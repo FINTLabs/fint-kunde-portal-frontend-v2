@@ -1,7 +1,13 @@
-# Welcome to Remix!
+# FINT KUNDE PORTAL FRONTEND V2
 
-- 📖 [Remix docs](https://remix.run/docs)
+## Setup environment 
 
+Create a `.env` file in root directory. 
+
+Add ```
+API_URL=http://localhost:<BACKEND_PORT>
+PERSONALNUMBER=<YOUR PERSONAL NUMBER>
+```
 ## Development
 
 Run the dev server:
