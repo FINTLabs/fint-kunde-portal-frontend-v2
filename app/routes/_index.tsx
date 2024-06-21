@@ -1,8 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import MeApi from "~/api/me-api";
-import {json} from "@remix-run/react";
-import {useLoaderData} from "@remix-run/react";
-import {IMeData} from "~/api/types";
+import {json,useLoaderData} from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [

@@ -1,5 +1,4 @@
 import {
-    json,
     Links,
     Meta,
     Outlet,
@@ -7,7 +6,9 @@ import {
     ScrollRestoration,
 } from "@remix-run/react";
 import "./tailwind.css";
+import "@navikt/ds-css";
 import {Box, Page} from "@navikt/ds-react";
+import React from "react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
