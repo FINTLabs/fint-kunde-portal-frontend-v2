@@ -3,11 +3,12 @@ import { Button, Dropdown } from "@navikt/ds-react";
 
 type NavLinkItemType = {
   title: string;
+  path: string;
 };
 const NavLinkItem = ({ item }: { item: NavLinkItemType }) => {
   return (
     <NavLink
-      to="/messages"
+      to={item.path}
       className={({ isActive, isPending }) =>
         isPending ? "pending" : isActive ? "active" : ""
       }
@@ -23,9 +24,11 @@ const MENU_ITEMS = [
     subMenu: [
       {
         title: "Kontakter",
+        path: "/kontakter",
       },
       {
         title: "Klienter",
+        path: "/klienter",
       },
     ],
   },
