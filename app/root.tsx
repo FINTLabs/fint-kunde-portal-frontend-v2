@@ -1,14 +1,15 @@
 import {
-    Links,
-    Meta,
-    Outlet,
-    Scripts,
-    ScrollRestoration,
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
 } from "@remix-run/react";
 import "./tailwind.css";
 import "@navikt/ds-css";
-import {Box, Page} from "@navikt/ds-react";
+import { Box, Page } from "@navikt/ds-react";
 import React from "react";
+import Menu from "./components/Menu";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,32 +21,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-
-      <Page
+        <Page
           footer={
-              <Box background="surface-neutral-moderate" padding="8" as="footer">
-                  <Page.Block gutters width="lg">
-                      Footer
-                  </Page.Block>
-              </Box>
-          }
-      >
-          <Box background="surface-neutral-moderate" padding="8" as="header">
+            <Box background="surface-neutral-moderate" padding="8" as="footer">
               <Page.Block gutters width="lg">
-                  Header
+                Footer
               </Page.Block>
+            </Box>
+          }
+        >
+          <Box background="surface-neutral-moderate" padding="8" as="header">
+            <Page.Block gutters width="lg">
+              <Menu />  
+            </Page.Block>
           </Box>
           <Box
-              background="surface-alt-3-moderate"
-              padding="8"
-              paddingBlock="16"
-              as="main"
+            background="surface-alt-3-moderate"
+            padding="8"
+            paddingBlock="16"
+            as="main"
           >
-              <Page.Block gutters width="lg">
-                  {children}
-              </Page.Block>
+            <Page.Block gutters width="lg">
+              {children}
+            </Page.Block>
           </Box>
-      </Page>
+        </Page>
 
         <ScrollRestoration />
         <Scripts />
