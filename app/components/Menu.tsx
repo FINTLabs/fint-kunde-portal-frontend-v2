@@ -56,8 +56,9 @@ export default function Menu({}: {}) {
               placement="bottom-start"
             >
               <Dropdown.Menu.List>
-                {item.subMenu.map((subMenuItem) => (
+                {item.subMenu.map((subMenuItem, index) => (
                   <Dropdown.Menu.List.Item
+                    key={`key-${index}`}
                     style={{
                       padding: "var(--a-spacing-0)",
                       color: "red",
