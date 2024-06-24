@@ -98,7 +98,7 @@ export interface IFetcherResponseData {
     variant: "error" | "info" | "warning" | "success";
 }
 
-export interface IMeData{
+export interface IMeData {
     dn: string; // Distinguished Name
     nin: string; // National Identification Number
     firstName: string; // First Name
