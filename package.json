@@ -13,6 +13,7 @@
   "dependencies": {
     "@navikt/ds-css": "^6.11.0",
     "@navikt/ds-react": "^6.11.0",
+    "@navikt/ds-tailwind": "^6.11.0",
     "@remix-run/node": "^2.9.2",
     "@remix-run/react": "^2.9.2",
     "@remix-run/serve": "^2.9.2",
