@@ -36,7 +36,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Page.Block>
           </Box>
           <Box
-              background="surface-alt-3-moderate"
+              // background="surface-alt-3-moderate"
               padding="8"
               paddingBlock="16"
               as="main"
