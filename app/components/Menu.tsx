@@ -39,8 +39,10 @@ export default function Menu({}: {}) {
           >
             <Button
               style={{
-                backgroundColor: isOpen ? "var(--a-lightblue-700)" : "none",
-                color: isOpen ? "var(--a-gray-50)" : "none",
+                backgroundColor: isOpen
+                  ? "var(--a-lightblue-700)"
+                  : "transparent",
+                color: isOpen ? "var(--a-gray-50)" : "var(--a-gray-800)",
               }}
               variant="tertiary"
               as={Dropdown.Toggle}
