@@ -51,7 +51,6 @@ export default function Menu({}: {}) {
                 border: "var(--a-spacing-0)",
                 borderRadius: "var(--a-spacing-0)",
                 padding: "var(--a-spacing-0)",
-                color: "red",
               }}
               placement="bottom-start"
             >
@@ -61,7 +60,6 @@ export default function Menu({}: {}) {
                     key={`key-${index}`}
                     style={{
                       padding: "var(--a-spacing-0)",
-                      color: "red",
                     }}
                   >
                     <NavLinkItem item={subMenuItem}></NavLinkItem>
