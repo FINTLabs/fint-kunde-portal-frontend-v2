@@ -7,6 +7,7 @@ import {
 } from "@remix-run/react";
 import "./tailwind.css";
 import "@navikt/ds-css";
+import "./data-theme.css";
 import { Box, Page } from "@navikt/ds-react";
 import React from "react";
 import Menu from "./components/Menu";
@@ -20,7 +21,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body data-theme="light">
         <Page
           footer={
             <Box background="surface-neutral-moderate" padding="8" as="footer">
@@ -32,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         >
           <Box background="surface-neutral-moderate" padding="8" as="header">
             <Page.Block gutters width="lg">
-              <Menu />  
+              <Menu />
             </Page.Block>
           </Box>
           <Box

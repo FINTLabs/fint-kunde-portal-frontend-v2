@@ -1,34 +1,103 @@
 import { NavLink } from "@remix-run/react";
 import { Button, Dropdown } from "@navikt/ds-react";
+import { useState } from "react";
 
 type NavLinkItemType = {
   title: string;
   path: string;
 };
+
 const NavLinkItem = ({ item }: { item: NavLinkItemType }) => {
   return (
     <NavLink
       to={item.path}
       className={({ isActive, isPending }) =>
-        isPending ? "pending" : isActive ? "active" : ""
+        `text-[--a-gray-600] hover:text-[--a-gray-200] w-full ${
+          isPending ? "pending" : isActive ? "active" : ""
+        }`
       }
     >
-      {item.title}
+      <div className="p-[--a-spacing-3] hover:bg-[--a-lightblue-600] hover:text-[--a-gray-50] w-full">
+        {item.title}
+      </div>
     </NavLink>
   );
 };
 
+export default function Menu({}: {}) {
+  return (
+    <>
+      {MENU_ITEMS.map((item) => {
+        const [isOpen, setIsOpen] = useState(false);
+
+        return (
+          <Dropdown
+            defaultOpen={false}
+            open={isOpen}
+            onOpenChange={() => setIsOpen(!isOpen)}
+          >
+            <Button
+              style={{
+                backgroundColor: isOpen ? "var(--a-lightblue-700)" : "",
+                color: isOpen ? "var(--a-gray-50)" : "",
+              }}
+              variant="tertiary"
+              as={Dropdown.Toggle}
+            >
+              {item.title}
+            </Button>
+            <Dropdown.Menu
+              style={{
+                border: "var(--a-spacing-0)",
+                borderRadius: "var(--a-spacing-0)",
+                padding: "var(--a-spacing-0)",
+                color: "red",
+              }}
+              placement="bottom-start"
+            >
+              <Dropdown.Menu.List>
+                {item.subMenu.map((subMenuItem) => (
+                  <Dropdown.Menu.List.Item
+                    style={{
+                      padding: "var(--a-spacing-0)",
+                      color: "red",
+                    }}
+                  >
+                    <NavLinkItem item={subMenuItem}></NavLinkItem>
+                  </Dropdown.Menu.List.Item>
+                ))}
+              </Dropdown.Menu.List>
+            </Dropdown.Menu>
+          </Dropdown>
+        );
+      })}
+    </>
+  );
+}
+
 const MENU_ITEMS = [
   {
-    title: "STYRING",
+    title: "TILGANGER",
     subMenu: [
       {
         title: "Kontakter",
         path: "/kontakter",
       },
       {
+        title: "Komponenter",
+        path: "/komponenter",
+      },
+      {
+        title: "Adapter",
+        path: "/adapter",
+      },
+      {
         title: "Klienter",
         path: "/klienter",
+      },
+      {
+        title: "Ressurser",
+        path: "/ressurser",
       },
     ],
   },
@@ -36,34 +105,13 @@ const MENU_ITEMS = [
     title: "HELSE",
     subMenu: [
       {
-        title: "Helse sjekk",
+        title: "Basistest",
+        path: "/basistest",
       },
       {
-        title: "....",
+        title: "Relasjonstest",
+        path: "/relasjonstest",
       },
     ],
   },
 ];
-
-export default function Menu({}: {}) {
-  return (
-    <>
-      {MENU_ITEMS.map((item) => (
-        <Dropdown>
-          <Button variant="tertiary" as={Dropdown.Toggle}>
-            {item.title}
-          </Button>
-          <Dropdown.Menu placement="bottom-start">
-            <Dropdown.Menu.List>
-              {item.subMenu.map((subMenuItem) => (
-                <Dropdown.Menu.List.Item>
-                  <NavLinkItem item={subMenuItem}></NavLinkItem>
-                </Dropdown.Menu.List.Item>
-              ))}
-            </Dropdown.Menu.List>
-          </Dropdown.Menu>
-        </Dropdown>
-      ))}
-    </>
-  );
-}
