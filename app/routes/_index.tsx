@@ -12,19 +12,20 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async () => {
-
-  const meData = await MeApi.fetchDisplayName();
-  return json({ meData });
+  const meData = await MeApi.fetchMe();
+  const organizationsData = await MeApi.fetchOrganisations();
+  return json({ meData, organizationsData });
 };
 
 export default function Index() {
-  const { meData } = useLoaderData<typeof loader>();
+  const { meData, organizationsData } = useLoaderData<typeof loader>();
 
   log(meData);
   return (
     <div className="font-sans p-4">
       <h1 className="text-3xl">
         Welcome to Kunde Portalen, {meData.firstName}
+        <div>Is part of {organizationsData.length} organization(s)</div>
         <div><Link to={'test'}>Test Page</Link></div>
       </h1>
     </div>
