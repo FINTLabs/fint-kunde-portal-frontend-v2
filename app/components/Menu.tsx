@@ -27,19 +27,20 @@ const NavLinkItem = ({ item }: { item: NavLinkItemType }) => {
 export default function Menu({}: {}) {
   return (
     <>
-      {MENU_ITEMS.map((item) => {
+      {MENU_ITEMS.map((item, index) => {
         const [isOpen, setIsOpen] = useState(false);
 
         return (
           <Dropdown
+            key={`key-${index}`}
             defaultOpen={false}
             open={isOpen}
             onOpenChange={() => setIsOpen(!isOpen)}
           >
             <Button
               style={{
-                backgroundColor: isOpen ? "var(--a-lightblue-700)" : "",
-                color: isOpen ? "var(--a-gray-50)" : "",
+                backgroundColor: isOpen ? "var(--a-lightblue-700)" : "none",
+                color: isOpen ? "var(--a-gray-50)" : "none",
               }}
               variant="tertiary"
               as={Dropdown.Toggle}
