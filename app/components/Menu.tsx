@@ -61,6 +61,9 @@ export default function Menu({}: {}) {
                 {item.subMenu.map((subMenuItem, index) => (
                   <Dropdown.Menu.List.Item
                     key={`key-${index}`}
+                    onClick={() => {
+                      if (isOpen) setIsOpen(!isOpen);
+                    }}
                     style={{
                       padding: "var(--a-spacing-0)",
                     }}
