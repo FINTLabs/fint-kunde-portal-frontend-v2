@@ -1,6 +1,7 @@
 import { NavLink } from "@remix-run/react";
-import { Button, Dropdown } from "@navikt/ds-react";
+import { Button, Dropdown, HStack } from "@navikt/ds-react";
 import { useState } from "react";
+import logo from "../../public/images/logo.svg";
 
 type NavLinkItemType = {
   title: string;
@@ -26,7 +27,10 @@ const NavLinkItem = ({ item }: { item: NavLinkItemType }) => {
 
 export default function Menu({}: {}) {
   return (
-    <>
+    <HStack>
+      <NavLink to="/" className={"flex item-center"}>
+        <img src={logo} width={50} height={50} />
+      </NavLink>
       {MENU_ITEMS.map((item, index) => {
         const [isOpen, setIsOpen] = useState(false);
 
@@ -76,7 +80,7 @@ export default function Menu({}: {}) {
           </Dropdown>
         );
       })}
-    </>
+    </HStack>
   );
 }
 
