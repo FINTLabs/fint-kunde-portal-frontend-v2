@@ -18,6 +18,7 @@ import {getSession, commitSession} from "~/utils/session";
 import MeApi from "~/api/me-api";
 import {log} from "~/utils/logger";
 import {IMeData, IOrganisations, UserSession} from "~/api/types";
+import Footer from "~/components/Footer";
 
 export const meta: MetaFunction = () => {
     return [
@@ -81,7 +82,7 @@ export function Layout({children}: { children: React.ReactNode }) {
             footer={
                 <Box background="surface-neutral-moderate" padding="8" as="footer">
                     <Page.Block gutters width="lg">
-                        Footer
+                        <Footer />
                     </Page.Block>
                 </Box>
             }

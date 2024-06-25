@@ -12,6 +12,7 @@ const InternalHeader: React.FC<LayoutHeaderProps> = ({ icon: IconComponent, titl
             as="header"
             borderWidth="0 0 4 0"
             borderColor="border-info"
+            className={"mb-10"}
         >
             <div className="max-w-5xl">
                 <Box paddingInline="4" paddingBlock="0 6">
