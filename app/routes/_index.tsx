@@ -1,7 +1,6 @@
-import type { MetaFunction } from "@remix-run/node";
-import MeApi from "~/api/me-api";
-import { json, Link, useLoaderData } from "@remix-run/react";
-import { log } from "~/utils/logger";
+import type {MetaFunction} from "@remix-run/node";
+import {Link, useOutletContext} from "@remix-run/react";
+import {UserSession} from "~/api/types";
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,24 +9,19 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async () => {
-  const meData = await MeApi.fetchMe();
-  const organizationsData = await MeApi.fetchOrganisations();
-  return json({ meData, organizationsData });
-};
-
 export default function Index() {
-  const { meData, organizationsData } = useLoaderData<typeof loader>();
+    const userSession = useOutletContext<UserSession>();
 
-  return (
-    <div className="font-sans p-4">
-      <h1 className="text-3xl">
-        Welcome to Kunde Portalen, {meData.firstName}
-        <div>Is part of {organizationsData.length} organization(s)</div>
-        <div>
-          <Link to={"test"}>Test Page</Link>
-        </div>
-      </h1>
-    </div>
+
+    return (
+      <div className="font-sans p-4">
+        <h1 className="text-3xl">
+          Welcome to Kunde Portalen, {userSession.firstName}
+          <div>Is part of {userSession.organizationCount} organization(s)</div>
+          <div>
+            <Link to={"test"}>Test Page</Link>
+          </div>
+        </h1>
+      </div>
   );
 }

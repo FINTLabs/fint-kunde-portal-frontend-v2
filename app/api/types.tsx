@@ -48,3 +48,27 @@ export interface IMeData {
     supportId: string;
     roles: string[];
 }
+
+export interface IOrganisations {
+    dn: string;
+    name: string;
+    orgNumber: string;
+    displayName: string;
+    components: string[];
+    legalContact: string;
+    techicalContacts: string[];
+    k8sSize: string;
+    customer: boolean;
+    primaryAssetId: string | null;
+}
+
+export interface UserSession {
+    firstName: string;
+    lastName: string;
+    organizationCount: number;
+    organizations: {
+        name: string;
+        orgNumber: string;
+        displayName: string;
+    }[];
+}

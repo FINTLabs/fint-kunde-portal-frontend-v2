@@ -22,12 +22,12 @@ class MeApi {
             if (response.ok) {
                 return await response.json();
             } else {
-                error("Error fetching display name", response.status);
+                error("Error fetching me information", response.status);
                 return "try-error";
             }
         } catch (err) {
             log(err);
-            error("Error fetching display name:", err);
+            error("Error fetching me information:", err);
             return "catch-error";
         }
     }
