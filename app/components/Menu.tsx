@@ -104,6 +104,10 @@ const MENU_ITEMS = [
         title: "Ressurser",
         path: "/ressurser",
       },
+      {
+        title: "Hendelseslogg",
+        path: "/hendelseslogg",
+      },
     ],
   },
   {
