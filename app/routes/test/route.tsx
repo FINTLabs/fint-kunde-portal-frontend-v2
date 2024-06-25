@@ -1,13 +1,16 @@
 import {Box, Page} from "@navikt/ds-react";
 import {PersonGroupIcon} from "@navikt/aksel-icons";
-import {Outlet} from "@remix-run/react";
+import {Outlet, useOutletContext} from "@remix-run/react";
 import Breadcrumbs from "~/components/breadcrumbs";
 import InternalHeader from "~/components/InternalHeader";
+import {UserSession} from "~/api/types";
 
 export default function Index() {
     const breadcrumbs = [
         { name: 'Test Page', link: '/test' },
     ];
+
+    const userSession = useOutletContext<UserSession>();
 
     return (
 
@@ -20,7 +23,7 @@ export default function Index() {
                 paddingBlock="16"
             >
                 <Page.Block gutters width="lg">
-                    <Outlet />
+                    <Outlet context={userSession}/>
                 </Page.Block>
             </Box>
         </>

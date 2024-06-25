@@ -61,14 +61,19 @@ export interface IOrganisations {
     customer: boolean;
     primaryAssetId: string | null;
 }
-
 export interface UserSession {
     firstName: string;
     lastName: string;
     organizationCount: number;
+    selectedOrganization: {
+        name: string;
+        orgNumber: string;
+        displayName: string;
+    } | null;
     organizations: {
         name: string;
         orgNumber: string;
         displayName: string;
     }[];
 }
+
