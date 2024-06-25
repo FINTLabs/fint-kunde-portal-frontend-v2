@@ -28,6 +28,7 @@ export default function Index() {
         <Button
           icon={<WrenchIcon size="small" title="vis tilganger" />}
           variant="tertiary"
+          className="hover:rounded-none"
           onClick={() => ref.current?.showModal()}
         />
         <Modal
