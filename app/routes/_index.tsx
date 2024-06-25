@@ -1,6 +1,7 @@
 import type {MetaFunction} from "@remix-run/node";
 import {Link, useOutletContext} from "@remix-run/react";
 import {UserSession} from "~/api/types";
+import {log} from "~/utils/logger";
 
 export const meta: MetaFunction = () => {
   return [
@@ -14,7 +15,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
     const userSession = useOutletContext<UserSession>();
 
-
+log("userSession", userSession)
     return (
       <div className="font-sans p-4">
         <h1 className="text-3xl">
