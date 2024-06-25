@@ -1,11 +1,10 @@
 /* eslint-disable import/no-duplicates */
+import { useRef } from "react";
 import type { MetaFunction } from "@remix-run/node";
 import ListItems from "./ListItems";
-import { XMarkIcon, WrenchIcon, PersonSuitIcon } from "@navikt/aksel-icons";
-
-import { useRef } from "react";
-import { BodyLong, Button, Modal } from "@navikt/ds-react";
 import RoleListItems from "./RoleListItems";
+import { XMarkIcon, WrenchIcon, PersonSuitIcon } from "@navikt/aksel-icons";
+import { BodyLong, Button, Modal } from "@navikt/ds-react";
 
 export const meta: MetaFunction = () => {
   return [
