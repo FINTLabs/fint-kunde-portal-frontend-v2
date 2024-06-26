@@ -1,5 +1,5 @@
 [data-theme="light"] {
-  /* button */
+  /* button tertiary*/
   --ac-button-tertiary-hover-bg: var(--a-lightblue-800);
   --ac-button-tertiary-text: var(--a-gray-800);
   --ac-button-tertiary-hover-text: var(--a-gray-50);

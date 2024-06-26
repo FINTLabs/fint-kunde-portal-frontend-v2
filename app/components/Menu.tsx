@@ -1,7 +1,9 @@
 import { NavLink } from "@remix-run/react";
 import { Button, Dropdown, HStack } from "@navikt/ds-react";
 import { useState } from "react";
-import logo from "../../public/images/logo.svg";
+import logo from "../../public/images/logo.png";
+import { UserSession } from "~/api/types";
+import { LeaveIcon } from "@navikt/aksel-icons";
 
 type NavLinkItemType = {
   title: string;
@@ -25,69 +27,122 @@ const NavLinkItem = ({ item }: { item: NavLinkItemType }) => {
   );
 };
 
-export default function Menu({}: {}) {
-  return (
-    <HStack>
-      <NavLink to="/" className={"flex item-center"}>
-        <img src={logo} width={50} height={50} />
-      </NavLink>
-      {MENU_ITEMS.map((item, index) => {
-        const [isOpen, setIsOpen] = useState(false);
+const renderMenuItems = (item: MENU_ITEMS_TYPE, index: number) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-        return (
-          <Dropdown
-            key={`key-${index}`}
-            defaultOpen={false}
-            open={isOpen}
-            onOpenChange={() => setIsOpen(!isOpen)}
-          >
-            <Button
-              style={{
-                backgroundColor: isOpen
-                  ? "var(--a-lightblue-700)"
-                  : "transparent",
-                color: isOpen ? "var(--a-gray-50)" : "var(--a-gray-800)",
+  return (
+    <Dropdown
+      key={`key-${index}`}
+      defaultOpen={false}
+      open={isOpen}
+      onOpenChange={() => setIsOpen(!isOpen)}
+    >
+      <Button
+        style={{
+          backgroundColor: isOpen ? "var(--a-lightblue-700)" : "transparent",
+          color: isOpen ? "var(--a-gray-50)" : "var(--a-gray-800)",
+        }}
+        variant="tertiary"
+        as={Dropdown.Toggle}
+      >
+        {item.title}
+      </Button>
+      <Dropdown.Menu
+        className="!border-0 !"
+        style={{
+          // border: "var(--a-spacing-0)",
+          borderRadius: "var(--a-spacing-0)",
+          padding: "var(--a-spacing-0)",
+        }}
+        placement="bottom-start"
+      >
+        <Dropdown.Menu.List>
+          {item.subMenus.map((subMenu, index) => (
+            <Dropdown.Menu.List.Item
+              className="!p-0"
+              key={`key-${index}`}
+              onClick={() => {
+                if (isOpen) setIsOpen(!isOpen);
               }}
-              variant="tertiary"
-              as={Dropdown.Toggle}
             >
-              {item.title}
+              <NavLinkItem item={subMenu}></NavLinkItem>
+            </Dropdown.Menu.List.Item>
+          ))}
+        </Dropdown.Menu.List>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
+
+const LogoNavLink = (
+  <NavLink to="/" className={"flex items-center"}>
+    <img src={logo} width={100} height={50} />
+  </NavLink>
+);
+
+export default function Menu({ userSession }: { userSession: UserSession }) {
+  console.log(userSession);
+
+  const original = userSession.organizations[0];
+  const obj = userSession.organizations[0];
+  const cloned = { ...obj };
+  cloned.displayName = "Some other org";
+
+  userSession.organizations = [original, cloned];
+  return (
+    <div className="flex justify-between">
+      <HStack>
+        {LogoNavLink}
+        {MENU_ITEMS_LEFT.map(renderMenuItems)}
+      </HStack>
+      <HStack gap="5">
+        {userSession.organizations.length === 1 && (
+          <div className="flex items-center">
+            {userSession.selectedOrganization.displayName}
+          </div>
+        )}
+        {userSession.organizations.length > 1 && (
+          <Dropdown>
+            <Button as={Dropdown.Toggle}>
+              {userSession.organizations[0].displayName}
             </Button>
-            <Dropdown.Menu
-              style={{
-                border: "var(--a-spacing-0)",
-                borderRadius: "var(--a-spacing-0)",
-                padding: "var(--a-spacing-0)",
-              }}
-              placement="bottom-start"
-            >
+            <Dropdown.Menu>
               <Dropdown.Menu.List>
-                {item.subMenu.map((subMenuItem, index) => (
-                  <Dropdown.Menu.List.Item
-                    key={`key-${index}`}
-                    onClick={() => {
-                      if (isOpen) setIsOpen(!isOpen);
-                    }}
-                    style={{
-                      padding: "var(--a-spacing-0)",
-                    }}
-                  >
-                    <NavLinkItem item={subMenuItem}></NavLinkItem>
-                  </Dropdown.Menu.List.Item>
-                ))}
+                {userSession.organizations.map((org) => {
+                  return (
+                    <Dropdown.Menu.List.Item>
+                      {org.displayName}
+                    </Dropdown.Menu.List.Item>
+                  );
+                })}
               </Dropdown.Menu.List>
             </Dropdown.Menu>
           </Dropdown>
-        );
-      })}
-    </HStack>
+        )}
+        <div className="flex items-center">{userSession.firstName}</div>
+        <div className="flex items-center">
+          <Button
+            className="hover:bg-red-300"
+            variant="tertiary"
+            title="logg ut"
+            icon={<LeaveIcon title="logg ut" fontSize="1.5rem" />}
+            onClick={() => alert("Er du sikker på at du vil logge ut?")}
+          ></Button>
+        </div>
+      </HStack>
+    </div>
   );
 }
 
-const MENU_ITEMS = [
+type MENU_ITEMS_TYPE = {
+  title: string;
+  subMenus: NavLinkItemType[];
+};
+
+const MENU_ITEMS_LEFT: MENU_ITEMS_TYPE[] = [
   {
     title: "TILGANGER",
-    subMenu: [
+    subMenus: [
       {
         title: "Kontakter",
         path: "/kontakter",
@@ -116,7 +171,7 @@ const MENU_ITEMS = [
   },
   {
     title: "HELSE",
-    subMenu: [
+    subMenus: [
       {
         title: "Basistest",
         path: "/basistest",
