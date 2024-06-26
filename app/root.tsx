@@ -15,7 +15,7 @@ import {Box, Page} from "@navikt/ds-react";
 import React from "react";
 import Menu from "./components/Menu";
 import {getSession, commitSession} from "~/utils/session";
-import MeApi from "~/api/me-api";
+import MeApi from "~/api/MeApi";
 import {log} from "~/utils/logger";
 import {IMeData, IOrganisations, UserSession} from "~/api/types";
 import Footer from "~/components/Footer";
