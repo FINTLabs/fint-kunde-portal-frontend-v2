@@ -28,7 +28,20 @@ class MeApi {
         } catch (err) {
             log(err);
             error("Error fetching me information:", err);
-            return "catch-error";
+            // return "catch-error";
+            // TODO: REMOVE !! THIS IS JUST FOR STARTUP
+            return {
+                dn: "test.user",
+                nin: "00000000000",
+                firstName: "Test",
+                lastName:   "User",
+                mail: "TEST EMAIL",
+                mobile: "000000000",
+                technical: [],
+                legal: [],
+                supportId: "000000000",
+                roles: [],
+            }
         }
     }
 
@@ -58,7 +71,22 @@ class MeApi {
         } catch (err) {
             log(err);
             error("Error fetching organisations:", err);
-            return "catch-error";
+            // return "catch-error";
+            // TODO: REMOVE !! THIS IS JUST FOR STARTUP
+            return [
+                {
+                    name: "TEST ORG",
+                    orgNumber: "000000000",
+                    displayName: "Test Organization",
+                    components: [],
+                    legalContact: "Test Legal Contact",
+                    techicalContacts: [],
+                    k8sSize: "small",
+                    customer: false,
+                    primaryAssetId: "000000000",
+                    dn: "test.org",
+                },
+            ]
         }
     }
 }

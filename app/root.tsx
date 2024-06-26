@@ -15,9 +15,10 @@ import { Box, Page } from "@navikt/ds-react";
 import React from "react";
 import Menu from "./components/Menu";
 import { getSession, commitSession } from "~/utils/session";
-import MeApi from "~/api/me-api";
 import { log } from "~/utils/logger";
 import { IMeData, IOrganisations, UserSession } from "~/api/types";
+import Footer from "~/components/Footer";
+import MeApi from "./api/MeApi";
 
 export const meta: MetaFunction = () => {
   return [
@@ -81,13 +82,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body data-theme="light">
         <Page
-          footer={
-            <Box background="surface-neutral-moderate" padding="8" as="footer">
-              <Page.Block gutters width="lg">
-                Footer
-              </Page.Block>
-            </Box>
-          }
+            footer={
+                <Box background="surface-neutral-moderate" padding="8" as="footer">
+                    <Page.Block gutters width="lg">
+                        <Footer />
+                    </Page.Block>
+                </Box>
+            }
         >
           <Box background="surface-neutral-moderate" padding="8" as="header">
             <Page.Block gutters width="lg">
