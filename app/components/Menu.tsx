@@ -98,7 +98,7 @@ export default function Menu({ userSession }: { userSession: UserSession }) {
       <HStack gap="5">
         {userSession.organizations.length === 1 && (
           <div className="flex items-center">
-            {userSession.selectedOrganization.displayName}
+            {userSession.selectedOrganization?.displayName}
           </div>
         )}
         {userSession.organizations.length > 1 && (
