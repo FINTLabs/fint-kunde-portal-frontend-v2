@@ -2,11 +2,12 @@
 
 ## Setup environment 
 
-Create a `.env` file in root directory. 
+## Create a `.env` file in root directory.
 
-Add ```
-API_URL=http://localhost:<BACKEND_PORT>
+```
+API_URL=http://localhost:<BACKEND_API_PORT>
 PERSONALNUMBER=<YOUR PERSONAL NUMBER>
+ZENDESK_API_URL=<BACKEND_ZENDESK_PORT>
 ```
 ## Development
 

@@ -1,6 +1,6 @@
 import {Box, Table} from "@navikt/ds-react";
 import {json, useLoaderData, useOutletContext} from "@remix-run/react";
-import ContactApi from "~/api/contact-api";
+import ContactApi from "~/api/ContactApi";
 import {IContact, UserSession} from "~/api/types";
 import {getSession} from "~/utils/session";
 import {LoaderFunctionArgs} from "@remix-run/node";
