@@ -4,12 +4,12 @@ import { Button } from "@navikt/ds-react";
 import { HospitalIcon, LinkBrokenIcon } from "@navikt/aksel-icons";
 
 const Accordions = () => {
-  const elements = Array.from({ length: 5 }, (_, index) => (
+  const elements = Array.from({ length: 8 }, (_, index) => (
     <Accordion.Item
-      className="!border-black !bg-white !border-x-2 !border-b-2 w-3/4 "
+      className="!border-black !bg-white !border-x-2 !border-b-2 w-full"
       key={index}
     >
-      <Accordion.Header className="relative !pl-3!hover:bg-slate-100 !shadow-none">
+      <Accordion.Header className="relative !pl-3 !bg-slate-100 !shadow-none">
         <p className="pl-2">Adam Accordion</p>
       </Accordion.Header>
       <AccordionContent>

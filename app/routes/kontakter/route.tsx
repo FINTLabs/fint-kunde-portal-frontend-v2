@@ -25,11 +25,32 @@ export default function Index() {
   const ref = useRef<HTMLDialogElement>(null);
 
   return (
-    <div className="font-sans p-4 flex flex-col justify-center">
-      <h1 className="text-3xl">Velkomment til kontakter :)</h1>
+    <div className="font-sans p-4 flex bg-white flex-col justify-center w-full">
+      <div>
+        <h1 className="text-3xl text-center font-semibold">Kontakter</h1>
+        <div className="font-medium my-4 border-dashed border-2 border-slate-400 p-2 rounded-lg">
+          <p>Kontakter er personer som har tilgang til kundeportalen.</p>
+          <p>En juridisk kontakt er den som har det merkantile ansvaret.</p>
+          <p>
+            Tekniske kontakter er organisasjonens FINT administratorer. De vil
+            få driftsmeldinger tilsendt ved behov.
+          </p>
+          <p>
+            Ordinære driftsmeldinger sendes på epost. Kritiske driftmeldinger
+            sendes på epost og sms.
+          </p>
+        </div>
+      </div>
+      <div className="p-4">
+        <p className="font-medium pb-4 text-xl">Juridiske kontakt</p>
+        <div className="flex flex-row items-center px-4">
+          <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4" />
+          <p className="pl-4 font-medium">Svein Håkon Skulstad</p>
+        </div>
+      </div>
 
       {/* Modal starts here */}
-      <div className="flex justify-between w-3/4 bg-white pl-3 border-black border-2">
+      {/* <div className="flex justify-between w-full bg-white pl-3 border-black border-2">
         <div className="flex items-center">
           <p className="pl-2">Mona Modal (Admin)</p>
         </div>
@@ -78,13 +99,13 @@ export default function Index() {
             </BodyLong>
           </Modal.Body>
         </Modal>
-      </div>
+      </div> */}
       {/* Modal ends here, Accordian starts */}
-      <Accordion>
+      <Accordion className="!border-t-2 border-black my-4">
         <Accordions />
       </Accordion>
 
-      <ListItems />
+      {/* <ListItems /> */}
     </div>
   );
 }
