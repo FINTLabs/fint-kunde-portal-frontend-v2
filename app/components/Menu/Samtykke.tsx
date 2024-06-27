@@ -5,6 +5,7 @@ import { Button } from '@navikt/ds-react';
 type SamtykkeType = {
     displaySamtykke: boolean;
 };
+
 export function Samtykke({ displaySamtykke }: SamtykkeType) {
     return (
         <div className="flex items-center">

@@ -5,6 +5,7 @@ type MenuItemsLeft = {
     dropdowns: MenuDropDown[];
     links: MenuItem[];
 };
+
 export const MENU_ITEMS_LEFT: MenuItemsLeft = {
     dropdowns: [
         {

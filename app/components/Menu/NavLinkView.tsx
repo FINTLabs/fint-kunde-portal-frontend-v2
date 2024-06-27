@@ -1,7 +1,11 @@
 import { NavLink } from '@remix-run/react';
 import { MenuItem } from '~/types/MenuItem';
 
-export const NavLinkView = ({ item }: { item: MenuItem }) => {
+type NavLinkViewType = {
+    item: MenuItem;
+};
+
+export const NavLinkView = ({ item }: NavLinkViewType) => {
     return (
         <NavLink
             to={item.path}
