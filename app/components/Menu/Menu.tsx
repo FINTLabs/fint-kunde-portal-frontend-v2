@@ -5,6 +5,8 @@ import { Logo } from './Logo';
 import { MENU_ITEMS_LEFT } from './constants';
 import { UserOrganization } from './UserOrganization';
 import { renderMenuItem } from './renderMenuItem';
+import { NavLink } from '@remix-run/react';
+import { Button } from '@navikt/ds-react';
 
 export default function Menu({
     userSession,
@@ -22,14 +24,20 @@ export default function Menu({
 }
 
 const MenuLeft = ({ displaySamtykke }: { displaySamtykke: boolean }) => {
-    const menuItems = displaySamtykke
-        ? MENU_ITEMS_LEFT
-        : MENU_ITEMS_LEFT.filter((item) => item.title !== 'Samtykke');
-
     return (
         <HStack gap="2">
             <Logo />
-            {menuItems.map(renderMenuItem)}
+            {MENU_ITEMS_LEFT.dropdowns.map(renderMenuItem)}
+            <div className="flex items-center">
+                {displaySamtykke &&
+                    MENU_ITEMS_LEFT.links.map((item, index) => (
+                        <NavLink key={`index-${index}`} to={item.path}>
+                            <Button variant="tertiary" className="!uppercase hover:bg-transparent">
+                                {item.title}
+                            </Button>
+                        </NavLink>
+                    ))}
+            </div>
         </HStack>
     );
 };
