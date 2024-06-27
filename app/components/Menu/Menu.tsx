@@ -51,15 +51,6 @@ const renderMenuItems = (item: MenuItems, index: number) => {
 };
 
 export default function Menu({ userSession }: { userSession: UserSession }) {
-    console.log(userSession);
-
-    const original = userSession.organizations[0];
-    const obj = userSession.organizations[0];
-    const cloned = { ...obj };
-    cloned.displayName = 'Some other org';
-
-    userSession.organizations = [original, cloned];
-
     return (
         <div className="flex justify-between">
             <HStack>
