@@ -16,7 +16,7 @@ export default function Index() {
 
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalHeader title={"Test with a Kontakter icon"} icon={PersonGroupIcon}/>
+            <InternalHeader title={"Test with a Kontakter icon"} icon={PersonGroupIcon} helpText="contacts"/>
             <Box
                 // background="surface-alt-4-moderate"
                 padding="8"
