@@ -1,8 +1,22 @@
-import { Dropdown } from '@navikt/ds-react';
 import { UserSession } from '~/api/types';
-import { Button } from '@navikt/ds-react';
+import { Select } from '@navikt/ds-react';
+import { ChangeEvent } from 'react';
+
+const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    console.log('Org changed to ', event.target.value);
+
+    // TODO: implement actual org change here
+};
 
 export const UserOrganization = ({ userSession }: { userSession: UserSession }) => {
+    if (userSession.selectedOrganization) {
+        console.log('userSession.selectedOrganization');
+        console.log(userSession.selectedOrganization);
+        const organizationExtra = userSession.selectedOrganization;
+        organizationExtra.displayName = 'ANUM organization';
+        userSession.organizations.push(organizationExtra);
+    }
+
     return (
         <>
             {userSession.organizations.length === 1 && (
@@ -11,20 +25,13 @@ export const UserOrganization = ({ userSession }: { userSession: UserSession }) 
                 </div>
             )}
             {userSession.organizations.length > 1 && (
-                <Dropdown>
-                    <Button as={Dropdown.Toggle}>{userSession.organizations[0].displayName}</Button>
-                    <Dropdown.Menu>
-                        <Dropdown.Menu.List>
-                            {userSession.organizations.map((org) => {
-                                return (
-                                    <Dropdown.Menu.List.Item>
-                                        {org.displayName}
-                                    </Dropdown.Menu.List.Item>
-                                );
-                            })}
-                        </Dropdown.Menu.List>
-                    </Dropdown.Menu>
-                </Dropdown>
+                <Select label="Velg organisasjon" hideLabel onChange={handleOrgChange}>
+                    {userSession.organizations.map((org, index) => (
+                        <option key={`key-${index}`} value={org.displayName}>
+                            {org.displayName}
+                        </option>
+                    ))}
+                </Select>
             )}
         </>
     );
