@@ -4,7 +4,11 @@ import { Button } from '@navikt/ds-react';
 import { MenuDropDown } from '../../types/MenuDropDown';
 import { NavLinkView } from './NavLinkView';
 
-export const renderMenuItem = (item: MenuDropDown, index: number) => {
+export const MenuDropdowns = ({ renderItems }: { renderItems: MenuDropDown[] }) => {
+    return renderItems.map(renderMenuItem);
+};
+
+const renderMenuItem = (item: MenuDropDown, index: number) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (

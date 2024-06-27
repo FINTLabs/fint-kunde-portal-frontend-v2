@@ -4,7 +4,8 @@ import { LogoutButton } from './LogoutButton';
 import { Logo } from './Logo';
 import { MENU_ITEMS_LEFT } from './constants';
 import { UserOrganization } from './UserOrganization';
-import { renderMenuItem } from './renderMenuItem';
+import { MenuDropdowns, renderMenuItem } from './renderMenuItem';
+import { NavLinkView } from './NavLinkView';
 import { NavLink } from '@remix-run/react';
 import { Button } from '@navikt/ds-react';
 
@@ -27,17 +28,8 @@ const MenuLeft = ({ displaySamtykke }: { displaySamtykke: boolean }) => {
     return (
         <HStack gap="2">
             <Logo />
-            {MENU_ITEMS_LEFT.dropdowns.map(renderMenuItem)}
-            <div className="flex items-center">
-                {displaySamtykke &&
-                    MENU_ITEMS_LEFT.links.map((item, index) => (
-                        <NavLink key={`index-${index}`} to={item.path}>
-                            <Button variant="tertiary" className="!uppercase hover:bg-transparent">
-                                {item.title}
-                            </Button>
-                        </NavLink>
-                    ))}
-            </div>
+            <MenuDropdowns renderItems={MENU_ITEMS_LEFT.dropdowns} />
+            <Samtykke displaySamtykke={displaySamtykke} />
         </HStack>
     );
 };
@@ -53,3 +45,18 @@ const MenuRight = ({ userSession }: { userSession: UserSession }) => (
         </div>
     </HStack>
 );
+
+function Samtykke({ displaySamtykke }: { displaySamtykke: boolean }) {
+    return (
+        <div className="flex items-center">
+            {displaySamtykke &&
+                MENU_ITEMS_LEFT.links.map((item, index) => (
+                    <NavLink key={`index-${index}`} to={item.path}>
+                        <Button variant="tertiary" className="!uppercase hover:bg-transparent">
+                            {item.title}
+                        </Button>
+                    </NavLink>
+                ))}
+        </div>
+    );
+}
