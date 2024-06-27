@@ -1,5 +1,4 @@
 import { HStack } from '@navikt/ds-react';
-import { useRef } from 'react';
 import { UserSession } from '~/api/types';
 import { LogoutButton } from './LogoutButton';
 import { Logo } from './Logo';
@@ -7,21 +6,33 @@ import { MENU_ITEMS_LEFT } from './constants';
 import { UserOrganization } from './UserOrganization';
 import { renderMenuItem } from './renderMenuItem';
 
-export default function Menu({ userSession }: { userSession: UserSession }) {
+export default function Menu({
+    userSession,
+    displaySamtykke,
+}: {
+    userSession: UserSession;
+    displaySamtykke: boolean;
+}) {
     return (
         <div className="flex justify-between">
-            <MenuLeft />
+            <MenuLeft displaySamtykke={displaySamtykke} />
             <MenuRight userSession={userSession} />
         </div>
     );
 }
 
-const MenuLeft = () => (
-    <HStack gap="2">
-        <Logo />
-        {MENU_ITEMS_LEFT.map(renderMenuItem)}
-    </HStack>
-);
+const MenuLeft = ({ displaySamtykke }: { displaySamtykke: boolean }) => {
+    const menuItems = displaySamtykke
+        ? MENU_ITEMS_LEFT
+        : MENU_ITEMS_LEFT.filter((item) => item.title !== 'Samtykke');
+
+    return (
+        <HStack gap="2">
+            <Logo />
+            {menuItems.map(renderMenuItem)}
+        </HStack>
+    );
+};
 
 const MenuRight = ({ userSession }: { userSession: UserSession }) => (
     <HStack gap="5">

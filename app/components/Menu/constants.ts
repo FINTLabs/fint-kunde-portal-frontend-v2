@@ -43,4 +43,8 @@ export const MENU_ITEMS_LEFT: MenuDropDown[] = [
             },
         ],
     },
+    {
+        title: 'Samtykke',
+        subMenus: [],
+    },
 ];

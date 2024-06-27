@@ -1,6 +1,5 @@
 import { log, error } from '~/utils/logger';
-
-const API_URL = process.env.API_URL || 'https://kunde-beta.fintlabs.no';
+import { API_URL } from './constants';
 
 class MeApi {
     static async fetchMe() {
