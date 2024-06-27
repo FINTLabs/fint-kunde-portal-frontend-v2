@@ -9,9 +9,24 @@ import { BodyLong, Button, Modal } from '@navikt/ds-react';
 type NavLinkItemType = {
     title: string;
     path: string;
+    title: string;
+    path: string;
 };
 
 const NavLinkItem = ({ item }: { item: NavLinkItemType }) => {
+    return (
+        <NavLink
+            to={item.path}
+            className={({ isActive, isPending }) =>
+                `text-[--a-gray-600] hover:text-[--a-gray-200] w-full ${
+                    isPending ? 'pending' : isActive ? 'active' : ''
+                }`
+            }>
+            <div className="p-[--a-spacing-3] hover:bg-[--a-lightblue-600] hover:text-[--a-gray-50] w-full">
+                {item.title}
+            </div>
+        </NavLink>
+    );
     return (
         <NavLink
             to={item.path}
@@ -139,8 +154,7 @@ export default function Menu({ userSession }: { userSession: UserSession }) {
                                 type="button"
                                 variant="secondary"
                                 onClick={() => {
-
-                                  // delete also the cookie ? 
+                                    // delete also the cookie ?
                                     window.location.href =
                                         'https://idp.felleskomponent.no/nidp/app/logout';
                                 }}>
