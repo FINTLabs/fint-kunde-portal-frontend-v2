@@ -1,14 +1,11 @@
 import { Dropdown, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import logo from '../../public/images/logo.png';
 import { UserSession } from '~/api/types';
-import { LeaveIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button, Modal } from '@navikt/ds-react';
-import { useNavigate } from '@remix-run/react';
+import { Button } from '@navikt/ds-react';
 import { LogoutButton } from './LogoutButton';
 import { MenuItems } from '../../types/MenuItems';
-import { NavLinkItem } from '~/types/NavLinkItem';
 import { NavLinkView } from './NavLinkView';
+import { Logo } from './Logo';
 
 const renderMenuItems = (item: MenuItems, index: number) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -53,12 +50,6 @@ const renderMenuItems = (item: MenuItems, index: number) => {
     );
 };
 
-// const LogoNavLink = (
-//     <NavLink to="/" className={'flex items-center'}>
-//         <img src={logo} width={100} height={50} />
-//     </NavLink>
-// );
-
 export default function Menu({ userSession }: { userSession: UserSession }) {
     console.log(userSession);
 
@@ -72,7 +63,7 @@ export default function Menu({ userSession }: { userSession: UserSession }) {
     return (
         <div className="flex justify-between">
             <HStack>
-                {/* {LogoNavLink} */}
+                <Logo />
                 {MENU_ITEMS_LEFT.map(renderMenuItems)}
             </HStack>
             <HStack gap="5">
