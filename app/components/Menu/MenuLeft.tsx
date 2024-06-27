@@ -1,7 +1,7 @@
 import { HStack } from '@navikt/ds-react';
 import { Logo } from './Logo';
 import { MENU_ITEMS_LEFT } from './constants';
-import { MenuDropdowns } from './renderMenuItem';
+import { MenuDropdowns } from './MenuDropdowns';
 import { Samtykke } from './Samtykke';
 
 type MenuLeftType = {
