@@ -1,4 +1,3 @@
-
 export interface IContact {
     dn: string;
     nin: string;
@@ -25,7 +24,6 @@ export const defaultContact: IContact = {
     roles: null,
 };
 
-
 export interface IErrorState {
     [key: string]: string | undefined;
 }
@@ -33,7 +31,7 @@ export interface IErrorState {
 export interface IFetcherResponseData {
     show: boolean;
     message: string;
-    variant: "error" | "info" | "warning" | "success";
+    variant: 'error' | 'info' | 'warning' | 'success';
 }
 
 export interface IMeData {
@@ -77,3 +75,22 @@ export interface UserSession {
     }[];
 }
 
+export interface IComponent {
+    dn: string;
+    name: string;
+    description: string;
+    organisations: string[];
+    clients: string[];
+    adapters: string[];
+    basePath: string;
+    port: number | null;
+    core: boolean;
+    openData: boolean;
+    common: boolean;
+    dockerImage: string | null;
+    componentSizes: any | null; // Replace `any` with a more specific type if available
+    cacheDisabledFor: string[];
+    inProduction: boolean;
+    inBeta: boolean;
+    inPlayWithFint: boolean;
+}

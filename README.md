@@ -1,13 +1,15 @@
 # FINT KUNDE PORTAL FRONTEND V2
 
-## Setup environment 
+## Setup environment
 
-Create a `.env` file in root directory. 
+## Create a `.env` file in root directory.
 
-Add ```
-API_URL=http://localhost:<BACKEND_PORT>
-PERSONALNUMBER=<YOUR PERSONAL NUMBER>
 ```
+API_URL=http://localhost:<BACKEND_API_PORT>
+PERSONALNUMBER=<YOUR PERSONAL NUMBER>
+ZENDESK_API_URL=<BACKEND_ZENDESK_PORT>
+```
+
 ## Development
 
 Run the dev server:
@@ -38,8 +40,8 @@ If you're familiar with deploying Node applications, the built-in Remix app serv
 
 Make sure to deploy the output of `npm run build`
 
-- `build/server`
-- `build/client`
+-   `build/server`
+-   `build/client`
 
 ## Styling
 

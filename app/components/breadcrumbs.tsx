@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link } from '@remix-run/react';
 import { ChevronRightIcon, HouseIcon } from '@navikt/aksel-icons';
 
 interface BreadcrumbItem {
@@ -24,9 +24,10 @@ export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
     ));
 
     return (
-        <div className='flex items-center space-x-2 p-3'>
+        <div className="flex items-center space-x-2 p-3">
             <Link to={homeLink} style={linkStyle}>
-                <HouseIcon title="a11y-title" />{'Dashboard'}
+                <HouseIcon title="a11y-title" />
+                {'Dashboard'}
             </Link>
             {crumbs}
         </div>

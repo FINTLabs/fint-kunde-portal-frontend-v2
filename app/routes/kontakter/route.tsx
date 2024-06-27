@@ -1,4 +1,3 @@
-/* eslint-disable import/no-duplicates */
 import { useRef } from "react";
 import type { MetaFunction } from "@remix-run/node";
 import ListItems from "./ListItems";
@@ -15,10 +14,7 @@ import { AccordionContent } from "@navikt/ds-react/Accordion";
 import Accordions from "./Accordions";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "Kontakter" },
-    { name: "description", content: "Liste over kontakter" },
-  ];
+    return [{ title: 'Kontakter' }, { name: 'description', content: 'Liste over kontakter' }];
 };
 
 export default function Index() {
@@ -53,4 +49,3 @@ export default function Index() {
       </Accordion>
     </div>
   );
-}
