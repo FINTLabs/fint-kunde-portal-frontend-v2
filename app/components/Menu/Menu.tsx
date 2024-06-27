@@ -6,6 +6,7 @@ import { LogoutButton } from './LogoutButton';
 import { MenuItems } from '../../types/MenuItems';
 import { NavLinkView } from './NavLinkView';
 import { Logo } from './Logo';
+import { MENU_ITEMS_LEFT } from './constants';
 
 const renderMenuItems = (item: MenuItems, index: number) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +29,6 @@ const renderMenuItems = (item: MenuItems, index: number) => {
             <Dropdown.Menu
                 className="!border-0 !"
                 style={{
-                    // border: "var(--a-spacing-0)",
                     borderRadius: 'var(--a-spacing-0)',
                     padding: 'var(--a-spacing-0)',
                 }}
@@ -50,87 +50,50 @@ const renderMenuItems = (item: MenuItems, index: number) => {
     );
 };
 
+const MenuLeft = () => (
+    <HStack>
+        <Logo />
+        {MENU_ITEMS_LEFT.map(renderMenuItems)}
+    </HStack>
+);
+
+const MenuRight = ({ userSession }: { userSession: UserSession }) => (
+    <HStack gap="5">
+        <div className="flex items-center">
+            {userSession.organizations.length === 1 && (
+                <div className="flex items-center">
+                    {userSession.selectedOrganization?.displayName}
+                </div>
+            )}
+            {userSession.organizations.length > 1 && (
+                <Dropdown>
+                    <Button as={Dropdown.Toggle}>{userSession.organizations[0].displayName}</Button>
+                    <Dropdown.Menu>
+                        <Dropdown.Menu.List>
+                            {userSession.organizations.map((org) => {
+                                return (
+                                    <Dropdown.Menu.List.Item>
+                                        {org.displayName}
+                                    </Dropdown.Menu.List.Item>
+                                );
+                            })}
+                        </Dropdown.Menu.List>
+                    </Dropdown.Menu>
+                </Dropdown>
+            )}
+        </div>
+        <div className="flex items-center">{userSession.firstName}</div>
+        <div className="flex items-center">
+            <LogoutButton />
+        </div>
+    </HStack>
+);
+
 export default function Menu({ userSession }: { userSession: UserSession }) {
     return (
         <div className="flex justify-between">
-            <HStack>
-                <Logo />
-                {MENU_ITEMS_LEFT.map(renderMenuItems)}
-            </HStack>
-            <HStack gap="5">
-                {userSession.organizations.length === 1 && (
-                    <div className="flex items-center">
-                        {userSession.selectedOrganization?.displayName}
-                    </div>
-                )}
-                {userSession.organizations.length > 1 && (
-                    <Dropdown>
-                        <Button as={Dropdown.Toggle}>
-                            {userSession.organizations[0].displayName}
-                        </Button>
-                        <Dropdown.Menu>
-                            <Dropdown.Menu.List>
-                                {userSession.organizations.map((org) => {
-                                    return (
-                                        <Dropdown.Menu.List.Item>
-                                            {org.displayName}
-                                        </Dropdown.Menu.List.Item>
-                                    );
-                                })}
-                            </Dropdown.Menu.List>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                )}
-                <div className="flex items-center">{userSession.firstName}</div>
-                <div className="flex items-center">
-                    <LogoutButton />
-                </div>
-            </HStack>
+            <MenuLeft />
+            <MenuRight userSession={userSession} />
         </div>
     );
 }
-
-const MENU_ITEMS_LEFT: MenuItems[] = [
-    {
-        title: 'TILGANGER',
-        subMenus: [
-            {
-                title: 'Kontakter',
-                path: '/kontakter',
-            },
-            {
-                title: 'Komponenter',
-                path: '/komponenter',
-            },
-            {
-                title: 'Adapter',
-                path: '/adapter',
-            },
-            {
-                title: 'Klienter',
-                path: '/klienter',
-            },
-            {
-                title: 'Ressurser',
-                path: '/ressurser',
-            },
-            {
-                title: 'Hendelseslogg',
-                path: '/hendelseslogg',
-            },
-        ],
-    },
-    {
-        title: 'HELSE',
-        subMenus: [
-            {
-                title: 'Basistest',
-                path: '/basistest',
-            },
-            {
-                title: 'Relasjonstest',
-                path: '/relasjonstest',
-            },
-        ],
-    },
-];
