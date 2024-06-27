@@ -1,6 +1,6 @@
-import { MenuItems } from '~/types/MenuItems';
+import { MenuDropDown } from '~/types/MenuDropDown';
 
-export const MENU_ITEMS_LEFT: MenuItems[] = [
+export const MENU_ITEMS_LEFT: MenuDropDown[] = [
     {
         title: 'TILGANGER',
         subMenus: [

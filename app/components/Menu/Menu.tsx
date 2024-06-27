@@ -3,12 +3,67 @@ import { useRef, useState } from 'react';
 import { UserSession } from '~/api/types';
 import { Button } from '@navikt/ds-react';
 import { LogoutButton } from './LogoutButton';
-import { MenuItems } from '../../types/MenuItems';
+import { MenuDropDown } from '../../types/MenuDropDown';
 import { NavLinkView } from './NavLinkView';
 import { Logo } from './Logo';
 import { MENU_ITEMS_LEFT } from './constants';
 
-const renderMenuItems = (item: MenuItems, index: number) => {
+export default function Menu({ userSession }: { userSession: UserSession }) {
+    return (
+        <div className="flex justify-between">
+            <MenuLeft />
+            <MenuRight userSession={userSession} />
+        </div>
+    );
+}
+
+const MenuLeft = () => (
+    <HStack>
+        <Logo />
+        {MENU_ITEMS_LEFT.map(renderMenuItem)}
+    </HStack>
+);
+
+const UserOrganization = ({ userSession }: { userSession: UserSession }) => {
+    return (
+        <>
+            {userSession.organizations.length === 1 && (
+                <div className="flex items-center">
+                    {userSession.selectedOrganization?.displayName}
+                </div>
+            )}
+            {userSession.organizations.length > 1 && (
+                <Dropdown>
+                    <Button as={Dropdown.Toggle}>{userSession.organizations[0].displayName}</Button>
+                    <Dropdown.Menu>
+                        <Dropdown.Menu.List>
+                            {userSession.organizations.map((org) => {
+                                return (
+                                    <Dropdown.Menu.List.Item>
+                                        {org.displayName}
+                                    </Dropdown.Menu.List.Item>
+                                );
+                            })}
+                        </Dropdown.Menu.List>
+                    </Dropdown.Menu>
+                </Dropdown>
+            )}
+        </>
+    );
+};
+const MenuRight = ({ userSession }: { userSession: UserSession }) => (
+    <HStack gap="5">
+        <div className="flex items-center">
+            <UserOrganization userSession={userSession} />
+        </div>
+        <div className="flex items-center">{userSession.firstName}</div>
+        <div className="flex items-center">
+            <LogoutButton />
+        </div>
+    </HStack>
+);
+
+const renderMenuItem = (item: MenuDropDown, index: number) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -49,51 +104,3 @@ const renderMenuItems = (item: MenuItems, index: number) => {
         </Dropdown>
     );
 };
-
-const MenuLeft = () => (
-    <HStack>
-        <Logo />
-        {MENU_ITEMS_LEFT.map(renderMenuItems)}
-    </HStack>
-);
-
-const MenuRight = ({ userSession }: { userSession: UserSession }) => (
-    <HStack gap="5">
-        <div className="flex items-center">
-            {userSession.organizations.length === 1 && (
-                <div className="flex items-center">
-                    {userSession.selectedOrganization?.displayName}
-                </div>
-            )}
-            {userSession.organizations.length > 1 && (
-                <Dropdown>
-                    <Button as={Dropdown.Toggle}>{userSession.organizations[0].displayName}</Button>
-                    <Dropdown.Menu>
-                        <Dropdown.Menu.List>
-                            {userSession.organizations.map((org) => {
-                                return (
-                                    <Dropdown.Menu.List.Item>
-                                        {org.displayName}
-                                    </Dropdown.Menu.List.Item>
-                                );
-                            })}
-                        </Dropdown.Menu.List>
-                    </Dropdown.Menu>
-                </Dropdown>
-            )}
-        </div>
-        <div className="flex items-center">{userSession.firstName}</div>
-        <div className="flex items-center">
-            <LogoutButton />
-        </div>
-    </HStack>
-);
-
-export default function Menu({ userSession }: { userSession: UserSession }) {
-    return (
-        <div className="flex justify-between">
-            <MenuLeft />
-            <MenuRight userSession={userSession} />
-        </div>
-    );
-}
