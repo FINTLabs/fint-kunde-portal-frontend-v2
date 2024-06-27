@@ -1,4 +1,3 @@
-
 export interface IContact {
     dn: string;
     nin: string;
@@ -25,7 +24,6 @@ export const defaultContact: IContact = {
     roles: null,
 };
 
-
 export interface IErrorState {
     [key: string]: string | undefined;
 }
@@ -33,7 +31,7 @@ export interface IErrorState {
 export interface IFetcherResponseData {
     show: boolean;
     message: string;
-    variant: "error" | "info" | "warning" | "success";
+    variant: 'error' | 'info' | 'warning' | 'success';
 }
 
 export interface IMeData {

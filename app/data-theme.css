@@ -1,8 +1,8 @@
-[data-theme="light"] {
-  /* button */
-  --ac-button-tertiary-hover-bg: var(--a-lightblue-800);
-  --ac-button-tertiary-text: var(--a-gray-800);
-  --ac-button-tertiary-hover-text: var(--a-gray-50);
-  --ac-button-tertiary-active-bg: var(--a-lightblue-900);
-  --ac-button-tertiary-active-hover-bg: var(--a-lightblue-900);
+[data-theme='light'] {
+    /* button */
+    --ac-button-tertiary-hover-bg: var(--a-lightblue-800);
+    --ac-button-tertiary-text: var(--a-gray-800);
+    --ac-button-tertiary-hover-text: var(--a-gray-50);
+    --ac-button-tertiary-active-bg: var(--a-lightblue-900);
+    --ac-button-tertiary-active-hover-bg: var(--a-lightblue-900);
 }

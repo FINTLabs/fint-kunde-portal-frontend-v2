@@ -23,8 +23,9 @@ export function log(...messages: any[]) {
 }
 
 export function error(...messages: any[]) {
-    const formattedMessages = messages.map(message =>
-        message instanceof Error ? formatError(message) : message);
+    const formattedMessages = messages.map((message) =>
+        message instanceof Error ? formatError(message) : message
+    );
     console.error(`[${getCurrentDateTime()}]`, ...formattedMessages);
 }
 
