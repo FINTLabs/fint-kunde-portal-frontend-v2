@@ -9,13 +9,13 @@ const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
 };
 
 export const UserOrganization = ({ userSession }: { userSession: UserSession }) => {
-    if (userSession.selectedOrganization) {
-        console.log('userSession.selectedOrganization');
-        console.log(userSession.selectedOrganization);
-        const organizationExtra = userSession.selectedOrganization;
-        organizationExtra.displayName = 'ANUM organization';
-        userSession.organizations.push(organizationExtra);
-    }
+    // if (userSession.selectedOrganization) {
+    //     console.log('userSession.selectedOrganization');
+    //     console.log(userSession.selectedOrganization);
+    //     const organizationExtra = userSession.selectedOrganization;
+    //     organizationExtra.displayName = 'ANUM organization';
+    //     userSession.organizations.push(organizationExtra);
+    // }
 
     return (
         <>
