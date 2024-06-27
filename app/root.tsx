@@ -62,7 +62,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
-    const { userSession } = useLoaderData<{ userSession: UserSession }>();
+    const data = useLoaderData<{ userSession: UserSession }>();
+
+    if (!data) {
+        return <div>No loader data in Layout. See app/root.tsx</div>;
+    }
+
+    const { userSession } = data;
 
     return (
         <html lang="en">
