@@ -5,11 +5,12 @@ import logo from '../../public/images/logo.png';
 import { UserSession } from '~/api/types';
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Modal } from '@navikt/ds-react';
+import { useNavigate } from '@remix-run/react';
 
 type NavLinkItemType = {
     title: string;
     path: string;
-¯};
+};
 
 const NavLinkItem = ({ item }: { item: NavLinkItemType }) => {
     return (
@@ -78,6 +79,7 @@ const LogoNavLink = (
 
 export default function Menu({ userSession }: { userSession: UserSession }) {
     console.log(userSession);
+    const navigate = useNavigate();
 
     const original = userSession.organizations[0];
     const obj = userSession.organizations[0];
@@ -139,9 +141,7 @@ export default function Menu({ userSession }: { userSession: UserSession }) {
                                 type="button"
                                 variant="secondary"
                                 onClick={() => {
-                                    // delete also the cookie ?
-                                    window.location.href =
-                                        'https://idp.felleskomponent.no/nidp/app/logout';
+                                    navigate('/logout');
                                 }}>
                                 Ja
                             </Button>
