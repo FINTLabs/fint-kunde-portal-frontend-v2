@@ -1,4 +1,3 @@
-import { NavLink } from '@remix-run/react';
 import { Dropdown, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import logo from '../../public/images/logo.png';
@@ -7,29 +6,11 @@ import { LeaveIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Modal } from '@navikt/ds-react';
 import { useNavigate } from '@remix-run/react';
 import { LogoutButton } from './LogoutButton';
+import { MenuItems } from '../../types/MenuItems';
+import { NavLinkItem } from '~/types/NavLinkItem';
+import { NavLinkView } from './NavLinkView';
 
-type NavLinkItemType = {
-    title: string;
-    path: string;
-};
-
-const NavLinkItem = ({ item }: { item: NavLinkItemType }) => {
-    return (
-        <NavLink
-            to={item.path}
-            className={({ isActive, isPending }) =>
-                `text-[--a-gray-600] hover:text-[--a-gray-200] w-full ${
-                    isPending ? 'pending' : isActive ? 'active' : ''
-                }`
-            }>
-            <div className="p-[--a-spacing-3] hover:bg-[--a-lightblue-600] hover:text-[--a-gray-50] w-full">
-                {item.title}
-            </div>
-        </NavLink>
-    );
-};
-
-const renderMenuItems = (item: MENU_ITEMS_TYPE, index: number) => {
+const renderMenuItems = (item: MenuItems, index: number) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -63,7 +44,7 @@ const renderMenuItems = (item: MENU_ITEMS_TYPE, index: number) => {
                             onClick={() => {
                                 if (isOpen) setIsOpen(!isOpen);
                             }}>
-                            <NavLinkItem item={subMenu}></NavLinkItem>
+                            <NavLinkView item={subMenu}></NavLinkView>
                         </Dropdown.Menu.List.Item>
                     ))}
                 </Dropdown.Menu.List>
@@ -72,15 +53,14 @@ const renderMenuItems = (item: MENU_ITEMS_TYPE, index: number) => {
     );
 };
 
-const LogoNavLink = (
-    <NavLink to="/" className={'flex items-center'}>
-        <img src={logo} width={100} height={50} />
-    </NavLink>
-);
+// const LogoNavLink = (
+//     <NavLink to="/" className={'flex items-center'}>
+//         <img src={logo} width={100} height={50} />
+//     </NavLink>
+// );
 
 export default function Menu({ userSession }: { userSession: UserSession }) {
     console.log(userSession);
-    const navigate = useNavigate();
 
     const original = userSession.organizations[0];
     const obj = userSession.organizations[0];
@@ -89,11 +69,10 @@ export default function Menu({ userSession }: { userSession: UserSession }) {
 
     userSession.organizations = [original, cloned];
 
-
     return (
         <div className="flex justify-between">
             <HStack>
-                {LogoNavLink}
+                {/* {LogoNavLink} */}
                 {MENU_ITEMS_LEFT.map(renderMenuItems)}
             </HStack>
             <HStack gap="5">
@@ -129,12 +108,7 @@ export default function Menu({ userSession }: { userSession: UserSession }) {
     );
 }
 
-type MENU_ITEMS_TYPE = {
-    title: string;
-    subMenus: NavLinkItemType[];
-};
-
-const MENU_ITEMS_LEFT: MENU_ITEMS_TYPE[] = [
+const MENU_ITEMS_LEFT: MenuItems[] = [
     {
         title: 'TILGANGER',
         subMenus: [
