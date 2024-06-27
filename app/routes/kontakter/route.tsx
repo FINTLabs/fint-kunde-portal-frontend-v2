@@ -42,70 +42,15 @@ export default function Index() {
         </div>
       </div>
       <div className="p-4">
-        <p className="font-medium pb-4 text-xl">Juridiske kontakt</p>
+        <p className="font-medium pb-4 text-xl">Juridisk kontakt</p>
         <div className="flex flex-row items-center px-4">
           <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4" />
           <p className="pl-4 font-medium">Svein Håkon Skulstad</p>
         </div>
       </div>
-
-      {/* Modal starts here */}
-      {/* <div className="flex justify-between w-full bg-white pl-3 border-black border-2">
-        <div className="flex items-center">
-          <p className="pl-2">Mona Modal (Admin)</p>
-        </div>
-        <Button
-          icon={<WrenchIcon size="small" title="vis tilganger" />}
-          variant="tertiary"
-          className="hover:rounded-none"
-          onClick={() => ref.current?.showModal()}
-        />
-        <Modal
-          ref={ref}
-          aria-label="Mona Modal Tilganger"
-          className="w-3/4 h-3/4"
-        >
-          <Modal.Body className="w-full h-full">
-            <BodyLong className="h-3/4 w-3/4">
-              <Button
-                type="button"
-                variant="tetriary"
-                onClick={() => ref.current?.close()}
-              >
-                <XMarkIcon className="h-8 w-8 absolute right-4 top-4" />
-              </Button>
-              <div className="flex  flex-col h-3/4 absolute top-4">
-                <p className="text-2xl">Mona Modal</p>
-                <p className="text-3xl pl-2">Roller</p>
-                <RoleListItems listLength={12} />
-                <div>
-                  <p className="text-3xl pl-2">Kontroll</p>
-                  <div className="flex flex-col items-start">
-                    <Button
-                      icon={<HospitalIcon size="small" />}
-                      variant="tetriary"
-                    >
-                      Gjør til juridisk kontakt
-                    </Button>
-                    <Button
-                      icon={<LinkBrokenIcon size="small" />}
-                      variant="tetriary"
-                    >
-                      Fjern kontakt
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </BodyLong>
-          </Modal.Body>
-        </Modal>
-      </div> */}
-      {/* Modal ends here, Accordian starts */}
       <Accordion className="!border-t-2 border-black my-4">
         <Accordions />
       </Accordion>
-
-      {/* <ListItems /> */}
     </div>
   );
 }
