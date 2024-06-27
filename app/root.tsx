@@ -6,7 +6,7 @@ import '@navikt/ds-css';
 import './data-theme.css';
 import { Box, Page } from '@navikt/ds-react';
 import React from 'react';
-import Menu from './components/Menu';
+import Menu from './components/Menu/Menu';
 import { getSession, commitSession } from '~/utils/session';
 import MeApi from '~/api/MeApi';
 import { log } from '~/utils/logger';
@@ -69,6 +69,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
     }
 
     const { userSession } = data;
+
+    
 
     return (
         <html lang="en">
