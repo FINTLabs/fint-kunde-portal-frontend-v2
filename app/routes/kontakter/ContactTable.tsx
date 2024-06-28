@@ -1,4 +1,3 @@
-// ContactTable.tsx
 import React, { useState } from 'react';
 import { Table, Button } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon, ShieldLockIcon } from '@navikt/aksel-icons';
@@ -13,7 +12,9 @@ interface IContactTableProps {
 }
 
 const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, hasRole }) => {
-    const [modalState, setModalState] = useState<{ type: string, contact?: IContact, open: boolean }>({ type: '', contact: undefined, open: false });
+    const [modalState, setModalState] =
+        useState<{ type: string, contact?: IContact, open: boolean }>
+        ({ type: '', contact: undefined, open: false });
 
     const handleOpenModal = (type: string, contact: IContact) => {
         setModalState({ type, contact, open: true });
@@ -24,7 +25,7 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, h
     };
 
     const handleConfirm = () => {
-        // Handle confirm action here
+        // todo: Handle confirm action here
         console.log(`${modalState.type} confirmed for contact:`, modalState.contact);
         handleCloseModal();
     };

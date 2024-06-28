@@ -8,7 +8,8 @@ interface IRolesChipsProps {
     hasRole: (currentContact: IContact, roleId: string) => boolean;
 }
 
-const RolesChips: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole }) => {
+const RolesChips: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole}) => {
+
     const isAdmin = hasRole(contact, 'ROLE_ADMIN');
 
     return (
