@@ -10,8 +10,9 @@ import Menu from './components/Menu/Menu';
 import { getSession, commitSession } from '~/utils/session';
 import MeApi from '~/api/MeApi';
 import { log } from '~/utils/logger';
-import { IMeData, IOrganisations, UserSession } from '~/api/types';
+import { FeatureFlags, IMeData, IOrganisations, UserSession } from '~/api/types';
 import Footer from '~/components/Footer';
+import FeaturesApi from './api/FeaturesApi';
 
 export const meta: MetaFunction = () => {
     return [
@@ -58,19 +59,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }
 
     log('user-session', session.get('user-session'));
-    return json({ userSession: session.get('user-session') });
+
+    const features = await FeaturesApi.fetchFeatures();
+    log('features', features);
+
+    return json({ userSession: session.get('user-session'), features: features });
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
-    const data = useLoaderData<{ userSession: UserSession }>();
-
-    if (!data) {
-        return <div>No loader data in Layout. See app/root.tsx</div>;
-    }
-
-    const { userSession } = data;
-
-    
+    const { userSession, features } = useLoaderData<{
+        userSession: UserSession;
+        features: FeatureFlags;
+    }>();
 
     return (
         <html lang="en">
@@ -91,7 +91,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     }>
                     <Box background="surface-neutral-moderate" padding="8" as="header">
                         <Page.Block gutters width="lg">
-                            <Menu userSession={userSession} />
+                            <Menu
+                                userSession={userSession}
+                                displaySamtykke={features['samtykke-admin-new']}
+                            />
                         </Page.Block>
                     </Box>
                     <Box
