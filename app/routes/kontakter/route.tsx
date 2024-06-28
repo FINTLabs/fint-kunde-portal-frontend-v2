@@ -1,52 +1,110 @@
-import { useRef } from 'react';
-import type { MetaFunction } from '@remix-run/node';
-import ListItems from './ListItems';
-import RoleListItems from './RoleListItems';
-import {
-    XMarkIcon,
-    WrenchIcon,
-    PersonSuitIcon,
-    HospitalIcon,
-    LinkBrokenIcon,
-} from '@navikt/aksel-icons';
-import { Accordion, BodyLong, Button, Modal, Switch } from '@navikt/ds-react';
-import { AccordionContent } from '@navikt/ds-react/Accordion';
-import Accordions from './Accordions';
+import React, {useState} from 'react';
+import {LoaderFunction, MetaFunction} from '@remix-run/node';
+import {PersonGroupIcon, PersonSuitIcon} from '@navikt/aksel-icons';
+import {BodyShort, Box, Button, Chips, Heading, HStack, InternalHeader, Search, Spacer, Table} from '@navikt/ds-react';
+import Breadcrumbs from "~/components/breadcrumbs";
+import {getSession} from "~/utils/session";
+import type {IContact, IRole} from "~/api/types";
+import {json, useLoaderData} from "@remix-run/react";
+import ContactApi from "~/api/ContactApi";
+import RoleApi from "~/api/RolesApi";
+import OrganisationApi from "~/api/OrganisationApi";
+import InternalPageHeader from "~/components/InternalPageHeader";
+import ContactTable from "~/routes/kontakter/ContactTable";
+
+
+interface IPageLoaderData {
+    contactsData?: IContact[];
+    rolesData?: IRole[];
+    error?: string;
+}
 
 export const meta: MetaFunction = () => {
-    return [{ title: 'Kontakter' }, { name: 'description', content: 'Liste over kontakter' }];
+    return [{title: 'Kontakter'}, {name: 'description', content: 'Liste over kontakter'}];
 };
 
+export const loader: LoaderFunction = async ({ request }) => {
+    const session = await getSession(request.headers.get('Cookie'));
+    const userSession = session.get('user-session');
+
+    try {
+        if (!userSession?.selectedOrganization) {
+            return json({ error: 'No organization selected' }, { status: 400 });
+        }
+
+        const contactsData = await ContactApi.fetchTechnicalContacts(userSession.selectedOrganization.name);
+        const rolesData = await RoleApi.getRoles();
+        const legalContact = await OrganisationApi.getLegalContact(userSession.selectedOrganization.name);
+
+        return json({ contactsData, rolesData, legalContact });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw new Response('Not Found', { status: 404 });
+    }
+};
+
+
 export default function Index() {
-    const ref = useRef<HTMLDialogElement>(null);
+    const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
+    const data = useLoaderData<IPageLoaderData & { legalContact?: IContact }>(); // Extend the type to include legal contact
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    const filteredContacts = data.contactsData?.filter(contact =>
+        contact.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        contact.lastName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    const hasRole = (currentContact: IContact, roleId: string): boolean => {
+        if (currentContact) {
+            return currentContact.roles?.includes(roleId + "@" + "fintlabs_no") ?? false;
+        }
+        return false;
+    };
+
 
     return (
-        <div className="font-sans p-4 flex bg-white flex-col justify-center w-full">
-            <div>
-                <h1 className="text-3xl text-center font-semibold">Kontakter</h1>
-                <div className="font-medium my-4 border-dashed border-2 border-slate-400 p-2 rounded-lg">
-                    <p>Kontakter er personer som har tilgang til kundeportalen.</p>
-                    <p>En juridisk kontakt er den som har det merkantile ansvaret.</p>
-                    <p>
-                        Tekniske kontakter er organisasjonens FINT administratorer. De vil få
-                        driftsmeldinger tilsendt ved behov.
-                    </p>
-                    <p>
-                        Ordinære driftsmeldinger sendes på epost. Kritiske driftmeldinger sendes på
-                        epost og sms.
-                    </p>
-                </div>
-            </div>
-            <div className="p-4">
-                <p className="font-medium pb-4 text-xl">Juridisk kontakt</p>
-                <div className="flex flex-row items-center px-4">
-                    <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4" />
-                    <p className="pl-4 font-medium">Svein Håkon Skulstad</p>
-                </div>
-            </div>
-            <Accordion className="!border-t-2 border-black my-4">
-                <Accordions />
-            </Accordion>
-        </div>
+        <>
+            <Breadcrumbs breadcrumbs={breadcrumbs}/>
+            <InternalPageHeader
+                title={'Kontakter'}
+                icon={PersonGroupIcon}
+                helpText="contacts"
+            />
+
+
+            <Box className="m-10">
+                <Heading size="xsmall">Juridisk kontakt</Heading>
+                {data.legalContact ? (
+                    <HStack gap="4" align="center" className="px-4">
+                        <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4"/>
+                        <BodyShort size="medium">{data.legalContact.firstName}</BodyShort>
+                    </HStack>
+                ) : (
+                    <BodyShort size="medium">Ingen juridisk kontakt funnet</BodyShort>
+                )}
+            </Box>
+
+            <InternalHeader className={"!bg-gray-400"}>
+                <form
+                    className="self-center px-5"
+                >
+                    <Search
+                        label="InternalPageHeader søk"
+                        size="small"
+                        variant="simple"
+                        placeholder="Søk"
+                        className={"!bg-gray-300"}
+                        onChange={(value) => setSearchQuery(value)}
+                    />
+                </form>
+                <Spacer/>
+                <InternalHeader.Title href="#home">Add New Contact</InternalHeader.Title>
+            </InternalHeader>
+
+            <ContactTable
+                contactsData={filteredContacts}
+                rolesData={data.rolesData}
+                hasRole={hasRole}
+            />
+        </>
     );
 }

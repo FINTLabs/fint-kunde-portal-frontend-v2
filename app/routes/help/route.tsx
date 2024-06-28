@@ -1,6 +1,6 @@
 import { MetaFunction } from '@remix-run/node';
 import Breadcrumbs from '~/components/breadcrumbs';
-import InternalHeader from '~/components/InternalHeader';
+import InternalPageHeader from '~/components/InternalPageHeader';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Accordion, Box } from '@navikt/ds-react';
 import { helpData, HelpDataItem } from '~/routes/help/HelpData';
@@ -15,7 +15,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalHeader title={'Mer Informasjon'} icon={InformationSquareIcon} />
+            <InternalPageHeader title={'Mer Informasjon'} icon={InformationSquareIcon} />
             <Box
                 // background="surface-alt-4-moderate"
                 padding="8"

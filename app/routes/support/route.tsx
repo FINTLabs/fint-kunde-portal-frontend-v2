@@ -10,7 +10,7 @@ import {
 } from '@navikt/ds-react';
 import { json, useLoaderData } from '@remix-run/react';
 import Breadcrumbs from '~/components/breadcrumbs';
-import InternalHeader from '~/components/InternalHeader';
+import InternalPageHeader from '~/components/InternalPageHeader';
 import { QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 import ZenDeskApi from '~/api/ZenDeskApi';
 import ComponentApi from '~/api/ComponentApi';
@@ -49,7 +49,7 @@ export default function Index() {
     return (
         <div>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalHeader title={'Opprett support sak'} icon={QuestionmarkDiamondIcon} />
+            <InternalPageHeader title={'Opprett support sak'} icon={QuestionmarkDiamondIcon} />
 
             <form method="post">
                 <RadioGroup

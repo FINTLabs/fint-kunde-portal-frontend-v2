@@ -2,7 +2,7 @@ import { Box, Page } from '@navikt/ds-react';
 import { PersonGroupIcon } from '@navikt/aksel-icons';
 import { Outlet, useOutletContext } from '@remix-run/react';
 import Breadcrumbs from '~/components/breadcrumbs';
-import InternalHeader from '~/components/InternalHeader';
+import InternalPageHeader from '~/components/InternalPageHeader';
 import { UserSession } from '~/api/types';
 
 export default function Index() {
@@ -13,7 +13,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalHeader
+            <InternalPageHeader
                 title={'Test with a Kontakter icon'}
                 icon={PersonGroupIcon}
                 helpText="contacts"

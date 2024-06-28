@@ -3,7 +3,7 @@ import { json, useLoaderData } from '@remix-run/react';
 import { IMeData } from '~/api/types';
 import MeApi from '~/api/MeApi';
 import Breadcrumbs from '~/components/breadcrumbs';
-import InternalHeader from '~/components/InternalHeader';
+import InternalPageHeader from '~/components/InternalPageHeader';
 import { PersonIcon } from '@navikt/aksel-icons';
 
 export let loader = async () => {
@@ -22,7 +22,7 @@ export default function Index() {
     return (
         <div>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalHeader title={'User Information'} icon={PersonIcon} />
+            <InternalPageHeader title={'User Information'} icon={PersonIcon} />
             <div style={{ marginBottom: '1rem' }}>
                 <Label>Full Name:</Label>
                 <BodyLong>{`${user.firstName} ${user.lastName}`}</BodyLong>

@@ -1,4 +1,4 @@
-// app/components/InternalHeader.tsx
+// app/components/InternalPageHeader.tsx
 import React from 'react';
 import { Box, Heading, HelpText, Hide, HStack, VStack } from '@navikt/ds-react';
 import { helpData, HelpDataItem } from '~/routes/help/HelpData';
@@ -9,7 +9,7 @@ interface LayoutHeaderProps {
     helpText?: string; // Make helpText optional
 }
 
-const InternalHeader: React.FC<LayoutHeaderProps> = ({ icon: IconComponent, title, helpText }) => {
+const InternalPageHeader: React.FC<LayoutHeaderProps> = ({ icon: IconComponent, title, helpText }) => {
     const helpDescription = helpData.find(
         (item: HelpDataItem) => item.id === helpText
     )?.description;
@@ -39,4 +39,4 @@ const InternalHeader: React.FC<LayoutHeaderProps> = ({ icon: IconComponent, titl
     );
 };
 
-export default InternalHeader;
+export default InternalPageHeader;
