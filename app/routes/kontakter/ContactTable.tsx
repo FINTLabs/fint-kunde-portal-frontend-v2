@@ -1,9 +1,10 @@
 // ContactTable.tsx
 import React, { useState } from 'react';
-import { Chips, Table, Button } from '@navikt/ds-react';
+import { Table, Button } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon, ShieldLockIcon } from '@navikt/aksel-icons';
 import { IContact, IRole } from '~/api/types';
 import ConfirmModal from './ConfirmModal';
+import RolesChips from "~/routes/kontakter/RoleChips";
 
 interface IContactTableProps {
     contactsData?: IContact[];
@@ -44,16 +45,11 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, h
                             key={i + contact.dn}
                             content={
                                 <>
-                                    <Chips>
-                                        {rolesData?.map((chip, chipIndex) => (
-                                            <Chips.Toggle
-                                                key={chipIndex + chip.id}
-                                                selected={hasRole(contact, chip.id)}
-                                            >
-                                                {chip.name}
-                                            </Chips.Toggle>
-                                        ))}
-                                    </Chips>
+                                    <RolesChips
+                                        contact={contact}
+                                        rolesData={rolesData}
+                                        hasRole={hasRole}
+                                    />
 
                                     <Button
                                         icon={<GavelSoundBlockIcon />}

@@ -1,6 +1,5 @@
 import { error, log } from '~/utils/logger';
-
-const API_URL = process.env.ZENDESK_API_URL || 'https://kunde-beta.fintlabs.no';
+import {API_URL} from "~/api/constants";
 
 export default class ZenDeskApi {
     static async getPriority() {

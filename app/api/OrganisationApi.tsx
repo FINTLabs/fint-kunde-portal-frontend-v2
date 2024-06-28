@@ -1,8 +1,7 @@
 import { error, log } from '~/utils/logger';
 import {IOrganisations} from "~/api/types";
+import {API_URL} from "~/api/constants";
 
-
-const API_URL = process.env.API_URL || 'https://kunde-beta.fintlabs.no';
 
 class OrganisationApi {
   static async getTechnicalContacts(organisationName: string): Promise<any> {
