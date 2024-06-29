@@ -2,20 +2,21 @@ import { UserSession } from '~/api/types';
 import { Select } from '@navikt/ds-react';
 import { ChangeEvent } from 'react';
 
-const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    console.log('Org changed to ', event.target.value);
-
-    // TODO: implement actual org change here
-};
-
 export const UserOrganization = ({ userSession }: { userSession: UserSession }) => {
-    // if (userSession.selectedOrganization) {
-    //     console.log('userSession.selectedOrganization');
-    //     console.log(userSession.selectedOrganization);
-    //     const organizationExtra = userSession.selectedOrganization;
-    //     organizationExtra.displayName = 'ANUM organization';
-    //     userSession.organizations.push(organizationExtra);
-    // }
+    if (userSession.selectedOrganization) {
+        console.log('userSession.selectedOrganization');
+        console.log(userSession.selectedOrganization);
+        const organizationExtra = userSession.selectedOrganization;
+        organizationExtra.displayName = 'ANUM organization';
+        userSession.organizations.push(organizationExtra);
+    }
+
+    const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        const selectedOrg = userSession.organizations.filter(
+            (org) => org.displayName === event.target.value
+        )[0];
+        userSession.selectedOrganization = selectedOrg;
+    };
 
     return (
         <>
