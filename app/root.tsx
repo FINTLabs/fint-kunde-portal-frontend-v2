@@ -72,6 +72,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         features: FeatureFlags;
     }>();
 
+    if (!userSession) {
+        return <div>Usersession is undefined</div>;
+    }
+
+    const displaySamtykke = features ? features['samtykke-admin-new'] : false;
     return (
         <html lang="en">
             <head>
@@ -91,10 +96,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     }>
                     <Box background="surface-neutral-moderate" padding="8" as="header">
                         <Page.Block gutters width="lg">
-                            <Menu
-                                userSession={userSession}
-                                displaySamtykke={features['samtykke-admin-new']}
-                            />
+                            <Menu userSession={userSession} displaySamtykke={displaySamtykke} />
                         </Page.Block>
                     </Box>
                     <Box
