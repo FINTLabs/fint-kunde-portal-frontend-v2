@@ -15,9 +15,6 @@ export default function Footer() {
             </Heading>
             <div style={{ marginBottom: '1rem' }}>
                 <BodyLong>
-                    <Link to="/user" style={{ marginRight: '1rem' }}>
-                        User Page
-                    </Link>
                     <Link
                         to="https://uustatus.no/nb/erklaringer/publisert/1226249b-ebc9-4d91-93b5-fa6b1df72691"
                         style={{ marginRight: '1rem' }}>
