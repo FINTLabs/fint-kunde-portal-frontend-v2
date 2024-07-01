@@ -16,9 +16,6 @@ export default class ZenDeskApi {
                 },
             });
 
-            if (response.redirected) {
-                log('Priority Request was redirected:', response.url);
-            }
 
             if (response.ok) {
                 return await response.json();
@@ -46,10 +43,6 @@ export default class ZenDeskApi {
                     'x-nin': process.env.PERSONALNUMBER || '',
                 },
             });
-
-            if (response.redirected) {
-                log('Type Request was redirected:', response.url);
-            }
 
             if (response.ok) {
                 return await response.json();

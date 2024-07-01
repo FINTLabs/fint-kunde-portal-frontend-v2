@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {LoaderFunction, MetaFunction} from '@remix-run/node';
 import {PersonGroupIcon, PersonSuitIcon} from '@navikt/aksel-icons';
-import {BodyShort, Box, Button, Chips, Heading, HStack, InternalHeader, Search, Spacer, Table} from '@navikt/ds-react';
+import {BodyShort, Box, Heading, HStack, InternalHeader, Search, Spacer} from '@navikt/ds-react';
 import Breadcrumbs from "~/components/breadcrumbs";
 import {getSession} from "~/utils/session";
 import type {IContact, IRole} from "~/api/types";
@@ -24,13 +24,11 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const session = await getSession(request.headers.get('Cookie'));
-    const userSession = session.get('user-session');
+
 
     try {
-        if (!userSession?.selectedOrganization) {
-            return json({ error: 'No organization selected' }, { status: 400 });
-        }
+        const session = await getSession(request.headers.get('Cookie'));
+        const userSession = session.get('user-session');
 
         const contactsData = await ContactApi.fetchTechnicalContacts(userSession.selectedOrganization.name);
         const rolesData = await RoleApi.getRoles();
@@ -46,19 +44,14 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
-    const data = useLoaderData<IPageLoaderData & { legalContact?: IContact }>(); // Extend the type to include legal contact
+    const data = useLoaderData<IPageLoaderData & { legalContact?: IContact }>();
     const [searchQuery, setSearchQuery] = useState<string>('');
 
     const filteredContacts = data.contactsData?.filter(contact =>
         contact.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         contact.lastName.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    const hasRole = (currentContact: IContact, roleId: string): boolean => {
-        if (currentContact) {
-            return currentContact.roles?.includes(roleId + "@" + "fintlabs_no") ?? false;
-        }
-        return false;
-    };
+
 
 
     return (
@@ -103,8 +96,16 @@ export default function Index() {
             <ContactTable
                 contactsData={filteredContacts}
                 rolesData={data.rolesData}
-                hasRole={hasRole}
             />
+        </>
+    );
+}
+
+export function ErrorBoundary({error}: { error: Error }) {
+    return (
+        <>
+            <p>Something went wrong fetching contacts.</p>
+            <p>{error?.message}</p>
         </>
     );
 }

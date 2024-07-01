@@ -26,7 +26,7 @@ class ContactApi {
             }
         } catch (err) {
             error('Error fetching contacts:', err);
-            return null;
+            throw new Error('Error fetching contacts');
         }
     }
 
@@ -48,9 +48,6 @@ class ContactApi {
                     },
                 }
             );
-            if (response.redirected) {
-                log('Contact Request was redirected:', response.url);
-            }
 
             if (response.ok) {
                 return await response.json();
@@ -60,7 +57,7 @@ class ContactApi {
             }
         } catch (err) {
             error('Error fetching contacts:', err);
-            return null;
+            throw new Error('Error fetching technical contacts');
         }
     }
 }

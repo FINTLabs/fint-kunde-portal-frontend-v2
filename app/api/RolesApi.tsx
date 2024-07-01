@@ -16,25 +16,21 @@ export default class RoleApi {
                 },
             });
 
-            if (response.redirected) {
-                log('Roles request was redirected:', response.url);
-            }
-
             if (response.ok) {
                 return await response.json();
             } else {
                 error('Error fetching roles', response.status);
-                return 'try-error';
+                return null;
             }
         } catch (err) {
             log(err);
             error('Error fetching roles:', err);
-            return 'catch-error';
+            throw new Error('Error fetching roles')
         }
     }
 
-    static async addRole(organisationName:string, contactNin: string, roleId: string) {
-        const url = `${API_URL}/organisations/${organisationName}/contacts/roles/${contactNin}/${roleId}`;
+    static async addRole(orgName:string, contactNin: string, roleId: string) {
+        const url = `${API_URL}/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`;
         log('Adding role', url);
 
         try {
@@ -45,10 +41,6 @@ export default class RoleApi {
                     'Content-Type': 'application/json',
                 },
             });
-
-            if (response.redirected) {
-                log('Add role request was redirected:', response.url);
-            }
 
             if (response.ok) {
                 return await response.json();
@@ -75,10 +67,6 @@ export default class RoleApi {
                     'Content-Type': 'application/json',
                 },
             });
-
-            if (response.redirected) {
-                log('Remove role request was redirected:', response.url);
-            }
 
             if (response.ok) {
                 return await response.json();

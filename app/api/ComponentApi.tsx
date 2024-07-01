@@ -16,10 +16,6 @@ class ComponentApi {
                 },
             });
 
-            if (response.redirected) {
-                log('Components Request was redirected:', response.url);
-            }
-
             if (response.ok) {
                 return await response.json();
             } else {
@@ -46,10 +42,6 @@ class ComponentApi {
                     'x-nin': process.env.PERSONALNUMBER || '',
                 },
             });
-
-            if (response.redirected) {
-                log('Organisation Components Request was redirected:', response.url);
-            }
 
             if (response.ok) {
                 return await response.json();
