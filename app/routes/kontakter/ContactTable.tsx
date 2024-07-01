@@ -1,19 +1,30 @@
-// ContactTable.tsx
 import React, { useState } from 'react';
 import { Table, Button } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon, ShieldLockIcon } from '@navikt/aksel-icons';
-import { IContact, IRole } from '~/api/types';
+import {IContact, IRole, type UserSession} from '~/api/types';
 import ConfirmModal from './ConfirmModal';
 import RolesChips from "~/routes/kontakter/RoleChips";
+import {log} from "~/utils/logger";
+import {useOutletContext} from "@remix-run/react";
 
 interface IContactTableProps {
     contactsData?: IContact[];
     rolesData?: IRole[];
-    hasRole: (currentContact: IContact, roleId: string) => boolean;
 }
 
-const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, hasRole }) => {
-    const [modalState, setModalState] = useState<{ type: string, contact?: IContact, open: boolean }>({ type: '', contact: undefined, open: false });
+const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData }) => {
+    const [modalState, setModalState] =
+        useState<{ type: string, contact?: IContact, open: boolean }>
+        ({ type: '', contact: undefined, open: false });
+
+    const userSession = useOutletContext<UserSession>();
+
+    const hasRole = (currentContact: IContact, roleId: string): boolean => {
+        if (currentContact) {
+            return currentContact.roles?.includes(roleId + "@" + "fintlabs_no") ?? false;
+        }
+        return false;
+    };
 
     const handleOpenModal = (type: string, contact: IContact) => {
         setModalState({ type, contact, open: true });
@@ -24,9 +35,15 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, h
     };
 
     const handleConfirm = () => {
-        // Handle confirm action here
+        // todo: Handle confirm action here
         console.log(`${modalState.type} confirmed for contact:`, modalState.contact);
         handleCloseModal();
+    };
+    const addRole = (contact: IContact, roleId: string) => {
+        // RoleApi.addRole(orgName, contactNin, roleId);
+        log(`Role ${roleId} added to contact ${contact.nin} with org: ${userSession.selectedOrganization?.name}`);
+        log('Contact:', contact);
+        log(hasRole(contact, roleId));
     };
 
     return (
@@ -49,6 +66,7 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, h
                                         contact={contact}
                                         rolesData={rolesData}
                                         hasRole={hasRole}
+                                        addRole={addRole}
                                     />
 
                                     <Button

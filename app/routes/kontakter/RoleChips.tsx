@@ -1,14 +1,15 @@
 import React from 'react';
 import { Chips } from '@navikt/ds-react';
-import { IContact, IRole } from '~/api/types';
+import {IContact, IRole} from '~/api/types';
 
 interface IRolesChipsProps {
     contact: IContact;
     rolesData?: IRole[];
     hasRole: (currentContact: IContact, roleId: string) => boolean;
+    addRole: (contact:IContact, roleId: string) => void;
 }
 
-const RolesChips: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole }) => {
+const RolesChips: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole, addRole}) => {
     const isAdmin = hasRole(contact, 'ROLE_ADMIN');
 
     return (
@@ -18,6 +19,7 @@ const RolesChips: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole })
                     key={chipIndex + chip.id}
                     selected={hasRole(contact, chip.id) || isAdmin}
                     checkmark={isAdmin && chip.id !== 'ROLE_ADMIN' ? false : undefined}
+                    onClick={() => addRole(contact, chip.id)}
                 >
                     {chip.name}
                 </Chips.Toggle>

@@ -41,9 +41,7 @@ class OrganisationApi {
           'x-nin': process.env.PERSONALNUMBER || '',
         },
       });
-      if (response.redirected) {
-        log('Request was redirected:', response.url);
-      }
+
       if (response.ok) {
         return await response.json();
       } else {
@@ -52,7 +50,7 @@ class OrganisationApi {
       }
     } catch (err) {
       error('Error fetching legal contact:', err);
-      return null;
+      throw new Error('Error fetching legal contact');
     }
   }
 
@@ -65,9 +63,7 @@ class OrganisationApi {
         method: 'GET',
         credentials: 'same-origin',
       });
-      if (response.redirected) {
-        log('Request was redirected:', response.url);
-      }
+
       if (response.ok) {
         return await response.json();
       } else {
@@ -93,9 +89,7 @@ class OrganisationApi {
         credentials: 'same-origin',
         body: JSON.stringify({ name: component.name }),
       });
-      if (response.redirected) {
-        log('Request was redirected:', response.url);
-      }
+
       if (response.ok) {
         return await response.json();
       } else {
@@ -121,9 +115,7 @@ class OrganisationApi {
         credentials: 'same-origin',
         body: JSON.stringify({ name: component.name }),
       });
-      if (response.redirected) {
-        log('Request was redirected:', response.url);
-      }
+
       if (response.ok) {
         return await response.json();
       } else {
@@ -149,9 +141,7 @@ class OrganisationApi {
         credentials: 'same-origin',
         body: JSON.stringify({ nin }),
       });
-      if (response.redirected) {
-        log('Request was redirected:', response.url);
-      }
+
       if (response.ok) {
         return await response.json();
       } else {
@@ -177,9 +167,7 @@ class OrganisationApi {
         credentials: 'same-origin',
         body: JSON.stringify({ nin: contact.nin }),
       });
-      if (response.redirected) {
-        log('Request was redirected:', response.url);
-      }
+
       if (response.ok) {
         return await response.json();
       } else {
@@ -205,9 +193,7 @@ class OrganisationApi {
         credentials: 'same-origin',
         body: JSON.stringify({ name: contact.nin }),
       });
-      if (response.redirected) {
-        log('Request was redirected:', response.url);
-      }
+
       if (response.ok) {
         return response;
       } else {
@@ -233,9 +219,7 @@ class OrganisationApi {
         credentials: 'same-origin',
         body: JSON.stringify({ name: contact.nin }),
       });
-      if (response.redirected) {
-        log('Request was redirected:', response.url);
-      }
+
       if (response.ok) {
         return await response.json();
       } else {
@@ -257,9 +241,7 @@ class OrganisationApi {
         method: 'GET',
         credentials: 'same-origin',
       });
-      if (response.redirected) {
-        log('Request was redirected:', response.url);
-      }
+
       if (response.ok) {
         return response;
       } else {
