@@ -2,9 +2,9 @@ import { log, error } from '~/utils/logger';
 import { API_URL } from './constants';
 
 class ComponentApi {
-    static async getApis() {
-        const url = `${API_URL}/api/components`;
-        log('Fetching components information', url);
+    static async fetch() {
+        const url = '/components.json'; // Path to the JSON file in the public directory
+        log('Fetching components information from static file', url);
 
         try {
             const response = await fetch(url, {
@@ -12,7 +12,6 @@ class ComponentApi {
                 credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-nin': process.env.PERSONALNUMBER || '',
                 },
             });
 
@@ -28,6 +27,33 @@ class ComponentApi {
             return 'catch-error';
         }
     }
+    //
+    // static async fetch() {
+    //     const url = `${API_URL}/api/components`;
+    //     log('Fetching components information', url);
+    //
+    //     try {
+    //         const response = await fetch(url, {
+    //             method: 'GET',
+    //             credentials: 'same-origin',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'x-nin': process.env.PERSONALNUMBER || '',
+    //             },
+    //         });
+    //
+    //         if (response.ok) {
+    //             return await response.json();
+    //         } else {
+    //             error('Error fetching components information', response.status);
+    //             return 'try-error';
+    //         }
+    //     } catch (err) {
+    //         log(err);
+    //         error('Error fetching components information:', err);
+    //         return 'catch-error';
+    //     }
+    // }
 
     static async getOrganisationComponents(organisationName: string) {
         const url = `${API_URL}/api/components/organisation/${organisationName}`;

@@ -1,0 +1,147 @@
+[
+  {
+    "dn": "ou=droid_parts,ou=components,o=fint",
+    "name": "droid_parts",
+    "description": "Droid Parts",
+    "organisations": [
+      "ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "clients": [],
+    "adapters": [
+      "cn=health_test@fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=health@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=fake@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=frode@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=ErlingTestAdapter@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=henrik@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=sanderTesting@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "basePath": "/droid/parts",
+    "port": 8456,
+    "core": true,
+    "openData": false,
+    "common": true,
+    "dockerImage": null,
+    "componentSizes": null,
+    "cacheDisabledFor": [],
+    "inProduction": false,
+    "inBeta": true,
+    "inPlayWithFint": true
+  },
+  {
+    "dn": "ou=jedi_tools,ou=components,o=fint",
+    "name": "jedi_tools",
+    "description": "Jedi Tools",
+    "organisations": [
+      "ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "clients": [],
+    "adapters": [
+      "cn=health_test@fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=health@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=fake@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=frode@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=ErlingTestAdapter@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=henrik@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=sanderTesting@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "basePath": "/jedi/tools",
+    "port": 8226,
+    "core": false,
+    "openData": false,
+    "common": false,
+    "dockerImage": null,
+    "componentSizes": null,
+    "cacheDisabledFor": [],
+    "inProduction": true,
+    "inBeta": false,
+    "inPlayWithFint": false
+  },
+  {
+    "dn": "ou=sith_relics,ou=components,o=fint",
+    "name": "sith_relics",
+    "description": "Sith Relics",
+    "organisations": [
+      "ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "clients": [],
+    "adapters": [
+      "cn=health_test@fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=health@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=fake@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=frode@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=ErlingTestAdapter@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=henrik@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=sanderTesting@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "basePath": "/sith/relics",
+    "port": 8975,
+    "core": true,
+    "openData": true,
+    "common": false,
+    "dockerImage": null,
+    "componentSizes": null,
+    "cacheDisabledFor": [],
+    "inProduction": true,
+    "inBeta": true,
+    "inPlayWithFint": true
+  },
+  {
+    "dn": "ou=rebel_alliance,ou=components,o=fint",
+    "name": "rebel_alliance",
+    "description": "Rebel Alliance",
+    "organisations": [
+      "ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "clients": [],
+    "adapters": [
+      "cn=health_test@fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=health@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=fake@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=frode@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=ErlingTestAdapter@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=henrik@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=sanderTesting@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "basePath": "/rebel/alliance",
+    "port": 8532,
+    "core": true,
+    "openData": false,
+    "common": true,
+    "dockerImage": null,
+    "componentSizes": null,
+    "cacheDisabledFor": [],
+    "inProduction": false,
+    "inBeta": false,
+    "inPlayWithFint": true
+  },
+  {
+    "dn": "ou=imperial_equipment,ou=components,o=fint",
+    "name": "imperial_equipment",
+    "description": "Imperial Equipment",
+    "organisations": [
+      "ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "clients": [],
+    "adapters": [
+      "cn=health_test@fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=health@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=fake@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=frode@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=ErlingTestAdapter@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=henrik@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+      "cn=sanderTesting@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "basePath": "/imperial/equipment",
+    "port": 8674,
+    "core": false,
+    "openData": true,
+    "common": true,
+    "dockerImage": null,
+    "componentSizes": null,
+    "cacheDisabledFor": [],
+    "inProduction": true,
+    "inBeta": true,
+    "inPlayWithFint": false
+  }
+  ]
