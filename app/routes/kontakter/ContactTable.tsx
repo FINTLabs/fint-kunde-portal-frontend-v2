@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon, ShieldLockIcon } from '@navikt/aksel-icons';
-import {IContact, IRole, type UserSession} from '~/api/types';
+import {IContact, IRole, type UserSession} from '~/types/types';
 import ConfirmModal from './ConfirmModal';
 import RolesChips from "~/routes/kontakter/RoleChips";
 import {log} from "~/utils/logger";

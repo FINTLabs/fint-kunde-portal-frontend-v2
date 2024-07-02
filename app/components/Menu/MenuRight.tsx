@@ -1,5 +1,5 @@
 import { HStack } from '@navikt/ds-react';
-import { UserSession } from '~/api/types';
+import { UserSession } from '~/types/types';
 import { LogoutButton } from './LogoutButton';
 import { UserOrganization } from './UserOrganization';
 

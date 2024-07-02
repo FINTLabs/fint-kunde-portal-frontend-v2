@@ -1,13 +1,22 @@
-import type { MetaFunction } from '@remix-run/node';
-
-export const meta: MetaFunction = () => {
-    return [{ title: 'Klienter' }, { name: 'description', content: 'Liste over klienter' }];
-};
+import Breadcrumbs from "~/components/breadcrumbs";
+import InternalPageHeader from "~/components/InternalPageHeader";
+import {TokenIcon} from "@navikt/aksel-icons";
+import React from "react";
+import {Outlet} from "@remix-run/react";
 
 export default function Index() {
+    const breadcrumbs = [{ name: 'Klienter', link: '/klienter' }];
+
     return (
-        <div className="font-sans p-4">
-            <h1 className="text-3xl">Velkomment til klienter :)</h1>
-        </div>
+        <>
+            <Breadcrumbs breadcrumbs={breadcrumbs}/>
+            <InternalPageHeader
+                title={'Klienter'}
+                icon={TokenIcon}
+                helpText="klienter"
+            />
+            <Outlet />
+
+        </>
     );
 }

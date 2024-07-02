@@ -10,9 +10,10 @@ import Menu from './components/Menu/Menu';
 import { getSession, commitSession } from '~/utils/session';
 import MeApi from '~/api/MeApi';
 import { log } from '~/utils/logger';
-import { FeatureFlags, IMeData, IOrganisations, UserSession } from '~/api/types';
+import { FeatureFlags, IMeData,  UserSession } from '~/types/types';
 import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
+import {IOrganisation} from "~/types/IOrganisation";
 
 export const meta: MetaFunction = () => {
     return [
@@ -27,7 +28,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     let userSession = session.get('user-session');
     if (!userSession) {
         const meData: IMeData = await MeApi.fetchMe();
-        const organisationsData: IOrganisations[] = await MeApi.fetchOrganisations();
+        const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
 
         const organizationDetails = organisationsData.map((org) => ({
             name: org.name,

@@ -1,6 +1,6 @@
 import { error, log } from '~/utils/logger';
-import {IOrganisations} from "~/api/types";
 import {API_URL} from "~/api/constants";
+import {IOrganisation} from "~/types/IOrganisation";
 
 
 class OrganisationApi {
@@ -13,9 +13,7 @@ class OrganisationApi {
         method: 'GET',
         credentials: 'same-origin',
       });
-      if (response.redirected) {
-        log('Request was redirected:', response.url);
-      }
+
       if (response.ok) {
         return await response.json();
       } else {
@@ -232,7 +230,7 @@ class OrganisationApi {
     }
   }
 
-  static async getPrimaryAsset(organisation: IOrganisations): Promise<any> {
+  static async getPrimaryAsset(organisation: IOrganisation): Promise<any> {
     const url = `${API_URL}/api/organisations/${organisation.name}/asset/primary`;
     log('Fetching primary asset', url);
 

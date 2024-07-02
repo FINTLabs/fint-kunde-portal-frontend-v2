@@ -1,4 +1,4 @@
-import { UserSession } from '~/api/types';
+import { UserSession } from '~/types/types';
 import { Select } from '@navikt/ds-react';
 import { ChangeEvent } from 'react';
 

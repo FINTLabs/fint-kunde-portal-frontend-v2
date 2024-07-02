@@ -14,7 +14,7 @@ import InternalPageHeader from '~/components/InternalPageHeader';
 import { QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 import ZenDeskApi from '~/api/ZenDeskApi';
 import ComponentApi from '~/api/ComponentApi';
-import { IComponent } from '~/api/types';
+import { IComponent } from '~/types/types';
 import React, { useState } from 'react';
 
 interface LoaderData {

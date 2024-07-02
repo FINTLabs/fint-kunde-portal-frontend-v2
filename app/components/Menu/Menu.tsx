@@ -1,4 +1,4 @@
-import { UserSession } from '~/api/types';
+import { UserSession } from '~/types/types';
 import { MenuRight } from './MenuRight';
 import { MenuLeft } from './MenuLeft';
 

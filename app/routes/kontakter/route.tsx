@@ -4,7 +4,7 @@ import {PersonGroupIcon, PersonSuitIcon} from '@navikt/aksel-icons';
 import {BodyShort, Box, Heading, HStack, InternalHeader, Search, Spacer} from '@navikt/ds-react';
 import Breadcrumbs from "~/components/breadcrumbs";
 import {getSession} from "~/utils/session";
-import type {IContact, IRole} from "~/api/types";
+import type {IContact, IRole} from "~/types/types";
 import {json, useLoaderData} from "@remix-run/react";
 import ContactApi from "~/api/ContactApi";
 import RoleApi from "~/api/RolesApi";
