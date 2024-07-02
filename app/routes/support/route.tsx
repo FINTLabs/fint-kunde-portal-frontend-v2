@@ -9,13 +9,13 @@ import {
     TextField,
 } from '@navikt/ds-react';
 import { json, useLoaderData } from '@remix-run/react';
-import Breadcrumbs from '~/components/breadcrumbs';
-import InternalPageHeader from '~/components/InternalPageHeader';
 import { QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 import ZenDeskApi from '~/api/ZenDeskApi';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/api/types';
 import React, { useState } from 'react';
+import Breadcrumbs from '~/components/shared/breadcrumbs';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
 
 interface LoaderData {
     types: ISupportType[];
