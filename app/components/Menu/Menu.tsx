@@ -1,7 +1,7 @@
 import { UserSession } from '~/types/types';
 import { MenuRight } from './MenuRight';
 import { MenuLeft } from './MenuLeft';
-import React from "react";
+import React from 'react';
 
 type MenuType = {
     userSession: UserSession;

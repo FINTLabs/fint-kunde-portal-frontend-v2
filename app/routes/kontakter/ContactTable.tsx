@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Table, Button } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon, ShieldLockIcon } from '@navikt/aksel-icons';
-import {IContact, IRole, type UserSession} from '~/types/types';
+import { IContact, IRole, type UserSession } from '~/types/types';
 import ConfirmModal from './ConfirmModal';
-import RolesChips from "~/routes/kontakter/RoleChips";
-import {log} from "~/utils/logger";
-import {useOutletContext} from "@remix-run/react";
+import RolesChips from '~/routes/kontakter/RoleChips';
+import { log } from '~/utils/logger';
+import { useOutletContext } from '@remix-run/react';
 
 interface IContactTableProps {
     contactsData?: IContact[];
@@ -13,15 +13,17 @@ interface IContactTableProps {
 }
 
 const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData }) => {
-    const [modalState, setModalState] =
-        useState<{ type: string, contact?: IContact, open: boolean }>
-        ({ type: '', contact: undefined, open: false });
+    const [modalState, setModalState] = useState<{
+        type: string;
+        contact?: IContact;
+        open: boolean;
+    }>({ type: '', contact: undefined, open: false });
 
     const userSession = useOutletContext<UserSession>();
 
     const hasRole = (currentContact: IContact, roleId: string): boolean => {
         if (currentContact) {
-            return currentContact.roles?.includes(roleId + "@" + "fintlabs_no") ?? false;
+            return currentContact.roles?.includes(roleId + '@' + 'fintlabs_no') ?? false;
         }
         return false;
     };
@@ -41,7 +43,9 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
     };
     const addRole = (contact: IContact, roleId: string) => {
         // RoleApi.addRole(orgName, contactNin, roleId);
-        log(`Role ${roleId} added to contact ${contact.nin} with org: ${userSession.selectedOrganization?.name}`);
+        log(
+            `Role ${roleId} added to contact ${contact.nin} with org: ${userSession.selectedOrganization?.name}`
+        );
         log('Contact:', contact);
         log(hasRole(contact, roleId));
     };
@@ -73,23 +77,22 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
                                         icon={<GavelSoundBlockIcon />}
                                         variant="tertiary"
                                         size="small"
-                                        className={"!mt-10"}
-                                        onClick={() => handleOpenModal('juridisk', contact)}
-                                    >
+                                        className={'!mt-10'}
+                                        onClick={() => handleOpenModal('juridisk', contact)}>
                                         Gjør til juridisk kontakt
                                     </Button>
                                     <Button
                                         icon={<LinkBrokenIcon />}
                                         variant="tertiary"
                                         size="small"
-                                        onClick={() => handleOpenModal('fjern', contact)}
-                                    >
+                                        onClick={() => handleOpenModal('fjern', contact)}>
                                         Fjern kontakt
                                     </Button>
                                 </>
-                            }
-                        >
-                            <Table.DataCell scope="row">{contact.firstName} {contact.lastName}</Table.DataCell>
+                            }>
+                            <Table.DataCell scope="row">
+                                {contact.firstName} {contact.lastName}
+                            </Table.DataCell>
                             <Table.DataCell>
                                 {hasRole(contact, 'ROLE_ADMIN') && (
                                     <ShieldLockIcon title="a11y-title" fontSize="1.5rem" />

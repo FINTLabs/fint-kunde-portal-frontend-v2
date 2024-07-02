@@ -1,5 +1,5 @@
 import { error, log } from '~/utils/logger';
-import {API_URL} from "~/api/constants";
+import { API_URL } from '~/api/constants';
 
 export default class ZenDeskApi {
     static async getPriority() {
@@ -15,7 +15,6 @@ export default class ZenDeskApi {
                     'x-nin': process.env.PERSONALNUMBER || '',
                 },
             });
-
 
             if (response.ok) {
                 return await response.json();

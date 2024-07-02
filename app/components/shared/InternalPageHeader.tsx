@@ -9,7 +9,11 @@ interface LayoutHeaderProps {
     helpText?: string; // Make helpText optional
 }
 
-const InternalPageHeader: React.FC<LayoutHeaderProps> = ({ icon: IconComponent, title, helpText }) => {
+const InternalPageHeader: React.FC<LayoutHeaderProps> = ({
+    icon: IconComponent,
+    title,
+    helpText,
+}) => {
     const helpDescription = helpData.find(
         (item: HelpDataItem) => item.id === helpText
     )?.description;
