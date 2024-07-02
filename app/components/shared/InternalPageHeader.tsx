@@ -7,19 +7,25 @@ interface LayoutHeaderProps {
     icon?: React.ElementType;
     title: string;
     helpText?: string; // Make helpText optional
+    hideBorder?: boolean;
 }
 
 const InternalPageHeader: React.FC<LayoutHeaderProps> = ({
     icon: IconComponent,
     title,
     helpText,
+    hideBorder = false,
 }) => {
     const helpDescription = helpData.find(
         (item: HelpDataItem) => item.id === helpText
     )?.description;
 
     return (
-        <Box as="header" borderWidth="0 0 4 0" borderColor="border-info" className={'mb-10'}>
+        <Box
+            as="header"
+            borderWidth={`0 0 ${!hideBorder ? '4' : '0'} 0`}
+            borderColor="border-info"
+            className={'mb-10'}>
             <div className="max-w-5xl">
                 <Box paddingInline="4" paddingBlock="0 6">
                     <VStack gap={'3'}>
