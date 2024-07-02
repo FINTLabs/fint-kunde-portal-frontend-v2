@@ -1,5 +1,5 @@
 import { error, log } from '~/utils/logger';
-import {API_URL} from "~/api/constants";
+import { API_URL } from '~/api/constants';
 
 export default class RoleApi {
     static async getRoles() {
@@ -25,11 +25,11 @@ export default class RoleApi {
         } catch (err) {
             log(err);
             error('Error fetching roles:', err);
-            throw new Error('Error fetching roles')
+            throw new Error('Error fetching roles');
         }
     }
 
-    static async addRole(orgName:string, contactNin: string, roleId: string) {
+    static async addRole(orgName: string, contactNin: string, roleId: string) {
         const url = `${API_URL}/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`;
         log('Adding role', url);
 
@@ -55,7 +55,7 @@ export default class RoleApi {
         }
     }
 
-    static async removeRole(organisationName:string, contactNin: string, roleId: string) {
+    static async removeRole(organisationName: string, contactNin: string, roleId: string) {
         const url = `${API_URL}/organisations/${organisationName}/contacts/roles/${contactNin}/${roleId}`;
         log('Removing role', url);
 

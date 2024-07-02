@@ -15,18 +15,19 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ open, onClose, onConfirm, t
             open={open}
             onClose={onClose}
             header={{
-                heading: type === 'juridisk' ? "Bekreft endring til juridisk kontakt" : "Bekreft fjerning av kontakt",
-                size: "small",
+                heading:
+                    type === 'juridisk'
+                        ? 'Bekreft endring til juridisk kontakt'
+                        : 'Bekreft fjerning av kontakt',
+                size: 'small',
                 closeButton: false,
             }}
-            width="small"
-        >
+            width="small">
             <Modal.Body>
                 <BodyLong>
-                    {type === 'juridisk' ?
-                        "Er du sikker på at du vil endre til juridisk kontakt?" :
-                        "Er du sikker på at du vil fjerne denne kontakten?"
-                    }
+                    {type === 'juridisk'
+                        ? 'Er du sikker på at du vil endre til juridisk kontakt?'
+                        : 'Er du sikker på at du vil fjerne denne kontakten?'}
                 </BodyLong>
             </Modal.Body>
             <Modal.Footer>

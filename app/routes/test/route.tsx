@@ -1,5 +1,5 @@
-import {Box, Page} from '@navikt/ds-react';
-import {PersonGroupIcon} from '@navikt/aksel-icons';
+import { Box, Page } from '@navikt/ds-react';
+import { PersonGroupIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 

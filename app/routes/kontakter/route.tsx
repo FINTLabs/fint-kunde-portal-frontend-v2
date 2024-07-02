@@ -1,18 +1,17 @@
-import React, {useState} from 'react';
-import {LoaderFunction, MetaFunction} from '@remix-run/node';
-import {PersonGroupIcon, PersonSuitIcon} from '@navikt/aksel-icons';
-import {BodyShort, Box, Heading, HStack, InternalHeader, Search, Spacer} from '@navikt/ds-react';
-import {getSession} from "~/utils/session";
-import {json, useLoaderData, useOutletContext} from "@remix-run/react";
-import ContactApi from "~/api/ContactApi";
-import RoleApi from "~/api/RolesApi";
-import OrganisationApi from "~/api/OrganisationApi";
-import ContactTable from "~/routes/kontakter/ContactTable";
-import {log} from "~/utils/logger";
-import {IContact, IRole} from "~/types/types";
-import Breadcrumbs from "~/components/shared/breadcrumbs";
-import InternalPageHeader from "~/components/shared/InternalPageHeader";
-
+import React, { useState } from 'react';
+import { LoaderFunction, MetaFunction } from '@remix-run/node';
+import { PersonGroupIcon, PersonSuitIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, Heading, HStack, InternalHeader, Search, Spacer } from '@navikt/ds-react';
+import { getSession } from '~/utils/session';
+import { json, useLoaderData, useOutletContext } from '@remix-run/react';
+import ContactApi from '~/api/ContactApi';
+import RoleApi from '~/api/RolesApi';
+import OrganisationApi from '~/api/OrganisationApi';
+import ContactTable from '~/routes/kontakter/ContactTable';
+import { log } from '~/utils/logger';
+import { IContact, IRole } from '~/types/types';
+import Breadcrumbs from '~/components/shared/breadcrumbs';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
 
 interface IPageLoaderData {
     contactsData?: IContact[];
@@ -21,11 +20,10 @@ interface IPageLoaderData {
 }
 
 export const meta: MetaFunction = () => {
-    return [{title: 'Kontakter'}, {name: 'description', content: 'Liste over kontakter'}];
+    return [{ title: 'Kontakter' }, { name: 'description', content: 'Liste over kontakter' }];
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-
     //TODO: here is the x-nin header
     log('Request headers:', request.headers.get('x-nin'));
 
@@ -33,9 +31,13 @@ export const loader: LoaderFunction = async ({ request }) => {
         const session = await getSession(request.headers.get('Cookie'));
         const userSession = session.get('user-session');
 
-        const contactsData = await ContactApi.fetchTechnicalContacts(userSession.selectedOrganization.name);
+        const contactsData = await ContactApi.fetchTechnicalContacts(
+            userSession.selectedOrganization.name
+        );
         const rolesData = await RoleApi.getRoles();
-        const legalContact = await OrganisationApi.getLegalContact(userSession.selectedOrganization.name);
+        const legalContact = await OrganisationApi.getLegalContact(
+            userSession.selectedOrganization.name
+        );
 
         return json({ contactsData, rolesData, legalContact });
     } catch (error) {
@@ -44,36 +46,30 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 };
 
-
 export default function Index() {
     const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
     const data = useLoaderData<IPageLoaderData & { legalContact?: IContact }>();
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const filteredContacts = data.contactsData?.filter(contact =>
-        contact.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        contact.lastName.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredContacts = data.contactsData?.filter(
+        (contact) =>
+            contact.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            contact.lastName.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const myValue = useOutletContext();
     console.log('myValue:', myValue);
 
-
     return (
         <>
-            <Breadcrumbs breadcrumbs={breadcrumbs}/>
-            <InternalPageHeader
-                title={'Kontakter'}
-                icon={PersonGroupIcon}
-                helpText="contacts"
-            />
-
+            <Breadcrumbs breadcrumbs={breadcrumbs} />
+            <InternalPageHeader title={'Kontakter'} icon={PersonGroupIcon} helpText="contacts" />
 
             <Box className="m-10">
                 <Heading size="xsmall">Juridisk kontakt</Heading>
                 {data.legalContact ? (
                     <HStack gap="4" align="center" className="px-4">
-                        <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4"/>
+                        <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4" />
                         <BodyShort size="medium">{data.legalContact.firstName}</BodyShort>
                     </HStack>
                 ) : (
@@ -81,32 +77,27 @@ export default function Index() {
                 )}
             </Box>
 
-            <InternalHeader className={"!bg-gray-400"}>
-                <form
-                    className="self-center px-5"
-                >
+            <InternalHeader className={'!bg-gray-400'}>
+                <form className="self-center px-5">
                     <Search
                         label="InternalPageHeader søk"
                         size="small"
                         variant="simple"
                         placeholder="Søk"
-                        className={"!bg-gray-300"}
+                        className={'!bg-gray-300'}
                         onChange={(value) => setSearchQuery(value)}
                     />
                 </form>
-                <Spacer/>
+                <Spacer />
                 <InternalHeader.Title href="#home">Add New Contact</InternalHeader.Title>
             </InternalHeader>
 
-            <ContactTable
-                contactsData={filteredContacts}
-                rolesData={data.rolesData}
-            />
+            <ContactTable contactsData={filteredContacts} rolesData={data.rolesData} />
         </>
     );
 }
 
-export function ErrorBoundary({error}: { error: Error }) {
+export function ErrorBoundary({ error }: { error: Error }) {
     return (
         <>
             <p>Something went wrong fetching contacts.</p>
