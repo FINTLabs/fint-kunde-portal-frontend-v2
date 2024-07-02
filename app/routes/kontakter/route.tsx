@@ -2,15 +2,16 @@ import React, {useState} from 'react';
 import {LoaderFunction, MetaFunction} from '@remix-run/node';
 import {PersonGroupIcon, PersonSuitIcon} from '@navikt/aksel-icons';
 import {BodyShort, Box, Heading, HStack, InternalHeader, Search, Spacer} from '@navikt/ds-react';
-import Breadcrumbs from "~/components/breadcrumbs";
 import {getSession} from "~/utils/session";
-import type {IContact, IRole} from "~/types/types";
-import {json, useLoaderData} from "@remix-run/react";
+import {json, useLoaderData, useOutletContext} from "@remix-run/react";
 import ContactApi from "~/api/ContactApi";
 import RoleApi from "~/api/RolesApi";
 import OrganisationApi from "~/api/OrganisationApi";
-import InternalPageHeader from "~/components/InternalPageHeader";
 import ContactTable from "~/routes/kontakter/ContactTable";
+import {log} from "~/utils/logger";
+import {IContact, IRole} from "~/types/types";
+import Breadcrumbs from "~/components/shared/breadcrumbs";
+import InternalPageHeader from "~/components/shared/InternalPageHeader";
 
 
 interface IPageLoaderData {
@@ -25,6 +26,8 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
 
+    //TODO: here is the x-nin header
+    log('Request headers:', request.headers.get('x-nin'));
 
     try {
         const session = await getSession(request.headers.get('Cookie'));
@@ -52,6 +55,8 @@ export default function Index() {
         contact.lastName.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const myValue = useOutletContext();
+    console.log('myValue:', myValue);
 
 
     return (
