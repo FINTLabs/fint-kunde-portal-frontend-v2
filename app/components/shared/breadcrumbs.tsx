@@ -1,4 +1,4 @@
-import { Link } from '@remix-run/react';
+import { Link, useLocation } from '@remix-run/react';
 import { ChevronRightIcon, HouseIcon } from '@navikt/aksel-icons';
 
 interface BreadcrumbItem {
@@ -13,13 +13,22 @@ interface BreadcrumbsProps {
 export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
     const homeLink = '/';
     const linkStyle = { textDecoration: 'none', display: 'flex', alignItems: 'center' };
+    const location = useLocation();
+    const currentPath = location.pathname;
+
+    console.log(currentPath);
 
     const crumbs = breadcrumbs.map(({ name, link }) => (
         <div key={link} className="flex items-center">
             <ChevronRightIcon title="Spacer" />
-            <Link to={link} style={linkStyle}>
-                {name}
-            </Link>
+
+            {link === currentPath ? (
+                <>{name}</>
+            ) : (
+                <Link to={link} style={linkStyle}>
+                    {name}
+                </Link>
+            )}
         </div>
     ));
 
