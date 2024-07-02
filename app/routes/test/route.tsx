@@ -1,9 +1,9 @@
 import { Box, Page } from '@navikt/ds-react';
 import { PersonGroupIcon } from '@navikt/aksel-icons';
 import { Outlet, useOutletContext } from '@remix-run/react';
-import Breadcrumbs from '~/components/breadcrumbs';
-import InternalPageHeader from '~/components/InternalPageHeader';
 import { UserSession } from '~/api/types';
+import Breadcrumbs from '~/components/shared/breadcrumbs';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Test Page', link: '/test' }];

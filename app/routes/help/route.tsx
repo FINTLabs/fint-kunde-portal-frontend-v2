@@ -1,9 +1,9 @@
 import { MetaFunction } from '@remix-run/node';
-import Breadcrumbs from '~/components/breadcrumbs';
-import InternalPageHeader from '~/components/InternalPageHeader';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Accordion, Box } from '@navikt/ds-react';
 import { helpData, HelpDataItem } from '~/routes/help/HelpData';
+import Breadcrumbs from '~/components/shared/breadcrumbs';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Adapter' }, { name: 'description', content: 'Liste over adapter' }];
