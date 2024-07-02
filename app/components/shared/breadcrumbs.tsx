@@ -16,8 +16,6 @@ export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
     const location = useLocation();
     const currentPath = location.pathname;
 
-    console.log(currentPath);
-
     const crumbs = breadcrumbs.map(({ name, link }) => (
         <div key={link} className="flex items-center">
             <ChevronRightIcon title="Spacer" />
