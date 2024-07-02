@@ -1,6 +1,6 @@
 import { BodyLong, Label, Tag } from '@navikt/ds-react';
 import { json, useLoaderData } from '@remix-run/react';
-import { IMeData } from '~/api/types';
+import { IMeData } from '~/types/types';
 import MeApi from '~/api/MeApi';
 import { PersonIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';

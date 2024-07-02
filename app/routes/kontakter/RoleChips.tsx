@@ -1,6 +1,6 @@
 import React from 'react';
 import { Chips } from '@navikt/ds-react';
-import {IContact, IRole} from '~/api/types';
+import {IContact, IRole} from '~/types/types';
 
 interface IRolesChipsProps {
     contact: IContact;
