@@ -2,7 +2,7 @@ import type { MetaFunction } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { Box, Heading, Tabs } from '@navikt/ds-react';
+import { Box, Tabs } from '@navikt/ds-react';
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { NotePencilDashIcon } from '@navikt/aksel-icons';
 
@@ -32,15 +32,15 @@ export default function Index() {
                             icon={<NotePencilDashIcon title="manuelt opprettet" aria-hidden />}
                         />
                         <Tabs.Tab
-                            value="automatis-opprettet"
+                            value="automatisk-opprettet"
                             label="Automatisk opprettet"
                             icon={<CogRotationIcon title="automatisk opprettet" aria-hidden />}
                         />
                     </Tabs.List>
-                    <Tabs.Panel value="logg" className="h-24 w-full bg-gray-50 p-4">
+                    <Tabs.Panel value="manuelt-opprettet" className="h-24 w-full bg-gray-50 p-4">
                         Logg-tab
                     </Tabs.Panel>
-                    <Tabs.Panel value="inbox" className="h-24 w-full bg-gray-50 p-4">
+                    <Tabs.Panel value="automatisk-opprettet" className="h-24 w-full bg-gray-50 p-4">
                         Inbox-tab
                     </Tabs.Panel>
                 </Tabs>
