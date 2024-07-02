@@ -2,9 +2,9 @@ import { BodyLong, Label, Tag } from '@navikt/ds-react';
 import { json, useLoaderData } from '@remix-run/react';
 import { IMeData } from '~/types/types';
 import MeApi from '~/api/MeApi';
-import Breadcrumbs from '~/components/breadcrumbs';
-import InternalPageHeader from '~/components/InternalPageHeader';
 import { PersonIcon } from '@navikt/aksel-icons';
+import Breadcrumbs from '~/components/shared/breadcrumbs';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
 
 export let loader = async () => {
     try {

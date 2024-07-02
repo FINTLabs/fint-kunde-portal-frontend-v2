@@ -51,7 +51,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         log('user-session', userSession);
 
         return json(
-            { userSession, features: {} },  // Ensure features is defined even if empty
+            { userSession, features: {} }, // Ensure features is defined even if empty
             {
                 headers: {
                     'Set-Cookie': cookie,
@@ -68,7 +68,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return json({ userSession, features });
 };
 
-
 export function Layout({ children }: { children: React.ReactNode }) {
     const loaderData = useLoaderData<{
         userSession: UserSession;
@@ -78,49 +77,47 @@ export function Layout({ children }: { children: React.ReactNode }) {
     const userSession = loaderData?.userSession;
     const features = loaderData?.features;
 
-    if (!userSession || !features) {
-        return <div>Loading...</div>;
+    if (!userSession) {
+        return <div>Usersession is undefined</div>;
     }
 
+    const displaySamtykke = features ? features['samtykke-admin-new'] : false;
     return (
         <html lang="en">
-        <head>
-            <meta charSet="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <Meta />
-            <Links />
-        </head>
-        <body data-theme="light">
-        <Page
-            footer={
-                <Box background="surface-neutral-moderate" padding="8" as="footer">
-                    <Page.Block gutters width="lg">
-                        <Footer />
-                    </Page.Block>
-                </Box>
-            }>
-            <Box background="surface-neutral-moderate" padding="8" as="header">
-                <Page.Block gutters width="lg">
-                    <Menu
-                        userSession={userSession}
-                        displaySamtykke={features['samtykke-admin-new']}
-                    />
-                </Page.Block>
-            </Box>
-            <Box
-                // background="surface-alt-3-moderate"
-                padding="8"
-                paddingBlock="16"
-                as="main">
-                <Page.Block gutters width="lg">
-                    {children}
-                </Page.Block>
-            </Box>
-        </Page>
+            <head>
+                <meta charSet="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <Meta />
+                <Links />
+            </head>
+            <body data-theme="light">
+                <Page
+                    footer={
+                        <Box background="surface-neutral-moderate" padding="8" as="footer">
+                            <Page.Block gutters width="lg">
+                                <Footer />
+                            </Page.Block>
+                        </Box>
+                    }>
+                    <Box background="surface-neutral-moderate" padding="8" as="header">
+                        <Page.Block gutters width="lg">
+                            <Menu userSession={userSession} displaySamtykke={displaySamtykke} />
+                        </Page.Block>
+                    </Box>
+                    <Box
+                        // background="surface-alt-3-moderate"
+                        padding="8"
+                        paddingBlock="16"
+                        as="main">
+                        <Page.Block gutters width="lg">
+                            {children}
+                        </Page.Block>
+                    </Box>
+                </Page>
 
-        <ScrollRestoration />
-        <Scripts />
-        </body>
+                <ScrollRestoration />
+                <Scripts />
+            </body>
         </html>
     );
 }
