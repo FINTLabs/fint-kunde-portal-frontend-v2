@@ -22,6 +22,7 @@ export function ListItem({ adapter }: { adapter: IAdapter }) {
                 <VStack>
                     <Label>{adapter.shortDescription}</Label>
                     <BodyLong>{adapter.name}</BodyLong>
+                    {/* <BodyLong>{adapter.components.length}</BodyLong> */}
                 </VStack>
                 <VStack className="!flex !justify-center pr-3">
                     <ChevronRightIcon title="Høyre peker" fontSize="1.7rem" />
