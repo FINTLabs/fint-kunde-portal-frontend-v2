@@ -2,7 +2,7 @@ import { json, type LoaderFunction, type MetaFunction } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { Box, Tabs } from '@navikt/ds-react';
+import { BodyLong, Box, HStack, Label, Tabs, VStack } from '@navikt/ds-react';
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { NotePencilDashIcon } from '@navikt/aksel-icons';
 import { log } from '~/utils/logger';
@@ -10,6 +10,7 @@ import { getSession } from '~/utils/session';
 import AdapterAPI from '~/api/AdapterApi';
 import { useLoaderData } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
+import { ChevronRightIcon } from '@navikt/aksel-icons';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
@@ -35,12 +36,39 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 };
 
+function ListItem({ adapter }: { adapter: IAdapter }) {
+    return (
+        <Box borderRadius="large" shadow="xsmall" background="surface-transparent" padding="6">
+            <HStack className="!flex !justify-between">
+                <VStack>
+                    <Label>{adapter.shortDescription}</Label>
+                    <BodyLong>{adapter.name}</BodyLong>
+                </VStack>
+                <VStack className="!flex !justify-center pr-3">
+                    <ChevronRightIcon title="Høyre peker" fontSize="1.7rem" />
+                </VStack>
+            </HStack>
+        </Box>
+    );
+}
+
+function AdapterList({ items }: { items: IAdapter[] }) {
+    return (
+        <VStack gap="5">
+            {items.map((adapter, index) => (
+                <ListItem key={index} adapter={adapter} />
+            ))}
+        </VStack>
+    );
+}
+
 export default function Index() {
     const breadcrumbs = [{ name: 'Adapter', link: '/adapter' }];
 
     const { adapters } = useLoaderData<IPageLoaderData>();
 
     console.log(adapters);
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -51,7 +79,12 @@ export default function Index() {
                 hideBorder={true}
             />
 
-            <Box>
+            {!adapters && (
+                <Box padding="4" background="surface-danger-moderate">
+                    Fant ingen adaptere
+                </Box>
+            )}
+            {adapters && (
                 <Tabs defaultValue="manuelt-opprettet" fill>
                     <Tabs.List>
                         <Tabs.Tab
@@ -65,14 +98,14 @@ export default function Index() {
                             icon={<CogRotationIcon title="automatisk opprettet" aria-hidden />}
                         />
                     </Tabs.List>
-                    <Tabs.Panel value="manuelt-opprettet" className="h-24 w-full bg-gray-50 p-4">
-                        Logg-tab
+                    <Tabs.Panel value="manuelt-opprettet" className="w-full p-10">
+                        <AdapterList items={adapters.filter((adapter) => !adapter.managed)} />
                     </Tabs.Panel>
-                    <Tabs.Panel value="automatisk-opprettet" className="h-24 w-full bg-gray-50 p-4">
-                        Inbox-tab
+                    <Tabs.Panel value="automatisk-opprettet" className="w-full p-10">
+                        <AdapterList items={adapters.filter((adapter) => adapter.managed)} />
                     </Tabs.Panel>
                 </Tabs>
-            </Box>
+            )}
         </>
     );
 }
