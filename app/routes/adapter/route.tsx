@@ -11,6 +11,7 @@ import AdapterAPI from '~/api/AdapterApi';
 import { useLoaderData } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
+import { useState } from 'react';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
@@ -28,7 +29,6 @@ export const loader: LoaderFunction = async ({ request }) => {
         const userSession = session.get('user-session');
 
         const adapters = await AdapterAPI.getAdapters(userSession.selectedOrganization.name);
-
         return json({ adapters });
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -36,9 +36,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 };
 
-function ListItem({ adapter }: { adapter: IAdapter }) {
+function ListItem({ adapter, onClick }: { adapter: IAdapter; onClick: () => void }) {
     return (
         <Box
+            onClick={onClick}
             className="hover:bg-[--a-surface-subtle] active:bg-[--a-surface-active] hover:cursor-pointer"
             borderRadius="large"
             shadow="xsmall"
@@ -57,23 +58,67 @@ function ListItem({ adapter }: { adapter: IAdapter }) {
     );
 }
 
-function AdapterList({ items }: { items: IAdapter[] }) {
+function AdapterList({
+    items,
+    onItemClick,
+}: {
+    items: IAdapter[];
+    onItemClick: (adapter: IAdapter) => void;
+}) {
     return (
         <VStack gap="5">
             {items.map((adapter, index) => (
-                <ListItem key={index} adapter={adapter} />
+                <ListItem key={index} adapter={adapter} onClick={() => onItemClick(adapter)} />
             ))}
         </VStack>
     );
 }
 
+function AdapterDetail({ adapter }: { adapter: IAdapter }) {
+    return (
+        <Box padding="6" borderRadius="large" shadow="small" background="surface-subtle">
+            <HStack>
+                <Label>Client ID:</Label>
+                <BodyLong>{adapter.clientId}</BodyLong>
+            </HStack>
+            <HStack>
+                <Label>Note:</Label>
+                <BodyLong>{adapter.note}</BodyLong>
+            </HStack>
+            <HStack>
+                <Label>Assets:</Label>
+                <BodyLong>{adapter.assets.join(', ')}</BodyLong>
+            </HStack>
+            {/* Add more fields as needed */}
+        </Box>
+    );
+}
+
+function Tab({ value, adapters }: { value: string; adapters: IAdapter[] }) {
+    const [selectedAdapter, setSelectedAdapter] = useState<IAdapter | null>(null);
+
+    return (
+        <Tabs.Panel value={value} className="w-full p-10">
+            {selectedAdapter && <AdapterDetail adapter={selectedAdapter} />}
+            {!selectedAdapter && <AdapterList items={adapters} onItemClick={setSelectedAdapter} />}
+        </Tabs.Panel>
+    );
+}
 export default function Index() {
     const breadcrumbs = [{ name: 'Adapter', link: '/adapter' }];
 
     const { adapters } = useLoaderData<IPageLoaderData>();
 
-    console.log(adapters);
-
+    const tabInfo = [
+        {
+            value: 'manuelt-opprettet',
+            label: 'Manuelt opprettet',
+        },
+        {
+            value: 'automatisk-opprettet',
+            label: 'Automatisk opprettet',
+        },
+    ];
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -90,25 +135,29 @@ export default function Index() {
                 </Box>
             )}
             {adapters && (
-                <Tabs defaultValue="manuelt-opprettet" fill>
+                <Tabs defaultValue={tabInfo[0].value} fill>
                     <Tabs.List>
                         <Tabs.Tab
-                            value="manuelt-opprettet"
-                            label="Manuelt opprettet"
-                            icon={<NotePencilDashIcon title="manuelt opprettet" aria-hidden />}
+                            value={tabInfo[0].value}
+                            label={tabInfo[0].label}
+                            icon={<NotePencilDashIcon title={tabInfo[0].label} aria-hidden />}
                         />
                         <Tabs.Tab
-                            value="automatisk-opprettet"
-                            label="Automatisk opprettet"
-                            icon={<CogRotationIcon title="automatisk opprettet" aria-hidden />}
+                            value={tabInfo[1].value}
+                            label={tabInfo[1].label}
+                            icon={<CogRotationIcon title={tabInfo[0].label} aria-hidden />}
                         />
                     </Tabs.List>
-                    <Tabs.Panel value="manuelt-opprettet" className="w-full p-10">
-                        <AdapterList items={adapters.filter((adapter) => !adapter.managed)} />
-                    </Tabs.Panel>
-                    <Tabs.Panel value="automatisk-opprettet" className="w-full p-10">
-                        <AdapterList items={adapters.filter((adapter) => adapter.managed)} />
-                    </Tabs.Panel>
+                    {tabInfo.map((tab, index) => (
+                        <Tab
+                            value={tab.value}
+                            adapters={
+                                index === 1
+                                    ? adapters.filter((adapter) => adapter.managed)
+                                    : adapters.filter((adapter) => !adapter.managed)
+                            }
+                        />
+                    ))}
                 </Tabs>
             )}
         </>
