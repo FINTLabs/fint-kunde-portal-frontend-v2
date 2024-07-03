@@ -38,7 +38,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 function ListItem({ adapter }: { adapter: IAdapter }) {
     return (
-        <Box borderRadius="large" shadow="xsmall" background="surface-transparent" padding="6">
+        <Box
+            className="hover:bg-[--a-surface-subtle] active:bg-[--a-surface-active] hover:cursor-pointer"
+            borderRadius="large"
+            shadow="xsmall"
+            background="surface-transparent"
+            padding="6">
             <HStack className="!flex !justify-between">
                 <VStack>
                     <Label>{adapter.shortDescription}</Label>
