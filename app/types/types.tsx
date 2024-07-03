@@ -115,3 +115,15 @@ export interface IRole {
     description: string;
     uri: string | null;
 }
+
+export interface IAdapter {
+    dn: string;
+    name: string;
+    shortDescription: string;
+    note: string;
+    clientId: string;
+    components: string[];
+    assets: string[];
+    assetIds: string[];
+    managed: boolean;
+}

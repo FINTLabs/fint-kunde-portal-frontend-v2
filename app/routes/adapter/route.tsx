@@ -1,18 +1,46 @@
-import type { MetaFunction } from '@remix-run/node';
+import { json, type LoaderFunction, type MetaFunction } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { Box, Tabs } from '@navikt/ds-react';
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { NotePencilDashIcon } from '@navikt/aksel-icons';
+import { log } from '~/utils/logger';
+import { getSession } from '~/utils/session';
+import AdapterAPI from '~/api/AdapterApi';
+import { useLoaderData } from '@remix-run/react';
+import { IAdapter } from '~/types/types';
+
+interface IPageLoaderData {
+    adapters?: IAdapter[];
+}
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Adapter' }, { name: 'description', content: 'Liste over adapter' }];
 };
 
+export const loader: LoaderFunction = async ({ request }) => {
+    log('Request headers:', request.headers.get('x-nin'));
+
+    try {
+        const session = await getSession(request.headers.get('Cookie'));
+        const userSession = session.get('user-session');
+
+        const adapters = await AdapterAPI.getAdapters(userSession.selectedOrganization.name);
+
+        return json({ adapters });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw new Response('Not Found', { status: 404 });
+    }
+};
+
 export default function Index() {
     const breadcrumbs = [{ name: 'Adapter', link: '/adapter' }];
 
+    const { adapters } = useLoaderData<IPageLoaderData>();
+
+    console.log(adapters);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
