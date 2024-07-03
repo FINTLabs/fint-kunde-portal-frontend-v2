@@ -1,0 +1,540 @@
+[
+    {
+        "dn": "cn=personvern-adapter-credentials-fmloj@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "personvern-adapter-credentials-fmloj@adapter.fintlabs.no",
+        "shortDescription": "personvern-adapter-credentials-fmloj",
+        "note": "En autogenerert adapter for FINT\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR",
+        "clientId": "f0e50541-44bc-48cc-a3e8-ab809b54b2ea",
+        "components": [
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=okonomi-pwf@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "okonomi-pwf@adapter.fintlabs.no",
+        "shortDescription": "adapter for pwf",
+        "note": "adapter for pwf",
+        "clientId": "4f2fcabb-e3ec-4405-8abd-da44df7ed169",
+        "components": [
+            "ou=okonomi_faktura,ou=components,o=fint",
+            "ou=okonomi_kodeverk,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=sanderTesting@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "sanderTesting@adapter.fintlabs.no",
+        "shortDescription": "sander testing",
+        "note": "sander testing",
+        "clientId": "79ed820d-c2b5-4994-b463-fdc04f22a6db",
+        "components": [
+            "ou=felles_kodeverk,ou=components,o=fint",
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=personvern-adapter-credentials-yuwic@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "personvern-adapter-credentials-yuwic@adapter.fintlabs.no",
+        "shortDescription": "personvern-adapter-credentials-yuwic",
+        "note": "En autogenerert adapter for FINT\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR-BETA",
+        "clientId": "968736cc-d793-499d-a208-172e49d608ba",
+        "components": [
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=personvern-adapter-credentials-obymg@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "personvern-adapter-credentials-obymg@adapter.fintlabs.no",
+        "shortDescription": "personvern-adapter-credentials-obymg",
+        "note": "En autogenerert adapter for FINT\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR",
+        "clientId": "4977aa4b-6252-44d3-bc00-158a95f4bf96",
+        "components": [
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=personvern-adapter-credentials-mhnye@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "personvern-adapter-credentials-mhnye@adapter.fintlabs.no",
+        "shortDescription": "personvern-adapter-credentials-mhnye",
+        "note": "En autogenerert adapter for FINT\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR",
+        "clientId": "0c642900-e1b4-4009-846f-0602221af3fe",
+        "components": [
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=personvern-adapter-credentials-sktub@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "personvern-adapter-credentials-sktub@adapter.fintlabs.no",
+        "shortDescription": "personvern-adapter-credentials-sktub",
+        "note": "En autogenerert adapter for FINT\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR",
+        "clientId": "43d94983-d7f3-4a8f-9307-be651d53b773",
+        "components": [
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=personvern-adapter-credentials-bunfy@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "personvern-adapter-credentials-bunfy@adapter.fintlabs.no",
+        "shortDescription": "personvern-adapter-credentials-bunfy",
+        "note": "En autogenerert adapter for FINT\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR",
+        "clientId": "985fec19-65b6-499e-b689-ce1a85f59203",
+        "components": [
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=personvern-adapter-credentials-zgqch@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "personvern-adapter-credentials-zgqch@adapter.fintlabs.no",
+        "shortDescription": "personvern-adapter-credentials-zgqch",
+        "note": "En autogenerert adapter for FINT\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR",
+        "clientId": "d80b84ae-2285-4566-ab7b-9721a97218e4",
+        "components": [
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=personvern-adapter-credentials-ajrnt@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "personvern-adapter-credentials-ajrnt@adapter.fintlabs.no",
+        "shortDescription": "personvern-adapter-credentials-ajrnt",
+        "note": "En autogenerert adapter for FINT\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR-BETA",
+        "clientId": "2319e730-1819-4162-b354-e3409dfd7547",
+        "components": [
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=utdanning-ot-test-adapter-awopr@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "utdanning-ot-test-adapter-awopr@adapter.fintlabs.no",
+        "shortDescription": "utdanning-ot-test-adapter-awopr",
+        "note": "Sender OT data til FINT\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR-BETA",
+        "clientId": "9cc0d1eb-20f4-4f5f-a450-267cb700b3bf",
+        "components": ["ou=utdanning_ot,ou=components,o=fint"],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=utdanning-ot-test-arujx@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "utdanning-ot-test-arujx@adapter.fintlabs.no",
+        "shortDescription": "utdanning-ot-test-arujx",
+        "note": "Sender OT data til FINT\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR-BETA",
+        "clientId": "8aa1be05-6a4c-4e72-adf8-c4dfd87afa68",
+        "components": ["ou=utdanning_ot,ou=components,o=fint"],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=nilsodd@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "nilsodd@adapter.fintlabs.no",
+        "shortDescription": "Adapter på grensen",
+        "note": "Forskning og adapterunderholdning på grensen, til glede for fellesskapet. Og fylkeskommunene. Og Oslo kommune.",
+        "clientId": "ca1bb73b-3d9a-4e73-84fd-8046fe806808",
+        "components": [
+            "ou=arkiv_kodeverk,ou=components,o=fint",
+            "ou=arkiv_kulturminnevern,ou=components,o=fint",
+            "ou=arkiv_noark,ou=components,o=fint",
+            "ou=arkiv_personal,ou=components,o=fint",
+            "ou=arkiv_samferdsel,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=sondres-test-adapter-mmojg@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "sondres-test-adapter-mmojg@adapter.fintlabs.no",
+        "shortDescription": "sondres-test-adapter-mmojg",
+        "note": "This is LA8PV transmitting on the short-wave band on fifty meters - over og ut.\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR-BETA",
+        "clientId": "0a728a06-5be1-4786-aa11-43b1b0344124",
+        "components": ["ou=utdanning_larling,ou=components,o=fint"],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=utdanning-larling-cred-ljtqm@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "utdanning-larling-cred-ljtqm@adapter.fintlabs.no",
+        "shortDescription": "utdanning-larling-cred-ljtqm",
+        "note": "Sender larling data til FINT API\n\nDenne adapteren er automatisk opprettet og håndteres av FINTERATOR-BETA",
+        "clientId": "4e795592-0d26-4a2a-ab5c-19316c8b2779",
+        "components": ["ou=utdanning_larling,ou=components,o=fint"],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": true
+    },
+    {
+        "dn": "cn=utdanning_kodeverk@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "utdanning_kodeverk@adapter.fintlabs.no",
+        "shortDescription": "Utdanning Kodeverk",
+        "note": ".",
+        "clientId": "f356561e-f8da-4795-b5f5-09456283ccc1",
+        "components": ["ou=utdanning_kodeverk,ou=components,o=fint"],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=utdanning_larling@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "utdanning_larling@adapter.fintlabs.no",
+        "shortDescription": "Utdanning Lærling",
+        "note": "Adapter for Utdanning Lærling",
+        "clientId": "aba21056-45fd-4525-b1de-32606d65ff26",
+        "components": [],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=personvern_kodeverk@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "personvern_kodeverk@adapter.fintlabs.no",
+        "shortDescription": "Personvern Kodeverk Adapter",
+        "note": "adapter som tilhører personvern kodeverk komponent.",
+        "clientId": "9db52120-1dd0-45aa-afb8-8b93c81fcc32",
+        "components": [
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=henrik@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "henrik@adapter.fintlabs.no",
+        "shortDescription": "henrik test adapter",
+        "note": ".",
+        "clientId": "ca993965-9d3f-470c-904a-7a99c6322614",
+        "components": [
+            "ou=utdanning_kodeverk,ou=components,o=fint",
+            "ou=utdanning_timeplan,ou=components,o=fint",
+            "ou=utdanning_elev,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint",
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=felles_kodeverk,ou=components,o=fint",
+            "ou=fint_metamodell,ou=components,o=fint",
+            "ou=utdanning_utdanningsprogram,ou=components,o=fint",
+            "ou=utdanning_vurdering,ou=components,o=fint",
+            "ou=utdanning_larling,ou=components,o=fint",
+            "ou=utdanning_ot,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=egiltest@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "egiltest@adapter.fintlabs.no",
+        "shortDescription": "egil test",
+        "note": "test",
+        "clientId": "76ea6df7-0df5-4c50-b466-0264aa95f2bb",
+        "components": [],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=asgeir@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "asgeir@adapter.fintlabs.no",
+        "shortDescription": "Asgeir test",
+        "note": "Arkiv test",
+        "clientId": "9b4dad06-52fe-49db-bbe0-f950e9227f20",
+        "components": [
+            "ou=arkiv_kodeverk,ou=components,o=fint",
+            "ou=arkiv_noark,ou=components,o=fint",
+            "ou=arkiv_samferdsel,ou=components,o=fint",
+            "ou=arkiv_kulturminnevern,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=core2-test@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "core2-test@adapter.fintlabs.no",
+        "shortDescription": "Core 2 Test",
+        "note": "Core 2 Test",
+        "clientId": "55a9cb3e-fc7b-4189-85b1-2ad4b62b41da",
+        "components": [
+            "ou=utdanning_vurdering,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint",
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=administrasjon_personal,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=metamodell@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "metamodell@adapter.fintlabs.no",
+        "shortDescription": "Metamodel adapter",
+        "note": "Metamodel adapter",
+        "clientId": "f2af82f9-1a64-4428-be61-2bb859f59deb",
+        "components": ["ou=fint_metamodell,ou=components,o=fint"],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=ErlingTestAdapter@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "ErlingTestAdapter@adapter.fintlabs.no",
+        "shortDescription": "Erling test adapter",
+        "note": "Erling sitt test adapter",
+        "clientId": "7c328769-168d-4b60-98c6-09aee963fb88",
+        "components": [
+            "ou=administrasjon_fullmakt,ou=components,o=fint",
+            "ou=administrasjon_personal,ou=components,o=fint",
+            "ou=arkiv_kodeverk,ou=components,o=fint",
+            "ou=arkiv_kulturminnevern,ou=components,o=fint",
+            "ou=arkiv_noark,ou=components,o=fint",
+            "ou=arkiv_personal,ou=components,o=fint",
+            "ou=arkiv_samferdsel,ou=components,o=fint",
+            "ou=fint_metamodell,ou=components,o=fint",
+            "ou=felles_kodeverk,ou=components,o=fint",
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint",
+            "ou=utdanning_vurdering,ou=components,o=fint",
+            "ou=vigokodeverk,ou=components,o=fint",
+            "ou=okonomi_faktura,ou=components,o=fint",
+            "ou=okonomi_kodeverk,ou=components,o=fint",
+            "ou=administrasjon_kodeverk,ou=components,o=fint",
+            "ou=administrasjon_organisasjon,ou=components,o=fint",
+            "ou=administrasjon_okonomi,ou=components,o=fint",
+            "ou=utdanning_elev,ou=components,o=fint",
+            "ou=utdanning_kodeverk,ou=components,o=fint",
+            "ou=utdanning_timeplan,ou=components,o=fint",
+            "ou=utdanning_utdanningsprogram,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=bym_oslo@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "bym_oslo@adapter.fintlabs.no",
+        "shortDescription": "Bymiljøetaten Oslo",
+        "note": "Midlertidig",
+        "clientId": "04090274-dfd6-4a68-a445-f32745d1d16e",
+        "components": [],
+        "assets": [],
+        "assetIds": ["bymoslo.fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=pifu-imse-test@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "pifu-imse-test@adapter.fintlabs.no",
+        "shortDescription": "Pifu Imse Test",
+        "note": "Brukes i forbindelse med testing av PIFU IMSE adapter",
+        "clientId": "214d3961-f979-4543-9342-e9d8449e0c18",
+        "components": [],
+        "assets": ["ou=pifu_fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["pifu.fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=trond@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "trond@adapter.fintlabs.no",
+        "shortDescription": "Trond Testadapter 2",
+        "note": "Tronds testadapter",
+        "clientId": "0a18227b-57ac-4d7f-87ca-fc3b7202e20b",
+        "components": [
+            "ou=utdanning_larling,ou=components,o=fint",
+            "ou=utdanning_ot,ou=components,o=fint",
+            "ou=administrasjon_fullmakt,ou=components,o=fint",
+            "ou=administrasjon_kodeverk,ou=components,o=fint",
+            "ou=administrasjon_organisasjon,ou=components,o=fint",
+            "ou=administrasjon_personal,ou=components,o=fint"
+        ],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=tffk-drosje@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "tffk-drosje@adapter.fintlabs.no",
+        "shortDescription": "Test for Troms og Finnmark",
+        "note": "Kan slettes når testen er ferdig.",
+        "clientId": "d432089d-1717-431b-ac50-aa1bf31c7acc",
+        "components": [],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=test2@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "test2@adapter.fintlabs.no",
+        "shortDescription": "Test2",
+        "note": "Test2",
+        "clientId": "e7c88155-8a29-4152-b037-fe068ed04abe",
+        "components": [],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=personvern@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "personvern@adapter.fintlabs.no",
+        "shortDescription": "Personvern Adapter",
+        "note": "Benyttes ifm. PoC om samtykke",
+        "clientId": "dcf7d2ea-3d94-4cf1-9574-731c63606deb",
+        "components": [],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=betaling@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "betaling@adapter.fintlabs.no",
+        "shortDescription": "Betaling adapter",
+        "note": "For test",
+        "clientId": "7f1797f7-4c2c-48cb-8b88-1ca265699d1b",
+        "components": [],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=fiks_test@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "fiks_test@adapter.fintlabs.no",
+        "shortDescription": "SvarUT Test",
+        "note": "Adapter for FIKS/SvarUT",
+        "clientId": "cd46d22a-5bab-473f-8601-589fddd0a30e",
+        "components": [],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=arkiv_test@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "arkiv_test@adapter.fintlabs.no",
+        "shortDescription": "Arkiv test",
+        "note": "Brukes i forbindelse med opplæring av Frank Sanders i Evry. Kan slettes når den jobben er gjort. Frode Sjovatsen",
+        "clientId": "287a860a-e5b2-4e98-afd7-86638dc06709",
+        "components": [],
+        "assets": ["ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=fake@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "fake@adapter.fintlabs.no",
+        "shortDescription": "Fake Data Adapter",
+        "note": "Generates fake data.",
+        "clientId": "ff1c79b5-2a75-4416-b95c-9d1a4b4a2d6b",
+        "components": [
+            "ou=felles_kodeverk,ou=components,o=fint",
+            "ou=vigokodeverk,ou=components,o=fint",
+            "ou=fint_metamodell,ou=components,o=fint"
+        ],
+        "assets": [
+            "ou=fake_fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint",
+            "ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"
+        ],
+        "assetIds": ["fake.fintlabs.no", "fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=health@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "health@adapter.fintlabs.no",
+        "shortDescription": "Health Adapter",
+        "note": "Used by Health Adapters.  Do not touch!",
+        "clientId": "2e998073-96d6-40f9-b715-7e278561fa96",
+        "components": [
+            "ou=felles_kodeverk,ou=components,o=fint",
+            "ou=vigokodeverk,ou=components,o=fint"
+        ],
+        "assets": ["ou=health_fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["health.fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=health_test@fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "health_test@fintlabs.no",
+        "shortDescription": "Health test",
+        "note": "For helseadapterne.",
+        "clientId": "c4caa814-158b-43d7-8b8a-fcc0c0e90f6c",
+        "components": [
+            "ou=felles_kodeverk,ou=components,o=fint",
+            "ou=vigokodeverk,ou=components,o=fint"
+        ],
+        "assets": ["ou=health_fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"],
+        "assetIds": ["health.fintlabs.no"],
+        "managed": false
+    },
+    {
+        "dn": "cn=frode@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
+        "name": "frode@adapter.fintlabs.no",
+        "shortDescription": "Frode Sjovatsen",
+        "note": "Test adapter for Frode",
+        "clientId": "429411f1-2005-4c9c-8078-41ff910b28bf",
+        "components": [
+            "ou=felles_kodeverk,ou=components,o=fint",
+            "ou=vigokodeverk,ou=components,o=fint",
+            "ou=arkiv_noark,ou=components,o=fint",
+            "ou=okonomi_faktura,ou=components,o=fint",
+            "ou=okonomi_kodeverk,ou=components,o=fint",
+            "ou=administrasjon_personal,ou=components,o=fint",
+            "ou=arkiv_kodeverk,ou=components,o=fint",
+            "ou=arkiv_kulturminnevern,ou=components,o=fint",
+            "ou=arkiv_personal,ou=components,o=fint",
+            "ou=arkiv_samferdsel,ou=components,o=fint",
+            "ou=utdanning_vurdering,ou=components,o=fint",
+            "ou=administrasjon_fullmakt,ou=components,o=fint",
+            "ou=personvern_samtykke,ou=components,o=fint",
+            "ou=personvern_kodeverk,ou=components,o=fint",
+            "ou=fint_metamodell,ou=components,o=fint",
+            "ou=administrasjon_kodeverk,ou=components,o=fint",
+            "ou=administrasjon_organisasjon,ou=components,o=fint",
+            "ou=administrasjon_okonomi,ou=components,o=fint",
+            "ou=utdanning_elev,ou=components,o=fint",
+            "ou=utdanning_kodeverk,ou=components,o=fint",
+            "ou=utdanning_timeplan,ou=components,o=fint",
+            "ou=utdanning_utdanningsprogram,ou=components,o=fint"
+        ],
+        "assets": [
+            "ou=fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint",
+            "ou=frode_fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint"
+        ],
+        "assetIds": ["fintlabs.no", "frode.fintlabs.no"],
+        "managed": false
+    }
+]
