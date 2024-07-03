@@ -29,9 +29,9 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader
-                title={'Adaptere'}
+                title={'Adapter Detaljer'}
                 icon={MigrationIcon}
-                helpText="adaptere"
+                helpText="adapter detaljer"
                 hideBorder={true}
             />
             {!adapter && (
