@@ -37,16 +37,13 @@ export const loader: LoaderFunction = async ({ request }) => {
         return json({ adapters });
     } catch (error) {
         console.error('Error fetching data:', error);
-
-        return json({ adapters });
-
         throw new Response('Not Found', { status: 404 });
     }
 };
 
 function Tab({ value, adapters }: { value: string; adapters: IAdapter[] }) {
     return (
-        <Tabs.Panel value={value} className="w-full p-10">
+        <Tabs.Panel value={value} className="w-full">
             <AdapterList items={adapters} />
         </Tabs.Panel>
     );

@@ -1,13 +1,25 @@
-import { VStack } from '@navikt/ds-react';
+import { Table, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { ListItem } from './ListItem';
+import RolesChips from '../kontakter/RoleChips';
 
 export function AdapterList({ items }: { items: IAdapter[] }) {
     return (
-        <VStack gap="5">
-            {items.map((adapter, index) => (
-                <ListItem key={index} adapter={adapter} />
-            ))}
-        </VStack>
+        <Table zebraStripes>
+            <Table.Header>
+                <Table.Row>
+                    <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
+                </Table.Row>
+            </Table.Header>
+            <Table.Body>
+                {items?.map((item, i) => (
+                    <Table.Row key={i + item.name}>
+                        <Table.DataCell scope="row">{item.shortDescription}</Table.DataCell>
+                        <Table.DataCell scope="row">{item.name}</Table.DataCell>
+                    </Table.Row>
+                ))}
+            </Table.Body>
+        </Table>
     );
 }
