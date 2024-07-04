@@ -58,8 +58,8 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                     Authentisering
                                 </Heading>
                                 <LabelValuePair label="Brukernavn" value={adapter.name} />
-                                <LabelValuePair label="Passord" value={''} displayRefreshButton />
                                 <LabelValuePair label="Klient ID" value={adapter.clientId} />
+                                <LabelValuePair label="Passord" value={''} displayRefreshButton />
                                 <LabelValuePair
                                     label="Klient Hemmelighet"
                                     value={clientSecret}
