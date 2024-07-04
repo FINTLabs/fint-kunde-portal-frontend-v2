@@ -1,27 +1,33 @@
-import {
-    BodyLong,
-    BodyShort,
-    Box,
-    Button,
-    Chips,
-    CopyButton,
-    HStack,
-    Heading,
-    Label,
-    VStack,
-} from '@navikt/ds-react';
+import { BodyLong, Box, Button, Chips, HStack, Heading, Label, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import { ThumbUpIcon, ArrowCirclepathIcon, PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
+import { PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
+import { LabelValuePair } from './LabelValuePair';
+import AdapterAPI from '~/api/AdapterApi';
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const navigate = useNavigate();
 
     const [clientSecret, setClientSecret] = useState('');
     const [passord, setPassord] = useState('');
-    console.log(adapter);
+
+    const handleRefreshClientSecret = async () => {
+        console.log('handle refresh');
+
+        try {
+            console.log('handle refresh');
+            setClientSecret('refreshed');
+            const secret = await AdapterAPI.getOpenIdSecret(adapter.name, 'fintlabs');
+            // if (secret) {
+            //     setClientSecret(secret);
+            // }
+        } catch (error) {
+            console.error('Error fetching client secret:', error);
+        }
+    };
+
     return (
         <Box padding={'2'}>
             <HStack>
@@ -64,6 +70,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                     label="Klient Hemmelighet"
                                     value={clientSecret}
                                     displayFetchValue
+                                    handleRefresh={handleRefreshClientSecret}
                                 />
                                 {/* <Divider className="pt-3" /> */}
                             </VStack>
@@ -73,56 +80,4 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
             </HStack>
         </Box>
     );
-
-    function LabelValuePair({
-        label,
-        value,
-        displayRefreshButton,
-        displayFetchValue,
-    }: {
-        label: string;
-        value: string;
-        displayRefreshButton?: boolean;
-        displayFetchValue?: boolean;
-    }) {
-        return (
-            <HStack className="flex !justify-between !items-center">
-                <HStack gap="4">
-                    <Label>{label}</Label>
-                    <BodyShort>{value}</BodyShort>
-                </HStack>
-                <HStack className=" flex !items-center">
-                    {displayFetchValue && (
-                        <Button
-                            variant="tertiary-neutral"
-                            icon={
-                                <ArrowCirclepathIcon
-                                    title="Hent klient hemmelighet"
-                                    fontSize="1.5rem"
-                                />
-                            }
-                            onClick={() => alert('not yet implemented')}>
-                            Hent hemmelighet
-                        </Button>
-                    )}
-                    {displayRefreshButton && (
-                        <Button
-                            variant="tertiary-neutral"
-                            icon={<ArrowCirclepathIcon title="Refresh" fontSize="1.5rem" />}
-                            onClick={() => alert('not yet implemented')}>
-                            Hent passord
-                        </Button>
-                    )}
-
-                    {!!value && (
-                        <CopyButton
-                            copyText={value}
-                            activeText={`${label} er kopiert!`}
-                            activeIcon={<ThumbUpIcon aria-hidden />}
-                        />
-                    )}
-                </HStack>
-            </HStack>
-        );
-    }
 }

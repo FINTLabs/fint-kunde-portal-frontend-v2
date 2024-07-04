@@ -1,23 +1,23 @@
 import { error, log } from '~/utils/logger';
 
-function getFetchOptions(): RequestInit {
-    return {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-            'x-nin': process.env.PERSONALNUMBER || '',
-        },
-    };
-}
-
-export async function fetchData(URL: string, functionName: string) {
+export async function fetchData(URL: string, functionName: string, returnType = 'json') {
     try {
         log(`Fetching ${functionName}`, URL);
-
-        const response = await fetch(URL, getFetchOptions());
+        console.log(`returnType: `, returnType);
+        const response = await fetch(URL, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-nin': process.env.PERSONALNUMBER || '',
+            },
+        });
         if (response.ok) {
-            return await response.json();
+            if (returnType === 'json') {
+                return await response.json();
+            } else {
+                return await response.text();
+            }
         } else {
             error(`Error fetching ${functionName}, status:`, response.status);
             return null;

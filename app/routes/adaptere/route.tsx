@@ -14,8 +14,6 @@ import { useState } from 'react';
 import adapters from '~/routes/adaptere/adapterList.json';
 import { tabInfo } from './constants';
 import { AdapterList } from './AdapterList';
-import { AdapterDetail } from '../adapter.$name/AdapterDetail';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
