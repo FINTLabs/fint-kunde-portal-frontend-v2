@@ -14,10 +14,13 @@ import { IAdapter } from '~/types/types';
 import { useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { ThumbUpIcon, ArrowCirclepathIcon, PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
+import { useState } from 'react';
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const navigate = useNavigate();
 
+    const [clientSecret, setClientSecret] = useState('');
+    const [passord, setPassord] = useState('');
     console.log(adapter);
     return (
         <Box padding={'2'}>
@@ -55,12 +58,13 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                     Authentisering
                                 </Heading>
                                 <LabelValuePair label="Brukernavn" value={adapter.name} />
-                                <LabelValuePair
-                                    label="Passord"
-                                    value={'*********'}
-                                    displayRefreshButton
-                                />
+                                <LabelValuePair label="Passord" value={''} displayRefreshButton />
                                 <LabelValuePair label="Klient ID" value={adapter.clientId} />
+                                <LabelValuePair
+                                    label="Klient Hemmelighet"
+                                    value={clientSecret}
+                                    displayFetchValue
+                                />
                                 {/* <Divider className="pt-3" /> */}
                             </VStack>
                         </VStack>
@@ -74,10 +78,12 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
         label,
         value,
         displayRefreshButton,
+        displayFetchValue,
     }: {
         label: string;
         value: string;
         displayRefreshButton?: boolean;
+        displayFetchValue?: boolean;
     }) {
         return (
             <HStack className="flex !justify-between !items-center">
@@ -86,19 +92,35 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                     <BodyShort>{value}</BodyShort>
                 </HStack>
                 <HStack className=" flex !items-center">
+                    {displayFetchValue && (
+                        <Button
+                            variant="tertiary-neutral"
+                            icon={
+                                <ArrowCirclepathIcon
+                                    title="Hent klient hemmelighet"
+                                    fontSize="1.5rem"
+                                />
+                            }
+                            onClick={() => alert('not yet implemented')}>
+                            Hent hemmelighet
+                        </Button>
+                    )}
                     {displayRefreshButton && (
                         <Button
                             variant="tertiary-neutral"
                             icon={<ArrowCirclepathIcon title="Refresh" fontSize="1.5rem" />}
-                            onClick={() => alert('not yet implemented')}
+                            onClick={() => alert('not yet implemented')}>
+                            Hent passord
+                        </Button>
+                    )}
+
+                    {!!value && (
+                        <CopyButton
+                            copyText={value}
+                            activeText={`${label} er kopiert!`}
+                            activeIcon={<ThumbUpIcon aria-hidden />}
                         />
                     )}
-                    <CopyButton
-                        copyText={value}
-                        // text="Kopier"
-                        activeText={`${label} er kopiert!`}
-                        activeIcon={<ThumbUpIcon aria-hidden />}
-                    />
                 </HStack>
             </HStack>
         );
