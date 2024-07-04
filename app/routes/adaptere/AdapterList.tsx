@@ -1,9 +1,13 @@
 import { Table, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
-import { ListItem } from './ListItem';
-import RolesChips from '../kontakter/RoleChips';
+import { useNavigate } from '@remix-run/react';
 
 export function AdapterList({ items }: { items: IAdapter[] }) {
+    const navigate = useNavigate();
+
+    const handleClick = (id: string) => {
+        navigate(`/adapter/${id}`);
+    };
     return (
         <Table>
             <Table.Header>
@@ -16,7 +20,8 @@ export function AdapterList({ items }: { items: IAdapter[] }) {
                 {items?.map((item, i) => (
                     <Table.Row
                         key={i + item.name}
-                        className="active:bg-[--a-surface-active] hover:cursor-pointer">
+                        className="active:bg-[--a-surface-active] hover:cursor-pointer"
+                        onClick={() => handleClick(item.name)}>
                         <Table.DataCell scope="row">{item.shortDescription}</Table.DataCell>
                         <Table.DataCell scope="row">{item.name}</Table.DataCell>
                     </Table.Row>
