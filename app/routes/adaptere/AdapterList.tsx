@@ -5,7 +5,7 @@ import RolesChips from '../kontakter/RoleChips';
 
 export function AdapterList({ items }: { items: IAdapter[] }) {
     return (
-        <Table zebraStripes>
+        <Table>
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
@@ -14,7 +14,9 @@ export function AdapterList({ items }: { items: IAdapter[] }) {
             </Table.Header>
             <Table.Body>
                 {items?.map((item, i) => (
-                    <Table.Row key={i + item.name}>
+                    <Table.Row
+                        key={i + item.name}
+                        className="active:bg-[--a-surface-active] hover:cursor-pointer">
                         <Table.DataCell scope="row">{item.shortDescription}</Table.DataCell>
                         <Table.DataCell scope="row">{item.name}</Table.DataCell>
                     </Table.Row>
