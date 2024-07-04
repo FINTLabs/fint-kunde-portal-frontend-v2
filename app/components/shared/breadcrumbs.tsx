@@ -18,7 +18,7 @@ export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
 
     const crumbs = breadcrumbs.map(({ name, link }) => (
         <div key={link} className="flex items-center">
-            <ChevronRightIcon title="Spacer" />
+            <ChevronRightIcon title="Spacer" className="mx-1" />
 
             {link === currentPath ? (
                 <>{name}</>
@@ -31,10 +31,10 @@ export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
     ));
 
     return (
-        <div className="flex items-center space-x-2 p-3">
-            <Link to={homeLink} style={linkStyle}>
-                <HouseIcon title="a11y-title" />
-                {'Dashboard'}
+        <div className="flex items-center align-center p-3">
+            <Link to={homeLink} style={linkStyle} className="!flex !items-start">
+                <HouseIcon title="dashboard" className="mt-[1.5px] " />
+                <span className="">{'Dashboard'}</span>
             </Link>
             {crumbs}
         </div>
