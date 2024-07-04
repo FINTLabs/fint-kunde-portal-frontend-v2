@@ -1,10 +1,35 @@
-import { BodyLong, Box, Button, HStack, Heading, Label, VStack } from '@navikt/ds-react';
+import { BodyLong, Box, Button, Chips, HStack, Heading, Label, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { PencilIcon } from '@navikt/aksel-icons';
 
+const comps = [
+    {
+        name: 'Administrasjon Fullmakt',
+    },
+    {
+        name: 'Administrasjon Kodeverk',
+    },
+];
+
+function ComponentsList({ selected }: { selected: string[] }) {
+    return (
+        <Chips size="small">
+            {comps.map((c, index) => (
+                <Chips.Toggle
+                    selected={true}
+                    key={index}
+                    onClick={() => {
+                        // do something
+                    }}>
+                    {c.name}
+                </Chips.Toggle>
+            ))}
+        </Chips>
+    );
+}
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const navigate = useNavigate();
 
@@ -19,16 +44,11 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                         onClick={() => navigate(`/adaptere`)}></Button>
                 </VStack>
                 <VStack className="flex flex-grow">
-                    <Box
-                        className="w-full"
-                        padding="6"
-                        borderRadius="large"
-                        shadow="small"
-                        background="surface-subtle">
+                    <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                         <VStack gap="5">
-                            <Heading size="medium" spacing>
+                            {/* <Heading size="medium" spacing>
                                 {adapter.note}
-                            </Heading>
+                            </Heading> */}
                             <VStack>
                                 <Label>Note</Label>
                                 <HStack className="!flex !justify-between !items-center">
@@ -40,15 +60,15 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                 </HStack>
                                 <Divider className="pt-3" />
                             </VStack>
-                            <VStack>
+                            {/* <VStack>
                                 <Label>Komponenter:</Label>
-                                <BodyLong>Display chips here</BodyLong>
+                                <ComponentsList selected={adapter.components} />
                                 <Divider className="pt-3" />
-                            </VStack>
+                            </VStack> */}
                             <VStack>
                                 <Label>Authentisering:</Label>
                                 <BodyLong>Display auth here</BodyLong>
-                                <Divider className="pt-3" />
+                                {/* <Divider className="pt-3" /> */}
                             </VStack>
                         </VStack>
                         {/* Add more fields as needed */}

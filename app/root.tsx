@@ -9,10 +9,10 @@ import React from 'react';
 import Menu from './components/Menu/Menu';
 import { getSession, commitSession } from '~/utils/session';
 import MeApi from '~/api/MeApi';
-import { FeatureFlags, IMeData,  UserSession } from '~/types/types';
+import { FeatureFlags, IMeData, UserSession } from '~/types/types';
 import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
-import {IOrganisation} from "~/types/IOrganisation";
+import { IOrganisation } from '~/types/IOrganisation';
 
 export const meta: MetaFunction = () => {
     return [
@@ -49,7 +49,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         const features = await FeaturesApi.fetchFeatures();
 
         return json(
-            { userSession, features },  // Ensure features is defined
+            { userSession, features }, // Ensure features is defined
             {
                 headers: {
                     'Set-Cookie': cookie,
@@ -63,26 +63,25 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
-
     return (
         <html lang="en">
-        <head>
-            <meta charSet="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <Meta />
-            <Links />
-        </head>
-        <body data-theme="light">
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-        </body>
+            <head>
+                <meta charSet="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <Meta />
+                <Links />
+            </head>
+            <body data-theme="light">
+                {children}
+                <ScrollRestoration />
+                <Scripts />
+            </body>
         </html>
     );
 }
 
 export default function App() {
-    const loaderData = useLoaderData<{ userSession: UserSession, features: FeatureFlags }>();
+    const loaderData = useLoaderData<{ userSession: UserSession; features: FeatureFlags }>();
     const userSession = loaderData?.userSession;
     const features = loaderData?.features;
 
@@ -103,10 +102,7 @@ export default function App() {
                     />
                 </Page.Block>
             </Box>
-            <Box
-                padding="8"
-                paddingBlock="16"
-                as="main">
+            <Box padding="8" paddingBlock="2" as="main">
                 <Page.Block gutters width="lg">
                     <Outlet context={userSession} />
                 </Page.Block>

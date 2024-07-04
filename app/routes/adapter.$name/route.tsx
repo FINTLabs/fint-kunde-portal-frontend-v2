@@ -4,7 +4,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { useParams } from '@remix-run/react';
 import adapters from '~/routes/adaptere/adapterList.json';
-import { BodyLong, Box } from '@navikt/ds-react';
+import { BodyLong, Box, Chips } from '@navikt/ds-react';
 import { AdapterDetail } from './AdapterDetail';
 
 export const meta: MetaFunction = () => {
@@ -29,7 +29,7 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader
-                title={'Adapter Detaljer'}
+                title={(adapter && adapter?.shortDescription) || 'No adapter found'}
                 icon={MigrationIcon}
                 helpText="adapter detaljer"
                 hideBorder={true}
