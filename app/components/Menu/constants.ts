@@ -20,8 +20,8 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
                     path: '/komponenter',
                 },
                 {
-                    title: 'Adapter',
-                    path: '/adapter',
+                    title: 'Adaptere',
+                    path: '/adaptere',
                 },
                 {
                     title: 'Klienter',
