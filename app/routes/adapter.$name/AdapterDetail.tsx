@@ -1,9 +1,19 @@
-import { BodyLong, Box, Button, Chips, HStack, Heading, Label, VStack } from '@navikt/ds-react';
+import {
+    BodyLong,
+    BodyShort,
+    Box,
+    Button,
+    Chips,
+    CopyButton,
+    HStack,
+    Heading,
+    Label,
+    VStack,
+} from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import { PencilIcon } from '@navikt/aksel-icons';
+import { ThumbUpIcon, ArrowCirclepathIcon, PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const navigate = useNavigate();
@@ -41,8 +51,16 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                 <Divider className="pt-3" />
                             </VStack> */}
                             <VStack>
-                                <Label>Authentisering:</Label>
-                                <BodyLong>Display auth here</BodyLong>
+                                <Heading size="medium" spacing>
+                                    Authentisering
+                                </Heading>
+                                <LabelValuePair label="Brukernavn" value={adapter.name} />
+                                <LabelValuePair
+                                    label="Passord"
+                                    value={'*********'}
+                                    displayRefreshButton
+                                />
+                                <LabelValuePair label="Klient ID" value={adapter.clientId} />
                                 {/* <Divider className="pt-3" /> */}
                             </VStack>
                         </VStack>
@@ -51,4 +69,38 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
             </HStack>
         </Box>
     );
+
+    function LabelValuePair({
+        label,
+        value,
+        displayRefreshButton,
+    }: {
+        label: string;
+        value: string;
+        displayRefreshButton?: boolean;
+    }) {
+        return (
+            <HStack className="flex !justify-between !items-center">
+                <HStack gap="4">
+                    <Label>{label}</Label>
+                    <BodyShort>{value}</BodyShort>
+                </HStack>
+                <HStack className=" flex !items-center">
+                    {displayRefreshButton && (
+                        <Button
+                            variant="tertiary-neutral"
+                            icon={<ArrowCirclepathIcon title="Refresh" fontSize="1.5rem" />}
+                            onClick={() => alert('not yet implemented')}
+                        />
+                    )}
+                    <CopyButton
+                        copyText={value}
+                        // text="Kopier"
+                        activeText={`${label} er kopiert!`}
+                        activeIcon={<ThumbUpIcon aria-hidden />}
+                    />
+                </HStack>
+            </HStack>
+        );
+    }
 }
