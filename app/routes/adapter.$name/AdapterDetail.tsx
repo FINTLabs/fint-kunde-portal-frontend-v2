@@ -5,37 +5,12 @@ import { useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { PencilIcon } from '@navikt/aksel-icons';
 
-const comps = [
-    {
-        name: 'Administrasjon Fullmakt',
-    },
-    {
-        name: 'Administrasjon Kodeverk',
-    },
-];
-
-function ComponentsList({ selected }: { selected: string[] }) {
-    return (
-        <Chips size="small">
-            {comps.map((c, index) => (
-                <Chips.Toggle
-                    selected={true}
-                    key={index}
-                    onClick={() => {
-                        // do something
-                    }}>
-                    {c.name}
-                </Chips.Toggle>
-            ))}
-        </Chips>
-    );
-}
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const navigate = useNavigate();
 
     console.log(adapter);
     return (
-        <Box>
+        <Box padding={'2'}>
             <HStack>
                 <VStack>
                     <Button
@@ -71,7 +46,6 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                 {/* <Divider className="pt-3" /> */}
                             </VStack>
                         </VStack>
-                        {/* Add more fields as needed */}
                     </Box>
                 </VStack>
             </HStack>
