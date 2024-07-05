@@ -2,16 +2,7 @@ import { json, type LoaderFunction, type MetaFunction } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
-import {
-    Button,
-    FormSummary,
-    HStack,
-    Heading,
-    Tabs,
-    TextField,
-    Textarea,
-    VStack,
-} from '@navikt/ds-react';
+import { Button, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { NotePencilDashIcon } from '@navikt/aksel-icons';
 import { log } from '~/utils/logger';
@@ -22,8 +13,7 @@ import { IAdapter } from '~/types/types';
 import { tabInfo } from './constants';
 import { AdapterList } from './AdapterList';
 import { ErrorBox } from '../../components/shared/ErrorBox';
-import { TrashIcon, PlusIcon } from '@navikt/aksel-icons';
-import { useEffect, useState } from 'react';
+import { PlusIcon } from '@navikt/aksel-icons';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];

@@ -1,4 +1,5 @@
 import { IAdapter } from '~/types/types';
+import { isClientSide } from '~/utils/environment';
 import { error, log } from '~/utils/logger';
 
 export type ReturnType = 'text' | 'json';
@@ -13,9 +14,10 @@ export async function request(
     try {
         log(`Running ${functionName}`, URL);
 
+        console.log(requestMethod);
         let requestOptions: RequestInit = {
             method: requestMethod,
-            credentials: 'include',
+            credentials: isClientSide() ? 'same-origin' : 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'x-nin': process.env.PERSONALNUMBER || '',
