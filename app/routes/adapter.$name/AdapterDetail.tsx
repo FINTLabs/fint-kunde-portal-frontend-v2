@@ -1,4 +1,14 @@
-import { BodyLong, Box, Button, Chips, HStack, Heading, Label, VStack } from '@navikt/ds-react';
+import {
+    BodyLong,
+    Box,
+    Button,
+    Chips,
+    CopyButton,
+    HStack,
+    Heading,
+    Label,
+    VStack,
+} from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
@@ -20,7 +30,15 @@ export function AdapterDetail({
     const [clientSecret, setClientSecret] = useState('');
     const [passord, setPassord] = useState('');
 
-    const copyAll = () => {};
+    const allDetails = {
+        username: adapter.name,
+        password: passord,
+        clientId: adapter.clientId,
+        openIdSecret: clientSecret,
+        scope: 'fint-client',
+        idpUri: 'https://idp.felleskomponent.no/nidp/oauth/nam/token',
+        assetIds: adapter.assetIds,
+    };
 
     return (
         <Box padding={'2'}>
@@ -84,7 +102,11 @@ export function AdapterDetail({
                                     }
                                 />
                                 <div className="h-5"></div>
-                                <Button onClick={copyAll}>Kopier alt</Button>
+                                <CopyButton
+                                    copyText={JSON.stringify(allDetails)}
+                                    text="Kopier alt"
+                                    activeText={`Alt er kopiert!`}
+                                />
                                 {/* <Divider className="pt-3" /> */}
                             </VStack>
                         </VStack>
