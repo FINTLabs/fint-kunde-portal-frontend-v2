@@ -1,8 +1,8 @@
-import { UserSession } from '~/types/types';
+import { IUserSession } from '~/types/types';
 import { Select } from '@navikt/ds-react';
 import { ChangeEvent } from 'react';
 
-export const UserOrganization = ({ userSession }: { userSession: UserSession }) => {
+export const UserOrganization = ({ userSession }: { userSession: IUserSession }) => {
     // if (userSession.selectedOrganization) {
     //     console.log('userSession.selectedOrganization');
     //     console.log(userSession.selectedOrganization);
@@ -12,7 +12,8 @@ export const UserOrganization = ({ userSession }: { userSession: UserSession }) 
     // }
 
     const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        const selectedOrg = userSession.organizations.filter(
+        let selectedOrg: { name: string; orgNumber: string; displayName: string };
+        selectedOrg = userSession.organizations.filter(
             (org) => org.displayName === event.target.value
         )[0];
         userSession.selectedOrganization = selectedOrg;

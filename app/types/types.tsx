@@ -60,7 +60,7 @@ export interface IMeData {
 //     customer: boolean;
 //     primaryAssetId: string | null;
 // }
-export interface UserSession {
+export interface IUserSession {
     firstName: string;
     lastName: string;
     organizationCount: number;

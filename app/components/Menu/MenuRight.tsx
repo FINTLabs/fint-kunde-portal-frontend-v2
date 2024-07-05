@@ -1,11 +1,11 @@
 import { HStack } from '@navikt/ds-react';
-import { UserSession } from '~/types/types';
+import { IUserSession } from '~/types/types';
 import { LogoutButton } from './LogoutButton';
 import { UserOrganization } from './UserOrganization';
 import { NavLinkView } from './NavLinkView';
 
 type MenuRightType = {
-    userSession: UserSession;
+    userSession: IUserSession;
 };
 export const MenuRight = ({ userSession }: MenuRightType) => (
     <HStack gap="5">

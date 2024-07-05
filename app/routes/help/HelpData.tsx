@@ -16,7 +16,7 @@ export const helpData: HelpDataItem[] = [
             'driftmeldinger sendes på epost og SMS.',
     },
     {
-        id: 'komponenter',
+        id: 'components',
         title: 'Komponenter',
         description:
             'En komponent er en løsning fra FINT. For at organisasjonen skal kunne ta i bruk en løsning fra ' +
@@ -50,7 +50,7 @@ export const helpData: HelpDataItem[] = [
             'undersystem i FINT.',
     },
     {
-        id: 'ressurser',
+        id: 'assets',
         title: 'Ressurser',
         description:
             'En ressurs er identifikatoren som styrer en forespørsel mot en komponent til riktig ' +

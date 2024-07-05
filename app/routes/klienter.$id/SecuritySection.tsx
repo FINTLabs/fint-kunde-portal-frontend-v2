@@ -1,28 +1,45 @@
 import React from 'react';
-import { Box, Button, CopyButton, Heading, Table } from '@navikt/ds-react';
+import { Box, Button, CopyButton, Table } from '@navikt/ds-react';
 import { ArrowCirclepathIcon, BagdeIcon, DownloadIcon, ThumbUpIcon } from '@navikt/aksel-icons';
 import { IClient } from '~/types/Clients';
+import { log } from '~/utils/logger';
 
 interface SecuritySectionProps {
     client: IClient;
 }
 
+function handleFetchSecret(downloadSecretButtonClicked: string) {
+    log('Download Secret button clicked');
+}
+
+function handleUpdatePW(downloadSecretButtonClicked: string) {
+    log('Update password clicked');
+}
+
+function handleCopyPassword() {
+    return 'get password from somewhere';
+}
+
+function handleCopySecret() {
+    return 'need to get secret from somewhere';
+}
+
 const SecuritySection: React.FC<SecuritySectionProps> = ({ client }) => (
     <>
-        <Heading size={'medium'}>Security</Heading>
         <Box
-            background="surface-subtle"
-            borderColor="border-alt-3"
+            // background="surface-subtle"
+            // borderColor="border-alt-3"
             padding="4"
-            borderWidth="2"
-            borderRadius="xlarge">
+            // borderWidth="2"
+            // borderRadius="xlarge"
+        >
             <Table>
                 <Table.Body>
                     <Table.Row>
                         <Table.DataCell>Brukernavn</Table.DataCell>
                         <Table.DataCell>{client.name}</Table.DataCell>
                         <Table.DataCell>
-                            <CopyButton copyText="3.14" />
+                            <CopyButton copyText={client.name} />
                         </Table.DataCell>
                     </Table.Row>
                     <Table.Row>
@@ -31,19 +48,20 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({ client }) => (
                             ****{' '}
                             <Button
                                 variant={'tertiary'}
+                                onClick={() => handleUpdatePW('Download Secret button clicked')}
                                 icon={
                                     <ArrowCirclepathIcon title="a11y-title" fontSize="1.5rem" />
                                 }></Button>
                         </Table.DataCell>
                         <Table.DataCell>
-                            <CopyButton copyText="3.14" />
+                            <CopyButton copyText={handleCopyPassword()} />
                         </Table.DataCell>
                     </Table.Row>
                     <Table.Row>
                         <Table.DataCell>Klient ID</Table.DataCell>
                         <Table.DataCell>{client.clientId}</Table.DataCell>
                         <Table.DataCell>
-                            <CopyButton copyText="3.14" />
+                            <CopyButton copyText={client.clientId} />
                         </Table.DataCell>
                     </Table.Row>
                     <Table.Row>
@@ -51,25 +69,26 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({ client }) => (
                         <Table.DataCell>
                             <Button
                                 variant={'tertiary'}
+                                onClick={() => handleFetchSecret('Download Secret button clicked')}
                                 icon={
                                     <DownloadIcon title="a11y-title" fontSize="1.5rem" />
                                 }></Button>
                         </Table.DataCell>
                         <Table.DataCell>
-                            <CopyButton copyText="3.14" />
+                            <CopyButton copyText={handleCopySecret()} />
                         </Table.DataCell>
                     </Table.Row>
                     <Table.Row>
                         <Table.DataCell>Resurs Id</Table.DataCell>
                         <Table.DataCell>{client.name}</Table.DataCell>
                         <Table.DataCell>
-                            <CopyButton copyText="3.14" />
+                            <CopyButton copyText={client.name} />
                         </Table.DataCell>
                     </Table.Row>
                 </Table.Body>
             </Table>
             <CopyButton
-                copyText="https://aksel.nav.no/"
+                copyText="NEED TO UPDATE THIS TEXT"
                 text="Kopier autentiseringsinformasjon"
                 activeText="Autentiseringsinformasjon er kopiert"
                 icon={<BagdeIcon aria-hidden />}

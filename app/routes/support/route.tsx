@@ -12,10 +12,10 @@ import { json, useLoaderData } from '@remix-run/react';
 import { QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 import ZenDeskApi from '~/api/ZenDeskApi';
 import ComponentApi from '~/api/ComponentApi';
-import { IComponent } from '~/types/types';
 import React, { useState } from 'react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { IComponent } from '~/types/Component';
 
 interface LoaderData {
     types: ISupportType[];

@@ -9,10 +9,11 @@ import React from 'react';
 import Menu from './components/Menu/Menu';
 import { getSession, commitSession } from '~/utils/session';
 import MeApi from '~/api/MeApi';
-import { FeatureFlags, IMeData, UserSession } from '~/types/types';
+import { FeatureFlags, IMeData, IUserSession } from '~/types/types';
 import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
-import { IOrganisation } from '~/types/IOrganisation';
+import { Organisation } from '~/types/Organisation';
+import { CustomError } from '~/components/shared/CustomError';
 import { log } from './utils/logger';
 
 export const meta: MetaFunction = () => {
@@ -30,7 +31,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     log('userSession');
     if (!userSession) {
         const meData: IMeData = await MeApi.fetchMe();
-        const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
+        const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
 
         const organizationDetails = organisationsData.map((org) => ({
             name: org.name,
@@ -84,7 +85,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    const loaderData = useLoaderData<{ userSession: UserSession; features: FeatureFlags }>();
+    const loaderData = useLoaderData<{ userSession: IUserSession; features: FeatureFlags }>();
     const userSession = loaderData?.userSession;
     const features = loaderData?.features;
 
@@ -111,5 +112,16 @@ export default function App() {
                 </Page.Block>
             </Box>
         </Page>
+    );
+}
+export function ErrorBoundary({ error }: { error: Error }) {
+    //TODO: can we make the message show?? need an error layout
+
+    return (
+        // <>
+        //     <p>Something went wrong !</p>
+        //     <p>{error?.message}</p>
+        // </>
+        <CustomError error={error} />
     );
 }

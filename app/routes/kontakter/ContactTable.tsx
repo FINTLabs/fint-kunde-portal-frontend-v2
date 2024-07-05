@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon, ShieldLockIcon } from '@navikt/aksel-icons';
-import { IContact, IRole, type UserSession } from '~/types/types';
+import { IContact, IRole, type IUserSession } from '~/types/types';
 import ConfirmModal from './ConfirmModal';
 import RolesChips from '~/routes/kontakter/RoleChips';
 import { log } from '~/utils/logger';
@@ -19,7 +19,7 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
         open: boolean;
     }>({ type: '', contact: undefined, open: false });
 
-    const userSession = useOutletContext<UserSession>();
+    const userSession = useOutletContext<IUserSession>();
 
     const hasRole = (currentContact: IContact, roleId: string): boolean => {
         if (currentContact) {

@@ -1,7 +1,7 @@
 import { API_URL } from '~/api/constants';
 import { error, log } from '~/utils/logger.js';
 import { IClient } from '~/types/Clients';
-import { IOrganisation } from '~/types/IOrganisation';
+import { Organisation } from '~/types/Organisation';
 
 class ClientApi {
     static async getClients(organisationName: string) {
@@ -20,13 +20,10 @@ class ClientApi {
 
             if (response.ok) {
                 return await response.json();
-            } else {
-                error('Error fetching clients, status:', response.status);
-                return null;
             }
         } catch (err) {
             error('Error fetching clients:', err);
-            return null;
+            throw new Error('Error fetching technical clients');
         }
     }
 
@@ -53,7 +50,7 @@ class ClientApi {
         }
     }
 
-    static async updateClient(client: IClient, organisation: IOrganisation) {
+    static async updateClient(client: IClient, organisation: Organisation) {
         const url = `${API_URL}/api/clients/${organisation}/${client.name}`;
         log('Updating client', url);
 
@@ -83,7 +80,7 @@ class ClientApi {
         }
     }
 
-    static async createClient(client: IClient, organisation: IOrganisation) {
+    static async createClient(client: IClient, organisation: Organisation) {
         const url = `${API_URL}/api/clients/${organisation}`;
         log('Creating client', url);
 
@@ -114,7 +111,7 @@ class ClientApi {
         }
     }
 
-    static async deleteClient(client: IClient, organisation: IOrganisation) {
+    static async deleteClient(client: IClient, organisation: Organisation) {
         const url = `${API_URL}/api/clients/${organisation}/${client.name}`;
         log('Deleting client', url);
 
