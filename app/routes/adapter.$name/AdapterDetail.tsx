@@ -41,6 +41,7 @@ export function AdapterDetail({
         assetIds: adapter.assetIds,
     };
 
+    console.log(adapter);
     return (
         <Box padding={'2'}>
             <HStack>

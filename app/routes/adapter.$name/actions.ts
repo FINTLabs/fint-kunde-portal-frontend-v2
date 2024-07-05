@@ -12,6 +12,8 @@ const fetchClientSecret = async (
     organisationName: string,
     setClientSecret: React.Dispatch<React.SetStateAction<string>>
 ) => {
+    console.log('name');
+    console.log(name);
     setClientSecret('refreshed');
     const secret = await AdapterAPI.getOpenIdSecret(name, organisationName);
     console.log(secret);
