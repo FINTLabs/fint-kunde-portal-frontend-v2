@@ -6,6 +6,7 @@ import { PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { ValueDisplayPanel } from './ValueDisplayPanel';
 import AdapterAPI from '~/api/AdapterApi';
+import { fetchClientSecret, resetPassword } from './actions';
 
 export function AdapterDetail({
     adapter,
@@ -19,22 +20,7 @@ export function AdapterDetail({
     const [clientSecret, setClientSecret] = useState('');
     const [passord, setPassord] = useState('');
 
-    const resetPassword = async () => {
-        console.log('handle reset password and post the password to backend');
-        setTimeout(() => {
-            setPassord('*******');
-        }, 400);
-    };
-
-    const fetchClientSecret = async () => {
-        setClientSecret('refreshed');
-        const secret = await AdapterAPI.getOpenIdSecret(adapter.name, organisationName);
-        console.log(secret);
-        if (secret) {
-            setClientSecret(secret);
-        }
-    };
-
+    console.log(adapter.assetIds);
     return (
         <Box padding={'2'}>
             <HStack>
@@ -75,18 +61,28 @@ export function AdapterDetail({
                                 <ValueDisplayPanel
                                     label="Passord"
                                     value={passord}
-                                    revalidate={resetPassword}
+                                    revalidate={() => resetPassword(setPassord)}
+                                />
+                                <ValueDisplayPanel
+                                    label="Ressurs Id-er"
+                                    value={adapter.assetIds.reduce(
+                                        (acc, curr) => acc.concat(!acc ? curr : `, ${curr}`),
+                                        ''
+                                    )}
+                                    // revalidate={fetchClientSecret}
                                 />
                                 <ValueDisplayPanel
                                     label="Klient Hemmelighet"
                                     value={clientSecret}
-                                    revalidate={fetchClientSecret}
+                                    revalidate={() =>
+                                        fetchClientSecret(
+                                            adapter.name,
+                                            organisationName,
+                                            setClientSecret
+                                        )
+                                    }
                                 />
-                                <ValueDisplayPanel
-                                    label="Ressurs Id-er"
-                                    value={clientSecret}
-                                    // revalidate={fetchClientSecret}
-                                />
+
                                 {/* <Divider className="pt-3" /> */}
                             </VStack>
                         </VStack>
