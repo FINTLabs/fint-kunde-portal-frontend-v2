@@ -20,7 +20,8 @@ export function AdapterDetail({
     const [clientSecret, setClientSecret] = useState('');
     const [passord, setPassord] = useState('');
 
-    console.log(adapter.assetIds);
+    const copyAll = () => {};
+
     return (
         <Box padding={'2'}>
             <HStack>
@@ -54,23 +55,23 @@ export function AdapterDetail({
                             </VStack> */}
                             <VStack>
                                 <Heading size="medium" spacing>
-                                    Authentisering
+                                    Autentisering
                                 </Heading>
                                 <ValueDisplayPanel label="Brukernavn" value={adapter.name} />
                                 <ValueDisplayPanel label="Klient ID" value={adapter.clientId} />
-                                <ValueDisplayPanel
-                                    label="Passord"
-                                    value={passord}
-                                    revalidate={() => resetPassword(setPassord)}
-                                />
                                 <ValueDisplayPanel
                                     label="Ressurs Id-er"
                                     value={adapter.assetIds.reduce(
                                         (acc, curr) => acc.concat(!acc ? curr : `, ${curr}`),
                                         ''
                                     )}
-                                    // revalidate={fetchClientSecret}
                                 />
+                                <ValueDisplayPanel
+                                    label="Passord"
+                                    value={passord}
+                                    revalidate={() => resetPassword(setPassord)}
+                                />
+
                                 <ValueDisplayPanel
                                     label="Klient Hemmelighet"
                                     value={clientSecret}
@@ -82,7 +83,8 @@ export function AdapterDetail({
                                         )
                                     }
                                 />
-
+                                <div className="h-5"></div>
+                                <Button onClick={copyAll}>Kopier alt</Button>
                                 {/* <Divider className="pt-3" /> */}
                             </VStack>
                         </VStack>
