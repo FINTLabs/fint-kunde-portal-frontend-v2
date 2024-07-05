@@ -1,10 +1,15 @@
 import { error, log } from '~/utils/logger';
 
-export async function fetchData(URL: string, functionName: string, returnType = 'json') {
+export async function request(
+    URL: string,
+    functionName: string,
+    requestMethod = 'GET',
+    returnType = 'json'
+) {
     try {
-        log(`Fetching ${functionName}`, URL);
+        log(`Running ${functionName}`, URL);
         const response = await fetch(URL, {
-            method: 'GET',
+            method: requestMethod,
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
@@ -14,11 +19,11 @@ export async function fetchData(URL: string, functionName: string, returnType = 
         if (response.ok) {
             return returnType === 'json' ? await response.json() : await response.text();
         } else {
-            error(`Error fetching ${functionName}, status:`, response.status);
+            error(`Error running ${functionName}, status:`, response.status);
             return null;
         }
     } catch (err) {
-        error(`Error fetching ${functionName}:`, err);
-        throw new Error(`Error fetching ${functionName}`);
+        error(`Error running ${functionName}:`, err);
+        throw new Error(`Error running ${functionName}`);
     }
 }
