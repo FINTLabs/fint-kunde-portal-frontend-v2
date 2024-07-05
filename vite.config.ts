@@ -21,4 +21,7 @@ export default defineConfig({
             port: 3000,
         },
     },
+    define: {
+        'process.env.PUBLIC_API_URL': JSON.stringify(process.env.API_URL),
+    },
 });

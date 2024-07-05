@@ -7,22 +7,26 @@ import { useState } from 'react';
 import { LabelValuePair } from './LabelValuePair';
 import AdapterAPI from '~/api/AdapterApi';
 
-export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
+export function AdapterDetail({
+    adapter,
+    organisationName,
+}: {
+    adapter: IAdapter;
+    organisationName: string;
+}) {
     const navigate = useNavigate();
 
     const [clientSecret, setClientSecret] = useState('');
     const [passord, setPassord] = useState('');
 
     const handleRefreshClientSecret = async () => {
-        console.log('handle refresh');
-
         try {
-            console.log('handle refresh');
             setClientSecret('refreshed');
-            const secret = await AdapterAPI.getOpenIdSecret(adapter.name, 'fintlabs');
-            // if (secret) {
-            //     setClientSecret(secret);
-            // }
+            const secret = await AdapterAPI.getOpenIdSecret(adapter.name, organisationName);
+            console.log(secret);
+            if (secret) {
+                setClientSecret(secret);
+            }
         } catch (error) {
             console.error('Error fetching client secret:', error);
         }
