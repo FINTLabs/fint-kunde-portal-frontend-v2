@@ -1,41 +1,29 @@
-import { BodyLong, Box, Button, Chips, HStack, Heading, Label, VStack } from '@navikt/ds-react';
+import {
+    BodyLong,
+    BodyShort,
+    Box,
+    Button,
+    Chips,
+    CopyButton,
+    HStack,
+    Heading,
+    Label,
+    VStack,
+} from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import { PencilIcon } from '@navikt/aksel-icons';
+import { ThumbUpIcon, ArrowCirclepathIcon, PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
+import { useState } from 'react';
 
-const comps = [
-    {
-        name: 'Administrasjon Fullmakt',
-    },
-    {
-        name: 'Administrasjon Kodeverk',
-    },
-];
-
-function ComponentsList({ selected }: { selected: string[] }) {
-    return (
-        <Chips size="small">
-            {comps.map((c, index) => (
-                <Chips.Toggle
-                    selected={true}
-                    key={index}
-                    onClick={() => {
-                        // do something
-                    }}>
-                    {c.name}
-                </Chips.Toggle>
-            ))}
-        </Chips>
-    );
-}
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const navigate = useNavigate();
 
+    const [clientSecret, setClientSecret] = useState('');
+    const [passord, setPassord] = useState('');
     console.log(adapter);
     return (
-        <Box>
+        <Box padding={'2'}>
             <HStack>
                 <VStack>
                     <Button
@@ -66,15 +54,75 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                 <Divider className="pt-3" />
                             </VStack> */}
                             <VStack>
-                                <Label>Authentisering:</Label>
-                                <BodyLong>Display auth here</BodyLong>
+                                <Heading size="medium" spacing>
+                                    Authentisering
+                                </Heading>
+                                <LabelValuePair label="Brukernavn" value={adapter.name} />
+                                <LabelValuePair label="Klient ID" value={adapter.clientId} />
+                                <LabelValuePair label="Passord" value={''} displayRefreshButton />
+                                <LabelValuePair
+                                    label="Klient Hemmelighet"
+                                    value={clientSecret}
+                                    displayFetchValue
+                                />
                                 {/* <Divider className="pt-3" /> */}
                             </VStack>
                         </VStack>
-                        {/* Add more fields as needed */}
                     </Box>
                 </VStack>
             </HStack>
         </Box>
     );
+
+    function LabelValuePair({
+        label,
+        value,
+        displayRefreshButton,
+        displayFetchValue,
+    }: {
+        label: string;
+        value: string;
+        displayRefreshButton?: boolean;
+        displayFetchValue?: boolean;
+    }) {
+        return (
+            <HStack className="flex !justify-between !items-center">
+                <HStack gap="4">
+                    <Label>{label}</Label>
+                    <BodyShort>{value}</BodyShort>
+                </HStack>
+                <HStack className=" flex !items-center">
+                    {displayFetchValue && (
+                        <Button
+                            variant="tertiary-neutral"
+                            icon={
+                                <ArrowCirclepathIcon
+                                    title="Hent klient hemmelighet"
+                                    fontSize="1.5rem"
+                                />
+                            }
+                            onClick={() => alert('not yet implemented')}>
+                            Hent hemmelighet
+                        </Button>
+                    )}
+                    {displayRefreshButton && (
+                        <Button
+                            variant="tertiary-neutral"
+                            icon={<ArrowCirclepathIcon title="Refresh" fontSize="1.5rem" />}
+                            onClick={() => alert('not yet implemented')}>
+                            Hent passord
+                        </Button>
+                    )}
+
+                    {!!value && (
+                        <CopyButton
+                            copyText={value}
+                            activeText={`${label} er kopiert!`}
+                            activeIcon={<ThumbUpIcon aria-hidden />}
+                        />
+                    )}
+                </HStack>
+            </HStack>
+        );
+    }
 }

@@ -13,6 +13,7 @@ import { FeatureFlags, IMeData, UserSession } from '~/types/types';
 import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
 import { IOrganisation } from '~/types/IOrganisation';
+import { log } from './utils/logger';
 
 export const meta: MetaFunction = () => {
     return [
@@ -25,6 +26,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const session = await getSession(request.headers.get('Cookie'));
 
     let userSession = session.get('user-session');
+
+    log('userSession');
     if (!userSession) {
         const meData: IMeData = await MeApi.fetchMe();
         const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
