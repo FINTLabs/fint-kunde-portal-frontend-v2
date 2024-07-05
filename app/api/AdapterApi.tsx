@@ -10,7 +10,7 @@ class AdapterAPI {
     static async createAdapter(adapter: IAdapter, organisationName: string) {
         const functionName = 'createAdapter';
         const URL = `${API_URL}/api/adapters/${organisationName}`;
-        return request(URL, functionName, 'POST');
+        return request(URL, functionName, 'POST', 'json', adapter);
     }
 
     static async deleteAdapter(name: string, organisationName: string) {

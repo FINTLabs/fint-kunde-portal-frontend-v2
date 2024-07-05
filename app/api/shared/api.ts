@@ -1,11 +1,13 @@
 import { IAdapter } from '~/types/types';
 import { error, log } from '~/utils/logger';
 
+export type ReturnType = 'text' | 'json';
+
 export async function request(
     URL: string,
     functionName: string,
     requestMethod = 'GET',
-    returnType = 'json',
+    returnType: ReturnType = 'json',
     adapter?: IAdapter
 ) {
     try {
