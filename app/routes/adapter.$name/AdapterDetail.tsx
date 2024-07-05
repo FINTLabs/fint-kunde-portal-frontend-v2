@@ -19,14 +19,14 @@ export function AdapterDetail({
     const [clientSecret, setClientSecret] = useState('');
     const [passord, setPassord] = useState('');
 
-    const fetchPassword = async () => {
-        console.log('handle fetch password');
+    const resetPassword = async () => {
+        console.log('handle reset password and post the password to backend');
         setTimeout(() => {
             setPassord('*******');
         }, 400);
     };
 
-    const handleRefreshClientSecret = async () => {
+    const fetchClientSecret = async () => {
         setClientSecret('refreshed');
         const secret = await AdapterAPI.getOpenIdSecret(adapter.name, organisationName);
         console.log(secret);
@@ -75,12 +75,17 @@ export function AdapterDetail({
                                 <ValueDisplayPanel
                                     label="Passord"
                                     value={passord}
-                                    revalidate={fetchPassword}
+                                    revalidate={resetPassword}
                                 />
                                 <ValueDisplayPanel
                                     label="Klient Hemmelighet"
                                     value={clientSecret}
-                                    revalidate={handleRefreshClientSecret}
+                                    revalidate={fetchClientSecret}
+                                />
+                                <ValueDisplayPanel
+                                    label="Ressurs Id-er"
+                                    value={clientSecret}
+                                    // revalidate={fetchClientSecret}
                                 />
                                 {/* <Divider className="pt-3" /> */}
                             </VStack>
