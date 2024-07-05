@@ -4,7 +4,7 @@ import { useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
-import { LabelValuePair } from './LabelValuePair';
+import { ValueDisplayPanel } from './ValueDisplayPanel';
 import AdapterAPI from '~/api/AdapterApi';
 
 export function AdapterDetail({
@@ -19,16 +19,19 @@ export function AdapterDetail({
     const [clientSecret, setClientSecret] = useState('');
     const [passord, setPassord] = useState('');
 
+    const fetchPassword = async () => {
+        console.log('handle fetch password');
+        setTimeout(() => {
+            setPassord('*******');
+        }, 400);
+    };
+
     const handleRefreshClientSecret = async () => {
-        try {
-            setClientSecret('refreshed');
-            const secret = await AdapterAPI.getOpenIdSecret(adapter.name, organisationName);
-            console.log(secret);
-            if (secret) {
-                setClientSecret(secret);
-            }
-        } catch (error) {
-            console.error('Error fetching client secret:', error);
+        setClientSecret('refreshed');
+        const secret = await AdapterAPI.getOpenIdSecret(adapter.name, organisationName);
+        console.log(secret);
+        if (secret) {
+            setClientSecret(secret);
         }
     };
 
@@ -67,14 +70,17 @@ export function AdapterDetail({
                                 <Heading size="medium" spacing>
                                     Authentisering
                                 </Heading>
-                                <LabelValuePair label="Brukernavn" value={adapter.name} />
-                                <LabelValuePair label="Klient ID" value={adapter.clientId} />
-                                <LabelValuePair label="Passord" value={''} displayRefreshButton />
-                                <LabelValuePair
+                                <ValueDisplayPanel label="Brukernavn" value={adapter.name} />
+                                <ValueDisplayPanel label="Klient ID" value={adapter.clientId} />
+                                <ValueDisplayPanel
+                                    label="Passord"
+                                    value={passord}
+                                    revalidate={fetchPassword}
+                                />
+                                <ValueDisplayPanel
                                     label="Klient Hemmelighet"
                                     value={clientSecret}
-                                    displayFetchValue
-                                    handleRefresh={handleRefreshClientSecret}
+                                    revalidate={handleRefreshClientSecret}
                                 />
                                 {/* <Divider className="pt-3" /> */}
                             </VStack>

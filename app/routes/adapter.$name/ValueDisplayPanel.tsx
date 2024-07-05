@@ -1,18 +1,14 @@
 import { BodyShort, Button, CopyButton, HStack, Label } from '@navikt/ds-react';
 import { ThumbUpIcon, ArrowCirclepathIcon } from '@navikt/aksel-icons';
 
-export function LabelValuePair({
+export function ValueDisplayPanel({
     label,
     value,
-    displayRefreshButton,
-    displayFetchValue,
-    handleRefresh,
+    revalidate,
 }: {
     label: string;
     value: string;
-    displayRefreshButton?: boolean;
-    displayFetchValue?: boolean;
-    handleRefresh?: () => void;
+    revalidate?: () => void;
 }) {
     return (
         <HStack className="flex !justify-between !items-center">
@@ -21,25 +17,12 @@ export function LabelValuePair({
                 <BodyShort>{value}</BodyShort>
             </HStack>
             <HStack className=" flex !items-center">
-                {displayFetchValue && (
-                    <Button
-                        variant="tertiary-neutral"
-                        icon={
-                            <ArrowCirclepathIcon
-                                title="Hent klient hemmelighet"
-                                fontSize="1.5rem"
-                            />
-                        }
-                        onClick={handleRefresh}>
-                        Hent hemmelighet
-                    </Button>
-                )}
-                {displayRefreshButton && (
+                {revalidate && (
                     <Button
                         variant="tertiary-neutral"
                         icon={<ArrowCirclepathIcon title="Refresh" fontSize="1.5rem" />}
-                        onClick={handleRefresh}>
-                        Hent passord
+                        onClick={revalidate}>
+                        Hent {label}
                     </Button>
                 )}
 
