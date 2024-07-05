@@ -2,7 +2,7 @@ import { json, type LoaderFunction, type MetaFunction } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { Tabs } from '@navikt/ds-react';
+import { Button, Tabs } from '@navikt/ds-react';
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { NotePencilDashIcon } from '@navikt/aksel-icons';
 import { log } from '~/utils/logger';
@@ -13,6 +13,7 @@ import { IAdapter } from '~/types/types';
 import { tabInfo } from './constants';
 import { AdapterList } from './AdapterList';
 import { ErrorBox } from '../../components/shared/ErrorBox';
+import { TrashIcon, PlusIcon } from '@navikt/aksel-icons';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
@@ -61,6 +62,7 @@ export default function Index() {
             />
 
             {!adapters && <ErrorBox message="Fant ingen adaptere" />}
+            <Button icon={<PlusIcon aria-hidden />}>Legg til</Button>
             {adapters && (
                 <Tabs defaultValue={tabInfo[0].value} fill>
                     <Tabs.List>

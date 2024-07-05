@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { ValueDisplayPanel } from './ValueDisplayPanel';
 import AdapterAPI from '~/api/AdapterApi';
 import { fetchClientSecret, resetPassword } from './actions';
+import { TrashIcon, PlusIcon } from '@navikt/aksel-icons';
 
 export function AdapterDetail({
     adapter,
@@ -101,12 +102,18 @@ export function AdapterDetail({
                                         )
                                     }
                                 />
-                                <div className="h-5"></div>
-                                <CopyButton
-                                    copyText={JSON.stringify(allDetails)}
-                                    text="Kopier alt"
-                                    activeText={`Alt er kopiert!`}
-                                />
+                                <div className="h-10"></div>
+                                <HStack justify={'center'}>
+                                    <CopyButton
+                                        copyText={JSON.stringify(allDetails)}
+                                        text="Kopier alt"
+                                        activeText={`Alt er kopiert!`}
+                                    />
+                                    <Button variant="danger" icon={<TrashIcon aria-hidden />}>
+                                        Slett
+                                    </Button>
+                                </HStack>
+
                                 {/* <Divider className="pt-3" /> */}
                             </VStack>
                         </VStack>
