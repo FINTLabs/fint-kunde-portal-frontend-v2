@@ -16,7 +16,7 @@ import { PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { ValueDisplayPanel } from './ValueDisplayPanel';
 import AdapterAPI from '~/api/AdapterApi';
-import { fetchClientSecret, resetPassword } from './actions';
+import { deleteAdapter, fetchClientSecret, resetPassword } from './actions';
 import { TrashIcon, PlusIcon } from '@navikt/aksel-icons';
 
 export function AdapterDetail({
@@ -109,7 +109,12 @@ export function AdapterDetail({
                                         text="Kopier alt"
                                         activeText={`Alt er kopiert!`}
                                     />
-                                    <Button variant="danger" icon={<TrashIcon aria-hidden />}>
+                                    <Button
+                                        variant="danger"
+                                        onClick={() =>
+                                            deleteAdapter(adapter.name, organisationName)
+                                        }
+                                        icon={<TrashIcon aria-hidden />}>
                                         Slett
                                     </Button>
                                 </HStack>

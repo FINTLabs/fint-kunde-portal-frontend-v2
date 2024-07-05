@@ -20,4 +20,8 @@ const fetchClientSecret = async (
     }
 };
 
-export { resetPassword, fetchClientSecret };
+const deleteAdapter = async (name: string, organisationName: string) => {
+    // delete
+};
+
+export { resetPassword, fetchClientSecret, deleteAdapter };
