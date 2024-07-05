@@ -1,21 +1,37 @@
+import { IAdapter } from '~/types/types';
 import { error, log } from '~/utils/logger';
 
 export async function request(
     URL: string,
     functionName: string,
     requestMethod = 'GET',
-    returnType = 'json'
+    returnType = 'json',
+    adapter?: IAdapter
 ) {
     try {
         log(`Running ${functionName}`, URL);
-        const response = await fetch(URL, {
+
+        let requestOptions: RequestInit = {
             method: requestMethod,
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'x-nin': process.env.PERSONALNUMBER || '',
             },
-        });
+        };
+
+        if (requestMethod === 'PUT' && adapter) {
+            requestOptions = {
+                ...requestOptions,
+                body: JSON.stringify({
+                    name: adapter.name,
+                    note: adapter.note,
+                    shortDescription: adapter.shortDescription,
+                }),
+            };
+        }
+
+        const response = await fetch(URL, requestOptions);
         if (response.ok) {
             return returnType === 'json' ? await response.json() : await response.text();
         } else {
