@@ -63,9 +63,7 @@ export default function Index() {
                 />
             )}
 
-            {(!userSession || userSession.selectedOrganization) && (
-                <ErrorBox message="User session is null" />
-            )}
+            {!userSession && <ErrorBox message="User session is null" />}
             {adapter && userSession && userSession.selectedOrganization && (
                 <AdapterDetail
                     adapter={adapter}
