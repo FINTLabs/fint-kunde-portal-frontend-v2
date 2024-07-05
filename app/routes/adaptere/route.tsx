@@ -61,7 +61,11 @@ export default function Index() {
 
     const { adapters } = useLoaderData<IPageLoaderData>();
 
-    const [creatingAdapter, setIsCreatingAdapter] = useState(false);
+    const navigate = useNavigate();
+
+    const handleCreate = () => {
+        navigate(`/adapter/create`);
+    };
 
     return (
         <>
@@ -76,49 +80,18 @@ export default function Index() {
                     />
                 </VStack>
                 <VStack>
-                    {!creatingAdapter && (
-                        <Button
-                            className="float-right"
-                            onClick={() => {
-                                setIsCreatingAdapter((prev) => !prev);
-                            }}
-                            icon={<PlusIcon aria-hidden />}>
-                            Legg til
-                        </Button>
-                    )}
+                    <Button
+                        className="float-right"
+                        onClick={handleCreate}
+                        icon={<PlusIcon aria-hidden />}>
+                        Legg til
+                    </Button>
                 </VStack>
             </HStack>
 
             {!adapters && <ErrorBox message="Fant ingen adaptere" />}
 
-            {creatingAdapter === true && (
-                <>
-                    <FormSummary>
-                        <FormSummary.Header>
-                            <FormSummary.Heading level="2">Opprett ny adapter</FormSummary.Heading>
-                            {/* <FormSummary.EditLink href="#" /> */}
-                        </FormSummary.Header>
-
-                        <FormSummary.Answers>
-                            <FormSummary.Answer>
-                                <HStack className="flex !items-end" gap="2">
-                                    <TextField label="Navn" htmlSize={20} />
-                                    <span className="pb-3.5">@adapter.fintlabs.no</span>
-                                </HStack>
-                            </FormSummary.Answer>
-
-                            <FormSummary.Answer>
-                                <TextField label="Kort beskrivelse" htmlSize={50} />
-                            </FormSummary.Answer>
-
-                            <FormSummary.Answer>
-                                <Textarea label="Detaljert informasjon" />
-                            </FormSummary.Answer>
-                        </FormSummary.Answers>
-                    </FormSummary>
-                </>
-            )}
-            {!creatingAdapter && adapters && (
+            {adapters && (
                 <>
                     <Tabs defaultValue={tabInfo[0].value} fill>
                         <Tabs.List>
