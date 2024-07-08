@@ -1,20 +1,18 @@
 import {
     type LoaderFunctionArgs,
     json,
-    type LoaderFunction,
     type MetaFunction,
     type ActionFunctionArgs,
 } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { Form, useFetcher, useLoaderData, useParams, useSearchParams } from '@remix-run/react';
+import { useLoaderData, useParams } from '@remix-run/react';
 import adapters from '~/routes/adaptere/adapterList.json';
 import { AdapterDetail } from './AdapterDetail';
 import { IUserSession } from '~/types/types';
 import { getSession } from '~/utils/session';
 import { ErrorBox } from '~/components/shared/ErrorBox';
-import { Button } from '@navikt/ds-react';
 import { fetchClientSecret } from './actions';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
