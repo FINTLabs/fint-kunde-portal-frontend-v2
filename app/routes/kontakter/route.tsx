@@ -96,12 +96,3 @@ export default function Index() {
         </>
     );
 }
-
-export function ErrorBoundary({ error }: { error: Error }) {
-    return (
-        <>
-            <p>Something went wrong fetching contacts.</p>
-            <p>{error?.message}</p>
-        </>
-    );
-}

@@ -1,4 +1,4 @@
-export interface IOrganisation {
+export interface Organisation {
     dn: string;
     name: string;
     orgNumber: string;

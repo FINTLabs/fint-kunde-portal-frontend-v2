@@ -1,117 +1,81 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
 import React from 'react';
-import { json, useLoaderData } from '@remix-run/react';
-import ClientApi from '~/api/ClientApi';
-import { BodyShort, Box, Button, CopyButton, Heading, Table } from '@navikt/ds-react';
-import { ArrowCirclepathIcon, BagdeIcon, DownloadIcon, ThumbUpIcon } from '@navikt/aksel-icons';
+import { json, useLoaderData, useNavigate } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
+import ClientDetails from '~/routes/klienter.$id/ClientDetails';
+import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
+import SecuritySection from '~/routes/klienter.$id/SecuritySection';
+import type { LoaderFunctionArgs } from '@remix-run/node';
+import ClientApi from '~/api/ClientApi';
+import Breadcrumbs from '~/components/shared/breadcrumbs';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
+import { Box, Button, Heading, HGrid } from '@navikt/ds-react';
+import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
+// import { loader as componentLoader } from '../komponenter._index/route';
+import ComponentApi from '~/api/ComponentApi';
+import { IComponent } from '~/types/Component';
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+// @ts-ignore
+export const loader = async ({ params }: LoaderFunctionArgs, request) => {
     const organisation = 'fintlabs_no'; // todo: Replace with actual organisation identifier
+    const id = params.id || '';
 
     try {
-        const client = await ClientApi.getClientById(organisation, params.id);
-        return json(client);
+        const client = await ClientApi.getClientById(organisation, id);
+        // const componentLoaderResponse = await componentLoader();
+        // const components = await componentLoaderResponse.json();
+        const components = await ComponentApi.getAllComponents();
+
+        return json({ client, components });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
     }
 };
+
 export default function Index() {
-    const client = useLoaderData<IClient>();
+    const { client, components } = useLoaderData<{ client: IClient; components: IComponent[] }>(); // Destructure client and components
+    const navigate = useNavigate();
+
+    const breadcrumbs = [
+        { name: 'Klienter', link: '/klienter' },
+        { name: client.name, link: `/klienter/${client.name}` },
+    ];
 
     return (
-        <Box padding={'10'}>
-            <Box padding="4">
-                <Heading size="medium">{client.shortDescription}</Heading>
-                <BodyShort>{client.name}</BodyShort>
-                <BodyShort>{client.note}</BodyShort>
-            </Box>
-            {/*<HStack><Heading size="small">Components</Heading><Button variant={"tertiary"} icon={<PencilIcon title="Rediger" />} /></HStack>*/}
+        <>
+            <Breadcrumbs breadcrumbs={breadcrumbs} />
+            <InternalPageHeader
+                title={client.shortDescription}
+                icon={TokenIcon}
+                hideBorder={true}
+            />
 
-            <Heading size={'medium'}>Components</Heading>
-            <Box
-                background="surface-subtle"
-                borderColor="border-alt-3"
-                padding="4"
-                borderWidth="2"
-                borderRadius="xlarge">
-                <ul>
-                    {client.components.map((component, index) => (
-                        <li key={index}>
-                            <BodyShort>{component}</BodyShort>
-                        </li>
-                    ))}
-                </ul>
-            </Box>
+            <HGrid columns="50px auto">
+                <Box>
+                    <Button
+                        icon={<ArrowLeftIcon title="a11y-title" fontSize="1.5rem" />}
+                        variant="tertiary"
+                        onClick={() => navigate(`/klienter`)}></Button>
+                </Box>
 
-            <Heading size={'medium'}>Security</Heading>
-            <Box
-                background="surface-subtle"
-                borderColor="border-alt-3"
-                padding="4"
-                borderWidth="2"
-                borderRadius="xlarge">
-                <Table>
-                    <Table.Body>
-                        <Table.Row>
-                            <Table.DataCell>Brukernavn</Table.DataCell>
-                            <Table.DataCell>{client.name}</Table.DataCell>
-                            <Table.DataCell>
-                                <CopyButton copyText="3.14" />
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.DataCell>Password</Table.DataCell>
-                            <Table.DataCell>
-                                ****{' '}
-                                <Button
-                                    variant={'tertiary'}
-                                    icon={
-                                        <ArrowCirclepathIcon title="a11y-title" fontSize="1.5rem" />
-                                    }></Button>
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                <CopyButton copyText="3.14" />
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.DataCell>Klient ID</Table.DataCell>
-                            <Table.DataCell>{client.clientId}</Table.DataCell>
-                            <Table.DataCell>
-                                <CopyButton copyText="3.14" />
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.DataCell>Klient Hemmelighet</Table.DataCell>
-                            <Table.DataCell>
-                                <Button
-                                    variant={'tertiary'}
-                                    icon={
-                                        <DownloadIcon title="a11y-title" fontSize="1.5rem" />
-                                    }></Button>
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                <CopyButton copyText="3.14" />
-                            </Table.DataCell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.DataCell>Resurs Id</Table.DataCell>
-                            <Table.DataCell>{client.name}</Table.DataCell>
-                            <Table.DataCell>
-                                <CopyButton copyText="3.14" />
-                            </Table.DataCell>
-                        </Table.Row>
-                    </Table.Body>
-                </Table>
-                <CopyButton
-                    copyText="https://aksel.nav.no/"
-                    text="Kopier autentiseringsinformasjon"
-                    activeText="Autentiseringsinformasjon er kopiert"
-                    icon={<BagdeIcon aria-hidden />}
-                    activeIcon={<ThumbUpIcon aria-hidden />}
-                />
-            </Box>
-        </Box>
+                <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+                    <Heading size={'medium'}>Deatails</Heading>
+                    <ClientDetails client={client} />
+                    <Divider className="pt-3" />
+
+                    <Heading size={'medium'}>Security</Heading>
+                    <SecuritySection client={client} />
+                    <Divider className="pt-3" />
+
+                    <Heading size={'medium'}>Komponenter</Heading>
+                    <ComponentsTable
+                        selectedComponents={client.components}
+                        components={components}
+                        columns={2}
+                    />
+                </Box>
+            </HGrid>
+        </>
     );
 }

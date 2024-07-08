@@ -1,6 +1,6 @@
 import { error, log } from '~/utils/logger';
 import { API_URL } from '~/api/constants';
-import { IOrganisation } from '~/types/IOrganisation';
+import { Organisation } from '~/types/Organisation';
 
 class OrganisationApi {
     static async getTechnicalContacts(organisationName: string): Promise<any> {
@@ -241,7 +241,7 @@ class OrganisationApi {
         }
     }
 
-    static async getPrimaryAsset(organisation: IOrganisation): Promise<any> {
+    static async getPrimaryAsset(organisation: Organisation): Promise<any> {
         const url = `${API_URL}/api/organisations/${organisation.name}/asset/primary`;
         log('Fetching primary asset', url);
 

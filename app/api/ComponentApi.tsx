@@ -1,8 +1,9 @@
 import { log, error } from '~/utils/logger';
 import { API_URL } from './constants';
+import { IClient } from '~/types/Clients';
 
 class ComponentApi {
-    static async getApis() {
+    static async getAllComponents() {
         const url = `${API_URL}/api/components`;
         log('Fetching components information', url);
 
@@ -25,7 +26,31 @@ class ComponentApi {
         } catch (err) {
             log(err);
             error('Error fetching components information:', err);
-            return 'catch-error';
+            throw new Error('Error fetching components information');
+            // return 'catch-error';
+        }
+    }
+
+    static async getComponentById(componentName: string) {
+        try {
+            const clients: IClient[] = await this.getAllComponents();
+            log('client search', componentName);
+            if (clients) {
+                const client = clients.find((item) => item.name === componentName);
+
+                if (client) {
+                    return client;
+                } else {
+                    error('Component not found, componentName:', componentName);
+                    return null;
+                }
+            } else {
+                error('No clients found for organisation:', componentName);
+                return null;
+            }
+        } catch (err) {
+            error('Error fetching components:', err);
+            return null;
         }
     }
 
