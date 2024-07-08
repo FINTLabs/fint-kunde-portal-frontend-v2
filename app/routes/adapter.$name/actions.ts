@@ -7,19 +7,8 @@ const resetPassword = async (setPassord: React.Dispatch<React.SetStateAction<str
     }, 400);
 };
 
-const fetchClientSecret = async (
-    name: string,
-    organisationName: string,
-    setClientSecret: React.Dispatch<React.SetStateAction<string>>
-) => {
-    console.log('name');
-    console.log(name);
-    setClientSecret('refreshed');
-    const secret = await AdapterAPI.getOpenIdSecret(name, organisationName);
-    console.log(secret);
-    if (secret) {
-        setClientSecret(secret);
-    }
+const fetchClientSecret = async (name: string, organisationName: string) => {
+    return await AdapterAPI.getOpenIdSecret(name, organisationName);
 };
 
 const deleteAdapter = async (name: string, organisationName: string) => {

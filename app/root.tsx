@@ -29,7 +29,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     let userSession = session.get('user-session');
 
     log('userSession');
-    log(userSession);
+    // log(userSession);
     if (!userSession) {
         const meData: IMeData = await MeApi.fetchMe();
         const organisationsData: Organisation[] = await MeApi.fetchOrganisations();

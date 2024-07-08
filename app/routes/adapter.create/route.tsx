@@ -10,7 +10,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { Form, useLoaderData, useParams } from '@remix-run/react';
 import adapters from '~/routes/adaptere/adapterList.json';
-import { IAdapter, IPartialAdapter, UserSession } from '~/types/types';
+import { IAdapter, IPartialAdapter, IUserSession } from '~/types/types';
 import { getSession } from '~/utils/session';
 import { ErrorBox } from '~/components/shared/ErrorBox';
 import { Box, Button, FormSummary, HStack, TextField, Textarea } from '@navikt/ds-react';

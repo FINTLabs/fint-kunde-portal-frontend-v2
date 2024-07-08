@@ -1,13 +1,16 @@
 import { BodyShort, Button, CopyButton, HStack, Label } from '@navikt/ds-react';
 import { ThumbUpIcon, ArrowCirclepathIcon } from '@navikt/aksel-icons';
+import { Form } from '@remix-run/react';
 
 export function ValueDisplayPanel({
     label,
     value,
+    name,
     revalidate,
 }: {
     label: string;
     value: string;
+    name?: string;
     revalidate?: () => void;
 }) {
     return (
@@ -17,15 +20,16 @@ export function ValueDisplayPanel({
                 <BodyShort>{value}</BodyShort>
             </HStack>
             <HStack className=" flex !items-center">
-                {revalidate && (
-                    <Button
-                        variant="tertiary-neutral"
-                        icon={<ArrowCirclepathIcon title="Refresh" fontSize="1.5rem" />}
-                        onClick={revalidate}>
-                        Hent {label}
-                    </Button>
+                {name && (
+                    <Form method="post" action={`/adapter/${name}?name=${name}`}>
+                        <Button
+                            type="submit"
+                            variant="tertiary-neutral"
+                            icon={<ArrowCirclepathIcon title="Refresh" fontSize="1.5rem" />}>
+                            Hent {label}
+                        </Button>
+                    </Form>
                 )}
-
                 {!!value && (
                     <CopyButton
                         copyText={value}
