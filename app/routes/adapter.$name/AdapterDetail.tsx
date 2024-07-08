@@ -28,9 +28,9 @@ export function AdapterDetail({
 }) {
     const navigate = useNavigate();
 
-    const fetcher = useFetcher({ key: 'fetch-client-secret' });
+    const clientSecretFetcher = useFetcher({ key: 'fetch-client-secret' });
 
-    const clientSecret = fetcher.data ? (fetcher.data as string) : '';
+    const clientSecret = clientSecretFetcher.data ? (clientSecretFetcher.data as string) : '';
     const [passord, setPassord] = useState('');
 
     const allDetails = {
