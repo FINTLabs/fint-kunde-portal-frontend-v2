@@ -18,20 +18,6 @@ import { Button } from '@navikt/ds-react';
 import { fetchClientSecret } from './actions';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-    console.log('loader in adapter.$name');
-    // console.log(`request: `, request.url);
-
-    // const url = new URL(request.url);
-    // const searchParams = url.searchParams;
-
-    // console.log(`params: `, params);
-    // console.log(`searchParams: `, searchParams);
-
-    // if (searchParams.get('fetchSecret') === 'true') {
-    //     // fetch secret
-    // }
-
-    console.log(`params`, params);
     const session = await getSession(request.headers.get('Cookie'));
     const userSession: IUserSession | undefined = session.get('user-session');
 
