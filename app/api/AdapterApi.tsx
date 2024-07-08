@@ -1,13 +1,13 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from './constants';
-import { IAdapter, IAdapterNew } from '~/types/types';
+import { IAdapter, IPartialAdapter } from '~/types/types';
 class AdapterAPI {
     static async getAdapters(organisationName: string) {
         const functionName = 'getAdapters';
         const URL = `${API_URL}/api/adapters/${organisationName}`;
         return request(URL, functionName);
     }
-    static async createAdapter(adapter: IAdapterNew, organisationName: string) {
+    static async createAdapter(adapter: IPartialAdapter, organisationName: string) {
         const functionName = 'createAdapter';
         const URL = `${API_URL}/api/adapters/${organisationName}`;
         return request(URL, functionName, 'POST', 'json', adapter);

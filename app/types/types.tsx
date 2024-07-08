@@ -116,12 +116,12 @@ export interface IRole {
     uri: string | null;
 }
 
-export interface IAdapterNew {
+export interface IPartialAdapter {
     name: string;
     shortDescription: string;
     note: string;
 }
-export interface IAdapter extends IAdapterNew {
+export interface IAdapter extends IPartialAdapter {
     dn: string;
     clientId: string;
     components: string[];

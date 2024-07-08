@@ -10,7 +10,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { Form, useLoaderData, useParams } from '@remix-run/react';
 import adapters from '~/routes/adaptere/adapterList.json';
-import { IAdapter, IAdapterNew, UserSession } from '~/types/types';
+import { IAdapter, IPartialAdapter, UserSession } from '~/types/types';
 import { getSession } from '~/utils/session';
 import { ErrorBox } from '~/components/shared/ErrorBox';
 import { Box, Button, FormSummary, HStack, TextField, Textarea } from '@navikt/ds-react';
@@ -103,7 +103,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const session = await getSession(request.headers.get('Cookie'));
     const userSession = session.get('user-session');
 
-    const newAdapter: IAdapterNew = {
+    const newAdapter: IPartialAdapter = {
         name: name,
         shortDescription: description,
         note: detailedInfo,
