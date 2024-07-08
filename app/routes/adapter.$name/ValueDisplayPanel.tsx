@@ -1,6 +1,6 @@
 import { BodyShort, Button, CopyButton, HStack, Label } from '@navikt/ds-react';
 import { ThumbUpIcon, ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import { Form } from '@remix-run/react';
+import { Form, useFetcher } from '@remix-run/react';
 
 export function ValueDisplayPanel({
     label,
@@ -13,6 +13,8 @@ export function ValueDisplayPanel({
     name?: string;
     revalidate?: () => void;
 }) {
+    const fetcher = useFetcher({ key: 'fetch-client-secret' });
+
     return (
         <HStack className="flex !justify-between !items-center">
             <HStack gap="4">
@@ -21,14 +23,14 @@ export function ValueDisplayPanel({
             </HStack>
             <HStack className=" flex !items-center">
                 {name && (
-                    <Form method="post" action={`/adapter/${name}?name=${name}`}>
+                    <fetcher.Form method="post" action={`/adapter/${name}?name=${name}`}>
                         <Button
                             type="submit"
                             variant="tertiary-neutral"
                             icon={<ArrowCirclepathIcon title="Refresh" fontSize="1.5rem" />}>
                             Hent {label}
                         </Button>
-                    </Form>
+                    </fetcher.Form>
                 )}
                 {!!value && (
                     <CopyButton
