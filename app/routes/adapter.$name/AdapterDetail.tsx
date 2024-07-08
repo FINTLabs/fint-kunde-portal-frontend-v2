@@ -2,7 +2,6 @@ import {
     BodyLong,
     Box,
     Button,
-    Chips,
     CopyButton,
     HStack,
     Heading,
@@ -15,9 +14,8 @@ import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { ValueDisplayPanel } from './ValueDisplayPanel';
-import AdapterAPI from '~/api/AdapterApi';
-import { deleteAdapter, fetchClientSecret, resetPassword } from './actions';
-import { TrashIcon, PlusIcon } from '@navikt/aksel-icons';
+import { deleteAdapter } from './actions';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 export function AdapterDetail({
     adapter,
