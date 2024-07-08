@@ -1,33 +1,12 @@
-import { log, error } from '~/utils/logger';
+import { request } from '~/api/shared/api';
 import { API_URL } from './constants';
 
 class MeApi {
     static async fetchMe() {
-        log('Fetching me information', `${API_URL}/api/me`);
-
-        try {
-            const response = await fetch(`${API_URL}/api/me`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-nin': process.env.PERSONALNUMBER || '',
-                },
-            });
-
-            if (response.redirected) {
-                log('Me Request was redirected:', response.url);
-            }
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error fetching me information', response.status);
-                return 'try-error';
-            }
-        } catch (err) {
-            log(err);
-            error('Error fetching me information:', err);
-            // return "catch-error";
+        const functionName = 'fetchMe';
+        const URL = `${API_URL}/api/me`;
+        return request(URL, functionName).catch((err) => {
+            console.error('Error fetching me information:', err);
             // TODO: REMOVE !! THIS IS JUST FOR STARTUP
             return {
                 dn: 'test.user',
@@ -41,35 +20,14 @@ class MeApi {
                 supportId: '000000000',
                 roles: [],
             };
-        }
+        });
     }
 
     static async fetchOrganisations() {
-        log('Fetching me information', `${API_URL}/api/contacts/organisations`);
-
-        try {
-            const response = await fetch(`${API_URL}/api/contacts/organisations`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-nin': process.env.PERSONALNUMBER || '',
-                },
-            });
-
-            if (response.redirected) {
-                log('Organisations Request was redirected:', response.url);
-            }
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error fetching organisations', response.status);
-                return 'try-error';
-            }
-        } catch (err) {
-            log(err);
-            error('Error fetching organisations:', err);
-            // return "catch-error";
+        const functionName = 'fetchOrganisations';
+        const URL = `${API_URL}/api/contacts/organisations`;
+        return request(URL, functionName).catch((err) => {
+            console.error('Error fetching organisations:', err);
             // TODO: REMOVE !! THIS IS JUST FOR STARTUP
             return [
                 {
@@ -85,7 +43,8 @@ class MeApi {
                     dn: 'test.org',
                 },
             ];
-        }
+        });
     }
 }
+
 export default MeApi;

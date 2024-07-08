@@ -1,267 +1,66 @@
-import { error, log } from '~/utils/logger';
+import { request } from '~/api/shared/api';
 import { API_URL } from '~/api/constants';
-import { Organisation } from '~/types/Organisation';
 
 class OrganisationApi {
     static async getTechnicalContacts(organisationName: string): Promise<any> {
-        const url = `${API_URL}/api/organisations/${organisationName}/contacts/technical`;
-        log('Fetching technical contacts', url);
-
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                credentials: 'same-origin',
-            });
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error fetching technical contacts, status:', response.status);
-                return null;
-            }
-        } catch (err) {
-            error('Error fetching technical contacts:', err);
-            return null;
-        }
+        const functionName = 'getTechnicalContacts';
+        const URL = `${API_URL}/api/organisations/${organisationName}/contacts/technical`;
+        return request(URL, functionName);
     }
 
     static async getLegalContact(organisationName: string): Promise<any> {
-        const url = `${API_URL}/api/organisations/${organisationName}/contacts/legal`;
-        log('Fetching legal contact', url);
-
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-nin': process.env.PERSONALNUMBER || '',
-                },
-            });
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error fetching legal contact, status:', response.status);
-                return null;
-            }
-        } catch (err) {
-            error('Error fetching legal contact:', err);
-            throw new Error('Error fetching legal contact');
-        }
+        const functionName = 'getLegalContact';
+        const URL = `${API_URL}/api/organisations/${organisationName}/contacts/legal`;
+        return request(URL, functionName);
     }
 
-    static async getOrganisation(organisationName: string): Promise<any> {
-        const url = `${API_URL}/api/organisations/${organisationName}`;
-        log('Fetching organisation details', url);
-
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                credentials: 'same-origin',
-            });
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error fetching organisation details, status:', response.status);
-                return null;
-            }
-        } catch (err) {
-            error('Error fetching organisation details:', err);
-            return null;
-        }
-    }
-
-    static async linkComponent(
-        component: { name: string },
-        organisationName: string
-    ): Promise<any> {
-        const url = `${API_URL}/api/organisations/${organisationName}/components/${component.name}`;
-        log('Linking component', url);
-
-        try {
-            const response = await fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({ name: component.name }),
-            });
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error linking component, status:', response.status);
-                return null;
-            }
-        } catch (err) {
-            error('Error linking component:', err);
-            return null;
-        }
-    }
-
-    static async unlinkComponent(
-        component: { name: string },
-        organisationName: string
-    ): Promise<any> {
-        const url = `${API_URL}/api/organisations/${organisationName}/components/${component.name}`;
-        log('Unlinking component', url);
-
-        try {
-            const response = await fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({ name: component.name }),
-            });
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error unlinking component, status:', response.status);
-                return null;
-            }
-        } catch (err) {
-            error('Error unlinking component:', err);
-            return null;
-        }
-    }
-
-    static async addTechnicalContact(nin: string, organisationName: string): Promise<any> {
-        const url = `${API_URL}/api/organisations/${organisationName}/contacts/technical/${nin}`;
-        log('Adding technical contact', url);
-
-        try {
-            const response = await fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({ nin }),
-            });
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error adding technical contact, status:', response.status);
-                return null;
-            }
-        } catch (err) {
-            error('Error adding technical contact:', err);
-            return null;
-        }
-    }
-
-    static async removeTechnicalContact(
-        contact: { nin: string },
-        organisationName: string
-    ): Promise<any> {
-        const url = `${API_URL}/api/organisations/${organisationName}/contacts/technical/${contact.nin}`;
-        log('Removing technical contact', url);
-
-        try {
-            const response = await fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({ nin: contact.nin }),
-            });
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error removing technical contact, status:', response.status);
-                return null;
-            }
-        } catch (err) {
-            error('Error removing technical contact:', err);
-            return null;
-        }
-    }
-
-    static async setLegalContact(contact: { nin: string }, organisationName: string): Promise<any> {
-        const url = `${API_URL}/api/organisations/${organisationName}/contacts/legal/${contact.nin}`;
-        log('Setting legal contact', url);
-
-        try {
-            const response = await fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({ name: contact.nin }),
-            });
-
-            if (response.ok) {
-                return response;
-            } else {
-                error('Error setting legal contact, status:', response.status);
-                return null;
-            }
-        } catch (err) {
-            error('Error setting legal contact:', err);
-            return null;
-        }
-    }
-
-    static async unsetLegalContact(
-        contact: { nin: string },
-        organisationName: string
-    ): Promise<any> {
-        const url = `${API_URL}/api/organisations/${organisationName}/contacts/legal/${contact.nin}`;
-        log('Unsetting legal contact', url);
-
-        try {
-            const response = await fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({ name: contact.nin }),
-            });
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error unsetting legal contact, status:', response.status);
-                return null;
-            }
-        } catch (err) {
-            error('Error unsetting legal contact:', err);
-            return null;
-        }
-    }
-
-    static async getPrimaryAsset(organisation: Organisation): Promise<any> {
-        const url = `${API_URL}/api/organisations/${organisation.name}/asset/primary`;
-        log('Fetching primary asset', url);
-
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                credentials: 'same-origin',
-            });
-
-            if (response.ok) {
-                return response;
-            } else {
-                error('Error fetching primary asset, status:', response.status);
-                return null;
-            }
-        } catch (err) {
-            error('Error fetching primary asset:', err);
-            return null;
-        }
-    }
+    // static async getOrganisation(organisationName: string): Promise<any> {
+    //     const functionName = 'getOrganisation';
+    //     const URL = `${API_URL}/api/organisations/${organisationName}`;
+    //     return request(URL, functionName);
+    // }
+    //
+    // static async linkComponent(component: { name: string }, organisationName: string): Promise<any> {
+    //     const functionName = 'linkComponent';
+    //     const URL = `${API_URL}/api/organisations/${organisationName}/components/${component.name}`;
+    //     return request(URL, functionName, 'PUT', 'json', { name: component.name });
+    // }
+    //
+    // static async unlinkComponent(component: { name: string }, organisationName: string): Promise<any> {
+    //     const functionName = 'unlinkComponent';
+    //     const URL = `${API_URL}/api/organisations/${organisationName}/components/${component.name}`;
+    //     return request(URL, functionName, 'DELETE', 'json', { name: component.name });
+    // }
+    //
+    // static async addTechnicalContact(nin: string, organisationName: string): Promise<any> {
+    //     const functionName = 'addTechnicalContact';
+    //     const URL = `${API_URL}/api/organisations/${organisationName}/contacts/technical/${nin}`;
+    //     return request(URL, functionName, 'PUT', 'json', { nin });
+    // }
+    //
+    // static async removeTechnicalContact(contact: { nin: string }, organisationName: string): Promise<any> {
+    //     const functionName = 'removeTechnicalContact';
+    //     const URL = `${API_URL}/api/organisations/${organisationName}/contacts/technical/${contact.nin}`;
+    //     return request(URL, functionName, 'DELETE', 'json', { nin: contact.nin });
+    // }
+    //
+    // static async setLegalContact(contact: { nin: string }, organisationName: string): Promise<any> {
+    //     const functionName = 'setLegalContact';
+    //     const URL = `${API_URL}/api/organisations/${organisationName}/contacts/legal/${contact.nin}`;
+    //     return request(URL, functionName, 'PUT', 'json', { name: contact.nin });
+    // }
+    //
+    // static async unsetLegalContact(contact: { nin: string }, organisationName: string): Promise<any> {
+    //     const functionName = 'unsetLegalContact';
+    //     const URL = `${API_URL}/api/organisations/${organisationName}/contacts/legal/${contact.nin}`;
+    //     return request(URL, functionName, 'DELETE', 'json', { name: contact.nin });
+    // }
+    //
+    // static async getPrimaryAsset(organisation: Organisation): Promise<any> {
+    //     const functionName = 'getPrimaryAsset';
+    //     const URL = `${API_URL}/api/organisations/${organisation.name}/asset/primary`;
+    //     return request(URL, functionName);
+    // }
 }
 
 export default OrganisationApi;

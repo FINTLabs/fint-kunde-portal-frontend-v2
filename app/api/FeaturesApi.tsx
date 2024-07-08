@@ -1,34 +1,12 @@
-import { log, error } from '~/utils/logger';
+import { request } from '~/api/shared/api';
 import { API_URL } from './constants';
 
 class FeaturesApi {
     static async fetchFeatures() {
+        const functionName = 'fetchFeatures';
         const URL = `${API_URL}/api/api/feature`;
-        log('Fetching me information', URL);
-
-        try {
-            const response = await fetch(URL, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-nin': process.env.PERSONALNUMBER || '',
-                },
-            });
-
-            if (response.redirected) {
-                log('Me Request was redirected:', response.url);
-            }
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error fetching me information', response.status);
-                return 'try-error';
-            }
-        } catch (err) {
-            log(err);
-            error('Error fetching me information:', err);
-            // return "catch-error";
+        return request(URL, functionName).catch((err) => {
+            console.error('Error fetching features information:', err);
             // TODO: REMOVE !! THIS IS JUST FOR STARTUP
             return {
                 'audit-log-new': true,
@@ -42,7 +20,8 @@ class FeaturesApi {
                 'audit-log': false,
                 'roles-init': false,
             };
-        }
+        });
     }
 }
+
 export default FeaturesApi;
