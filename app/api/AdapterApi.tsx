@@ -1,4 +1,4 @@
-import { request as request } from '~/api/shared/api';
+import { request } from '~/api/shared/api';
 import { API_URL } from './constants';
 import { IAdapter } from '~/types/types';
 class AdapterAPI {

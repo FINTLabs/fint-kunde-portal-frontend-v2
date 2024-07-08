@@ -14,6 +14,7 @@ import { tabInfo } from './constants';
 import { AdapterList } from './AdapterList';
 import { ErrorBox } from '../../components/shared/ErrorBox';
 import { PlusIcon } from '@navikt/aksel-icons';
+import mockAdapters from './adapterList.json';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
@@ -30,12 +31,13 @@ export const loader: LoaderFunction = async ({ request }) => {
         const session = await getSession(request.headers.get('Cookie'));
         const userSession = session.get('user-session');
 
-        const adapters = await AdapterAPI.getAdapters(userSession.selectedOrganization.name);
+        const adapterResponse = await AdapterAPI.getAdapters(userSession.selectedOrganization.name);
 
-        return json({ adapters });
+        return json({ adapters: adapterResponse });
     } catch (error) {
         console.error('Error fetching data:', error);
-        throw new Response('Not Found', { status: 404 });
+        return json({ adapters: mockAdapters });
+        // throw new Response('Not Found', { status: 404 });
     }
 };
 
