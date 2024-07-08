@@ -31,13 +31,17 @@ export default function Index() {
     const selectedComponents = components
         .filter((component) => component.organisations.some((org) => org.includes('fintlabs')))
         .map((component) => component.dn);
+    const sortedComponents = [...components].sort((a, b) => a.name.localeCompare(b.name));
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Komponenter'} icon={ComponentIcon} helpText="components" />
 
-            <ComponentsTable selectedComponents={selectedComponents} components={components} />
+            <ComponentsTable
+                selectedComponents={selectedComponents}
+                components={sortedComponents}
+            />
         </>
     );
 }
