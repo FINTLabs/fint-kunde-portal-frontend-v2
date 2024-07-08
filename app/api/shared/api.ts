@@ -12,7 +12,7 @@ export async function request(
     adapter?: IPartialAdapter
 ) {
     try {
-        log(`Running ${functionName}`, URL);
+        log(`Running ${functionName} with URL:`, URL);
 
         let requestOptions: RequestInit = {
             method: requestMethod,

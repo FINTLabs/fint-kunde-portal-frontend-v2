@@ -5,27 +5,26 @@ class AdapterAPI {
     static async getAdapters(organisationName: string) {
         const functionName = 'getAdapters';
         const URL = `${API_URL}/api/adapters/${organisationName}`;
-        return request(URL, functionName);
+        return await request(URL, functionName);
     }
     static async createAdapter(adapter: IPartialAdapter, organisationName: string) {
         const functionName = 'createAdapter';
         const URL = `${API_URL}/api/adapters/${organisationName}`;
-        return request(URL, functionName, 'POST', 'json', adapter);
+        return await request(URL, functionName, 'POST', 'json', adapter);
     }
 
     static async deleteAdapter(name: string, organisationName: string) {
         const functionName = 'deleteAdapter';
         const URL = `${API_URL}/api/adapters/${organisationName}/${name}`;
-        return request(URL, functionName, 'DELETE');
+        return await request(URL, functionName, 'DELETE');
     }
 
     static async getOpenIdSecret(adapterName: string, organisationName: string) {
         const functionName = 'getOpenIdSecret';
-        console.log(API_URL);
+        const API_URL = 'http://localhost:3000';
         const URL = `${API_URL}/api/adapters/${organisationName}/${adapterName}/secret`;
 
-        console.log(URL);
-        return request(URL, functionName, 'GET', 'text');
+        return await request(URL, functionName, 'GET', 'text');
     }
 }
 export default AdapterAPI;
