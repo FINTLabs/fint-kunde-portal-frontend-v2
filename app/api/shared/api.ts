@@ -14,7 +14,6 @@ export async function request(
     try {
         log(`Running ${functionName}`, URL);
 
-        console.log(requestMethod);
         let requestOptions: RequestInit = {
             method: requestMethod,
             credentials: isClientSide() ? 'same-origin' : 'include',
