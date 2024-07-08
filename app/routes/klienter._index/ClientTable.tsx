@@ -18,14 +18,6 @@ const ClientTable: React.FC<ClientTableProps> = ({ clients }) => {
     return (
         <VStack>
             <Table>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.ColumnHeader sortKey="name" sortable>
-                            Navn
-                        </Table.ColumnHeader>
-                        <Table.HeaderCell scope="col"></Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
                 <Table.Body>
                     {clients?.map((client, i) => (
                         <Table.Row key={i + client.name} onClick={() => handleRowClick(client)}>
@@ -40,13 +32,6 @@ const ClientTable: React.FC<ClientTableProps> = ({ clients }) => {
                     ))}
                 </Table.Body>
             </Table>
-
-            {/*<Pagination*/}
-            {/*    page={page}*/}
-            {/*    onPageChange={setPage}*/}
-            {/*    count={Math.ceil(clients.length / rowsPerPage)}*/}
-            {/*    size="small"*/}
-            {/*/>*/}
         </VStack>
     );
 };

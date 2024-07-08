@@ -36,6 +36,7 @@ export const loader = async ({ params }: LoaderFunctionArgs, request) => {
 export default function Index() {
     const { client, components } = useLoaderData<{ client: IClient; components: IComponent[] }>(); // Destructure client and components
     const navigate = useNavigate();
+    const sortedComponents = [...components].sort((a, b) => a.name.localeCompare(b.name));
 
     const breadcrumbs = [
         { name: 'Klienter', link: '/klienter' },
@@ -67,7 +68,7 @@ export default function Index() {
                     <Heading size={'medium'}>Komponenter</Heading>
                     <ComponentsTable
                         selectedComponents={client.components}
-                        components={components}
+                        components={sortedComponents}
                         columns={2}
                     />
                 </Box>

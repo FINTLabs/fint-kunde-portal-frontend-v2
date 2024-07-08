@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
-import { LoaderFunction, MetaFunction } from '@remix-run/node';
-import { PersonGroupIcon, PersonSuitIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Heading, HStack, InternalHeader, Search, Spacer } from '@navikt/ds-react';
+import React, { useEffect, useState } from 'react';
+import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
+import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
+import { Alert, BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { getSession } from '~/utils/session';
-import { json, useLoaderData, useOutletContext } from '@remix-run/react';
+import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
 import OrganisationApi from '~/api/OrganisationApi';
 import ContactTable from '~/routes/kontakter/ContactTable';
 import { log } from '~/utils/logger';
-import { IContact, IRole } from '~/types/types';
+import { IContact, IFetcherResponseData, IRole } from '~/types/types';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import ContactModal from '~/routes/kontakter/ContactModal';
 
 interface IPageLoaderData {
-    contactsData?: IContact[];
+    technicalContacts?: IContact[];
     rolesData?: IRole[];
+    allContacts?: IContact[];
     error?: string;
 }
 
@@ -24,46 +26,86 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    //TODO: here is the x-nin header
     log('Request headers:', request.headers.get('x-nin'));
 
     try {
         const session = await getSession(request.headers.get('Cookie'));
         const userSession = session.get('user-session');
+        const selectedOrg = userSession.selectedOrganization.name;
 
-        const contactsData = await ContactApi.fetchTechnicalContacts(
-            userSession.selectedOrganization.name
-        );
+        const technicalContacts = await ContactApi.getTechnicalContacts(selectedOrg);
         const rolesData = await RoleApi.getRoles();
-        const legalContact = await OrganisationApi.getLegalContact(
-            userSession.selectedOrganization.name
-        );
+        const legalContact = await OrganisationApi.getLegalContact(selectedOrg);
+        const allContacts = await ContactApi.getAllContacts();
 
-        return json({ contactsData, rolesData, legalContact });
+        return json({ technicalContacts, rolesData, legalContact, allContacts });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
     }
 };
 
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const formValues: Record<string, FormDataEntryValue> = {};
+
+    for (const [key, value] of formData) {
+        formValues[key] = value;
+    }
+
+    const contactNin = (formValues['selectedContactNin'] as string) || '';
+
+    const session = await getSession(request.headers.get('Cookie'));
+    const userSession = session.get('user-session');
+    const selectedOrg = userSession.selectedOrganization.name;
+
+    const response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
+
+    return json({ show: true, message: response?.message, variant: response?.variant });
+}
+
 export default function Index() {
     const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
     const data = useLoaderData<IPageLoaderData & { legalContact?: IContact }>();
-    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const fetcher = useFetcher();
+    const actionData = fetcher.data as IFetcherResponseData;
+    const [show, setShow] = React.useState(false);
 
-    const filteredContacts = data.contactsData?.filter(
-        (contact) =>
-            contact.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            contact.lastName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    const myValue = useOutletContext();
-    console.log('myValue:', myValue);
+    useEffect(() => {
+        setShow(true);
+        setIsModalOpen(false);
+    }, [fetcher.state]);
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'Kontakter'} icon={PersonGroupIcon} helpText="contacts" />
+            <HStack align={'center'} justify={'space-between'}>
+                <VStack>
+                    <InternalPageHeader
+                        title={'Kontakter'}
+                        icon={PersonGroupIcon}
+                        helpText="contacts"
+                    />
+                </VStack>
+                <VStack>
+                    <Button
+                        size="small"
+                        onClick={() => setIsModalOpen(true)}
+                        icon={<PlusIcon aria-hidden />}>
+                        Legg til
+                    </Button>
+                </VStack>
+            </HStack>
+
+            {actionData && show && (
+                <Alert
+                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
+                    closeButton
+                    onClose={() => setShow(false)}>
+                    {actionData.message || 'Content'}
+                </Alert>
+            )}
 
             <Box className="m-10">
                 <Heading size="xsmall">Juridisk kontakt</Heading>
@@ -77,22 +119,13 @@ export default function Index() {
                 )}
             </Box>
 
-            <InternalHeader className={'!bg-gray-400'}>
-                <form className="self-center px-5">
-                    <Search
-                        label="InternalPageHeader søk"
-                        size="small"
-                        variant="simple"
-                        placeholder="Søk"
-                        className={'!bg-gray-300'}
-                        onChange={(value) => setSearchQuery(value)}
-                    />
-                </form>
-                <Spacer />
-                <InternalHeader.Title href="#home">Add New Contact</InternalHeader.Title>
-            </InternalHeader>
-
-            <ContactTable contactsData={filteredContacts} rolesData={data.rolesData} />
+            <ContactTable contactsData={data.technicalContacts} rolesData={data.rolesData} />
+            <ContactModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                contacts={data.allContacts || []}
+                f={fetcher}
+            />
         </>
     );
 }
