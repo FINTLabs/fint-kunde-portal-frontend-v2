@@ -51,7 +51,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         session.set('user-session', userSession);
         const cookie = await commitSession(session);
 
-        const features = await FeaturesApi.fetchFeatures();
+        let features = await FeaturesApi.fetchFeatures();
+
+        features = features ? features : {};
 
         return json(
             { userSession, features }, // Ensure features is defined
