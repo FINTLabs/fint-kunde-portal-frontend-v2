@@ -12,7 +12,7 @@ import { useLoaderData, useNavigate } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
 import { tabInfo } from './constants';
 import { AdapterList } from './AdapterList';
-import { ErrorBox } from '../../components/shared/ErrorBox';
+import { ErrorBox } from '~/components/shared/ErrorBox';
 import { PlusIcon } from '@navikt/aksel-icons';
 import mockAdapters from './adapterList.json';
 
@@ -68,7 +68,6 @@ export default function Index() {
                         title={'Adaptere'}
                         icon={MigrationIcon}
                         helpText="adaptere"
-                        hideBorder={true}
                     />
                 </VStack>
                 <VStack>
