@@ -43,9 +43,12 @@ export default function Index() {
             <Tabs
                 value={isManaged}
                 onChange={handleTabClick}
+                fill={true}
                 aria-label="hvordan-client-er-opprettet">
-                <Tabs.Tab value="false" label="Manuelt opprettet" />
-                <Tabs.Tab value="true" label="Automatisk opprettet" />
+                <Tabs.List>
+                    <Tabs.Tab value="false" label="Manuelt opprettet" />
+                    <Tabs.Tab value="true" label="Automatisk opprettet" />
+                </Tabs.List>
             </Tabs>
 
             <ClientTable clients={filteredClients} />

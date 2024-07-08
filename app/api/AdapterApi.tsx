@@ -21,7 +21,7 @@ class AdapterAPI {
 
     static async getOpenIdSecret(adapterName: string, organisationName: string) {
         const functionName = 'getOpenIdSecret';
-        const API_URL = 'http://localhost:3000';
+        const API_URL = 'http://localhost:8080';
         const URL = `${API_URL}/api/adapters/${organisationName}/${adapterName}/secret`;
 
         return await request(URL, functionName, 'GET', 'text');
