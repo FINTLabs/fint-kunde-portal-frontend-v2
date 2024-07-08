@@ -1,4 +1,4 @@
-import { IAdapter } from '~/types/types';
+import { IAdapter, IAdapterNew } from '~/types/types';
 import { isClientSide } from '~/utils/environment';
 import { error, log } from '~/utils/logger';
 
@@ -9,7 +9,7 @@ export async function request(
     functionName: string,
     requestMethod = 'GET',
     returnType: ReturnType = 'json',
-    adapter?: IAdapter
+    adapter?: IAdapterNew
 ) {
     try {
         log(`Running ${functionName}`, URL);
