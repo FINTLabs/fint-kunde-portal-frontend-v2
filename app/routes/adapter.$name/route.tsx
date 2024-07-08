@@ -8,7 +8,7 @@ import {
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { Form, useLoaderData, useParams, useSearchParams } from '@remix-run/react';
+import { Form, useFetcher, useLoaderData, useParams, useSearchParams } from '@remix-run/react';
 import adapters from '~/routes/adaptere/adapterList.json';
 import { AdapterDetail } from './AdapterDetail';
 import { IUserSession } from '~/types/types';
@@ -97,29 +97,26 @@ export async function action({ request }: ActionFunctionArgs) {
     const name = searchParams.get('name');
 
     if (!name) {
-        return console.error('No adapter name in action ', name);
+        return json({ error: 'No adapter name in action' }, { status: 400 });
     }
 
     const session = await getSession(request.headers.get('Cookie'));
     const userSession: IUserSession | undefined = session.get('user-session');
 
+    // TODO: find a better way to grab session;
     if (!userSession) {
-        throw new Response('Unauthorized', { status: 401 });
+        return json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     if (!userSession.selectedOrganization) {
-        return console.error('Selected Organization');
+        return json({ error: 'Selected Organization' }, { status: 400 });
     }
+
     const response = await fetchClientSecret(name, userSession.selectedOrganization?.name);
     console.log('');
     console.log('client secret: ');
     console.log(response);
     console.log('');
 
-    if (response.ok) {
-        return json({ ok: true, clientSecret: response });
-    } else {
-        // todo: get correct message
-        return json({ error: 'Failed to get client secret' });
-    }
+    return response;
 }

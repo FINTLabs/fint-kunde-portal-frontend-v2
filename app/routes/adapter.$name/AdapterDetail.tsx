@@ -10,7 +10,7 @@ import {
     VStack,
 } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
-import { useNavigate } from '@remix-run/react';
+import { useFetcher, useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
@@ -28,7 +28,9 @@ export function AdapterDetail({
 }) {
     const navigate = useNavigate();
 
-    const [clientSecret, setClientSecret] = useState('');
+    const fetcher = useFetcher({ key: 'fetch-client-secret' });
+
+    const clientSecret = fetcher.data ? (fetcher.data as string) : '';
     const [passord, setPassord] = useState('');
 
     const allDetails = {
@@ -41,7 +43,6 @@ export function AdapterDetail({
         assetIds: adapter.assetIds,
     };
 
-    console.log(adapter);
     return (
         <Box padding={'2'}>
             <HStack>
