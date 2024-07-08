@@ -6,12 +6,10 @@ export function ValueDisplayPanel({
     label,
     value,
     name,
-    revalidate,
 }: {
     label: string;
     value: string;
     name?: string;
-    revalidate?: () => void;
 }) {
     const fetcher = useFetcher({ key: 'fetch-client-secret' });
 

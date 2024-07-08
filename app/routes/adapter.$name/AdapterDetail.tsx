@@ -87,23 +87,12 @@ export function AdapterDetail({
                                         ''
                                     )}
                                 />
-                                <ValueDisplayPanel
-                                    label="Passord"
-                                    value={passord}
-                                    revalidate={() => resetPassword(setPassord)}
-                                />
+                                <ValueDisplayPanel label="Passord" value={passord} />
 
                                 <ValueDisplayPanel
                                     label="Klient Hemmelighet"
                                     value={clientSecret}
                                     name={adapter.name}
-                                    // revalidate={() =>
-                                    //     fetchClientSecret(
-                                    //         adapter.name,
-                                    //         organisationName,
-                                    //         setClientSecret
-                                    //     )
-                                    // }
                                 />
                                 <div className="h-10"></div>
                                 <HStack justify={'center'}>
