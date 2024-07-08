@@ -1,56 +1,31 @@
-import { log, error } from '~/utils/logger';
 import { API_URL } from './constants';
 import { IAsset } from '~/types/Asset';
+import { request } from '~/api/shared/api';
 
 class AssetApi {
     static async getAllAssets(organisation: string) {
-        const url = `${API_URL}/api/assets/${organisation}/`;
-        log('Fetching access information', url);
-
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-nin': process.env.PERSONALNUMBER || '',
-                },
-            });
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                error('Error fetching access information', response.status);
-                return 'try-error';
-            }
-        } catch (err) {
-            log(err);
-            error('Error fetching access information:', err);
-            throw new Error('Error fetching access information');
-        }
+        const functionName = 'getAllAssets';
+        const URL = `${API_URL}/api/assets/${organisation}/`;
+        return request(URL, functionName);
     }
 
     static async getAssetById(orgName: string, assetId: string) {
-        try {
-            const assets: IAsset[] = await this.getAllAssets(orgName);
-            log('asset search', assetId);
-            if (assets) {
+        const functionName = 'getAssetById';
+        const URL = `${API_URL}/api/assets/${orgName}/${assetId}`;
+        return request(URL, functionName)
+            .then((assets: IAsset[]) => {
                 const asset = assets.find((item) => item.name === assetId);
-
                 if (asset) {
                     return asset;
                 } else {
-                    error('Asset not found, assetId:', assetId);
+                    console.error('Asset not found, assetId:', assetId);
                     return null;
                 }
-            } else {
-                error('No assests found for organisation:', orgName);
+            })
+            .catch((err) => {
+                console.error('Error fetching asset:', err);
                 return null;
-            }
-        } catch (err) {
-            error('Error fetching asset:', err);
-            return null;
-        }
+            });
     }
 
     // static async setAccess(access, organisation) {
