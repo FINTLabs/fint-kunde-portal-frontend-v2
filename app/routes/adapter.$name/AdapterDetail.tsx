@@ -95,13 +95,14 @@ export function AdapterDetail({
                                 <ValueDisplayPanel
                                     label="Klient Hemmelighet"
                                     value={clientSecret}
-                                    revalidate={() =>
-                                        fetchClientSecret(
-                                            adapter.name,
-                                            organisationName,
-                                            setClientSecret
-                                        )
-                                    }
+                                    name={adapter.name}
+                                    // revalidate={() =>
+                                    //     fetchClientSecret(
+                                    //         adapter.name,
+                                    //         organisationName,
+                                    //         setClientSecret
+                                    //     )
+                                    // }
                                 />
                                 <div className="h-10"></div>
                                 <HStack justify={'center'}>

@@ -70,8 +70,6 @@ async function getRequest(
     returnType: ReturnType
 ) {
     const response = await fetch(URL, requestOptions);
-    console.log('--------response');
-    console.log(response);
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {
