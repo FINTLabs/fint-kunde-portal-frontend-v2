@@ -32,7 +32,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={component.name} icon={ComponentIcon} hideBorder={true} />
+            <InternalPageHeader title={component.name} icon={ComponentIcon} />
 
             <HGrid columns="50px auto">
                 <Box>

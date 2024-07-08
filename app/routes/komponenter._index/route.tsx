@@ -35,12 +35,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader
-                title={'Komponenter'}
-                icon={ComponentIcon}
-                helpText="components"
-                hideBorder={true}
-            />
+            <InternalPageHeader title={'Komponenter'} icon={ComponentIcon} helpText="components" />
 
             <ComponentsTable selectedComponents={selectedComponents} components={components} />
         </>

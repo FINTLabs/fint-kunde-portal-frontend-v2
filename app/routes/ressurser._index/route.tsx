@@ -5,6 +5,7 @@ import { json, useLoaderData } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AccessApi from '~/api/AssetApi';
+import { IAsset } from '~/types/Asset';
 
 export const meta: MetaFunction = () => {
     return [
@@ -25,19 +26,14 @@ export const loader = async () => {
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter._index' }];
-    const assests = useLoaderData<IAccess[]>();
+    const assets = useLoaderData<IAsset[]>();
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader
-                title={'Ressurser'}
-                icon={LayersIcon}
-                helpText="assets"
-                hideBorder={true}
-            />
+            <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="assets" />
 
-            {assests.map((asset) => (
+            {assets.map((asset) => (
                 <div key={asset.dn}>
                     <h2>{asset.name}</h2>
                     <p>{asset.description}</p>

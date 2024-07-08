@@ -38,12 +38,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader
-                title={'Klienter'}
-                icon={TokenIcon}
-                helpText="klienter"
-                hideBorder={true}
-            />
+            <InternalPageHeader title={'Klienter'} icon={TokenIcon} helpText="klienter" />
 
             <Tabs
                 value={isManaged}

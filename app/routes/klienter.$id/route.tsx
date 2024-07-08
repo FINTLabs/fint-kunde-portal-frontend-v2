@@ -45,11 +45,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader
-                title={client.shortDescription}
-                icon={TokenIcon}
-                hideBorder={true}
-            />
+            <InternalPageHeader title={client.shortDescription} icon={TokenIcon} />
 
             <HGrid columns="50px auto">
                 <Box>

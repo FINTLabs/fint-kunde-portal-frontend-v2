@@ -55,7 +55,6 @@ export default function Index() {
                 title={(adapter && adapter?.shortDescription) || 'No adapter found'}
                 icon={MigrationIcon}
                 helpText="adapter detaljer"
-                hideBorder={true}
             />
             {!adapter && (
                 <ErrorBox

@@ -42,12 +42,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader
-                title={'Ressurser'}
-                icon={LayersIcon}
-                helpText="assets"
-                hideBorder={true}
-            />
+            <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="assets" />
             <ClientTable clients={assetData.clients} />
         </>
     );
