@@ -22,8 +22,6 @@ export const loader = async ({ params }: LoaderFunctionArgs, request) => {
 
     try {
         const client = await ClientApi.getClientById(organisation, id);
-        // const componentLoaderResponse = await componentLoader();
-        // const components = await componentLoaderResponse.json();
         const components = await ComponentApi.getAllComponents();
 
         return json({ client, components });
@@ -34,9 +32,8 @@ export const loader = async ({ params }: LoaderFunctionArgs, request) => {
 };
 
 export default function Index() {
-    const { client, components } = useLoaderData<{ client: IClient; components: IComponent[] }>(); // Destructure client and components
+    const { client } = useLoaderData<{ client: IClient; components: IComponent[] }>(); // Destructure client and components
     const navigate = useNavigate();
-    const sortedComponents = [...components].sort((a, b) => a.name.localeCompare(b.name));
 
     const breadcrumbs = [
         { name: 'Klienter', link: '/klienter' },
@@ -66,11 +63,7 @@ export default function Index() {
                     <Divider className="pt-3" />
 
                     <Heading size={'medium'}>Komponenter</Heading>
-                    <ComponentsTable
-                        selectedComponents={client.components}
-                        components={sortedComponents}
-                        columns={2}
-                    />
+                    <ComponentsTable selectedComponents={client.components} columns={2} />
                 </Box>
             </HGrid>
         </>

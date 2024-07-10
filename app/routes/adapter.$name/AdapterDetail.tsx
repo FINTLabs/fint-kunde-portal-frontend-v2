@@ -9,13 +9,14 @@ import {
     VStack,
 } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
-import { useFetcher, useNavigate } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { ValueDisplayPanel } from './ValueDisplayPanel';
 import { deleteAdapter } from './actions';
 import { TrashIcon } from '@navikt/aksel-icons';
+import { IComponent } from '~/types/Component';
 
 export function AdapterDetail({
     adapter,
@@ -25,12 +26,15 @@ export function AdapterDetail({
     organisationName: string;
 }) {
     const navigate = useNavigate();
+    const components = useLoaderData<IComponent[]>();
+    
 
     const clientSecretFetcher = useFetcher({ key: 'fetch-client-secret' });
 
     const clientSecret = clientSecretFetcher.data ? (clientSecretFetcher.data as string) : '';
     const [passord, setPassord] = useState('');
 
+    console.log(adapter);
     const allDetails = {
         username: adapter.name,
         password: passord,
