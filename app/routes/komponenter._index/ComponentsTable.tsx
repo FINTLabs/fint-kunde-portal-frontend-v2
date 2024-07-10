@@ -5,7 +5,8 @@ import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { useLoaderData, useNavigate } from '@remix-run/react'; // Import HStack
 
 interface ComponentsSectionProps {
-    selectedComponents?: string[];
+    components?: IComponent[];
+    selectedComponents: string[];
     columns?: number;
 }
 

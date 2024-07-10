@@ -14,6 +14,7 @@ import { IUserSession } from '~/types/types';
 import { getSession } from '~/utils/session';
 import { ErrorBox } from '~/components/shared/ErrorBox';
 import { fetchClientSecret } from './actions';
+import ComponentApi from '~/api/ComponentApi';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const session = await getSession(request.headers.get('Cookie'));
@@ -24,8 +25,9 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     if (!userSession) {
         throw new Response('Unauthorized', { status: 401 });
     }
+    const components = await ComponentApi.getAllComponents();
 
-    return json({ userSession });
+    return json({ userSession, components });
 };
 
 export const meta: MetaFunction = () => {
