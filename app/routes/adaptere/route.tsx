@@ -15,6 +15,7 @@ import { AdapterList } from './AdapterList';
 import { ErrorBox } from '~/components/shared/ErrorBox';
 import { PlusIcon } from '@navikt/aksel-icons';
 import mockAdapters from './adapterList.json';
+import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
@@ -26,19 +27,9 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
     log('Request headers:', request.headers.get('x-nin'));
-
-    try {
-        const session = await getSession(request.headers.get('Cookie'));
-        const userSession = session.get('user-session');
-
-        const adapterResponse = await AdapterAPI.getAdapters(userSession.selectedOrganization.name);
-
-        return json({ adapters: adapterResponse });
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        return json({ adapters: mockAdapters });
-        // throw new Response('Not Found', { status: 404 });
-    }
+    const orgName = await getSelectedOprganization(request);
+    const adapters = await AdapterAPI.getAdapters(orgName);
+    return json({ adapters: adapters, orgName });
 };
 
 function Tab({ value, adapters }: { value: string; adapters: IAdapter[] }) {
