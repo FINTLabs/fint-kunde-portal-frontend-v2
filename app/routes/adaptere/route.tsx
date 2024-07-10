@@ -11,11 +11,11 @@ import AdapterAPI from '~/api/AdapterApi';
 import { useLoaderData, useNavigate } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
 import { tabInfo } from './constants';
-import { AdapterList } from './AdapterList';
 import { ErrorBox } from '~/components/shared/ErrorBox';
 import { PlusIcon } from '@navikt/aksel-icons';
 import mockAdapters from './adapterList.json';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { AdapterList } from '~/components/shared/AdapterList';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
@@ -39,6 +39,7 @@ function Tab({ value, adapters }: { value: string; adapters: IAdapter[] }) {
         </Tabs.Panel>
     );
 }
+
 export default function Index() {
     const breadcrumbs = [{ name: 'Adaptere', link: '/adaptere' }];
 
@@ -75,7 +76,8 @@ export default function Index() {
 
             {adapters && (
                 <>
-                    <Tabs defaultValue={tabInfo[0].value} fill>
+                    <AdapterList items={adapters} />
+                    {/* <Tabs defaultValue={tabInfo[0].value} fill>
                         <Tabs.List>
                             <Tabs.Tab
                                 value={tabInfo[0].value}
@@ -99,7 +101,7 @@ export default function Index() {
                                 }
                             />
                         ))}
-                    </Tabs>
+                    </Tabs> */}
                 </>
             )}
         </>
