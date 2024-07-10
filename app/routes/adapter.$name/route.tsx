@@ -73,15 +73,11 @@ export default function Index() {
     );
 }
 
-export async function action({ request }: ActionFunctionArgs) {
-    // console.log('request action ', request);
-
-    const url = new URL(request.url);
-    const searchParams = url.searchParams;
-    const name = searchParams.get('name');
+export async function action({ request, params }: ActionFunctionArgs) {
+    const name = params.name;
 
     if (!name) {
-        return json({ error: 'No adapter name in action' }, { status: 400 });
+        return json({ error: 'No adapter name in params' }, { status: 400 });
     }
 
     const session = await getSession(request.headers.get('Cookie'));
@@ -97,10 +93,5 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     const response = await fetchClientSecret(name, userSession.selectedOrganization?.name);
-    console.log('');
-    console.log('client secret: ');
-    console.log(response);
-    console.log('');
-
     return response;
 }
