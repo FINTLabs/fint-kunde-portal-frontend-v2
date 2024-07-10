@@ -1,11 +1,12 @@
+import React from 'react';
 import { MetaFunction } from '@remix-run/node';
 import { ComponentIcon } from '@navikt/aksel-icons';
-import React from 'react';
-import { json, useLoaderData } from '@remix-run/react';
-import ComponentApi from '~/api/ComponentApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
+import { fetchComponentsLoader } from '~/loaders/shared/componentsLoader';
+import { useLoaderData } from '@remix-run/react';
+import { IComponent } from '~/types/Component';
 
 export const meta: MetaFunction = () => {
     return [
@@ -14,19 +15,14 @@ export const meta: MetaFunction = () => {
     ];
 };
 
-export const loader = async () => {
-    try {
-        const components = await ComponentApi.getAllComponents();
-        return json({ components });
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        throw new Response('Not Found', { status: 404 });
-    }
-};
+export const loader = fetchComponentsLoader;
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter' }];
 
+    const { components } = useLoaderData<{ components: IComponent[] }>();
+    console.log('components');
+    console.log(components);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
