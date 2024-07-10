@@ -74,36 +74,7 @@ export default function Index() {
 
             {!adapters && <ErrorBox message="Fant ingen adaptere" />}
 
-            {adapters && (
-                <>
-                    <AdapterList items={adapters} />
-                    {/* <Tabs defaultValue={tabInfo[0].value} fill>
-                        <Tabs.List>
-                            <Tabs.Tab
-                                value={tabInfo[0].value}
-                                label={tabInfo[0].label}
-                                icon={<NotePencilDashIcon title={tabInfo[0].label} aria-hidden />}
-                            />
-                            <Tabs.Tab
-                                value={tabInfo[1].value}
-                                label={tabInfo[1].label}
-                                icon={<CogRotationIcon title={tabInfo[0].label} aria-hidden />}
-                            />
-                        </Tabs.List>
-                        {tabInfo.map((tab, index) => (
-                            <Tab
-                                key={index}
-                                value={tab.value}
-                                adapters={
-                                    index === 1
-                                        ? adapters.filter((adapter) => adapter.managed)
-                                        : adapters.filter((adapter) => !adapter.managed)
-                                }
-                            />
-                        ))}
-                    </Tabs> */}
-                </>
-            )}
+            {adapters && <AdapterList items={adapters} />}
         </>
     );
 }
