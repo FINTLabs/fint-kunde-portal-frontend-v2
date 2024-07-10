@@ -21,7 +21,7 @@ export function ValueDisplayPanel({
             </HStack>
             <HStack className=" flex !items-center">
                 {name && (
-                    <fetcher.Form method="post" action={`/adapter/${name}?name=${name}`}>
+                    <fetcher.Form method="post" action={`/adapter/${name}`}>
                         <Button
                             type="submit"
                             variant="tertiary-neutral"

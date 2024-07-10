@@ -1,5 +1,6 @@
 import { createCookieSessionStorage } from '@remix-run/node';
 
+//TODO: double check if this cookie is secure
 export const { getSession, commitSession, destroySession } = createCookieSessionStorage({
     cookie: {
         name: 'user-session',

@@ -19,6 +19,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const session = await getSession(request.headers.get('Cookie'));
     const userSession: IUserSession | undefined = session.get('user-session');
 
+    // fetch adapter by name here
+
     if (!userSession) {
         throw new Response('Unauthorized', { status: 401 });
     }
@@ -46,6 +48,7 @@ export default function Index() {
     if (filteredAdapters.length > 0) {
     }
 
+    // TODO: fetch from backend
     const adapter = filteredAdapters.length > 0 ? filteredAdapters[0] : null;
 
     return (
