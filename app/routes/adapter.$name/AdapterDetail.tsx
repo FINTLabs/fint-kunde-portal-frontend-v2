@@ -56,6 +56,9 @@ export function AdapterDetail({
                     <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                         <VStack gap="5">
                             <VStack>
+                                <Heading size="medium" spacing>
+                                    Detaljer
+                                </Heading>
                                 <Label>Kort beskrivelse</Label>
                                 <HStack className="!flex !justify-between !items-center">
                                     <BodyLong>{adapter.shortDescription}</BodyLong>
@@ -64,19 +67,13 @@ export function AdapterDetail({
                                         variant="tertiary"
                                     />
                                 </HStack>
-                            </VStack>
-                            <VStack>
                                 <Label>Note</Label>
                                 <HStack className="!flex !justify-between !items-center">
                                     <BodyLong>{adapter.note}</BodyLong>
                                 </HStack>
                                 <Divider className="pt-3" />
                             </VStack>
-                            {/* <VStack>
-                                <Label>Komponenter:</Label>
-                                <ComponentsList selected={adapter.components} />
-                                <Divider className="pt-3" />
-                            </VStack> */}
+
                             <VStack>
                                 <Heading size="medium" spacing>
                                     Autentisering
@@ -104,21 +101,21 @@ export function AdapterDetail({
                                         text="Kopier alt"
                                         activeText={`Alt er kopiert!`}
                                     />
-                                    <Button
-                                        variant="danger"
-                                        onClick={() =>
-                                            deleteAdapter(adapter.name, organisationName)
-                                        }
-                                        icon={<TrashIcon aria-hidden />}>
-                                        Slett
-                                    </Button>
                                 </HStack>
-
-                                {/* <Divider className="pt-3" /> */}
+                                <Divider className="pt-3" />
                             </VStack>
                             <VStack>
+                                <Heading size="medium" spacing>
+                                    Komponenter
+                                </Heading>
                                 <ComponentsTable selectedComponents={selectedComponents} />
                             </VStack>
+                            <Button
+                                variant="danger"
+                                onClick={() => alert('Display a modal')}
+                                icon={<TrashIcon aria-hidden />}>
+                                Slett
+                            </Button>
                         </VStack>
                     </Box>
                 </VStack>
