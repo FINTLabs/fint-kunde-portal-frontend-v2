@@ -26,24 +26,7 @@ class MeApi {
     static async fetchOrganisations() {
         const functionName = 'fetchOrganisations';
         const URL = `${API_URL}/api/contacts/organisations`;
-        return request(URL, functionName).catch((err) => {
-            console.error('Error fetching organisations:', err);
-            // TODO: REMOVE !! THIS IS JUST FOR STARTUP
-            return [
-                {
-                    name: 'TEST ORG',
-                    orgNumber: '000000000',
-                    displayName: 'Test Organization',
-                    components: [],
-                    legalContact: 'Test Legal Contact',
-                    techicalContacts: [],
-                    k8sSize: 'small',
-                    customer: false,
-                    primaryAssetId: '000000000',
-                    dn: 'test.org',
-                },
-            ];
-        });
+        return request(URL, functionName);
     }
 }
 
