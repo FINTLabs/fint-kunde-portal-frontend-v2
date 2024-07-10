@@ -8,26 +8,22 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { useLoaderData, useParams } from '@remix-run/react';
-import adapters from '~/routes/adaptere/adapterList.json';
 import { AdapterDetail } from './AdapterDetail';
-import { IUserSession } from '~/types/types';
+import { IAdapter, IUserSession } from '~/types/types';
 import { getSession } from '~/utils/session';
 import { ErrorBox } from '~/components/shared/ErrorBox';
 import { fetchClientSecret } from './actions';
 import ComponentApi from '~/api/ComponentApi';
+import AdapterAPI from '~/api/AdapterApi';
+import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-    const session = await getSession(request.headers.get('Cookie'));
-    const userSession: IUserSession | undefined = session.get('user-session');
+    const orgName = await getSelectedOprganization(request);
 
-    // fetch adapter by name here
-
-    if (!userSession) {
-        throw new Response('Unauthorized', { status: 401 });
-    }
+    const adapters = await AdapterAPI.getAdapters(orgName);
     const components = await ComponentApi.getAllComponents();
 
-    return json({ userSession, components });
+    return json({ adapters, components, orgName });
 };
 
 export const meta: MetaFunction = () => {
@@ -35,9 +31,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-    const { userSession } = useLoaderData<{
-        userSession: IUserSession;
-    }>();
+    const { adapters, orgName } = useLoaderData<{ adapters: IAdapter[]; orgName: string }>();
 
     const { name } = useParams();
 
@@ -50,7 +44,6 @@ export default function Index() {
     if (filteredAdapters.length > 0) {
     }
 
-    // TODO: fetch from backend
     const adapter = filteredAdapters.length > 0 ? filteredAdapters[0] : null;
 
     return (
@@ -67,13 +60,7 @@ export default function Index() {
                 />
             )}
 
-            {!userSession && <ErrorBox message="User session is null" />}
-            {adapter && userSession && userSession.selectedOrganization && (
-                <AdapterDetail
-                    adapter={adapter}
-                    organisationName={userSession.selectedOrganization.name}
-                />
-            )}
+            {adapter && <AdapterDetail adapter={adapter} organisationName={orgName} />}
         </>
     );
 }
