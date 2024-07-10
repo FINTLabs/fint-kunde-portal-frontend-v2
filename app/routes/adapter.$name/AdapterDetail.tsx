@@ -54,7 +54,7 @@ export function AdapterDetail({
                     <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                         <VStack gap="5">
                             <VStack>
-                                <Label>Short Description</Label>
+                                <Label>Kort beskrivelse</Label>
                                 <HStack className="!flex !justify-between !items-center">
                                     <BodyLong>{adapter.shortDescription}</BodyLong>
                                     <Button
