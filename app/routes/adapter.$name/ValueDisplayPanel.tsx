@@ -1,6 +1,6 @@
 import { BodyShort, Button, CopyButton, HStack, Label } from '@navikt/ds-react';
 import { ThumbUpIcon, ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import { Form, useFetcher } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
 
 export function ValueDisplayPanel({
     label,

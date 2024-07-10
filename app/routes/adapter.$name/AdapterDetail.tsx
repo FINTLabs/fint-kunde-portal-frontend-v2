@@ -53,17 +53,20 @@ export function AdapterDetail({
                 <VStack className="flex flex-grow">
                     <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                         <VStack gap="5">
-                            {/* <Heading size="medium" spacing>
-                                {adapter.note}
-                            </Heading> */}
                             <VStack>
-                                <Label>Note</Label>
+                                <Label>Short Description</Label>
                                 <HStack className="!flex !justify-between !items-center">
-                                    <BodyLong>{adapter.note}</BodyLong>
+                                    <BodyLong>{adapter.shortDescription}</BodyLong>
                                     <Button
                                         icon={<PencilIcon title="Rediger" />}
                                         variant="tertiary"
                                     />
+                                </HStack>
+                            </VStack>
+                            <VStack>
+                                <Label>Note</Label>
+                                <HStack className="!flex !justify-between !items-center">
+                                    <BodyLong>{adapter.note}</BodyLong>
                                 </HStack>
                                 <Divider className="pt-3" />
                             </VStack>
