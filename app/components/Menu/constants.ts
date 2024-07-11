@@ -31,15 +31,15 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
                     title: 'Ressurser',
                     path: '/ressurser',
                 },
-                {
-                    title: 'Hendelseslogg',
-                    path: '/hendelseslogg',
-                },
             ],
         },
         {
             title: 'HELSE',
             subMenus: [
+                {
+                    title: 'Hendelseslogg',
+                    path: '/hendelseslogg',
+                },
                 {
                     title: 'Basistest',
                     path: '/basistest',

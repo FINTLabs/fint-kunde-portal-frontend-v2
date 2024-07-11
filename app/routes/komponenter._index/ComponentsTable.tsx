@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Detail, HGrid, Label, Switch, Table } from '@navikt/ds-react';
+import { Box, Chips, Detail, HGrid, Label, Switch, Table, Tag } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
@@ -62,6 +62,20 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                 <Label>{component.description}</Label>
                                                 <Detail>{component.basePath}</Detail>
                                             </Switch>
+                                        </Table.DataCell>
+                                        <Table.DataCell>
+                                            {component.common && (
+                                                <Tag variant="info" size={'xsmall'}>
+                                                    Felles
+                                                </Tag>
+                                            )}
+                                        </Table.DataCell>
+                                        <Table.DataCell>
+                                            {component.openData && (
+                                                <Tag variant="neutral" size={'xsmall'}>
+                                                    Åpne Data
+                                                </Tag>
+                                            )}
                                         </Table.DataCell>
                                         <Table.DataCell>
                                             <ChevronRightIcon
