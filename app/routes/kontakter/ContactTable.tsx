@@ -3,9 +3,9 @@ import { Table, Button } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon, ShieldLockIcon } from '@navikt/aksel-icons';
 import { IContact, IRole, type IUserSession } from '~/types/types';
 import ConfirmModal from './ConfirmModal';
-import RolesChips from '~/routes/kontakter/RoleChips';
 import { log } from '~/utils/logger';
 import { useOutletContext } from '@remix-run/react';
+import RolesCheckbox from '~/routes/kontakter/RoleCheckmarks';
 
 interface IContactTableProps {
     contactsData?: IContact[];
@@ -20,7 +20,6 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
     }>({ type: '', contact: undefined, open: false });
 
     const userSession = useOutletContext<IUserSession>();
-
     const hasRole = (currentContact: IContact, roleId: string): boolean => {
         if (currentContact) {
             return currentContact.roles?.includes(roleId + '@' + 'fintlabs_no') ?? false;
@@ -66,7 +65,7 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
                             key={i + contact.dn}
                             content={
                                 <>
-                                    <RolesChips
+                                    <RolesCheckbox
                                         contact={contact}
                                         rolesData={rolesData}
                                         hasRole={hasRole}

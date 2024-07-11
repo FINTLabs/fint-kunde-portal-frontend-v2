@@ -11,17 +11,18 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, HGrid } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-// import { loader as componentLoader } from '../komponenter._index/route';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
+import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 // @ts-ignore
 export const loader = async ({ params }: LoaderFunctionArgs, request) => {
-    const organisation = 'fintlabs_no'; // todo: Replace with actual organisation identifier
+    const orgName = await getSelectedOprganization(request);
+
     const id = params.id || '';
 
     try {
-        const client = await ClientApi.getClientById(organisation, id);
+        const client = await ClientApi.getClientById(orgName, id);
         const components = await ComponentApi.getAllComponents();
 
         return json({ client, components });
@@ -32,8 +33,11 @@ export const loader = async ({ params }: LoaderFunctionArgs, request) => {
 };
 
 export default function Index() {
-    const { client } = useLoaderData<{ client: IClient; components: IComponent[] }>(); // Destructure client and components
+    const { client, components } = useLoaderData<{ client: IClient; components: IComponent[] }>(); // Destructure client and components
     const navigate = useNavigate();
+    const selectedComponents = components
+        .filter((component) => client.components.includes(component.dn))
+        .map((component) => component.dn);
 
     const breadcrumbs = [
         { name: 'Klienter', link: '/klienter' },
@@ -63,7 +67,11 @@ export default function Index() {
                     <Divider className="pt-3" />
 
                     <Heading size={'medium'}>Komponenter</Heading>
-                    <ComponentsTable selectedComponents={client.components} columns={2} />
+                    <ComponentsTable
+                        components={components}
+                        selectedComponents={selectedComponents}
+                        columns={2}
+                    />
                 </Box>
             </HGrid>
         </>
