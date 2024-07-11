@@ -1,4 +1,4 @@
-import { type LoaderFunction, MetaFunction } from '@remix-run/node';
+import { type LoaderFunction, type LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { ComponentIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import { json, useLoaderData } from '@remix-run/react';
@@ -16,10 +16,12 @@ export const meta: MetaFunction = () => {
     ];
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ params }: LoaderFunctionArgs, request: Request) => {
+    //TODO: get real org name
     try {
         const components = await ComponentApi.getAllComponents();
-        const orgName = await getSelectedOprganization(request);
+        // const orgName = await getSelectedOprganization(request);
+        const orgName = 'fintlabs_no';
         return json({ components, orgName });
     } catch (error) {
         console.error('Error fetching data:', error);
