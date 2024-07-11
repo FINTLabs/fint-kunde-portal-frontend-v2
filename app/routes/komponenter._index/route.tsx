@@ -1,4 +1,4 @@
-import { MetaFunction } from '@remix-run/node';
+import { type LoaderFunction, MetaFunction } from '@remix-run/node';
 import { ComponentIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import { json, useLoaderData } from '@remix-run/react';
@@ -7,6 +7,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import { IComponent } from '~/types/Component';
+import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 export const meta: MetaFunction = () => {
     return [
@@ -15,10 +16,11 @@ export const meta: MetaFunction = () => {
     ];
 };
 
-export const loader = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
     try {
         const components = await ComponentApi.getAllComponents();
-        return json({ components });
+        const orgName = await getSelectedOprganization(request);
+        return json({ components, orgName });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
@@ -27,12 +29,10 @@ export const loader = async () => {
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter' }];
-    const { components } = useLoaderData<{ components: IComponent[] }>();
+    const { components, orgName } = useLoaderData<{ components: IComponent[]; orgName: string }>();
 
     const selectedCompoents = components
-        .filter(
-            (component) => component.organisations.some((org) => org.includes('fintlabs')) // TODO: fiks hard coded org name
-        )
+        .filter((component) => component.organisations.some((org) => org.includes(orgName)))
         .map((component) => component.dn);
 
     return (

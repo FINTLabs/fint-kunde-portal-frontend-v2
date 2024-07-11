@@ -13,14 +13,16 @@ import { Box, Button, Heading, HGrid } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
+import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 // @ts-ignore
 export const loader = async ({ params }: LoaderFunctionArgs, request) => {
-    const organisation = 'fintlabs_no'; // todo: Replace with actual organisation identifier
+    const orgName = await getSelectedOprganization(request);
+
     const id = params.id || '';
 
     try {
-        const client = await ClientApi.getClientById(organisation, id);
+        const client = await ClientApi.getClientById(orgName, id);
         const components = await ComponentApi.getAllComponents();
 
         return json({ client, components });

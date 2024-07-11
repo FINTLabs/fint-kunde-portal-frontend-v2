@@ -7,12 +7,14 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TokenIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Tabs } from '@navikt/ds-react';
+import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import type { LoaderFunction } from '@remix-run/node';
 
-export const loader = async () => {
-    const organisation = 'fintlabs_no'; // todo: Replace with actual organisation identifier
+export const loader: LoaderFunction = async ({ request }) => {
+    const orgName = await getSelectedOprganization(request);
 
     try {
-        const clientData = await ClientApi.getClients(organisation);
+        const clientData = await ClientApi.getClients(orgName);
         return json(clientData);
     } catch (error) {
         console.error('Error fetching data:', error);
