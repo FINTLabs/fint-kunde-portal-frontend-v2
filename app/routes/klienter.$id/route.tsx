@@ -17,8 +17,9 @@ import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 // @ts-ignore
 export const loader = async ({ params }: LoaderFunctionArgs, request) => {
-    const orgName = await getSelectedOprganization(request);
-
+    // const orgName = await getSelectedOprganization(request);
+    //TODO: get orgname here
+    const orgName = 'fintlabs_no';
     const id = params.id || '';
 
     try {
