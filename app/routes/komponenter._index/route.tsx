@@ -6,6 +6,7 @@ import ComponentApi from '~/api/ComponentApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
+import { IComponent } from '~/types/Component';
 
 export const meta: MetaFunction = () => {
     return [
@@ -26,12 +27,19 @@ export const loader = async () => {
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter' }];
+    const { components } = useLoaderData<{ components: IComponent[] }>();
+
+    const selectedCompoents = components
+        .filter(
+            (component) => component.organisations.some((org) => org.includes('fintlabs')) // TODO: fiks hard coded org name
+        )
+        .map((component) => component.dn);
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Komponenter'} icon={ComponentIcon} helpText="components" />
-            <ComponentsTable />
+            <ComponentsTable components={components} selectedComponents={selectedCompoents} />
         </>
     );
 }
