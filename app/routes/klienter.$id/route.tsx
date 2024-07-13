@@ -4,7 +4,7 @@ import { IClient } from '~/types/Clients';
 import ClientDetails from '~/routes/klienter.$id/ClientDetails';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import SecuritySection from '~/routes/klienter.$id/SecuritySection';
-import type { LoaderFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs } from '@remix-run/node';
 import ClientApi from '~/api/ClientApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -16,25 +16,22 @@ import { IComponent } from '~/types/Component';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 // @ts-ignore
-export const loader = async ({ params }: LoaderFunctionArgs, request) => {
-    // const orgName = await getSelectedOprganization(request);
-    //TODO: get orgname here
-    const orgName = 'fintlabs_no';
+export async function loader({ request, params }: ActionFunctionArgs) {
+    const orgName = await getSelectedOprganization(request);
     const id = params.id || '';
 
     try {
         const client = await ClientApi.getClientById(orgName, id);
         const components = await ComponentApi.getAllComponents();
-
         return json({ client, components });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
     }
-};
+}
 
 export default function Index() {
-    const { client, components } = useLoaderData<{ client: IClient; components: IComponent[] }>(); // Destructure client and components
+    const { client, components } = useLoaderData<{ client: IClient; components: IComponent[] }>();
     const navigate = useNavigate();
     const selectedComponents = components
         .filter((component) => client.components.includes(component.dn))
