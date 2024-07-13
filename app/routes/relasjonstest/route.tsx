@@ -1,4 +1,4 @@
-import type { MetaFunction } from '@remix-run/node';
+import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
@@ -6,12 +6,30 @@ import React, { useState } from 'react';
 import { Box, VStack } from '@navikt/ds-react';
 import TestAddForm from '~/routes/relasjonstest/TestAddForm';
 import TestResultsTable from '~/routes/relasjonstest/TestResultsTable';
+import ComponentApi from '~/api/ComponentApi';
+import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { json, useLoaderData } from '@remix-run/react';
+import { IComponent } from '~/types/Component';
+import ClientApi from '~/api/ClientApi';
+import { IClient } from '~/types/Clients';
 
 export const meta: MetaFunction = () => {
     return [
         { title: 'Relasjonstest' },
         { name: 'description', content: 'Liste over hendelseslogg' },
     ];
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+    try {
+        const components = await ComponentApi.getAllComponents();
+        const orgName = await getSelectedOprganization(request);
+        const clients = await ClientApi.getClients(orgName);
+        return json({ components, clients });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw new Response('Not Found', { status: 404 });
+    }
 };
 
 const fakeData = [
@@ -40,6 +58,10 @@ const fakeData = [
 
 export default function Index() {
     const [logResults, setLogResults] = useState(null);
+    const { components, clients } = useLoaderData<{
+        components: IComponent[];
+        clients: IClient[];
+    }>();
 
     const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
 
@@ -58,7 +80,11 @@ export default function Index() {
             />
             <VStack gap={'6'}>
                 <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                    <TestAddForm handleSearch={handleSearch} />
+                    <TestAddForm
+                        handleSearch={handleSearch}
+                        components={components}
+                        clients={clients}
+                    />
                 </Box>
                 <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                     <TestResultsTable logResults={logResults} />
