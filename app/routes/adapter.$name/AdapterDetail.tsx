@@ -6,6 +6,7 @@ import {
     HStack,
     Heading,
     Label,
+    Table,
     VStack,
 } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
@@ -19,6 +20,18 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import ComponentsTable from '../komponenter._index/ComponentsTable';
 import { IComponent } from '~/types/Component';
 import { FETCH_PASSORD_KEY, FETCH_CLIENT_SECRET_KEY } from './constants';
+import { TableCellValue } from './TableCellValue';
+import Autentisering from './Autentisering';
+
+type AutentiseringDetails = {
+    username: string;
+    password: string;
+    clientId: string;
+    openIdSecret: string;
+    scope: string;
+    idpUri: string;
+    assetIds: string[];
+};
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
@@ -32,8 +45,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const clientSecret = clientSecretFetcher.data ? (clientSecretFetcher.data as string) : '';
     const passord = passordFetcher.data ? (passordFetcher.data as string) : '';
 
-    // console.log(adapter);
-    const allDetails = {
+    const allDetails: AutentiseringDetails = {
         username: adapter.name,
         password: passord,
         clientId: adapter.clientId,
@@ -73,41 +85,18 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                 </HStack>
                                 <Divider className="pt-3" />
                             </VStack>
-
-                            <VStack>
-                                <Heading size="medium" spacing>
-                                    Autentisering
-                                </Heading>
-                                <ValueDisplayPanel label="Brukernavn" value={adapter.name} />
-                                <ValueDisplayPanel label="Klient ID" value={adapter.clientId} />
-                                <ValueDisplayPanel
-                                    label="Ressurs Id-er"
-                                    value={adapter.assetIds.reduce(
-                                        (acc, curr) => acc.concat(!acc ? curr : `, ${curr}`),
-                                        ''
-                                    )}
-                                />
-                                <ValueDisplayPanel
-                                    label="Passord"
-                                    value={passord}
-                                    fetcherKey={FETCH_PASSORD_KEY}
-                                />
-
-                                <ValueDisplayPanel
-                                    label="Klient Hemmelighet"
-                                    value={clientSecret}
-                                    fetcherKey={FETCH_CLIENT_SECRET_KEY}
-                                />
-                                <div className="h-10"></div>
-                                <HStack justify={'center'}>
-                                    <CopyButton
-                                        copyText={JSON.stringify(allDetails)}
-                                        text="Kopier alt"
-                                        activeText={`Alt er kopiert!`}
-                                    />
-                                </HStack>
-                                <Divider className="pt-3" />
-                            </VStack>
+                            <Autentisering
+                                name={adapter.name}
+                                clientId={adapter.clientId}
+                                ressourceIds={adapter.assetIds.reduce(
+                                    (acc, curr) => acc.concat(!acc ? curr : `, ${curr}`),
+                                    ''
+                                )}
+                                clientSecret={clientSecret}
+                                passord={passord}
+                                allDetails={allDetails}
+                            />
+                            <Divider className="pt-3" />
                             <VStack>
                                 <Heading size="medium" spacing>
                                     Komponenter
