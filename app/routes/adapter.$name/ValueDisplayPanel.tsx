@@ -52,11 +52,9 @@ export function ValueDisplayPanel({
         <VStack className="mt-2">
             <HStack align={'center'} justify={'space-between'}>
                 <Label>{label}</Label>
-                <HStack>
-                    <Fetcher />
-                </HStack>
+                <Fetcher />
             </HStack>
-            <HStack align="center" justify={'space-between'}>
+            <HStack align="center" justify={'start'}>
                 <BodyShort>{value}</BodyShort>
                 <CopyButton />
             </HStack>
@@ -65,9 +63,9 @@ export function ValueDisplayPanel({
         <HStack className="flex !justify-between !items-center mt-2">
             <HStack gap="4">
                 <Label>{label}</Label>
-                <BodyShort>{value}</BodyShort>
             </HStack>
             <HStack className="flex !items-center">
+                <BodyShort>{value}</BodyShort>
                 <Fetcher />
                 <CopyButton />
             </HStack>
