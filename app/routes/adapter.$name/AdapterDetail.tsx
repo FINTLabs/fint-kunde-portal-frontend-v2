@@ -9,14 +9,15 @@ import {
     VStack,
 } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
-import { useFetcher, useNavigate } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { ValueDisplayPanel } from './ValueDisplayPanel';
 import { deleteAdapter } from './actions';
 import { TrashIcon } from '@navikt/aksel-icons';
-import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
+import ComponentsTable from '../komponenter._index/ComponentsTable';
+import { IComponent } from '~/types/Component';
 
 export function AdapterDetail({
     adapter,
@@ -25,6 +26,8 @@ export function AdapterDetail({
     adapter: IAdapter;
     organisationName: string;
 }) {
+    const { components } = useLoaderData<{ adapters: IComponent[] }>();
+
     const navigate = useNavigate();
     const selectedComponents = adapter.components;
     const clientSecretFetcher = useFetcher({ key: 'fetch-client-secret' });
@@ -108,7 +111,10 @@ export function AdapterDetail({
                                 <Heading size="medium" spacing>
                                     Komponenter
                                 </Heading>
-                                <ComponentsTable selectedComponents={selectedComponents} />
+                                <ComponentsTable
+                                    components={components}
+                                    selectedComponents={selectedComponents}
+                                />
                             </VStack>
                             <Button
                                 variant="danger"
