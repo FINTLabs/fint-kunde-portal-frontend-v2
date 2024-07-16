@@ -1,5 +1,5 @@
 import React from 'react';
-import { json, useLoaderData, useNavigate } from '@remix-run/react';
+import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import ClientDetails from '~/routes/klienter.$id/ClientDetails';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
@@ -14,6 +14,11 @@ import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import Autentisering from '~/components/shared/Autentisering';
+import { AutentiseringDetail } from '~/types/AutentinseringDetail';
+import { FETCH_CLIENT_SECRET_KEY, FETCH_PASSORD_KEY } from '../adapter.$name/constants';
+import { cli } from '@remix-run/dev';
+import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
 
 // @ts-ignore
 export async function loader({ request, params }: ActionFunctionArgs) {
@@ -42,6 +47,21 @@ export default function Index() {
         { name: client.name, link: `/klienter/${client.name}` },
     ];
 
+    const passordFetcher = useFetcher({ key: FETCH_PASSORD_KEY });
+    const clientSecretFetcher = useFetcher({ key: FETCH_CLIENT_SECRET_KEY });
+
+    const clientSecret = clientSecretFetcher.data ? (clientSecretFetcher.data as string) : '';
+    const passord = passordFetcher.data ? (passordFetcher.data as string) : '';
+
+    const allDetails: AutentiseringDetail = {
+        username: client.name,
+        password: passord,
+        clientId: client.clientId,
+        openIdSecret: clientSecret,
+        scope: 'fint-client',
+        idpUri: 'https://idp.felleskomponent.no/nidp/oauth/nam/token',
+        assetIds: client.assetId,
+    };
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -60,8 +80,15 @@ export default function Index() {
                     <ClientDetails client={client} />
                     <Divider className="pt-3" />
 
-                    <Heading size={'medium'}>Security</Heading>
-                    <SecuritySection client={client} />
+                    <Autentisering
+                        name={client.name}
+                        passord={passord}
+                        ressourceIds={client.assetId}
+                        clientId={client.clientId}
+                        clientSecret={clientSecret}
+                        allDetails={allDetails}
+                    />
+                    {/* <SecuritySection client={client} /> */}
                     <Divider className="pt-3" />
 
                     <Heading size={'medium'}>Komponenter</Heading>
@@ -74,4 +101,21 @@ export default function Index() {
             </HGrid>
         </>
     );
+}
+
+export async function action({ request, params }: ActionFunctionArgs) {
+    // const name = params.name;
+
+    const formData = await request.formData();
+    const orgName = await getSelectedOprganization(request);
+
+    const actionType = formData.get('type') as string;
+    if (actionType === 'Passord') {
+        const response = 'Implement me. What is the API CALL?';
+        return response;
+    } else {
+        const response = 'Implement me. What is the API call?';
+        // const response = await fetchClientSecret(name, orgName);
+        return response;
+    }
 }

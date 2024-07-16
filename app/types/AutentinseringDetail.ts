@@ -5,5 +5,5 @@ export type AutentiseringDetail = {
     openIdSecret: string;
     scope: string;
     idpUri: string;
-    assetIds: string[];
+    assetIds: string[] | string;
 };

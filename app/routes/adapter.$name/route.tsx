@@ -9,13 +9,12 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { useLoaderData, useParams } from '@remix-run/react';
 import { AdapterDetail } from './AdapterDetail';
-import { IAdapter, IUserSession } from '~/types/types';
-import { getSession } from '~/utils/session';
+import { IAdapter } from '~/types/types';
 import { ErrorBox } from '~/components/shared/ErrorBox';
-import { fetchClientSecret } from './actions';
 import ComponentApi from '~/api/ComponentApi';
 import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const orgName = await getSelectedOprganization(request);
