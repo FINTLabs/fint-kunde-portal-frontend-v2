@@ -25,33 +25,32 @@ import Autentisering from '../../components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { useEffect, useState } from 'react';
 
-function DetailValue({
-    defaultValue,
+function EditableTextField({
+    label,
     value,
     isEditing,
     setValue,
 }: {
-    defaultValue: string;
+    label: string;
     value: string;
     isEditing: boolean;
     setValue: React.Dispatch<React.SetStateAction<string>>;
 }) {
+    const maxChars = 94;
     return (
-        <HStack justify={'space-between'} className="h-20">
-            <VStack>
+        <HStack justify={'space-between'}>
+            <VStack className="h-20">
                 {isEditing ? (
                     <TextField
                         value={value}
                         type="text"
-                        htmlSize={defaultValue.length + 10}
-                        label={'Kort beskrivelse'}
-                        onChange={(e) => setValue(e.target.value)}
-                        // defaultValue={defaultValue}
-                    ></TextField>
+                        htmlSize={value.length + 10 < maxChars ? value.length + 10 : maxChars}
+                        label={label}
+                        onChange={(e) => setValue(e.target.value)}></TextField>
                 ) : (
-                    <VStack justify={'space-between'} className="h-full">
-                        <Label>Kort beskrivelse</Label>
-                        <BodyLong className="h-10">{defaultValue}</BodyLong>
+                    <VStack justify={'space-between'} className="">
+                        <Label>{label}</Label>
+                        <BodyLong className="min-h-15 bg-green-200 pt-3">{value}</BodyLong>
                     </VStack>
                 )}
             </VStack>
@@ -106,20 +105,20 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                         Detaljer
                                     </Heading>
                                 </HStack>
-                                <DetailValue
+                                <EditableTextField
+                                    label={'Kort beskrivelse'}
                                     value={adapterShortDesc}
-                                    defaultValue={adapter.shortDescription}
                                     isEditing={isEditing}
                                     setValue={setAdapterShortDesc}
                                 />
                                 <HStack justify={'space-between'}>
-                                    <DetailValue
+                                    <EditableTextField
+                                        label={'Note'}
                                         value={adapterNote}
-                                        defaultValue={adapter.note}
                                         isEditing={isEditing}
                                         setValue={setAdapterNote}
                                     />
-                                    <VStack align={'end'} justify={'end'}>
+                                    <HStack className="w-full" align={'end'} justify={'end'}>
                                         <Button
                                             icon={
                                                 isEditing ? (
@@ -137,7 +136,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                                         adapterShortDesc.trim() !==
                                                             adapter.shortDescription
                                                     ) {
-                                                        submit(
+                                                        const res = submit(
                                                             {
                                                                 note: adapterNote,
                                                                 shortDescription: adapterShortDesc,
@@ -148,12 +147,15 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                                                 navigate: false,
                                                             }
                                                         );
+
+                                                        console.log('res');
+                                                        console.log(res);
                                                     }
                                                 }
                                                 setIsEditing(!isEditing);
                                             }}
                                         />
-                                    </VStack>
+                                    </HStack>
                                 </HStack>
                                 <Divider className="pt-3" />
                             </VStack>
