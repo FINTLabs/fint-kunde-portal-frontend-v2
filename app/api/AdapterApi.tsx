@@ -13,6 +13,12 @@ class AdapterAPI {
         return await request(URL, functionName, 'POST', 'json', adapter);
     }
 
+    static async updateAdapter(adapter: IPartialAdapter, organisationName: string) {
+        const functionName = 'updateAdapter';
+        const URL = `${API_URL}/api/adapters/${organisationName}`;
+        return await request(URL, functionName, 'PUT', 'json', adapter);
+    }
+
     static async deleteAdapter(name: string, organisationName: string) {
         const functionName = 'deleteAdapter';
         const URL = `${API_URL}/api/adapters/${organisationName}/${name}`;

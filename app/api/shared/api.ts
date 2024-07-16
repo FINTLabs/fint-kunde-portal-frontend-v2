@@ -44,11 +44,7 @@ export async function postRequest(
     if (adapter) {
         requestOptions = {
             ...requestOptions,
-            body: JSON.stringify({
-                name: adapter.name,
-                note: adapter.note,
-                shortDescription: adapter.shortDescription,
-            }),
+            body: JSON.stringify(adapter),
         };
     }
 
