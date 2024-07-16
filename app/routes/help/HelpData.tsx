@@ -92,4 +92,9 @@ export const helpData: HelpDataItem[] = [
             'over behandlinger eller legg til en ny behandlinger. Klikk på plussikonet for å legge til en ' +
             'nye tjenester eller behandlingsgrunnlag.',
     },
+    {
+        id: 'hendelseslogg',
+        title: 'Hendelseslogg',
+        description: 'This needs to be written!!!!',
+    },
 ];
