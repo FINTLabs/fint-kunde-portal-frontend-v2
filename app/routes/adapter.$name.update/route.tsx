@@ -22,7 +22,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         },
         orgName
     );
-    console.log('UPDATED');
     return redirect(`/adapter/${params.name}`);
 };
 
