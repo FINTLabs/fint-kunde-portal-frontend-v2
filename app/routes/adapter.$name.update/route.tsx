@@ -14,7 +14,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const note = getFormData(formData.get('note'), 'note', actionName);
 
     const orgName = await getSelectedOprganization(request);
-    const res = await AdapterAPI.updateAdapter(
+    await AdapterAPI.updateAdapter(
         {
             name: name,
             shortDescription: shortDescription as string,
@@ -22,11 +22,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         },
         orgName
     );
-
-    console.log('res in action update');
-    console.log(res);
-    // return redirect(`/adapter/${params.name}`);
-    return json({ ok: 200 });
+    console.log('UPDATED');
+    return redirect(`/adapter/${params.name}`);
 };
 
 function getRequstParam(value: string | undefined, name: string) {

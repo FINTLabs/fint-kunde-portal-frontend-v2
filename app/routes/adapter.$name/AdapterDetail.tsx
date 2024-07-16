@@ -50,7 +50,7 @@ function EditableTextField({
                 ) : (
                     <VStack justify={'space-between'} className="">
                         <Label>{label}</Label>
-                        <BodyLong className="min-h-15 bg-green-200 pt-3">{value}</BodyLong>
+                        <BodyLong className="min-h-15 pt-3">{value}</BodyLong>
                     </VStack>
                 )}
             </VStack>
