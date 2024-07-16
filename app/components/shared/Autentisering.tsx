@@ -1,8 +1,7 @@
 import { Box, Heading, Table, CopyButton } from '@navikt/ds-react';
-import { FETCH_PASSORD_KEY, FETCH_CLIENT_SECRET_KEY } from './constants';
-import { TableCellValue } from './TableCellValue';
+import { FETCH_PASSORD_KEY, FETCH_CLIENT_SECRET_KEY } from '../../routes/adapter.$name/constants';
+import { TableCellValue } from '../../routes/adapter.$name/TableCellValue';
 import { ThumbUpIcon, BagdeIcon } from '@navikt/aksel-icons';
-
 
 type AutentiseringProps = {
     name: string;

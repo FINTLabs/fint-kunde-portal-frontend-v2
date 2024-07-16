@@ -1,37 +1,14 @@
-import {
-    BodyLong,
-    Box,
-    Button,
-    CopyButton,
-    HStack,
-    Heading,
-    Label,
-    Table,
-    VStack,
-} from '@navikt/ds-react';
+import { BodyLong, Box, Button, HStack, Heading, Label, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
-import { ValueDisplayPanel } from './ValueDisplayPanel';
-import { deleteAdapter } from './actions';
 import { TrashIcon } from '@navikt/aksel-icons';
 import ComponentsTable from '../komponenter._index/ComponentsTable';
 import { IComponent } from '~/types/Component';
 import { FETCH_PASSORD_KEY, FETCH_CLIENT_SECRET_KEY } from './constants';
-import { TableCellValue } from './TableCellValue';
-import Autentisering from './Autentisering';
-
-type AutentiseringDetails = {
-    username: string;
-    password: string;
-    clientId: string;
-    openIdSecret: string;
-    scope: string;
-    idpUri: string;
-    assetIds: string[];
-};
+import Autentisering from '../../components/shared/Autentisering';
+import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
@@ -45,7 +22,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const clientSecret = clientSecretFetcher.data ? (clientSecretFetcher.data as string) : '';
     const passord = passordFetcher.data ? (passordFetcher.data as string) : '';
 
-    const allDetails: AutentiseringDetails = {
+    const allDetails: AutentiseringDetail = {
         username: adapter.name,
         password: passord,
         clientId: adapter.clientId,
