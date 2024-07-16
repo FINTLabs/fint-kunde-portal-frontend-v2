@@ -65,6 +65,8 @@ export default function Index() {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
+    console.log('Called adapter name');
+
     const name = params.name;
 
     if (!name) {

@@ -29,9 +29,34 @@ export async function request(
         if (requestMethod === 'POST') {
             return await postRequest(URL, functionName, requestOptions, adapter);
         }
+        if (requestMethod === 'PUT') {
+            return await putRequest(URL, functionName, requestOptions, adapter);
+        }
     } catch (err) {
         error(`Error running ${functionName}:`, err);
         throw new Error(`Error running ${functionName}`);
+    }
+}
+
+export async function putRequest(
+    URL: string,
+    functionName: string,
+    requestOptions: RequestInit,
+    adapter?: IPartialAdapter
+) {
+    if (adapter) {
+        requestOptions = {
+            ...requestOptions,
+            body: JSON.stringify(adapter),
+        };
+    }
+
+    const response = await fetch(URL, requestOptions);
+    if (response.status === 200) {
+        return await response.json();
+    } else {
+        error(`Error running ${functionName}, status:`, response.status);
+        return null;
     }
 }
 

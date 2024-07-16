@@ -16,7 +16,7 @@ import { IComponent } from '~/types/Component';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
 import Autentisering from '~/components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
-import { FETCH_CLIENT_SECRET_KEY, FETCH_PASSORD_KEY } from '../adapter.$name/constants';
+import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from '../adapter.$name/constants';
 import { cli } from '@remix-run/dev';
 import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
 
@@ -47,8 +47,8 @@ export default function Index() {
         { name: client.name, link: `/klienter/${client.name}` },
     ];
 
-    const passordFetcher = useFetcher({ key: FETCH_PASSORD_KEY });
-    const clientSecretFetcher = useFetcher({ key: FETCH_CLIENT_SECRET_KEY });
+    const passordFetcher = useFetcher({ key: FETCHER_PASSORD_KEY });
+    const clientSecretFetcher = useFetcher({ key: FETCHER_CLIENT_SECRET_KEY });
 
     const clientSecret = clientSecretFetcher.data ? (clientSecretFetcher.data as string) : '';
     const passord = passordFetcher.data ? (passordFetcher.data as string) : '';

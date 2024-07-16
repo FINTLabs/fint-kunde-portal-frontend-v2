@@ -1,5 +1,8 @@
 import { Box, Heading, Table, CopyButton } from '@navikt/ds-react';
-import { FETCH_PASSORD_KEY, FETCH_CLIENT_SECRET_KEY } from '../../routes/adapter.$name/constants';
+import {
+    FETCHER_PASSORD_KEY,
+    FETCHER_CLIENT_SECRET_KEY,
+} from '../../routes/adapter.$name/constants';
 import { TableCellValue } from '../../routes/adapter.$name/TableCellValue';
 import { ThumbUpIcon, BagdeIcon } from '@navikt/aksel-icons';
 
@@ -36,7 +39,7 @@ function Autentisering({
                             <TableCellValue
                                 label={'Passord'}
                                 value={passord}
-                                fetcherKey={FETCH_PASSORD_KEY}
+                                fetcherKey={FETCHER_PASSORD_KEY}
                             />
                         </Table.Row>
                         <Table.Row>
@@ -47,7 +50,7 @@ function Autentisering({
                             <TableCellValue
                                 label={'Klient Hemmelighet'}
                                 value={clientSecret}
-                                fetcherKey={FETCH_CLIENT_SECRET_KEY}
+                                fetcherKey={FETCHER_CLIENT_SECRET_KEY}
                             />
                         </Table.Row>
                         <Table.Row>

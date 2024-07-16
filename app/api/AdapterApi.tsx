@@ -15,7 +15,7 @@ class AdapterAPI {
 
     static async updateAdapter(adapter: IPartialAdapter, organisationName: string) {
         const functionName = 'updateAdapter';
-        const URL = `${API_URL}/api/adapters/${organisationName}`;
+        const URL = `${API_URL}/api/adapters/${organisationName}/${adapter.name}`;
         return await request(URL, functionName, 'PUT', 'json', adapter);
     }
 
