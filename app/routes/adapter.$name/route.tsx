@@ -23,7 +23,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const adapters = await AdapterAPI.getAdapters(orgName);
     const components = await ComponentApi.getAllComponents();
 
-    return json({ adapters, components, orgName });
+    return json({ adapters, components });
 };
 
 export const meta: MetaFunction = () => {
@@ -31,7 +31,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-    const { adapters, orgName } = useLoaderData<{ adapters: IAdapter[]; orgName: string }>();
+    const { adapters } = useLoaderData<{ adapters: IAdapter[] }>();
 
     const { name } = useParams();
 
@@ -60,7 +60,7 @@ export default function Index() {
                 />
             )}
 
-            {adapter && <AdapterDetail adapter={adapter} organisationName={orgName} />}
+            {adapter && <AdapterDetail adapter={adapter} />}
         </>
     );
 }
@@ -72,18 +72,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
         return json({ error: 'No adapter name in params' }, { status: 400 });
     }
 
-    const session = await getSession(request.headers.get('Cookie'));
-    const userSession: IUserSession | undefined = session.get('user-session');
+    const formData = await request.formData();
+    const orgName = await getSelectedOprganization(request);
 
-    // TODO: find a better way to grab session;
-    if (!userSession) {
-        return json({ error: 'Unauthorized' }, { status: 401 });
+    const actionType = formData.get('type') as string;
+    if (actionType === 'Passord') {
+        const response = 'Not implemented';
+        return response;
+    } else {
+        const response = await fetchClientSecret(name, orgName);
+        return response;
     }
-
-    if (!userSession.selectedOrganization) {
-        return json({ error: 'Selected Organization' }, { status: 400 });
-    }
-
-    const response = await fetchClientSecret(name, userSession.selectedOrganization?.name);
-    return response;
 }

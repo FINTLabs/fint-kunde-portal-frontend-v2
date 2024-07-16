@@ -18,24 +18,21 @@ import { deleteAdapter } from './actions';
 import { TrashIcon } from '@navikt/aksel-icons';
 import ComponentsTable from '../komponenter._index/ComponentsTable';
 import { IComponent } from '~/types/Component';
+import { FETCH_PASSORD_KEY, FETCH_CLIENT_SECRET_KEY } from './constants';
 
-export function AdapterDetail({
-    adapter,
-    organisationName,
-}: {
-    adapter: IAdapter;
-    organisationName: string;
-}) {
-    const { components } = useLoaderData<{ adapters: IComponent[] }>();
+export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
+    const { components } = useLoaderData<{ components: IComponent[] }>();
 
     const navigate = useNavigate();
     const selectedComponents = adapter.components;
-    const clientSecretFetcher = useFetcher({ key: 'fetch-client-secret' });
+
+    const passordFetcher = useFetcher({ key: FETCH_PASSORD_KEY });
+    const clientSecretFetcher = useFetcher({ key: FETCH_CLIENT_SECRET_KEY });
 
     const clientSecret = clientSecretFetcher.data ? (clientSecretFetcher.data as string) : '';
-    const [passord, setPassord] = useState('');
+    const passord = passordFetcher.data ? (passordFetcher.data as string) : '';
 
-    console.log(adapter);
+    // console.log(adapter);
     const allDetails = {
         username: adapter.name,
         password: passord,
@@ -90,12 +87,16 @@ export function AdapterDetail({
                                         ''
                                     )}
                                 />
-                                <ValueDisplayPanel label="Passord" value={passord} />
+                                <ValueDisplayPanel
+                                    label="Passord"
+                                    value={passord}
+                                    fetcherKey={FETCH_PASSORD_KEY}
+                                />
 
                                 <ValueDisplayPanel
                                     label="Klient Hemmelighet"
                                     value={clientSecret}
-                                    name={adapter.name}
+                                    fetcherKey={FETCH_CLIENT_SECRET_KEY}
                                 />
                                 <div className="h-10"></div>
                                 <HStack justify={'center'}>

@@ -5,13 +5,13 @@ import { useFetcher } from '@remix-run/react';
 export function ValueDisplayPanel({
     label,
     value,
-    name,
+    fetcherKey,
 }: {
     label: string;
     value: string;
-    name?: string;
+    fetcherKey?: string;
 }) {
-    const fetcher = useFetcher({ key: 'fetch-client-secret' });
+    const fetcher = useFetcher({ key: fetcherKey });
 
     return (
         <HStack className="flex !justify-between !items-center">
@@ -20,8 +20,9 @@ export function ValueDisplayPanel({
                 <BodyShort>{value}</BodyShort>
             </HStack>
             <HStack className=" flex !items-center">
-                {name && (
-                    <fetcher.Form method="post" action={`/adapter/${name}`}>
+                {fetcherKey && (
+                    <fetcher.Form method="post">
+                        <input type="hidden" name="type" value={label} />
                         <Button
                             type="submit"
                             variant="tertiary-neutral"
