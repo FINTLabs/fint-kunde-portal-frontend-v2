@@ -80,6 +80,11 @@ export const helpData: HelpDataItem[] = [
         description: 'En relasjonstest sjekker at alle relasjonene i en komponent virker',
     },
     {
+        id: 'hendelseslogg',
+        title: 'Hendelseslogg',
+        description: 'This needs to be written!!!!',
+    },
+    {
         id: 'samtykke',
         title: 'Samtykke',
         description:
