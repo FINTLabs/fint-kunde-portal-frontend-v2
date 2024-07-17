@@ -5,6 +5,7 @@ import {
     HStack,
     Heading,
     Label,
+    Modal,
     Select,
     TextField,
     VStack,
@@ -23,7 +24,7 @@ import {
 } from './constants';
 import Autentisering from '../../components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 function EditableTextField({
     label,
@@ -55,6 +56,39 @@ function EditableTextField({
                 )}
             </VStack>
         </HStack>
+    );
+}
+
+function DeleteAdapter() {
+    const ref = useRef<HTMLDialogElement>(null);
+
+    return (
+        <>
+            <Button
+                variant="danger"
+                onClick={() => ref.current?.showModal()}
+                icon={<TrashIcon aria-hidden />}>
+                Slett
+            </Button>
+            <Modal ref={ref} header={{ heading: 'Slett adapter' }}>
+                <Modal.Body>
+                    <BodyLong>Er du sikker på at du vil slette dette adapteret?</BodyLong>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        type="button"
+                        variant="danger"
+                        onClick={() => {
+                            // slette adapter og gå tilbake til listen over alle adapter
+                        }}>
+                        Ja, jeg er sikker
+                    </Button>
+                    <Button type="button" onClick={() => ref.current?.close()}>
+                        Avbryt
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
     );
 }
 
@@ -180,12 +214,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                     selectedComponents={selectedComponents}
                                 />
                             </VStack>
-                            <Button
-                                variant="danger"
-                                onClick={() => alert('Display a modal')}
-                                icon={<TrashIcon aria-hidden />}>
-                                Slett
-                            </Button>
+                            <DeleteAdapter></DeleteAdapter>
                         </VStack>
                     </Box>
                 </VStack>
