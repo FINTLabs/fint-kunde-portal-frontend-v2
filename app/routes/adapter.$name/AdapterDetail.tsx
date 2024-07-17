@@ -167,7 +167,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                                         adapterShortDesc.trim() !==
                                                             adapter.shortDescription
                                                     ) {
-                                                        const res = submit(
+                                                        submit(
                                                             {
                                                                 note: adapterNote,
                                                                 shortDescription: adapterShortDesc,
@@ -178,9 +178,6 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                                                 navigate: false,
                                                             }
                                                         );
-
-                                                        console.log('res');
-                                                        console.log(res);
                                                     }
                                                 }
                                                 setIsEditing(!isEditing);
