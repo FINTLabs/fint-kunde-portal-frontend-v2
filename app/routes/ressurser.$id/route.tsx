@@ -49,7 +49,7 @@ export default function Index() {
             <Box padding={'2'}>
                 <HStack>
                     <VStack>
-                        <BackButton to={`/adaptere`} />
+                        <BackButton to={`/ressurser`} />
                     </VStack>
                     <VStack className="flex flex-grow">
                         <Box className="w-full" padding="6" borderRadius="large" shadow="small">

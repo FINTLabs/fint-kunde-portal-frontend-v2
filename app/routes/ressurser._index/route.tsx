@@ -7,7 +7,8 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AccessApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
-import { Table } from '@navikt/ds-react';
+import { BodyShort, Heading, Table } from '@navikt/ds-react';
+import { ChevronRightIcon } from '@navikt/aksel-icons';
 
 export const meta: MetaFunction = () => {
     return [
@@ -45,8 +46,8 @@ export default function Index() {
             <Table>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
+                        <Table.HeaderCell scope="col"></Table.HeaderCell>
+                        <Table.HeaderCell scope="col"></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -55,8 +56,13 @@ export default function Index() {
                             key={i + item.dn}
                             className="active:bg-[--a-surface-active] hover:cursor-pointer"
                             onClick={() => handleClick(item.name)}>
-                            <Table.DataCell scope="row">{item.name}</Table.DataCell>
-                            <Table.DataCell scope="row">{item.description}</Table.DataCell>
+                            <Table.DataCell>
+                                <Heading size="small">{item.name}</Heading>
+                                <BodyShort textColor="subtle">{item.description}</BodyShort>
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                <ChevronRightIcon title="a11y-title" fontSize="1.5rem" />
+                            </Table.DataCell>
                         </Table.Row>
                     ))}
                 </Table.Body>
