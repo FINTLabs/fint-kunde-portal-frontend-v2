@@ -11,6 +11,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const orgName = await getSelectedOprganization(request);
 
     // Send api request here
-    const response = await AssetApi.updateAccess()
+    console.log(id);
+    console.log(description);
+    const response = await AssetApi.updateaccess({ name: id, description: description }, orgName);
+    console.log('response');
+    console.log(response);
     return redirect(`/ressurser/${id}`);
 };
