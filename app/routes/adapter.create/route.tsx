@@ -8,7 +8,7 @@ import {
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { Form, useLoaderData, useParams } from '@remix-run/react';
+import { Form, redirect, useLoaderData, useParams } from '@remix-run/react';
 import adapters from '~/routes/adaptere/adapterList.json';
 import { IAdapter, IPartialAdapter, IUserSession } from '~/types/types';
 import { getSession } from '~/utils/session';
@@ -17,7 +17,7 @@ import { Box, Button, FormSummary, HStack, TextField, Textarea } from '@navikt/d
 import AdapterAPI from '~/api/AdapterApi';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-    console.log('Am in loader');
+    console.log('Am in create');
     // const session = await getSession(request.headers.get('Cookie'));
     // const userSession: UserSession | undefined = session.get('user-session');
     // if (!userSession) {
@@ -84,14 +84,6 @@ export default function Index() {
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
 
-    // create adapter based on formaData;
-
-    console.log('formData');
-    console.log(formData);
-    console.log(formData.get('name'));
-    console.log(formData.get('description'));
-    console.log(formData.get('detailedInfo'));
-
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
     const detailedInfo = formData.get('detailedInfo') as string;
@@ -112,6 +104,16 @@ export async function action({ request }: ActionFunctionArgs) {
         newAdapter,
         userSession.selectedOrganization.name
     );
-    // check if user was created successfully
-    return json({ ok: true });
+
+    if (response.status === 201) {
+        const newAdapter = (await response.json()) as IAdapter;
+        return redirect(`/adapter/${newAdapter.name}`);
+    } else {
+        const responseData = await response.json();
+        return json({
+            error: 'Unable to create adapter',
+            message: responseData.error,
+            status: response.status,
+        });
+    }
 }

@@ -74,14 +74,17 @@ export async function postRequest(
     }
 
     const response = await fetch(URL, requestOptions);
-    if (response.status === 201 && adapter) {
-        return 'Opprettet adapteret ' + adapter.name;
-    } else if (response.status === 302 && adapter) {
-        return 'Adaptere finnes fra før av ' + adapter.name;
-    } else {
-        error(`Error running ${functionName}, status:`, response.status);
-        return null;
-    }
+    return response;
+    // if (response.status === 201) {
+    //     return await response.json();
+    // } else if (response.status === 302 && adapter) {
+    //     return 'Adapteren finnes fra før av ' + adapter.name;
+    // } else {
+    //     console.error(response);
+    //     error(`Error running ${functionName}, status:`, response.status);
+    //     error(`Error running ${functionName}, status:`, response.statusText);
+    //     return null;
+    // }
 }
 
 async function getRequest(
