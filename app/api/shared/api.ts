@@ -60,6 +60,9 @@ export async function putRequest(
     log(`RequestOptions: `, requestOptions);
 
     const response = await fetch(URL, requestOptions);
+    console.log('reponse in PUT');
+    console.log(response);
+    console.log(await response.json());
     if (response.status === 200) {
         const json = await response.json();
         return json;

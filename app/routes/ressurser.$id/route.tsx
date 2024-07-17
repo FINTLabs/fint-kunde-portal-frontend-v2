@@ -38,6 +38,7 @@ export default function Index() {
         { name: `${id}`, link: `/ressurser/${id}` },
     ];
     const assetData = useLoaderData<IAsset>();
+    const navigate = useNavigate();
 
     // console.log(assetData);
     return (

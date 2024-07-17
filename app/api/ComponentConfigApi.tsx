@@ -13,7 +13,7 @@ class ComponentConfigApi {
     // }
 
     static async getComponentConfigs() {
-        const functionName = 'getEntities';
+        const functionName = 'getComponentConfigs';
         const URL = `${API_URL}/api/components/configurations`;
         return await request(URL, functionName);
     }
