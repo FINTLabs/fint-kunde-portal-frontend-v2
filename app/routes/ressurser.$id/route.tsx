@@ -1,20 +1,12 @@
 import { type LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { LayersIcon } from '@navikt/aksel-icons';
-import React from 'react';
-import { json, useLoaderData, useNavigate } from '@remix-run/react';
+import { json, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
-import ClientTable from '~/routes/klienter._index/ClientTable';
 import { IAsset } from '~/types/Asset';
-import { getSession } from '~/utils/session';
-import { IUserSession } from '~/types/types';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
-import { Box, HStack, VStack, Button, Heading } from '@navikt/ds-react';
-import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import Autentisering from '~/components/shared/Autentisering';
-import { DeleteAdapter } from '../adapter.$name/DeleteAdapter';
-import ComponentsTable from '../komponenter._index/ComponentsTable';
+import { Box, HStack, VStack, Button } from '@navikt/ds-react';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { DetailView } from './DetailView';
 
@@ -39,7 +31,12 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 };
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter._index' }];
+    const { id } = useParams();
+
+    const breadcrumbs = [
+        { name: 'Ressurser', link: '/ressurser' },
+        { name: `${id}`, link: `/ressurser/${id}` },
+    ];
     const assetData = useLoaderData<IAsset>();
     const navigate = useNavigate();
 

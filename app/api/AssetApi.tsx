@@ -9,6 +9,12 @@ class AssetApi {
         return request(URL, functionName);
     }
 
+    static async updateAccess(access: IPartialAsset, organisationName: string) {
+        const functionName = 'updateAccess';
+        const URL = `${API_URL}/api/assets/${organisationName}/${access.name}`;
+        return await request(URL, functionName, 'PUT', 'json', access);
+    }
+
     static async getAssetById(orgName: string, assetId: string) {
         const functionName = 'getAssetById';
         const URL = `${API_URL}/api/assets/${orgName}/${assetId}`;
@@ -58,11 +64,6 @@ class AssetApi {
     //     }
     // }
     //
-    static async updateaccess(access: IPartialAsset, organisationName: string) {
-        const functionName = 'updateAdapter';
-        const URL = `${API_URL}/api/accesses/${organisationName}/${access.name}`;
-        return await request(URL, functionName, 'PUT', 'json', access);
-    }
 
     // static async updateAccess(access, organisation) {
     //     const url = `${API_URL}/api/accesses/${organisation}/${access.name}`;
