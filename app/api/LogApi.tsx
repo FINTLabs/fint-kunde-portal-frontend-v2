@@ -1,12 +1,19 @@
-import { API_URL } from '~/api/constants';
 import { request } from '~/api/shared/api';
-//TODO api url not working?
+import { log } from '~/utils/logger';
+
+const API_URL = process.env.API_URL;
 
 class LogApi {
     static async getLogs(environment: string, organisation: string, query: string) {
         const functionName = 'getLogs';
         const URL = `${API_URL}/api/events/${organisation}/${environment}/${query}`;
-        return await request(URL, functionName);
+
+        const results = await request(URL, functionName);
+        log('results from request:', results);
+        // if (results) return results;
+        // else return 'no logs found';
+        return results;
     }
 }
+
 export default LogApi;
