@@ -116,7 +116,6 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const [adapterShortDesc, setAdapterShortDesc] = useState(adapter.shortDescription);
     const [adapterNote, setAdapterNote] = useState(adapter.note);
 
-    const fetcher = useFetcher({ key: FETCHER_UPDATE_ADAPTER });
     const submit = useSubmit();
 
     return (
