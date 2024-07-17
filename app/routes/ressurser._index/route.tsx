@@ -46,7 +46,8 @@ export default function Index() {
             <Table>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell scope="col"></Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
                         <Table.HeaderCell scope="col"></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -57,11 +58,17 @@ export default function Index() {
                             className="active:bg-[--a-surface-active] hover:cursor-pointer"
                             onClick={() => handleClick(item.name)}>
                             <Table.DataCell>
-                                <Heading size="small">{item.name}</Heading>
+                                {/* <Heading size="small">{item.name}</Heading> */}
+                                <BodyShort>{item.name}</BodyShort>
+
+                                {/* <BodyShort textColor="subtle">{item.description}</BodyShort> */}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                {/* <Heading size="small">{item.name}</Heading> */}
                                 <BodyShort textColor="subtle">{item.description}</BodyShort>
                             </Table.DataCell>
                             <Table.DataCell>
-                                <ChevronRightIcon title="a11y-title" fontSize="1.5rem" />
+                                <ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />
                             </Table.DataCell>
                         </Table.Row>
                     ))}
