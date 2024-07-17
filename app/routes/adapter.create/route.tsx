@@ -111,8 +111,7 @@ export async function action({ request }: ActionFunctionArgs) {
     } else {
         const responseData = await response.json();
         return json({
-            error: 'Unable to create adapter',
-            message: responseData.error,
+            error: `Unable to create adapter: ${responseData.error}`,
             status: response.status,
         });
     }

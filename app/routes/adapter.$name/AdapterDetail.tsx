@@ -11,7 +11,7 @@ import {
     VStack,
 } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
-import { useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
+import { Form, useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { PencilIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { TrashIcon, FloppydiskIcon } from '@navikt/aksel-icons';
@@ -75,14 +75,12 @@ function DeleteAdapter() {
                     <BodyLong>Er du sikker på at du vil slette dette adapteret?</BodyLong>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        type="button"
-                        variant="danger"
-                        onClick={() => {
-                            // slette adapter og gå tilbake til listen over alle adapter
-                        }}>
-                        Ja, jeg er sikker
-                    </Button>
+                    <Form action="delete" method="post" navigate={false}>
+                        <Button type="submit" variant="danger">
+                            Ja, jeg er sikker
+                        </Button>
+                    </Form>
+
                     <Button type="button" onClick={() => ref.current?.close()}>
                         Avbryt
                     </Button>

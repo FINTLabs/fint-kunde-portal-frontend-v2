@@ -5,7 +5,7 @@ import { getSelectedOprganization } from '~/utils/selectedOrganization';
 export const action = async ({ request, params }: ActionFunctionArgs) => {
     const actionName = 'action update';
     const formData = await request.formData();
-    const name = getRequstParam(params.name, 'name');
+    const name = getRequestParam(params.name, 'name');
     const shortDescription = getFormData(
         formData.get('shortDescription'),
         'shortDescription',
@@ -25,7 +25,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     return redirect(`/adapter/${params.name}`);
 };
 
-function getRequstParam(value: string | undefined, name: string) {
+function getRequestParam(value: string | undefined, name: string) {
     if (!value)
         throw new Response(`Failed to update. Invalid ${name} in request params`, { status: 400 });
 

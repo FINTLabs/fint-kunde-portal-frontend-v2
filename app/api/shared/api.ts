@@ -32,6 +32,9 @@ export async function request(
         if (requestMethod === 'PUT') {
             return await putRequest(URL, functionName, requestOptions, adapter);
         }
+        if (requestMethod === 'DELETE') {
+            return await postRequest(URL, functionName, requestOptions, adapter);
+        }
     } catch (err) {
         error(`Error running ${functionName}:`, err);
         throw new Error(`Error running ${functionName}`);
@@ -75,16 +78,6 @@ export async function postRequest(
 
     const response = await fetch(URL, requestOptions);
     return response;
-    // if (response.status === 201) {
-    //     return await response.json();
-    // } else if (response.status === 302 && adapter) {
-    //     return 'Adapteren finnes fra før av ' + adapter.name;
-    // } else {
-    //     console.error(response);
-    //     error(`Error running ${functionName}, status:`, response.status);
-    //     error(`Error running ${functionName}, status:`, response.statusText);
-    //     return null;
-    // }
 }
 
 async function getRequest(
