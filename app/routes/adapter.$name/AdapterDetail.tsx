@@ -1,15 +1,4 @@
-import {
-    BodyLong,
-    Box,
-    Button,
-    HStack,
-    Heading,
-    Label,
-    Modal,
-    Select,
-    TextField,
-    VStack,
-} from '@navikt/ds-react';
+import { BodyLong, Box, Button, HStack, Heading, Modal, Select, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { Form, useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
@@ -24,71 +13,9 @@ import {
 } from './constants';
 import Autentisering from '../../components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
-import { useEffect, useRef, useState } from 'react';
-
-function EditableTextField({
-    label,
-    value,
-    isEditing,
-    setValue,
-}: {
-    label: string;
-    value: string;
-    isEditing: boolean;
-    setValue: React.Dispatch<React.SetStateAction<string>>;
-}) {
-    const maxChars = 94;
-    return (
-        <HStack justify={'space-between'}>
-            <VStack className="h-20">
-                {isEditing ? (
-                    <TextField
-                        value={value}
-                        type="text"
-                        htmlSize={value.length + 10 < maxChars ? value.length + 10 : maxChars}
-                        label={label}
-                        onChange={(e) => setValue(e.target.value)}></TextField>
-                ) : (
-                    <VStack justify={'space-between'} className="">
-                        <Label>{label}</Label>
-                        <BodyLong className="min-h-15 pt-3">{value}</BodyLong>
-                    </VStack>
-                )}
-            </VStack>
-        </HStack>
-    );
-}
-
-function DeleteAdapter() {
-    const ref = useRef<HTMLDialogElement>(null);
-
-    return (
-        <>
-            <Button
-                variant="danger"
-                onClick={() => ref.current?.showModal()}
-                icon={<TrashIcon aria-hidden />}>
-                Slett
-            </Button>
-            <Modal ref={ref} header={{ heading: 'Slett adapter' }}>
-                <Modal.Body>
-                    <BodyLong>Er du sikker på at du vil slette dette adapteret?</BodyLong>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Form action="delete" method="post" navigate={false}>
-                        <Button type="submit" variant="danger">
-                            Ja, jeg er sikker
-                        </Button>
-                    </Form>
-
-                    <Button type="button" onClick={() => ref.current?.close()}>
-                        Avbryt
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </>
-    );
-}
+import { useState } from 'react';
+import { EditableTextField } from './EditableTextField';
+import { DeleteAdapter } from './DeleteAdapter';
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
@@ -208,7 +135,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                     selectedComponents={selectedComponents}
                                 />
                             </VStack>
-                            <DeleteAdapter></DeleteAdapter>
+                            <DeleteAdapter />
                         </VStack>
                     </Box>
                 </VStack>
