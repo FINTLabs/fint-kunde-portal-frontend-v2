@@ -10,11 +10,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const description = getFormData(formData.get('description'), 'description', actionName);
     const orgName = await getSelectedOprganization(request);
 
-    // Send api request here
-    console.log(id);
-    console.log(description);
     const response = await AssetApi.updateAccess({ name: id, description: description }, orgName);
-    console.log('response in action');
-    console.log(response);
+    // console.log('response in action');
+    // console.log(response);
     return redirect(`/ressurser/${id}`);
 };
