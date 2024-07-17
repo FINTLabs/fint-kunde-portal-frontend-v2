@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { type LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { LayersIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import { json, useLoaderData } from '@remix-run/react';
@@ -9,6 +9,7 @@ import ClientTable from '~/routes/klienter._index/ClientTable';
 import { IAsset } from '~/types/Asset';
 import { getSession } from '~/utils/session';
 import { IUserSession } from '~/types/types';
+import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 export const meta: MetaFunction = () => {
     return [
@@ -17,17 +18,12 @@ export const meta: MetaFunction = () => {
     ];
 };
 
-export const loader = async ({ params }: LoaderFunctionArgs, request: Request) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const id = params.id || '';
 
     try {
-        const session = await getSession(request.headers.get('Cookie'));
-        const userSession = session.get('user-session') as IUserSession;
-        if (!userSession?.selectedOrganization?.name) {
-            return new Response('Selected organization not found', { status: 400 });
-        }
-        const assetData = await AssetApi.getAssetById(userSession.selectedOrganization.name, id);
-
+        const orgName = await getSelectedOprganization(request);
+        const assetData = await AssetApi.getAssetById(orgName, id);
         return json(assetData);
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -39,11 +35,12 @@ export default function Index() {
     const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter._index' }];
     const assetData = useLoaderData<IAsset>();
 
+    console.log(assetData);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="assets" />
-            <ClientTable clients={assetData.clients} />
+            {/* <ClientTable clients={assetData.clients} /> */}
         </>
     );
 }

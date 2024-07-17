@@ -12,20 +12,21 @@ class AssetApi {
     static async getAssetById(orgName: string, assetId: string) {
         const functionName = 'getAssetById';
         const URL = `${API_URL}/api/assets/${orgName}/${assetId}`;
-        return request(URL, functionName)
-            .then((assets: IAsset[]) => {
-                const asset = assets.find((item) => item.name === assetId);
-                if (asset) {
-                    return asset;
-                } else {
-                    console.error('Asset not found, assetId:', assetId);
-                    return null;
-                }
-            })
-            .catch((err) => {
-                console.error('Error fetching asset:', err);
-                return null;
-            });
+        return request(URL, functionName);
+        // .then((assets: IAsset[]) => {
+        //     console.log('assets: ', assets);
+        //     const asset = assets.find((item) => item.name === assetId);
+        //     if (asset) {
+        //         return asset;
+        //     } else {
+        //         console.error('Asset not found, assetId:', assetId);
+        //         return null;
+        //     }
+        // })
+        // .catch((err) => {
+        //     console.error('Error fetching asset:', err);
+        //     return null;
+        // });
     }
 
     // static async setAccess(access, organisation) {
