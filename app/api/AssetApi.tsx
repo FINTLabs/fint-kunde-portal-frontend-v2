@@ -58,22 +58,31 @@ class AssetApi {
     //     }
     // }
     //
+    static async updateaccess(
+        access: { name: string; description: string },
+        organisationName: string
+    ) {
+        const functionName = 'updateAdapter';
+        const URL = `${API_URL}/api/accesses/${organisationName}/${access.name}`;
+        return await request(URL, functionName, 'PUT', 'json', access);
+    }
+
     // static async updateAccess(access, organisation) {
     //     const url = `${API_URL}/api/accesses/${organisation}/${access.name}`;
     //     log('Updating access information', url);
-    //
+
     //     try {
     //         const response = await fetch(url, {
     //             method: 'PUT',
     //             credentials: 'same-origin',
     //             headers: {
-    //                 'Accept': 'application/json',
+    //                 Accept: 'application/json',
     //                 'Content-Type': 'application/json',
     //                 'x-nin': process.env.PERSONALNUMBER || '',
     //             },
     //             body: JSON.stringify(access),
     //         });
-    //
+
     //         if (response.ok) {
     //             return await response.json();
     //         } else {

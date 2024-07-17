@@ -1,6 +1,7 @@
 import { ActionFunctionArgs, json, redirect } from '@remix-run/node';
 import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getRequestParam, getFormData } from '../../utils/requestUtils';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
     const actionName = 'action update';
@@ -22,21 +23,5 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         },
         orgName
     );
-    return redirect(`/adapter/${params.name}`);
+    return redirect(`/adapter/${name}`);
 };
-
-function getRequestParam(value: string | undefined, name: string) {
-    if (!value)
-        throw new Response(`Failed to update. Invalid ${name} in request params`, { status: 400 });
-
-    return value;
-}
-
-function getFormData(value: FormDataEntryValue | null, name: string, actionName: string) {
-    if (!value)
-        throw new Response(`Failed in ${actionName}. Invalid ${name} in formData`, {
-            status: 400,
-        });
-
-    return value;
-}

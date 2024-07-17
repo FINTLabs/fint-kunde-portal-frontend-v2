@@ -115,7 +115,6 @@ export interface IRole {
     description: string;
     uri: string | null;
 }
-
 export interface IPartialAdapter {
     name: string;
     shortDescription: string;
