@@ -7,7 +7,7 @@ import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
 import { Box, HStack, VStack } from '@navikt/ds-react';
-import { DetailView } from './DetailView';
+import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
 
 export const meta: MetaFunction = () => {
@@ -54,7 +54,7 @@ export default function Index() {
                     <VStack className="flex flex-grow">
                         <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                             <VStack gap="5">
-                                <DetailView asset={assetData} />
+                                <GeneralDetailView asset={assetData} />
                             </VStack>
                         </Box>
                     </VStack>

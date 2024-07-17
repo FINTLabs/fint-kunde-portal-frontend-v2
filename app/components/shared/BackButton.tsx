@@ -7,7 +7,7 @@ export function BackButton({ to }: { to: string }) {
 
     return (
         <Button
-            icon={<ArrowLeftIcon title="tilbake" fontSize="1.5rem" />}
+            icon={<ArrowLeftIcon title="Gå tilbake" fontSize="1.5rem" />}
             variant="tertiary"
             onClick={() => navigate(to)}></Button>
     );

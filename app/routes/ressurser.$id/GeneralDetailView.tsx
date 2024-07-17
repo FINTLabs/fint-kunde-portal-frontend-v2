@@ -6,7 +6,7 @@ import { IAsset } from '~/types/Asset';
 import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 import { ToggleEditSaveButton } from '~/components/shared/EditSaveButton';
 
-export function DetailView({ asset }: { asset: IAsset }) {
+export function GeneralDetailView({ asset }: { asset: IAsset }) {
     const [isEditing, setIsEditing] = useState(false);
     const [description, setDescription] = useState(asset.description);
 

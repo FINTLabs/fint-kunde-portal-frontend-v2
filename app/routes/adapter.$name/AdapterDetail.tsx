@@ -9,7 +9,7 @@ import { FETCHER_PASSORD_KEY, FETCHER_CLIENT_SECRET_KEY } from './constants';
 import Autentisering from '../../components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { DeleteAdapter } from './DeleteAdapter';
-import { DetailView } from './DetailView';
+import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
@@ -43,7 +43,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                 <VStack className="flex flex-grow">
                     <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                         <VStack gap="5">
-                            <DetailView adapter={adapter} />
+                            <GeneralDetailView adapter={adapter} />
                             <Divider className="pt-3" />
                             <Autentisering
                                 name={adapter.name}

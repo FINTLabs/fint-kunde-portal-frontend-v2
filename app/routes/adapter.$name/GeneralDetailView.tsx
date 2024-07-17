@@ -5,7 +5,7 @@ import { IAdapter } from '~/types/types';
 import { EditableTextField } from '../../components/shared/EditableTextField';
 import { PencilIcon, FloppydiskIcon } from '@navikt/aksel-icons';
 
-export function DetailView({ adapter }: { adapter: IAdapter }) {
+export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
     const [isEditing, setIsEditing] = useState(false);
     const [adapterShortDesc, setAdapterShortDesc] = useState(adapter.shortDescription);
     const [adapterNote, setAdapterNote] = useState(adapter.note);
