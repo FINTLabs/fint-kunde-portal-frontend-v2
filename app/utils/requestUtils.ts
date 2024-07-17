@@ -10,5 +10,5 @@ export function getFormData(value: FormDataEntryValue | null, name: string, acti
             status: 400,
         });
 
-    return value;
+    return value as string;
 }

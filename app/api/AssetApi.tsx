@@ -1,5 +1,5 @@
 import { API_URL } from './constants';
-import { IAsset } from '~/types/Asset';
+import { IAsset, IPartialAsset } from '~/types/Asset';
 import { request } from '~/api/shared/api';
 
 class AssetApi {
@@ -58,10 +58,7 @@ class AssetApi {
     //     }
     // }
     //
-    static async updateaccess(
-        access: { name: string; description: string },
-        organisationName: string
-    ) {
+    static async updateaccess(access: IPartialAsset, organisationName: string) {
         const functionName = 'updateAdapter';
         const URL = `${API_URL}/api/accesses/${organisationName}/${access.name}`;
         return await request(URL, functionName, 'PUT', 'json', access);

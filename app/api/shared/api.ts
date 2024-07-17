@@ -58,6 +58,9 @@ export async function putRequest(
     }
 
     const response = await fetch(URL, requestOptions);
+    console.log('reponse in PUT');
+    console.log(response);
+    console.log(await response.json());
     if (response.status === 200) {
         return await response.json();
     } else {
