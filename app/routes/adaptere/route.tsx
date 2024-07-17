@@ -3,17 +3,12 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Tabs, VStack } from '@navikt/ds-react';
-import { CogRotationIcon } from '@navikt/aksel-icons';
-import { NotePencilDashIcon } from '@navikt/aksel-icons';
 import { log } from '~/utils/logger';
-import { getSession } from '~/utils/session';
 import AdapterAPI from '~/api/AdapterApi';
 import { useLoaderData, useNavigate } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
-import { tabInfo } from './constants';
 import { ErrorBox } from '~/components/shared/ErrorBox';
 import { PlusIcon } from '@navikt/aksel-icons';
-import mockAdapters from './adapterList.json';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
 import { AdapterList } from '~/components/shared/AdapterList';
 
