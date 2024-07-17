@@ -56,47 +56,6 @@ export function DetailView({ asset }: { asset: IAsset }) {
                     />
                     <ToggleEditSaveButton isEditing={isEditing} onClick={toggleEditSave} />
                 </HStack>
-
-                {/* <EditableTextField
-                    label={'Note'}
-                    value={adapterNote}
-                    isEditing={isEditing}
-                    setValue={setAdapterNote}
-                />
-                <HStack className="w-full" align={'end'} justify={'end'}>
-                    <Button
-                        icon={
-                            isEditing ? (
-                                <FloppydiskIcon title="Lagre" />
-                            ) : (
-                                <PencilIcon title="Rediger" />
-                            )
-                        }
-                        variant="tertiary"
-                        type="submit"
-                        onClick={() => {
-                            if (isEditing) {
-                                if (
-                                    adapterNote.trim() !== adapter.note ||
-                                    adapterShortDesc.trim() !== adapter.shortDescription
-                                ) {
-                                    submit(
-                                        {
-                                            note: adapterNote,
-                                            shortDescription: adapterShortDesc,
-                                        },
-                                        {
-                                            method: 'POST',
-                                            action: 'update',
-                                            navigate: false,
-                                        }
-                                    );
-                                }
-                            }
-                            setIsEditing(!isEditing);
-                        }}
-                    />
-                </HStack> */}
             </HStack>
         </VStack>
     );
