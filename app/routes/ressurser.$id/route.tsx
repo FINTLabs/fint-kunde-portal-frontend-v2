@@ -6,9 +6,9 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
-import { Box, HStack, VStack, Button } from '@navikt/ds-react';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
+import { Box, HStack, VStack } from '@navikt/ds-react';
 import { DetailView } from './DetailView';
+import { BackButton } from '~/components/shared/BackButton';
 
 export const meta: MetaFunction = () => {
     return [
@@ -38,9 +38,8 @@ export default function Index() {
         { name: `${id}`, link: `/ressurser/${id}` },
     ];
     const assetData = useLoaderData<IAsset>();
-    const navigate = useNavigate();
 
-    console.log(assetData);
+    // console.log(assetData);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -50,10 +49,7 @@ export default function Index() {
             <Box padding={'2'}>
                 <HStack>
                     <VStack>
-                        <Button
-                            icon={<ArrowLeftIcon title="a11y-title" fontSize="1.5rem" />}
-                            variant="tertiary"
-                            onClick={() => navigate(`/adaptere`)}></Button>
+                        <BackButton to={`/adaptere`} />
                     </VStack>
                     <VStack className="flex flex-grow">
                         <Box className="w-full" padding="6" borderRadius="large" shadow="small">

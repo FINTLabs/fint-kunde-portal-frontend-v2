@@ -10,6 +10,7 @@ import Autentisering from '../../components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { DeleteAdapter } from './DeleteAdapter';
 import { DetailView } from './DetailView';
+import { BackButton } from '~/components/shared/BackButton';
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
@@ -37,10 +38,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
         <Box padding={'2'}>
             <HStack>
                 <VStack>
-                    <Button
-                        icon={<ArrowLeftIcon title="a11y-title" fontSize="1.5rem" />}
-                        variant="tertiary"
-                        onClick={() => navigate(`/adaptere`)}></Button>
+                    <BackButton to={`/adaptere`} />
                 </VStack>
                 <VStack className="flex flex-grow">
                     <Box className="w-full" padding="6" borderRadius="large" shadow="small">

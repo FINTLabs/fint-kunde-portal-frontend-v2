@@ -30,6 +30,8 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+
+    // TODO: get adapter based on ID.
     const { adapters } = useLoaderData<{ adapters: IAdapter[] }>();
 
     const { name } = useParams();
