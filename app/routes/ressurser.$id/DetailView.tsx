@@ -1,11 +1,8 @@
-import { VStack, HStack, Heading, Button, Label, BodyLong } from '@navikt/ds-react';
+import { VStack, HStack, Heading } from '@navikt/ds-react';
 import { useSubmit } from '@remix-run/react';
 import { useState } from 'react';
-import { IAdapter } from '~/types/types';
 import { EditableTextField } from '../../components/shared/EditableTextField';
-import { PencilIcon, FloppydiskIcon } from '@navikt/aksel-icons';
 import { IAsset } from '~/types/Asset';
-import { ValueDisplayPanel } from '../adapter.$name/ValueDisplayPanel';
 import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 import { ToggleEditSaveButton } from '~/components/shared/EditSaveButton';
 
@@ -47,7 +44,7 @@ export function DetailView({ asset }: { asset: IAsset }) {
                     <LabelValuePanel label="Navn" value={asset.name} />
                 </VStack>
 
-                <HStack className="w-full bg-red-300" align={'end'} justify={'space-between'}>
+                <HStack className="w-full" align={'end'} justify={'space-between'}>
                     <EditableTextField
                         label={'Beskrivelse'}
                         value={description}
