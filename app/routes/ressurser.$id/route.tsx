@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { ActionFunctionArgs, type LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { LayersIcon } from '@navikt/aksel-icons';
 import { json, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -20,6 +20,15 @@ export const meta: MetaFunction = () => {
         { title: 'Ressurser' },
         { name: 'description', content: 'Liste over ressurser._index' },
     ];
+};
+
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+    const actionName = 'action XXX???';
+
+    console.log(params);
+    console.log(request);
+    console.log('ACTTIONNNN');
+    return null;
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
