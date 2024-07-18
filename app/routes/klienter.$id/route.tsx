@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import ClientDetails from '~/routes/klienter.$id/ClientDetails';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
-import SecuritySection from '~/routes/klienter.$id/SecuritySection';
 import type { ActionFunctionArgs } from '@remix-run/node';
 import ClientApi from '~/api/ClientApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading, HGrid } from '@navikt/ds-react';
+import { ArrowLeftIcon, FloppydiskIcon, PencilIcon, TokenIcon } from '@navikt/aksel-icons';
+import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
@@ -17,8 +16,6 @@ import { getSelectedOprganization } from '~/utils/selectedOrganization';
 import Autentisering from '~/components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from '../adapter.$name/constants';
-import { cli } from '@remix-run/dev';
-import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
 
 // @ts-ignore
 export async function loader({ request, params }: ActionFunctionArgs) {
@@ -62,6 +59,8 @@ export default function Index() {
         idpUri: 'https://idp.felleskomponent.no/nidp/oauth/nam/token',
         assetIds: client.assetId,
     };
+    const [isEditing, setIsEditing] = useState(false);
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -76,8 +75,26 @@ export default function Index() {
                 </Box>
 
                 <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                    <Heading size={'medium'}>Deatails</Heading>
-                    <ClientDetails client={client} />
+                    <HStack>
+                        <Heading size={'medium'}>Details</Heading>
+                        <Spacer />
+                        {isEditing ? (
+                            <Button
+                                icon={<FloppydiskIcon title="Rediger" />}
+                                variant="tertiary"
+                                onClick={() => setIsEditing(false)}
+                            />
+                        ) : (
+                            <Button
+                                icon={<PencilIcon title="Rediger" />}
+                                variant="tertiary"
+                                onClick={() => setIsEditing(true)}
+                            />
+                        )}
+                    </HStack>
+
+                    <ClientDetails client={client} isEditing={isEditing} />
+
                     <Divider className="pt-3" />
 
                     <Autentisering
@@ -88,7 +105,7 @@ export default function Index() {
                         clientSecret={clientSecret}
                         allDetails={allDetails}
                     />
-                    {/* <SecuritySection client={client} /> */}
+
                     <Divider className="pt-3" />
 
                     <Heading size={'medium'}>Komponenter</Heading>

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Label, HStack, BodyLong, Button, TextField, Switch } from '@navikt/ds-react';
-import { PencilIcon } from '@navikt/aksel-icons';
+import React from 'react';
+import { BodyShort, Checkbox, CheckboxGroup, HStack, Label, Tag, VStack } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 
 interface ClientComponentProps {
@@ -8,76 +7,76 @@ interface ClientComponentProps {
 }
 
 const ClientDetails: React.FC<ClientComponentProps> = ({ component }) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState({
-        basePath: component.basePath,
-        openData: component.openData,
-        common: component.common,
-    });
+    const selectedValuesEnv = [];
+    if (component.inProduction) selectedValuesEnv.push('api');
+    if (component.inPlayWithFint) selectedValuesEnv.push('pwf');
+    if (component.inBeta) selectedValuesEnv.push('beta');
 
-    const handleEditClick = () => {
-        setIsEditing(true);
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
-    const handleSaveClick = () => {
-        // Handle the save action (e.g., API call)
-        setIsEditing(false);
-    };
-
-    const handleCancelClick = () => {
-        // Reset the form data to the initial state
-        setFormData({
-            basePath: component.basePath,
-            openData: component.openData,
-            common: component.common,
-        });
-        setIsEditing(false);
-    };
+    const selectedValues = [];
+    if (component.openData) selectedValues.push('openData');
+    if (component.common) selectedValues.push('common');
 
     return (
-        <Box padding="4">
-            {!isEditing ? (
-                <Box>
-                    <HStack className="!flex !justify-between !items-center">
-                        <Label>Sti</Label>
-                        <BodyLong>{component.basePath}</BodyLong>
-                        <Button
-                            icon={<PencilIcon title="Rediger" />}
-                            variant="tertiary"
-                            onClick={handleEditClick}
-                        />
-                    </HStack>
-                    <HStack>
-                        <Label>Åpne data</Label>
-                        <BodyLong>{component.openData}</BodyLong>
-                    </HStack>
-                    <HStack>
-                        <Label>Felles</Label>
-                        <BodyLong>{component.common}</BodyLong>
-                    </HStack>
-                </Box>
-            ) : (
-                <Box>
-                    <TextField label="Har du noen tilbakemeldinger?" />
-                    <Switch>Varsle med SMS</Switch>
-                    <Switch>Varsle med SMS</Switch>
-                    <HStack>
-                        <Button onClick={handleSaveClick}>Lagre</Button>
-                        <Button variant="secondary" onClick={handleCancelClick}>
-                            Avbryt
-                        </Button>
-                    </HStack>
-                </Box>
-            )}
-        </Box>
+        <HStack className="!flex !justify-between !items-center">
+            <VStack gap={'2'}>
+                <HStack gap={'2'}>
+                    <Label>Navn</Label>
+                    <BodyShort>{component.name}</BodyShort>
+                </HStack>
+                <HStack gap={'2'}>
+                    <Label>Beskrivelse</Label>
+                    <BodyShort>{component.description}</BodyShort>
+                </HStack>
+                <HStack gap={'2'}>
+                    <Label>Sti</Label>
+                    <BodyShort>{component.basePath}</BodyShort>
+                </HStack>
+                <HStack gap={'2'}>
+                    <Label>Adapters</Label>
+                    <BodyShort>{component.adapters.length}</BodyShort>
+                </HStack>
+                <HStack gap={'2'}>
+                    <Label>Clients</Label>
+                    <BodyShort>{component.clients.length}</BodyShort>
+                </HStack>
+                <HStack gap={'2'}>
+                    <Label>Organisations</Label>
+                    <BodyShort>{component.organisations.length}</BodyShort>
+                </HStack>
+            </VStack>
+            <VStack>
+                <HStack>
+                    {component.openData && (
+                        <Tag variant="neutral" size={'xsmall'}>
+                            Åpne Data
+                        </Tag>
+                    )}
+                </HStack>
+                <HStack>
+                    <CheckboxGroup
+                        legend="Title"
+                        // onChange={handleChange}
+                        value={selectedValuesEnv}
+                        size="small"
+                        readOnly>
+                        <Checkbox value="openData">Open Data</Checkbox>
+                        <Checkbox value="common">Felles</Checkbox>
+                    </CheckboxGroup>
+                </HStack>
+                <HStack>
+                    <CheckboxGroup
+                        legend="Miljø"
+                        // onChange={handleChange}
+                        value={selectedValuesEnv}
+                        size="small"
+                        readOnly>
+                        <Checkbox value="pwf">Play with FINT</Checkbox>
+                        <Checkbox value="beta">Beta</Checkbox>
+                        <Checkbox value="api">API</Checkbox>
+                    </CheckboxGroup>
+                </HStack>
+            </VStack>
+        </HStack>
     );
 };
 
