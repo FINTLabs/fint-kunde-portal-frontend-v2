@@ -53,7 +53,7 @@ const ComponentsList: React.FC<ComponentsSectionProps> = ({
                                     </Table.DataCell>
                                     <Table.DataCell>
                                         {' '}
-                                        <ChevronRightIcon title="a11y-title" fontSize="1.5rem" />
+                                        <ChevronRightIcon title="Vis detaljer" fontSize="1.5rem" />
                                     </Table.DataCell>
                                 </Table.Row>
                             ))}

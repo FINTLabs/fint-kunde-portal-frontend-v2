@@ -5,7 +5,7 @@ import { IAdapter } from '~/types/types';
 
 interface AdapterSelectorProps {
     items: IAdapter[];
-    selectedItems: string[]; // TODO fix this: It comes as a string like this "cn=frode@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint"
+    selectedItems: string[];
 }
 
 const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems }) => {
