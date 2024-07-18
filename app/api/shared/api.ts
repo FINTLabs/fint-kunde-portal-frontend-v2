@@ -5,7 +5,8 @@ import { error, log } from '~/utils/logger';
 
 export type ReturnType = 'text' | 'json';
 
-export type PostDataType = IPartialAdapter | IPartialAsset;
+export type IMiniAdapter = { name: string };
+export type PostDataType = IPartialAdapter | IPartialAsset | IMiniAdapter;
 
 export async function request(
     URL: string,

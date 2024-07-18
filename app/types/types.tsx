@@ -117,8 +117,8 @@ export interface IRole {
 }
 export interface IPartialAdapter {
     name: string;
-    shortDescription?: string;
-    note?: string;
+    shortDescription: string;
+    note: string;
 }
 export interface IAdapter extends IPartialAdapter {
     dn: string;
