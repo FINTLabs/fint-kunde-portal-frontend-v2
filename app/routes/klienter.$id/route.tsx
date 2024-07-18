@@ -17,9 +17,6 @@ import { getSelectedOprganization } from '~/utils/selectedOrganization';
 import Autentisering from '~/components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from '../adapter.$name/constants';
-import { cli } from '@remix-run/dev';
-import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
-import AdapterAPI from '~/api/AdapterApi';
 
 // @ts-ignore
 export async function loader({ request, params }: ActionFunctionArgs) {
@@ -29,9 +26,8 @@ export async function loader({ request, params }: ActionFunctionArgs) {
     try {
         const client = await ClientApi.getClientById(orgName, id);
         const components = await ComponentApi.getAllComponents();
-        const adapters = await AdapterAPI.getAdapters(orgName);
 
-        return json({ client, components, adapters });
+        return json({ client, components });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });

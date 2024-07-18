@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Chips, Detail, HGrid, Label, Switch, Table, Tag } from '@navikt/ds-react';
+import { Box, Chips, Detail, Heading, HGrid, Label, Switch, Table, Tag } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
@@ -14,6 +14,7 @@ interface AdapterSelectorProps {
 const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems }) => {
     const navigate = useNavigate();
 
+    console.log(items);
     // const sortedComponents = components.sort((a, b) => a.name.localeCompare(b.name));
 
     // const handleRowClick = (component: IComponent) => {
@@ -38,7 +39,11 @@ const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems 
         <>
             <Box padding="4">
                 <HGrid gap="8">
-                    <AdapterList items={items} />
+                    <Heading size="medium" spacing>
+                        Adaptere tilknyttet denne ressurs
+                    </Heading>
+
+                    <AdapterList items={items} selectable />
                 </HGrid>
             </Box>
         </>
