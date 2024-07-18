@@ -65,7 +65,14 @@ export default function Index() {
                                 <GeneralDetailView asset={asset} />
                                 <Divider className="pt-3" />
                                 {/* Adapters list */}
-                                <AdapterSelector items={adapters} selectedItems={asset.adapters} />
+                                <AdapterSelector
+                                    items={adapters}
+                                    selectedItems={asset.adapters.map((a) => {
+                                        const match = a.match(/cn=([^,]+)/);
+                                        if (match) return match[1];
+                                        return null;
+                                    })}
+                                />
                                 {/* Klienter list */}
                             </VStack>
                         </Box>

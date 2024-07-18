@@ -23,6 +23,7 @@ function AdapterTable({
         navigate(`/adapter/${id}`);
     };
 
+    console.log(selectedItems);
     return (
         <Table>
             <Table.Header>
@@ -43,14 +44,7 @@ function AdapterTable({
                                 <Switch
                                     checked={
                                         selectedItems &&
-                                        selectedItems.some((selected) => {
-                                            const match = selected.match(/cn=([^,]+)/);
-                                            if (match) {
-                                                const cn = match[1];
-                                                if (cn === item.name) return true;
-                                            }
-                                            return false;
-                                        })
+                                        selectedItems.some((selected) => selected === item.name)
                                     }
                                     onChange={toggleSwitch}>
                                     <Label>{''}</Label>

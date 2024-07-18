@@ -16,7 +16,6 @@ const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems 
                     <Heading size="medium" spacing>
                         Adaptere tilknyttet denne ressurs
                     </Heading>
-
                     <AdapterList items={items} selectable selectedItems={selectedItems} />
                 </HGrid>
             </Box>
