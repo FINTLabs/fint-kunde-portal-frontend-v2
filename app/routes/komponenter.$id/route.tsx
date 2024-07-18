@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { json, useLoaderData, useNavigate } from '@remix-run/react';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { ArrowLeftIcon, ComponentIcon } from '@navikt/aksel-icons';
+import { ArrowLeftIcon, ComponentIcon, PencilIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { Box, Button, Heading, HGrid, Table } from '@navikt/ds-react';
+import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import ComponentDetails from '~/routes/komponenter.$id/ComponentDetails';
 import { LoaderFunctionArgs } from '@remix-run/node';
+import EndpointTable from '~/routes/komponenter.$id/EndpointTable';
+import SwaggerTable from '~/routes/komponenter.$id/SwaggerTable';
+import ComponentEdit from '~/routes/komponenter.$id/ComponentEdit';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const id = params.id || '';
@@ -28,11 +31,16 @@ export default function Index() {
         { name: component.name, link: `/komponenter/${component.name}` },
     ];
     const navigate = useNavigate();
+    const [isEditing, setIsEditing] = useState(false);
+
+    function handleCloseEdit() {
+        setIsEditing(false);
+    }
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={component.name} icon={ComponentIcon} />
+            <InternalPageHeader title={component.description} icon={ComponentIcon} />
 
             <HGrid columns="50px auto">
                 <Box>
@@ -43,61 +51,34 @@ export default function Index() {
                 </Box>
 
                 <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                    <Heading size={'medium'}>Details</Heading>
-                    <ComponentDetails component={component} />
+                    <HStack gap={'1'}>
+                        <Heading size={'medium'}>Details</Heading>
+                        <Spacer />
+                        {!isEditing && (
+                            <Button
+                                icon={<PencilIcon title="Rediger" />}
+                                variant="tertiary"
+                                onClick={() => setIsEditing(true)}
+                            />
+                        )}
+                    </HStack>
+
+                    {!isEditing ? (
+                        <ComponentDetails component={component} />
+                    ) : (
+                        <ComponentEdit component={component} onClose={handleCloseEdit} />
+                    )}
+
                     <Divider className="pt-3" />
 
                     <Heading size={'medium'}>Endepunkter</Heading>
                     <Box padding="4">
-                        <Table>
-                            <Table.Row>
-                                <Table.DataCell>Produksjon</Table.DataCell>
-                                <Table.DataCell>
-                                    https://api.felleskomponent.no{component.basePath}
-                                </Table.DataCell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.DataCell>Beta</Table.DataCell>
-                                <Table.DataCell>
-                                    https://beta.felleskomponent.no{component.basePath}
-                                </Table.DataCell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.DataCell>Play-with-FINT</Table.DataCell>
-                                <Table.DataCell>
-                                    https://play-with-fint.felleskomponent.no
-                                    {component.basePath}
-                                </Table.DataCell>
-                            </Table.Row>
-                        </Table>
+                        <EndpointTable component={component} />
                     </Box>
                     <Heading size={'medium'}>Swagger</Heading>
 
                     <Box padding="4">
-                        <Table>
-                            <Table.Row>
-                                <Table.DataCell>Produksjon</Table.DataCell>
-                                <Table.DataCell>
-                                    https://api.felleskomponent.no{component.basePath}
-                                    /swagger-ui.html
-                                </Table.DataCell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.DataCell>Beta</Table.DataCell>
-                                <Table.DataCell>
-                                    https://beta.felleskomponent.no{component.basePath}
-                                    /swagger-ui.html
-                                </Table.DataCell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.DataCell>Play-with-FINT</Table.DataCell>
-                                <Table.DataCell>
-                                    https://play-with-fint.felleskomponent.no
-                                    {component.basePath}
-                                    /swagger-ui.html
-                                </Table.DataCell>
-                            </Table.Row>
-                        </Table>
+                        <SwaggerTable component={component} />
                     </Box>
                 </Box>
             </HGrid>

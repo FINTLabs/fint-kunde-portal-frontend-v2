@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Chips, Detail, HGrid, Label, Switch, Table, Tag } from '@navikt/ds-react';
+import { Box, Detail, HGrid, Label, Switch, Table, Tag } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
@@ -42,7 +42,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
             <Box padding="4">
                 <HGrid gap="8" columns={columns}>
                     {componentChunks.map((chunk, chunkIndex) => (
-                        <Table key={chunkIndex}>
+                        <Table key={chunkIndex} size={'small'}>
                             <Table.Body>
                                 {chunk.map((component, index) => (
                                     <Table.Row

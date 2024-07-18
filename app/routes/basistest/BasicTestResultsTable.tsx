@@ -5,7 +5,7 @@ interface TestResultsTableProps {
     logResults: any[] | null; // Replace 'any[]' with the appropriate type for your log results
 }
 
-const TestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
+const BasicTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
     return (
         <>
             {logResults ? (
@@ -48,4 +48,4 @@ const TestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
     );
 };
 
-export default TestResultsTable;
+export default BasicTestResultsTable;
