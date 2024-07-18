@@ -9,6 +9,10 @@ import { getSelectedOprganization } from '~/utils/selectedOrganization';
 import { Box, HStack, VStack } from '@navikt/ds-react';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
+import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
+import Autentisering from '~/components/shared/Autentisering';
+import AdapterSelector from './AdapterSelector';
+import { IAdapter } from '~/types/types';
 
 export const meta: MetaFunction = () => {
     return [
@@ -37,10 +41,11 @@ export default function Index() {
         { name: 'Ressurser', link: '/ressurser' },
         { name: `${id}`, link: `/ressurser/${id}` },
     ];
-    const assetData = useLoaderData<IAsset>();
-    const navigate = useNavigate();
+    const asset = useLoaderData<IAsset>();
 
-    // console.log(assetData);
+    const { adapters } = useLoaderData<{ adapters: IAdapter[] }>();
+
+    console.log(asset);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -55,7 +60,14 @@ export default function Index() {
                     <VStack className="flex flex-grow">
                         <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                             <VStack gap="5">
-                                <GeneralDetailView asset={assetData} />
+                                <GeneralDetailView asset={asset} />
+                                <Divider className="pt-3" />
+                                {/* Adapters list */}
+                                <AdapterSelector
+                                    items={adapters}
+                                    selectedItems={adapters.slice(0, 4)}
+                                />
+                                {/* Klienter list */}
                             </VStack>
                         </Box>
                     </VStack>
