@@ -8,11 +8,13 @@ import { ChevronRightIcon } from '@navikt/aksel-icons';
 function AdapterTable({
     items,
     selectable,
+    selectedItems,
     toggleSwitch,
 }: {
     items: IAdapter[];
 
     selectable?: boolean;
+    selectedItems?: string[];
     toggleSwitch?: () => void;
 }) {
     const navigate = useNavigate();
@@ -38,7 +40,19 @@ function AdapterTable({
                         className="active:bg-[--a-surface-active] hover:cursor-pointer">
                         {selectable && (
                             <Table.DataCell scope="row">
-                                <Switch checked={false} onChange={toggleSwitch}>
+                                <Switch
+                                    checked={
+                                        selectedItems &&
+                                        selectedItems.some((selected) => {
+                                            const match = selected.match(/cn=([^,]+)/);
+                                            if (match) {
+                                                const cn = match[1];
+                                                if (cn === item.name) return true;
+                                            }
+                                            return false;
+                                        })
+                                    }
+                                    onChange={toggleSwitch}>
                                     <Label>{''}</Label>
                                 </Switch>
                             </Table.DataCell>
@@ -62,17 +76,24 @@ function AdapterTable({
 function Tab({
     value,
     adapters,
+    selectedItems,
     selectable,
     toggleSwitch,
 }: {
     value: string;
     adapters: IAdapter[];
     selectable?: boolean;
+    selectedItems?: string[];
     toggleSwitch?: () => void;
 }) {
     return (
         <Tabs.Panel value={value} className="w-full">
-            <AdapterTable items={adapters} selectable={selectable} toggleSwitch={toggleSwitch} />
+            <AdapterTable
+                items={adapters}
+                selectable={selectable}
+                selectedItems={selectedItems}
+                toggleSwitch={toggleSwitch}
+            />
         </Tabs.Panel>
     );
 }
@@ -80,10 +101,12 @@ function Tab({
 export function AdapterList({
     items,
     selectable = false,
+    selectedItems,
     toggleSwitch,
 }: {
     items: IAdapter[];
     selectable?: boolean;
+    selectedItems?: string[];
     toggleSwitch?: () => void;
 }) {
     return (
@@ -104,6 +127,7 @@ export function AdapterList({
                 <Tab
                     key={index}
                     value={tab.value}
+                    selectedItems={selectedItems}
                     selectable={selectable}
                     toggleSwitch={toggleSwitch}
                     adapters={

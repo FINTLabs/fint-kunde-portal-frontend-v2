@@ -8,13 +8,12 @@ import { IAdapter } from '~/types/types';
 
 interface AdapterSelectorProps {
     items: IAdapter[];
-    selectedItems: IAdapter[];
+    selectedItems: string[]; // TODO fix this: It comes as a string like this "cn=frode@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint"
 }
 
 const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems }) => {
     const navigate = useNavigate();
 
-    console.log(items);
     // const sortedComponents = components.sort((a, b) => a.name.localeCompare(b.name));
 
     // const handleRowClick = (component: IComponent) => {
@@ -43,7 +42,7 @@ const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems 
                         Adaptere tilknyttet denne ressurs
                     </Heading>
 
-                    <AdapterList items={items} selectable />
+                    <AdapterList items={items} selectable selectedItems={selectedItems} />
                 </HGrid>
             </Box>
         </>

@@ -65,10 +65,7 @@ export default function Index() {
                                 <GeneralDetailView asset={asset} />
                                 <Divider className="pt-3" />
                                 {/* Adapters list */}
-                                <AdapterSelector
-                                    items={adapters}
-                                    selectedItems={adapters.slice(0, 4)}
-                                />
+                                <AdapterSelector items={adapters} selectedItems={asset.adapters} />
                                 {/* Klienter list */}
                             </VStack>
                         </Box>
