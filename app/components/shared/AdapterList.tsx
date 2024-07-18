@@ -1,8 +1,9 @@
-import { Table, Tabs, VStack } from '@navikt/ds-react';
+import { Detail, Label, Switch, Table, Tabs, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { useNavigate } from '@remix-run/react';
 import { tabInfo } from '~/routes/adaptere/constants';
 import { NotePencilDashIcon, CogRotationIcon } from '@navikt/aksel-icons';
+import { ChevronRightIcon } from '@navikt/aksel-icons';
 
 function AdapterTable({
     items,
@@ -16,7 +17,7 @@ function AdapterTable({
 }) {
     const navigate = useNavigate();
 
-    const handleClick = (id: string) => {
+    const showDetails = (id: string) => {
         navigate(`/adapter/${id}`);
     };
 
@@ -24,19 +25,33 @@ function AdapterTable({
         <Table>
             <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
+                    {selectable && <Table.HeaderCell scope="col"></Table.HeaderCell>}
                     <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
+                    <Table.HeaderCell scope="col"></Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
                 {items?.map((item, i) => (
                     <Table.Row
                         key={i + item.name}
-                        className="active:bg-[--a-surface-active] hover:cursor-pointer"
-                        onClick={() => handleClick(item.name)}>
-                            
-                        <Table.DataCell scope="row">{item.shortDescription}</Table.DataCell>
-                        <Table.DataCell scope="row">{item.name}</Table.DataCell>
+                        className="active:bg-[--a-surface-active] hover:cursor-pointer">
+                        {selectable && (
+                            <Table.DataCell scope="row">
+                                <Switch checked={false} onChange={() => {}}>
+                                    <Label>{''}</Label>
+                                </Switch>
+                            </Table.DataCell>
+                        )}
+                        <Table.DataCell scope="row" onClick={() => showDetails(item.name)}>
+                            {item.name}
+                        </Table.DataCell>
+                        <Table.DataCell scope="row" onClick={() => showDetails(item.name)}>
+                            {item.shortDescription}
+                        </Table.DataCell>
+                        <Table.DataCell onClick={() => showDetails(item.name)}>
+                            <ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />
+                        </Table.DataCell>
                     </Table.Row>
                 ))}
             </Table.Body>
