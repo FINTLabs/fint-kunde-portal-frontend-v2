@@ -48,8 +48,6 @@ function AdapterTable({
                                     }
                                     onChange={(e) => {
                                         const isChecked = e.target.checked;
-                                        console.log(isChecked);
-
                                         toggleSwitch && toggleSwitch(item.name, isChecked);
                                     }}>
                                     <Label>{''}</Label>
@@ -83,7 +81,7 @@ function Tab({
     adapters: IAdapter[];
     selectable?: boolean;
     selectedItems?: string[];
-    toggleSwitch?: () => void;
+    toggleSwitch?: (name: string, checked: boolean) => void;
 }) {
     return (
         <Tabs.Panel value={value} className="w-full">
@@ -106,7 +104,7 @@ export function AdapterList({
     items: IAdapter[];
     selectable?: boolean;
     selectedItems?: string[];
-    toggleSwitch?: () => void;
+    toggleSwitch?: (name: string, checked: boolean) => void;
 }) {
     return (
         <Tabs defaultValue={tabInfo[0].value} fill>

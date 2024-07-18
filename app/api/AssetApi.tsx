@@ -19,20 +19,12 @@ class AssetApi {
         const functionName = 'getAssetById';
         const URL = `${API_URL}/api/assets/${orgName}/${assetId}`;
         return request(URL, functionName);
-        // .then((assets: IAsset[]) => {
-        //     console.log('assets: ', assets);
-        //     const asset = assets.find((item) => item.name === assetId);
-        //     if (asset) {
-        //         return asset;
-        //     } else {
-        //         console.error('Asset not found, assetId:', assetId);
-        //         return null;
-        //     }
-        // })
-        // .catch((err) => {
-        //     console.error('Error fetching asset:', err);
-        //     return null;
-        // });
+    }
+
+    static addAdapterToAsset(adapterName: string, assetName: string, organisationName: string) {
+        const functionName = 'addAdapterToAsset';
+        const URL = `${API_URL}/api/assets/${organisationName}/${assetName}/adapters/${adapterName}`;
+        return request(URL, functionName, 'PUT', 'json', { name: adapterName });
     }
 
     // static async setAccess(access, organisation) {

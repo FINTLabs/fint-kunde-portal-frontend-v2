@@ -20,8 +20,12 @@ const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems 
                         items={items}
                         selectable
                         selectedItems={selectedItems}
-                        toggleSwitch={() => {
+                        toggleSwitch={(name, isChecked) => {
                             console.log('toggle switch');
+                            console.log('name ', name);
+                            console.log('is Checked', isChecked);
+                            // add adapter to asset
+                            
                         }}
                     />
                 </HGrid>
