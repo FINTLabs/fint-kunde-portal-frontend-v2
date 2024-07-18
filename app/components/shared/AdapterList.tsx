@@ -8,12 +8,12 @@ import { ChevronRightIcon } from '@navikt/aksel-icons';
 function AdapterTable({
     items,
     selectable,
-    onSelect,
+    toggleSwitch,
 }: {
     items: IAdapter[];
 
     selectable?: boolean;
-    onSelect?: () => void;
+    toggleSwitch?: () => void;
 }) {
     const navigate = useNavigate();
 
@@ -38,7 +38,7 @@ function AdapterTable({
                         className="active:bg-[--a-surface-active] hover:cursor-pointer">
                         {selectable && (
                             <Table.DataCell scope="row">
-                                <Switch checked={false} onChange={() => {}}>
+                                <Switch checked={false} onChange={toggleSwitch}>
                                     <Label>{''}</Label>
                                 </Switch>
                             </Table.DataCell>
@@ -63,16 +63,16 @@ function Tab({
     value,
     adapters,
     selectable,
-    onSelect,
+    toggleSwitch,
 }: {
     value: string;
     adapters: IAdapter[];
     selectable?: boolean;
-    onSelect?: () => void;
+    toggleSwitch?: () => void;
 }) {
     return (
         <Tabs.Panel value={value} className="w-full">
-            <AdapterTable items={adapters} selectable={selectable} onSelect={onSelect} />
+            <AdapterTable items={adapters} selectable={selectable} toggleSwitch={toggleSwitch} />
         </Tabs.Panel>
     );
 }
@@ -80,11 +80,11 @@ function Tab({
 export function AdapterList({
     items,
     selectable = false,
-    onSelect,
+    toggleSwitch,
 }: {
     items: IAdapter[];
     selectable?: boolean;
-    onSelect?: () => void;
+    toggleSwitch?: () => void;
 }) {
     return (
         <Tabs defaultValue={tabInfo[0].value} fill>
@@ -105,7 +105,7 @@ export function AdapterList({
                     key={index}
                     value={tab.value}
                     selectable={selectable}
-                    onSelect={onSelect}
+                    toggleSwitch={toggleSwitch}
                     adapters={
                         index === 1
                             ? items.filter((adapter) => adapter.managed)
