@@ -56,7 +56,6 @@ export default function Index() {
 
     const { adapters, asset } = useLoaderData<{ adapters: IAdapter[]; asset: IAsset }>();
 
-    console.log(asset);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />

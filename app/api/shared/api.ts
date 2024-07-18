@@ -58,19 +58,17 @@ export async function putRequest(
         };
     }
 
-    log(`RequestOptions: `, requestOptions);
+    // log(`RequestOptions: `, requestOptions);
 
-    const response = await fetch(URL, requestOptions);
-    console.log('reponse in PUT');
-    console.log(response);
-    console.log(await response.json());
-    if (response.status === 200) {
-        const json = await response.json();
-        return json;
-    } else {
-        error(`Error running ${functionName}, status:`, response.status);
-        return null;
-    }
+    return await fetch(URL, requestOptions);
+    // const response = await fetch(URL, requestOptions);
+    // if (response.status === 200) {
+    //     const json = await response.json();
+    //     return json;
+    // } else {
+    //     error(`Error running ${functionName}, status:`, response.status);
+    //     return null;
+    // }
 }
 
 export async function postRequest(
@@ -86,7 +84,7 @@ export async function postRequest(
         };
     }
 
-    log(`RequestOptions: `, requestOptions);
+    // log(`RequestOptions: `, requestOptions);
 
     const response = await fetch(URL, requestOptions);
     return response;
@@ -98,7 +96,7 @@ async function getRequest(
     requestOptions: RequestInit,
     returnType: ReturnType
 ) {
-    log(`RequestOptions: `, requestOptions);
+    // log(`RequestOptions: `, requestOptions);
     const response = await fetch(URL, requestOptions);
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();

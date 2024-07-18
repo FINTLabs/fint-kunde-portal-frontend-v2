@@ -21,10 +21,14 @@ class AssetApi {
         return request(URL, functionName);
     }
 
-    static addAdapterToAsset(adapterName: string, assetName: string, organisationName: string) {
+    static async addAdapterToAsset(
+        adapterName: string,
+        assetName: string,
+        organisationName: string
+    ) {
         const functionName = 'addAdapterToAsset';
         const URL = `${API_URL}/api/assets/${organisationName}/${assetName}/adapters/${adapterName}`;
-        return request(URL, functionName, 'PUT', 'json', { name: adapterName });
+        return await request(URL, functionName, 'PUT', 'json', { name: adapterName });
     }
 
     // static async setAccess(access, organisation) {
