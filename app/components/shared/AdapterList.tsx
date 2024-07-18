@@ -15,7 +15,7 @@ function AdapterTable({
 
     selectable?: boolean;
     selectedItems?: string[];
-    toggleSwitch?: () => void;
+    toggleSwitch?: (name: string, checked: boolean) => void;
 }) {
     const navigate = useNavigate();
 
@@ -46,7 +46,12 @@ function AdapterTable({
                                         selectedItems &&
                                         selectedItems.some((selected) => selected === item.name)
                                     }
-                                    onChange={toggleSwitch}>
+                                    onChange={(e) => {
+                                        const isChecked = e.target.checked;
+                                        console.log(isChecked);
+
+                                        toggleSwitch && toggleSwitch(item.name, isChecked);
+                                    }}>
                                     <Label>{''}</Label>
                                 </Switch>
                             </Table.DataCell>
