@@ -69,8 +69,7 @@ export default function Index() {
                                     items={adapters}
                                     selectedItems={asset.adapters.map((a) => {
                                         const match = a.match(/cn=([^,]+)/);
-                                        if (match) return match[1];
-                                        return null;
+                                        return match ? match[1] : '';
                                     })}
                                 />
                                 {/* Klienter list */}
