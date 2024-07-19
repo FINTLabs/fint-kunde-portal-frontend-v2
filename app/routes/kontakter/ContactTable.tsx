@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Table, Button } from '@navikt/ds-react';
+import { Button, Table } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon, ShieldLockIcon } from '@navikt/aksel-icons';
-import { IContact, IRole, type IUserSession } from '~/types/types';
+import { IContact, IRole } from '~/types/types';
 import ConfirmModal from './ConfirmModal';
-import { log } from '~/utils/logger';
-import { useOutletContext } from '@remix-run/react';
-import RolesCheckbox from '~/routes/kontakter/RoleCheckmarks';
+import { useFetcher } from '@remix-run/react';
+import RolesSwitch from '~/routes/kontakter/RoleSwitch';
 
 interface IContactTableProps {
     contactsData?: IContact[];
@@ -18,8 +17,9 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
         contact?: IContact;
         open: boolean;
     }>({ type: '', contact: undefined, open: false });
+    const fetcher = useFetcher();
 
-    const userSession = useOutletContext<IUserSession>();
+    // const userSession = useOutletContext<IUserSession>();
     const hasRole = (currentContact: IContact, roleId: string): boolean => {
         if (currentContact) {
             return currentContact.roles?.includes(roleId + '@' + 'fintlabs_no') ?? false;
@@ -38,16 +38,33 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
     const handleConfirm = () => {
         // todo: Handle confirm action here
         console.log(`${modalState.type} confirmed for contact:`, modalState.contact);
+        const contactNin = (modalState.contact?.nin as string) || '';
+
+        //todo: only handling jurdisk now
+        const formData = new FormData();
+        formData.append('contactNin', contactNin);
+        formData.append('actionType', 'setLegalContact');
+
+        fetcher.submit(formData, {
+            method: 'post',
+            action: '/kontakter',
+        });
         handleCloseModal();
     };
-    const addRole = (contact: IContact, roleId: string) => {
-        // RoleApi.addRole(orgName, contactNin, roleId);
-        log(
-            `Role ${roleId} added to contact ${contact.nin} with org: ${userSession.selectedOrganization?.name}`
-        );
-        log('Contact:', contact);
-        log(hasRole(contact, roleId));
-    };
+
+    function updateRole(contactNin: string, roleId: string, isChecked: boolean) {
+        const formData = new FormData();
+        formData.append('contactNin', contactNin);
+        formData.append('roleId', roleId);
+
+        if (isChecked) formData.append('actionType', 'addRole');
+        else formData.append('actionType', 'deleteRole');
+
+        fetcher.submit(formData, {
+            method: 'post',
+            action: '/kontakter',
+        });
+    }
 
     return (
         <>
@@ -65,13 +82,14 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
                             key={i + contact.dn}
                             content={
                                 <>
-                                    <RolesCheckbox
-                                        contact={contact}
-                                        rolesData={rolesData}
-                                        hasRole={hasRole}
-                                        addRole={addRole}
-                                    />
-
+                                    <fetcher.Form method="post">
+                                        <RolesSwitch
+                                            contact={contact}
+                                            rolesData={rolesData}
+                                            hasRole={hasRole}
+                                            updateRole={updateRole}
+                                        />
+                                    </fetcher.Form>
                                     <Button
                                         icon={<GavelSoundBlockIcon />}
                                         variant="tertiary"
