@@ -27,14 +27,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     return json({ adapters: adapters, orgName });
 };
 
-function Tab({ value, adapters }: { value: string; adapters: IAdapter[] }) {
-    return (
-        <Tabs.Panel value={value} className="w-full">
-            <AdapterList items={adapters} />
-        </Tabs.Panel>
-    );
-}
-
 export default function Index() {
     const breadcrumbs = [{ name: 'Adaptere', link: '/adaptere' }];
 

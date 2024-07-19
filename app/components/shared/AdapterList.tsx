@@ -1,32 +1,68 @@
-import { Table, Tabs, VStack } from '@navikt/ds-react';
+import { Detail, Label, Switch, Table, Tabs, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { useNavigate } from '@remix-run/react';
 import { tabInfo } from '~/routes/adaptere/constants';
 import { NotePencilDashIcon, CogRotationIcon } from '@navikt/aksel-icons';
+import { ChevronRightIcon } from '@navikt/aksel-icons';
 
-function AdapterTable({ items }: { items: IAdapter[] }) {
+function AdapterTable({
+    items,
+    selectable,
+    selectedItems,
+    toggleSwitch,
+}: {
+    items: IAdapter[];
+
+    selectable?: boolean;
+    selectedItems?: string[];
+    toggleSwitch?: (name: string, checked: boolean) => void;
+}) {
     const navigate = useNavigate();
 
-    const handleClick = (id: string) => {
+    const showDetails = (id: string) => {
         navigate(`/adapter/${id}`);
     };
 
+    console.log(selectedItems);
     return (
         <Table>
             <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
+                    {selectable && <Table.HeaderCell scope="col"></Table.HeaderCell>}
                     <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
+                    <Table.HeaderCell scope="col"></Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
                 {items?.map((item, i) => (
                     <Table.Row
                         key={i + item.name}
-                        className="active:bg-[--a-surface-active] hover:cursor-pointer"
-                        onClick={() => handleClick(item.name)}>
-                        <Table.DataCell scope="row">{item.shortDescription}</Table.DataCell>
-                        <Table.DataCell scope="row">{item.name}</Table.DataCell>
+                        className="active:bg-[--a-surface-active] hover:cursor-pointer">
+                        {selectable && (
+                            <Table.DataCell scope="row">
+                                <Switch
+                                    checked={
+                                        selectedItems &&
+                                        selectedItems.some((selected) => selected === item.name)
+                                    }
+                                    onChange={(e) => {
+                                        const isChecked = e.target.checked;
+                                        toggleSwitch && toggleSwitch(item.name, isChecked);
+                                    }}>
+                                    <Label>{''}</Label>
+                                </Switch>
+                            </Table.DataCell>
+                        )}
+                        <Table.DataCell scope="row" onClick={() => showDetails(item.name)}>
+                            {item.name}
+                        </Table.DataCell>
+                        <Table.DataCell scope="row" onClick={() => showDetails(item.name)}>
+                            {item.shortDescription}
+                        </Table.DataCell>
+                        <Table.DataCell onClick={() => showDetails(item.name)}>
+                            <ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />
+                        </Table.DataCell>
                     </Table.Row>
                 ))}
             </Table.Body>
@@ -34,15 +70,42 @@ function AdapterTable({ items }: { items: IAdapter[] }) {
     );
 }
 
-function Tab({ value, adapters }: { value: string; adapters: IAdapter[] }) {
+function Tab({
+    value,
+    adapters,
+    selectedItems,
+    selectable,
+    toggleSwitch,
+}: {
+    value: string;
+    adapters: IAdapter[];
+    selectable?: boolean;
+    selectedItems?: string[];
+    toggleSwitch?: (name: string, checked: boolean) => void;
+}) {
     return (
         <Tabs.Panel value={value} className="w-full">
-            <AdapterTable items={adapters} />
+            <AdapterTable
+                items={adapters}
+                selectable={selectable}
+                selectedItems={selectedItems}
+                toggleSwitch={toggleSwitch}
+            />
         </Tabs.Panel>
     );
 }
 
-export function AdapterList({ items }: { items: IAdapter[] }) {
+export function AdapterList({
+    items,
+    selectable = false,
+    selectedItems,
+    toggleSwitch,
+}: {
+    items: IAdapter[];
+    selectable?: boolean;
+    selectedItems?: string[];
+    toggleSwitch?: (name: string, checked: boolean) => void;
+}) {
     return (
         <Tabs defaultValue={tabInfo[0].value} fill>
             <Tabs.List>
@@ -61,6 +124,9 @@ export function AdapterList({ items }: { items: IAdapter[] }) {
                 <Tab
                     key={index}
                     value={tab.value}
+                    selectedItems={selectedItems}
+                    selectable={selectable}
+                    toggleSwitch={toggleSwitch}
                     adapters={
                         index === 1
                             ? items.filter((adapter) => adapter.managed)

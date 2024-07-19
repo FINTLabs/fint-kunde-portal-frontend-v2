@@ -25,6 +25,7 @@ export async function loader({ request, params }: ActionFunctionArgs) {
     try {
         const client = await ClientApi.getClientById(orgName, id);
         const components = await ComponentApi.getAllComponents();
+
         return json({ client, components });
     } catch (error) {
         console.error('Error fetching data:', error);
