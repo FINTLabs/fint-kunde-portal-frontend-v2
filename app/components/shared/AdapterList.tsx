@@ -23,7 +23,6 @@ function AdapterTable({
         navigate(`/adapter/${id}`);
     };
 
-    console.log(selectedItems);
     return (
         <Table>
             <Table.Header>

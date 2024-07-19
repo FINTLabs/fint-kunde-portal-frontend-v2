@@ -1,6 +1,6 @@
-import { ActionFunctionArgs, type LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { type LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { LayersIcon } from '@navikt/aksel-icons';
-import { json, useLoaderData, useNavigate, useParams } from '@remix-run/react';
+import { json, useLoaderData, useParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
@@ -10,7 +10,6 @@ import { Box, HStack, VStack } from '@navikt/ds-react';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import Autentisering from '~/components/shared/Autentisering';
 import AdapterSelector from './AdapterSelector';
 import { IAdapter } from '~/types/types';
 import AdapterAPI from '~/api/AdapterApi';
@@ -20,15 +19,6 @@ export const meta: MetaFunction = () => {
         { title: 'Ressurser' },
         { name: 'description', content: 'Liste over ressurser._index' },
     ];
-};
-
-export const action = async ({ request, params }: ActionFunctionArgs) => {
-    const actionName = 'action XXX???';
-
-    console.log(params);
-    console.log(request);
-    console.log('ACTTIONNNN');
-    return null;
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
