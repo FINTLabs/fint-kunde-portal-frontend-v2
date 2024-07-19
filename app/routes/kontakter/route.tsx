@@ -13,6 +13,7 @@ import { IContact, IFetcherResponseData, IRole } from '~/types/types';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ContactModal from '~/routes/kontakter/ContactModal';
+import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 interface IPageLoaderData {
     technicalContacts?: IContact[];
@@ -45,23 +46,59 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 };
 
+// export async function action({ request }: ActionFunctionArgs) {
+//     const formData = await request.formData();
+//     const formValues: Record<string, FormDataEntryValue> = {};
+//
+//     for (const [key, value] of formData) {
+//         formValues[key] = value;
+//     }
+//
+//     const contactNin = (formValues['selectedContactNin'] as string) || '';
+//
+//     const session = await getSession(request.headers.get('Cookie'));
+//     const userSession = session.get('user-session');
+//     const selectedOrg = userSession.selectedOrganization.name;
+//
+//     const response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
+//
+//     return json({ show: true, message: response?.message, variant: response?.variant });
+// }
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
-    const formValues: Record<string, FormDataEntryValue> = {};
+    const actionType = formData.get('actionType');
+    const selectedOrg = await getSelectedOprganization(request);
+    const contactNin = (formData.get('contactNin') as string) || '';
+    const roleId = (formData.get('roleId') as string) || '';
 
-    for (const [key, value] of formData) {
-        formValues[key] = value;
+    log('INSIDE ACTION', actionType);
+    // let formValues: any = {};
+    // for (const [key, value] of formData) {
+    //     formValues[key] = value;
+    // }
+
+    let response;
+    switch (actionType) {
+        case 'addTechnicalContact':
+            response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
+            break;
+        case 'removeTechnicalContact':
+            response = await ContactApi.removeTechnicalContact(contactNin, selectedOrg);
+            break;
+        case 'setLegalContact':
+            response = await ContactApi.setLegalContact(contactNin, selectedOrg);
+            break;
+        case 'addRole':
+            response = await RoleApi.addRole(selectedOrg, contactNin, roleId);
+            break;
+        case 'deleteRole':
+            response = await RoleApi.removeRole(selectedOrg, contactNin, roleId);
+            break;
+        default:
+            return json({ show: true, message: 'Unknown action type', variant: 'error' });
     }
 
-    const contactNin = (formValues['selectedContactNin'] as string) || '';
-
-    const session = await getSession(request.headers.get('Cookie'));
-    const userSession = session.get('user-session');
-    const selectedOrg = userSession.selectedOrganization.name;
-
-    const response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
-
-    return json({ show: true, message: response?.message, variant: response?.variant });
+    return json({ show: true, message: 'Unknown action type', variant: 'error' });
 }
 
 export default function Index() {
