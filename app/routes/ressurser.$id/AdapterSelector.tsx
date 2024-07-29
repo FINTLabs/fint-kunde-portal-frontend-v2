@@ -3,6 +3,7 @@ import { Box, Heading, HGrid } from '@navikt/ds-react';
 import { AdapterList } from '~/components/shared/AdapterList';
 import { IAdapter } from '~/types/types';
 import { useSubmit } from '@remix-run/react';
+import { CustomTabs } from '~/components/shared/CustomTabs';
 
 interface AdapterSelectorProps {
     items: IAdapter[];
@@ -19,16 +20,11 @@ const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems 
                     <Heading size="medium" spacing>
                         Adaptere tilknyttet denne ressurs
                     </Heading>
-                    <AdapterList
+                    <CustomTabs
                         items={items}
                         selectable
                         selectedItems={selectedItems}
                         toggleSwitch={(name, isChecked) => {
-                            console.log('toggle switch');
-                            console.log('name ', name);
-                            console.log('is Checked', isChecked);
-                            // add adapter to asset
-
                             if (isChecked) {
                                 // add adapter to asset
                                 submit(
