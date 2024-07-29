@@ -15,6 +15,7 @@ import { IAdapter } from '~/types/types';
 import AdapterAPI from '~/api/AdapterApi';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
+import ClientSelector from './ClientSelector';
 
 type LoaderData = {
     adapters: IAdapter[];
@@ -80,6 +81,13 @@ export default function Index() {
                                     })}
                                 />
                                 {/* Klienter list */}
+                                <ClientSelector
+                                    items={clients}
+                                    selectedItems={asset.clients.map((a) => {
+                                        const match = a.match(/cn=([^,]+)/);
+                                        return match ? match[1] : '';
+                                    })}
+                                />
                             </VStack>
                         </Box>
                     </VStack>
