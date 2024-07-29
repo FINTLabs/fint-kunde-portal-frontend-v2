@@ -1,5 +1,5 @@
 import { API_URL } from './constants';
-import { IAsset, IPartialAsset } from '~/types/Asset';
+import { IPartialAsset } from '~/types/Asset';
 import { request } from '~/api/shared/api';
 
 class AssetApi {
