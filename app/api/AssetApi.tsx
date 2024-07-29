@@ -31,6 +31,12 @@ class AssetApi {
         return await request(URL, functionName, 'PUT', 'json', { name: adapterName });
     }
 
+    static async addClientToAsset(clientName: string, assetName: string, organisationName: string) {
+        const functionName = 'addClientToAsset';
+        const URL = `${API_URL}/api/assets/${organisationName}/${assetName}/clients/${clientName}`;
+        return await request(URL, functionName, 'PUT', 'json', { name: clientName });
+    }
+
     // static async setAccess(access, organisation) {
     //     const url = `${API_URL}/api/accesses/${organisation}/`;
     //     log('Setting access information', url);

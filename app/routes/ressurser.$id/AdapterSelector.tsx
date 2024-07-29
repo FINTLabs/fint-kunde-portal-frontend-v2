@@ -23,7 +23,7 @@ const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems 
                         items={items}
                         selectable
                         selectedItems={selectedItems}
-                        toggleSwitch={(adapterName, isChecked) => {
+                        toggleSwitch={(name, isChecked) => {
                             console.log('toggle switch');
                             console.log('name ', name);
                             console.log('is Checked', isChecked);
@@ -33,7 +33,7 @@ const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems 
                                 // add adapter to asset
                                 submit(
                                     {
-                                        adapterName: adapterName,
+                                        adapterName: name,
                                         actionType: 'ADD_ADAPTER_TO_ASSET',
                                     },
                                     {

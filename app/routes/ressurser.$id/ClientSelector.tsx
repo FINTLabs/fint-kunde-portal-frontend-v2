@@ -30,7 +30,7 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({ items, selectedItems })
                                 // add adapter to asset
                                 submit(
                                     {
-                                        adapterName: name,
+                                        clientName: name,
                                         actionType: 'ADD_CLIENT_TO_ASSET',
                                     },
                                     {
