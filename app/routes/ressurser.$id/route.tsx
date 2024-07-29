@@ -13,7 +13,14 @@ import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import AdapterSelector from './AdapterSelector';
 import { IAdapter } from '~/types/types';
 import AdapterAPI from '~/api/AdapterApi';
+import ClientApi from '~/api/ClientApi';
+import { IClient } from '~/types/Clients';
 
+type LoaderData = {
+    adapters: IAdapter[];
+    asset: IAsset;
+    clients: IClient[];
+};
 export const meta: MetaFunction = () => {
     return [
         { title: 'Ressurser' },
@@ -28,8 +35,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         const orgName = await getSelectedOprganization(request);
         const asset = await AssetApi.getAssetById(orgName, id);
         const adapters = await AdapterAPI.getAdapters(orgName);
+        const clients = await ClientApi.getClients(orgName);
 
-        return json({ asset: asset, adapters: adapters });
+        return json({ asset: asset, adapters: adapters, clients: clients });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
@@ -44,8 +52,9 @@ export default function Index() {
         { name: `${id}`, link: `/ressurser/${id}` },
     ];
 
-    const { adapters, asset } = useLoaderData<{ adapters: IAdapter[]; asset: IAsset }>();
+    const { adapters, asset, clients } = useLoaderData<LoaderData>();
 
+    console.log(asset);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
