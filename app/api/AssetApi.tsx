@@ -31,10 +31,28 @@ class AssetApi {
         return await request(URL, functionName, 'PUT', 'json', { name: adapterName });
     }
 
-    static async addClientToAsset(clientName: string, assetName: string, organisationName: string) {
-        const functionName = 'addClientToAsset';
+    static async updateClientInAsset(
+        clientName: string,
+        assetName: string,
+        organisationName: string,
+        updateType: string
+    ) {
         const URL = `${API_URL}/api/assets/${organisationName}/${assetName}/clients/${clientName}`;
+        if (updateType === 'add') {
+            return await AssetApi.addClientToAsset(URL, clientName);
+        } else {
+            return await AssetApi.removeClientFromAsset(URL, clientName);
+        }
+    }
+
+    static async addClientToAsset(URL: string, clientName: string) {
+        const functionName = 'addClientToAsset';
         return await request(URL, functionName, 'PUT', 'json', { name: clientName });
+    }
+
+    static async removeClientFromAsset(URL: string, clientName: string) {
+        const functionName = 'removeClientFromAsset';
+        return await request(URL, functionName, 'DELETE', 'json', { name: clientName });
     }
 
     // static async setAccess(access, organisation) {

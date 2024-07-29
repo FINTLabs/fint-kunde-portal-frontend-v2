@@ -16,8 +16,6 @@ export async function request(
     data?: PostDataType
 ) {
     try {
-        console.log('coming here 2');
-
         log(`Running ${functionName} with URL:`, URL);
 
         let requestOptions: RequestInit = {

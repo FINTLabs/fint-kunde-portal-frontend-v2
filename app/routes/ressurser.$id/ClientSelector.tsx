@@ -26,22 +26,18 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({ items, selectedItems })
                         selectable
                         selectedItems={selectedItems}
                         toggleSwitch={(name, isChecked) => {
-                            if (isChecked) {
-                                // add adapter to asset
-                                submit(
-                                    {
-                                        clientName: name,
-                                        actionType: 'ADD_CLIENT_TO_ASSET',
-                                    },
-                                    {
-                                        method: 'POST',
-                                        action: 'update',
-                                        navigate: false,
-                                    }
-                                );
-                            } else {
-                                /// remove addapter from asset
-                            }
+                            submit(
+                                {
+                                    clientName: name,
+                                    updateType: isChecked ? 'add' : 'remove',
+                                    actionType: 'UPDATE_CLIENT_IN_ASSET',
+                                },
+                                {
+                                    method: 'POST',
+                                    action: 'update',
+                                    navigate: false,
+                                }
+                            );
                         }}
                     />
                 </HGrid>
