@@ -12,15 +12,6 @@ interface CustomTabsProps<T> {
     toggleSwitch?: (name: string, checked: boolean) => void;
 }
 
-function isIAdapter(item: any): item is IAdapter {
-    return (
-        typeof item === 'object' &&
-        typeof item.name === 'string' &&
-        typeof item.shortDescription === 'string' &&
-        typeof item.managed === 'boolean'
-    );
-}
-
 export function CustomTabs<T extends IAdapter>({
     items,
     selectable = false,
@@ -32,12 +23,6 @@ export function CustomTabs<T extends IAdapter>({
     const showDetails = (id: string) => {
         navigate(`/adapter/${id}`);
     };
-
-    console.log(items);
-
-    if (!items.every(isIAdapter)) {
-        throw new Error('Invalid items: All items must conform to IAdapter interface');
-    }
 
     return (
         <Tabs defaultValue={tabInfo[0].value} fill>
@@ -55,7 +40,6 @@ export function CustomTabs<T extends IAdapter>({
             </Tabs.List>
             {tabInfo.map((tab, index) => (
                 <Tabs.Panel key={index} value={tab.value} className="w-full">
-                    {/* View 1 */}
                     <Table>
                         <Table.Header>
                             <Table.Row>

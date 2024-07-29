@@ -55,7 +55,6 @@ export default function Index() {
 
     const { adapters, asset, clients } = useLoaderData<LoaderData>();
 
-    console.log(asset);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -72,7 +71,6 @@ export default function Index() {
                             <VStack gap="5">
                                 <GeneralDetailView asset={asset} />
                                 <Divider className="pt-3" />
-                                {/* Adapters list */}
                                 <AdapterSelector
                                     items={adapters}
                                     selectedItems={asset.adapters.map((a) => {
@@ -80,7 +78,6 @@ export default function Index() {
                                         return match ? match[1] : '';
                                     })}
                                 />
-                                {/* Klienter list */}
                                 <ClientSelector
                                     items={clients}
                                     selectedItems={asset.clients.map((a) => {

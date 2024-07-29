@@ -19,7 +19,7 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({ items, selectedItems })
             <Box padding="4">
                 <HGrid gap="8">
                     <Heading size="medium" spacing>
-                        Klienter tilknyttet ressursen
+                        Klienter tilknyttet ressurs
                     </Heading>
                     <ClientTable
                         clients={items}

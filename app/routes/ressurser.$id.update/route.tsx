@@ -15,13 +15,32 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     let response = null;
     switch (actionType) {
         case 'UPDATE_CLIENT_IN_ASSET':
-            const updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
+            let clientUpdateType = getFormData(
+                formData.get('updateType'),
+                'updateType',
+                actionName
+            );
             const clientName = getFormData(formData.get('clientName'), 'clientName', actionName);
-            response = await AssetApi.updateClientInAsset(clientName, id, orgName, updateType);
+            response = await AssetApi.updateClientInAsset(
+                clientName,
+                id,
+                orgName,
+                clientUpdateType
+            );
             return json({ ok: response.status === 204 ? true : false });
-        case 'ADD_ADAPTER_TO_ASSET':
+        case 'UPDATE_ADAPTER_IN_ASSET':
+            let adapterUpdateType = getFormData(
+                formData.get('updateType'),
+                'updateType',
+                actionName
+            );
             const adapterName = getFormData(formData.get('adapterName'), 'adapterName', actionName);
-            response = await AssetApi.addAdapterToAsset(adapterName, id, orgName);
+            response = await AssetApi.updateAdapterInAsset(
+                adapterName,
+                id,
+                orgName,
+                adapterUpdateType
+            );
             return json({ ok: response.status === 204 ? true : false });
         default:
             const description = getFormData(formData.get('description'), 'description', actionName);
