@@ -28,7 +28,6 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({ f, components, configs })
         setSelectedComponent(findConfig ? findConfig.name : '');
     }
 
-    //TODO: form error handling
     return (
         <f.Form method="post">
             <VStack gap={'10'}>

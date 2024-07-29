@@ -40,6 +40,7 @@ export default function Index() {
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Komponenter'} icon={ComponentIcon} helpText="components" />
             <ComponentsTable components={components} selectedComponents={selectedCompoents} />
+            {/*<ComponentsTableFlat components={components} selectedComponents={selectedCompoents} />*/}
         </>
     );
 }
