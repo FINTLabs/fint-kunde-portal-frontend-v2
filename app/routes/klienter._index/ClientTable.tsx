@@ -1,14 +1,22 @@
 import React from 'react';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
-import { BodyShort, Heading, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, Label, Switch, Table, VStack } from '@navikt/ds-react';
 import { IClient } from '~/types/Clients';
 import { useNavigate } from '@remix-run/react';
 
 interface ClientTableProps {
     clients: IClient[];
+    selectable?: boolean;
+    selectedItems?: string[];
+    toggleSwitch?: (name: string, checked: boolean) => void;
 }
 
-const ClientTable: React.FC<ClientTableProps> = ({ clients }) => {
+const ClientTable: React.FC<ClientTableProps> = ({
+    clients,
+    selectable,
+    selectedItems,
+    toggleSwitch,
+}) => {
     const navigate = useNavigate();
 
     const handleRowClick = (client: IClient) => {
@@ -19,14 +27,30 @@ const ClientTable: React.FC<ClientTableProps> = ({ clients }) => {
         <VStack>
             <Table>
                 <Table.Body>
-                    {clients?.map((client, i) => (
-                        <Table.Row key={i + client.name} onClick={() => handleRowClick(client)}>
-                            <Table.DataCell>
-                                <Heading size="small">{client.shortDescription}</Heading>
-                                <BodyShort textColor="subtle">{client.name}</BodyShort>
+                    {clients?.map((item, i) => (
+                        <Table.Row key={i + item.name}>
+                            {selectable && (
+                                <Table.DataCell scope="row">
+                                    <Switch
+                                        checked={
+                                            selectedItems &&
+                                            selectedItems.some((selected) => selected === item.name)
+                                        }
+                                        onChange={(e) => {
+                                            const isChecked = e.target.checked;
+                                            console.log(item.name);
+                                            toggleSwitch && toggleSwitch(item.name, isChecked);
+                                        }}>
+                                        <Label>{''}</Label>
+                                    </Switch>
+                                </Table.DataCell>
+                            )}
+                            <Table.DataCell onClick={() => handleRowClick(item)}>
+                                <Heading size="small">{item.shortDescription}</Heading>
+                                <BodyShort textColor="subtle">{item.name}</BodyShort>
                             </Table.DataCell>
-                            <Table.DataCell>
-                                <ChevronRightIcon title="a11y-title" fontSize="1.5rem" />
+                            <Table.DataCell onClick={() => handleRowClick(item)}>
+                                <ChevronRightIcon title="Gå tilbake" fontSize="1.5rem" />
                             </Table.DataCell>
                         </Table.Row>
                     ))}

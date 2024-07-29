@@ -58,17 +58,7 @@ export async function putRequest(
         };
     }
 
-    // log(`RequestOptions: `, requestOptions);
-
     return await fetch(URL, requestOptions);
-    // const response = await fetch(URL, requestOptions);
-    // if (response.status === 200) {
-    //     const json = await response.json();
-    //     return json;
-    // } else {
-    //     error(`Error running ${functionName}, status:`, response.status);
-    //     return null;
-    // }
 }
 
 export async function postRequest(

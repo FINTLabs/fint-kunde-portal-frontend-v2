@@ -8,8 +8,8 @@ export interface IPartialAsset {
 export interface IAsset extends IPartialAsset {
     dn: string;
     organisation: string;
-    clients: IClient[]; // If you have a specific type for clients, replace `any` with that type
-    adapters: any[]; // If you have a specific type for adapters, replace `any` with that type
+    clients: string[];
+    adapters: string[];
     assetId: string;
     primaryAsset: boolean;
 }

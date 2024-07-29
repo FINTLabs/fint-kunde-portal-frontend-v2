@@ -1,15 +1,15 @@
 import React from 'react';
 import { Box, Heading, HGrid } from '@navikt/ds-react';
-import { IAdapter } from '~/types/types';
 import { useSubmit } from '@remix-run/react';
-import { CustomTabs } from '~/components/shared/CustomTabs';
+import { IClient } from '~/types/Clients';
+import ClientTable from '../klienter._index/ClientTable';
 
-interface AdapterSelectorProps {
-    items: IAdapter[];
+interface ClientSelectorProps {
+    items: IClient[];
     selectedItems: string[];
 }
 
-const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems }) => {
+const ClientSelector: React.FC<ClientSelectorProps> = ({ items, selectedItems }) => {
     const submit = useSubmit();
 
     return (
@@ -17,18 +17,18 @@ const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems 
             <Box padding="4">
                 <HGrid gap="8">
                     <Heading size="medium" spacing>
-                        Adaptere tilknyttet ressurs
+                        Klienter tilknyttet ressurs
                     </Heading>
-                    <CustomTabs
-                        items={items}
+                    <ClientTable
+                        clients={items}
                         selectable
                         selectedItems={selectedItems}
                         toggleSwitch={(name, isChecked) => {
                             submit(
                                 {
-                                    adapterName: name,
+                                    clientName: name,
                                     updateType: isChecked ? 'add' : 'remove',
-                                    actionType: 'UPDATE_ADAPTER_IN_ASSET',
+                                    actionType: 'UPDATE_CLIENT_IN_ASSET',
                                 },
                                 {
                                     method: 'POST',
@@ -44,4 +44,4 @@ const AdapterSelector: React.FC<AdapterSelectorProps> = ({ items, selectedItems 
     );
 };
 
-export default AdapterSelector;
+export default ClientSelector;

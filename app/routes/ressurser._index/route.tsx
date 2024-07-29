@@ -7,8 +7,9 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AccessApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
-import { BodyShort, Heading, Table } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
+import { PlusIcon } from '@navikt/aksel-icons';
 
 export const meta: MetaFunction = () => {
     return [
@@ -29,20 +30,34 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'ressurser', link: '/ressurser._index' }];
+    const breadcrumbs = [{ name: 'R essurser', link: '/ressurser._index' }];
     const assets = useLoaderData<IAsset[]>();
-    console.log(assets);
 
     const navigate = useNavigate();
 
     const handleClick = (id: string) => {
         navigate(`/ressurser/${id}`);
     };
+
+    const handleCreate = () => {
+        navigate(`/ressurser/create`);
+    };
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="assets" />
-
+            <HStack align={'center'} justify={'space-between'}>
+                <VStack>
+                    <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="assets" />
+                </VStack>
+                <VStack>
+                    <Button
+                        className="float-right"
+                        onClick={handleCreate}
+                        icon={<PlusIcon aria-hidden />}>
+                        Legg til
+                    </Button>
+                </VStack>
+            </HStack>
             <Table>
                 <Table.Header>
                     <Table.Row>

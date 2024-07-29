@@ -1,6 +1,6 @@
-import { ActionFunctionArgs, type LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { type LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { LayersIcon } from '@navikt/aksel-icons';
-import { json, useLoaderData, useNavigate, useParams } from '@remix-run/react';
+import { json, useLoaderData, useParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
@@ -10,25 +10,23 @@ import { Box, HStack, VStack } from '@navikt/ds-react';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import Autentisering from '~/components/shared/Autentisering';
 import AdapterSelector from './AdapterSelector';
 import { IAdapter } from '~/types/types';
 import AdapterAPI from '~/api/AdapterApi';
+import ClientApi from '~/api/ClientApi';
+import { IClient } from '~/types/Clients';
+import ClientSelector from './ClientSelector';
 
+type LoaderData = {
+    adapters: IAdapter[];
+    asset: IAsset;
+    clients: IClient[];
+};
 export const meta: MetaFunction = () => {
     return [
         { title: 'Ressurser' },
         { name: 'description', content: 'Liste over ressurser._index' },
     ];
-};
-
-export const action = async ({ request, params }: ActionFunctionArgs) => {
-    const actionName = 'action XXX???';
-
-    console.log(params);
-    console.log(request);
-    console.log('ACTTIONNNN');
-    return null;
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -38,8 +36,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         const orgName = await getSelectedOprganization(request);
         const asset = await AssetApi.getAssetById(orgName, id);
         const adapters = await AdapterAPI.getAdapters(orgName);
+        const clients = await ClientApi.getClients(orgName);
 
-        return json({ asset: asset, adapters: adapters });
+        return json({ asset: asset, adapters: adapters, clients: clients });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
@@ -54,7 +53,7 @@ export default function Index() {
         { name: `${id}`, link: `/ressurser/${id}` },
     ];
 
-    const { adapters, asset } = useLoaderData<{ adapters: IAdapter[]; asset: IAsset }>();
+    const { adapters, asset, clients } = useLoaderData<LoaderData>();
 
     return (
         <>
@@ -72,7 +71,6 @@ export default function Index() {
                             <VStack gap="5">
                                 <GeneralDetailView asset={asset} />
                                 <Divider className="pt-3" />
-                                {/* Adapters list */}
                                 <AdapterSelector
                                     items={adapters}
                                     selectedItems={asset.adapters.map((a) => {
@@ -80,7 +78,13 @@ export default function Index() {
                                         return match ? match[1] : '';
                                     })}
                                 />
-                                {/* Klienter list */}
+                                <ClientSelector
+                                    items={clients}
+                                    selectedItems={asset.clients.map((a) => {
+                                        const match = a.match(/cn=([^,]+)/);
+                                        return match ? match[1] : '';
+                                    })}
+                                />
                             </VStack>
                         </Box>
                     </VStack>
