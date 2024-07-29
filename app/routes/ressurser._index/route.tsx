@@ -30,7 +30,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'R essurser', link: '/ressurser._index' }];
+    const breadcrumbs = [{ name: 'Ressurser', link: '/ressurser._index' }];
     const assets = useLoaderData<IAsset[]>();
 
     const navigate = useNavigate();
