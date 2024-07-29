@@ -10,7 +10,6 @@ import { IAdapter } from '~/types/types';
 import { ErrorBox } from '~/components/shared/ErrorBox';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
-import { AdapterList } from '~/components/shared/AdapterList';
 import { CustomTabs } from '~/components/shared/CustomTabs';
 
 interface IPageLoaderData {

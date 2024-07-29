@@ -1,7 +1,5 @@
 import React from 'react';
 import { Box, Heading, HGrid } from '@navikt/ds-react';
-import { AdapterList } from '~/components/shared/AdapterList';
-import { IAdapter } from '~/types/types';
 import { useSubmit } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import ClientTable from '../klienter._index/ClientTable';
