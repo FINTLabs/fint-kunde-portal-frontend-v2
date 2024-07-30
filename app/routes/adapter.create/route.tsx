@@ -5,11 +5,12 @@ import {
     type ActionFunctionArgs,
 } from '@remix-run/node';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { Form, redirect } from '@remix-run/react';
+import { Form, redirect, useActionData } from '@remix-run/react';
 import { IAdapter, IPartialAdapter } from '~/types/types';
 import { getSession } from '~/utils/session';
 import { Box, Button, FormSummary, HStack, TextField, Textarea } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
+import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 export const meta: MetaFunction = () => {
     return [
@@ -17,8 +18,14 @@ export const meta: MetaFunction = () => {
         { name: 'description', content: 'Opprett ny adapter' },
     ];
 };
+type Errors = { name?: string; description?: string; detailedInfo?: string };
+type ActionData = {
+    errors?: Errors;
+};
 
 export default function Index() {
+    const actionData = useActionData<ActionData>();
+
     const breadcrumbs = [
         { name: 'Adaptere', link: '/adaptere' },
         { name: `Opprett ny adapter`, link: `/adapter/create` },
@@ -38,7 +45,13 @@ export default function Index() {
                         <FormSummary.Answers>
                             <FormSummary.Answer>
                                 <HStack className="flex !items-end" gap="2">
-                                    <TextField name="name" label="Navn" type="text" htmlSize={20} />
+                                    <TextField
+                                        name="name"
+                                        label="Navn"
+                                        type="text"
+                                        htmlSize={20}
+                                        error={actionData?.errors?.name}
+                                    />
                                     <span className="pb-3.5">@adapter.fintlabs.no</span>
                                 </HStack>
                             </FormSummary.Answer>
@@ -49,11 +62,16 @@ export default function Index() {
                                     label="Kort beskrivelse"
                                     type="text"
                                     htmlSize={50}
+                                    error={actionData?.errors?.description}
                                 />
                             </FormSummary.Answer>
 
                             <FormSummary.Answer>
-                                <Textarea name="detailedInfo" label="Detaljert informasjon" />
+                                <Textarea
+                                    name="detailedInfo"
+                                    label="Detaljert informasjon"
+                                    error={actionData?.errors?.detailedInfo}
+                                />
                             </FormSummary.Answer>
                             <Button type="submit" title="Opprett">
                                 Opprett
@@ -72,23 +90,23 @@ export async function action({ request }: ActionFunctionArgs) {
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
     const detailedInfo = formData.get('detailedInfo') as string;
-    // validate form here // use data mutations with form
-    if (!name || !description || !detailedInfo) {
-        return json({ error: 'Form is not valid' });
+
+    const errors: Errors = {};
+    if (!name) errors.name = 'Navn er påkrevd';
+    if (!description) errors.description = 'Beskrivelse er påkrevd';
+    if (!detailedInfo) errors.detailedInfo = 'Detaljert informasjon er påkrevd';
+
+    if (Object.keys(errors).length > 0) {
+        return json({ errors });
     }
 
-    const session = await getSession(request.headers.get('Cookie'));
-    const userSession = session.get('user-session');
-
+    const orgName = await getSelectedOprganization(request);
     const newAdapter: IPartialAdapter = {
         name: name,
         shortDescription: description,
         note: detailedInfo,
     };
-    const response = await AdapterAPI.createAdapter(
-        newAdapter,
-        userSession.selectedOrganization.name
-    );
+    const response = await AdapterAPI.createAdapter(newAdapter, orgName);
 
     if (response.status === 201) {
         const newAdapter = (await response.json()) as IAdapter;
