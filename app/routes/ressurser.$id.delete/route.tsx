@@ -4,16 +4,9 @@ import { getFormData, getRequestParam } from '~/utils/requestUtils';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
-    const actionName = 'action update';
-    const formData = await request.formData();
     const id = getRequestParam(params.id, 'id'); // TODO: fix it with invariant
-
-    const actionType = formData.get('actionType') || '';
-
     const orgName = await getSelectedOprganization(request);
-
     const response = await AssetApi.deleteAsset(id, orgName);
-
     if (response.status === 204) {
         // TODO: find out how to display a message that the record was deleted
         return redirect(`/ressurser`);
