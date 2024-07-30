@@ -1,30 +1,15 @@
 import {
     type LoaderFunctionArgs,
     json,
-    type LoaderFunction,
     type MetaFunction,
     type ActionFunctionArgs,
 } from '@remix-run/node';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { MigrationIcon } from '@navikt/aksel-icons';
-import { Form, redirect, useLoaderData, useParams } from '@remix-run/react';
-import adapters from '~/routes/adaptere/adapterList.json';
-import { IAdapter, IPartialAdapter, IUserSession } from '~/types/types';
+import { Form, redirect } from '@remix-run/react';
+import { IAdapter, IPartialAdapter } from '~/types/types';
 import { getSession } from '~/utils/session';
-import { ErrorBox } from '~/components/shared/ErrorBox';
 import { Box, Button, FormSummary, HStack, TextField, Textarea } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
-
-export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-    console.log('Am in create');
-    // const session = await getSession(request.headers.get('Cookie'));
-    // const userSession: UserSession | undefined = session.get('user-session');
-    // if (!userSession) {
-    //     throw new Response('Unauthorized', { status: 401 });
-    // }
-    return json({});
-};
 
 export const meta: MetaFunction = () => {
     return [
