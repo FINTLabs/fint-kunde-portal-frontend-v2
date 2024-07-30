@@ -20,7 +20,7 @@ export const meta: MetaFunction = () => {
     ];
 };
 
-type Errors = { name?: string; description?: string };
+type Errors = { name?: string; description?: string; apiError?: string };
 type ActionData = {
     errors?: Errors;
 };
@@ -74,6 +74,12 @@ export default function Index() {
                         </FormSummary.Answers>
                     </FormSummary>
                 </Form>
+
+                {actionData?.errors?.apiError && (
+                    <Box padding="4" background="surface-danger-subtle">
+                        {actionData.errors.apiError}
+                    </Box>
+                )}
             </Box>
         </>
     );
@@ -108,9 +114,10 @@ export async function action({ request }: ActionFunctionArgs) {
         const newAdapter = (await response.json()) as IAsset;
         return redirect(`/ressurser/${newAdapter.name}`);
     } else {
-        const responseData = await response.json();
         return json({
-            error: `Unable to create adapter: ${responseData.error}`,
+            errors: {
+                apiError: `Unable to create resource: Status: ${response.status}, statusText: ${response.statusText}`,
+            },
             status: response.status,
         });
     }

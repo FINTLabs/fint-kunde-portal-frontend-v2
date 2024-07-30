@@ -20,7 +20,7 @@ export async function request(
 
         let requestOptions: RequestInit = {
             method: requestMethod,
-            credentials: isClientSide() ? 'same-origin' : 'include',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'x-nin': process.env.PERSONALNUMBER || '',
