@@ -1,5 +1,4 @@
 import {
-    type LoaderFunctionArgs,
     json,
     type MetaFunction,
     type ActionFunctionArgs,
@@ -7,7 +6,6 @@ import {
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Form, redirect, useActionData } from '@remix-run/react';
 import { IAdapter, IPartialAdapter } from '~/types/types';
-import { getSession } from '~/utils/session';
 import { Box, Button, FormSummary, HStack, TextField, Textarea } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
