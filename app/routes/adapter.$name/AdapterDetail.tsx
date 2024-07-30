@@ -11,6 +11,7 @@ import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { DeleteAdapter } from './DeleteAdapter';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
+import { DeleteModal } from '~/components/shared/DeleteModal';
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
@@ -66,7 +67,11 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                     selectedComponents={selectedComponents}
                                 />
                             </VStack>
-                            <DeleteAdapter />
+                            <DeleteModal
+                                title="Slett adapter"
+                                bodyText="Er du sikker på at du vil slette dette adapteret?"
+                                action="delete"
+                            />
                         </VStack>
                     </Box>
                 </VStack>

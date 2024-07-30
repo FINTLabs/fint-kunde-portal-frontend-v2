@@ -3,7 +3,13 @@ import { Form } from '@remix-run/react';
 import { useRef } from 'react';
 import { TrashIcon } from '@navikt/aksel-icons';
 
-export function DeleteAdapter() {
+type DeleteModalProps = {
+    title: string;
+    bodyText: string;
+    action: string;
+};
+
+export function DeleteModal({ title, bodyText, action }: DeleteModalProps) {
     const ref = useRef<HTMLDialogElement>(null);
     return (
         <>
@@ -13,12 +19,12 @@ export function DeleteAdapter() {
                 icon={<TrashIcon aria-hidden />}>
                 Slett
             </Button>
-            <Modal ref={ref} header={{ heading: 'Slett adapter' }}>
+            <Modal ref={ref} header={{ heading: title }}>
                 <Modal.Body>
-                    <BodyLong>Er du sikker på at du vil slette dette adapteret?</BodyLong>
+                    <BodyLong>{bodyText}</BodyLong>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Form action="delete" method="post" navigate={false}>
+                    <Form action={action} method="post" navigate={false}>
                         <Button type="submit" variant="danger">
                             Ja, jeg er sikker
                         </Button>

@@ -17,6 +17,7 @@ import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import ClientSelector from './ClientSelector';
 import { DeleteRessurs } from './DeleteRessurs';
+import { DeleteModal } from '~/components/shared/DeleteModal';
 
 type LoaderData = {
     adapters: IAdapter[];
@@ -86,7 +87,11 @@ export default function Index() {
                                         return match ? match[1] : '';
                                     })}
                                 />
-                                <DeleteRessurs />
+                                <DeleteModal
+                                    title="Slett ressurs"
+                                    bodyText="Er du sikker på at du vil slette denne ressursen?"
+                                    action="delete"
+                                />
                             </VStack>
                         </Box>
                     </VStack>
