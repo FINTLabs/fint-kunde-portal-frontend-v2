@@ -3,9 +3,9 @@ import { IPartialAsset } from '~/types/Asset';
 import { request } from '~/api/shared/api';
 
 class AssetApi {
-    static async getAllAssets(organisation: string) {
+    static async getAllAssets(organisationName: string) {
         const functionName = 'getAllAssets';
-        const URL = `${API_URL}/api/assets/${organisation}/`;
+        const URL = `${API_URL}/api/assets/${organisationName}/`;
         return request(URL, functionName);
     }
 
@@ -13,6 +13,12 @@ class AssetApi {
         const functionName = 'updateAccess';
         const URL = `${API_URL}/api/assets/${organisationName}/${access.name}`;
         return await request(URL, functionName, 'PUT', 'json', access);
+    }
+
+    static async deleteAsset(name: string, organisationName: string) {
+        const functionName = 'deleteAsset';
+        const URL = `${API_URL}/api/assets/${organisationName}/${name}`;
+        return await request(URL, functionName, 'DELETE');
     }
 
     static async getAssetById(orgName: string, assetId: string) {

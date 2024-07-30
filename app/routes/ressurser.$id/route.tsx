@@ -16,6 +16,7 @@ import AdapterAPI from '~/api/AdapterApi';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import ClientSelector from './ClientSelector';
+import { DeleteRessurs } from './DeleteRessurs';
 
 type LoaderData = {
     adapters: IAdapter[];
@@ -85,6 +86,7 @@ export default function Index() {
                                         return match ? match[1] : '';
                                     })}
                                 />
+                                <DeleteRessurs />
                             </VStack>
                         </Box>
                     </VStack>
