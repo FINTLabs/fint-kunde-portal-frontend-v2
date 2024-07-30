@@ -1,6 +1,7 @@
 import { IClient } from '~/types/Clients';
 
 export interface IPartialAsset {
+    assetId: string;
     name: string;
     description: string;
 }

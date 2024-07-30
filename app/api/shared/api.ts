@@ -74,9 +74,10 @@ export async function postRequest(
         };
     }
 
-    // log(`RequestOptions: `, requestOptions);
+    log(`RequestOptions: `, requestOptions);
 
     const response = await fetch(URL, requestOptions);
+    console.log(response);
     return response;
 }
 

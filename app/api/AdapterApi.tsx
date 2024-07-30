@@ -7,6 +7,7 @@ class AdapterAPI {
         const URL = `${API_URL}/api/adapters/${organisationName}`;
         return await request(URL, functionName);
     }
+    
     static async createAdapter(adapter: IPartialAdapter, organisationName: string) {
         const functionName = 'createAdapter';
         const URL = `${API_URL}/api/adapters/${organisationName}`;

@@ -9,10 +9,16 @@ class AssetApi {
         return request(URL, functionName);
     }
 
-    static async updateAccess(access: IPartialAsset, organisationName: string) {
-        const functionName = 'updateAccess';
-        const URL = `${API_URL}/api/assets/${organisationName}/${access.name}`;
-        return await request(URL, functionName, 'PUT', 'json', access);
+    static async createAsset(asset: IPartialAsset, organisationName: string) {
+        const functionName = 'createAsset';
+        const URL = `${API_URL}/api/assets/${organisationName}`;
+        return await request(URL, functionName, 'POST', 'json', asset);
+    }
+
+    static async updateAsset(asset: IPartialAsset, organisationName: string) {
+        const functionName = 'updateAsset';
+        const URL = `${API_URL}/api/assets/${organisationName}/${asset.name}`;
+        return await request(URL, functionName, 'PUT', 'json', asset);
     }
 
     static async deleteAsset(name: string, organisationName: string) {

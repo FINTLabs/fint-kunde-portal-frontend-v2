@@ -44,7 +44,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
             return json({ ok: response.status === 204 ? true : false });
         default:
             const description = getFormData(formData.get('description'), 'description', actionName);
-            response = await AssetApi.updateAccess({ name: id, description: description }, orgName);
+            response = await AssetApi.updateAsset({ name: id, description: description }, orgName);
             return json({ ok: response.status === 200 ? true : false });
     }
 };
