@@ -1,6 +1,6 @@
 import { ActionFunctionArgs, json, redirect } from '@remix-run/node';
 import AssetApi from '~/api/AssetApi';
-import { getFormData, getRequestParam } from '~/utils/requestUtils';
+import { getRequestParam } from '~/utils/requestUtils';
 import { getSelectedOprganization } from '~/utils/selectedOrganization';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
