@@ -25,7 +25,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     console.log('cookies _>_>_>_>>_>__>');
     console.log(cookies);
     try {
-        const services = await ConsentApi.getServices(orgName, cookies); // Pass cookies to getServices
+        const services = await ConsentApi.getServices(orgName, cookies ?? ''); // Pass cookies to getServices
         const configs = await ConsentApi.getTest(orgName);
         return json({ services, configs });
     } catch (error) {

@@ -13,7 +13,7 @@ export async function request(
     functionName: string,
     requestMethod = 'GET',
     returnType: ReturnType = 'json',
-    data?: PostDataType,
+    data?: PostDataType
 ) {
     try {
         log(`Running ${functionName} with URL:`, URL);
@@ -42,8 +42,8 @@ export async function request(
                 throw new Error(`Unsupported request method: ${requestMethod}`);
         }
     } catch (err) {
-        error(`Error running ${functionName}:`, err);
-        throw new Error(`Error running ${functionName}`);
+        error(`:((((( Error running ${functionName}:`, err);
+        throw new Error(`:(((((Error running ${functionName}`);
     }
 }
 
@@ -76,7 +76,7 @@ export async function postRequest(
         };
     }
 
-    log(`RequestOptions: `, requestOptions);
+    // log(`RequestOptions: `, requestOptions);
 
     const response = await fetch(URL, requestOptions);
     console.log(response);
@@ -89,13 +89,16 @@ async function getRequest(
     requestOptions: RequestInit,
     returnType: ReturnType
 ) {
-    log(`RequestOptions: `, requestOptions);
+    // log(`RequestOptions: `, requestOptions);
     const response = await fetch(URL, requestOptions);
-    log(`Response: `, response);
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {
-        error(`Error running ${functionName}, status:`, response.status);
+        log(`Response: `, response);
+
+        error(
+            `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`
+        );
         return null;
     }
 }
