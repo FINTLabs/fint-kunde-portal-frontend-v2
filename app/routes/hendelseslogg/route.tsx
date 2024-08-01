@@ -74,7 +74,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
+    const breadcrumbs = [{ name: 'Hendelseslogg', link: '/hendelseslogg' }];
     const fetcher = useFetcher();
     const actionData = fetcher.data as ActionData;
 
