@@ -27,8 +27,8 @@ export default function Index() {
                             (acc: MenuItem[], curr: MenuDropDown) => [...acc, ...curr.subMenus],
                             []
                         )
-                        .map((item) => (
-                            <Link to={item.path}>
+                        .map((item, index) => (
+                            <Link key={index} to={item.path}>
                                 <Box padding="10" borderRadius={'medium'} borderWidth="1">
                                     {item.title}
                                 </Box>
