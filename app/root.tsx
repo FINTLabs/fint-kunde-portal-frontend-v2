@@ -25,11 +25,9 @@ export const meta: MetaFunction = () => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const session = await getSession(request.headers.get('Cookie'));
-
     let userSession = session.get('user-session');
 
-    log('userSession');
-    // log(userSession);
+    log('userSession: ', userSession);
     if (!userSession) {
         const meData: IMeData = await MeApi.fetchMe();
         const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
@@ -50,7 +48,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
         session.set('user-session', userSession);
         const cookie = await commitSession(session);
-
         let features = await FeaturesApi.fetchFeatures();
 
         features = features ? features : {};
