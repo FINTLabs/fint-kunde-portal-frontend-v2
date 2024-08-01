@@ -16,8 +16,8 @@ spec:
   orgId: fintlabs.no
   image: ghcr.io/fintlabs/fint-kunde-portal-frontend-v2:latest
   url:
-    hostname: kunde.felleskomponent.no
-    basePath: /v2
+    hostname: kunde-remix.felleskomponent.no
+    basePath: /
   ingress:
     enabled: true
     middlewares:
