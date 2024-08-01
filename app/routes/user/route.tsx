@@ -17,11 +17,11 @@ export let loader = async () => {
 
 export default function Index() {
     const user = useLoaderData<IMeData>();
-    const breadcrumbs = [{ name: 'Profile', link: '/user' }];
+    // const breadcrumbs = [{ name: 'Profile', link: '/user' }];
 
     return (
         <div>
-            <Breadcrumbs breadcrumbs={breadcrumbs} />
+            {/* <Breadcrumbs breadcrumbs={breadcrumbs} /> */}
             <InternalPageHeader title={'User Information'} icon={PersonIcon} />
             <div style={{ marginBottom: '1rem' }}>
                 <Label>Full Name:</Label>
