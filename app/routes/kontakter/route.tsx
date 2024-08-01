@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import { getSession } from '~/utils/session';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
@@ -30,9 +29,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     log('Request headers:', request.headers.get('x-nin'));
 
     try {
-        const session = await getSession(request.headers.get('Cookie'));
-        const userSession = session.get('user-session');
-        const selectedOrg = userSession.selectedOrganization.name;
+        const selectedOrg = await getSelectedOprganization(request);
 
         const technicalContacts = await ContactApi.getTechnicalContacts(selectedOrg);
         const rolesData = await RoleApi.getRoles();
