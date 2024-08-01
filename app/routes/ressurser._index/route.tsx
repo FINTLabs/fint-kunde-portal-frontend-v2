@@ -6,7 +6,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AccessApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { BodyShort, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { PlusIcon } from '@navikt/aksel-icons';
@@ -20,7 +20,7 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
     try {
-        const orgName = await getSelectedOprganization(request);
+        const orgName = await getSelectedOrganization(request);
         const assets = await AccessApi.getAllAssets(orgName);
         return json(assets);
     } catch (error) {

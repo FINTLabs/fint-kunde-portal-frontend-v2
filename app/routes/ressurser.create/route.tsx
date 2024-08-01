@@ -9,7 +9,7 @@ import { Box, Button, FormSummary, HStack, Textarea, TextField } from '@navikt/d
 import React from 'react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Form, useActionData } from '@remix-run/react';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IAsset, IPartialAsset } from '~/types/Asset';
 import AssetApi from '~/api/AssetApi';
 
@@ -100,7 +100,7 @@ export async function action({ request }: ActionFunctionArgs) {
         return json({ errors });
     }
 
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
     const newAsset: IPartialAsset = {
         assetId: name,
         name: name,

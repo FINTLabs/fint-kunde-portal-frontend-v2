@@ -9,7 +9,7 @@ import { useLoaderData, useNavigate } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
 import { ErrorBox } from '~/components/shared/ErrorBox';
 import { PlusIcon } from '@navikt/aksel-icons';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { CustomTabs } from '~/components/shared/CustomTabs';
 
 interface IPageLoaderData {
@@ -22,7 +22,7 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
     log('Request headers:', request.headers.get('x-nin'));
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
     const adapters = await AdapterAPI.getAdapters(orgName);
     return json({ adapters: adapters, orgName });
 };

@@ -12,14 +12,14 @@ import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import Autentisering from '~/components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from '../adapter.$name/constants';
 
 // @ts-ignore
 export async function loader({ request, params }: ActionFunctionArgs) {
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
     const id = params.id || '';
 
     try {
@@ -125,7 +125,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     // const name = params.name;
 
     const formData = await request.formData();
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
 
     const actionType = formData.get('type') as string;
     if (actionType === 'Passord') {

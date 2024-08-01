@@ -1,14 +1,10 @@
-import {
-    json,
-    type MetaFunction,
-    type ActionFunctionArgs,
-} from '@remix-run/node';
+import { json, type MetaFunction, type ActionFunctionArgs } from '@remix-run/node';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Form, redirect, useActionData } from '@remix-run/react';
 import { IAdapter, IPartialAdapter } from '~/types/types';
 import { Box, Button, FormSummary, HStack, TextField, Textarea } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const meta: MetaFunction = () => {
     return [
@@ -98,7 +94,7 @@ export async function action({ request }: ActionFunctionArgs) {
         return json({ errors });
     }
 
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
     const newAdapter: IPartialAdapter = {
         name: name,
         shortDescription: description,

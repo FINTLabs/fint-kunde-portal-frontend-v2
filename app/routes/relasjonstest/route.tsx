@@ -5,7 +5,7 @@ import { TerminalIcon } from '@navikt/aksel-icons';
 import { Box, VStack } from '@navikt/ds-react';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
 import ComponentApi from '~/api/ComponentApi';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import { IComponent } from '~/types/Component';
 import ClientApi from '~/api/ClientApi';
@@ -23,7 +23,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
 
     try {
         const components = await ComponentApi.getOrganisationComponents(orgName);

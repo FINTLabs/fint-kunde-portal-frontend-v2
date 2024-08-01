@@ -1,6 +1,6 @@
 import { ActionFunctionArgs, json, redirect } from '@remix-run/node';
 import AdapterAPI from '~/api/AdapterApi';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getRequestParam, getFormData } from '../../utils/requestUtils';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -15,7 +15,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const note = getFormData(formData.get('note'), 'note', actionName);
 
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
 
     const actionType = formData.get('actionType') || '';
 

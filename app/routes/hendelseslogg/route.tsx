@@ -13,7 +13,7 @@ import { IComponentConfig } from '~/types/ComponentConfig';
 import LogApi from '~/api/LogApi';
 import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
 import CacheStatusTable from '~/routes/hendelseslogg/CacheStatusTable';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 interface ActionData {
     message: string;
@@ -28,7 +28,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const selectOrg = await getSelectedOprganization(request);
+    const selectOrg = await getSelectedOrganization(request);
     try {
         const components = await ComponentApi.getOrganisationComponents(selectOrg);
         const configs = await ComponentConfigApi.getComponentConfigs();
@@ -47,7 +47,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const configClass = formData.get('configClass') as string;
     log('on search:', component, environment, action, configClass);
 
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
 
     const query = `${component}/${action}_${configClass.toUpperCase()}`;
     log('url:', query);

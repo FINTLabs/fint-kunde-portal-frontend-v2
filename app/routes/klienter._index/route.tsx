@@ -7,11 +7,11 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TokenIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Tabs } from '@navikt/ds-react';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import type { LoaderFunction } from '@remix-run/node';
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
 
     try {
         const clientData = await ClientApi.getClients(orgName);

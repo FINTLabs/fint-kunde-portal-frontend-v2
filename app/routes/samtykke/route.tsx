@@ -6,7 +6,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Box, VStack } from '@navikt/ds-react';
 import ServiceAccordion from '~/routes/samtykke/ServiceAccordion';
 import SearchHeader from '~/routes/samtykke/SearchHeader';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { json, useLoaderData } from '@remix-run/react';
 import ConsentApi from '~/api/ConsentApi';
 import { IComponentConfig } from '~/types/ComponentConfig';
@@ -18,7 +18,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
     const headers = request.headers;
     const cookies = headers.get('Cookie');
 

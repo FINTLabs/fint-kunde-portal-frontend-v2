@@ -5,7 +5,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { Box, HStack, VStack } from '@navikt/ds-react';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
@@ -35,7 +35,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const id = params.id || '';
 
     try {
-        const orgName = await getSelectedOprganization(request);
+        const orgName = await getSelectedOrganization(request);
         const asset = await AssetApi.getAssetById(orgName, id);
         const adapters = await AdapterAPI.getAdapters(orgName);
         const clients = await ClientApi.getClients(orgName);

@@ -1,12 +1,12 @@
 import { ActionFunctionArgs, json, redirect } from '@remix-run/node';
 import AdapterAPI from '~/api/AdapterApi';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
     const actionName = 'action delete';
 
     const name = getRequestParam(params.name, 'name');
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
 
     const response = await AdapterAPI.deleteAdapter(name, orgName);
     if (response.status === 204) {

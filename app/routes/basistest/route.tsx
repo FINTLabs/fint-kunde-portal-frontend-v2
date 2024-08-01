@@ -4,7 +4,7 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import { Alert, BodyShort, Box, VStack } from '@navikt/ds-react';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ComponentApi from '~/api/ComponentApi';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import { IComponent } from '~/types/Component';
@@ -25,7 +25,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const selectOrg = await getSelectedOprganization(request);
+    const selectOrg = await getSelectedOrganization(request);
     try {
         const components = await ComponentApi.getOrganisationComponents(selectOrg);
         const clients = await ClientApi.getClients(selectOrg);
@@ -46,7 +46,7 @@ export async function action({ request }: ActionFunctionArgs) {
     log('env:', environment);
     log('client:', client);
 
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
 
     let response: never[] = [];
     let message = 'Run test with: ' + component + ' ' + client + ' ' + environment + orgName;

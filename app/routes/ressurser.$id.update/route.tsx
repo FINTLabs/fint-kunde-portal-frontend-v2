@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, json, redirect } from '@remix-run/node';
 import AssetApi from '~/api/AssetApi';
 import { getFormData, getRequestParam } from '~/utils/requestUtils';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
     const actionName = 'action update';
@@ -10,7 +10,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const actionType = formData.get('actionType') || '';
 
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
 
     let response = null;
     switch (actionType) {

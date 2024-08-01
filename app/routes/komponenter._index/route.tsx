@@ -7,7 +7,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import { IComponent } from '~/types/Component';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const meta: MetaFunction = () => {
     return [
@@ -19,7 +19,7 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async ({ request }) => {
     try {
         const components = await ComponentApi.getAllComponents();
-        const orgName = await getSelectedOprganization(request);
+        const orgName = await getSelectedOrganization(request);
         return json({ components, orgName });
     } catch (error) {
         console.error('Error fetching data:', error);

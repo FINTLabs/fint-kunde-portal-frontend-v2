@@ -12,7 +12,7 @@ import { IContact, IFetcherResponseData, IRole } from '~/types/types';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ContactModal from '~/routes/kontakter/ContactModal';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization as getSelectedOrganization } from '~/utils/selectedOrganization';
 
 interface IPageLoaderData {
     technicalContacts?: IContact[];
@@ -29,7 +29,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     log('Request headers:', request.headers.get('x-nin'));
 
     try {
-        const selectedOrg = await getSelectedOprganization(request);
+        const selectedOrg = await getSelectedOrganization(request);
 
         const technicalContacts = await ContactApi.getTechnicalContacts(selectedOrg);
         const rolesData = await RoleApi.getRoles();
@@ -64,7 +64,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const actionType = formData.get('actionType');
-    const selectedOrg = await getSelectedOprganization(request);
+    const selectedOrg = await getSelectedOrganization(request);
     const contactNin = (formData.get('contactNin') as string) || '';
     const roleId = (formData.get('roleId') as string) || '';
 

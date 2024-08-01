@@ -13,11 +13,11 @@ import { IAdapter } from '~/types/types';
 import { ErrorBox } from '~/components/shared/ErrorBox';
 import ComponentApi from '~/api/ComponentApi';
 import AdapterAPI from '~/api/AdapterApi';
-import { getSelectedOprganization } from '~/utils/selectedOrganization';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
 
     const adapters = await AdapterAPI.getAdapters(orgName);
     const components = await ComponentApi.getAllComponents();
@@ -30,7 +30,6 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-
     // TODO: get adapter based on ID.
     const { adapters } = useLoaderData<{ adapters: IAdapter[] }>();
 
@@ -74,7 +73,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     }
 
     const formData = await request.formData();
-    const orgName = await getSelectedOprganization(request);
+    const orgName = await getSelectedOrganization(request);
 
     const actionType = formData.get('type') as string;
     if (actionType === 'Passord') {
