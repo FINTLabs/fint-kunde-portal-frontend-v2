@@ -20,8 +20,10 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOprganization(request);
     const headers = request.headers;
-    const cookies = headers.get('cookie');
+    const cookies = headers.get('Cookie');
 
+    console.log('cookies _>_>_>_>>_>__>');
+    console.log(cookies);
     try {
         const services = await ConsentApi.getServices(orgName, cookies); // Pass cookies to getServices
         const configs = await ConsentApi.getTest(orgName);

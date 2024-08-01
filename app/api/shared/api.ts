@@ -13,7 +13,7 @@ export async function request(
     functionName: string,
     requestMethod = 'GET',
     returnType: ReturnType = 'json',
-    data?: PostDataType
+    data?: PostDataType,
 ) {
     try {
         log(`Running ${functionName} with URL:`, URL);
@@ -24,6 +24,8 @@ export async function request(
             headers: {
                 'Content-Type': 'application/json',
                 'x-nin': process.env.PERSONALNUMBER || '',
+                // Cookie: cookies, // Include cookies in the request headers
+                Authorization: `Bearer ${process.env.ACCESS_TOKEN}`, // TODO: this is just a temporary solution, change this to fetch accesstoken from OAuth 2.0 log in
             },
         };
 
@@ -87,8 +89,9 @@ async function getRequest(
     requestOptions: RequestInit,
     returnType: ReturnType
 ) {
-    // log(`RequestOptions: `, requestOptions);
+    log(`RequestOptions: `, requestOptions);
     const response = await fetch(URL, requestOptions);
+    log(`Response: `, response);
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {
