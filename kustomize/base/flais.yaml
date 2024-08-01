@@ -21,4 +21,4 @@ spec:
   ingress:
     enabled: true
     middlewares:
-      - fint-kunde-portal-sso
+      - fint-kunde-portal-v2-sso
