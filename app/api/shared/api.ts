@@ -27,17 +27,17 @@ export async function request(
             },
         };
 
-        if (requestMethod === 'GET') {
-            return await getRequest(URL, functionName, requestOptions, returnType);
-        }
-        if (requestMethod === 'POST') {
-            return await postRequest(URL, functionName, requestOptions, data);
-        }
-        if (requestMethod === 'PUT') {
-            return await putRequest(URL, functionName, requestOptions, data);
-        }
-        if (requestMethod === 'DELETE') {
-            return await postRequest(URL, functionName, requestOptions, data);
+        switch (requestMethod) {
+            case 'GET':
+                return await getRequest(URL, functionName, requestOptions, returnType);
+            case 'POST':
+                return await postRequest(URL, functionName, requestOptions, data);
+            case 'PUT':
+                return await putRequest(URL, functionName, requestOptions, data);
+            case 'DELETE':
+                return await postRequest(URL, functionName, requestOptions, data);
+            default:
+                throw new Error(`Unsupported request method: ${requestMethod}`);
         }
     } catch (err) {
         error(`Error running ${functionName}:`, err);
