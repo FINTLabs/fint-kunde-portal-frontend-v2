@@ -15,7 +15,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const note = getFormData(formData.get('note'), 'note', actionName);
 
     const orgName = await getSelectedOprganization(request);
-    await AdapterAPI.updateAdapter(
+
+    let response = null;
+
+    response = await AdapterAPI.updateAdapter(
         {
             name: name,
             shortDescription: shortDescription as string,

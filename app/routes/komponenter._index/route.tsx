@@ -39,7 +39,7 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Komponenter'} icon={ComponentIcon} helpText="components" />
-            <ComponentsTable components={components} selectedComponents={selectedCompoents} />
+            <ComponentsTable items={components} selectedItems={selectedCompoents} />
             {/*<ComponentsTableFlat components={components} selectedComponents={selectedCompoents} />*/}
         </>
     );

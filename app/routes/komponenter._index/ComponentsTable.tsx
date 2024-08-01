@@ -5,15 +5,19 @@ import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
 
 interface ComponentsSectionProps {
-    components: IComponent[];
-    selectedComponents: string[];
+    items: IComponent[];
+    selectedItems: string[];
     columns?: number;
+    selectable?: boolean;
+    toggleSwitch?: (name: string, checked: boolean) => void;
 }
 
 const ComponentsTable: React.FC<ComponentsSectionProps> = ({
-    components,
-    selectedComponents,
+    items: components,
+    selectedItems,
     columns = 1,
+    selectable,
+    toggleSwitch,
 }) => {
     const navigate = useNavigate();
 
@@ -44,34 +48,41 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                     {componentChunks.map((chunk, chunkIndex) => (
                         <Table key={chunkIndex} size={'small'}>
                             <Table.Body>
-                                {chunk.map((component, index) => (
+                                {chunk.map((item, index) => (
                                     <Table.Row key={index}>
                                         <Table.DataCell>
                                             <Switch
-                                                checked={selectedComponents.includes(component.dn)}
-                                                onChange={() => {}}>
+                                                checked={selectedItems.some(
+                                                    (selected) => selected === item.name
+                                                )}
+                                                onChange={(e) => {
+                                                    const isChecked = e.target.checked;
+                                                    console.log(item.name);
+                                                    toggleSwitch &&
+                                                        toggleSwitch(item.name, isChecked);
+                                                }}>
                                                 {''}
                                             </Switch>
                                         </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(component)}>
-                                            <Label>{component.description}</Label>
-                                            <Detail>{component.basePath}</Detail>
+                                        <Table.DataCell onClick={() => handleRowClick(item)}>
+                                            <Label>{item.description}</Label>
+                                            <Detail>{item.basePath}</Detail>
                                         </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(component)}>
-                                            {component.common && (
+                                        <Table.DataCell onClick={() => handleRowClick(item)}>
+                                            {item.common && (
                                                 <Tag variant="info" size={'xsmall'}>
                                                     Felles
                                                 </Tag>
                                             )}
                                         </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(component)}>
-                                            {component.openData && (
+                                        <Table.DataCell onClick={() => handleRowClick(item)}>
+                                            {item.openData && (
                                                 <Tag variant="neutral" size={'xsmall'}>
                                                     Åpne Data
                                                 </Tag>
                                             )}
                                         </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(component)}>
+                                        <Table.DataCell onClick={() => handleRowClick(item)}>
                                             <ChevronRightIcon
                                                 title="a11y-title"
                                                 fontSize="1.5rem"

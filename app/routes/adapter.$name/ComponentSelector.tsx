@@ -13,6 +13,7 @@ interface ComponentSelectorProps {
 const ComponentSelector: React.FC<ComponentSelectorProps> = ({ items, selectedItems }) => {
     const submit = useSubmit();
 
+    console.log(selectedItems);
     return (
         <>
             <Box padding="4">
@@ -20,17 +21,15 @@ const ComponentSelector: React.FC<ComponentSelectorProps> = ({ items, selectedIt
                     <Heading size="medium" spacing>
                         Komponenter tilknyttet ressurs
                     </Heading>
-                    <ComponentsTable components={items} selectedComponents={selectedItems} />
-                    {/* <ClientTable
-                        clients={items}
-                        selectable
+                    <ComponentsTable
+                        items={items}
                         selectedItems={selectedItems}
                         toggleSwitch={(name, isChecked) => {
                             submit(
                                 {
                                     clientName: name,
                                     updateType: isChecked ? 'add' : 'remove',
-                                    actionType: 'UPDATE_CLIENT_IN_ASSET',
+                                    actionType: 'UPDATE_COMPONENT_IN_ADAPTER',
                                 },
                                 {
                                     method: 'POST',
@@ -39,7 +38,7 @@ const ComponentSelector: React.FC<ComponentSelectorProps> = ({ items, selectedIt
                                 }
                             );
                         }}
-                    /> */}
+                    />
                 </HGrid>
             </Box>
         </>

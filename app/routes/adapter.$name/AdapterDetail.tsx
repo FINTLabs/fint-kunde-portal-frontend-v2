@@ -36,6 +36,8 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
         assetIds: adapter.assetIds,
     };
 
+    console.log(adapter.components);
+
     return (
         <Box padding={'2'}>
             <HStack>
@@ -62,7 +64,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                             <ComponentSelector
                                 items={components}
                                 selectedItems={adapter.components.map((a) => {
-                                    const match = a.match(/cn=([^,]+)/);
+                                    const match = a.match(/ou=([^,]+)/);
                                     return match ? match[1] : '';
                                 })}
                             />

@@ -111,8 +111,8 @@ export default function Index() {
 
                     <Heading size={'medium'}>Komponenter</Heading>
                     <ComponentsTable
-                        components={components}
-                        selectedComponents={selectedComponents}
+                        items={components}
+                        selectedItems={selectedComponents}
                         columns={2}
                     />
                 </Box>
