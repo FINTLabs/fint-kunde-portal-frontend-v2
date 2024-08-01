@@ -45,39 +45,33 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                         <Table key={chunkIndex} size={'small'}>
                             <Table.Body>
                                 {chunk.map((component, index) => (
-                                    <Table.Row
-                                        key={index}
-                                        onClick={() => handleRowClick(component)}>
-                                        {/*<Table.DataCell>*/}
-                                        {/*    /!*<Label>{component.description}</Label>*!/*/}
-                                        {/*    <Detail>{component.basePath}</Detail>*/}
-                                        {/*</Table.DataCell>*/}
+                                    <Table.Row key={index}>
                                         <Table.DataCell>
                                             <Switch
                                                 checked={selectedComponents.includes(component.dn)}
-                                                onChange={() => {}}
-                                                // hideLabel={true}
-                                                // position="right"
-                                            >
-                                                <Label>{component.description}</Label>
-                                                <Detail>{component.basePath}</Detail>
+                                                onChange={() => {}}>
+                                                {''}
                                             </Switch>
                                         </Table.DataCell>
-                                        <Table.DataCell>
+                                        <Table.DataCell onClick={() => handleRowClick(component)}>
+                                            <Label>{component.description}</Label>
+                                            <Detail>{component.basePath}</Detail>
+                                        </Table.DataCell>
+                                        <Table.DataCell onClick={() => handleRowClick(component)}>
                                             {component.common && (
                                                 <Tag variant="info" size={'xsmall'}>
                                                     Felles
                                                 </Tag>
                                             )}
                                         </Table.DataCell>
-                                        <Table.DataCell>
+                                        <Table.DataCell onClick={() => handleRowClick(component)}>
                                             {component.openData && (
                                                 <Tag variant="neutral" size={'xsmall'}>
                                                     Åpne Data
                                                 </Tag>
                                             )}
                                         </Table.DataCell>
-                                        <Table.DataCell>
+                                        <Table.DataCell onClick={() => handleRowClick(component)}>
                                             <ChevronRightIcon
                                                 title="a11y-title"
                                                 fontSize="1.5rem"

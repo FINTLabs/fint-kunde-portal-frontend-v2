@@ -12,6 +12,7 @@ import { DeleteAdapter } from './DeleteAdapter';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
 import { DeleteModal } from '~/components/shared/DeleteModal';
+import ComponentSelector from './ComponentSelector';
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
@@ -58,15 +59,13 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                                 allDetails={allDetails}
                             />
                             <Divider className="pt-3" />
-                            <VStack>
-                                <Heading size="medium" spacing>
-                                    Komponenter
-                                </Heading>
-                                <ComponentsTable
-                                    components={components}
-                                    selectedComponents={selectedComponents}
-                                />
-                            </VStack>
+                            <ComponentSelector
+                                items={components}
+                                selectedItems={adapter.components.map((a) => {
+                                    const match = a.match(/cn=([^,]+)/);
+                                    return match ? match[1] : '';
+                                })}
+                            />
                             <DeleteModal
                                 title="Slett adapter"
                                 bodyText="Er du sikker på at du vil slette dette adapteret?"
