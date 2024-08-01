@@ -17,7 +17,7 @@ export let loader = async () => {
 
 export default function Index() {
     const user = useLoaderData<IMeData>();
-    const breadcrumbs = [{ name: 'Test Page', link: '/test' }];
+    const breadcrumbs = [{ name: 'Profile', link: '/user' }];
 
     return (
         <div>
