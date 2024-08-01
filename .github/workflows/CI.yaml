@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Start deployment
+        if: github.ref == 'refs/heads/main'
+        uses: peter-evans/repository-dispatch@v2.1.1
+        with:
+          token: ${{ secrets.GITHUBACTION_TOKEN }}
+          repository: ${{ github.repository }}
+          event-type: trigger-cd
