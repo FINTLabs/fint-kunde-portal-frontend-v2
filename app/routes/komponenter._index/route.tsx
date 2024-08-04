@@ -1,13 +1,15 @@
-import { type LoaderFunction, MetaFunction } from '@remix-run/node';
+import { ActionFunctionArgs, type LoaderFunction, MetaFunction } from '@remix-run/node';
 import { ComponentIcon } from '@navikt/aksel-icons';
 import React from 'react';
-import { json, useLoaderData } from '@remix-run/react';
+import { json, useLoaderData, useSubmit } from '@remix-run/react';
 import ComponentApi from '~/api/ComponentApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import { IComponent } from '~/types/Component';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import { getFormData } from '~/utils/requestUtils';
+import OrganisationApi from '~/api/OrganisationApi';
 
 export const meta: MetaFunction = () => {
     return [
@@ -35,12 +37,45 @@ export default function Index() {
         .filter((component) => component.organisations.some((org) => org.includes(orgName)))
         .map((component) => component.dn);
 
+    const submit = useSubmit();
+
+    console.log(components);
+    console.log(selectedCompoents);
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Komponenter'} icon={ComponentIcon} helpText="components" />
-            <ComponentsTable items={components} selectedItems={selectedCompoents} />
+            <ComponentsTable
+                items={components}
+                selectedItems={selectedCompoents}
+                toggleSwitch={(name, isChecked) => {
+                    submit(
+                        {
+                            componentName: name,
+                            updateType: isChecked ? 'add' : 'remove',
+                        },
+                        {
+                            method: 'POST',
+                            navigate: false,
+                        }
+                    );
+                }}
+            />
             {/*<ComponentsTableFlat components={components} selectedComponents={selectedCompoents} />*/}
         </>
     );
 }
+
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+    const actionName = 'action update';
+    const formData = await request.formData();
+    const orgName = await getSelectedOrganization(request);
+
+    let updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
+    const componentName = getFormData(formData.get('componentName'), 'componentName', actionName);
+
+    const response = await OrganisationApi.updateComponent(componentName, orgName, updateType);
+    console.log(response);
+    return json({ ok: response.status === 204 ? true : false });
+};

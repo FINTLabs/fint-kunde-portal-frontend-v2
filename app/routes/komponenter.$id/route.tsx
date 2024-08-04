@@ -8,10 +8,13 @@ import { IComponent } from '~/types/Component';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import ComponentDetails from '~/routes/komponenter.$id/ComponentDetails';
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import EndpointTable from '~/routes/komponenter.$id/EndpointTable';
 import SwaggerTable from '~/routes/komponenter.$id/SwaggerTable';
 import ComponentEdit from '~/routes/komponenter.$id/ComponentEdit';
+import OrganisationApi from '~/api/OrganisationApi';
+import { getFormData } from '~/utils/requestUtils';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const id = params.id || '';

@@ -53,7 +53,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                         <Table.DataCell>
                                             <Switch
                                                 checked={selectedItems.some(
-                                                    (selected) => selected === item.name
+                                                    (selected) => selected === item.dn
                                                 )}
                                                 onChange={(e) => {
                                                     const isChecked = e.target.checked;
