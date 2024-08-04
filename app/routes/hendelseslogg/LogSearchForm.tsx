@@ -32,6 +32,8 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({ f, components, configs })
         return <div>No components</div>;
     }
 
+    console.log('configs aka ressurs');
+    console.log(configs);
     return (
         <f.Form method="post">
             <VStack gap={'10'}>
@@ -61,7 +63,7 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({ f, components, configs })
                     </Select>
 
                     <Select
-                        label="Configs"
+                        label="Ressurs"
                         size="small"
                         onChange={(e) => setSelectedConfig(e.target.value)}
                         value={selectedConfig}

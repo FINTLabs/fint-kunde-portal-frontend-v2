@@ -31,7 +31,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const selectOrg = await getSelectedOrganization(request);
     try {
         const components = await ComponentApi.getOrganisationComponents(selectOrg);
-        const configs = await ComponentConfigApi.getComponentConfigs();
+        const configs = await ComponentConfigApi.getComponentConfigs(); // rename to something else - returns a list of components with associated classes, these classes are the configurations
         return json({ components, configs });
     } catch (error) {
         console.error('Error fetching data:', error);
