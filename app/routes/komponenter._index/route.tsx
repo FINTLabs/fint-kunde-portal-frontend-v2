@@ -39,9 +39,6 @@ export default function Index() {
 
     const submit = useSubmit();
 
-    console.log(components);
-    console.log(selectedCompoents);
-
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
