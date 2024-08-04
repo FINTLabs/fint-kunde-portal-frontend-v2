@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { IAdapter } from '~/types/types';
 import { EditableTextField } from '../../components/shared/EditableTextField';
 import { PencilIcon, FloppydiskIcon } from '@navikt/aksel-icons';
+import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 
 export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -13,12 +14,13 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
     const submit = useSubmit();
 
     return (
-        <VStack gap="3">
+        <VStack gap="6">
             <HStack justify={'space-between'} align={'center'}>
                 <Heading align="start" size="medium">
                     Detaljer
                 </Heading>
             </HStack>
+            <LabelValuePanel label="Navn" value={adapter.name} />
             <EditableTextField
                 label={'Kort beskrivelse'}
                 value={adapterShortDesc}
