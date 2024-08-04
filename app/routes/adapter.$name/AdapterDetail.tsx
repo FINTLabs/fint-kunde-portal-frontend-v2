@@ -1,14 +1,11 @@
-import { Box, Button, HStack, Heading, VStack } from '@navikt/ds-react';
+import { Box, HStack, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import ComponentsTable from '../komponenter._index/ComponentsTable';
 import { IComponent } from '~/types/Component';
 import { FETCHER_PASSORD_KEY, FETCHER_CLIENT_SECRET_KEY } from './constants';
 import Autentisering from '../../components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
-import { DeleteAdapter } from './DeleteAdapter';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
 import { DeleteModal } from '~/components/shared/DeleteModal';
