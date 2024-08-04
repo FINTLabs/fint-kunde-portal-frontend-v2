@@ -14,6 +14,29 @@ class OrganisationApi {
         return request(URL, functionName);
     }
 
+    static async updateComponent(
+        componentName: string,
+        organisationName: string,
+        updateType: string
+    ) {
+        const URL = `${API_URL}/api/organisations/${organisationName}/components/${componentName}`;
+        if (updateType === 'add') {
+            return await OrganisationApi.addComponentToOrganisation(URL, componentName);
+        } else {
+            return await OrganisationApi.removeComponentFromOrganisation(URL, componentName);
+        }
+    }
+
+    static async addComponentToOrganisation(URL: string, componentName: string) {
+        const functionName = 'addComponentToOrganisation';
+        return await request(URL, functionName, 'PUT', 'json', { name: componentName });
+    }
+
+    static async removeComponentFromOrganisation(URL: string, componentName: string) {
+        const functionName = 'removeComponentFromOrganisation';
+        return await request(URL, functionName, 'DELETE', 'json', { name: componentName });
+    }
+
     // static async getOrganisation(organisationName: string): Promise<any> {
     //     const functionName = 'getOrganisation';
     //     const URL = `${API_URL}/api/organisations/${organisationName}`;
