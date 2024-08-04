@@ -103,8 +103,8 @@ export async function action({ request }: ActionFunctionArgs) {
     const response = await AdapterAPI.createAdapter(newAdapter, orgName);
 
     if (response.status === 201) {
-        const newAdapter = (await response.json()) as IAdapter;
-        return redirect(`/adapter/${newAdapter.name}`);
+        const responseAdapter = (await response.json()) as IAdapter;
+        return redirect(`/adapter/${responseAdapter.name}`);
     } else {
         const responseData = await response.json();
         return json({

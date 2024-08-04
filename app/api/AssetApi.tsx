@@ -11,7 +11,7 @@ class AssetApi {
 
     static async createAsset(asset: IPartialAsset, organisationName: string) {
         const functionName = 'createAsset';
-        const URL = `${API_URL}/api/assets/${organisationName}`;
+        const URL = `${API_URL}/api/assets/${organisationName}/`;
         return await request(URL, functionName, 'POST', 'json', asset);
     }
 

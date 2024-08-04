@@ -111,8 +111,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
     console.log(response);
     if (response.status === 201) {
-        const newAdapter = (await response.json()) as IAsset;
-        return redirect(`/ressurser/${newAdapter.name}`);
+        // const newAdapter = (await response.json()) as IAsset;
+        return redirect(`/ressurser/${newAsset.assetId}_fintlabs_no`);
     } else {
         return json({
             errors: {
