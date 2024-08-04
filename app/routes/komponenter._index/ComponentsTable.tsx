@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Detail, HGrid, Label, Switch, Table, Tag } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
@@ -16,7 +16,6 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
     items: components,
     selectedItems,
     columns = 1,
-    selectable,
     toggleSwitch,
 }) => {
     const navigate = useNavigate();
@@ -48,48 +47,71 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                     {componentChunks.map((chunk, chunkIndex) => (
                         <Table key={chunkIndex} size={'small'}>
                             <Table.Body>
-                                {chunk.map((item, index) => (
-                                    <Table.Row key={index}>
-                                        <Table.DataCell>
-                                            <Switch
-                                                checked={selectedItems.some(
-                                                    (selected) => selected === item.dn
+                                {chunk.map((item, index) => {
+                                    const isComponentSwitchedOn = selectedItems.some(
+                                        (selected) => selected === item.dn
+                                    );
+
+                                    const [switchLoadingState, setSwitchLoadingState] = useState({
+                                        loading: false,
+                                        isOn: isComponentSwitchedOn,
+                                    });
+
+                                    // To update switch loading state to false
+                                    useEffect(() => {
+                                        setSwitchLoadingState((prevState) => ({
+                                            ...prevState,
+                                            isOn: isComponentSwitchedOn,
+                                            loading: false,
+                                        }));
+                                    }, [isComponentSwitchedOn]);
+
+                                    return (
+                                        <Table.Row key={index}>
+                                            <Table.DataCell>
+                                                <Switch
+                                                    loading={switchLoadingState.loading}
+                                                    checked={isComponentSwitchedOn}
+                                                    onChange={(e) => {
+                                                        const checkedStatus = e.target.checked;
+                                                        console.log(item.name);
+                                                        setSwitchLoadingState({
+                                                            loading: true,
+                                                            isOn: isComponentSwitchedOn,
+                                                        });
+                                                        toggleSwitch &&
+                                                            toggleSwitch(item.name, checkedStatus);
+                                                    }}>
+                                                    {''}
+                                                </Switch>
+                                            </Table.DataCell>
+                                            <Table.DataCell onClick={() => handleRowClick(item)}>
+                                                <Label>{item.description}</Label>
+                                                <Detail>{item.basePath}</Detail>
+                                            </Table.DataCell>
+                                            <Table.DataCell onClick={() => handleRowClick(item)}>
+                                                {item.common && (
+                                                    <Tag variant="info" size={'xsmall'}>
+                                                        Felles
+                                                    </Tag>
                                                 )}
-                                                onChange={(e) => {
-                                                    const isChecked = e.target.checked;
-                                                    console.log(item.name);
-                                                    toggleSwitch &&
-                                                        toggleSwitch(item.name, isChecked);
-                                                }}>
-                                                {''}
-                                            </Switch>
-                                        </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(item)}>
-                                            <Label>{item.description}</Label>
-                                            <Detail>{item.basePath}</Detail>
-                                        </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(item)}>
-                                            {item.common && (
-                                                <Tag variant="info" size={'xsmall'}>
-                                                    Felles
-                                                </Tag>
-                                            )}
-                                        </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(item)}>
-                                            {item.openData && (
-                                                <Tag variant="neutral" size={'xsmall'}>
-                                                    Åpne Data
-                                                </Tag>
-                                            )}
-                                        </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(item)}>
-                                            <ChevronRightIcon
-                                                title="a11y-title"
-                                                fontSize="1.5rem"
-                                            />
-                                        </Table.DataCell>
-                                    </Table.Row>
-                                ))}
+                                            </Table.DataCell>
+                                            <Table.DataCell onClick={() => handleRowClick(item)}>
+                                                {item.openData && (
+                                                    <Tag variant="neutral" size={'xsmall'}>
+                                                        Åpne Data
+                                                    </Tag>
+                                                )}
+                                            </Table.DataCell>
+                                            <Table.DataCell onClick={() => handleRowClick(item)}>
+                                                <ChevronRightIcon
+                                                    title="a11y-title"
+                                                    fontSize="1.5rem"
+                                                />
+                                            </Table.DataCell>
+                                        </Table.Row>
+                                    );
+                                })}
                             </Table.Body>
                         </Table>
                     ))}

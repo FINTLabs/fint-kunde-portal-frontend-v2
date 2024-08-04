@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, type LoaderFunction, MetaFunction } from '@remix-run/node';
 import { ComponentIcon } from '@navikt/aksel-icons';
-import React from 'react';
-import { json, useLoaderData, useSubmit } from '@remix-run/react';
+import React, { useEffect, useState } from 'react';
+import { json, useActionData, useLoaderData, useSubmit } from '@remix-run/react';
 import ComponentApi from '~/api/ComponentApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -32,12 +32,20 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Index() {
     const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter' }];
     const { components, orgName } = useLoaderData<{ components: IComponent[]; orgName: string }>();
+    // const actionData = useActionData<{ success: boolean; error?: string }>();
 
     const selectedCompoents = components
         .filter((component) => component.organisations.some((org) => org.includes(orgName)))
         .map((component) => component.dn);
 
     const submit = useSubmit();
+
+    // useEffect(() => {
+    //     console.log(actionData);
+    //     if (actionData) {
+    //         setLoading(false);
+    //     }
+    // }, [actionData]);
 
     return (
         <>
@@ -72,7 +80,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     let updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
     const componentName = getFormData(formData.get('componentName'), 'componentName', actionName);
 
-    const response = await OrganisationApi.updateComponent(componentName, orgName, updateType);
-    console.log(response);
-    return json({ ok: response.status === 204 ? true : false });
+    try {
+        const response = await OrganisationApi.updateComponent(componentName, orgName, updateType);
+        const success = response.status === 204;
+        return json({ success });
+    } catch (error) {
+        console.error('Error updating component:', error);
+        return json({ success: false, error: 'Error updating component' }, { status: 500 });
+    }
 };
