@@ -26,7 +26,7 @@ const ComponentSelector: React.FC<ComponentSelectorProps> = ({ items, selectedIt
                         toggleSwitch={(name, isChecked) => {
                             submit(
                                 {
-                                    clientName: name,
+                                    componentName: name,
                                     updateType: isChecked ? 'add' : 'remove',
                                     actionType: 'UPDATE_COMPONENT_IN_ADAPTER',
                                 },

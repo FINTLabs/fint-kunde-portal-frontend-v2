@@ -6,7 +6,7 @@ import { getRequestParam, getFormData } from '../../utils/requestUtils';
 export const action = async ({ request, params }: ActionFunctionArgs) => {
     const actionName = 'action update';
     const formData = await request.formData();
-    const name = getRequestParam(params.name, 'name');
+    const adapterName = getRequestParam(params.name, 'name');
     const shortDescription = getFormData(
         formData.get('shortDescription'),
         'shortDescription',
@@ -21,48 +21,35 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     let response = null;
 
-    // switch (actionType) {
-    //     case 'UPDATE_CLIENT_IN_ASSET':
-    //         let clientUpdateType = getFormData(
-    //             formData.get('updateType'),
-    //             'updateType',
-    //             actionName
-    //         );
-    //         const clientName = getFormData(formData.get('clientName'), 'clientName', actionName);
-    //         response = await AssetApi.updateClientInAsset(
-    //             clientName,
-    //             id,
-    //             orgName,
-    //             clientUpdateType
-    //         );
-    //         return json({ ok: response.status === 204 ? true : false });
-    //     case 'UPDATE_ADAPTER_IN_ASSET':
-    //         let adapterUpdateType = getFormData(
-    //             formData.get('updateType'),
-    //             'updateType',
-    //             actionName
-    //         );
-    //         const adapterName = getFormData(formData.get('adapterName'), 'adapterName', actionName);
-    //         response = await AssetApi.updateAdapterInAsset(
-    //             adapterName,
-    //             id,
-    //             orgName,
-    //             adapterUpdateType
-    //         );
-    //         return json({ ok: response.status === 204 ? true : false });
-    //     default:
-    //         response = await AdapterAPI.updateAdapter(
-    //             {
-    //                 name: name,
-    //                 shortDescription: shortDescription as string,
-    //                 note: note as string,
-    //             },
-    //             orgName
-    //         );
-
-    //         console.log("response.status")
-    //         console.log(response.status)
-    //         return json({ ok: response.status === 200 ? true : false });
-
-    return redirect(`/adapter/${name}`);
+    switch (actionType) {
+        case 'UPDATE_COMPONENT_IN_ADAPTER':
+            let clientUpdateType = getFormData(
+                formData.get('updateType'),
+                'updateType',
+                actionName
+            );
+            const componentName = getFormData(
+                formData.get('componentName'),
+                'componentName',
+                actionName
+            );
+            response = await AdapterAPI.updateComponentInAdapter(
+                componentName,
+                adapterName,
+                orgName,
+                clientUpdateType
+            );
+            return json({ ok: response.status === 204 ? true : false });
+        default:
+            response = await AdapterAPI.updateAdapter(
+                {
+                    name: adapterName,
+                    shortDescription: shortDescription as string,
+                    note: note as string,
+                },
+                orgName
+            );
+            return redirect(`/adapter/${adapterName}`);
+    }
+    // return json({ ok: response.status === 200 ? true : false });
 };
