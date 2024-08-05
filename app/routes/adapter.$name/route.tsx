@@ -10,11 +10,11 @@ import { MigrationIcon } from '@navikt/aksel-icons';
 import { useLoaderData, useParams } from '@remix-run/react';
 import { AdapterDetail } from './AdapterDetail';
 import { IAdapter } from '~/types/types';
-import { InfoBox } from '~/components/shared/ErrorBox';
 import ComponentApi from '~/api/ComponentApi';
 import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
+import { InfoBox } from '~/components/shared/InfoBox';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const orgName = await getSelectedOrganization(request);

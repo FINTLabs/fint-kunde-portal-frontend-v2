@@ -10,7 +10,7 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { BodyShort, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { PlusIcon } from '@navikt/aksel-icons';
-import { InfoBox } from '~/components/shared/ErrorBox';
+import { InfoBox } from '~/components/shared/InfoBox';
 
 export const meta: MetaFunction = () => {
     return [
