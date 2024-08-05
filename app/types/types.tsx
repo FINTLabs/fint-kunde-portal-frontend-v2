@@ -60,20 +60,18 @@ export interface IMeData {
 //     customer: boolean;
 //     primaryAssetId: string | null;
 // }
+
+export interface SessionOrganisation {
+    name: string;
+    orgNumber: string;
+    displayName: string;
+}
 export interface IUserSession {
     firstName: string;
     lastName: string;
     organizationCount: number;
-    selectedOrganization: {
-        name: string;
-        orgNumber: string;
-        displayName: string;
-    } | null;
-    organizations: {
-        name: string;
-        orgNumber: string;
-        displayName: string;
-    }[];
+    selectedOrganization: SessionOrganisation | null;
+    organizations: SessionOrganisation[];
 }
 
 export interface FeatureFlags {

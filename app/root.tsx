@@ -1,5 +1,5 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import './tailwind.css';
 import '@navikt/ds-css';
@@ -9,12 +9,13 @@ import React from 'react';
 import Menu from './components/Menu/Menu';
 import { getSession, commitSession } from '~/utils/session';
 import MeApi from '~/api/MeApi';
-import { FeatureFlags, IMeData, IUserSession } from '~/types/types';
+import { FeatureFlags, IMeData, IUserSession, SessionOrganisation } from '~/types/types';
 import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
 import { Organisation } from '~/types/Organisation';
 import { CustomError } from '~/components/shared/CustomError';
 import { log } from './utils/logger';
+import { getFormData } from './utils/requestUtils';
 
 export const meta: MetaFunction = () => {
     return [
@@ -65,6 +66,33 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const features = await FeaturesApi.fetchFeatures();
     return json({ userSession, features });
 };
+
+export async function action({ request }: ActionFunctionArgs) {
+    const actionName = 'Action Update';
+    const formData = await request.formData();
+    const selectedOrganization = getFormData(
+        formData.get('selectedOrganization'),
+        'selectedOrganization',
+        actionName
+    );
+
+    const session = await getSession(request.headers.get('Cookie'));
+    let userSession = session.get('user-session');
+    userSession.selectedOrganization = userSession.organizations.find(
+        (org: SessionOrganisation) => org.displayName === selectedOrganization
+    );
+
+    session.set('user-session', userSession);
+    const cookie = await commitSession(session);
+    return json(
+        { userSession },
+        {
+            headers: {
+                'Set-Cookie': cookie,
+            },
+        }
+    );
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
     return (

@@ -1,15 +1,10 @@
 import { IUserSession } from '~/types/types';
 import { Select } from '@navikt/ds-react';
 import { ChangeEvent } from 'react';
+import { useSubmit } from '@remix-run/react';
 
 export const UserOrganization = ({ userSession }: { userSession: IUserSession }) => {
-    // if (userSession.selectedOrganization) {
-    //     console.log('userSession.selectedOrganization');
-    //     console.log(userSession.selectedOrganization);
-    //     const organizationExtra = userSession.selectedOrganization;
-    //     organizationExtra.displayName = 'ANUM organization';
-    //     userSession.organizations.push(organizationExtra);
-    // }
+    const submit = useSubmit();
 
     const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
         let selectedOrg: { name: string; orgNumber: string; displayName: string };
@@ -17,6 +12,17 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
             (org) => org.displayName === event.target.value
         )[0];
         userSession.selectedOrganization = selectedOrg;
+
+        submit(
+            {
+                selectedOrganization: event.target.value,
+                actionType: 'UPDATE_SELECTED_ORGANIZATION',
+            },
+            {
+                method: 'POST',
+                navigate: false,
+            }
+        );
     };
 
     return (

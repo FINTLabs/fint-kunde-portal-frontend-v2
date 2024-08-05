@@ -1,7 +1,6 @@
 import { IUserSession } from '~/types/types';
 import { MenuRight } from './MenuRight';
 import { MenuLeft } from './MenuLeft';
-import React from 'react';
 
 type MenuType = {
     userSession: IUserSession;
