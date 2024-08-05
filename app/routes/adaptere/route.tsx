@@ -7,7 +7,7 @@ import { log } from '~/utils/logger';
 import AdapterAPI from '~/api/AdapterApi';
 import { useLoaderData, useNavigate } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
-import { ErrorBox } from '~/components/shared/ErrorBox';
+import { InfoBox } from '~/components/shared/ErrorBox';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { CustomTabs } from '~/components/shared/CustomTabs';
@@ -59,7 +59,7 @@ export default function Index() {
                 </VStack>
             </HStack>
 
-            {!adapters && <ErrorBox message="Fant ingen adaptere" />}
+            {!adapters && <InfoBox message="Fant ingen adaptere" />}
 
             {/* {adapters && <AdapterList items={adapters} />} */}
             {adapters && <CustomTabs items={adapters} />}

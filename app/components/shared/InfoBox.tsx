@@ -1,8 +1,8 @@
 import { BodyLong, Box } from '@navikt/ds-react';
 
-export function ErrorBox({ message }: { message: string }) {
+export function InfoBox({ message }: { message: string }) {
     return (
-        <Box padding="4" background="surface-danger-moderate">
+        <Box padding="8" background="surface-info-moderate">
             <BodyLong>{message}</BodyLong>
         </Box>
     );

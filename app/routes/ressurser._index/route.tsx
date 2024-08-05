@@ -10,6 +10,7 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { BodyShort, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { PlusIcon } from '@navikt/aksel-icons';
+import { InfoBox } from '~/components/shared/ErrorBox';
 
 export const meta: MetaFunction = () => {
     return [
@@ -22,6 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     try {
         const orgName = await getSelectedOrganization(request);
         const assets = await AccessApi.getAllAssets(orgName);
+        console.log('assets results, ', assets);
         return json(assets);
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -42,6 +44,7 @@ export default function Index() {
     const handleCreate = () => {
         navigate(`/ressurser/create`);
     };
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -58,37 +61,40 @@ export default function Index() {
                     </Button>
                 </VStack>
             </HStack>
-            <Table>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
-                        <Table.HeaderCell scope="col"></Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {assets.map((item, i) => (
-                        <Table.Row
-                            key={i + item.dn}
-                            className="active:bg-[--a-surface-active] hover:cursor-pointer"
-                            onClick={() => handleClick(item.name)}>
-                            <Table.DataCell>
-                                {/* <Heading size="small">{item.name}</Heading> */}
-                                <BodyShort>{item.name}</BodyShort>
-
-                                {/* <BodyShort textColor="subtle">{item.description}</BodyShort> */}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                {/* <Heading size="small">{item.name}</Heading> */}
-                                <BodyShort textColor="subtle">{item.description}</BodyShort>
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                <ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />
-                            </Table.DataCell>
+            {!assets && <InfoBox message="Fant ingen ressurser" />}
+            {assets && (
+                <Table>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
+                            <Table.HeaderCell scope="col"></Table.HeaderCell>
                         </Table.Row>
-                    ))}
-                </Table.Body>
-            </Table>
+                    </Table.Header>
+                    <Table.Body>
+                        {assets.map((item, i) => (
+                            <Table.Row
+                                key={i + item.dn}
+                                className="active:bg-[--a-surface-active] hover:cursor-pointer"
+                                onClick={() => handleClick(item.name)}>
+                                <Table.DataCell>
+                                    {/* <Heading size="small">{item.name}</Heading> */}
+                                    <BodyShort>{item.name}</BodyShort>
+
+                                    {/* <BodyShort textColor="subtle">{item.description}</BodyShort> */}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {/* <Heading size="small">{item.name}</Heading> */}
+                                    <BodyShort textColor="subtle">{item.description}</BodyShort>
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    <ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />
+                                </Table.DataCell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
+            )}
         </>
     );
 }

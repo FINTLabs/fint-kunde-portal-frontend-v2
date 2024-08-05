@@ -10,7 +10,7 @@ import { MigrationIcon } from '@navikt/aksel-icons';
 import { useLoaderData, useParams } from '@remix-run/react';
 import { AdapterDetail } from './AdapterDetail';
 import { IAdapter } from '~/types/types';
-import { ErrorBox } from '~/components/shared/ErrorBox';
+import { InfoBox } from '~/components/shared/ErrorBox';
 import ComponentApi from '~/api/ComponentApi';
 import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
@@ -55,7 +55,7 @@ export default function Index() {
                 helpText="adapter detaljer"
             />
             {!adapter && (
-                <ErrorBox
+                <InfoBox
                     message={`Det finnes ingen adapter ved navn ${name} i listen over adaptere`}
                 />
             )}
