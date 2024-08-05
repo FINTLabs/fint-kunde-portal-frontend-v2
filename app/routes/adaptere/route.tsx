@@ -7,10 +7,10 @@ import { log } from '~/utils/logger';
 import AdapterAPI from '~/api/AdapterApi';
 import { useLoaderData, useNavigate } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
-import { InfoBox } from '~/components/shared/ErrorBox';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { CustomTabs } from '~/components/shared/CustomTabs';
+import { InfoBox } from '~/components/shared/InfoBox';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
