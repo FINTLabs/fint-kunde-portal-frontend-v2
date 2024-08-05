@@ -7,16 +7,10 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
     const submit = useSubmit();
 
     const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        let selectedOrg: { name: string; orgNumber: string; displayName: string };
-        selectedOrg = userSession.organizations.filter(
-            (org) => org.displayName === event.target.value
-        )[0];
-        userSession.selectedOrganization = selectedOrg;
-
         submit(
             {
                 selectedOrganization: event.target.value,
-                actionType: 'UPDATE_SELECTED_ORGANIZATION',
+                actionType: 'UPDATE_SELECTED_ORGANIZATION', // not used
             },
             {
                 method: 'POST',
@@ -34,11 +28,17 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
             )}
             {userSession.organizations.length > 1 && (
                 <Select label="Velg organisasjon" hideLabel onChange={handleOrgChange}>
-                    {userSession.organizations.map((org, index) => (
-                        <option key={`key-${index}`} value={org.displayName}>
-                            {org.displayName}
-                        </option>
-                    ))}
+                    {/* The selected org should display on top */}
+                    <option value={userSession.selectedOrganization?.name}>
+                        {userSession.selectedOrganization?.displayName}
+                    </option>
+                    {userSession.organizations
+                        .filter((org) => org.name !== userSession.selectedOrganization?.name)
+                        .map((org, index) => (
+                            <option key={`key-${index}`} value={org.displayName}>
+                                {org.displayName}
+                            </option>
+                        ))}
                 </Select>
             )}
         </>
