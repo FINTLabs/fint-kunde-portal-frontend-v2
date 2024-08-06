@@ -31,6 +31,12 @@ class ClientApi {
         return request(URL, functionName, 'POST', 'json', client);
     }
 
+    static async deleteClient(clientName: string, organisation: string) {
+        const functionName = 'deleteClient';
+        const URL = `${API_URL}/api/clients/${organisation}/${clientName}`;
+        return request(URL, functionName, 'DELETE');
+    }
+
     // static async updateClient(client: IClient, organisation: Organisation) {
     //     const functionName = 'updateClient';
     //     const URL = `${API_URL}/api/clients/${organisation}/${client.name}`;
@@ -44,15 +50,6 @@ class ClientApi {
     //     });
     // }
     //
-
-    // static async deleteClient(client: IClient, organisation: Organisation) {
-    //     const functionName = 'deleteClient';
-    //     const URL = `${API_URL}/api/clients/${organisation}/${client.name}`;
-    //     return request(URL, functionName, 'DELETE').catch((err) => {
-    //         console.error('Error deleting client:', err);
-    //         return null;
-    //     });
-    // }
 }
 
 export default ClientApi;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { json, useLoaderData, useNavigate } from '@remix-run/react';
+import { json, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import ClientTable from '~/routes/klienter._index/ClientTable';
@@ -10,6 +10,7 @@ import { Button, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import type { LoaderFunction } from '@remix-run/node';
 import { PlusIcon } from '@navikt/aksel-icons';
+import { InfoBox } from '~/components/shared/InfoBox';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
@@ -29,6 +30,13 @@ export default function Index() {
     const [isManaged, setIsManaged] = useState('false');
     const [filteredClients, setFilteredClients] = useState(clientData);
 
+    const [searchParams] = useSearchParams();
+    const deletedClientName = searchParams.get('deleted');
+
+    for (const [key, value] of searchParams) {
+        console.log(key);
+        console.log(value);
+    }
     const navigate = useNavigate();
 
     function handleTabClick(newValue: string) {
@@ -47,6 +55,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
+            {deletedClientName && <InfoBox message={`Klient ${deletedClientName} slettet`} />}
             <HStack align={'center'} justify={'space-between'}>
                 <VStack>
                     <InternalPageHeader title={'Klienter'} icon={TokenIcon} helpText="klienter" />
