@@ -29,14 +29,16 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
                 <div className="flex items-center">{orgName}</div>
             )}
             {userSession.organizations.length > 1 && (
-                <Select label="Velg organisasjon" hideLabel onChange={handleOrgChange}>
-                    {userSession.organizations
-                        // .filter((org) => org.displayName !== orgName)
-                        .map((org, index) => (
-                            <option key={`key-${index + 1}`} value={org.displayName}>
-                                {org.displayName}
-                            </option>
-                        ))}
+                <Select
+                    label="Velg organisasjon"
+                    hideLabel
+                    onChange={handleOrgChange}
+                    defaultValue={orgName}>
+                    {userSession.organizations.map((org, index) => (
+                        <option key={`key-${index}`} value={org.displayName}>
+                            {org.displayName}
+                        </option>
+                    ))}
                 </Select>
             )}
         </>
