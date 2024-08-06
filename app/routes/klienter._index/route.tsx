@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { json, useLoaderData } from '@remix-run/react';
+import { json, useLoaderData, useNavigate } from '@remix-run/react';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import ClientTable from '~/routes/klienter._index/ClientTable';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TokenIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { Tabs } from '@navikt/ds-react';
+import { Button, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import type { LoaderFunction } from '@remix-run/node';
+import { PlusIcon } from '@navikt/aksel-icons';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
@@ -28,6 +29,8 @@ export default function Index() {
     const [isManaged, setIsManaged] = useState('false');
     const [filteredClients, setFilteredClients] = useState(clientData);
 
+    const navigate = useNavigate();
+
     function handleTabClick(newValue: string) {
         setIsManaged(newValue);
         if (newValue === 'true') {
@@ -37,11 +40,26 @@ export default function Index() {
         }
     }
 
+    const handleCreate = () => {
+        navigate(`/klienter/create`);
+    };
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'Klienter'} icon={TokenIcon} helpText="klienter" />
-
+            <HStack align={'center'} justify={'space-between'}>
+                <VStack>
+                    <InternalPageHeader title={'Klienter'} icon={TokenIcon} helpText="klienter" />
+                </VStack>
+                <VStack>
+                    <Button
+                        className="float-right"
+                        onClick={handleCreate}
+                        icon={<PlusIcon aria-hidden />}>
+                        Legg til
+                    </Button>
+                </VStack>
+            </HStack>
             <Tabs
                 value={isManaged}
                 onChange={handleTabClick}

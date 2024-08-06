@@ -32,20 +32,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Index() {
     const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter' }];
     const { components, orgName } = useLoaderData<{ components: IComponent[]; orgName: string }>();
-    // const actionData = useActionData<{ success: boolean; error?: string }>();
 
     const selectedCompoents = components
         .filter((component) => component.organisations.some((org) => org.includes(orgName)))
         .map((component) => component.dn);
 
     const submit = useSubmit();
-
-    // useEffect(() => {
-    //     console.log(actionData);
-    //     if (actionData) {
-    //         setLoading(false);
-    //     }
-    // }, [actionData]);
 
     return (
         <>

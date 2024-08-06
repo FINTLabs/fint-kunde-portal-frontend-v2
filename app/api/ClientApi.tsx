@@ -6,10 +6,7 @@ class ClientApi {
     static async getClients(organisationName: string) {
         const functionName = 'getClients';
         const URL = `${API_URL}/api/clients/${organisationName}`;
-        return request(URL, functionName).catch((err) => {
-            console.error('Error fetching clients:', err);
-            throw new Error('Error fetching clients');
-        });
+        return request(URL, functionName);
     }
 
     static async getClientById(organisationName: string, clientId: string) {
