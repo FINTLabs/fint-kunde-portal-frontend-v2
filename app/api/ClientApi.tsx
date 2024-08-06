@@ -1,6 +1,6 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from '~/api/constants';
-import { IClient } from '~/types/Clients';
+import { IClient, IPartialClient } from '~/types/Clients';
 
 class ClientApi {
     static async getClients(organisationName: string) {
@@ -25,6 +25,11 @@ class ClientApi {
                 return null;
             });
     }
+    static async createClient(client: IPartialClient, organisation: string) {
+        const functionName = 'createClient';
+        const URL = `${API_URL}/api/clients/${organisation}`;
+        return request(URL, functionName, 'POST', 'json', client);
+    }
 
     // static async updateClient(client: IClient, organisation: Organisation) {
     //     const functionName = 'updateClient';
@@ -39,18 +44,6 @@ class ClientApi {
     //     });
     // }
     //
-    // static async createClient(client: IClient, organisation: Organisation) {
-    //     const functionName = 'createClient';
-    //     const URL = `${API_URL}/api/clients/${organisation}`;
-    //     return request(URL, functionName, 'POST', 'json', {
-    //         name: client.name,
-    //         note: client.note,
-    //         shortDescription: client.shortDescription
-    //     }).catch((err) => {
-    //         console.error('Error creating client:', err);
-    //         return null;
-    //     });
-    // }
 
     // static async deleteClient(client: IClient, organisation: Organisation) {
     //     const functionName = 'deleteClient';

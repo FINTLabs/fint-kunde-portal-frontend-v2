@@ -12,12 +12,14 @@ import { Form, useActionData } from '@remix-run/react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IAsset, IPartialAsset } from '~/types/Asset';
 import AssetApi from '~/api/AssetApi';
+import ClientApi from '~/api/ClientApi';
+import { IClient, IPartialClient } from '~/types/Clients';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Opprett ny klient' }, { name: 'description', content: 'Opprett ny klient' }];
 };
 
-type Errors = { name?: string; description?: string; apiError?: string };
+type Errors = { name?: string; description?: string; note?: string; apiError?: string };
 type ActionData = {
     errors?: Errors;
 };
@@ -51,7 +53,7 @@ export default function Index() {
                                         htmlSize={20}
                                         error={actionData?.errors?.name}
                                     />
-                                    <span className="pb-3.5">_fintlabs_no</span>
+                                    <span className="pb-3.5">@client.fintlabs.no</span>
                                 </HStack>
                             </FormSummary.Answer>
 
@@ -65,6 +67,13 @@ export default function Index() {
                                 />
                             </FormSummary.Answer>
 
+                            <FormSummary.Answer>
+                                <Textarea
+                                    name="note"
+                                    label="Beskrivelse"
+                                    error={actionData?.errors?.note}
+                                />
+                            </FormSummary.Answer>
                             <Button type="submit" title="Opprett">
                                 Opprett
                             </Button>
@@ -87,33 +96,35 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
-    const detailedInfo = formData.get('detailedInfo') as string;
+    const note = formData.get('note') as string;
 
     const errors: Errors = {};
     if (!name) errors.name = 'Navn er påkrevd';
-    if (!description) errors.description = 'Beskrivelse er påkrevd';
+    if (!description) errors.description = 'Kort beskrivelse er påkrevd';
+    if (!note) errors.note = 'Beskrivelse er påkrevd';
 
     if (Object.keys(errors).length > 0) {
         return json({ errors });
     }
 
     const orgName = await getSelectedOrganization(request);
-    const newAsset: IPartialAsset = {
-        assetId: name,
+    const newClient: IPartialClient = {
         name: name,
-        description,
+        note: note,
+        shortDescription: description,
     };
-    console.log(newAsset);
-    const response = await AssetApi.createAsset(newAsset, orgName);
+    console.log(newClient);
+    const response = await ClientApi.createClient(newClient, orgName);
 
     console.log(response);
     if (response.status === 201) {
-        // const newAdapter = (await response.json()) as IAsset;
-        return redirect(`/ressurser/${newAsset.assetId}_fintlabs_no`);
+        const responseObject = (await response.json()) as IClient;
+        console.log(responseObject);
+        return redirect(`/klienter/${responseObject.name}`);
     } else {
         return json({
             errors: {
-                apiError: `Unable to create resource: Status: ${response.status}, statusText: ${response.statusText}`,
+                apiError: `Feil oppretting av klient. Status: ${response.status}, statusText: ${response.statusText}`,
             },
             status: response.status,
         });
