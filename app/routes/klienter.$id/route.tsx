@@ -8,7 +8,7 @@ import ClientApi from '~/api/ClientApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, FloppydiskIcon, PencilIcon, TokenIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
+import { Box, Button, Heading, HGrid, HStack, Spacer, VStack } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
@@ -16,6 +16,7 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import Autentisering from '~/components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from '../adapter.$name/constants';
+import { DeleteModal } from '~/components/shared/DeleteModal';
 
 // @ts-ignore
 export async function loader({ request, params }: ActionFunctionArgs) {
@@ -115,6 +116,13 @@ export default function Index() {
                         selectedItems={selectedComponents}
                         columns={2}
                     />
+                    <HStack justify={'center'}>
+                        <DeleteModal
+                            title="Slett klient"
+                            bodyText="Er du sikker på at du vil slette denne klienten?"
+                            action="delete"
+                        />
+                    </HStack>
                 </Box>
             </HGrid>
         </>
