@@ -36,12 +36,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     const cookieHeader = request.headers.get('Cookie'); // to get user_session set by SSO (middleware between user and remix app)
     log('cookieHeader in loader', cookieHeader);
-    const cookie = await remix_cookie.parse('cookieHeader'); // this is NULL - WHY????
+    const cookieObj = await remix_cookie.parse(cookieHeader); // this is NULL - WHY????
 
-    log('cookie', cookie);
+    log('cookieOBJXT', cookieObj);
 
     const userSession = getCookieValue(cookieHeader || '', 'user_session'); // getting cookie value manually
     console.log(userSession);
+
+    // const meData: IMeData = await MeApi.fetchMe();
 
     // log('userSession: ', userSession);
     // if (!userSession) {
@@ -81,7 +83,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // const features = await FeaturesApi.fetchFeatures();
     // return json({ userSession, features });
 
-    return json({ cookieHeader, cookie, userSession: userSession });
+    return json({ cookieHeader, cookie: cookieObj, userSession: userSession });
 };
 
 // export async function action({ request }: ActionFunctionArgs) {
@@ -183,7 +185,6 @@ function getCookieValue(cookieString: string, key: string): string | null {
     const keyValuePairs = cookieString.split('; ');
     for (const pair of keyValuePairs) {
         const [cookieKey, cookieValue] = pair.split('=');
-        console.log('cookieKey: ', cookieKey);
         if (cookieKey === key) {
             return decodeURIComponent(cookieValue);
         }
