@@ -31,7 +31,11 @@ export const remix_cookie = createCookie('remix_cookie', {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const session = await getSession(request.headers.get('Cookie'));
-    let userSession = session.get('user_session');
+
+    console.log();
+    let userSession = session.get(
+        request.url.includes('localhost') ? 'user-session' : 'user_session'
+    );
     log('userSessionFromGetSession ', userSession);
     // let userSession = session.get('user_session');
 
