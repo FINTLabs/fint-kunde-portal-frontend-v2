@@ -53,7 +53,7 @@ export default function Index() {
                             <FormSummary.Answer>
                                 <TextField
                                     name="description"
-                                    label="Kort beskrivelse"
+                                    label="Tittel"
                                     type="text"
                                     htmlSize={50}
                                     error={actionData?.errors?.description}

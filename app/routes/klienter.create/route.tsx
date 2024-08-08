@@ -60,7 +60,7 @@ export default function Index() {
                             <FormSummary.Answer>
                                 <TextField
                                     name="description"
-                                    label="Kort beskrivelse"
+                                    label="Tittel"
                                     type="text"
                                     htmlSize={50}
                                     error={actionData?.errors?.description}
@@ -100,7 +100,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const errors: Errors = {};
     if (!name) errors.name = 'Navn er påkrevd';
-    if (!description) errors.description = 'Kort beskrivelse er påkrevd';
+    if (!description) errors.description = 'Tittel er påkrevd';
     if (!note) errors.note = 'Beskrivelse er påkrevd';
 
     if (Object.keys(errors).length > 0) {

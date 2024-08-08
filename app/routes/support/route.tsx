@@ -117,7 +117,7 @@ export default function Index() {
                 </div>
                 <div style={{ marginBottom: '1rem' }}>
                     <TextField
-                        label="Kort Beskrivelse"
+                        label="Tittel"
                         name="shortDescription"
                         placeholder="Enter a brief description"
                     />

@@ -22,7 +22,7 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
             </HStack>
             <LabelValuePanel label="Navn" value={adapter.name} />
             <EditableTextField
-                label={'Kort beskrivelse'}
+                label={'Tittel'}
                 value={adapterShortDesc}
                 isEditing={isEditing}
                 setValue={setAdapterShortDesc}
