@@ -30,30 +30,26 @@ export const remix_cookie = createCookie('remix_cookie', {
 });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    const session = await getSession(request.headers.get('Cookie'));
+    const session = await getSession(request.headers.get('cookie'));
+    const personNumber = request.headers.get('x-nin') || ''
 
-    console.log();
     let userSession = session.get(
         request.url.includes('localhost') ? 'user-session' : 'user_session'
     );
-    log('userSessionFromGetSession ', userSession);
-    // let userSession = session.get('user_session');
+    log('User session (session.get): ', userSession);
 
-    const cookieHeader = request.headers.get('Cookie'); // to get user_session set by SSO (middleware between user and remix app)
-    log('cookieHeader in loader', cookieHeader);
-    const cookieObj = await remix_cookie.parse(cookieHeader); // this is NULL - WHY????
-
-    log('cookieOBJXT', cookieObj);
+    const cookieHeader = request.headers.get('cookie') || '' // to get user_session set by SSO (middleware between user and remix app)
+    log('Cookies: ', cookieHeader);
 
     const user_session = getCookieValue(cookieHeader || '', 'user_session'); // getting cookie value manually
-    console.log(user_session);
+    console.log("User session: ", user_session);
 
     // const meData: IMeData = await MeApi.fetchMe(cookieHeader);
 
     log('userSession: ', userSession);
     if (!userSession) {
-        const meData: IMeData = await MeApi.fetchMe(cookieHeader || '');
-        const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
+        const meData: IMeData = await MeApi.fetchMe(cookieHeader, personNumber);
+        const organisationsData: Organisation[] = await MeApi.fetchOrganisations(cookieHeader, personNumber);
 
         const organizationDetails = organisationsData.map((org) => ({
             name: org.name,
