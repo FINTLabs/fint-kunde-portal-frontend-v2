@@ -24,10 +24,13 @@ export async function request(
             headers: {
                 'Content-Type': 'application/json',
                 'x-nin': process.env.PERSONALNUMBER || '',
-                // Cookie: cookies, // Include cookies in the request headers
+                // Cookie: cookies ?? '', // Include cookies in the request headers
                 // Authorization: `Bearer ${process.env.ACCESS_TOKEN}`, // TODO: this is just a temporary solution, change this to fetch accesstoken from OAuth 2.0 log in
             },
         };
+
+        log('requestOptions in request');
+        log(requestOptions);
 
         switch (requestMethod) {
             case 'GET':

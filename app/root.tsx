@@ -26,7 +26,7 @@ export const meta: MetaFunction = () => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const session = await getSession(request.headers.get('Cookie'));
-    let userSession = session.get('user-session');
+    let userSession = session.get('user_session');
 
     log('userSession: ', userSession);
     if (!userSession) {
@@ -47,7 +47,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             organizations: organizationDetails,
         };
 
-        session.set('user-session', userSession);
+        session.set('user_session', userSession);
         const cookie = await commitSession(session);
         let features = await FeaturesApi.fetchFeatures();
 
@@ -77,12 +77,12 @@ export async function action({ request }: ActionFunctionArgs) {
     );
 
     const session = await getSession(request.headers.get('Cookie'));
-    let userSession = session.get('user-session');
+    let userSession = session.get('user_session');
     userSession.selectedOrganization = userSession.organizations.find(
         (org: SessionOrganisation) => org.displayName === selectedOrganization
     );
 
-    session.set('user-session', userSession);
+    session.set('user_session', userSession);
     const cookie = await commitSession(session);
     return json(
         { userSession },
