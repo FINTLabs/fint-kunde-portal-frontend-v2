@@ -43,7 +43,6 @@ export async function request(
         }
     } catch (err) {
         error(`:( Request failed:  Error running ${functionName}:`, err);
-        console.log(err);
         throw new Error(`:( Request failed: Error running ${functionName}`);
     }
 }
@@ -92,6 +91,8 @@ async function getRequest(
 ) {
     // log(`RequestOptions: `, requestOptions);
     const response = await fetch(URL, requestOptions);
+    log('response in GET Request');
+    log(response);
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {
