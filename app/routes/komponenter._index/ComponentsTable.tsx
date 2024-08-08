@@ -7,6 +7,7 @@ import {
     FormSummary,
     Heading,
     HGrid,
+    HStack,
     Label,
     Switch,
     Table,
@@ -75,7 +76,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                         const groupComponents = groupedByType[key];
                         // console.log(groupComponents);
                         return (
-                            <FormSummary>
+                            <FormSummary key={`${key}-${i}`}>
                                 <FormSummary.Header>
                                     <FormSummary.Heading level="2">
                                         {capitalizeFirstLetter(componentType)}
@@ -96,22 +97,29 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                     (selected) => selected === item.dn
                                                 );
                                                 return (
-                                                    <Checkbox
-                                                        checked={isComponentSwitchedOn}
+                                                    <HStack
                                                         key={componentType + i}
-                                                        onChange={(e) => {
-                                                            const checkedStatus = e.target.checked;
-                                                            toggleSwitch &&
-                                                                toggleSwitch(
-                                                                    item.name,
-                                                                    checkedStatus
-                                                                );
-                                                        }}
-                                                        value={true}>
-                                                        {splitted.length > 1
-                                                            ? splitted[1]
-                                                            : splitted[0]}
-                                                    </Checkbox>
+                                                        justify={'space-between'}
+                                                        align={'center'}>
+                                                        <Checkbox
+                                                            checked={isComponentSwitchedOn}
+                                                            key={componentType + i}
+                                                            onChange={(e) => {
+                                                                const checkedStatus =
+                                                                    e.target.checked;
+                                                                toggleSwitch &&
+                                                                    toggleSwitch(
+                                                                        item.name,
+                                                                        checkedStatus
+                                                                    );
+                                                            }}
+                                                            value={true}>
+                                                            {splitted.length > 1
+                                                                ? splitted[1]
+                                                                : splitted[0]}
+                                                        </Checkbox>
+                                                        <ChevronRightIcon title="Vis detaljer" />
+                                                    </HStack>
                                                 );
                                             })}
                                         </CheckboxGroup>

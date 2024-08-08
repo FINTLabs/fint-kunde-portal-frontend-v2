@@ -39,6 +39,7 @@ export default function Index() {
     function handleCloseEdit() {
         setIsEditing(false);
     }
+    console.log(component);
 
     return (
         <>
