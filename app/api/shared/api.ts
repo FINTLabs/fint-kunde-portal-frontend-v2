@@ -42,8 +42,9 @@ export async function request(
                 throw new Error(`Unsupported request method: ${requestMethod}`);
         }
     } catch (err) {
-        error(`:((((( Error running ${functionName}:`, err);
-        throw new Error(`:(((((Error running ${functionName}`);
+        error(`:( Request failed:  Error running ${functionName}:`, err);
+        console.log(err);
+        throw new Error(`:( Request failed: Error running ${functionName}`);
     }
 }
 
@@ -99,6 +100,6 @@ async function getRequest(
         error(
             `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`
         );
-        return null;
+        return `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`;
     }
 }
