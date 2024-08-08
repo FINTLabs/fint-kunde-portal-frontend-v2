@@ -97,7 +97,7 @@ async function getRequest(
     // log(`RequestOptions: `, requestOptions);
     const response = await fetch(URL, requestOptions);
     log('response in GET Request');
-    log(response);
+    log('response.status: ' + response.status);
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {

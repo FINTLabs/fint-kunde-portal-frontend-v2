@@ -32,7 +32,6 @@ export const remix_cookie = createCookie('remix_cookie', {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const session = await getSession(request.headers.get('Cookie'));
 
-    console.log();
     let userSession = session.get(
         request.url.includes('localhost') ? 'user-session' : 'user_session'
     );
@@ -53,6 +52,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     log('userSession: ', userSession);
     if (!userSession) {
         const meData: IMeData = await MeApi.fetchMe(cookieHeader || '');
+        console.log('meData: ', meData);
         const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
 
         const organizationDetails = organisationsData.map((org) => ({
