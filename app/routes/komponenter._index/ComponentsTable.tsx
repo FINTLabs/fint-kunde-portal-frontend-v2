@@ -90,9 +90,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                             onChange={() => {}}
                                             size="small">
                                             {groupComponents.map((item, i) => {
-                                                console.log(item.description);
                                                 const splitted = item.description.split(' ');
-                                                console.log('splitted: ', splitted);
 
                                                 const isComponentSwitchedOn = selectedItems.some(
                                                     (selected) => selected === item.dn
