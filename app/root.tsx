@@ -31,8 +31,8 @@ export const remix_cookie = createCookie('remix_cookie', {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const session = await getSession(request.headers.get('Cookie'));
-    let userSessionFromGetSession = session.get('user_session');
-    log('userSessionFromGetSession ', userSessionFromGetSession);
+    let userSession = session.get('user_session');
+    log('userSessionFromGetSession ', userSession);
     // let userSession = session.get('user_session');
 
     const cookieHeader = request.headers.get('Cookie'); // to get user_session set by SSO (middleware between user and remix app)
@@ -41,78 +41,78 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     log('cookieOBJXT', cookieObj);
 
-    const userSession = getCookieValue(cookieHeader || '', 'user_session'); // getting cookie value manually
-    console.log(userSession);
+    const user_session = getCookieValue(cookieHeader || '', 'user_session'); // getting cookie value manually
+    console.log(user_session);
 
-    // const meData: IMeData = await MeApi.fetchMe();
+    // const meData: IMeData = await MeApi.fetchMe(cookieHeader);
 
-    // log('userSession: ', userSession);
-    // if (!userSession) {
-    //     const meData: IMeData = await MeApi.fetchMe();
-    //     const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
+    log('userSession: ', userSession);
+    if (!userSession) {
+        const meData: IMeData = await MeApi.fetchMe(cookieHeader);
+        const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
 
-    //     const organizationDetails = organisationsData.map((org) => ({
-    //         name: org.name,
-    //         orgNumber: org.orgNumber,
-    //         displayName: org.displayName,
-    //     }));
+        const organizationDetails = organisationsData.map((org) => ({
+            name: org.name,
+            orgNumber: org.orgNumber,
+            displayName: org.displayName,
+        }));
 
-    //     userSession = {
-    //         firstName: meData.firstName,
-    //         lastName: meData.lastName,
-    //         organizationCount: organisationsData.length,
-    //         selectedOrganization: organizationDetails[0],
-    //         organizations: organizationDetails,
-    //     };
+        userSession = {
+            firstName: meData.firstName,
+            lastName: meData.lastName,
+            organizationCount: organisationsData.length,
+            selectedOrganization: organizationDetails[0],
+            organizations: organizationDetails,
+        };
 
-    //     session.set('user_session', userSession);
-    //     const cookie = await commitSession(session);
-    //     let features = await FeaturesApi.fetchFeatures();
+        session.set('user_session', userSession);
+        const cookie = await commitSession(session);
+        let features = await FeaturesApi.fetchFeatures();
 
-    //     features = features ? features : {};
+        features = features ? features : {};
 
-    //     return json(
-    //         { userSession, features }, // Ensure features is defined
-    //         {
-    //             headers: {
-    //                 'Set-Cookie': cookie,
-    //             },
-    //         }
-    //     );
-    // }
+        return json(
+            { userSession, features }, // Ensure features is defined
+            {
+                headers: {
+                    'Set-Cookie': cookie,
+                },
+            }
+        );
+    }
 
-    // const features = await FeaturesApi.fetchFeatures();
-    // return json({ userSession, features });
+    const features = await FeaturesApi.fetchFeatures();
+    return json({ userSession, features });
 
-    return json({ cookieHeader, cookie: cookieObj, userSession: userSession });
+    // return json({ cookieHeader, cookie: cookieObj, userSession: userSession });
 };
 
-// export async function action({ request }: ActionFunctionArgs) {
-//     const actionName = 'Action Update';
-//     const formData = await request.formData();
-//     const selectedOrganization = getFormData(
-//         formData.get('selectedOrganization'),
-//         'selectedOrganization',
-//         actionName
-//     );
+export async function action({ request }: ActionFunctionArgs) {
+    const actionName = 'Action Update';
+    const formData = await request.formData();
+    const selectedOrganization = getFormData(
+        formData.get('selectedOrganization'),
+        'selectedOrganization',
+        actionName
+    );
 
-//     const session = await getSession(request.headers.get('Cookie'));
-//     let userSession = session.get('user_session');
-//     userSession.selectedOrganization = userSession.organizations.find(
-//         (org: SessionOrganisation) => org.displayName === selectedOrganization
-//     );
+    const session = await getSession(request.headers.get('Cookie'));
+    let userSession = session.get('user_session');
+    userSession.selectedOrganization = userSession.organizations.find(
+        (org: SessionOrganisation) => org.displayName === selectedOrganization
+    );
 
-//     session.set('user_session', userSession);
-//     const cookie = await commitSession(session);
-//     return json(
-//         { userSession },
-//         {
-//             headers: {
-//                 'Set-Cookie': cookie,
-//             },
-//         }
-//     );
-// }
+    session.set('user_session', userSession);
+    const cookie = await commitSession(session);
+    return json(
+        { userSession },
+        {
+            headers: {
+                'Set-Cookie': cookie,
+            },
+        }
+    );
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
     return (
@@ -133,43 +133,43 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    // const loaderData = useLoaderData<{ userSession: IUserSession; features: FeatureFlags }>();
-    const { cookieHeader, cookie, userSession } = useLoaderData<typeof loader>();
-    // const userSession = loaderData?.userSession;
-    // const features = loaderData?.features;
+    const loaderData = useLoaderData<{ userSession: IUserSession; features: FeatureFlags }>();
+    // const { cookieHeader, cookie, userSession } = useLoaderData<typeof loader>();
+    const userSession = loaderData?.userSession;
+    const features = loaderData?.features;
 
-    console.log('cookieHeader');
-    console.log(cookieHeader);
-    console.log('cookie');
-    console.log(cookie);
-    console.log('userSessionFromHeader');
-    console.log(userSession);
+    // console.log('cookieHeader');
+    // console.log(cookieHeader);
+    // console.log('cookie');
+    // console.log(cookie);
+    // console.log('userSessionFromHeader');
+    // console.log(userSession);
 
-    return <div>Cookies:</div>;
-    // return (
-    //     <Page
-    //         footer={
-    //             <Box background="surface-neutral-moderate" padding="8" as="footer">
-    //                 <Page.Block gutters width="lg">
-    //                     <Footer />
-    //                 </Page.Block>
-    //             </Box>
-    //         }>
-    //         <Box background="surface-neutral-moderate" padding="8" as="header">
-    //             <Page.Block gutters width="lg">
-    //                 <Menu
-    //                     userSession={userSession}
-    //                     displaySamtykke={features['samtykke-admin-new']}
-    //                 />
-    //             </Page.Block>
-    //         </Box>
-    //         <Box padding="8" paddingBlock="2" as="main">
-    //             <Page.Block gutters width="lg">
-    //                 <Outlet context={userSession} />
-    //             </Page.Block>
-    //         </Box>
-    //     </Page>
-    // );
+    // return <div>Cookies:</div>;
+    return (
+        <Page
+            footer={
+                <Box background="surface-neutral-moderate" padding="8" as="footer">
+                    <Page.Block gutters width="lg">
+                        <Footer />
+                    </Page.Block>
+                </Box>
+            }>
+            <Box background="surface-neutral-moderate" padding="8" as="header">
+                <Page.Block gutters width="lg">
+                    <Menu
+                        userSession={userSession}
+                        displaySamtykke={features['samtykke-admin-new']}
+                    />
+                </Page.Block>
+            </Box>
+            <Box padding="8" paddingBlock="2" as="main">
+                <Page.Block gutters width="lg">
+                    <Outlet context={userSession} />
+                </Page.Block>
+            </Box>
+        </Page>
+    );
 }
 export function ErrorBoundary({ error }: { error: Error }) {
     //TODO: can we make the message show?? need an error layout

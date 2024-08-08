@@ -2,10 +2,10 @@ import { request } from '~/api/shared/api';
 import { API_URL } from './constants';
 
 class MeApi {
-    static async fetchMe() {
+    static async fetchMe(cookieHeader: string) {
         const functionName = 'fetchMe';
         const URL = `${API_URL}/api/me`;
-        return request(URL, functionName).catch((err) => {
+        return request(URL, functionName, cookieHeader).catch((err) => {
             console.error('Error fetching me information:', err);
         });
     }
