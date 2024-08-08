@@ -30,26 +30,24 @@ export const remix_cookie = createCookie('remix_cookie', {
 });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+    const cookies = request.headers.get("cookie");
+    log('Cookies: ', cookies);
     const session = await getSession(request.headers.get('cookie'));
     const personNumber = request.headers.get('x-nin') || ''
 
     let userSession = session.get(
         request.url.includes('localhost') ? 'user-session' : 'user_session'
     );
-    log('User session (session.get): ', userSession);
-
-    const cookieHeader = request.headers.get('cookie') || '' // to get user_session set by SSO (middleware between user and remix app)
-    log('Cookies: ', cookieHeader);
-
-    const user_session = getCookieValue(cookieHeader || '', 'user_session'); // getting cookie value manually
-    console.log("User session: ", user_session);
-
-    // const meData: IMeData = await MeApi.fetchMe(cookieHeader);
-
     log('userSession: ', userSession);
+
+    // const user_session = getCookieValue(cookies || '', 'user_session'); // getting cookie value manually
+    // console.log("User session: ", user_session);
+
+    // const meData: IMeData = await MeApi.fetchMe(cookies);
+
     if (!userSession) {
-        const meData: IMeData = await MeApi.fetchMe(cookieHeader, personNumber);
-        const organisationsData: Organisation[] = await MeApi.fetchOrganisations(cookieHeader, personNumber);
+        const meData: IMeData = await MeApi.fetchMe(cookies, personNumber);
+        const organisationsData: Organisation[] = await MeApi.fetchOrganisations(cookies, personNumber);
 
         const organizationDetails = organisationsData.map((org) => ({
             name: org.name,
@@ -84,7 +82,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const features = await FeaturesApi.fetchFeatures();
     return json({ userSession, features });
 
-    // return json({ cookieHeader, cookie: cookieObj, userSession: userSession });
+    // return json({ cookies, cookie: cookieObj, userSession: userSession });
 };
 
 export async function action({ request }: ActionFunctionArgs) {
