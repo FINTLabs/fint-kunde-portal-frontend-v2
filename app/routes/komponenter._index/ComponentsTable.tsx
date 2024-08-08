@@ -5,6 +5,7 @@ import {
     CheckboxGroup,
     Detail,
     FormSummary,
+    Heading,
     HGrid,
     Label,
     Switch,
@@ -14,6 +15,7 @@ import {
 import { IComponent } from '~/types/Component';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
+import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 
 interface ComponentsSectionProps {
     items: IComponent[];
@@ -64,7 +66,6 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
         return acc;
     }, {});
 
-    console.log(groupedByType);
     return (
         <>
             <Box padding="4">
@@ -92,17 +93,29 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                 console.log(item.description);
                                                 const splitted = item.description.split(' ');
                                                 console.log('splitted: ', splitted);
+
+                                                const isComponentSwitchedOn = selectedItems.some(
+                                                    (selected) => selected === item.dn
+                                                );
                                                 return (
-                                                    <Checkbox key={componentType + i} value="car">
+                                                    <Checkbox
+                                                        checked={isComponentSwitchedOn}
+                                                        key={componentType + i}
+                                                        onChange={(e) => {
+                                                            const checkedStatus = e.target.checked;
+                                                            toggleSwitch &&
+                                                                toggleSwitch(
+                                                                    item.name,
+                                                                    checkedStatus
+                                                                );
+                                                        }}
+                                                        value={true}>
                                                         {splitted.length > 1
                                                             ? splitted[1]
                                                             : splitted[0]}
                                                     </Checkbox>
                                                 );
                                             })}
-
-                                            <Checkbox value="taxi">Drosje</Checkbox>
-                                            <Checkbox value="public">Kollektivt</Checkbox>
                                         </CheckboxGroup>
                                     </FormSummary.Answer>
                                 </FormSummary.Answers>
@@ -110,6 +123,13 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                         );
                     })}
                 </HGrid>
+
+                <Box padding="10"></Box>
+                <Divider />
+                <Box padding="10"></Box>
+
+                <Heading size="large">Old view</Heading>
+                <Box padding="10"></Box>
                 <HGrid gap="8" columns={columns}>
                     {componentChunks.map((chunk, chunkIndex) => (
                         <Table key={chunkIndex} size={'small'}>
