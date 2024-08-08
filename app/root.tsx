@@ -16,6 +16,7 @@ import { Organisation } from '~/types/Organisation';
 import { CustomError } from '~/components/shared/CustomError';
 import { log } from './utils/logger';
 import { getFormData } from './utils/requestUtils';
+import { createCookie } from '@remix-run/node'; // or cloudflare/deno
 
 export const meta: MetaFunction = () => {
     return [
@@ -24,14 +25,14 @@ export const meta: MetaFunction = () => {
     ];
 };
 
-import { createCookie } from '@remix-run/node'; // or cloudflare/deno
-
 export const remix_cookie = createCookie('remix_cookie', {
     maxAge: 604_800, // one week
 });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    // const session = await getSession(request.headers.get('Cookie'));
+    const session = await getSession(request.headers.get('Cookie'));
+    let userSessionFromGetSession = session.get('user_session');
+    log('userSessionFromGetSession ', userSessionFromGetSession);
     // let userSession = session.get('user_session');
 
     const cookieHeader = request.headers.get('Cookie'); // to get user_session set by SSO (middleware between user and remix app)
