@@ -39,10 +39,6 @@ const ClientDetails: React.FC<ClientComponentProps> = ({ component }) => {
                     <Label>Clients</Label>
                     <BodyShort>{component.clients.length}</BodyShort>
                 </HStack>
-                <HStack gap={'2'}>
-                    <Label>Organisations</Label>
-                    <BodyShort>{component.organisations.length}</BodyShort>
-                </HStack>
             </VStack>
             <VStack>
                 <HStack>
