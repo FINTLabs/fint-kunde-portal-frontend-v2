@@ -3,7 +3,7 @@ import { getSession } from './session';
 
 export async function getSelectedOrganization(request: Request) {
     const session = await getSession(request.headers.get('Cookie'));
-    const userSession: IUserSession | undefined = session.get('user-session');
+    const userSession: IUserSession | undefined = session.get('user_session');
 
     if (!userSession) throw new Response('Unauthorized', { status: 401 });
     if (!userSession.selectedOrganization)

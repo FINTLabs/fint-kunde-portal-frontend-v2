@@ -54,7 +54,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 //     const contactNin = (formValues['selectedContactNin'] as string) || '';
 //
 //     const session = await getSession(request.headers.get('Cookie'));
-//     const userSession = session.get('user-session');
+//     const userSession = session.get('user_session');
 //     const selectedOrg = userSession.selectedOrganization.name;
 //
 //     const response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
