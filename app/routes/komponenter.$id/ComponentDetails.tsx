@@ -7,6 +7,13 @@ interface ClientComponentProps {
 }
 
 const ClientDetails: React.FC<ClientComponentProps> = ({ component }) => {
+    const orgClients = component.clients.filter((client, index) => {
+        // console.log(client);
+        const split = client.split(',');
+        // console.log(split);
+        return false;
+    });
+
     const selectedValuesEnv = [];
     if (component.inProduction) selectedValuesEnv.push('api');
     if (component.inPlayWithFint) selectedValuesEnv.push('pwf');
@@ -37,7 +44,7 @@ const ClientDetails: React.FC<ClientComponentProps> = ({ component }) => {
                 </HStack>
                 <HStack gap={'2'}>
                     <Label>Clients</Label>
-                    <BodyShort>{component.clients.length}</BodyShort>
+                    <BodyShort>{orgClients}</BodyShort>
                 </HStack>
             </VStack>
             <VStack>
