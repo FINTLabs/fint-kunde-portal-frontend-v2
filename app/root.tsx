@@ -35,19 +35,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     let userSession = session.get(
         request.url.includes('localhost') ? 'user-session' : 'user_session'
     );
-    log('userSessionFromGetSession ', userSession);
+    // log('userSessionFromGetSession ', userSession);
     // let userSession = session.get('user_session');
 
     const cookieHeader = request.headers.get('Cookie'); // to get user_session set by SSO (middleware between user and remix app)
-    log('cookieHeader in loader', cookieHeader);
-    const cookieObj = await remix_cookie.parse(cookieHeader); // this is NULL - WHY????
+    // log('cookieHeader in loader', cookieHeader);
+    // const cookieObj = await remix_cookie.parse(cookieHeader); // this is NULL - WHY????
 
-    log('cookieOBJXT', cookieObj);
+    // log('cookieOBJXT', cookieObj);
 
-    const user_session = getCookieValue(cookieHeader || '', 'user_session'); // getting cookie value manually
-    console.log(user_session);
-
-    // const meData: IMeData = await MeApi.fetchMe(cookieHeader);
+    // const user_session = getCookieValue(cookieHeader || '', 'user_session'); // getting cookie value manually
+    // console.log(user_session);
 
     log('userSession: ', userSession);
     if (!userSession) {
