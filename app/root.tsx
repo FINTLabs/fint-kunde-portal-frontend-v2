@@ -24,12 +24,20 @@ export const meta: MetaFunction = () => {
     ];
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-    const session = await getSession(request.headers.get('Cookie'));
-    let userSession = session.get('user_session');
+import { createCookie } from '@remix-run/node'; // or cloudflare/deno
 
-    const cookieHeader = request.headers.get('Cookie');
-    log(cookieHeader);
+export const remix_cookie = createCookie('remix_cookie', {
+    maxAge: 604_800, // one week
+});
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+    // const session = await getSession(request.headers.get('Cookie'));
+    // let userSession = session.get('user_session');
+
+    const cookieHeader = request.headers.get('Cookie'); // to get user_session set by SSO (middleware between user and remix app)
+    log('cookieHeader', cookieHeader);
+    const cookie = (await remix_cookie.parse(cookieHeader)) || {};
+    log('cookie', cookie);
 
     // log('userSession: ', userSession);
     // if (!userSession) {
@@ -69,7 +77,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // const features = await FeaturesApi.fetchFeatures();
     // return json({ userSession, features });
 
-    return json(cookieHeader);
+    return json(cookie);
 };
 
 // export async function action({ request }: ActionFunctionArgs) {
@@ -119,11 +127,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
     // const loaderData = useLoaderData<{ userSession: IUserSession; features: FeatureFlags }>();
-    const cookieHeader = useLoaderData();
+    const cookie = useLoaderData();
     // const userSession = loaderData?.userSession;
     // const features = loaderData?.features;
 
-    console.log(cookieHeader);
+    console.log(cookie);
     return <div>Cookies</div>;
     // return (
     //     <Page
