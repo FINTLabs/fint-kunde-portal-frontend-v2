@@ -77,7 +77,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // const features = await FeaturesApi.fetchFeatures();
     // return json({ userSession, features });
 
-    return json(cookie);
+    return json({ cookieHeader, cookie });
 };
 
 // export async function action({ request }: ActionFunctionArgs) {
@@ -127,12 +127,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
     // const loaderData = useLoaderData<{ userSession: IUserSession; features: FeatureFlags }>();
-    const cookie = useLoaderData();
+    const { cookieHeader, cookie } = useLoaderData<typeof loader>();
     // const userSession = loaderData?.userSession;
     // const features = loaderData?.features;
 
+    console.log('cookieHeader');
+    console.log(cookieHeader);
+    console.log('cookie');
     console.log(cookie);
-    return <div>Cookies</div>;
+
+    return <div>Cookies:</div>;
     // return (
     //     <Page
     //         footer={
