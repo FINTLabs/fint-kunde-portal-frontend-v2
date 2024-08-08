@@ -39,6 +39,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const cookie = (await remix_cookie.parse(cookieHeader)) || {};
     log('cookie', cookie);
 
+    const userSessionFromHeader = cookieHeader?.split(';');
+
     // log('userSession: ', userSession);
     // if (!userSession) {
     //     const meData: IMeData = await MeApi.fetchMe();
@@ -77,7 +79,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // const features = await FeaturesApi.fetchFeatures();
     // return json({ userSession, features });
 
-    return json({ cookieHeader, cookie });
+    return json({ cookieHeader, cookie, userSessionFromHeader });
 };
 
 // export async function action({ request }: ActionFunctionArgs) {
@@ -127,7 +129,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
     // const loaderData = useLoaderData<{ userSession: IUserSession; features: FeatureFlags }>();
-    const { cookieHeader, cookie } = useLoaderData<typeof loader>();
+    const { cookieHeader, cookie, userSessionFromHeader } = useLoaderData<typeof loader>();
     // const userSession = loaderData?.userSession;
     // const features = loaderData?.features;
 
@@ -135,6 +137,8 @@ export default function App() {
     console.log(cookieHeader);
     console.log('cookie');
     console.log(cookie);
+    console.log('userSessionFromHeader');
+    console.log(userSessionFromHeader);
 
     return <div>Cookies:</div>;
     // return (
