@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Detail, HGrid, Label, Switch, Table, Tag } from '@navikt/ds-react';
+import {
+    Box,
+    Checkbox,
+    CheckboxGroup,
+    Detail,
+    FormSummary,
+    HGrid,
+    Label,
+    Switch,
+    Table,
+    Tag,
+} from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
@@ -54,40 +65,52 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
     }, {});
 
     console.log(groupedByType);
-
     return (
         <>
             <Box padding="4">
-                <HGrid gap="8" columns={columns}>
-                    <Table>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell />
-                                <Table.HeaderCell scope="col">Komponent type</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {Object.keys(groupedByType).map((key, i) => {
-                                const componentType = key;
-                                const groupComponents = groupedByType[key];
-                                const Comp = () => {
-                                    return groupComponents.map((item, i) => (
-                                        <div>
-                                            {capitalizeFirstLetter(item.name.split('_')[1] ?? '')}
-                                        </div>
-                                    ));
-                                };
-                                return (
-                                    <Table.ExpandableRow key={i} content={<Comp />}>
-                                        <Table.DataCell scope="row">
-                                            {capitalizeFirstLetter(componentType)}
-                                        </Table.DataCell>
-                                    </Table.ExpandableRow>
-                                );
-                            })}
-                        </Table.Body>
-                    </Table>
+                <HGrid gap={'8'} columns={3}>
+                    {Object.keys(groupedByType).map((key, i) => {
+                        const componentType = key;
+                        const groupComponents = groupedByType[key];
+                        // console.log(groupComponents);
+                        return (
+                            <FormSummary>
+                                <FormSummary.Header>
+                                    <FormSummary.Heading level="2">
+                                        {capitalizeFirstLetter(componentType)}
+                                    </FormSummary.Heading>
+                                </FormSummary.Header>
 
+                                <FormSummary.Answers>
+                                    <FormSummary.Answer>
+                                        <CheckboxGroup
+                                            hideLegend
+                                            legend={componentType.toUpperCase()}
+                                            onChange={() => {}}
+                                            size="small">
+                                            {groupComponents.map((item, i) => {
+                                                console.log(item.description);
+                                                const splitted = item.description.split(' ');
+                                                console.log('splitted: ', splitted);
+                                                return (
+                                                    <Checkbox key={componentType + i} value="car">
+                                                        {splitted.length > 1
+                                                            ? splitted[1]
+                                                            : splitted[0]}
+                                                    </Checkbox>
+                                                );
+                                            })}
+
+                                            <Checkbox value="taxi">Drosje</Checkbox>
+                                            <Checkbox value="public">Kollektivt</Checkbox>
+                                        </CheckboxGroup>
+                                    </FormSummary.Answer>
+                                </FormSummary.Answers>
+                            </FormSummary>
+                        );
+                    })}
+                </HGrid>
+                <HGrid gap="8" columns={columns}>
                     {componentChunks.map((chunk, chunkIndex) => (
                         <Table key={chunkIndex} size={'small'}>
                             <Table.Body>
