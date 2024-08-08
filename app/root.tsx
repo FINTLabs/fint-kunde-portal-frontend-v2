@@ -35,11 +35,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // let userSession = session.get('user_session');
 
     const cookieHeader = request.headers.get('Cookie'); // to get user_session set by SSO (middleware between user and remix app)
-    log('cookieHeader', cookieHeader);
-    const cookie = (await remix_cookie.parse(cookieHeader)) || {};
+    log('cookieHeader in loader', cookieHeader);
+    const cookie = await remix_cookie.parse('cookieHeader'); // this is NULL - WHY????
+
     log('cookie', cookie);
 
-    const userSessionFromHeader = cookieHeader?.split(';');
+    const userSession = getCookieValue(cookieHeader || '', 'user_session'); // getting cookie value manually
+    console.log(userSession);
 
     // log('userSession: ', userSession);
     // if (!userSession) {
@@ -79,7 +81,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // const features = await FeaturesApi.fetchFeatures();
     // return json({ userSession, features });
 
-    return json({ cookieHeader, cookie, userSessionFromHeader });
+    return json({ cookieHeader, cookie, userSession: userSession });
 };
 
 // export async function action({ request }: ActionFunctionArgs) {
@@ -129,7 +131,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
     // const loaderData = useLoaderData<{ userSession: IUserSession; features: FeatureFlags }>();
-    const { cookieHeader, cookie, userSessionFromHeader } = useLoaderData<typeof loader>();
+    const { cookieHeader, cookie, userSession } = useLoaderData<typeof loader>();
     // const userSession = loaderData?.userSession;
     // const features = loaderData?.features;
 
@@ -138,7 +140,7 @@ export default function App() {
     console.log('cookie');
     console.log(cookie);
     console.log('userSessionFromHeader');
-    console.log(userSessionFromHeader);
+    console.log(userSession);
 
     return <div>Cookies:</div>;
     // return (
@@ -176,4 +178,15 @@ export function ErrorBoundary({ error }: { error: Error }) {
         // </>
         <CustomError error={error} />
     );
+}
+function getCookieValue(cookieString: string, key: string): string | null {
+    const keyValuePairs = cookieString.split('; ');
+    for (const pair of keyValuePairs) {
+        const [cookieKey, cookieValue] = pair.split('=');
+        console.log('cookieKey: ', cookieKey);
+        if (cookieKey === key) {
+            return decodeURIComponent(cookieValue);
+        }
+    }
+    return null;
 }
