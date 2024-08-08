@@ -48,7 +48,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     log('userSession: ', userSession);
     if (!userSession) {
-        const meData: IMeData = await MeApi.fetchMe(cookieHeader);
+        const meData: IMeData = await MeApi.fetchMe(cookieHeader || '');
         const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
 
         const organizationDetails = organisationsData.map((org) => ({

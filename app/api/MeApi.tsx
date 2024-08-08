@@ -5,7 +5,7 @@ class MeApi {
     static async fetchMe(cookieHeader: string) {
         const functionName = 'fetchMe';
         const URL = `${API_URL}/api/me`;
-        return request(URL, functionName, cookieHeader).catch((err) => {
+        return request(URL, functionName, '', cookieHeader).catch((err) => {
             console.error('Error fetching me information:', err);
         });
     }
@@ -13,7 +13,7 @@ class MeApi {
     static async fetchOrganisations() {
         const functionName = 'fetchOrganisations';
         const URL = `${API_URL}/api/contacts/organisations`;
-        return request(URL, functionName);
+        return request(URL, functionName, '');
     }
 }
 

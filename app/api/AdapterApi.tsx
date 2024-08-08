@@ -5,19 +5,19 @@ class AdapterAPI {
     static async getAdapters(organisationName: string) {
         const functionName = 'getAdapters';
         const URL = `${API_URL}/api/adapters/${organisationName}`;
-        return await request(URL, functionName);
+        return await request(URL, functionName, '');
     }
 
     static async createAdapter(adapter: IPartialAdapter, organisationName: string) {
         const functionName = 'createAdapter';
         const URL = `${API_URL}/api/adapters/${organisationName}`;
-        return await request(URL, functionName, 'POST', 'json', adapter);
+        return await request(URL, functionName, '', 'POST', 'json', adapter);
     }
 
     static async updateAdapter(adapter: IPartialAdapter, organisationName: string) {
         const functionName = 'updateAdapter';
         const URL = `${API_URL}/api/adapters/${organisationName}/${adapter.name}`;
-        return await request(URL, functionName, 'PUT', 'json', adapter);
+        return await request(URL, functionName, '', 'PUT', 'json', adapter);
     }
 
     static async updateComponentInAdapter(
@@ -36,25 +36,25 @@ class AdapterAPI {
 
     static async addComponentToAdapter(URL: string, adapterName: string) {
         const functionName = 'addComponentToAdapter';
-        return await request(URL, functionName, 'PUT', 'json', { name: adapterName });
+        return await request(URL, functionName, '', 'PUT', 'json', { name: adapterName });
     }
 
     static async removeComponentFromAdapter(URL: string, adapterName: string) {
         const functionName = 'removeComponentFromAdapter';
-        return await request(URL, functionName, 'DELETE', 'json', { name: adapterName });
+        return await request(URL, functionName, '', 'DELETE', 'json', { name: adapterName });
     }
 
     static async deleteAdapter(name: string, organisationName: string) {
         const functionName = 'deleteAdapter';
         const URL = `${API_URL}/api/adapters/${organisationName}/${name}`;
-        return await request(URL, functionName, 'DELETE');
+        return await request(URL, functionName, '', 'DELETE');
     }
 
     static async getOpenIdSecret(adapterName: string, organisationName: string) {
         const functionName = 'getOpenIdSecret';
         const URL = `${API_URL}/api/adapters/${organisationName}/${adapterName}/secret`;
 
-        return await request(URL, functionName, 'GET', 'text');
+        return await request(URL, functionName, '', 'GET', 'text');
     }
 }
 export default AdapterAPI;

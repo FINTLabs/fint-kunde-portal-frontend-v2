@@ -27,7 +27,7 @@ class ConsentApi {
         const functionName = 'getOrganisationComponents';
         const URL = `${API_URL}/consent-admin/tjeneste/${orgName}`;
         log('test url', URL);
-        return request(URL, functionName);
+        return request(URL, functionName, '');
     }
 }
 

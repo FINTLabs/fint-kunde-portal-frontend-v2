@@ -6,13 +6,13 @@ class ContactApi {
     static async getAllContacts() {
         const functionName = 'fetchContacts';
         const URL = `${API_URL}/api/contacts`;
-        return request(URL, functionName);
+        return request(URL, functionName, '');
     }
 
     static async getTechnicalContacts(orgName: string) {
         const functionName = 'fetchTechnicalContacts';
         const URL = `${API_URL}/api/organisations/${orgName}/contacts/technical`;
-        return request(URL, functionName);
+        return request(URL, functionName, '');
     }
 
     static async removeTechnicalContact(contactNin: string, orgName: string) {
@@ -22,7 +22,7 @@ class ContactApi {
         const functionName = 'unsetLegalContact';
         const URL = `${API_URL}/api/organisations/${orgName}/contacts/legal/${contactNin}`;
 
-        return request(URL, functionName, 'DELETE');
+        return request(URL, functionName, '', 'DELETE');
         // const request = new Request(`/api/organisations/${orgName}/contacts/legal/${contactNin}`, {
         //     method: 'DELETE',
         //     headers: new Headers({
@@ -49,7 +49,7 @@ class ContactApi {
 
         // const functionName = 'setLegalContact';
         // const URL = `${API_URL}/api/organisations/${orgName}/contacts/legal/${contactNin}`;
-        // const test = await request(URL, functionName, 'PUT');
+        // const test = await request(URL, functionName, '','PUT');
         // log('HELLO', test);
         // return 'message';
 
