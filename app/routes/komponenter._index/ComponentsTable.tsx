@@ -74,7 +74,6 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                     {Object.keys(groupedByType).map((key, i) => {
                         const componentType = key;
                         const groupComponents = groupedByType[key];
-                        console.log(groupComponents);
                         const names = groupComponents
                             .filter((item) => selectedItems.includes(item.dn))
                             .map((item) => item.name);

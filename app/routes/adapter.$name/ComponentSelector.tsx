@@ -12,7 +12,6 @@ interface ComponentSelectorProps {
 const ComponentSelector: React.FC<ComponentSelectorProps> = ({ items, selectedItems }) => {
     const submit = useSubmit();
 
-    console.log(selectedItems);
     return (
         <>
             <Box padding="4">
