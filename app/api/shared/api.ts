@@ -102,9 +102,10 @@ async function getRequest(
     } else {
         log(`Response: `, response);
 
-        error(
-            `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`
-        );
-        return `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`;
+        const errorMsg = `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`;
+        error(errorMsg);
+        return {
+            error: `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`,
+        };
     }
 }

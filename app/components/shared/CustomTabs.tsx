@@ -24,6 +24,10 @@ export function CustomTabs<T extends IAdapter>({
         navigate(`/adapter/${id}`);
     };
 
+    if (!items) {
+        return <div>Fant ingen</div>;
+    }
+
     return (
         <Tabs defaultValue={tabInfo[0].value} fill>
             <Tabs.List>

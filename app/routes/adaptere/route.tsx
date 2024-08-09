@@ -14,6 +14,7 @@ import { InfoBox } from '~/components/shared/InfoBox';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
+    error: string;
 }
 
 export const meta: MetaFunction = () => {
@@ -23,14 +24,14 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async ({ request }) => {
     log('Request headers:', request.headers.get('x-nin'));
     const orgName = await getSelectedOrganization(request);
-    const adapters = await AdapterAPI.getAdapters(orgName);
-    return json({ adapters: adapters, orgName });
+    const response = await AdapterAPI.getAdapters(orgName);
+    return json({ adapters: response.error ? null : response, orgName, error: response.error });
 };
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Adaptere', link: '/adaptere' }];
 
-    const { adapters } = useLoaderData<IPageLoaderData>();
+    const { adapters, error } = useLoaderData<IPageLoaderData>();
 
     const navigate = useNavigate();
 
@@ -59,7 +60,8 @@ export default function Index() {
                 </VStack>
             </HStack>
 
-            {!adapters && <InfoBox message="Fant ingen adaptere" />}
+            {error && <InfoBox message={error}></InfoBox>}
+            {adapters && adapters.length == 0 && <InfoBox message="Ingen adaptere" />}
 
             {/* {adapters && <AdapterList items={adapters} />} */}
             {adapters && <CustomTabs items={adapters} />}
