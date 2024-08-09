@@ -17,7 +17,7 @@ import { CustomError } from '~/components/shared/CustomError';
 import { log } from './utils/logger';
 import { getFormData } from './utils/requestUtils';
 import { createCookie } from '@remix-run/node'; // or cloudflare/deno
-import { getUserSession } from './utils/selectedOrganization';
+import { getSessionFromCookie, getUserSession, setUserSession } from './utils/selectedOrganization';
 
 export const meta: MetaFunction = () => {
     return [
@@ -65,8 +65,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             selectedOrganization: organizationDetails[0],
             organizations: organizationDetails,
         };
-
-        session.set('user_session', userSession);
+        // const session = await getSessionFromCookie(request);
+        // session.set('user_session', userSession);
+        const session = await setUserSession(request, userSession);
         const cookie = await commitSession(session);
         let features = await FeaturesApi.fetchFeatures();
 

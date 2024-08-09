@@ -89,8 +89,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     try {
         const response = await OrganisationApi.updateComponent(componentName, orgName, updateType);
-        console.log('Reposne');
-        console.log(response);
+        const successResponse = response.status === 204;
+
+        if (!successResponse) {
+            log(`${actionName} failed: Response: ${response.status}`);
+        }
         const success = response.status === 204;
         const actionDataResult: ActionData = { success, status: response.status };
         console.log(actionDataResult);
