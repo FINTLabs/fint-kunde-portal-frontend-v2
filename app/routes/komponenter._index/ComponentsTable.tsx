@@ -74,7 +74,10 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                     {Object.keys(groupedByType).map((key, i) => {
                         const componentType = key;
                         const groupComponents = groupedByType[key];
-                        // console.log(groupComponents);
+                        console.log(groupComponents);
+                        const names = groupComponents
+                            .filter((item) => selectedItems.includes(item.dn))
+                            .map((item) => item.name);
                         return (
                             <FormSummary key={`${key}-${i}`}>
                                 <FormSummary.Header>
@@ -88,7 +91,10 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                         <CheckboxGroup
                                             hideLegend
                                             legend={componentType.toUpperCase()}
-                                            onChange={() => {}}
+                                            defaultValue={names}
+                                            onChange={(names) => {
+                                                console.log(names);
+                                            }}
                                             size="small">
                                             {groupComponents.map((item, i) => {
                                                 const splitted = item.description.split(' ');
@@ -102,7 +108,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                         justify={'space-between'}
                                                         align={'center'}>
                                                         <Checkbox
-                                                            checked={isComponentSwitchedOn}
+                                                            value={item.name}
                                                             key={componentType + i}
                                                             onChange={(e) => {
                                                                 const checkedStatus =
@@ -112,8 +118,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                                         item.name,
                                                                         checkedStatus
                                                                     );
-                                                            }}
-                                                            value={true}>
+                                                            }}>
                                                             {splitted.length > 1
                                                                 ? splitted[1]
                                                                 : splitted[0]}
