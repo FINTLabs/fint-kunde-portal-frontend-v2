@@ -78,8 +78,6 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                             .filter((item) => selectedItems.includes(item.dn))
                             .map((item) => item.name);
 
-                        console.log('names');
-                        console.log(names);
                         return (
                             <FormSummary key={`${key}-${i}`}>
                                 <FormSummary.Header>
