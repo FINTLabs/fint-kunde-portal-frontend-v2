@@ -17,6 +17,7 @@ import { CustomError } from '~/components/shared/CustomError';
 import { log } from './utils/logger';
 import { getFormData } from './utils/requestUtils';
 import { createCookie } from '@remix-run/node'; // or cloudflare/deno
+import { getUserSession } from './utils/selectedOrganization';
 
 export const meta: MetaFunction = () => {
     return [
@@ -30,11 +31,9 @@ export const remix_cookie = createCookie('remix_cookie', {
 });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    const session = await getSession(request.headers.get('Cookie'));
+    log('Calling loader in root.tsx');
 
-    let userSession = session.get(
-        request.url.includes('localhost') ? 'user-session' : 'user_session'
-    );
+    let userSession = await getUserSession(request);
     // log('userSessionFromGetSession ', userSession);
     // let userSession = session.get('user_session');
 
@@ -47,7 +46,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // const user_session = getCookieValue(cookieHeader || '', 'user_session'); // getting cookie value manually
     // console.log(user_session);
 
-    log('userSession: ', userSession);
+    // log('userSession: ', userSession);
     if (!userSession) {
         const meData: IMeData = await MeApi.fetchMe(cookieHeader || '');
         console.log('meData: ', meData);
@@ -84,6 +83,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const features = await FeaturesApi.fetchFeatures();
+    log('Userorganization  |', userSession.selectedOrganization.displayName);
     return json({ userSession, features });
 
     // return json({ cookieHeader, cookie: cookieObj, userSession: userSession });
@@ -92,28 +92,36 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export async function action({ request }: ActionFunctionArgs) {
     const actionName = 'Action Update';
     const formData = await request.formData();
-    const selectedOrganization = getFormData(
-        formData.get('selectedOrganization'),
-        'selectedOrganization',
-        actionName
-    );
+    const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
 
-    const session = await getSession(request.headers.get('Cookie'));
-    let userSession = session.get('user_session');
-    userSession.selectedOrganization = userSession.organizations.find(
-        (org: SessionOrganisation) => org.displayName === selectedOrganization
-    );
+    console.log('Updating user org in action');
+    if (actionType === 'UPDATE_SELECTED_ORGANIZATION') {
+        const selectedOrganization = getFormData(
+            formData.get('selectedOrganization'),
+            'selectedOrganization',
+            actionName
+        );
 
-    session.set('user_session', userSession);
-    const cookie = await commitSession(session);
-    return json(
-        { userSession },
-        {
-            headers: {
-                'Set-Cookie': cookie,
-            },
-        }
-    );
+        const sessionString = request.url.includes('localhost') ? 'user-session' : 'user_session';
+        const session = await getSession(request.headers.get('Cookie'));
+        let userSession = session.get(sessionString);
+        userSession.selectedOrganization = userSession.organizations.find(
+            (org: SessionOrganisation) => org.displayName === selectedOrganization
+        );
+
+        session.set(sessionString, userSession);
+        const cookie = await commitSession(session);
+        return json(
+            { userSession },
+            {
+                headers: {
+                    'Set-Cookie': cookie,
+                },
+            }
+        );
+    }
+
+    return json({ ok: true });
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {

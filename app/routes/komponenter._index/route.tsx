@@ -10,6 +10,7 @@ import { IComponent } from '~/types/Component';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData } from '~/utils/requestUtils';
 import OrganisationApi from '~/api/OrganisationApi';
+import { log } from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [
@@ -19,6 +20,8 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
+    log('Calling loader in komponenter_index.tsx');
+
     try {
         const components = await ComponentApi.getAllComponents();
         const orgName = await getSelectedOrganization(request);
@@ -29,10 +32,20 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 };
 
+type ActionData = {
+    success: boolean;
+    status: number;
+};
+
 export default function Index() {
     const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter' }];
     const { components, orgName } = useLoaderData<{ components: IComponent[]; orgName: string }>();
+    const actionData = useActionData<ActionData>();
 
+    console.log('actionData: ', actionData);
+    // console.log(components.length);
+    console.log(orgName);
+    // console.log(components.map((c) => c.organisations.map((o) => o)));
     const selectedCompoents = components
         .filter((component) => component.organisations.some((org) => org.includes(orgName)))
         .map((component) => component.dn);
@@ -71,11 +84,17 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     let updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
     const componentName = getFormData(formData.get('componentName'), 'componentName', actionName);
+    console.log(orgName);
+    console.log('skfsdldfl');
 
     try {
         const response = await OrganisationApi.updateComponent(componentName, orgName, updateType);
+        console.log('Reposne');
+        console.log(response);
         const success = response.status === 204;
-        return json({ success });
+        const actionDataResult: ActionData = { success, status: response.status };
+        console.log(actionDataResult);
+        return json({ result: actionDataResult });
     } catch (error) {
         console.error('Error updating component:', error);
         return json({ success: false, error: 'Error updating component' }, { status: 500 });

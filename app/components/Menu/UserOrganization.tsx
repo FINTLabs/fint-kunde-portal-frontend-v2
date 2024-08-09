@@ -10,7 +10,7 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
 
     const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setOrgName(event.target.value);
-
+        console.log(`Change org to ${event.target.value}`);
         submit(
             {
                 selectedOrganization: event.target.value,

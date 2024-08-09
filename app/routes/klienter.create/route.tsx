@@ -1,9 +1,4 @@
-import {
-    json,
-    type MetaFunction,
-    type ActionFunctionArgs,
-    redirect,
-} from '@remix-run/node';
+import { json, type MetaFunction, type ActionFunctionArgs, redirect } from '@remix-run/node';
 import { Box, Button, FormSummary, HStack, Textarea, TextField } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Form, useActionData } from '@remix-run/react';
@@ -18,6 +13,7 @@ export const meta: MetaFunction = () => {
 type Errors = { name?: string; description?: string; note?: string; apiError?: string };
 type ActionData = {
     errors?: Errors;
+    status: number;
 };
 
 export default function Index() {

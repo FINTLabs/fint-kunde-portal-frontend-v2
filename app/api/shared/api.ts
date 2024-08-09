@@ -17,7 +17,7 @@ export async function request(
     data?: PostDataType
 ) {
     try {
-        log(`Running ${functionName} with URL:`, URL);
+        log(`Running ${requestMethod} on ${functionName} with URL:`, URL);
 
         let requestOptions: RequestInit = {
             method: requestMethod,
@@ -31,8 +31,8 @@ export async function request(
             },
         };
 
-        log('requestOptions in request');
-        log(requestOptions);
+        // log('requestOptions in request');
+        // log(requestOptions);
 
         switch (requestMethod) {
             case 'GET':
@@ -96,8 +96,7 @@ async function getRequest(
 ) {
     // log(`RequestOptions: `, requestOptions);
     const response = await fetch(URL, requestOptions);
-    log('response in GET Request');
-    log('response.status: ' + response.status);
+    log(`-> Response: ${response.status}`);
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {

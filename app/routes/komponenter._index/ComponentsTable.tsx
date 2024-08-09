@@ -67,6 +67,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
         return acc;
     }, {});
 
+
     return (
         <>
             <Box padding="4">
