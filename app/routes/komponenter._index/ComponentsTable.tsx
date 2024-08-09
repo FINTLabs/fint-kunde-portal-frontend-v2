@@ -106,23 +106,37 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                         key={componentType + i}
                                                         justify={'space-between'}
                                                         align={'center'}>
-                                                        <Checkbox
-                                                            value={item.name}
-                                                            key={componentType + i}
-                                                            onChange={(e) => {
-                                                                const checkedStatus =
-                                                                    e.target.checked;
-                                                                toggleSwitch &&
-                                                                    toggleSwitch(
-                                                                        item.name,
-                                                                        checkedStatus
-                                                                    );
-                                                            }}>
+                                                        <HStack align={'center'}>
+                                                            <Checkbox
+                                                                value={item.name}
+                                                                key={componentType + i}
+                                                                onChange={(e) => {
+                                                                    const checkedStatus =
+                                                                        e.target.checked;
+                                                                    toggleSwitch &&
+                                                                        toggleSwitch(
+                                                                            item.name,
+                                                                            checkedStatus
+                                                                        );
+                                                                }}>
+                                                                {' '}
+                                                            </Checkbox>
                                                             {splitted.length > 1
                                                                 ? splitted[1]
                                                                 : splitted[0]}
-                                                        </Checkbox>
-                                                        <ChevronRightIcon title="Vis detaljer" />
+                                                        </HStack>
+                                                        <HStack align={'center'}>
+                                                            <Box
+                                                                padding={'2'}
+                                                                className="hover:bg-[--a-surface-active] hover:cursor-pointer">
+                                                                <ChevronRightIcon
+                                                                    title="Vis detaljer"
+                                                                    onClick={() =>
+                                                                        handleRowClick(item)
+                                                                    }
+                                                                />
+                                                            </Box>
+                                                        </HStack>
                                                     </HStack>
                                                 );
                                             })}
