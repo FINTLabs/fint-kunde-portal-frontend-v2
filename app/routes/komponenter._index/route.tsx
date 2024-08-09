@@ -81,8 +81,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     let updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
     const componentName = getFormData(formData.get('componentName'), 'componentName', actionName);
-    console.log(orgName);
-    console.log('skfsdldfl');
 
     try {
         const response = await OrganisationApi.updateComponent(componentName, orgName, updateType);
