@@ -11,6 +11,7 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData } from '~/utils/requestUtils';
 import OrganisationApi from '~/api/OrganisationApi';
 import { log } from '~/utils/logger';
+import { InfoBox } from '~/components/shared/InfoBox';
 
 export const meta: MetaFunction = () => {
     return [
@@ -34,7 +35,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 type ActionData = {
     success: boolean;
-    status: number;
+    message: string;
 };
 
 export default function Index() {
@@ -42,10 +43,6 @@ export default function Index() {
     const { components, orgName } = useLoaderData<{ components: IComponent[]; orgName: string }>();
     const actionData = useActionData<ActionData>();
 
-    console.log('actionData: ', actionData);
-    // console.log(components.length);
-    console.log(orgName);
-    // console.log(components.map((c) => c.organisations.map((o) => o)));
     const selectedCompoents = components
         .filter((component) => component.organisations.some((org) => org.includes(orgName)))
         .map((component) => component.dn);
@@ -56,6 +53,7 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Komponenter'} icon={ComponentIcon} helpText="components" />
+            {actionData && !actionData.success && <InfoBox message={actionData.message} />}
             <ComponentsTable
                 items={components}
                 selectedItems={selectedCompoents}
@@ -66,8 +64,7 @@ export default function Index() {
                             updateType: isChecked ? 'add' : 'remove',
                         },
                         {
-                            method: 'POST',
-                            navigate: false,
+                            method: 'post',
                         }
                     );
                 }}
@@ -95,9 +92,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
             log(`${actionName} failed: Response: ${response.status}`);
         }
         const success = response.status === 204;
-        const actionDataResult: ActionData = { success, status: response.status };
-        console.log(actionDataResult);
-        return json({ result: actionDataResult });
+        return json({
+            success,
+            message: `${success ? '' : `Failed tu update org: Status: ${response.status}`}`,
+        });
     } catch (error) {
         console.error('Error updating component:', error);
         return json({ success: false, error: 'Error updating component' }, { status: 500 });
