@@ -47,6 +47,7 @@ export default function Index() {
         .filter((component) => component.organisations.some((org) => org.includes(orgName)))
         .map((component) => component.dn);
 
+    console.log(selectedCompoents);
     const submit = useSubmit();
 
     return (

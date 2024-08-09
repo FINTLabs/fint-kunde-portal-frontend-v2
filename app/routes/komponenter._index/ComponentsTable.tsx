@@ -67,7 +67,6 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
         return acc;
     }, {});
 
-
     return (
         <>
             <Box padding="4">
@@ -78,6 +77,9 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                         const names = groupComponents
                             .filter((item) => selectedItems.includes(item.dn))
                             .map((item) => item.name);
+
+                        console.log('names');
+                        console.log(names);
                         return (
                             <FormSummary key={`${key}-${i}`}>
                                 <FormSummary.Header>
