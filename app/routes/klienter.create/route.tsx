@@ -1,17 +1,13 @@
 import {
-    type LoaderFunctionArgs,
     json,
     type MetaFunction,
     type ActionFunctionArgs,
     redirect,
 } from '@remix-run/node';
 import { Box, Button, FormSummary, HStack, Textarea, TextField } from '@navikt/ds-react';
-import React from 'react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Form, useActionData } from '@remix-run/react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { IAsset, IPartialAsset } from '~/types/Asset';
-import AssetApi from '~/api/AssetApi';
 import ClientApi from '~/api/ClientApi';
 import { IClient, IPartialClient } from '~/types/Clients';
 
@@ -113,13 +109,13 @@ export async function action({ request }: ActionFunctionArgs) {
         note: note,
         shortDescription: description,
     };
-    console.log(newClient);
+
     const response = await ClientApi.createClient(newClient, orgName);
 
-    console.log(response);
+    // console.log(response);
     if (response.status === 201) {
         const responseObject = (await response.json()) as IClient;
-        console.log(responseObject);
+        // console.log(responseObject);
         return redirect(`/klienter/${responseObject.name}`);
     } else {
         return json({

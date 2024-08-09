@@ -172,7 +172,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                     checked={isComponentSwitchedOn}
                                                     onChange={(e) => {
                                                         const checkedStatus = e.target.checked;
-                                                        console.log(item.name);
+                                                        // console.log(item.name);
                                                         setSwitchLoadingState({
                                                             loading: true,
                                                             isOn: isComponentSwitchedOn,

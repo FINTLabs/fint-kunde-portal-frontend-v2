@@ -90,7 +90,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
-    const detailedInfo = formData.get('detailedInfo') as string;
+    // const detailedInfo = formData.get('detailedInfo') as string;
 
     const errors: Errors = {};
     if (!name) errors.name = 'Navn er påkrevd';
@@ -106,10 +106,10 @@ export async function action({ request }: ActionFunctionArgs) {
         name: name,
         description,
     };
-    console.log(newAsset);
+    // console.log(newAsset);
     const response = await AssetApi.createAsset(newAsset, orgName);
 
-    console.log(response);
+    // console.log(response);
     if (response.status === 201) {
         // const newAdapter = (await response.json()) as IAsset;
         return redirect(`/ressurser/${newAsset.assetId}_fintlabs_no`);
