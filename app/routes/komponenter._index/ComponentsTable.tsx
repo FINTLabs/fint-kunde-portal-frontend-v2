@@ -72,9 +72,8 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
         <>
             <Box padding="4">
                 <HGrid gap={'8'} columns={3}>
-                    {Object.keys(groupedByType).map((key, i) => {
-                        const componentType = key;
-                        const groupComponents = groupedByType[key];
+                    {Object.keys(groupedByType).map((groupName, i) => {
+                        const groupComponents = groupedByType[groupName];
                         const selectedItemsInGroupNames = groupComponents
                             .filter((item) => selectedItems.includes(item.dn))
                             .map((item) => item.name);
@@ -82,23 +81,47 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                         const isGroupSelected =
                             groupComponents.length === selectedItemsInGroupNames.length;
 
+                        const [switchLoadingState, setSwitchLoadingState] = useState({
+                            loading: false,
+                            isOn: isGroupSelected,
+                        });
+
+                        // To update switch loading state to false
+                        useEffect(() => {
+                            setSwitchLoadingState((prevState) => ({
+                                ...prevState,
+                                isOn: isGroupSelected,
+                                loading: false,
+                            }));
+                        }, [isGroupSelected]);
                         return (
-                            <FormSummary key={`${key}-${i}`}>
+                            <FormSummary key={`${groupName}-${i}`}>
                                 <FormSummary.Header>
                                     <HStack align={'center'} justify={'space-between'}>
                                         <FormSummary.Heading level="2">
-                                            {capitalizeFirstLetter(componentType)}
+                                            {capitalizeFirstLetter(groupName)}
                                         </FormSummary.Heading>
                                     </HStack>
                                     <HStack align={'center'} justify={'space-between'}>
                                         <CheckboxGroup
-                                            legend={componentType}
+                                            legend={groupName}
                                             hideLegend
-                                            value={[componentType]}>
+                                            value={[groupName]}>
                                             <Checkbox
-                                                value={isGroupSelected ? componentType : ''}
-                                                onChange={() => {
-                                                    // select all / unselect all
+                                                disabled={switchLoadingState.loading}
+                                                value={isGroupSelected ? groupName : ''}
+                                                onChange={(e) => {
+                                                    const checkedStatus = e.target.checked;
+                                                    setSwitchLoadingState({
+                                                        loading: true,
+                                                        isOn: isGroupSelected,
+                                                    });
+
+                                                    // TODO: ask backend to implement the correct call.
+                                                    groupComponents.forEach((item) => {
+                                                        console.log(`toggling ${item.name}`);
+                                                        toggle && toggle(item.name, checkedStatus);
+                                                    });
                                                 }}>
                                                 {''}
                                             </Checkbox>
@@ -111,7 +134,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                         <CheckboxGroup
                                             hideLegend
                                             value={selectedItemsInGroupNames}
-                                            legend={componentType.toUpperCase()}
+                                            legend={groupName.toUpperCase()}
                                             // defaultValue={names}
                                             onChange={(names) => {
                                                 console.log(names);
@@ -141,7 +164,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
 
                                                 return (
                                                     <HStack
-                                                        key={componentType + i}
+                                                        key={groupName + i}
                                                         justify={'space-between'}
                                                         align={'center'}>
                                                         <HStack align={'center'} gap={'2'}>
@@ -150,7 +173,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                                     switchLoadingState.loading
                                                                 }
                                                                 value={item.name}
-                                                                key={componentType + i}
+                                                                key={groupName + i}
                                                                 onChange={(e) => {
                                                                     const checkedStatus =
                                                                         e.target.checked;
