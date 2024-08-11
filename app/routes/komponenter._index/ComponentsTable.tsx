@@ -189,13 +189,17 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                                 }}>
                                                                 {' '}
                                                             </Checkbox>
-                                                            {splitted.length > 1
-                                                                ? splitted[1]
-                                                                : splitted[0]}
-                                                            {loadingState.loading ||
-                                                                (groupLoading.loading && (
+                                                            <HStack gap={'1'}>
+                                                                {splitted.length > 1
+                                                                    ? splitted[1]
+                                                                    : splitted[0]}
+                                                                {loadingState.loading && (
+                                                                    // ||
+                                                                    //     groupLoading.loading
+
                                                                     <Loader />
-                                                                ))}
+                                                                )}
+                                                            </HStack>
                                                         </HStack>
                                                         <HStack align={'center'}>
                                                             <Box
