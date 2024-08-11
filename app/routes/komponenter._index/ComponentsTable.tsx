@@ -74,7 +74,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                     {Object.keys(groupedByType).map((key, i) => {
                         const componentType = key;
                         const groupComponents = groupedByType[key];
-                        const names = groupComponents
+                        const selectedItemsInGroupNames = groupComponents
                             .filter((item) => selectedItems.includes(item.dn))
                             .map((item) => item.name);
 
@@ -84,13 +84,23 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                     <FormSummary.Heading level="2">
                                         {capitalizeFirstLetter(componentType)}
                                     </FormSummary.Heading>
+                                    <CheckboxGroup
+                                        legend={componentType}
+                                        hideLegend
+                                        value={[componentType]}>
+                                        <Checkbox value={componentType} onChange={() => {
+                                            // select all / unselect all
+                                        }}>
+                                            {''}
+                                        </Checkbox>
+                                    </CheckboxGroup>
                                 </FormSummary.Header>
 
                                 <FormSummary.Answers>
                                     <FormSummary.Answer>
                                         <CheckboxGroup
                                             hideLegend
-                                            value={names}
+                                            value={selectedItemsInGroupNames}
                                             legend={componentType.toUpperCase()}
                                             // defaultValue={names}
                                             onChange={(names) => {
