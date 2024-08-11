@@ -75,7 +75,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);
 
-    const actionType = formData.get('type') as string;
+    const actionType = formData.get('actionType') as string;
     if (actionType === 'Passord') {
         const response = 'Not implemented';
         return response;

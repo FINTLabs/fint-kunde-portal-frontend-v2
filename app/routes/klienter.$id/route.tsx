@@ -175,6 +175,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 updateType
             );
             return json({ ok: response.status === 204 ? true : false });
+        case 'Passord':
+            return 'Not implemented';
+        case 'Klient Hemmelighet':
+            return 'Not implemented';
         default:
             return null;
         // return redirect(`/adapter/${adapterName}`);

@@ -16,7 +16,7 @@ export function TableCellValue({
     const Fetcher = () => {
         return (
             <fetcher.Form method="post">
-                <input type="hidden" name="type" value={label} />
+                <input type="hidden" name="actionType" value={label} />
                 <Button
                     type="submit"
                     variant="tertiary-neutral"
