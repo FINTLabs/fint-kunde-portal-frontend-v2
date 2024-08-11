@@ -9,6 +9,7 @@ import {
     HGrid,
     HStack,
     Label,
+    Loader,
     Switch,
     Table,
     Tag,
@@ -78,22 +79,31 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                             .filter((item) => selectedItems.includes(item.dn))
                             .map((item) => item.name);
 
+                        const isGroupSelected =
+                            groupComponents.length === selectedItemsInGroupNames.length;
+
                         return (
                             <FormSummary key={`${key}-${i}`}>
                                 <FormSummary.Header>
-                                    <FormSummary.Heading level="2">
-                                        {capitalizeFirstLetter(componentType)}
-                                    </FormSummary.Heading>
-                                    <CheckboxGroup
-                                        legend={componentType}
-                                        hideLegend
-                                        value={[componentType]}>
-                                        <Checkbox value={componentType} onChange={() => {
-                                            // select all / unselect all
-                                        }}>
-                                            {''}
-                                        </Checkbox>
-                                    </CheckboxGroup>
+                                    <HStack align={'center'} justify={'space-between'}>
+                                        <FormSummary.Heading level="2">
+                                            {capitalizeFirstLetter(componentType)}
+                                        </FormSummary.Heading>
+                                    </HStack>
+                                    <HStack align={'center'} justify={'space-between'}>
+                                        <CheckboxGroup
+                                            legend={componentType}
+                                            hideLegend
+                                            value={[componentType]}>
+                                            <Checkbox
+                                                value={isGroupSelected ? componentType : ''}
+                                                onChange={() => {
+                                                    // select all / unselect all
+                                                }}>
+                                                {''}
+                                            </Checkbox>
+                                        </CheckboxGroup>
+                                    </HStack>
                                 </FormSummary.Header>
 
                                 <FormSummary.Answers>
@@ -113,18 +123,41 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                 const isComponentSwitchedOn = selectedItems.some(
                                                     (selected) => selected === item.dn
                                                 );
+
+                                                const [switchLoadingState, setSwitchLoadingState] =
+                                                    useState({
+                                                        loading: false,
+                                                        isOn: isComponentSwitchedOn,
+                                                    });
+
+                                                // To update switch loading state to false
+                                                useEffect(() => {
+                                                    setSwitchLoadingState((prevState) => ({
+                                                        ...prevState,
+                                                        isOn: isComponentSwitchedOn,
+                                                        loading: false,
+                                                    }));
+                                                }, [isComponentSwitchedOn]);
+
                                                 return (
                                                     <HStack
                                                         key={componentType + i}
                                                         justify={'space-between'}
                                                         align={'center'}>
-                                                        <HStack align={'center'}>
+                                                        <HStack align={'center'} gap={'2'}>
                                                             <Checkbox
+                                                                disabled={
+                                                                    switchLoadingState.loading
+                                                                }
                                                                 value={item.name}
                                                                 key={componentType + i}
                                                                 onChange={(e) => {
                                                                     const checkedStatus =
                                                                         e.target.checked;
+                                                                    setSwitchLoadingState({
+                                                                        loading: true,
+                                                                        isOn: isComponentSwitchedOn,
+                                                                    });
                                                                     toggle &&
                                                                         toggle(
                                                                             item.name,
@@ -136,6 +169,9 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                             {splitted.length > 1
                                                                 ? splitted[1]
                                                                 : splitted[0]}
+                                                            {switchLoadingState.loading && (
+                                                                <Loader />
+                                                            )}
                                                         </HStack>
                                                         <HStack align={'center'}>
                                                             <Box
