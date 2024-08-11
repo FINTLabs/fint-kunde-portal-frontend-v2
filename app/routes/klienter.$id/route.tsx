@@ -151,11 +151,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);
-    console.log(formData);
+    // console.log(formData);
 
     const clientName = getRequestParam(params.id, 'id');
 
-    console.log(clientName);
+    // console.log(clientName);
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
 
     let response = null;
