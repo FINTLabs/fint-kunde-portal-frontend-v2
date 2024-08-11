@@ -47,7 +47,6 @@ export default function Index() {
         .filter((component) => component.organisations.some((org) => org.includes(orgName)))
         .map((component) => component.dn);
 
-    console.log(selectedCompoents);
     const submit = useSubmit();
 
     return (
@@ -58,7 +57,7 @@ export default function Index() {
             <ComponentsTable
                 items={components}
                 selectedItems={selectedCompoents}
-                toggleSwitch={(name, isChecked) => {
+                toggle={(name, isChecked) => {
                     submit(
                         {
                             componentName: name,

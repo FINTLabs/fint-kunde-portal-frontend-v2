@@ -23,7 +23,7 @@ interface ComponentsSectionProps {
     selectedItems: string[];
     columns?: number;
     selectable?: boolean;
-    toggleSwitch?: (name: string, checked: boolean) => void;
+    toggle?: (name: string, checked: boolean) => void;
 }
 
 type ComponentType = {
@@ -34,7 +34,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
     items,
     selectedItems,
     columns = 1,
-    toggleSwitch,
+    toggle,
 }) => {
     const navigate = useNavigate();
 
@@ -90,8 +90,9 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                     <FormSummary.Answer>
                                         <CheckboxGroup
                                             hideLegend
+                                            value={names}
                                             legend={componentType.toUpperCase()}
-                                            defaultValue={names}
+                                            // defaultValue={names}
                                             onChange={(names) => {
                                                 console.log(names);
                                             }}
@@ -114,8 +115,8 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                                 onChange={(e) => {
                                                                     const checkedStatus =
                                                                         e.target.checked;
-                                                                    toggleSwitch &&
-                                                                        toggleSwitch(
+                                                                    toggle &&
+                                                                        toggle(
                                                                             item.name,
                                                                             checkedStatus
                                                                         );
@@ -191,8 +192,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                             loading: true,
                                                             isOn: isComponentSwitchedOn,
                                                         });
-                                                        toggleSwitch &&
-                                                            toggleSwitch(item.name, checkedStatus);
+                                                        toggle && toggle(item.name, checkedStatus);
                                                     }}>
                                                     {''}
                                                 </Switch>

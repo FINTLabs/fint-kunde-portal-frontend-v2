@@ -22,7 +22,7 @@ const ComponentSelector: React.FC<ComponentSelectorProps> = ({ items, selectedIt
                     <ComponentsTable
                         items={items}
                         selectedItems={selectedItems}
-                        toggleSwitch={(name, isChecked) => {
+                        toggle={(name, isChecked) => {
                             submit(
                                 {
                                     componentName: name,
