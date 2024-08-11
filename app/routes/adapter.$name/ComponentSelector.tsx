@@ -14,10 +14,10 @@ const ComponentSelector: React.FC<ComponentSelectorProps> = ({ items, selectedIt
 
     return (
         <>
-            <Box padding="4">
-                <HGrid gap="8">
+            <Box padding="6">
+                <HGrid gap="2">
                     <Heading size="medium" spacing>
-                        Komponenter tilknyttet ressurs
+                        Komponenter tilknyttet
                     </Heading>
                     <ComponentsTable
                         items={items}

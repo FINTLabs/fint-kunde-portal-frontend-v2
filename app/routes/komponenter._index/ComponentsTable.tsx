@@ -69,241 +69,237 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
     }, {});
 
     return (
-        <>
-            <Box padding="4">
-                <HGrid gap={'8'} columns={3}>
-                    {Object.keys(groupedByType).map((groupName, i) => {
-                        const groupComponents = groupedByType[groupName];
-                        const selectedItemsInGroupNames = groupComponents
-                            .filter((item) => selectedItems.includes(item.dn))
-                            .map((item) => item.name);
+        <Box padding="0">
+            <HGrid gap={'6'} columns={3}>
+                {Object.keys(groupedByType).map((groupName, i) => {
+                    const groupComponents = groupedByType[groupName];
+                    const selectedItemsInGroupNames = groupComponents
+                        .filter((item) => selectedItems.includes(item.dn))
+                        .map((item) => item.name);
 
-                        const isGroupSelected =
-                            groupComponents.length === selectedItemsInGroupNames.length;
+                    const isGroupSelected =
+                        groupComponents.length === selectedItemsInGroupNames.length;
 
-                        const [groupLoading, setGroupLoading] = useState({
-                            loading: false,
+                    const [groupLoading, setGroupLoading] = useState({
+                        loading: false,
+                        isOn: isGroupSelected,
+                    });
+
+                    // To update switch loading state to false
+                    useEffect(() => {
+                        setGroupLoading((prevState) => ({
+                            ...prevState,
                             isOn: isGroupSelected,
-                        });
-
-                        // To update switch loading state to false
-                        useEffect(() => {
-                            setGroupLoading((prevState) => ({
-                                ...prevState,
-                                isOn: isGroupSelected,
-                                loading: false,
-                            }));
-                        }, [isGroupSelected]);
-                        return (
-                            <FormSummary key={`${groupName}-${i}`}>
-                                <FormSummary.Header>
-                                    <HStack align={'center'} justify={'space-between'}>
-                                        <FormSummary.Heading level="2">
-                                            {capitalizeFirstLetter(groupName)}
-                                        </FormSummary.Heading>
-                                    </HStack>
-                                    <HStack align={'center'} justify={'space-between'}>
-                                        <CheckboxGroup
-                                            legend={groupName}
-                                            hideLegend
-                                            value={[groupName]}>
-                                            <Checkbox
-                                                disabled={groupLoading.loading}
-                                                value={isGroupSelected ? groupName : ''}
-                                                onChange={(e) => {
-                                                    const checkedStatus = e.target.checked;
-                                                    setGroupLoading({
-                                                        loading: true,
-                                                        isOn: isGroupSelected,
-                                                    });
-
-                                                    // TODO: ask backend to implement the correct call.
-                                                    groupComponents.forEach((item) => {
-                                                        console.log(`toggling ${item.name}`);
-                                                        toggle && toggle(item.name, checkedStatus);
-                                                    });
-                                                }}>
-                                                {''}
-                                            </Checkbox>
-                                        </CheckboxGroup>
-                                    </HStack>
-                                </FormSummary.Header>
-
-                                <FormSummary.Answers>
-                                    <FormSummary.Answer>
-                                        <CheckboxGroup
-                                            hideLegend
-                                            value={selectedItemsInGroupNames}
-                                            legend={groupName.toUpperCase()}
-                                            // defaultValue={names}
-                                            onChange={(names) => {
-                                                console.log(names);
-                                            }}
-                                            size="small">
-                                            {groupComponents.map((item, i) => {
-                                                const splitted = item.description.split(' ');
-
-                                                const isComponentOn = selectedItems.some(
-                                                    (selected) => selected === item.dn
-                                                );
-
-                                                const [loadingState, setLoadingState] = useState({
-                                                    loading: false,
-                                                    isOn: isComponentOn,
+                            loading: false,
+                        }));
+                    }, [isGroupSelected]);
+                    return (
+                        <FormSummary key={`${groupName}-${i}`}>
+                            <FormSummary.Header>
+                                <HStack align={'center'} justify={'space-between'}>
+                                    <FormSummary.Heading level="2">
+                                        {capitalizeFirstLetter(groupName)}
+                                    </FormSummary.Heading>
+                                </HStack>
+                                <HStack align={'center'} justify={'space-between'}>
+                                    <CheckboxGroup
+                                        legend={groupName}
+                                        hideLegend
+                                        value={[groupName]}>
+                                        <Checkbox
+                                            disabled={groupLoading.loading}
+                                            value={isGroupSelected ? groupName : ''}
+                                            onChange={(e) => {
+                                                const checkedStatus = e.target.checked;
+                                                setGroupLoading({
+                                                    loading: true,
+                                                    isOn: isGroupSelected,
                                                 });
 
-                                                // To update switch loading state to false
-                                                useEffect(() => {
-                                                    setLoadingState((prevState) => ({
-                                                        ...prevState,
-                                                        isOn: isComponentOn,
-                                                        loading: false,
-                                                    }));
-                                                }, [isComponentOn]);
+                                                // TODO: ask backend to implement the correct call.
+                                                groupComponents.forEach((item) => {
+                                                    console.log(`toggling ${item.name}`);
+                                                    toggle && toggle(item.name, checkedStatus);
+                                                });
+                                            }}>
+                                            {''}
+                                        </Checkbox>
+                                    </CheckboxGroup>
+                                </HStack>
+                            </FormSummary.Header>
 
-                                                return (
-                                                    <HStack
-                                                        key={groupName + i}
-                                                        justify={'space-between'}
-                                                        align={'center'}>
-                                                        <HStack align={'center'} gap={'0'}>
-                                                            <Checkbox
-                                                                disabled={
-                                                                    loadingState.loading ||
-                                                                    groupLoading.loading
-                                                                }
-                                                                value={item.name}
-                                                                key={groupName + i}
-                                                                onChange={(e) => {
-                                                                    const checkedStatus =
-                                                                        e.target.checked;
-                                                                    setLoadingState({
-                                                                        loading: true,
-                                                                        isOn: isComponentOn,
-                                                                    });
-                                                                    toggle &&
-                                                                        toggle(
-                                                                            item.name,
-                                                                            checkedStatus
-                                                                        );
-                                                                }}>
-                                                                {' '}
-                                                            </Checkbox>
-                                                            <HStack gap={'1'}>
-                                                                {splitted.length > 1
-                                                                    ? splitted[1]
-                                                                    : splitted[0]}
-                                                                {loadingState.loading && (
-                                                                    // ||
-                                                                    //     groupLoading.loading
+                            <FormSummary.Answers>
+                                <FormSummary.Answer>
+                                    <CheckboxGroup
+                                        hideLegend
+                                        value={selectedItemsInGroupNames}
+                                        legend={groupName.toUpperCase()}
+                                        // defaultValue={names}
+                                        onChange={(names) => {
+                                            console.log(names);
+                                        }}
+                                        size="small">
+                                        {groupComponents.map((item, i) => {
+                                            const splitted = item.description.split(' ');
 
-                                                                    <Loader />
-                                                                )}
-                                                            </HStack>
-                                                        </HStack>
-                                                        <HStack align={'center'}>
-                                                            <Box
-                                                                padding={'2'}
-                                                                className="hover:bg-[--a-surface-active] hover:cursor-pointer">
-                                                                <ChevronRightIcon
-                                                                    title="Vis detaljer"
-                                                                    onClick={() =>
-                                                                        handleRowClick(item)
-                                                                    }
-                                                                />
-                                                            </Box>
+                                            const isComponentOn = selectedItems.some(
+                                                (selected) => selected === item.dn
+                                            );
+
+                                            const [loadingState, setLoadingState] = useState({
+                                                loading: false,
+                                                isOn: isComponentOn,
+                                            });
+
+                                            // To update switch loading state to false
+                                            useEffect(() => {
+                                                setLoadingState((prevState) => ({
+                                                    ...prevState,
+                                                    isOn: isComponentOn,
+                                                    loading: false,
+                                                }));
+                                            }, [isComponentOn]);
+
+                                            return (
+                                                <HStack
+                                                    key={groupName + i}
+                                                    justify={'space-between'}
+                                                    align={'center'}>
+                                                    <HStack align={'center'} gap={'0'}>
+                                                        <Checkbox
+                                                            disabled={
+                                                                loadingState.loading ||
+                                                                groupLoading.loading
+                                                            }
+                                                            value={item.name}
+                                                            key={groupName + i}
+                                                            onChange={(e) => {
+                                                                const checkedStatus =
+                                                                    e.target.checked;
+                                                                setLoadingState({
+                                                                    loading: true,
+                                                                    isOn: isComponentOn,
+                                                                });
+                                                                toggle &&
+                                                                    toggle(
+                                                                        item.name,
+                                                                        checkedStatus
+                                                                    );
+                                                            }}>
+                                                            {' '}
+                                                        </Checkbox>
+                                                        <HStack gap={'1'}>
+                                                            {splitted.length > 1
+                                                                ? splitted[1]
+                                                                : splitted[0]}
+                                                            {loadingState.loading && (
+                                                                // ||
+                                                                //     groupLoading.loading
+
+                                                                <Loader />
+                                                            )}
                                                         </HStack>
                                                     </HStack>
-                                                );
-                                            })}
-                                        </CheckboxGroup>
-                                    </FormSummary.Answer>
-                                </FormSummary.Answers>
-                            </FormSummary>
-                        );
-                    })}
-                </HGrid>
+                                                    <HStack align={'center'}>
+                                                        <Box
+                                                            padding={'2'}
+                                                            className="hover:bg-[--a-surface-active] hover:cursor-pointer">
+                                                            <ChevronRightIcon
+                                                                title="Vis detaljer"
+                                                                onClick={() => handleRowClick(item)}
+                                                            />
+                                                        </Box>
+                                                    </HStack>
+                                                </HStack>
+                                            );
+                                        })}
+                                    </CheckboxGroup>
+                                </FormSummary.Answer>
+                            </FormSummary.Answers>
+                        </FormSummary>
+                    );
+                })}
+            </HGrid>
 
-                <Box padding="10"></Box>
-                <Divider />
-                <Box padding="10"></Box>
+            <Box padding="10"></Box>
+            <Divider />
+            <Box padding="10"></Box>
 
-                <Heading size="large">Old view</Heading>
-                <Box padding="10"></Box>
-                <HGrid gap="8" columns={columns}>
-                    {componentChunks.map((chunk, chunkIndex) => (
-                        <Table key={chunkIndex} size={'small'}>
-                            <Table.Body>
-                                {chunk.map((item, index) => {
-                                    const isComponentSwitchedOn = selectedItems.some(
-                                        (selected) => selected === item.dn
-                                    );
+            <Heading size="large">Old view</Heading>
+            <Box padding="10"></Box>
+            <HGrid gap="8" columns={columns}>
+                {componentChunks.map((chunk, chunkIndex) => (
+                    <Table key={chunkIndex} size={'small'}>
+                        <Table.Body>
+                            {chunk.map((item, index) => {
+                                const isComponentSwitchedOn = selectedItems.some(
+                                    (selected) => selected === item.dn
+                                );
 
-                                    const [switchLoadingState, setSwitchLoadingState] = useState({
-                                        loading: false,
+                                const [switchLoadingState, setSwitchLoadingState] = useState({
+                                    loading: false,
+                                    isOn: isComponentSwitchedOn,
+                                });
+
+                                // To update switch loading state to false
+                                useEffect(() => {
+                                    setSwitchLoadingState((prevState) => ({
+                                        ...prevState,
                                         isOn: isComponentSwitchedOn,
-                                    });
+                                        loading: false,
+                                    }));
+                                }, [isComponentSwitchedOn]);
 
-                                    // To update switch loading state to false
-                                    useEffect(() => {
-                                        setSwitchLoadingState((prevState) => ({
-                                            ...prevState,
-                                            isOn: isComponentSwitchedOn,
-                                            loading: false,
-                                        }));
-                                    }, [isComponentSwitchedOn]);
-
-                                    return (
-                                        <Table.Row key={index}>
-                                            <Table.DataCell>
-                                                <Switch
-                                                    loading={switchLoadingState.loading}
-                                                    checked={isComponentSwitchedOn}
-                                                    onChange={(e) => {
-                                                        const checkedStatus = e.target.checked;
-                                                        // console.log(item.name);
-                                                        setSwitchLoadingState({
-                                                            loading: true,
-                                                            isOn: isComponentSwitchedOn,
-                                                        });
-                                                        toggle && toggle(item.name, checkedStatus);
-                                                    }}>
-                                                    {''}
-                                                </Switch>
-                                            </Table.DataCell>
-                                            <Table.DataCell onClick={() => handleRowClick(item)}>
-                                                <Label>{item.description}</Label>
-                                                <Detail>{item.basePath}</Detail>
-                                            </Table.DataCell>
-                                            <Table.DataCell onClick={() => handleRowClick(item)}>
-                                                {item.common && (
-                                                    <Tag variant="info" size={'xsmall'}>
-                                                        Felles
-                                                    </Tag>
-                                                )}
-                                            </Table.DataCell>
-                                            <Table.DataCell onClick={() => handleRowClick(item)}>
-                                                {item.openData && (
-                                                    <Tag variant="neutral" size={'xsmall'}>
-                                                        Åpne Data
-                                                    </Tag>
-                                                )}
-                                            </Table.DataCell>
-                                            <Table.DataCell onClick={() => handleRowClick(item)}>
-                                                <ChevronRightIcon
-                                                    title="a11y-title"
-                                                    fontSize="1.5rem"
-                                                />
-                                            </Table.DataCell>
-                                        </Table.Row>
-                                    );
-                                })}
-                            </Table.Body>
-                        </Table>
-                    ))}
-                </HGrid>
-            </Box>
-        </>
+                                return (
+                                    <Table.Row key={index}>
+                                        <Table.DataCell>
+                                            <Switch
+                                                loading={switchLoadingState.loading}
+                                                checked={isComponentSwitchedOn}
+                                                onChange={(e) => {
+                                                    const checkedStatus = e.target.checked;
+                                                    // console.log(item.name);
+                                                    setSwitchLoadingState({
+                                                        loading: true,
+                                                        isOn: isComponentSwitchedOn,
+                                                    });
+                                                    toggle && toggle(item.name, checkedStatus);
+                                                }}>
+                                                {''}
+                                            </Switch>
+                                        </Table.DataCell>
+                                        <Table.DataCell onClick={() => handleRowClick(item)}>
+                                            <Label>{item.description}</Label>
+                                            <Detail>{item.basePath}</Detail>
+                                        </Table.DataCell>
+                                        <Table.DataCell onClick={() => handleRowClick(item)}>
+                                            {item.common && (
+                                                <Tag variant="info" size={'xsmall'}>
+                                                    Felles
+                                                </Tag>
+                                            )}
+                                        </Table.DataCell>
+                                        <Table.DataCell onClick={() => handleRowClick(item)}>
+                                            {item.openData && (
+                                                <Tag variant="neutral" size={'xsmall'}>
+                                                    Åpne Data
+                                                </Tag>
+                                            )}
+                                        </Table.DataCell>
+                                        <Table.DataCell onClick={() => handleRowClick(item)}>
+                                            <ChevronRightIcon
+                                                title="a11y-title"
+                                                fontSize="1.5rem"
+                                            />
+                                        </Table.DataCell>
+                                    </Table.Row>
+                                );
+                            })}
+                        </Table.Body>
+                    </Table>
+                ))}
+            </HGrid>
+        </Box>
     );
 };
 

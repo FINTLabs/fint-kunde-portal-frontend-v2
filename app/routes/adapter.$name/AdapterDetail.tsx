@@ -36,44 +36,38 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     console.log(adapter.components);
 
     return (
-        <Box padding={'2'}>
-            <HStack>
-                <VStack>
-                    <BackButton to={`/adaptere`} />
+        <HStack className="" gap="8" justify={'start'} align={'baseline'}>
+            <BackButton to={`/adaptere`} />
+            <Box padding="6" borderRadius="large" shadow="small">
+                <VStack gap="5">
+                    <GeneralDetailView adapter={adapter} />
+                    <Divider className="pt-3" />
+                    <Autentisering
+                        name={adapter.name}
+                        clientId={adapter.clientId}
+                        ressourceIds={adapter.assetIds.reduce(
+                            (acc, curr) => acc.concat(!acc ? curr : `, ${curr}`),
+                            ''
+                        )}
+                        clientSecret={clientSecret}
+                        passord={passord}
+                        allDetails={allDetails}
+                    />
+                    <Divider className="pt-3" />
+                    <ComponentSelector
+                        items={components}
+                        selectedItems={adapter.components.map((a) => {
+                            const match = a.match(/ou=([^,]+)/);
+                            return match ? match[1] : '';
+                        })}
+                    />
+                    <DeleteModal
+                        title="Slett adapter"
+                        bodyText="Er du sikker på at du vil slette dette adapteret?"
+                        action="delete"
+                    />
                 </VStack>
-                <VStack className="flex flex-grow">
-                    <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                        <VStack gap="5">
-                            <GeneralDetailView adapter={adapter} />
-                            <Divider className="pt-3" />
-                            <Autentisering
-                                name={adapter.name}
-                                clientId={adapter.clientId}
-                                ressourceIds={adapter.assetIds.reduce(
-                                    (acc, curr) => acc.concat(!acc ? curr : `, ${curr}`),
-                                    ''
-                                )}
-                                clientSecret={clientSecret}
-                                passord={passord}
-                                allDetails={allDetails}
-                            />
-                            <Divider className="pt-3" />
-                            <ComponentSelector
-                                items={components}
-                                selectedItems={adapter.components.map((a) => {
-                                    const match = a.match(/ou=([^,]+)/);
-                                    return match ? match[1] : '';
-                                })}
-                            />
-                            <DeleteModal
-                                title="Slett adapter"
-                                bodyText="Er du sikker på at du vil slette dette adapteret?"
-                                action="delete"
-                            />
-                        </VStack>
-                    </Box>
-                </VStack>
-            </HStack>
-        </Box>
+            </Box>
+        </HStack>
     );
 }
