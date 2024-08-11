@@ -166,7 +166,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                         key={groupName + i}
                                                         justify={'space-between'}
                                                         align={'center'}>
-                                                        <HStack align={'center'} gap={'2'}>
+                                                        <HStack align={'center'} gap={'0'}>
                                                             <Checkbox
                                                                 disabled={
                                                                     loadingState.loading ||
