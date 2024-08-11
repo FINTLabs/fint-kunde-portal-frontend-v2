@@ -37,6 +37,12 @@ class ClientApi {
         return request(URL, functionName, '', 'DELETE');
     }
 
+    static async getOpenIdSecret(clientName: string, organisationName: string): Promise<string> {
+        const functionName = 'getOpenIdSecret';
+        const URL = `${API_URL}/api/clients/${organisationName}/${clientName}/secret`;
+
+        return request(URL, functionName, '', 'GET', 'text');
+    }
     // Function to update component in a client
     static async updateComponentInClient(
         componentName: string,

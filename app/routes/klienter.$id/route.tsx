@@ -178,7 +178,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
         case 'Passord':
             return 'Not implemented';
         case 'Klient Hemmelighet':
-            return 'Not implemented';
+            response = await ClientApi.getOpenIdSecret(clientName, orgName);
+            return response;
         default:
             return null;
         // return redirect(`/adapter/${adapterName}`);
