@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
+import { json, useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import ClientDetails from '~/routes/klienter.$id/ClientDetails';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
@@ -17,6 +17,7 @@ import Autentisering from '~/components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from '../adapter.$name/constants';
 import { DeleteModal } from '~/components/shared/DeleteModal';
+import { getFormData, getRequestParam } from '~/utils/requestUtils';
 
 // @ts-ignore
 export async function loader({ request, params }: ActionFunctionArgs) {
@@ -62,6 +63,9 @@ export default function Index() {
         assetIds: client.assetId,
     };
     const [isEditing, setIsEditing] = useState(false);
+
+    console.log(selectedComponents);
+    const submit = useSubmit();
 
     return (
         <>
@@ -114,6 +118,18 @@ export default function Index() {
                     <ComponentsTable
                         items={components}
                         selectedItems={selectedComponents}
+                        toggle={(name, isChecked) => {
+                            submit(
+                                {
+                                    componentName: name,
+                                    updateType: isChecked ? 'add' : 'remove',
+                                    actionType: 'UPDATE_COMPONONENT_IN_CLIENT',
+                                },
+                                {
+                                    method: 'post',
+                                }
+                            );
+                        }}
                         columns={2}
                     />
                     <HStack justify={'center'}>
@@ -131,17 +147,45 @@ export default function Index() {
 
 export async function action({ request, params }: ActionFunctionArgs) {
     // const name = params.name;
+    const actionName = 'Action in Klienter.$id';
 
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);
+    console.log(formData);
 
-    const actionType = formData.get('type') as string;
-    if (actionType === 'Passord') {
-        const response = 'Implement me. What is the API CALL?';
-        return response;
-    } else {
-        const response = 'Implement me. What is the API call?';
-        // const response = await fetchClientSecret(name, orgName);
-        return response;
+    const clientName = getRequestParam(params.id, 'id');
+
+    console.log(clientName);
+    const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
+
+    let response = null;
+
+    switch (actionType) {
+        case 'UPDATE_COMPONONENT_IN_CLIENT':
+            let updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
+            const componentName = getFormData(
+                formData.get('componentName'),
+                'componentName',
+                actionName
+            );
+            response = await ClientApi.updateComponentInClient(
+                componentName,
+                clientName,
+                orgName,
+                updateType
+            );
+            return json({ ok: response.status === 204 ? true : false });
+        default:
+            return null;
+        // return redirect(`/adapter/${adapterName}`);
     }
+    // const type = formData.get('type') as string;
+    // if (type === 'Passord') {
+    //     const response = 'Implement me. What is the API CALL?';
+    //     return response;
+    // } else {
+    //     const response = 'Implement me. What is the API call?';
+    //     // const response = await fetchClientSecret(name, orgName);
+    //     return response;
+    // }
 }
