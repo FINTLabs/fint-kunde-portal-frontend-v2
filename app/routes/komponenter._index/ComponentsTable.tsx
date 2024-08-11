@@ -81,14 +81,14 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                         const isGroupSelected =
                             groupComponents.length === selectedItemsInGroupNames.length;
 
-                        const [switchLoadingState, setSwitchLoadingState] = useState({
+                        const [groupLoading, setGroupLoading] = useState({
                             loading: false,
                             isOn: isGroupSelected,
                         });
 
                         // To update switch loading state to false
                         useEffect(() => {
-                            setSwitchLoadingState((prevState) => ({
+                            setGroupLoading((prevState) => ({
                                 ...prevState,
                                 isOn: isGroupSelected,
                                 loading: false,
@@ -108,11 +108,11 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                             hideLegend
                                             value={[groupName]}>
                                             <Checkbox
-                                                disabled={switchLoadingState.loading}
+                                                disabled={groupLoading.loading}
                                                 value={isGroupSelected ? groupName : ''}
                                                 onChange={(e) => {
                                                     const checkedStatus = e.target.checked;
-                                                    setSwitchLoadingState({
+                                                    setGroupLoading({
                                                         loading: true,
                                                         isOn: isGroupSelected,
                                                     });
@@ -143,24 +143,23 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                             {groupComponents.map((item, i) => {
                                                 const splitted = item.description.split(' ');
 
-                                                const isComponentSwitchedOn = selectedItems.some(
+                                                const isComponentOn = selectedItems.some(
                                                     (selected) => selected === item.dn
                                                 );
 
-                                                const [switchLoadingState, setSwitchLoadingState] =
-                                                    useState({
-                                                        loading: false,
-                                                        isOn: isComponentSwitchedOn,
-                                                    });
+                                                const [loadingState, setLoadingState] = useState({
+                                                    loading: false,
+                                                    isOn: isComponentOn,
+                                                });
 
                                                 // To update switch loading state to false
                                                 useEffect(() => {
-                                                    setSwitchLoadingState((prevState) => ({
+                                                    setLoadingState((prevState) => ({
                                                         ...prevState,
-                                                        isOn: isComponentSwitchedOn,
+                                                        isOn: isComponentOn,
                                                         loading: false,
                                                     }));
-                                                }, [isComponentSwitchedOn]);
+                                                }, [isComponentOn]);
 
                                                 return (
                                                     <HStack
@@ -170,16 +169,17 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                         <HStack align={'center'} gap={'2'}>
                                                             <Checkbox
                                                                 disabled={
-                                                                    switchLoadingState.loading
+                                                                    loadingState.loading ||
+                                                                    groupLoading.loading
                                                                 }
                                                                 value={item.name}
                                                                 key={groupName + i}
                                                                 onChange={(e) => {
                                                                     const checkedStatus =
                                                                         e.target.checked;
-                                                                    setSwitchLoadingState({
+                                                                    setLoadingState({
                                                                         loading: true,
-                                                                        isOn: isComponentSwitchedOn,
+                                                                        isOn: isComponentOn,
                                                                     });
                                                                     toggle &&
                                                                         toggle(
@@ -192,9 +192,10 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                             {splitted.length > 1
                                                                 ? splitted[1]
                                                                 : splitted[0]}
-                                                            {switchLoadingState.loading && (
-                                                                <Loader />
-                                                            )}
+                                                            {loadingState.loading ||
+                                                                (groupLoading.loading && (
+                                                                    <Loader />
+                                                                ))}
                                                         </HStack>
                                                         <HStack align={'center'}>
                                                             <Box
