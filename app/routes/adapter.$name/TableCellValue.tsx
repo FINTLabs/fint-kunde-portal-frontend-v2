@@ -28,7 +28,7 @@ export function TableCellValue({
     return (
         <>
             <Table.DataCell>{label}</Table.DataCell>
-            <Table.DataCell>{value ? value : <Fetcher />}</Table.DataCell>
+            <Table.DataCell className="max-w-xs">{value ? value : <Fetcher />}</Table.DataCell>
             <Table.DataCell>{!!value && <CopyButton copyText={value} />}</Table.DataCell>
         </>
     );
