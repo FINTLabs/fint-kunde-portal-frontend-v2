@@ -15,7 +15,6 @@ import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
 import { InfoBox } from '~/components/shared/InfoBox';
-import adapters from '../adaptere/adapterList.json';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const orgName = await getSelectedOrganization(request);
