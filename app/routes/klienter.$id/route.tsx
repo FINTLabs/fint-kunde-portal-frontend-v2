@@ -18,6 +18,7 @@ import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from '../adapter.$name/constants';
 import { DeleteModal } from '~/components/shared/DeleteModal';
 import { getFormData, getRequestParam } from '~/utils/requestUtils';
+import ComponentSelector from '~/components/shared/ComponentSelector';
 
 // @ts-ignore
 export async function loader({ request, params }: ActionFunctionArgs) {
@@ -114,7 +115,23 @@ export default function Index() {
 
                     <Divider className="pt-10" />
 
-                    <Heading size={'medium'} spacing>
+                    <ComponentSelector
+                        items={components}
+                        selectedItems={selectedComponents}
+                        toggle={(name, isChecked) => {
+                            submit(
+                                {
+                                    componentName: name,
+                                    updateType: isChecked ? 'add' : 'remove',
+                                    actionType: 'UPDATE_COMPONONENT_IN_CLIENT',
+                                },
+                                {
+                                    method: 'post',
+                                }
+                            );
+                        }}
+                    />
+                    {/* <Heading size={'medium'} spacing>
                         Komponenter tilknyttet
                     </Heading>
                     <ComponentsTable
@@ -133,7 +150,7 @@ export default function Index() {
                             );
                         }}
                         columns={2}
-                    />
+                    /> */}
                     <HStack justify={'center'}>
                         <DeleteModal
                             title="Slett klient"

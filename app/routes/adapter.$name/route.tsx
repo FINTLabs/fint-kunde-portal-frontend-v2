@@ -20,8 +20,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const orgName = await getSelectedOrganization(request);
 
     const adapters = await AdapterAPI.getAdapters(orgName);
-    const components = await ComponentApi.getAllComponents();
-
+    const components = await ComponentApi.getOrganisationComponents(orgName);
+    console.log(components.length);
     return json({ adapters, components });
 };
 
