@@ -27,7 +27,7 @@ export async function loader({ request, params }: ActionFunctionArgs) {
 
     try {
         const client = await ClientApi.getClientById(orgName, id);
-        const components = await ComponentApi.getAllComponents();
+        const components = await ComponentApi.getOrganisationComponents(orgName);
 
         return json({ client, components });
     } catch (error) {
