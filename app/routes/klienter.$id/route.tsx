@@ -112,9 +112,11 @@ export default function Index() {
                         allDetails={allDetails}
                     />
 
-                    <Divider className="pt-3" />
+                    <Divider className="pt-10" />
 
-                    <Heading size={'medium'}>Komponenter</Heading>
+                    <Heading size={'medium'} spacing>
+                        Komponenter tilknyttet
+                    </Heading>
                     <ComponentsTable
                         items={components}
                         selectedItems={selectedComponents}
