@@ -46,11 +46,18 @@ export default function Index() {
 
     const adapter = filteredAdapters.length > 0 ? filteredAdapters[0] : null;
 
+    const displayName = (adapter: string) => {
+        if (adapter && adapter.name) {
+            return adapter.name.split('@')[0];
+        }
+        return 'No adapter found';
+    };
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader
-                title={(adapter && adapter?.shortDescription) || 'No adapter found'}
+                title={displayName(adapter)}
                 icon={MigrationIcon}
                 helpText="adapter detaljer"
             />
