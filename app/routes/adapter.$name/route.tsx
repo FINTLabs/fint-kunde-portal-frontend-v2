@@ -15,14 +15,15 @@ import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
 import { InfoBox } from '~/components/shared/InfoBox';
+import adapters from '../adaptere/adapterList.json'
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-    const orgName = await getSelectedOrganization(request);
+    // const orgName = await getSelectedOrganization(request);
 
-    const adapters = await AdapterAPI.getAdapters(orgName);
-    const components = await ComponentApi.getAllComponents();
+    // const adapters = await AdapterAPI.getAdapters(orgName);
+    // const components = await ComponentApi.getAllComponents();
 
-    return json({ adapters, components });
+    return json({ adapters, components[] });
 };
 
 export const meta: MetaFunction = () => {
