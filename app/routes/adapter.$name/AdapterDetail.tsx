@@ -10,6 +10,7 @@ import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
 import { DeleteModal } from '~/components/shared/DeleteModal';
 import ComponentSelector from '../../components/shared/ComponentSelector';
+import { getComponentIds } from '~/utils/helper';
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
@@ -33,6 +34,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
         assetIds: adapter.assetIds,
     };
 
+    console.log(adapter);
     const submit = useSubmit();
 
     return (
@@ -56,10 +58,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                     <Divider className="pt-3" />
                     <ComponentSelector
                         items={components}
-                        selectedItems={adapter.components.map((a) => {
-                            const match = a.match(/ou=([^,]+)/);
-                            return match ? match[1] : '';
-                        })}
+                        selectedItems={getComponentIds(adapter.components)}
                         toggle={(name, isChecked) => {
                             submit(
                                 {

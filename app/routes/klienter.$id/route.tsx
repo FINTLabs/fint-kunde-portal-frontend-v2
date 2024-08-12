@@ -19,6 +19,7 @@ import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from '../adapter.$name
 import { DeleteModal } from '~/components/shared/DeleteModal';
 import { getFormData, getRequestParam } from '~/utils/requestUtils';
 import ComponentSelector from '~/components/shared/ComponentSelector';
+import { getComponentIds } from '~/utils/helper';
 
 // @ts-ignore
 export async function loader({ request, params }: ActionFunctionArgs) {
@@ -39,9 +40,7 @@ export async function loader({ request, params }: ActionFunctionArgs) {
 export default function Index() {
     const { client, components } = useLoaderData<{ client: IClient; components: IComponent[] }>();
     const navigate = useNavigate();
-    const selectedComponents = components
-        .filter((component) => client.components.includes(component.dn))
-        .map((component) => component.dn);
+    const selectedComponents = getComponentIds(client.components);
 
     const breadcrumbs = [
         { name: 'Klienter', link: '/klienter' },
@@ -65,7 +64,6 @@ export default function Index() {
     };
     const [isEditing, setIsEditing] = useState(false);
 
-    console.log(selectedComponents);
     const submit = useSubmit();
 
     return (

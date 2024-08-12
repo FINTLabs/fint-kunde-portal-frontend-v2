@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Heading, HGrid } from '@navikt/ds-react';
-import { useSubmit } from '@remix-run/react';
 import { IComponent } from '~/types/Component';
 import ComponentsTable from '../../routes/komponenter._index/ComponentsTable';
 
