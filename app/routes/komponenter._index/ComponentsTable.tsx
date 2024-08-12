@@ -76,23 +76,6 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                     const selectedItemsInGroupNames = groupComponents
                         .filter((item) => selectedItems.includes(item.dn))
                         .map((item) => item.name);
-
-                    const isGroupSelected =
-                        groupComponents.length === selectedItemsInGroupNames.length;
-
-                    const [groupLoading, setGroupLoading] = useState({
-                        loading: false,
-                        isOn: isGroupSelected,
-                    });
-
-                    // To update switch loading state to false
-                    useEffect(() => {
-                        setGroupLoading((prevState) => ({
-                            ...prevState,
-                            isOn: isGroupSelected,
-                            loading: false,
-                        }));
-                    }, [isGroupSelected]);
                     return (
                         <FormSummary key={`${groupName}-${i}`}>
                             <FormSummary.Header>
@@ -100,31 +83,6 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                     <FormSummary.Heading level="2">
                                         {capitalizeFirstLetter(groupName)}
                                     </FormSummary.Heading>
-                                </HStack>
-                                <HStack align={'center'} justify={'space-between'}>
-                                    <CheckboxGroup
-                                        legend={groupName}
-                                        hideLegend
-                                        value={[groupName]}>
-                                        <Checkbox
-                                            disabled={groupLoading.loading}
-                                            value={isGroupSelected ? groupName : ''}
-                                            onChange={(e) => {
-                                                const checkedStatus = e.target.checked;
-                                                setGroupLoading({
-                                                    loading: true,
-                                                    isOn: isGroupSelected,
-                                                });
-
-                                                // TODO: ask backend to implement the correct call.
-                                                groupComponents.forEach((item) => {
-                                                    console.log(`toggling ${item.name}`);
-                                                    toggle && toggle(item.name, checkedStatus);
-                                                });
-                                            }}>
-                                            {''}
-                                        </Checkbox>
-                                    </CheckboxGroup>
                                 </HStack>
                             </FormSummary.Header>
 
@@ -167,10 +125,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                     align={'center'}>
                                                     <HStack align={'center'} gap={'0'}>
                                                         <Checkbox
-                                                            disabled={
-                                                                loadingState.loading ||
-                                                                groupLoading.loading
-                                                            }
+                                                            disabled={loadingState.loading}
                                                             value={item.name}
                                                             key={groupName + i}
                                                             onChange={(e) => {
@@ -192,12 +147,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                             {splitted.length > 1
                                                                 ? splitted[1]
                                                                 : splitted[0]}
-                                                            {loadingState.loading && (
-                                                                // ||
-                                                                //     groupLoading.loading
-
-                                                                <Loader />
-                                                            )}
+                                                            {loadingState.loading && <Loader />}
                                                         </HStack>
                                                     </HStack>
                                                     <HStack align={'center'}>
