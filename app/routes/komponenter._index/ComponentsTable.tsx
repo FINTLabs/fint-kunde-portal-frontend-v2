@@ -70,7 +70,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
 
     return (
         <Box padding="0">
-            <HGrid gap={'6'} columns={3}>
+            <HGrid gap={'3'} columns={3}>
                 {Object.keys(groupedByType).map((groupName, i) => {
                     const groupComponents = groupedByType[groupName];
                     const selectedItemsInGroupNames = groupComponents

@@ -175,7 +175,7 @@ export default function App() {
                 </Page.Block>
             </Box>
             <Box padding="8" paddingBlock="2" as="main">
-                <Page.Block gutters width="xl">
+                <Page.Block gutters width="lg">
                     <Outlet context={userSession} />
                 </Page.Block>
             </Box>
