@@ -52,7 +52,7 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader
-                title={displayName(adapter)}
+                title={displayName()}
                 icon={MigrationIcon}
                 helpText="adapter detaljer"
             />
