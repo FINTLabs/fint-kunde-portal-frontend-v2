@@ -11,7 +11,6 @@ import ComponentDetails from '~/routes/komponenter.$id/ComponentDetails';
 import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import EndpointTable from '~/routes/komponenter.$id/EndpointTable';
 import SwaggerTable from '~/routes/komponenter.$id/SwaggerTable';
-import ComponentEdit from '~/routes/komponenter.$id/ComponentEdit';
 import OrganisationApi from '~/api/OrganisationApi';
 import { getFormData } from '~/utils/requestUtils';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
@@ -34,12 +33,6 @@ export default function Index() {
         { name: component.name, link: `/komponenter/${component.name}` },
     ];
     const navigate = useNavigate();
-    const [isEditing, setIsEditing] = useState(false);
-
-    function handleCloseEdit() {
-        setIsEditing(false);
-    }
-    console.log(component);
 
     return (
         <>
@@ -58,20 +51,9 @@ export default function Index() {
                     <HStack gap={'1'}>
                         <Heading size={'medium'}>Details</Heading>
                         <Spacer />
-                        {!isEditing && (
-                            <Button
-                                icon={<PencilIcon title="Rediger" />}
-                                variant="tertiary"
-                                onClick={() => setIsEditing(true)}
-                            />
-                        )}
                     </HStack>
 
-                    {!isEditing ? (
-                        <ComponentDetails component={component} />
-                    ) : (
-                        <ComponentEdit component={component} onClose={handleCloseEdit} />
-                    )}
+                    <ComponentDetails component={component} />
 
                     <Divider className="pt-3" />
 
