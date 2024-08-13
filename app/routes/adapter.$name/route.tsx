@@ -44,15 +44,13 @@ export default function Index() {
 
     const adapter = filteredAdapters.length > 0 ? filteredAdapters[0] : null;
 
-    const displayName = () => {
-        return adapter.name.split('@')[0];
-    };
+    const displayName = adapter?.name.split('@')[0];
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader
-                title={displayName()}
+                title={displayName}
                 icon={MigrationIcon}
                 helpText="adapter detaljer"
             />
