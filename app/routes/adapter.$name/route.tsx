@@ -41,16 +41,11 @@ export default function Index() {
     ];
 
     const filteredAdapters = adapters.filter((a) => a.name === name);
-    if (filteredAdapters.length > 0) {
-    }
 
     const adapter = filteredAdapters.length > 0 ? filteredAdapters[0] : null;
 
-    const displayName = (adapter: string) => {
-        if (adapter && adapter.name) {
-            return adapter.name.split('@')[0];
-        }
-        return 'No adapter found';
+    const displayName = () => {
+        return adapter.name.split('@')[0];
     };
 
     return (
