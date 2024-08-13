@@ -43,13 +43,6 @@ const ComponentDetails: React.FC<ComponentDetailProps> = ({ component }) => {
             </VStack>
             <VStack>
                 <HStack>
-                    {component.openData && (
-                        <Tag variant="neutral" size={'xsmall'}>
-                            Åpne Data
-                        </Tag>
-                    )}
-                </HStack>
-                <HStack>
                     <CheckboxGroup
                         legend="Title"
                         // onChange={handleChange}
