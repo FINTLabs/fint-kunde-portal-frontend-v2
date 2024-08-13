@@ -1,10 +1,10 @@
 name: CI
 
-#on:
-#  push:
-#    branches: [ main ]
-#  pull_request:
-#    branches: [ main ]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -24,10 +24,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Start deployment
-        if: github.ref == 'refs/heads/main'
-        uses: peter-evans/repository-dispatch@v2.1.1
-        with:
-          token: ${{ secrets.GITHUBACTION_TOKEN }}
-          repository: ${{ github.repository }}
-          event-type: trigger-cd
+#      - name: Start deployment
+#        if: github.ref == 'refs/heads/main'
+#        uses: peter-evans/repository-dispatch@v2.1.1
+#        with:
+#          token: ${{ secrets.GITHUBACTION_TOKEN }}
+#          repository: ${{ github.repository }}
+#          event-type: trigger-cd
