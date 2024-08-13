@@ -1,6 +1,6 @@
 import { Box, HStack, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
-import { useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { IComponent } from '~/types/Component';
 import { FETCHER_PASSORD_KEY, FETCHER_CLIENT_SECRET_KEY } from './constants';
@@ -9,7 +9,8 @@ import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
 import { DeleteModal } from '~/components/shared/DeleteModal';
-import ComponentSelector from './ComponentSelector';
+import ComponentSelector from '../../components/shared/ComponentSelector';
+import { getComponentIds } from '~/utils/helper';
 
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
@@ -33,7 +34,8 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
         assetIds: adapter.assetIds,
     };
 
-    console.log(adapter.components);
+    console.log(adapter);
+    const submit = useSubmit();
 
     return (
         <HStack className="" gap="8" justify={'start'} align={'baseline'}>
@@ -56,10 +58,21 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                     <Divider className="pt-3" />
                     <ComponentSelector
                         items={components}
-                        selectedItems={adapter.components.map((a) => {
-                            const match = a.match(/ou=([^,]+)/);
-                            return match ? match[1] : '';
-                        })}
+                        selectedItems={getComponentIds(adapter.components)}
+                        toggle={(name, isChecked) => {
+                            submit(
+                                {
+                                    componentName: name,
+                                    updateType: isChecked ? 'add' : 'remove',
+                                    actionType: 'UPDATE_COMPONENT_IN_ADAPTER',
+                                },
+                                {
+                                    method: 'POST',
+                                    action: 'update',
+                                    navigate: false,
+                                }
+                            );
+                        }}
                     />
                     <DeleteModal
                         title="Slett adapter"

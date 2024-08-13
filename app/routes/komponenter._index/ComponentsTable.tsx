@@ -69,12 +69,12 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
     }, {});
 
     return (
-        <Box padding="0">
+        <Box>
             <HGrid gap={'3'} columns={3}>
                 {Object.keys(groupedByType).map((groupName, i) => {
                     const groupComponents = groupedByType[groupName];
                     const selectedItemsInGroupNames = groupComponents
-                        .filter((item) => selectedItems.includes(item.dn))
+                        .filter((item) => selectedItems.includes(item.name)) // based on components list
                         .map((item) => item.name);
                     return (
                         <FormSummary key={`${groupName}-${i}`}>
@@ -93,9 +93,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                         value={selectedItemsInGroupNames}
                                         legend={groupName.toUpperCase()}
                                         // defaultValue={names}
-                                        onChange={(names) => {
-                                            console.log(names);
-                                        }}
+                                        onChange={(names) => {}}
                                         size="small">
                                         {groupComponents.map((item, i) => {
                                             const splitted = item.description.split(' ');

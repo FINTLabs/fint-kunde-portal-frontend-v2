@@ -7,13 +7,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const actionName = 'action update';
     const formData = await request.formData();
     const adapterName = getRequestParam(params.name, 'name');
-    const shortDescription = getFormData(
-        formData.get('shortDescription'),
-        'shortDescription',
-        actionName
-    );
-
-    const note = getFormData(formData.get('note'), 'note', actionName);
 
     const orgName = await getSelectedOrganization(request);
 
@@ -41,6 +34,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
             );
             return json({ ok: response.status === 204 ? true : false });
         default:
+            const shortDescription = getFormData(
+                formData.get('shortDescription'),
+                'shortDescription',
+                actionName
+            );
+
+            const note = getFormData(formData.get('note'), 'note', actionName);
+
             response = await AdapterAPI.updateAdapter(
                 {
                     name: adapterName,

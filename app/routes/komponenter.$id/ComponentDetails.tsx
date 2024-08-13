@@ -2,11 +2,12 @@ import React from 'react';
 import { BodyShort, Checkbox, CheckboxGroup, HStack, Label, Tag, VStack } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 
-interface ClientComponentProps {
+interface ComponentDetailProps {
     component: IComponent;
 }
 
-const ClientDetails: React.FC<ClientComponentProps> = ({ component }) => {
+const ComponentDetails: React.FC<ComponentDetailProps> = ({ component }) => {
+    console.log(component);
     const selectedValuesEnv = [];
     if (component.inProduction) selectedValuesEnv.push('api');
     if (component.inPlayWithFint) selectedValuesEnv.push('pwf');
@@ -55,14 +56,14 @@ const ClientDetails: React.FC<ClientComponentProps> = ({ component }) => {
                         value={selectedValuesEnv}
                         size="small"
                         readOnly>
-                        <Checkbox value="openData">Open Data</Checkbox>
+                        <Checkbox value="openData">Åpne Data</Checkbox>
                         <Checkbox value="common">Felles</Checkbox>
                     </CheckboxGroup>
                 </HStack>
                 <HStack>
                     <CheckboxGroup
                         legend="Miljø"
-                        // onChange={handleChange}
+                        //Open Data onChange={handleChange}
                         value={selectedValuesEnv}
                         size="small"
                         readOnly>
@@ -76,4 +77,4 @@ const ClientDetails: React.FC<ClientComponentProps> = ({ component }) => {
     );
 };
 
-export default ClientDetails;
+export default ComponentDetails;

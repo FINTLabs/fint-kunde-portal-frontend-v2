@@ -18,6 +18,8 @@ import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from '../adapter.$name/constants';
 import { DeleteModal } from '~/components/shared/DeleteModal';
 import { getFormData, getRequestParam } from '~/utils/requestUtils';
+import ComponentSelector from '~/components/shared/ComponentSelector';
+import { getComponentIds } from '~/utils/helper';
 
 // @ts-ignore
 export async function loader({ request, params }: ActionFunctionArgs) {
@@ -26,7 +28,7 @@ export async function loader({ request, params }: ActionFunctionArgs) {
 
     try {
         const client = await ClientApi.getClientById(orgName, id);
-        const components = await ComponentApi.getAllComponents();
+        const components = await ComponentApi.getOrganisationComponents(orgName);
 
         return json({ client, components });
     } catch (error) {
@@ -38,9 +40,7 @@ export async function loader({ request, params }: ActionFunctionArgs) {
 export default function Index() {
     const { client, components } = useLoaderData<{ client: IClient; components: IComponent[] }>();
     const navigate = useNavigate();
-    const selectedComponents = components
-        .filter((component) => client.components.includes(component.dn))
-        .map((component) => component.dn);
+    const selectedComponents = getComponentIds(client.components);
 
     const breadcrumbs = [
         { name: 'Klienter', link: '/klienter' },
@@ -64,7 +64,6 @@ export default function Index() {
     };
     const [isEditing, setIsEditing] = useState(false);
 
-    console.log(selectedComponents);
     const submit = useSubmit();
 
     return (
@@ -112,9 +111,27 @@ export default function Index() {
                         allDetails={allDetails}
                     />
 
-                    <Divider className="pt-3" />
+                    <Divider className="pt-10" />
 
-                    <Heading size={'medium'}>Komponenter</Heading>
+                    <ComponentSelector
+                        items={components}
+                        selectedItems={selectedComponents}
+                        toggle={(name, isChecked) => {
+                            submit(
+                                {
+                                    componentName: name,
+                                    updateType: isChecked ? 'add' : 'remove',
+                                    actionType: 'UPDATE_COMPONONENT_IN_CLIENT',
+                                },
+                                {
+                                    method: 'post',
+                                }
+                            );
+                        }}
+                    />
+                    {/* <Heading size={'medium'} spacing>
+                        Komponenter tilknyttet
+                    </Heading>
                     <ComponentsTable
                         items={components}
                         selectedItems={selectedComponents}
@@ -131,7 +148,7 @@ export default function Index() {
                             );
                         }}
                         columns={2}
-                    />
+                    /> */}
                     <HStack justify={'center'}>
                         <DeleteModal
                             title="Slett klient"
