@@ -44,7 +44,7 @@ export default function Index() {
 
     const adapter = filteredAdapters.length > 0 ? filteredAdapters[0] : null;
 
-    const displayName = adapter?.name.split('@')[0];
+    const displayName = adapter?.name.split('@')[0] || '';
 
     return (
         <>
