@@ -29,7 +29,7 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
             />
             <HStack justify={'space-between'}>
                 <EditableTextField
-                    label={'Beskjed'}
+                    label={'Beskrivelse'}
                     value={adapterNote}
                     isEditing={isEditing}
                     setValue={setAdapterNote}

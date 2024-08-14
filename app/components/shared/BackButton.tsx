@@ -2,11 +2,12 @@ import { Button } from '@navikt/ds-react';
 import { useNavigate } from '@remix-run/react';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
-export function BackButton({ to }: { to: string }) {
+export function BackButton({ to, className }: { to: string; className?: string }) {
     const navigate = useNavigate();
 
     return (
         <Button
+            className={className}
             icon={<ArrowLeftIcon title="Gå tilbake" fontSize="1.5rem" />}
             variant="tertiary"
             onClick={() => navigate(to)}></Button>
