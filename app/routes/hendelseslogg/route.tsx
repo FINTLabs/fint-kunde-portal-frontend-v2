@@ -14,6 +14,7 @@ import LogApi from '~/api/LogApi';
 import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
 import CacheStatusTable from '~/routes/hendelseslogg/CacheStatusTable';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import { getFormData } from '~/utils/requestUtils';
 
 interface ActionData {
     message: string;
@@ -40,24 +41,29 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export async function action({ request }: ActionFunctionArgs) {
+    const actionName = 'Action in hendelsesslogg/route.tsx';
     const formData = await request.formData();
+    console.log('formData');
+    console.log(formData);
     const environment = formData.get('environment') as string;
-    const component = formData.get('component');
-    const action = formData.get('action');
+    const componentName = getFormData(formData.get('component'), 'component', actionName);
+    const action = getFormData(formData.get('action'), 'action', actionName);
     const configClass = formData.get('configClass') as string;
-    log('on search:', component, environment, action, configClass);
+    log('comp:', componentName);
+    log('action:', action);
 
     const orgName = await getSelectedOrganization(request);
-
-    const query = `${component}/${action}_${configClass.toUpperCase()}`;
-    log('url:', query);
+    // const query = `${component}/${action}_${configClass.toUpperCase()}`;
 
     let response;
     let message = '';
 
+    const splitted = componentName.split('_');
+    const newCompName = `${splitted[0]}-${splitted[1]}`;
+
     try {
-        response = await LogApi.getLogs(environment, orgName, query);
-        log('response:', response);
+        response = await LogApi.getLogs(environment, orgName, componentName, action);
+        log('response:', response.length);
 
         if (!response) {
             message = 'Error occurred';
