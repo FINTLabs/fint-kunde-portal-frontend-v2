@@ -3,14 +3,6 @@ kind: Application
 metadata:
   name: fint-kunde-portal-frontend-v2
   namespace: fintlabs-no
-  labels:
-    app.kubernetes.io/name: fint-kunde-portal-frontend-v2
-    app.kubernetes.io/instance: fint-kunde-portal-frontend-v2_fintlabs_no
-    app.kubernetes.io/version: latest
-    app.kubernetes.io/component: frontend
-    app.kubernetes.io/part-of: fint-core
-    fintlabs.no/team: core
-    fintlabs.no/org-id: fintlabs.no
 spec:
   port: 8000
   orgId: fintlabs.no

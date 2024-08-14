@@ -2,3 +2,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - flais.yaml
+commonLabels:
+  app.kubernetes.io/name: fint-kunde-portal-frontend-v2
+  app.kubernetes.io/instance: fint-kunde-portal-frontend-v2_fintlabs_no
+  app.kubernetes.io/version: latest
+  app.kubernetes.io/component: frontend
+  app.kubernetes.io/part-of: fint-core
+  fintlabs.no/team: core
+  fintlabs.no/org-id: fintlabs.no
