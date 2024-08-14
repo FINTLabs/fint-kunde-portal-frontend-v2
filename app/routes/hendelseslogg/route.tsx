@@ -33,7 +33,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     try {
         const components = await ComponentApi.getOrganisationComponents(selectOrg);
         const configs = await ComponentConfigApi.getComponentConfigs(); // rename to something else - returns a list of components with associated classes, these classes are the configurations
-        return json({ components, configs });
+        const defaultLogs = await LogApi.getLogs('api', selectOrg, 'felles_kodeverk', 'GET_ALL');
+        return json({ components, configs, defaultLogs });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
@@ -58,9 +59,6 @@ export async function action({ request }: ActionFunctionArgs) {
     let response;
     let message = '';
 
-    const splitted = componentName.split('_');
-    const newCompName = `${splitted[0]}-${splitted[1]}`;
-
     try {
         response = await LogApi.getLogs(environment, orgName, componentName, action);
         log('response:', response.length);
@@ -84,11 +82,11 @@ export default function Index() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as ActionData;
 
-    const { components, configs } = useLoaderData<{
-        components: IComponent[];
-        configs: IComponentConfig[];
-    }>();
+    const { components, configs, defaultLogs } = useLoaderData<typeof loader>();
 
+    const logs = actionData?.data || defaultLogs;
+    console.log('logs');
+    console.log(logs);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -106,29 +104,28 @@ export default function Index() {
                         configs={configs}
                     />
                 </Box>
-                {actionData ? (
+                {logs ? (
                     <>
-                        {actionData.message && (
+                        {actionData?.message && (
                             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                                 <Alert variant="info">{actionData.message}</Alert>
                             </Box>
                         )}
-
-                        {actionData.data && actionData.data.length > 0 && (
+                        {logs.length > 0 && (
                             <>
                                 <Box
                                     className="w-full"
                                     padding="6"
                                     borderRadius="large"
                                     shadow="small">
-                                    <HealthStatusTable logResults={actionData.data} />
+                                    <HealthStatusTable logResults={logs} />
                                 </Box>
                                 <Box
                                     className="w-full"
                                     padding="6"
                                     borderRadius="large"
                                     shadow="small">
-                                    <CacheStatusTable logResults={actionData.data} />
+                                    <CacheStatusTable logResults={logs} />
                                 </Box>
                             </>
                         )}
