@@ -33,7 +33,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     try {
         const components = await ComponentApi.getOrganisationComponents(selectOrg);
         const configs = await ComponentConfigApi.getComponentConfigs(); // rename to something else - returns a list of components with associated classes, these classes are the configurations
-        const defaultLogs = await LogApi.getLogs('api', selectOrg, 'felles_kodeverk', 'GET_ALL');
+        const defaultLogs = await LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', 'GET_ALL');
         return json({ components, configs, defaultLogs });
     } catch (error) {
         console.error('Error fetching data:', error);
