@@ -17,7 +17,7 @@ spec:
   image: ghcr.io/fintlabs/fint-kunde-portal-frontend-v2:latest
   env:
     - name: API_URL
-      value: https://kunde-beta.felleskomponent.no
+      value: http://fint-kunde-portal-backend:8080
   url:
     hostname: kunde-remix.felleskomponent.no
     basePath: /
