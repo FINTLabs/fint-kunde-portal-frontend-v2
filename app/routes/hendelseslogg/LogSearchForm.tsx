@@ -36,9 +36,6 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({ f, components, configs })
         return <div>No components</div>;
     }
 
-    // console.log('configs aka ressurs');
-    // console.log(configs);
-    console.log(components);
     return (
         <f.Form method="post">
             <VStack gap={'10'}>
