@@ -4,15 +4,17 @@ import { log } from '~/utils/logger';
 const API_URL = process.env.API_URL;
 
 class LogApi {
-    static async getLogs(environment: string, organisation: string, query: string) {
+    static async getLogs(
+        environment: string,
+        organisation: string,
+        componentName: string,
+        type: string
+    ) {
         const functionName = 'getLogs';
-        const URL = `${API_URL}/api/events/${organisation}/${environment}/${query}`;
+        // http://localhost:8080/events/{{orgName}}/{{environment}}/{{component}}/{{action}}
+        const URL = `${API_URL}/api/events/${organisation}/${environment}/${componentName}/${type}`;
 
-        const results = await request(URL, functionName, '');
-        log('results from request:', results);
-        // if (results) return results;
-        // else return 'no logs found';
-        return results;
+        return await request(URL, functionName, '');
     }
 }
 

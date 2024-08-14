@@ -126,3 +126,29 @@ export interface IAdapter extends IPartialAdapter {
     assetIds: string[];
     managed: boolean;
 }
+
+interface Event {
+    corrId: string;
+    action: string;
+    operation: any; // This could be more specific if you know the type
+    status: string;
+    time: number;
+    orgId: string;
+    source: string;
+    client: string;
+    data: any[]; // Array of unknown type, could be specified further
+    problems: any; // Could be more specific
+    message: string | null;
+    query: any; // Could be more specific
+    statusCode: string | null;
+    responseStatus: string | null;
+}
+
+export interface Log {
+    corrId: string;
+    source: string;
+    orgId: string;
+    timestamp: number;
+    event: Event;
+    clearData: boolean;
+}

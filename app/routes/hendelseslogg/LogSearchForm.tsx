@@ -22,18 +22,20 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({ f, components, configs })
     const [componentConfig, setComponentConfig] = useState<IComponentConfig>();
 
     function handleChangeComponent(value: string) {
-        const findConfig = configs.find((config) => config.dn === value);
-        setComponentConfig(findConfig);
-        setSelectedConfig('');
-        setSelectedComponent(findConfig ? findConfig.name : '');
+        // const findConfig = configs.find((config) => config.dn === value);
+        // setComponentConfig(findConfig);
+        // setSelectedConfig('');
+
+        // console.log(findConfig);
+        // console.log(value);
+        // setSelectedComponent(findConfig ? findConfig.name : '');
+        setSelectedComponent(value);
     }
 
     if (!components) {
         return <div>No components</div>;
     }
 
-    console.log('configs aka ressurs');
-    console.log(configs);
     return (
         <f.Form method="post">
             <VStack gap={'10'}>
@@ -56,7 +58,7 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({ f, components, configs })
                         {components
                             .sort((a, b) => a.description.localeCompare(b.description))
                             .map((component, index) => (
-                                <option value={component.dn} key={index}>
+                                <option value={component.name} key={index}>
                                     {component.description}
                                 </option>
                             ))}

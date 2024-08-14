@@ -14,6 +14,7 @@ import LogApi from '~/api/LogApi';
 import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
 import CacheStatusTable from '~/routes/hendelseslogg/CacheStatusTable';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import { getFormData } from '~/utils/requestUtils';
 
 interface ActionData {
     message: string;
@@ -32,7 +33,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     try {
         const components = await ComponentApi.getOrganisationComponents(selectOrg);
         const configs = await ComponentConfigApi.getComponentConfigs(); // rename to something else - returns a list of components with associated classes, these classes are the configurations
-        return json({ components, configs });
+        const defaultLogs = await LogApi.getLogs('api', selectOrg, 'felles_kodeverk', 'GET_ALL');
+        return json({ components, configs, defaultLogs });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
@@ -40,24 +42,26 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export async function action({ request }: ActionFunctionArgs) {
+    const actionName = 'Action in hendelsesslogg/route.tsx';
     const formData = await request.formData();
+    console.log('formData');
+    console.log(formData);
     const environment = formData.get('environment') as string;
-    const component = formData.get('component');
-    const action = formData.get('action');
+    const componentName = getFormData(formData.get('component'), 'component', actionName);
+    const action = getFormData(formData.get('action'), 'action', actionName);
     const configClass = formData.get('configClass') as string;
-    log('on search:', component, environment, action, configClass);
+    log('comp:', componentName);
+    log('action:', action);
 
     const orgName = await getSelectedOrganization(request);
-
-    const query = `${component}/${action}_${configClass.toUpperCase()}`;
-    log('url:', query);
+    // const query = `${component}/${action}_${configClass.toUpperCase()}`;
 
     let response;
     let message = '';
 
     try {
-        response = await LogApi.getLogs(environment, orgName, query);
-        log('response:', response);
+        response = await LogApi.getLogs(environment, orgName, componentName, action);
+        log('response:', response.length);
 
         if (!response) {
             message = 'Error occurred';
@@ -78,11 +82,11 @@ export default function Index() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as ActionData;
 
-    const { components, configs } = useLoaderData<{
-        components: IComponent[];
-        configs: IComponentConfig[];
-    }>();
+    const { components, configs, defaultLogs } = useLoaderData<typeof loader>();
 
+    const logs = actionData?.data || defaultLogs;
+    console.log('logs');
+    console.log(logs);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -100,29 +104,28 @@ export default function Index() {
                         configs={configs}
                     />
                 </Box>
-                {actionData ? (
+                {logs ? (
                     <>
-                        {actionData.message && (
+                        {actionData?.message && (
                             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                                 <Alert variant="info">{actionData.message}</Alert>
                             </Box>
                         )}
-
-                        {actionData.data && actionData.data.length > 0 && (
+                        {logs.length > 0 && (
                             <>
                                 <Box
                                     className="w-full"
                                     padding="6"
                                     borderRadius="large"
                                     shadow="small">
-                                    <HealthStatusTable logResults={actionData.data} />
+                                    <HealthStatusTable logResults={logs} />
                                 </Box>
                                 <Box
                                     className="w-full"
                                     padding="6"
                                     borderRadius="large"
                                     shadow="small">
-                                    <CacheStatusTable logResults={actionData.data} />
+                                    <CacheStatusTable logResults={logs} />
                                 </Box>
                             </>
                         )}
