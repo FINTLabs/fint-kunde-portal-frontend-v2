@@ -13,6 +13,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ContactModal from '~/routes/kontakter/ContactModal';
 import { getSelectedOrganization as getSelectedOrganization } from '~/utils/selectedOrganization';
+import { getFormData } from '~/utils/requestUtils';
 
 interface IPageLoaderData {
     technicalContacts?: IContact[];
@@ -62,10 +63,13 @@ export const loader: LoaderFunction = async ({ request }) => {
 //     return json({ show: true, message: response?.message, variant: response?.variant });
 // }
 export async function action({ request }: ActionFunctionArgs) {
+    const actionName = 'Action in kontakter/route.tsx';
     const formData = await request.formData();
+
+    log(formData);
     const actionType = formData.get('actionType');
     const selectedOrg = await getSelectedOrganization(request);
-    const contactNin = (formData.get('contactNin') as string) || '';
+    const contactNin = getFormData(formData.get('contactNin'), 'contactNin', actionName);
     const roleId = (formData.get('roleId') as string) || '';
 
     log('INSIDE ACTION', actionType);
@@ -78,6 +82,10 @@ export async function action({ request }: ActionFunctionArgs) {
     switch (actionType) {
         case 'addTechnicalContact':
             response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
+            log(response);
+            return json({
+                ok: true,
+            });
             break;
         case 'removeTechnicalContact':
             response = await ContactApi.removeTechnicalContact(contactNin, selectedOrg);
@@ -92,10 +100,12 @@ export async function action({ request }: ActionFunctionArgs) {
             response = await RoleApi.removeRole(selectedOrg, contactNin, roleId);
             break;
         default:
-            return json({ show: true, message: 'Unknown action type', variant: 'error' });
+            return json({
+                show: true,
+                message: `Unknown action type '${actionType}'`,
+                variant: 'error',
+            });
     }
-
-    return json({ show: true, message: 'Unknown action type', variant: 'error' });
 }
 
 export default function Index() {

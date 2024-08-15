@@ -75,30 +75,30 @@ class ContactApi {
         }
     }
 
-    static async addTechnicalContact(nin: string, organisation: string) {
-        const url = `${API_URL}/api/organisations/${organisation}/contacts/technical/${nin}`;
-
-        const response = await fetch(url, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-nin': process.env.PERSONALNUMBER || '',
-            },
-        });
-        if (response.ok) {
-            log('Technical contact added');
-            return { message: 'Technical Kontakt ble oppdatert', variant: 'success' };
-        } else {
-            log('Error adding technical contact:', response.statusText);
-            return {
-                message:
-                    'Det oppsto en feil ved oppdatering av kontakt.' +
-                    response.status +
-                    ' ' +
-                    response.statusText,
-                variant: 'error',
-            };
-        }
+    static async addTechnicalContact(contactNin: string, organisation: string) {
+        const url = `${API_URL}/api/organisations/${organisation}/contacts/technical/${contactNin}`;
+        return await request(url, 'addTechnicalContact', '', 'PUT', 'json');
+        // const response = await fetch(url, {
+        //     method: 'PUT',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'x-nin': process.env.PERSONALNUMBER || '',
+        //     },
+        // });
+        // if (response.ok) {
+        //     log('Technical contact added');
+        //     return { message: 'Technical Kontakt ble oppdatert', variant: 'success' };
+        // } else {
+        //     log('Error adding technical contact:', response.statusText);
+        //     return {
+        //         message:
+        //             'Det oppsto en feil ved oppdatering av kontakt.' +
+        //             response.status +
+        //             ' ' +
+        //             response.statusText,
+        //         variant: 'error',
+        //     };
+        // }
     }
 }
 
