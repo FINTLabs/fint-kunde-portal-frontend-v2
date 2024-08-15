@@ -23,9 +23,9 @@ interface TestAddFormProps {
 const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, f }) => {
     const ref = useRef<HTMLDialogElement>(null);
     return (
-        <HStack wrap={false} gap="6" align="center">
-            <f.Form>
-                <HGrid gap="6" columns={3}>
+        <f.Form>
+            <HStack align={'center'} justify={'space-between'}>
+                <HGrid gap="6" columns={3} className="w-5/6">
                     <Select label="Miljø" size="small" name={'environment'}>
                         <option value="pwf">Play-With-FINT</option>
                         <option value="beta">BETA</option>
@@ -52,8 +52,7 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, f }
                         ))}
                     </Select>
                 </HGrid>
-            </f.Form>
-            <Box>
+
                 <Button
                     icon={<PlayIcon title="Start Test" />}
                     onClick={() => ref.current?.showModal()}
@@ -66,15 +65,16 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, f }
                                 <Button variant="secondary" onClick={() => ref.current?.close()}>
                                     Avbryt
                                 </Button>
-                                <f.Form>
-                                    <Button onClick={() => ref.current?.close()}>Kjør test</Button>
-                                </f.Form>
+
+                                <Button onClick={() => ref.current?.close()} formMethod="post">
+                                    Kjør test
+                                </Button>
                             </HStack>
                         </VStack>
                     </Alert>
                 </Modal>
-            </Box>
-        </HStack>
+            </HStack>
+        </f.Form>
     );
 };
 
