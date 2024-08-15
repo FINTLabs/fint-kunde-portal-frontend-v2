@@ -48,9 +48,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
         // f.submit(formData, { method: 'post' });
         // f.submit({ method: 'POST' }, { selectedContactNin: nin });
         setSelectedContactNin(nin);
-        f.submit({
-            actionType: 'Test',
-        });
+        f.submit();
         // handleClose();
     }
 
@@ -73,7 +71,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
                     onChange={handleFilterChange}
                 />
                 <f.Form method="POST">
-                    <input type={'hidden'} name={'selectedContactNin'} value={selectedContactNin} />
+                    <input type={'hidden'} name={'contactNin'} value={selectedContactNin} />
                     <input type={'hidden'} name={'actionType'} value={'addTechnicalContact'} />
                     <Table>
                         <Table.Body>
