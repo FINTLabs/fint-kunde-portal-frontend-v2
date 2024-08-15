@@ -25,7 +25,7 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, f }
     return (
         <f.Form>
             <HStack align={'center'} justify={'space-between'}>
-                <HGrid gap="6" columns={3} className="w-5/6">
+                <HGrid gap="6" columns={3} className="w-11/12">
                     <Select label="Miljø" size="small" name={'environment'}>
                         <option value="pwf">Play-With-FINT</option>
                         <option value="beta">BETA</option>
