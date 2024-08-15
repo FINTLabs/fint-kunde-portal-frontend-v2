@@ -1,4 +1,4 @@
-import { Box, HStack, VStack } from '@navikt/ds-react';
+import { Box, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
@@ -38,9 +38,9 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const submit = useSubmit();
 
     return (
-        <HStack className="" gap="8" justify={'start'} align={'baseline'}>
-            <BackButton to={`/adaptere`} />
-            <Box padding="6" borderRadius="large" shadow="small">
+        <HGrid gap="2" align={'start'}>
+            <BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />
+            <Box padding="6" borderRadius="large" shadow="small" className="relative bottom-12">
                 <VStack gap="5">
                     <GeneralDetailView adapter={adapter} />
                     <Divider className="pt-3" />
@@ -81,6 +81,6 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                     />
                 </VStack>
             </Box>
-        </HStack>
+        </HGrid>
     );
 }

@@ -39,15 +39,20 @@ export default function Index() {
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={component.description} icon={ComponentIcon} />
 
-            <HGrid columns="50px auto">
+            <HGrid gap="2" align={'start'}>
                 <Box>
                     <Button
+                        className="relative h-12 w-12 top-2 right-14"
                         icon={<ArrowLeftIcon title="a11y-title" fontSize="1.5rem" />}
                         variant="tertiary"
                         onClick={() => navigate(`/komponenter`)}></Button>
                 </Box>
 
-                <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+                <Box
+                    className="w-full relative bottom-12"
+                    padding="6"
+                    borderRadius="large"
+                    shadow="small">
                     <HStack gap={'1'}>
                         <Heading size={'medium'}>Details</Heading>
                         <Spacer />
