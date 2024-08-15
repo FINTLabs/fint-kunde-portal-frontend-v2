@@ -82,9 +82,13 @@ export async function action({ request }: ActionFunctionArgs) {
     switch (actionType) {
         case 'addTechnicalContact':
             response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
-            log(response);
+            const isOk = response.status === 204;
             return json({
-                ok: true,
+                ok: isOk,
+                message: isOk
+                    ? 'Kontakten er lagt til'
+                    : `Legge til kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
+                variant: isOk ? 'success' : 'error',
             });
             break;
         case 'removeTechnicalContact':
@@ -116,6 +120,7 @@ export default function Index() {
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
 
+    console.log(actionData);
     useEffect(() => {
         setShow(true);
         setIsModalOpen(false);
