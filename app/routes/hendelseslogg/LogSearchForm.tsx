@@ -78,7 +78,7 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({ f, components, configs })
                         ))}
                     </Select>
                     <Select
-                        label="Action"
+                        label="Type"
                         size="small"
                         // onChange={(e) => setSelectedAction(e.target.value)}
                         name={'action'}>
