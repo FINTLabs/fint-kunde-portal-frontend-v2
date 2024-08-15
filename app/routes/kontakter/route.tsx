@@ -120,7 +120,7 @@ export default function Index() {
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
 
-    console.log(actionData);
+    // console.log(actionData);
     useEffect(() => {
         setShow(true);
         setIsModalOpen(false);

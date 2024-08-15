@@ -214,7 +214,11 @@ export function ErrorBoundary() {
                 <h1>Error</h1>
                 <p>{error.message}</p>
                 <p>The stack trace is:</p>
-                <pre>{error.stack}</pre>
+                <p>
+                    <pre className="overflow-auto whitespace-pre-wrap break-words max-w-full p-4 bg-gray-100 border border-gray-300 rounded-md">
+                        {error.stack}
+                    </pre>
+                </p>
             </CustomError>
         );
     } else {
