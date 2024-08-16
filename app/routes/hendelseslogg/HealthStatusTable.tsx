@@ -1,30 +1,12 @@
 import React from 'react';
-import { Table, BodyShort, Label } from '@navikt/ds-react';
-import { Log } from '~/types/types';
+import { Table, BodyShort, Label, Box, VStack, HStack } from '@navikt/ds-react';
+import { Log, ReduntantLog } from '~/types/types';
 
 interface HealthStatusProps {
-    logResults: Log[]; // TODO: Replace 'any[]' with the appropriate type for your log results
+    logs: Log[];
 }
 
-type Grouped = {
-    [key: string]: Log[];
-};
-
-const HealthStatusTable: React.FC<HealthStatusProps> = ({ logResults }) => {
-    const groupById = logResults.reduce(
-        (acc, curr) => {
-            const key = curr.event.corrId;
-            const currentList = acc[key];
-
-            acc[key] = !currentList ? [curr] : [...currentList, curr];
-
-            return acc;
-        },
-        {} as { [key: string]: Log[] }
-    );
-
-    const groupKeys = Object.keys(groupById);
-
+const HealthStatusTable: React.FC<HealthStatusProps> = ({ logs }) => {
     return (
         <>
             <>
@@ -33,34 +15,47 @@ const HealthStatusTable: React.FC<HealthStatusProps> = ({ logResults }) => {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell scope="col">ID</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Status</Table.HeaderCell>
-                            {/* <Table.HeaderCell scope="col">ID</Table.HeaderCell> */}
-                            {/* <Table.HeaderCell scope="col">Time</Table.HeaderCell> */}
-                            {/* <Table.HeaderCell scope="col">Type</Table.HeaderCell> */}
+                            <Table.HeaderCell scope="col">Type</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Time</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {groupKeys.map((key, index) => {
-                            const logs = groupById[key];
-                            console.log(logs);
-                            return (
-                                <Table.Row key={index}>
-                                    <Table.DataCell>{key}</Table.DataCell>
-                                    <Table.DataCell>{logs[0].event.action}</Table.DataCell>
-                                    {/* <Table.DataCell>{log.status}</Table.DataCell>
-                                    <Table.DataCell>{log.event.time}</Table.DataCell>
-                                    <Table.DataCell>{log.event.action}</Table.DataCell> */}
-                                </Table.Row>
-                            );
-                        })}
-                        {/* {logResults.map((log, index) => (
+                        {logs.map((log, index) => (
                             <Table.Row key={index}>
-                                <Table.DataCell>{log.event.status}</Table.DataCell>
-                                <Table.DataCell>{log.event.corrId}</Table.DataCell>
-                                <Table.DataCell>{log.event.time}</Table.DataCell>
-                                <Table.DataCell>{log.event.action}</Table.DataCell>
+                                <Table.DataCell>
+                                    {log.id}
+
+                                    {log.events.map((event, index) => (
+                                        <Box padding={'4'} key={index}>
+                                            <VStack>
+                                                <HStack>
+                                                    <Label>Tid:</Label>
+                                                    <BodyShort>{event.timestamp}</BodyShort>
+                                                </HStack>
+                                                <HStack>
+                                                    <Label>Klient:</Label>
+                                                    <BodyShort>{event.klient}</BodyShort>
+                                                </HStack>
+                                                <HStack>
+                                                    <Label>Status:</Label>
+                                                    <BodyShort>{event.status}</BodyShort>
+                                                </HStack>
+                                                <HStack>
+                                                    <Label>Reponse:</Label>
+                                                    <BodyShort>{event.response}</BodyShort>
+                                                </HStack>
+                                                <HStack>
+                                                    <Label>Melding:</Label>
+                                                    <BodyShort>{event.melding}</BodyShort>
+                                                </HStack>
+                                            </VStack>
+                                        </Box>
+                                    ))}
+                                </Table.DataCell>
+                                <Table.DataCell>{log.action}</Table.DataCell>
+                                <Table.DataCell>{log.timestamp}</Table.DataCell>
                             </Table.Row>
-                        ))} */}
+                        ))}
                     </Table.Body>
                 </Table>
             </>

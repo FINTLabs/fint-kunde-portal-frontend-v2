@@ -15,6 +15,8 @@ import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
 import CacheStatusTable from '~/routes/hendelseslogg/CacheStatusTable';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData } from '~/utils/requestUtils';
+import { InfoBox } from '~/components/shared/InfoBox';
+import { Log, ReduntantLog } from '~/types/types';
 
 interface ActionData {
     message: string;
@@ -77,6 +79,11 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ message, data: response });
 }
 
+// Mapped log
+type LogHashMap = {
+    [key: string]: ReduntantLog[];
+};
+
 export default function Index() {
     const breadcrumbs = [{ name: 'Hendelseslogg', link: '/hendelseslogg' }];
     const fetcher = useFetcher();
@@ -85,8 +92,10 @@ export default function Index() {
     const { components, configs, defaultLogs } = useLoaderData<typeof loader>();
 
     const logs = actionData?.data || defaultLogs;
-    console.log('logs');
-    console.log(logs);
+    console.log('logs uten mapping:', logs);
+
+    const mappedLogs = mapLogs(logs);
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -104,6 +113,12 @@ export default function Index() {
                         configs={configs}
                     />
                 </Box>
+
+                {defaultLogs && (
+                    <InfoBox
+                        message={`Displaying default logs: await LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', 'GET_ALL');`}
+                    />
+                )}
                 {logs ? (
                     <>
                         {actionData?.message && (
@@ -118,7 +133,7 @@ export default function Index() {
                                     padding="6"
                                     borderRadius="large"
                                     shadow="small">
-                                    <HealthStatusTable logResults={logs} />
+                                    <HealthStatusTable logs={mappedLogs} />
                                 </Box>
                                 <Box
                                     className="w-full"
@@ -138,4 +153,36 @@ export default function Index() {
             </VStack>
         </>
     );
+}
+function mapLogs(logs: ReduntantLog[]) {
+    const mappedLogs = logs.reduce((acc: Log[], curr: ReduntantLog) => {
+        const existingLog = acc.find((log) => log.id === curr.corrId);
+
+        const currentEvent = curr.event;
+        const event = {
+            timestamp: currentEvent.time,
+            klient: currentEvent.client,
+            status: currentEvent.status,
+            response: currentEvent.responseStatus || '',
+            melding: currentEvent.message || '',
+        };
+        if (!existingLog) {
+            return [
+                ...acc,
+                {
+                    id: curr.corrId,
+                    timestamp: curr.timestamp,
+                    action: curr.event.action,
+                    events: [event],
+                },
+            ];
+        } else {
+            existingLog.events.push(event);
+            return acc;
+        }
+    }, [] as Log[]);
+
+    console.log('MAPPED LOGS');
+    console.log(mappedLogs);
+    return mappedLogs;
 }

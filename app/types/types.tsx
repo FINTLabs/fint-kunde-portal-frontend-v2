@@ -127,28 +127,40 @@ export interface IAdapter extends IPartialAdapter {
     managed: boolean;
 }
 
-interface Event {
+interface ReduntantLogEvent {
     corrId: string;
     action: string;
-    operation: any; // This could be more specific if you know the type
     status: string;
     time: number;
     orgId: string;
     source: string;
     client: string;
-    data: any[]; // Array of unknown type, could be specified further
-    problems: any; // Could be more specific
+    data: string[];
     message: string | null;
-    query: any; // Could be more specific
     statusCode: string | null;
     responseStatus: string | null;
 }
 
-export interface Log {
+export interface ReduntantLog {
     corrId: string;
     source: string;
     orgId: string;
     timestamp: number;
-    event: Event;
+    event: ReduntantLogEvent;
     clearData: boolean;
+}
+
+export interface LogEvent {
+    timestamp: number;
+    klient: string;
+    status: string;
+    response: string;
+    melding: string;
+}
+// Mapped log
+export interface Log {
+    id: string;
+    timestamp: number;
+    action: string;
+    events: LogEvent[];
 }
