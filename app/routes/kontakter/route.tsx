@@ -13,9 +13,11 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ContactModal from '~/routes/kontakter/ContactModal';
 import { getSelectedOrganization as getSelectedOrganization } from '~/utils/selectedOrganization';
+import { getFormData } from '~/utils/requestUtils';
+import { InfoBox } from '~/components/shared/InfoBox';
 
 interface IPageLoaderData {
-    technicalContacts?: IContact[];
+    technicalContacts?: IContact[] | string;
     rolesData?: IRole[];
     allContacts?: IContact[];
     error?: string;
@@ -36,7 +38,12 @@ export const loader: LoaderFunction = async ({ request }) => {
         const legalContact = await OrganisationApi.getLegalContact(selectedOrg);
         const allContacts = await ContactApi.getAllContacts();
 
-        return json({ technicalContacts, rolesData, legalContact, allContacts });
+        return json({
+            technicalContacts,
+            rolesData,
+            legalContact,
+            allContacts,
+        });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
@@ -62,50 +69,69 @@ export const loader: LoaderFunction = async ({ request }) => {
 //     return json({ show: true, message: response?.message, variant: response?.variant });
 // }
 export async function action({ request }: ActionFunctionArgs) {
+    const actionName = 'Action in kontakter/route.tsx';
     const formData = await request.formData();
-    const actionType = formData.get('actionType');
-    const selectedOrg = await getSelectedOrganization(request);
-    const contactNin = (formData.get('contactNin') as string) || '';
-    const roleId = (formData.get('roleId') as string) || '';
 
-    log('INSIDE ACTION', actionType);
-    // let formValues: any = {};
-    // for (const [key, value] of formData) {
-    //     formValues[key] = value;
-    // }
+    log(formData);
+    const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
+    const selectedOrg = await getSelectedOrganization(request);
+    const contactNin = getFormData(formData.get('contactNin'), 'contactNin', actionName);
 
     let response;
+    let isOk = false;
     switch (actionType) {
         case 'addTechnicalContact':
             response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
-            break;
+            isOk = response.status === 204;
+            return json({
+                ok: isOk,
+                message: isOk
+                    ? 'Kontakten er lagt til'
+                    : `Legge til kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
+                variant: isOk ? 'success' : 'error',
+            });
         case 'removeTechnicalContact':
             response = await ContactApi.removeTechnicalContact(contactNin, selectedOrg);
-            break;
+            isOk = response.status === 204;
+            log('--- AM IN removeTechnicalContact');
+            return json({
+                ok: isOk,
+                message: isOk
+                    ? 'Kontakten er fjernet som teknisk kontakt'
+                    : `Fjerning av teknisk kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
+                variant: isOk ? 'success' : 'error',
+            });
         case 'setLegalContact':
             response = await ContactApi.setLegalContact(contactNin, selectedOrg);
             break;
         case 'addRole':
-            response = await RoleApi.addRole(selectedOrg, contactNin, roleId);
+            let roleIdToAdd = getFormData(formData.get('roleId'), 'roleId', actionName);
+            response = await RoleApi.addRole(selectedOrg, contactNin, roleIdToAdd);
             break;
         case 'deleteRole':
-            response = await RoleApi.removeRole(selectedOrg, contactNin, roleId);
+            let roleIdToDelete = getFormData(formData.get('roleId'), 'roleId', actionName);
+            response = await RoleApi.removeRole(selectedOrg, contactNin, roleIdToDelete);
             break;
         default:
-            return json({ show: true, message: 'Unknown action type', variant: 'error' });
+            return json({
+                show: true,
+                message: `Unknown action type '${actionType}'`,
+                variant: 'error',
+            });
     }
-
-    return json({ show: true, message: 'Unknown action type', variant: 'error' });
 }
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
-    const data = useLoaderData<IPageLoaderData & { legalContact?: IContact }>();
+    const { legalContact, technicalContacts, allContacts, rolesData } = useLoaderData<
+        IPageLoaderData & { legalContact?: IContact }
+    >();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
 
+    console.log('actionData', actionData);
     useEffect(() => {
         setShow(true);
         setIsModalOpen(false);
@@ -143,21 +169,26 @@ export default function Index() {
 
             <Box className="m-10">
                 <Heading size="xsmall">Juridisk kontakt</Heading>
-                {data.legalContact ? (
+                {legalContact ? (
                     <HStack gap="4" align="center" className="px-4">
                         <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4" />
-                        <BodyShort size="medium">{data.legalContact.firstName}</BodyShort>
+                        <BodyShort size="medium">{legalContact.firstName}</BodyShort>
                     </HStack>
                 ) : (
                     <BodyShort size="medium">Ingen juridisk kontakt funnet</BodyShort>
                 )}
             </Box>
 
-            <ContactTable contactsData={data.technicalContacts} rolesData={data.rolesData} />
+            {technicalContacts && typeof technicalContacts === 'string' && (
+                <InfoBox message={technicalContacts} />
+            )}
+            {technicalContacts && typeof technicalContacts !== 'string' && (
+                <ContactTable contactsData={technicalContacts} rolesData={rolesData} />
+            )}
             <ContactModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                contacts={data.allContacts || []}
+                contacts={allContacts || []}
                 f={fetcher}
             />
         </>

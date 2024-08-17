@@ -7,11 +7,8 @@ export function getRequestParam(value: string | undefined, name: string) {
 }
 export function getFormData(value: FormDataEntryValue | null, name: string, actionName: string) {
     if (!value) {
-        error(`Failed in ${actionName}. Invalid value '${value}' for ${name} in formData`);
-        throw new Response(
-            `Failed in ${actionName}. Invalid value '${value}' for ${name} in formData`,
-            { status: 400 }
-        );
+        const errorMessage = `Failed in ${actionName}. ${name} is '${value}' in formData`;
+        throw new Response(errorMessage, { status: 400 });
     }
 
     return value as string;

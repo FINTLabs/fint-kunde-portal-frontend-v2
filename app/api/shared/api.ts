@@ -84,7 +84,6 @@ export async function postRequest(
     // log(`RequestOptions: `, requestOptions);
 
     const response = await fetch(URL, requestOptions);
-    console.log(response);
     return response;
 }
 
@@ -104,8 +103,6 @@ async function getRequest(
 
         const errorMsg = `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`;
         error(errorMsg);
-        return {
-            error: `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`,
-        };
+        return `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`;
     }
 }

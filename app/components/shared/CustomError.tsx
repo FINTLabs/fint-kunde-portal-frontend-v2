@@ -1,12 +1,11 @@
 import React from 'react';
-import { Box, Page } from '@navikt/ds-react';
+import { Box, Heading, Page } from '@navikt/ds-react';
 
 import '@navikt/ds-css';
 
 import Footer from '~/components/Footer';
 
-export function CustomError({ error }: { error: Error }) {
-    //TODO: Made this page prettier
+export function CustomError({ children }: { children: React.ReactNode }) {
     return (
         <Page
             footer={
@@ -18,13 +17,12 @@ export function CustomError({ error }: { error: Error }) {
             }>
             <Box background="surface-neutral-moderate" padding="8" as="header">
                 <Page.Block gutters width="lg">
-                    <h1>Error</h1>
+                    <Heading size="large">Error</Heading>
                 </Page.Block>
             </Box>
             <Box padding="8" paddingBlock="2" as="main">
                 <Page.Block gutters width="lg">
-                    <p>Something went wrong!</p>
-                    <p>{error?.message}</p>
+                    {children}
                 </Page.Block>
             </Box>
         </Page>

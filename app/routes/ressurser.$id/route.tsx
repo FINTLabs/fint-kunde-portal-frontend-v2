@@ -16,7 +16,6 @@ import AdapterAPI from '~/api/AdapterApi';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import ClientSelector from './ClientSelector';
-import { DeleteRessurs } from './DeleteRessurs';
 import { DeleteModal } from '~/components/shared/DeleteModal';
 
 type LoaderData = {

@@ -1,10 +1,19 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
+import {
+    isRouteErrorResponse,
+    Links,
+    Meta,
+    Outlet,
+    Scripts,
+    ScrollRestoration,
+    useLoaderData,
+    useRouteError,
+} from '@remix-run/react';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import './tailwind.css';
 import '@navikt/ds-css';
 import './data-theme.css';
-import { Box, Page } from '@navikt/ds-react';
+import { BodyShort, Box, Heading, Page } from '@navikt/ds-react';
 import React from 'react';
 import Menu from './components/Menu/Menu';
 import { getSession, commitSession } from '~/utils/session';
@@ -17,7 +26,7 @@ import { CustomError } from '~/components/shared/CustomError';
 import { log } from './utils/logger';
 import { getFormData } from './utils/requestUtils';
 import { createCookie } from '@remix-run/node'; // or cloudflare/deno
-import { getSessionFromCookie, getUserSession, setUserSession } from './utils/selectedOrganization';
+import { getUserSession, setUserSession } from './utils/selectedOrganization';
 
 export const meta: MetaFunction = () => {
     return [
@@ -182,17 +191,41 @@ export default function App() {
         </Page>
     );
 }
-export function ErrorBoundary({ error }: { error: Error }) {
+export function ErrorBoundary() {
     //TODO: can we make the message show?? need an error layout
+    // This will handle JavaScript exceptions thrown in loaders/actions
 
-    return (
-        // <>
-        //     <p>Something went wrong !</p>
-        //     <p>{error?.message}</p>
-        // </>
-        <CustomError error={error} />
-    );
+    const error = useRouteError();
+
+    if (isRouteErrorResponse(error)) {
+        return (
+            <CustomError>
+                <Heading size="medium" spacing>
+                    {error.status} {error.statusText}
+                </Heading>
+                <Box padding="8" borderColor="border-danger" borderWidth="4" borderRadius={'large'}>
+                    <BodyShort>{error.data}</BodyShort>
+                </Box>
+            </CustomError>
+        );
+    } else if (error instanceof Error) {
+        return (
+            <CustomError>
+                <h1>Error</h1>
+                <p>{error.message}</p>
+                <p>The stack trace is:</p>
+                <p>
+                    <pre className="overflow-auto whitespace-pre-wrap break-words max-w-full p-4 bg-gray-100 border border-gray-300 rounded-md">
+                        {error.stack}
+                    </pre>
+                </p>
+            </CustomError>
+        );
+    } else {
+        return <h1>Unknown Error</h1>;
+    }
 }
+
 function getCookieValue(cookieString: string, key: string): string | null {
     const keyValuePairs = cookieString.split('; ');
     for (const pair of keyValuePairs) {
