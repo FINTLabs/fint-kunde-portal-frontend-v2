@@ -14,9 +14,10 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ContactModal from '~/routes/kontakter/ContactModal';
 import { getSelectedOrganization as getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData } from '~/utils/requestUtils';
+import { InfoBox } from '~/components/shared/InfoBox';
 
 interface IPageLoaderData {
-    technicalContacts?: IContact[];
+    technicalContacts?: IContact[] | string;
     rolesData?: IRole[];
     allContacts?: IContact[];
     error?: string;
@@ -37,7 +38,12 @@ export const loader: LoaderFunction = async ({ request }) => {
         const legalContact = await OrganisationApi.getLegalContact(selectedOrg);
         const allContacts = await ContactApi.getAllContacts();
 
-        return json({ technicalContacts, rolesData, legalContact, allContacts });
+        return json({
+            technicalContacts,
+            rolesData,
+            legalContact,
+            allContacts,
+        });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
@@ -117,7 +123,9 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
-    const data = useLoaderData<IPageLoaderData & { legalContact?: IContact }>();
+    const { legalContact, technicalContacts, allContacts, rolesData } = useLoaderData<
+        IPageLoaderData & { legalContact?: IContact }
+    >();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
@@ -161,21 +169,26 @@ export default function Index() {
 
             <Box className="m-10">
                 <Heading size="xsmall">Juridisk kontakt</Heading>
-                {data.legalContact ? (
+                {legalContact ? (
                     <HStack gap="4" align="center" className="px-4">
                         <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4" />
-                        <BodyShort size="medium">{data.legalContact.firstName}</BodyShort>
+                        <BodyShort size="medium">{legalContact.firstName}</BodyShort>
                     </HStack>
                 ) : (
                     <BodyShort size="medium">Ingen juridisk kontakt funnet</BodyShort>
                 )}
             </Box>
 
-            <ContactTable contactsData={data.technicalContacts} rolesData={data.rolesData} />
+            {technicalContacts && typeof technicalContacts === 'string' && (
+                <InfoBox message={technicalContacts} />
+            )}
+            {technicalContacts && typeof technicalContacts !== 'string' && (
+                <ContactTable contactsData={technicalContacts} rolesData={rolesData} />
+            )}
             <ContactModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                contacts={data.allContacts || []}
+                contacts={allContacts || []}
                 f={fetcher}
             />
         </>

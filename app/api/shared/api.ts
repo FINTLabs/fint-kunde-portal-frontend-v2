@@ -103,8 +103,6 @@ async function getRequest(
 
         const errorMsg = `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`;
         error(errorMsg);
-        return {
-            error: `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`,
-        };
+        return `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`;
     }
 }
