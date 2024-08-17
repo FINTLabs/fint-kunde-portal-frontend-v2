@@ -11,12 +11,14 @@ interface IContactTableProps {
     rolesData?: IRole[];
 }
 
+type ModalType = 'fjern' | 'juridisk';
+
 const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData }) => {
     const [modalState, setModalState] = useState<{
-        type: string;
+        type: ModalType;
         contact?: IContact;
         open: boolean;
-    }>({ type: '', contact: undefined, open: false });
+    }>({ type: 'juridisk', contact: undefined, open: false });
     const fetcher = useFetcher();
 
     // const userSession = useOutletContext<IUserSession>();
@@ -27,7 +29,7 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
         return false;
     };
 
-    const handleOpenModal = (type: string, contact: IContact) => {
+    const handleOpenModal = (type: ModalType, contact: IContact) => {
         setModalState({ type, contact, open: true });
     };
 
@@ -40,14 +42,18 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
         console.log(`${modalState.type} confirmed for contact:`, modalState.contact);
         const contactNin = (modalState.contact?.nin as string) || '';
 
-        //todo: only handling jurdisk now
         const formData = new FormData();
         formData.append('contactNin', contactNin);
-        formData.append('actionType', 'setLegalContact');
+
+        console.log(modalState);
+        formData.append(
+            'actionType',
+            modalState.type === 'fjern' ? 'removeTechnicalContact' : 'setLegalContact'
+        );
 
         fetcher.submit(formData, {
-            method: 'post',
-            action: '/kontakter',
+            method: 'POST',
+            navigate: false,
         });
         handleCloseModal();
     };

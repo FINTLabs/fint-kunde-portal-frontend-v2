@@ -67,22 +67,16 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
 
     log(formData);
-    const actionType = formData.get('actionType');
+    const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
     const selectedOrg = await getSelectedOrganization(request);
     const contactNin = getFormData(formData.get('contactNin'), 'contactNin', actionName);
-    const roleId = (formData.get('roleId') as string) || '';
-
-    log('INSIDE ACTION', actionType);
-    // let formValues: any = {};
-    // for (const [key, value] of formData) {
-    //     formValues[key] = value;
-    // }
 
     let response;
+    let isOk = false;
     switch (actionType) {
         case 'addTechnicalContact':
             response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
-            const isOk = response.status === 204;
+            isOk = response.status === 204;
             return json({
                 ok: isOk,
                 message: isOk
@@ -90,18 +84,27 @@ export async function action({ request }: ActionFunctionArgs) {
                     : `Legge til kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
                 variant: isOk ? 'success' : 'error',
             });
-            break;
         case 'removeTechnicalContact':
             response = await ContactApi.removeTechnicalContact(contactNin, selectedOrg);
-            break;
+            isOk = response.status === 204;
+            log('--- AM IN removeTechnicalContact');
+            return json({
+                ok: isOk,
+                message: isOk
+                    ? 'Kontakten er fjernet som teknisk kontakt'
+                    : `Fjerning av teknisk kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
+                variant: isOk ? 'success' : 'error',
+            });
         case 'setLegalContact':
             response = await ContactApi.setLegalContact(contactNin, selectedOrg);
             break;
         case 'addRole':
-            response = await RoleApi.addRole(selectedOrg, contactNin, roleId);
+            let roleIdToAdd = getFormData(formData.get('roleId'), 'roleId', actionName);
+            response = await RoleApi.addRole(selectedOrg, contactNin, roleIdToAdd);
             break;
         case 'deleteRole':
-            response = await RoleApi.removeRole(selectedOrg, contactNin, roleId);
+            let roleIdToDelete = getFormData(formData.get('roleId'), 'roleId', actionName);
+            response = await RoleApi.removeRole(selectedOrg, contactNin, roleIdToDelete);
             break;
         default:
             return json({
@@ -120,7 +123,7 @@ export default function Index() {
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
 
-    // console.log(actionData);
+    console.log('actionData', actionData);
     useEffect(() => {
         setShow(true);
         setIsModalOpen(false);
