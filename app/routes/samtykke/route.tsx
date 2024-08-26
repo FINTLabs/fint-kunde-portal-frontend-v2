@@ -1,33 +1,35 @@
-import type { LoaderFunction, MetaFunction } from '@remix-run/node';
-import { TerminalIcon } from '@navikt/aksel-icons';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import React from 'react';
+import React, { useState } from 'react';
+import { PlusIcon, TerminalIcon } from '@navikt/aksel-icons';
+import { Box, Button, HStack, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { Box, VStack } from '@navikt/ds-react';
-import ServiceAccordion from '~/routes/samtykke/ServiceAccordion';
-import SearchHeader from '~/routes/samtykke/SearchHeader';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { json, useLoaderData } from '@remix-run/react';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import ServiceTable from '~/routes/samtykke/ServiceTable';
+import AddServiceForm from '~/routes/samtykke/AddServiceForm';
+import AddTjenesteForm from '~/routes/samtykke/AddTjenesteForm';
+import { useLoaderData } from '@remix-run/react';
+import { json } from '@remix-run/node';
 import ConsentApi from '~/api/ConsentApi';
-import { IComponentConfig } from '~/types/ComponentConfig';
-import { IService } from '~/types/Consent';
-import { log } from '~/utils/logger';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
 
-export const meta: MetaFunction = () => {
+export const meta = () => {
     return [{ title: 'Samtykke' }, { name: 'description', content: 'Liste over Samtykke' }];
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: { request: Request }) => {
     const orgName = await getSelectedOrganization(request);
-    const headers = request.headers;
-    const cookies = headers.get('Cookie');
 
-    console.log('cookies _>_>_>_>>_>__>');
-    console.log(cookies);
     try {
-        const services = await ConsentApi.getServices(orgName, cookies ?? ''); // Pass cookies to getServices
-        const configs = await ConsentApi.getTest(orgName);
-        return json({ services, configs });
+        const behandlings = await ConsentApi.getBehandlings(orgName);
+        const tjenster = await ConsentApi.getTjenste(orgName);
+        const personopplysning = await ConsentApi.getPersonopplysning();
+        const grunnlag = await ConsentApi.getBehandlingsgrunnlag();
+        return json({
+            behandling: behandlings,
+            tjenster: tjenster,
+            personopplysning: personopplysning,
+            grunnlag: grunnlag,
+        });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
@@ -35,28 +37,102 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Index() {
+    const [showAddServiceForm, setShowAddServiceForm] = useState(false);
+    const [showAddTjenesteForm, setShowAddTjenesteForm] = useState(false);
+
     const breadcrumbs = [{ name: 'Samtykke', link: '/samtykke' }];
-    const { services, configs } = useLoaderData<{
-        services: IService[];
-        configs: IComponentConfig[];
+    const { behandling, tjenster, personopplysning, grunnlag } = useLoaderData<{
+        behandling: IBehandling[];
+        tjenster: ITjeneste[];
+        personopplysning: IPersonopplysning[];
+        grunnlag: IBehandlingsgrunnlag[];
     }>();
-    log('consent configs:', configs.length);
+
+    const handleAddServiceClick = () => {
+        setShowAddServiceForm(true);
+        setShowAddTjenesteForm(false);
+    };
+
+    const handleAddTjenesteClick = () => {
+        setShowAddTjenesteForm(true);
+        setShowAddServiceForm(false);
+    };
+
+    const handleCancelClick = () => {
+        setShowAddServiceForm(false);
+        setShowAddTjenesteForm(false);
+    };
+
+    const handleSaveService = (formData: {
+        selectedPersonopplysning: string;
+        selectedGrunnlag: string;
+        selectedTjeneste: string;
+    }) => {
+        console.log('Saved service data:', formData);
+        setShowAddServiceForm(false);
+        // Implement the logic to handle saving the service form data
+    };
+
+    const handleSaveTjeneste = (formData: { tjenesteNavn: string; tjenesteKode: string }) => {
+        console.log('Saved tjeneste data:', formData);
+        setShowAddTjenesteForm(false);
+        // Implement the logic to handle saving the tjeneste form data
+    };
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'Samtykke'} icon={TerminalIcon} helpText="samtykke" />
+
+            <HStack align={'center'} justify={'space-between'}>
+                <VStack>
+                    <InternalPageHeader
+                        title={'Samtykke'}
+                        icon={TerminalIcon}
+                        helpText="samtykke"
+                    />
+                </VStack>
+                <VStack gap={'3'}>
+                    {!showAddServiceForm && !showAddTjenesteForm && (
+                        <>
+                            <Button
+                                size="small"
+                                icon={<PlusIcon aria-hidden />}
+                                onClick={handleAddServiceClick}>
+                                Ny Samtykke
+                            </Button>
+                            <Button
+                                size="small"
+                                icon={<PlusIcon aria-hidden />}
+                                onClick={handleAddTjenesteClick}>
+                                Ny Tjeneste
+                            </Button>
+                        </>
+                    )}
+                </VStack>
+            </HStack>
 
             <VStack gap={'6'}>
-                {' '}
-                <SearchHeader />
-                {/*<Box className="w-full" padding="6" borderRadius="large" shadow="small">*/}
-                {/*    <HGrid columns={2}>*/}
-                {/*        <TextField label="Filtrer på tjenste" size="small" />*/}
-                {/*        <Switch>Vis inaktive behandling</Switch>*/}
-                {/*    </HGrid>*/}
-                {/*</Box>*/}
-                <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                    <ServiceAccordion services={services} />
+                <Box className="w-full" padding="6">
+                    {showAddServiceForm && (
+                        <AddServiceForm
+                            personopplysninger={personopplysning}
+                            grunnlager={grunnlag}
+                            tjenester={tjenster}
+                            onCancel={handleCancelClick}
+                            onSave={handleSaveService}
+                        />
+                    )}
+                    {showAddTjenesteForm && (
+                        <AddTjenesteForm onCancel={handleCancelClick} onSave={handleSaveTjeneste} />
+                    )}
+                    {!showAddServiceForm && !showAddTjenesteForm && (
+                        <ServiceTable
+                            behandlings={behandling}
+                            tjenester={tjenster}
+                            personopplysninger={personopplysning}
+                            grunnlager={grunnlag}
+                        />
+                    )}
                 </Box>
             </VStack>
         </>
