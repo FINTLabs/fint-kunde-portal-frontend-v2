@@ -175,14 +175,10 @@ export default function App() {
                     </Page.Block>
                 </Box>
             }>
-            <Box background="surface-neutral-moderate" padding="8" as="header">
-                <Page.Block gutters width="lg">
-                    <Menu
-                        userSession={userSession}
-                        displaySamtykke={features['samtykke-admin-new']}
-                    />
-                </Page.Block>
-            </Box>
+            <Page.Block gutters as="header" className={'bg-gray-200'}>
+                <Menu userSession={userSession} displaySamtykke={features['samtykke-admin-new']} />
+            </Page.Block>
+
             <Box padding="8" paddingBlock="2" as="main">
                 <Page.Block gutters width="lg">
                     <Outlet context={userSession} />
