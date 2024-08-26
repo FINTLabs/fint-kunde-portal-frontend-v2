@@ -5,5 +5,6 @@
     --ac-button-primary-active-bg: var(--a-gray-50);
     --ac-button-tertiary-active-bg: var(--a-lightblue-900);
     --ac-button-tertiary-active-hover-bg: var(--a-lightblue-900);
+    --a-bg-subtle: #F8EBDB;
 }
 

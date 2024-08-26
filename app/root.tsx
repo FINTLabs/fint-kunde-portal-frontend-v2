@@ -169,15 +169,20 @@ export default function App() {
     return (
         <Page
             footer={
-                <Box background="surface-neutral-moderate" padding="8" as="footer">
+                <Box background="bg-subtle" padding="1" as="footer">
                     <Page.Block gutters width="lg">
                         <Footer />
                     </Page.Block>
                 </Box>
             }>
-            <Page.Block gutters as="header" className={'bg-gray-200'}>
-                <Menu userSession={userSession} displaySamtykke={features['samtykke-admin-new']} />
-            </Page.Block>
+            <Box background="bg-subtle" as="header">
+                <Page.Block gutters width="lg">
+                    <Menu
+                        userSession={userSession}
+                        displaySamtykke={features['samtykke-admin-new']}
+                    />
+                </Page.Block>
+            </Box>
 
             <Box padding="8" paddingBlock="2" as="main">
                 <Page.Block gutters width="lg">
