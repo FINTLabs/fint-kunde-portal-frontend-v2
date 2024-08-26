@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PlusIcon, TerminalIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, VStack } from '@navikt/ds-react';
+import { Box, Button, HStack, VStack, Alert } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ServiceTable from '~/routes/samtykke/ServiceTable';
@@ -31,8 +31,8 @@ export const loader = async ({ request }: { request: Request }) => {
             grunnlag: grunnlag,
         });
     } catch (error) {
-        console.error('Error fetching data:', error);
-        throw new Response('Not Found', { status: 404 });
+        console.error('Error fetching data HELLO:', error);
+        return json({ error: 'An error occurred while fetching data.' }, { status: 200 });
     }
 };
 
@@ -41,11 +41,12 @@ export default function Index() {
     const [showAddTjenesteForm, setShowAddTjenesteForm] = useState(false);
 
     const breadcrumbs = [{ name: 'Samtykke', link: '/samtykke' }];
-    const { behandling, tjenster, personopplysning, grunnlag } = useLoaderData<{
+    const { behandling, tjenster, personopplysning, grunnlag, error } = useLoaderData<{
         behandling: IBehandling[];
         tjenster: ITjeneste[];
         personopplysning: IPersonopplysning[];
         grunnlag: IBehandlingsgrunnlag[];
+        error?: string;
     }>();
 
     const handleAddServiceClick = () => {
@@ -92,7 +93,7 @@ export default function Index() {
                     />
                 </VStack>
                 <VStack gap={'3'}>
-                    {!showAddServiceForm && !showAddTjenesteForm && (
+                    {!error && !showAddServiceForm && !showAddTjenesteForm && (
                         <>
                             <Button
                                 size="small"
@@ -113,6 +114,11 @@ export default function Index() {
 
             <VStack gap={'6'}>
                 <Box className="w-full" padding="6">
+                    {error && (
+                        <Alert variant="error">
+                            Error - Brukes til å informere brukeren om at noe kritisk har skjedd.
+                        </Alert>
+                    )}
                     {showAddServiceForm && (
                         <AddServiceForm
                             personopplysninger={personopplysning}
@@ -125,7 +131,7 @@ export default function Index() {
                     {showAddTjenesteForm && (
                         <AddTjenesteForm onCancel={handleCancelClick} onSave={handleSaveTjeneste} />
                     )}
-                    {!showAddServiceForm && !showAddTjenesteForm && (
+                    {!showAddServiceForm && !showAddTjenesteForm && !error && (
                         <ServiceTable
                             behandlings={behandling}
                             tjenester={tjenster}
