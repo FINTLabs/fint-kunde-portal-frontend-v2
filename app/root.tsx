@@ -143,7 +143,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Meta />
                 <Links />
             </head>
-            <body data-theme="light">
+            <body data-theme="novari">
                 {children}
                 <ScrollRestoration />
                 <Scripts />

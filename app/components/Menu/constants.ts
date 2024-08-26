@@ -31,6 +31,10 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
                     title: 'Ressurser',
                     path: '/ressurser',
                 },
+                {
+                    title: 'Tilgangspakker',
+                    path: '/accesspackage',
+                },
             ],
         },
         {
