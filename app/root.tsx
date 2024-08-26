@@ -169,7 +169,7 @@ export default function App() {
     return (
         <Page
             footer={
-                <Box background="bg-subtle" padding="8" as="footer">
+                <Box background="bg-subtle" padding="1" as="footer">
                     <Page.Block gutters width="lg">
                         <Footer />
                     </Page.Block>
