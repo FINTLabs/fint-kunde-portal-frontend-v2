@@ -30,6 +30,7 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
             )}
             {userSession.organizations.length > 1 && (
                 <Select
+                    size={'small'}
                     label="Velg organisasjon"
                     hideLabel
                     onChange={handleOrgChange}
