@@ -35,7 +35,7 @@ import { getUserSession, setUserSession } from './utils/selectedOrganization';
 
 export const meta: MetaFunction = () => {
     return [
-        { title: 'Novari Kunde Portalen' },
+        { title: 'Novari Kundeportalen' },
         { name: 'description', content: 'Welcome to the kundeportalen!' },
     ];
 };
@@ -145,11 +145,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
+
                 <Meta />
                 <Links />
                 <link rel="icon" href="/NovariFavicon.svg" />
             </head>
-            <body data-theme="light">
+            <body data-theme="novari">
                 {children}
                 <ScrollRestoration />
                 <Scripts />
@@ -175,13 +176,13 @@ export default function App() {
     return (
         <Page
             footer={
-                <Box background="surface-neutral-moderate" padding="8" as="footer">
+                <Box background="bg-subtle" padding="1" as="footer">
                     <Page.Block gutters width="lg">
                         <Footer />
                     </Page.Block>
                 </Box>
             }>
-            <Box background="surface-neutral-moderate" padding="8" as="header">
+            <Box background="bg-subtle" as="header">
                 <Page.Block gutters width="lg">
                     <Menu
                         userSession={userSession}
@@ -189,6 +190,7 @@ export default function App() {
                     />
                 </Page.Block>
             </Box>
+
             <Box padding="8" paddingBlock="2" as="main">
                 <Page.Block gutters width="lg">
                     <Outlet context={userSession} />

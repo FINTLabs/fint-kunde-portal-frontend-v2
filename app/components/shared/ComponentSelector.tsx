@@ -17,7 +17,12 @@ const ComponentSelector: React.FC<ComponentSelectorProps> = ({ items, selectedIt
                     <Heading size="medium" spacing>
                         Komponenter tilknyttet
                     </Heading>
-                    <ComponentsTable items={items} selectedItems={selectedItems} toggle={toggle} />
+                    <ComponentsTable
+                        items={items}
+                        selectedItems={selectedItems}
+                        toggle={toggle}
+                        isSubTable={true}
+                    />
                 </HGrid>
             </Box>
         </>
