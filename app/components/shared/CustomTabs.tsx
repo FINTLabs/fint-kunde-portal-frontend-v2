@@ -1,9 +1,9 @@
-import { Detail, Label, Switch, Table, Tabs, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, Label, Switch, Table, Tabs } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { useNavigate } from '@remix-run/react';
 import { tabInfo } from '~/routes/adaptere/constants';
-import { NotePencilDashIcon, CogRotationIcon } from '@navikt/aksel-icons';
-import { ChevronRightIcon } from '@navikt/aksel-icons';
+import { ChevronRightIcon, CogRotationIcon, NotePencilDashIcon } from '@navikt/aksel-icons';
+import React from 'react';
 
 interface CustomTabsProps<T> {
     items: T[];
@@ -44,15 +44,14 @@ export function CustomTabs<T extends IAdapter>({
             </Tabs.List>
             {tabInfo.map((tab, index) => (
                 <Tabs.Panel key={index} value={tab.value} className="w-full">
-                    <Table>
-                        <Table.Header>
-                            <Table.Row>
-                                {selectable && <Table.HeaderCell scope="col"></Table.HeaderCell>}
-                                <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
-                                <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
-                                <Table.HeaderCell scope="col"></Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
+                    <Table size={'small'}>
+                        {/*<Table.Header>*/}
+                        {/*    <Table.Row>*/}
+                        {/*        {selectable && <Table.HeaderCell scope="col"></Table.HeaderCell>}*/}
+                        {/*        <Table.HeaderCell scope="col">Navn</Table.HeaderCell>*/}
+                        {/*        <Table.HeaderCell scope="col"></Table.HeaderCell>*/}
+                        {/*    </Table.Row>*/}
+                        {/*</Table.Header>*/}
                         <Table.Body>
                             {(index === 1
                                 ? items.filter((i) => i.managed)
@@ -60,7 +59,8 @@ export function CustomTabs<T extends IAdapter>({
                             ).map((item, i) => (
                                 <Table.Row
                                     key={i + item.name}
-                                    className="active:bg-[--a-surface-active] hover:cursor-pointer">
+                                    className="active:bg-[--a-surface-active] hover:cursor-pointer"
+                                    onClick={() => showDetails(item.name)}>
                                     {selectable && (
                                         <Table.DataCell scope="row">
                                             <Switch
@@ -79,16 +79,11 @@ export function CustomTabs<T extends IAdapter>({
                                             </Switch>
                                         </Table.DataCell>
                                     )}
-                                    <Table.DataCell
-                                        scope="row"
-                                        onClick={() => showDetails(item.name)}>
-                                        {item.name}
+                                    <Table.DataCell>
+                                        <Heading size="small">{item.shortDescription}</Heading>
+                                        <BodyShort textColor="subtle">{item.name}</BodyShort>
                                     </Table.DataCell>
-                                    <Table.DataCell
-                                        scope="row"
-                                        onClick={() => showDetails(item.name)}>
-                                        {item.shortDescription}
-                                    </Table.DataCell>
+
                                     <Table.DataCell onClick={() => showDetails(item.name)}>
                                         <ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />
                                     </Table.DataCell>

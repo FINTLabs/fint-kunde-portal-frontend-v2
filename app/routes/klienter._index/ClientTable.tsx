@@ -25,7 +25,7 @@ const ClientTable: React.FC<ClientTableProps> = ({
 
     return (
         <VStack>
-            <Table>
+            <Table size={'small'}>
                 <Table.Body>
                     {clients?.map((item, i) => (
                         <Table.Row key={i + item.name}>

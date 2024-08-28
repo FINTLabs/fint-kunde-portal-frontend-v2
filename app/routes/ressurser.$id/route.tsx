@@ -6,10 +6,8 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Box, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Box, HGrid } from '@navikt/ds-react';
 import { GeneralDetailView } from './GeneralDetailView';
-import { BackButton } from '~/components/shared/BackButton';
-import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import AdapterSelector from './AdapterSelector';
 import { IAdapter } from '~/types/types';
 import AdapterAPI from '~/api/AdapterApi';
@@ -63,42 +61,62 @@ export default function Index() {
             {/* <ClientTable clients={assetData.clients} /> */}
 
             <Box padding={'2'}>
-                <HStack>
-                    <HGrid gap="2" align={'start'}>
-                        <BackButton
-                            to={`/ressurser`}
-                            className="relative h-12 w-12 top-2 right-14"
-                        />
+                <HGrid gap="2" align={'start'}>
+                    <GeneralDetailView asset={asset} />
 
-                        <VStack className="flex flex-grow relative bottom-12">
-                            <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                                <VStack gap="5">
-                                    <GeneralDetailView asset={asset} />
-                                    <Divider className="pt-3" />
-                                    <AdapterSelector
-                                        items={adapters}
-                                        selectedItems={asset.adapters.map((a) => {
-                                            const match = a.match(/cn=([^,]+)/);
-                                            return match ? match[1] : '';
-                                        })}
-                                    />
-                                    <ClientSelector
-                                        items={clients}
-                                        selectedItems={asset.clients.map((a) => {
-                                            const match = a.match(/cn=([^,]+)/);
-                                            return match ? match[1] : '';
-                                        })}
-                                    />
-                                    <DeleteModal
-                                        title="Slett ressurs"
-                                        bodyText="Er du sikker på at du vil slette denne ressursen?"
-                                        action="delete"
-                                    />
-                                </VStack>
-                            </Box>
-                        </VStack>
-                    </HGrid>
-                </HStack>
+                    <AdapterSelector
+                        items={adapters}
+                        selectedItems={asset.adapters.map((a) => {
+                            const match = a.match(/cn=([^,]+)/);
+                            return match ? match[1] : '';
+                        })}
+                    />
+
+                    <ClientSelector
+                        items={clients}
+                        selectedItems={asset.clients.map((a) => {
+                            const match = a.match(/cn=([^,]+)/);
+                            return match ? match[1] : '';
+                        })}
+                    />
+
+                    {/*<HStack>*/}
+                    {/*    <HGrid gap="2" align={'start'}>*/}
+                    {/*        <BackButton*/}
+                    {/*            to={`/ressurser`}*/}
+                    {/*            className="relative h-12 w-12 top-2 right-14"*/}
+                    {/*        />*/}
+
+                    {/*        <VStack className="flex flex-grow relative bottom-12">*/}
+                    {/*            <Box className="w-full" padding="6" borderRadius="large" shadow="small">*/}
+                    {/*                <VStack gap="5">*/}
+                    {/*                    <GeneralDetailView asset={asset} />*/}
+                    {/*                    <Divider className="pt-3" />*/}
+                    {/*                    <AdapterSelector*/}
+                    {/*                        items={adapters}*/}
+                    {/*                        selectedItems={asset.adapters.map((a) => {*/}
+                    {/*                            const match = a.match(/cn=([^,]+)/);*/}
+                    {/*                            return match ? match[1] : '';*/}
+                    {/*                        })}*/}
+                    {/*                    />*/}
+                    {/*                    <ClientSelector*/}
+                    {/*                        items={clients}*/}
+                    {/*                        selectedItems={asset.clients.map((a) => {*/}
+                    {/*                            const match = a.match(/cn=([^,]+)/);*/}
+                    {/*                            return match ? match[1] : '';*/}
+                    {/*                        })}*/}
+                    {/*                    />*/}
+                    <DeleteModal
+                        title="Slett ressurs"
+                        bodyText="Er du sikker på at du vil slette denne ressursen?"
+                        action="delete"
+                    />
+                    {/*                </VStack>*/}
+                    {/*            </Box>*/}
+                    {/*        </VStack>*/}
+                    {/*    </HGrid>*/}
+                    {/*</HStack>*/}
+                </HGrid>
             </Box>
         </>
     );

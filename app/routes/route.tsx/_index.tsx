@@ -1,6 +1,6 @@
-import { BodyShort, Box, Heading, HGrid, Loader, VStack } from '@navikt/ds-react';
+import { Box, Heading, HGrid, Loader, VStack } from '@navikt/ds-react';
 import type { MetaFunction } from '@remix-run/node';
-import { Link, NavLink, useOutletContext } from '@remix-run/react';
+import { Link, useOutletContext } from '@remix-run/react';
 import { useState } from 'react';
 import { MENU_ITEMS_LEFT } from '~/components/Menu/constants';
 import { MenuDropDown } from '~/types/MenuDropDown';
@@ -9,7 +9,10 @@ import { IUserSession } from '~/types/types';
 import { log } from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
-    return [{ title: 'New Remix App' }, { name: 'description', content: 'Welcome to Remix!' }];
+    return [
+        { title: 'Kundeportalen V2' },
+        { name: 'description', content: 'Welcome to the kundeportalen!' },
+    ];
 };
 
 function WelcomeMessage({ userSession }: { userSession: IUserSession }) {

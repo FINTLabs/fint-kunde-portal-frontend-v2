@@ -1,4 +1,5 @@
 import { log } from '~/utils/logger';
+import { IBehandling } from '~/types/Consent';
 
 const API_URL = process.env.CONSENT_API_URL;
 
@@ -42,6 +43,28 @@ class ConsentApi {
         });
 
         return response.json();
+    }
+
+    static setActive(processedConsents: IBehandling) {
+        var setTo = true;
+        if (processedConsents.aktiv) setTo = false;
+
+        const request = new Request(`/consent-admin/behandling/${processedConsents.id}/${setTo}`, {
+            method: 'PUT',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
+            }),
+            credentials: 'same-origin',
+        });
+
+        return fetch(request)
+            .then((response) => {
+                return response.status;
+            })
+            .catch((error) => {
+                return error;
+            });
     }
 }
 

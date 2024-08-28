@@ -1,21 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {
-    Box,
-    Checkbox,
-    CheckboxGroup,
-    Detail,
-    FormSummary,
-    Heading,
-    HGrid,
-    HStack,
-    Label,
-    Loader,
-    Switch,
-    Table,
-    Tag,
-} from '@navikt/ds-react';
+import { Box, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack, Loader } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
-import { ChevronRightIcon } from '@navikt/aksel-icons';
+import { ChevronRightCircleIcon, ChevronRightIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 
@@ -25,6 +11,7 @@ interface ComponentsSectionProps {
     columns?: number;
     selectable?: boolean;
     toggle?: (name: string, checked: boolean) => void;
+    isSubTable?: boolean;
 }
 
 type ComponentType = {
@@ -36,13 +23,15 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
     selectedItems,
     columns = 1,
     toggle,
+    isSubTable = false,
 }) => {
     const navigate = useNavigate();
 
     const sortedComponents = items.sort((a, b) => a.name.localeCompare(b.name));
 
     const handleRowClick = (component: IComponent) => {
-        navigate(`/komponenter/${component.name}`);
+        if (isSubTable) navigate(`/accesscontrol/${component.name}`);
+        else navigate(`/komponenter/${component.name}`);
     };
 
     // Function to split components into chunks
@@ -80,6 +69,9 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                         <FormSummary key={`${groupName}-${i}`}>
                             <FormSummary.Header>
                                 <HStack align={'center'} justify={'space-between'}>
+                                    {isSubTable && (
+                                        <KeyVerticalIcon title="a11y-title" fontSize="1.5rem" />
+                                    )}
                                     <FormSummary.Heading level="2">
                                         {capitalizeFirstLetter(groupName)}
                                     </FormSummary.Heading>
@@ -152,10 +144,19 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                         <Box
                                                             padding={'2'}
                                                             className="hover:bg-[--a-surface-active] hover:cursor-pointer">
-                                                            <ChevronRightIcon
-                                                                title="Vis detaljer"
-                                                                onClick={() => handleRowClick(item)}
-                                                            />
+                                                            {isSubTable ? (
+                                                                <ChevronRightCircleIcon
+                                                                    title="Vis detaljer"
+                                                                    onClick={() =>
+                                                                        handleRowClick(item)
+                                                                    }
+                                                                />
+                                                            ) : (
+                                                                <ChevronRightIcon
+                                                                    title="a11y-title"
+                                                                    fontSize="1.5rem"
+                                                                />
+                                                            )}
                                                         </Box>
                                                     </HStack>
                                                 </HStack>
@@ -169,84 +170,84 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                 })}
             </HGrid>
 
-            <Box padding="10"></Box>
+            {/*<Box padding="10"></Box>*/}
             <Divider />
-            <Box padding="10"></Box>
+            {/*<Box padding="10"></Box>*/}
 
-            <Heading size="large">Old view</Heading>
-            <Box padding="10"></Box>
-            <HGrid gap="8" columns={columns}>
-                {componentChunks.map((chunk, chunkIndex) => (
-                    <Table key={chunkIndex} size={'small'}>
-                        <Table.Body>
-                            {chunk.map((item, index) => {
-                                const isComponentSwitchedOn = selectedItems.some(
-                                    (selected) => selected === item.dn
-                                );
+            {/*<Heading size="large">Old view</Heading>*/}
+            {/*<Box padding="10"></Box>*/}
+            {/*<HGrid gap="8" columns={columns}>*/}
+            {/*    {componentChunks.map((chunk, chunkIndex) => (*/}
+            {/*        <Table key={chunkIndex} size={'small'}>*/}
+            {/*            <Table.Body>*/}
+            {/*                {chunk.map((item, index) => {*/}
+            {/*                    const isComponentSwitchedOn = selectedItems.some(*/}
+            {/*                        (selected) => selected === item.dn*/}
+            {/*                    );*/}
 
-                                const [switchLoadingState, setSwitchLoadingState] = useState({
-                                    loading: false,
-                                    isOn: isComponentSwitchedOn,
-                                });
+            {/*                    const [switchLoadingState, setSwitchLoadingState] = useState({*/}
+            {/*                        loading: false,*/}
+            {/*                        isOn: isComponentSwitchedOn,*/}
+            {/*                    });*/}
 
-                                // To update switch loading state to false
-                                useEffect(() => {
-                                    setSwitchLoadingState((prevState) => ({
-                                        ...prevState,
-                                        isOn: isComponentSwitchedOn,
-                                        loading: false,
-                                    }));
-                                }, [isComponentSwitchedOn]);
+            {/*                    // To update switch loading state to false*/}
+            {/*                    useEffect(() => {*/}
+            {/*                        setSwitchLoadingState((prevState) => ({*/}
+            {/*                            ...prevState,*/}
+            {/*                            isOn: isComponentSwitchedOn,*/}
+            {/*                            loading: false,*/}
+            {/*                        }));*/}
+            {/*                    }, [isComponentSwitchedOn]);*/}
 
-                                return (
-                                    <Table.Row key={index}>
-                                        <Table.DataCell>
-                                            <Switch
-                                                loading={switchLoadingState.loading}
-                                                checked={isComponentSwitchedOn}
-                                                onChange={(e) => {
-                                                    const checkedStatus = e.target.checked;
-                                                    // console.log(item.name);
-                                                    setSwitchLoadingState({
-                                                        loading: true,
-                                                        isOn: isComponentSwitchedOn,
-                                                    });
-                                                    toggle && toggle(item.name, checkedStatus);
-                                                }}>
-                                                {''}
-                                            </Switch>
-                                        </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(item)}>
-                                            <Label>{item.description}</Label>
-                                            <Detail>{item.basePath}</Detail>
-                                        </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(item)}>
-                                            {item.common && (
-                                                <Tag variant="info" size={'xsmall'}>
-                                                    Felles
-                                                </Tag>
-                                            )}
-                                        </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(item)}>
-                                            {item.openData && (
-                                                <Tag variant="neutral" size={'xsmall'}>
-                                                    Åpne Data
-                                                </Tag>
-                                            )}
-                                        </Table.DataCell>
-                                        <Table.DataCell onClick={() => handleRowClick(item)}>
-                                            <ChevronRightIcon
-                                                title="a11y-title"
-                                                fontSize="1.5rem"
-                                            />
-                                        </Table.DataCell>
-                                    </Table.Row>
-                                );
-                            })}
-                        </Table.Body>
-                    </Table>
-                ))}
-            </HGrid>
+            {/*                    return (*/}
+            {/*                        <Table.Row key={index}>*/}
+            {/*                            <Table.DataCell>*/}
+            {/*                                <Switch*/}
+            {/*                                    loading={switchLoadingState.loading}*/}
+            {/*                                    checked={isComponentSwitchedOn}*/}
+            {/*                                    onChange={(e) => {*/}
+            {/*                                        const checkedStatus = e.target.checked;*/}
+            {/*                                        // console.log(item.name);*/}
+            {/*                                        setSwitchLoadingState({*/}
+            {/*                                            loading: true,*/}
+            {/*                                            isOn: isComponentSwitchedOn,*/}
+            {/*                                        });*/}
+            {/*                                        toggle && toggle(item.name, checkedStatus);*/}
+            {/*                                    }}>*/}
+            {/*                                    {''}*/}
+            {/*                                </Switch>*/}
+            {/*                            </Table.DataCell>*/}
+            {/*                            <Table.DataCell onClick={() => handleRowClick(item)}>*/}
+            {/*                                <Label>{item.description}</Label>*/}
+            {/*                                <Detail>{item.basePath}</Detail>*/}
+            {/*                            </Table.DataCell>*/}
+            {/*                            <Table.DataCell onClick={() => handleRowClick(item)}>*/}
+            {/*                                {item.common && (*/}
+            {/*                                    <Tag variant="info" size={'xsmall'}>*/}
+            {/*                                        Felles*/}
+            {/*                                    </Tag>*/}
+            {/*                                )}*/}
+            {/*                            </Table.DataCell>*/}
+            {/*                            <Table.DataCell onClick={() => handleRowClick(item)}>*/}
+            {/*                                {item.openData && (*/}
+            {/*                                    <Tag variant="neutral" size={'xsmall'}>*/}
+            {/*                                        Åpne Data*/}
+            {/*                                    </Tag>*/}
+            {/*                                )}*/}
+            {/*                            </Table.DataCell>*/}
+            {/*                            <Table.DataCell onClick={() => handleRowClick(item)}>*/}
+            {/*                                <ChevronRightIcon*/}
+            {/*                                    title="a11y-title"*/}
+            {/*                                    fontSize="1.5rem"*/}
+            {/*                                />*/}
+            {/*                            </Table.DataCell>*/}
+            {/*                        </Table.Row>*/}
+            {/*                    );*/}
+            {/*                })}*/}
+            {/*            </Table.Body>*/}
+            {/*        </Table>*/}
+            {/*    ))}*/}
+            {/*</HGrid>*/}
         </Box>
     );
 };

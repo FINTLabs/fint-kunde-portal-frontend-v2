@@ -9,13 +9,33 @@ interface AddTjenesteFormProps {
 const AddTjenesteForm: React.FC<AddTjenesteFormProps> = ({ onCancel, onSave }) => {
     const [tjenesteNavn, setTjenesteNavn] = useState('');
     const [tjenesteKode, setTjenesteKode] = useState('');
+    const [tjenesteNavnError, setTjenesteNavnError] = useState<string | undefined>();
+    const [tjenesteKodeError, setTjenesteKodeError] = useState<string | undefined>();
 
     const handleSave = () => {
-        const formData = {
-            tjenesteNavn,
-            tjenesteKode,
-        };
-        onSave(formData);
+        let isValid = true;
+
+        if (tjenesteNavn.trim() === '') {
+            setTjenesteNavnError('Tjeneste Navn er påkrevd');
+            isValid = false;
+        } else {
+            setTjenesteNavnError(undefined);
+        }
+
+        if (tjenesteKode.trim() === '') {
+            setTjenesteKodeError('Tjeneste Kode er påkrevd');
+            isValid = false;
+        } else {
+            setTjenesteKodeError(undefined);
+        }
+
+        if (isValid) {
+            const formData = {
+                tjenesteNavn,
+                tjenesteKode,
+            };
+            onSave(formData);
+        }
     };
 
     return (
@@ -26,12 +46,14 @@ const AddTjenesteForm: React.FC<AddTjenesteFormProps> = ({ onCancel, onSave }) =
                     size="small"
                     value={tjenesteNavn}
                     onChange={(e) => setTjenesteNavn(e.target.value)}
+                    error={tjenesteNavnError}
                 />
                 <TextField
                     label="Tjeneste Kode"
                     size="small"
                     value={tjenesteKode}
                     onChange={(e) => setTjenesteKode(e.target.value)}
+                    error={tjenesteKodeError}
                 />
                 <HStack justify="end" gap="4">
                     <Button variant="secondary" onClick={onCancel}>

@@ -1,5 +1,14 @@
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { MenuItem } from '~/types/MenuItem';
+import {
+    BriefcaseIcon,
+    ComponentIcon,
+    FileIcon,
+    LayersIcon,
+    MigrationIcon,
+    PersonGroupIcon,
+    TerminalIcon,
+} from '@navikt/aksel-icons'; // Import relevant icons
 
 type MenuItemsLeft = {
     dropdowns: MenuDropDown[];
@@ -14,26 +23,27 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
                 {
                     title: 'Kontakter',
                     path: '/kontakter',
+                    icon: PersonGroupIcon, // Add icon here
                 },
                 {
                     title: 'Komponenter',
                     path: '/komponenter',
+                    icon: ComponentIcon,
                 },
                 {
                     title: 'Adaptere',
                     path: '/adaptere',
+                    icon: BriefcaseIcon,
                 },
                 {
                     title: 'Klienter',
                     path: '/klienter',
+                    icon: MigrationIcon,
                 },
                 {
                     title: 'Ressurser',
                     path: '/ressurser',
-                },
-                {
-                    title: 'Tilgangspakker',
-                    path: '/accesspackage',
+                    icon: LayersIcon,
                 },
             ],
         },
@@ -43,14 +53,17 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
                 {
                     title: 'Hendelseslogg',
                     path: '/hendelseslogg',
+                    icon: TerminalIcon,
                 },
                 {
                     title: 'Basistest',
                     path: '/basistest',
+                    icon: TerminalIcon,
                 },
                 {
                     title: 'Relasjonstest',
                     path: '/relasjonstest',
+                    icon: TerminalIcon,
                 },
             ],
         },
@@ -59,6 +72,7 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
         {
             title: 'Samtykke',
             path: '/samtykke',
+            icon: FileIcon, // Add icon here
         },
     ],
 };
