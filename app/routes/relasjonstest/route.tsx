@@ -36,7 +36,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
+    const breadcrumbs = [{ name: 'Relasjonstest', link: '/relasjonstest' }];
     const fetcher = useFetcher();
     // const actionData = fetcher.data as ActionData;
 

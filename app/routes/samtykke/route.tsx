@@ -1,34 +1,30 @@
 import React, { useState } from 'react';
 import { PlusIcon, TerminalIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, VStack, Alert } from '@navikt/ds-react';
+import { Alert, Box, Button, HStack, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ServiceTable from '~/routes/samtykke/ServiceTable';
 import AddServiceForm from '~/routes/samtykke/AddServiceForm';
 import AddTjenesteForm from '~/routes/samtykke/AddTjenesteForm';
 import { useLoaderData } from '@remix-run/react';
-import { json } from '@remix-run/node';
+import { ActionFunctionArgs, json } from '@remix-run/node';
 import ConsentApi from '~/api/ConsentApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
-
-export const meta = () => {
-    return [{ title: 'Samtykke' }, { name: 'description', content: 'Liste over Samtykke' }];
-};
 
 export const loader = async ({ request }: { request: Request }) => {
     const orgName = await getSelectedOrganization(request);
 
     try {
-        const behandlings = await ConsentApi.getBehandlings(orgName);
-        const tjenster = await ConsentApi.getTjenste(orgName);
-        const personopplysning = await ConsentApi.getPersonopplysning();
-        const grunnlag = await ConsentApi.getBehandlingsgrunnlag();
+        const processedConsents = await ConsentApi.getBehandlings(orgName);
+        const services = await ConsentApi.getTjenste(orgName);
+        const personalDataList = await ConsentApi.getPersonopplysning();
+        const foundations = await ConsentApi.getBehandlingsgrunnlag();
         return json({
-            behandling: behandlings,
-            tjenster: tjenster,
-            personopplysning: personopplysning,
-            grunnlag: grunnlag,
+            processedConsents: processedConsents,
+            services: services,
+            personalDataList: personalDataList,
+            foundations: foundations,
         });
     } catch (error) {
         console.error('Error fetching data HELLO:', error);
@@ -36,16 +32,22 @@ export const loader = async ({ request }: { request: Request }) => {
     }
 };
 
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const behandlingId = String(formData.get('behandlingId'));
+    console.log('save from form', behandlingId);
+}
+
 export default function Index() {
     const [showAddServiceForm, setShowAddServiceForm] = useState(false);
     const [showAddTjenesteForm, setShowAddTjenesteForm] = useState(false);
 
     const breadcrumbs = [{ name: 'Samtykke', link: '/samtykke' }];
-    const { behandling, tjenster, personopplysning, grunnlag, error } = useLoaderData<{
-        behandling: IBehandling[];
-        tjenster: ITjeneste[];
-        personopplysning: IPersonopplysning[];
-        grunnlag: IBehandlingsgrunnlag[];
+    const { processedConsents, services, personalDataList, foundations, error } = useLoaderData<{
+        processedConsents: IBehandling[];
+        services: ITjeneste[];
+        personalDataList: IPersonopplysning[];
+        foundations: IBehandlingsgrunnlag[];
         error?: string;
     }>();
 
@@ -65,9 +67,9 @@ export default function Index() {
     };
 
     const handleSaveService = (formData: {
-        selectedPersonopplysning: string;
-        selectedGrunnlag: string;
-        selectedTjeneste: string;
+        selectedPersonalData: string;
+        selectedFoundation: string;
+        selectedService: string;
     }) => {
         console.log('Saved service data:', formData);
         setShowAddServiceForm(false);
@@ -99,13 +101,13 @@ export default function Index() {
                                 size="small"
                                 icon={<PlusIcon aria-hidden />}
                                 onClick={handleAddServiceClick}>
-                                Ny Samtykke
+                                Nytt samtykke
                             </Button>
                             <Button
                                 size="small"
                                 icon={<PlusIcon aria-hidden />}
                                 onClick={handleAddTjenesteClick}>
-                                Ny Tjeneste
+                                Ny tjeneste
                             </Button>
                         </>
                     )}
@@ -115,15 +117,13 @@ export default function Index() {
             <VStack gap={'6'}>
                 <Box className="w-full" padding="6">
                     {error && (
-                        <Alert variant="error">
-                            Error - Brukes til å informere brukeren om at noe kritisk har skjedd.
-                        </Alert>
+                        <Alert variant="error">Error - feil ved tilkobling til server.</Alert>
                     )}
                     {showAddServiceForm && (
                         <AddServiceForm
-                            personopplysninger={personopplysning}
-                            grunnlager={grunnlag}
-                            tjenester={tjenster}
+                            personalData={personalDataList}
+                            foundation={foundations}
+                            service={services}
                             onCancel={handleCancelClick}
                             onSave={handleSaveService}
                         />
@@ -133,10 +133,10 @@ export default function Index() {
                     )}
                     {!showAddServiceForm && !showAddTjenesteForm && !error && (
                         <ServiceTable
-                            behandlings={behandling}
-                            tjenester={tjenster}
-                            personopplysninger={personopplysning}
-                            grunnlager={grunnlag}
+                            processedConsents={processedConsents}
+                            services={services}
+                            personalDataList={personalDataList}
+                            foundations={foundations}
                         />
                     )}
                 </Box>

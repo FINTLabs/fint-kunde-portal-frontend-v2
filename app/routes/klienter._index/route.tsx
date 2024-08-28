@@ -6,7 +6,7 @@ import ClientTable from '~/routes/klienter._index/ClientTable';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TokenIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { Button, HStack, Tabs, VStack } from '@navikt/ds-react';
+import { Button, HStack, Tabs, VStack, Search } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import type { LoaderFunction } from '@remix-run/node';
 import { PlusIcon } from '@navikt/aksel-icons';
@@ -33,10 +33,6 @@ export default function Index() {
     const [searchParams] = useSearchParams();
     const deletedClientName = searchParams.get('deleted');
 
-    for (const [key, value] of searchParams) {
-        console.log(key);
-        console.log(value);
-    }
     const navigate = useNavigate();
 
     function handleTabClick(newValue: string) {
@@ -50,6 +46,18 @@ export default function Index() {
 
     const handleCreate = () => {
         navigate(`/klienter/create`);
+    };
+
+    // Handle search input change
+    const handleSearch = (value: string) => {
+        const query = value.toLowerCase();
+        setFilteredClients(
+            clientData.filter(
+                (client) =>
+                    client.name.toLowerCase().includes(query) ||
+                    client.shortDescription.toLowerCase().includes(query)
+            )
+        );
     };
 
     return (
@@ -69,6 +77,17 @@ export default function Index() {
                     </Button>
                 </VStack>
             </HStack>
+
+            <Search
+                label="Søk etter klienter"
+                hideLabel
+                variant="secondary"
+                size="small"
+                onChange={(value: string) => handleSearch(value)}
+                placeholder="Søk etter navn eller description"
+                className={'pb-6'}
+            />
+
             <Tabs
                 value={isManaged}
                 onChange={handleTabClick}

@@ -1,4 +1,4 @@
-// src/routes/accesspackage/AccessTemplateDetails.tsx
+// src/routes/accesscontrol.$id/AccessTemplateDetails.tsx
 
 import React from 'react';
 import { IAccess } from '~/types/Access';

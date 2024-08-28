@@ -30,7 +30,7 @@ import { getUserSession, setUserSession } from './utils/selectedOrganization';
 
 export const meta: MetaFunction = () => {
     return [
-        { title: 'Novari Kunde Portalen' },
+        { title: 'Novari Kundeportalen' },
         { name: 'description', content: 'Welcome to the kundeportalen!' },
     ];
 };
@@ -140,6 +140,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
+
                 <Meta />
                 <Links />
             </head>

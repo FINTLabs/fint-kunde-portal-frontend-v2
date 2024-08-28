@@ -17,7 +17,7 @@ export default function Footer() {
             <div style={{ marginBottom: '1rem' }}>
                 <BodyLong>
                     <Link to="/support" style={{ marginRight: '1rem' }}>
-                        Opprett support sak
+                        Opprett supportsak
                     </Link>
                     <Link to="/help" style={{ marginRight: '1rem' }}>
                         Brukerhjelp

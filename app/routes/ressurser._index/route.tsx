@@ -64,13 +64,12 @@ export default function Index() {
             {!assets && <InfoBox message="Fant ingen ressurser" />}
             {assets && (
                 <Table>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
-                            <Table.HeaderCell scope="col"></Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
+                    {/*<Table.Header>*/}
+                    {/*    <Table.Row>*/}
+                    {/*        <Table.HeaderCell scope="col">Navn</Table.HeaderCell>*/}
+                    {/*        <Table.HeaderCell scope="col"></Table.HeaderCell>*/}
+                    {/*    </Table.Row>*/}
+                    {/*</Table.Header>*/}
                     <Table.Body>
                         {assets.map((item, i) => (
                             <Table.Row
@@ -79,13 +78,9 @@ export default function Index() {
                                 onClick={() => handleClick(item.name)}>
                                 <Table.DataCell>
                                     {/* <Heading size="small">{item.name}</Heading> */}
-                                    <BodyShort>{item.name}</BodyShort>
-
-                                    {/* <BodyShort textColor="subtle">{item.description}</BodyShort> */}
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    {/* <Heading size="small">{item.name}</Heading> */}
+                                    <Heading size={'small'}>{item.name}</Heading>
                                     <BodyShort textColor="subtle">{item.description}</BodyShort>
+                                    {/* <BodyShort textColor="subtle">{item.description}</BodyShort> */}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     <ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />
