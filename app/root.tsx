@@ -8,7 +8,12 @@ import {
     useLoaderData,
     useRouteError,
 } from '@remix-run/react';
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type {
+    ActionFunctionArgs,
+    LinksFunction,
+    LoaderFunctionArgs,
+    MetaFunction,
+} from '@remix-run/node';
 import { json } from '@remix-run/node';
 import './tailwind.css';
 import '@navikt/ds-css';
@@ -142,6 +147,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <Meta />
                 <Links />
+                <link rel="icon" href="/NovariFavicon.svg" />
             </head>
             <body data-theme="light">
                 {children}

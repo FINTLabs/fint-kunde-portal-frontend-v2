@@ -1,36 +1,64 @@
 import React from 'react';
-import { Table, BodyShort, Label, Box, VStack, HStack } from '@navikt/ds-react';
+import { Table, BodyShort, Label, Box, VStack, HStack, Accordion } from '@navikt/ds-react';
 import { Log, ReduntantLog } from '~/types/types';
 
 interface HealthStatusProps {
     logs: Log[];
 }
 
+function formattedDate(event: { timestamp: number | Date | undefined }): string {
+    return new Intl.DateTimeFormat('en-NO', {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hourCycle: 'h23',
+    }).format(event.timestamp);
+}
+
 const HealthStatusTable: React.FC<HealthStatusProps> = ({ logs }) => {
     return (
         <>
-            <>
-                <Label>Helsestatus</Label>
+            <Label>Helsestatus</Label>
+            <Accordion size="small">
                 <Table size="small">
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell scope="col">ID</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Type</Table.HeaderCell>
                             <Table.HeaderCell scope="col">Time</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Action</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Response</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         {logs.map((log, index) => (
-                            <Table.Row key={index}>
-                                <Table.DataCell>
-                                    {log.id}
+                            <Accordion.Item key={index}>
+                                <Accordion.Header>
+                                    {/* <Table.Row key={index}> */}
+                                    {/* <Table.DataCell> */}
 
-                                    {log.events.map((event, index) => (
+                                    <Table.DataCell>
+                                        <VStack>{log.id}</VStack>
+                                    </Table.DataCell>
+                                    <Table.DataCell>
+                                        <VStack>{formattedDate(log.timestamp)}</VStack>
+                                    </Table.DataCell>
+                                    <Table.DataCell>
+                                        <VStack>{log.action}</VStack>
+                                    </Table.DataCell>
+                                    <Table.DataCell>
+                                        <VStack>{log.response}</VStack>
+                                    </Table.DataCell>
+                                </Accordion.Header>
+
+                                {log.events.map((event, index) => (
+                                    <Accordion.Content key={index}>
                                         <Box padding={'4'} key={index}>
                                             <VStack>
                                                 <HStack>
                                                     <Label>Tid:</Label>
-                                                    <BodyShort>{event.timestamp}</BodyShort>
+                                                    <BodyShort>
+                                                        {formattedDate(event.timestamp)}
+                                                    </BodyShort>
                                                 </HStack>
                                                 <HStack>
                                                     <Label>Klient:</Label>
@@ -50,15 +78,16 @@ const HealthStatusTable: React.FC<HealthStatusProps> = ({ logs }) => {
                                                 </HStack>
                                             </VStack>
                                         </Box>
-                                    ))}
-                                </Table.DataCell>
-                                <Table.DataCell>{log.action}</Table.DataCell>
-                                <Table.DataCell>{log.timestamp}</Table.DataCell>
-                            </Table.Row>
+                                    </Accordion.Content>
+                                ))}
+                                {/* </Table.DataCell> */}
+
+                                {/* </Table.Row> */}
+                            </Accordion.Item>
                         ))}
                     </Table.Body>
                 </Table>
-            </>
+            </Accordion>
         </>
     );
 };

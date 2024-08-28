@@ -9,7 +9,10 @@ import { IUserSession } from '~/types/types';
 import { log } from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
-    return [{ title: 'New Remix App' }, { name: 'description', content: 'Welcome to Remix!' }];
+    return [
+        { title: 'Novari IKS Kundeportal', favicon: '/public/NovariFavicon.svg' },
+        { name: 'description', content: 'Welcome to Remix!' },
+    ];
 };
 
 function WelcomeMessage({ userSession }: { userSession: IUserSession }) {
