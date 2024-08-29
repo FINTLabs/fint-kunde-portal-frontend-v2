@@ -17,6 +17,7 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData } from '~/utils/requestUtils';
 import { InfoBox } from '~/components/shared/InfoBox';
 import { Log, ReduntantLog } from '~/types/types';
+import HealthStatusView from './HealthStatusView';
 
 interface ActionData {
     message: string;
@@ -133,7 +134,7 @@ export default function Index() {
                                     padding="6"
                                     borderRadius="large"
                                     shadow="small">
-                                    <HealthStatusTable logs={mappedLogs} />
+                                    <HealthStatusView logs={mappedLogs} />
                                 </Box>
                                 <Box
                                     className="w-full"
