@@ -7,11 +7,7 @@ interface AddServiceFormProps {
     foundation: IBehandlingsgrunnlag[];
     service: ITjeneste[];
     onCancel: () => void;
-    onSave: (formData: {
-        selectedPersonalData: string;
-        selectedFoundation: string;
-        selectedService: string;
-    }) => void;
+    f: any;
 }
 
 const AddServiceForm: React.FC<AddServiceFormProps> = ({
@@ -19,7 +15,7 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({
     foundation,
     service,
     onCancel,
-    onSave,
+    f,
 }) => {
     const [selectedPersonalData, setSelectedPersonalData] = useState('');
     const [selectedFoundation, setSelectedFoundation] = useState('');
@@ -60,59 +56,61 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({
                 selectedFoundation: selectedFoundation,
                 selectedService: selectedService,
             };
-            onSave(formData);
+            f.submit();
         }
     };
 
     return (
         <Box padding="6" borderRadius="large" shadow="small">
-            <VStack gap="4">
-                <Select
-                    label="Personopplysning"
-                    value={selectedPersonalData}
-                    onChange={(e) => setSelectedPersonalData(e.target.value)}
-                    error={selectedPersonalDataError}>
-                    <option value="">Velg personopplysning</option>
-                    {personalData.map((person) => (
-                        <option key={person.id} value={person.id}>
-                            {person.navn}({person.kode})
-                        </option>
-                    ))}
-                </Select>
-                <Select
-                    label="Behandlingsgrunnlag"
-                    value={selectedFoundation}
-                    onChange={(e) => setSelectedFoundation(e.target.value)}
-                    error={selectedFoudnationError}>
-                    <option value="">Velg behandlingsgrunnlag</option>
-                    {foundation.map((grunn) => (
-                        <option key={grunn.id} value={grunn.id}>
-                            {grunn.navn}
-                        </option>
-                    ))}
-                </Select>
-                <Select
-                    label="Tjeneste"
-                    value={selectedService}
-                    onChange={(e) => setSelectedService(e.target.value)}
-                    error={selectedServiceError}>
-                    <option value="">Velg tjeneste</option>
-                    {service.map((tjeneste) => (
-                        <option key={tjeneste.id} value={tjeneste.id}>
-                            {tjeneste.navn}
-                        </option>
-                    ))}
-                </Select>
-                <TextField label="Formål" />
-                <HStack justify="end" gap="4">
-                    <Button variant="secondary" onClick={onCancel}>
-                        Avbryt
-                    </Button>
-                    <Button variant="primary" onClick={handleSave}>
-                        Lagre
-                    </Button>
-                </HStack>
-            </VStack>
+            <f.Form>
+                <VStack gap="4">
+                    <Select
+                        label="Personopplysning"
+                        value={selectedPersonalData}
+                        onChange={(e) => setSelectedPersonalData(e.target.value)}
+                        error={selectedPersonalDataError}>
+                        <option value="">Velg personopplysning</option>
+                        {personalData.map((person) => (
+                            <option key={person.id} value={person.id}>
+                                {person.navn}({person.kode})
+                            </option>
+                        ))}
+                    </Select>
+                    <Select
+                        label="Behandlingsgrunnlag"
+                        value={selectedFoundation}
+                        onChange={(e) => setSelectedFoundation(e.target.value)}
+                        error={selectedFoudnationError}>
+                        <option value="">Velg behandlingsgrunnlag</option>
+                        {foundation.map((grunn) => (
+                            <option key={grunn.id} value={grunn.id}>
+                                {grunn.navn}
+                            </option>
+                        ))}
+                    </Select>
+                    <Select
+                        label="Tjeneste"
+                        value={selectedService}
+                        onChange={(e) => setSelectedService(e.target.value)}
+                        error={selectedServiceError}>
+                        <option value="">Velg tjeneste</option>
+                        {service.map((tjeneste) => (
+                            <option key={tjeneste.id} value={tjeneste.id}>
+                                {tjeneste.navn}
+                            </option>
+                        ))}
+                    </Select>
+                    <TextField label="Formål" />
+                    <HStack justify="end" gap="4">
+                        <Button variant="secondary" onClick={onCancel}>
+                            Avbryt
+                        </Button>
+                        <Button variant="primary" onClick={handleSave}>
+                            Lagre
+                        </Button>
+                    </HStack>
+                </VStack>
+            </f.Form>
         </Box>
     );
 };

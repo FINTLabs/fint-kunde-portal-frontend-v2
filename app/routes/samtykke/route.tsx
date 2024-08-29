@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PlusIcon, TerminalIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, HStack, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -6,11 +6,12 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ServiceTable from '~/routes/samtykke/ServiceTable';
 import AddServiceForm from '~/routes/samtykke/AddServiceForm';
 import AddTjenesteForm from '~/routes/samtykke/AddTjenesteForm';
-import { useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 import { ActionFunctionArgs, json } from '@remix-run/node';
 import ConsentApi from '~/api/ConsentApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
+import { IFetcherResponseData } from '~/types/types';
 
 export const loader = async ({ request }: { request: Request }) => {
     const orgName = await getSelectedOrganization(request);
@@ -33,15 +34,36 @@ export const loader = async ({ request }: { request: Request }) => {
 };
 
 export async function action({ request }: ActionFunctionArgs) {
+    const orgName = await getSelectedOrganization(request);
     const formData = await request.formData();
-    const behandlingId = String(formData.get('behandlingId'));
-    console.log('save from form', behandlingId);
+
+    const serviceId = String(formData.get('serviceId'));
+    const isActive = String(formData.get('isActive'));
+    const actionType = formData.get('actionType');
+
+    console.log('INSIDE ACTION --------------------------');
+    let response;
+    switch (actionType) {
+        case 'setIsActive':
+            response = await ConsentApi.setActive(orgName, serviceId, isActive);
+            break;
+        case 'addService':
+            console.log('ADDING NEW SERVICE');
+            break;
+        default:
+            return json({ show: true, message: 'Unknown action type', variant: 'error' });
+    }
+
+    return json({ show: true, message: response?.message, variant: response?.variant });
 }
 
 export default function Index() {
     const [showAddServiceForm, setShowAddServiceForm] = useState(false);
     const [showAddTjenesteForm, setShowAddTjenesteForm] = useState(false);
-
+    const fetcher = useFetcher();
+    const actionData = fetcher.data as IFetcherResponseData;
+    const [show, setShow] = React.useState(false);
+    // console.log(actionData);
     const breadcrumbs = [{ name: 'Samtykke', link: '/samtykke' }];
     const { processedConsents, services, personalDataList, foundations, error } = useLoaderData<{
         processedConsents: IBehandling[];
@@ -51,19 +73,26 @@ export default function Index() {
         error?: string;
     }>();
 
+    useEffect(() => {
+        setShow(true);
+    }, [fetcher.state]);
+
     const handleAddServiceClick = () => {
         setShowAddServiceForm(true);
         setShowAddTjenesteForm(false);
+        setShow(false);
     };
 
     const handleAddTjenesteClick = () => {
         setShowAddTjenesteForm(true);
         setShowAddServiceForm(false);
+        setShow(false);
     };
 
     const handleCancelClick = () => {
         setShowAddServiceForm(false);
         setShowAddTjenesteForm(false);
+        setShow(false);
     };
 
     const handleSaveService = (formData: {
@@ -73,13 +102,14 @@ export default function Index() {
     }) => {
         console.log('Saved service data:', formData);
         setShowAddServiceForm(false);
-        // Implement the logic to handle saving the service form data
+
+        fetcher.submit(formData);
     };
 
     const handleSaveTjeneste = (formData: { tjenesteNavn: string; tjenesteKode: string }) => {
         console.log('Saved tjeneste data:', formData);
         setShowAddTjenesteForm(false);
-        // Implement the logic to handle saving the tjeneste form data
+        fetcher.submit(formData, { method: 'post', action: '/samtykke' });
     };
 
     return (
@@ -114,6 +144,16 @@ export default function Index() {
                 </VStack>
             </HStack>
 
+            {actionData && show && (
+                <Alert
+                    className={'!mt-5'}
+                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
+                    closeButton
+                    onClose={() => setShow(false)}>
+                    {actionData.message || 'Content'}
+                </Alert>
+            )}
+
             <VStack gap={'6'}>
                 <Box className="w-full" padding="6">
                     {error && (
@@ -125,11 +165,18 @@ export default function Index() {
                             foundation={foundations}
                             service={services}
                             onCancel={handleCancelClick}
-                            onSave={handleSaveService}
+                            f={fetcher}
                         />
                     )}
                     {showAddTjenesteForm && (
-                        <AddTjenesteForm onCancel={handleCancelClick} onSave={handleSaveTjeneste} />
+                        <fetcher.Form method="post">
+                            {/*<input type={'hidden'} name={'actionType'} value={'addService'} />*/}
+                            <AddTjenesteForm
+                                onCancel={handleCancelClick}
+                                onSave={handleSaveTjeneste}
+                                // f={fetcher}
+                            />
+                        </fetcher.Form>
                     )}
                     {!showAddServiceForm && !showAddTjenesteForm && !error && (
                         <ServiceTable
@@ -137,6 +184,7 @@ export default function Index() {
                             services={services}
                             personalDataList={personalDataList}
                             foundations={foundations}
+                            f={fetcher}
                         />
                     )}
                 </Box>
