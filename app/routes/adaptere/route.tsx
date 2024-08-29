@@ -22,7 +22,6 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    log('Request headers:', request.headers.get('x-nin'));
     const orgName = await getSelectedOrganization(request);
     const response = await AdapterAPI.getAdapters(orgName);
     return json({ adapters: response.error ? null : response, orgName, error: response.error });

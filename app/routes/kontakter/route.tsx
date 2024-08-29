@@ -28,8 +28,6 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    log('Request headers:', request.headers.get('x-nin'));
-
     try {
         const selectedOrg = await getSelectedOrganization(request);
 
