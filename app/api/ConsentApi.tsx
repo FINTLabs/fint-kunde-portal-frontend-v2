@@ -1,5 +1,4 @@
 import { log } from '~/utils/logger';
-import { IBehandling } from '~/types/Consent';
 
 const API_URL = process.env.CONSENT_API_URL;
 
@@ -32,6 +31,81 @@ class ConsentApi {
         return this.fetchData(url);
     }
 
+    static setActive(orgName: string, behandlingId: string, isActive: string) {
+        const request = new Request(
+            `${API_URL}/consent-admin/behandling/${orgName}/${behandlingId}/${isActive}`,
+            {
+                method: 'PUT',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
+                }),
+                credentials: 'same-origin',
+            }
+        );
+
+        return fetch(request)
+            .then((response) => {
+                if (response.ok) {
+                    return { message: 'Samtykke er oppdatert', variant: 'info' };
+                } else {
+                    return {
+                        message: 'Det oppsto en feil ved oppdatering.',
+                        variant: 'error',
+                    };
+                }
+            })
+            .catch((error) => {
+                error('error setting isActive on samtykke behandling');
+                return {
+                    message: 'Det oppsto en feil.',
+                    variant: 'error',
+                };
+            });
+    }
+
+    static createPolicy(
+        serviceId: string,
+        reasonId: string,
+        personalDataId: string,
+        description: string,
+        orgName: string
+    ) {
+        const request = new Request(`/consent-admin/behandling/${orgName}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                aktiv: true,
+                formal: description,
+                behandlingsgrunnlagIds: [reasonId],
+                tjenesteIds: [serviceId],
+                personopplysningIds: [personalDataId],
+            }),
+        });
+        return fetch(request)
+            .then((response) => {
+                if (response.ok) {
+                    return { message: 'Samtykke er added', variant: 'info' };
+                } else {
+                    return {
+                        message: 'Det oppsto en feil ved adding.',
+                        variant: 'error',
+                    };
+                }
+            })
+            .catch((error) => {
+                error('error adding a new samtykke');
+                return {
+                    message: 'Det oppsto en feil.',
+                    variant: 'error',
+                };
+            });
+    }
+
     private static async fetchData(url: string) {
         const response = await fetch(url, {
             method: 'GET',
@@ -43,28 +117,6 @@ class ConsentApi {
         });
 
         return response.json();
-    }
-
-    static setActive(processedConsents: IBehandling) {
-        var setTo = true;
-        if (processedConsents.aktiv) setTo = false;
-
-        const request = new Request(`/consent-admin/behandling/${processedConsents.id}/${setTo}`, {
-            method: 'PUT',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
-            }),
-            credentials: 'same-origin',
-        });
-
-        return fetch(request)
-            .then((response) => {
-                return response.status;
-            })
-            .catch((error) => {
-                return error;
-            });
     }
 }
 
