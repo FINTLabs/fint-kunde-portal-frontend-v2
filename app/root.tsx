@@ -97,7 +97,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const features = await FeaturesApi.fetchFeatures();
-    log('Userorganization  |', userSession?.selectedOrganization?.displayName);
+    log('Userorganization:', userSession?.selectedOrganization?.displayName);
     return json({ userSession, features });
 
     // return json({ cookieHeader, cookie: cookieObj, userSession: userSession });

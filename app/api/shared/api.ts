@@ -17,7 +17,7 @@ export async function request(
     data?: PostDataType
 ) {
     try {
-        log(`Running ${requestMethod} on ${functionName} with URL:`, URL);
+        log(`> Calling ${requestMethod} on ${functionName}:`, URL);
 
         let requestOptions: RequestInit = {
             method: requestMethod,
@@ -65,8 +65,16 @@ export async function putRequest(
     }
 
     const response = await fetch(URL, requestOptions);
-    log(`-> Response ${functionName}: ${response.status}`);
+    logStatus(response.status, functionName);
     return response;
+}
+
+function logStatus(status: number, functionName: string) {
+    if (status >= 200 && status < 300) {
+        log(`--> Result: ${functionName} ${status} 🟢`);
+    } else {
+        error(`--> Result: ${functionName} ${status} 🔴`);
+    }
 }
 
 export async function postRequest(
@@ -83,7 +91,7 @@ export async function postRequest(
     }
 
     const response = await fetch(URL, requestOptions);
-    log(`-> Response ${functionName}: ${response.status}`);
+    logStatus(response.status, functionName);
     return response;
 }
 
@@ -95,15 +103,13 @@ async function getRequest(
 ) {
     // log(`RequestOptions: `, requestOptions);
     const response = await fetch(URL, requestOptions);
-    log(`-> Response ${functionName}: ${response.status}`);
-
+    logStatus(response.status, functionName);
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {
-        log(`Response: `, response);
-
-        const errorMsg = `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`;
-        error(errorMsg);
-        return `:((((( Error running ${functionName}, status: ${response.status}, statusText: ${response.statusText}`;
+        // log(`Response: `, response);
+        const errorMsg = `😡 Error running ${functionName}, status: ${response.status}`;
+        // error(errorMsg);
+        return errorMsg;
     }
 }
