@@ -12,7 +12,6 @@ export type PostDataType = IPartialAdapter | IPartialAsset | IMiniAdapter;
 export async function request(
     URL: string,
     functionName: string,
-    personNumber: string = '',
     requestMethod = 'GET',
     returnType: ReturnType = 'json',
     data?: PostDataType
