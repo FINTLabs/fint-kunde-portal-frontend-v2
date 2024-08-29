@@ -40,6 +40,16 @@ export const meta: MetaFunction = () => {
     ];
 };
 
+export const FavLink: LinksFunction = () => {
+    return [
+        {
+            rel: 'icon',
+            href: '/NovariFavicon.svg',
+            type: 'image/svg',
+        },
+    ];
+};
+
 export const remix_cookie = createCookie('remix_cookie', {
     maxAge: 604_800, // one week
 });
