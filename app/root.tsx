@@ -47,6 +47,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // let userSession = session.get('user_session');
 
     const cookieHeader = request.headers.get('Cookie'); // to get user_session set by SSO (middleware between user and remix app)
+    const personNumber = request.headers.get("x-nin") || ''
     // log('cookieHeader in loader', cookieHeader);
     // const cookieObj = await remix_cookie.parse(cookieHeader); // this is NULL - WHY????
 
@@ -57,9 +58,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     // log('userSession: ', userSession);
     if (!userSession) {
-        const meData: IMeData = await MeApi.fetchMe(cookieHeader || '');
+        const meData: IMeData = await MeApi.fetchMe(personNumber);
         console.log('meData: ', meData);
-        const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
+        const organisationsData: Organisation[] = await MeApi.fetchOrganisations(personNumber);
 
         const organizationDetails = organisationsData.map((org) => ({
             name: org.name,

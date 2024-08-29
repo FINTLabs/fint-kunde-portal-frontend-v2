@@ -11,7 +11,7 @@ export type PostDataType = IPartialAdapter | IPartialAsset | IMiniAdapter;
 export async function request(
     URL: string,
     functionName: string,
-    cookieHeader: string,
+    personNumber: string = '',
     requestMethod = 'GET',
     returnType: ReturnType = 'json',
     data?: PostDataType
@@ -24,8 +24,7 @@ export async function request(
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
-                'x-nin': process.env.PERSONALNUMBER || '', // TODO: get x-nin from headers
-                Cookie: cookieHeader,
+                'x-nin': process.env.PERSONALNUMBER || personNumber, // TODO: get x-nin from headers
                 // Cookie: cookies ?? '', // Include cookies in the request headers
                 // Authorization: `Bearer ${process.env.ACCESS_TOKEN}`, // TODO: this is just a temporary solution, change this to fetch accesstoken from OAuth 2.0 log in
             },
