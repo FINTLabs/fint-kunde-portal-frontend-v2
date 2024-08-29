@@ -64,7 +64,9 @@ export async function putRequest(
         };
     }
 
-    return await fetch(URL, requestOptions);
+    const response = await fetch(URL, requestOptions);
+    log(`-> Response ${functionName}: ${response.status}`);
+    return response;
 }
 
 export async function postRequest(
@@ -80,9 +82,8 @@ export async function postRequest(
         };
     }
 
-    // log(`RequestOptions: `, requestOptions);
-
     const response = await fetch(URL, requestOptions);
+    log(`-> Response ${functionName}: ${response.status}`);
     return response;
 }
 
@@ -94,7 +95,8 @@ async function getRequest(
 ) {
     // log(`RequestOptions: `, requestOptions);
     const response = await fetch(URL, requestOptions);
-    log(`-> Response: ${response.status}`);
+    log(`-> Response ${functionName}: ${response.status}`);
+
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {

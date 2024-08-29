@@ -45,7 +45,7 @@ class ContactApi {
         await this.unsetLegalContact(contactNin, organisation);
         const url = `${API_URL}/api/organisations/${organisation}/contacts/technical/${contactNin}`;
 
-        return await request(url, 'setLegalContact', '', 'PUT', 'json', { name: contactNin });
+        return await request(url, 'setLegalContact', 'PUT', 'json', { name: contactNin });
 
         // const functionName = 'setLegalContact';
         // const URL = `${API_URL}/api/organisations/${orgName}/contacts/legal/${contactNin}`;
@@ -77,12 +77,12 @@ class ContactApi {
 
     static async addTechnicalContact(contactNin: string, organisation: string) {
         const url = `${API_URL}/api/organisations/${organisation}/contacts/technical/${contactNin}`;
-        return await request(url, 'addTechnicalContact', '', 'PUT', 'json');
+        return await request(url, 'addTechnicalContact', 'PUT', 'json');
     }
 
     static async removeTechnicalContact(contactNin: string, orgName: string) {
         const url = `${API_URL}/api/organisations/${orgName}/contacts/technical/${contactNin}`;
-        return await request(url, 'removeTechnicalContact', '', 'DELETE', 'json');
+        return await request(url, 'removeTechnicalContact', 'DELETE', 'json');
     }
 }
 
