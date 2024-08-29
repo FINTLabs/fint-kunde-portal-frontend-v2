@@ -86,7 +86,7 @@ export async function action({ request }: ActionFunctionArgs) {
             return json({
                 ok: isOk,
                 message: isOk
-                    ? 'Kontakten er lagt til'
+                    ? 'Kontakten er lagt til. Husk å tildele roller til kontakten.'
                     : `Legge til kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
                 variant: isOk ? 'success' : 'error',
             });
