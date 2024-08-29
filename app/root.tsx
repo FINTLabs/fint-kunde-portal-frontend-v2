@@ -26,7 +26,7 @@ import { CustomError } from '~/components/shared/CustomError';
 import { log } from './utils/logger';
 import { getFormData } from './utils/requestUtils';
 import { createCookie } from '@remix-run/node'; // or cloudflare/deno
-import { getUserSession, getXnin, setUserSession } from './utils/selectedOrganization';
+import { getUserSession, setUserSession } from './utils/selectedOrganization';
 import { Utility } from './utils/utility';
 
 export const meta: MetaFunction = () => {
