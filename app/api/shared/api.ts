@@ -2,6 +2,7 @@ import { IPartialAsset } from '~/types/Asset';
 import { IAdapter, IPartialAdapter } from '~/types/types';
 import { isClientSide } from '~/utils/environment';
 import { error, log } from '~/utils/logger';
+import { Utility } from '~/utils/utility';
 
 export type ReturnType = 'text' | 'json';
 
@@ -24,7 +25,7 @@ export async function request(
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
-                'x-nin': process.env.PERSONALNUMBER || personNumber, // TODO: get x-nin from headers
+                'x-nin': Utility.getXnin(), //  process.env.PERSONALNUMBER || '', // TODO: get x-nin from headers
                 // Cookie: cookies ?? '', // Include cookies in the request headers
                 // Authorization: `Bearer ${process.env.ACCESS_TOKEN}`, // TODO: this is just a temporary solution, change this to fetch accesstoken from OAuth 2.0 log in
             },

@@ -26,7 +26,8 @@ import { CustomError } from '~/components/shared/CustomError';
 import { log } from './utils/logger';
 import { getFormData } from './utils/requestUtils';
 import { createCookie } from '@remix-run/node'; // or cloudflare/deno
-import { getUserSession, setUserSession } from './utils/selectedOrganization';
+import { getUserSession, getXnin, setUserSession } from './utils/selectedOrganization';
+import { Utility } from './utils/utility';
 
 export const meta: MetaFunction = () => {
     return [
@@ -41,13 +42,15 @@ export const remix_cookie = createCookie('remix_cookie', {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     log('Calling loader in root.tsx');
-
     let userSession = await getUserSession(request);
+    Utility.setXnin(request); // root is called on every request, makes sense to set xnin only once here.
+
+    // log('request.headers: ', request.headers);
     // log('userSessionFromGetSession ', userSession);
     // let userSession = session.get('user_session');
 
     const cookieHeader = request.headers.get('Cookie'); // to get user_session set by SSO (middleware between user and remix app)
-    const personNumber = request.headers.get("x-nin") || ''
+    const personNumber = request.headers.get('x-nin') || '';
     // log('cookieHeader in loader', cookieHeader);
     // const cookieObj = await remix_cookie.parse(cookieHeader); // this is NULL - WHY????
 
