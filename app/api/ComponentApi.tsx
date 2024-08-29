@@ -6,7 +6,7 @@ class ComponentApi {
     static async getAllComponents() {
         const functionName = 'getAllComponents';
         const URL = `${API_URL}/api/components`;
-        return request(URL, functionName, '');
+        return request(URL, functionName);
     }
 
     static async getComponentById(componentName: string) {
@@ -29,7 +29,7 @@ class ComponentApi {
     static async getOrganisationComponents(organisationName: string) {
         const functionName = 'getOrganisationComponents';
         const URL = `${API_URL}/api/components/organisation/${organisationName}`;
-        return request(URL, functionName, '');
+        return request(URL, functionName);
     }
 }
 

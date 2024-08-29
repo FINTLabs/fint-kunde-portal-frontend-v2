@@ -45,7 +45,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     let userSession = await getUserSession(request);
     Utility.setXnin(request); // root is called on every request, makes sense to set xnin only once here.
 
-    // log('request.headers: ', request.headers);
+    // log('reques  t.headers: ', request.headers);
     // log('userSessionFromGetSession ', userSession);
     // let userSession = session.get('user_session');
 

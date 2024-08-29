@@ -14,7 +14,7 @@ class LogApi {
         // http://localhost:8080/events/{{orgName}}/{{environment}}/{{component}}/{{action}}
         const URL = `${API_URL}/api/events/${organisation}/${environment}/${componentName}/${type}`;
 
-        return await request(URL, functionName, '');
+        return await request(URL, functionName);
     }
 }
 

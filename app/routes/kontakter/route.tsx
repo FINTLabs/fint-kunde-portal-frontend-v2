@@ -93,7 +93,6 @@ export async function action({ request }: ActionFunctionArgs) {
         case 'removeTechnicalContact':
             response = await ContactApi.removeTechnicalContact(contactNin, selectedOrg);
             isOk = response.status === 204;
-            log('--- AM IN removeTechnicalContact');
             return json({
                 ok: isOk,
                 message: isOk
@@ -103,6 +102,14 @@ export async function action({ request }: ActionFunctionArgs) {
             });
         case 'setLegalContact':
             response = await ContactApi.setLegalContact(contactNin, selectedOrg);
+            isOk = response.status === 204;
+            return json({
+                ok: isOk,
+                message: isOk
+                    ? 'Kontakten er satt som juridisk kontakt'
+                    : `Forespørslen feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
+                variant: isOk ? 'success' : 'error',
+            });
             break;
         case 'addRole':
             let roleIdToAdd = getFormData(formData.get('roleId'), 'roleId', actionName);

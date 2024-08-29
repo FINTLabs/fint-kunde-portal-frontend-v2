@@ -18,7 +18,7 @@ class FeaturesApi {
             'audit-log': false,
             'roles-init': false,
         };
-        return await request(URL, functionName, '');
+        return await request(URL, functionName);
     }
 }
 

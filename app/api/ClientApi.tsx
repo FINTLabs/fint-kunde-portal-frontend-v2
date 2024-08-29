@@ -6,7 +6,7 @@ class ClientApi {
     static async getClients(organisationName: string) {
         const functionName = 'getClients';
         const URL = `${API_URL}/api/clients/${organisationName}`;
-        return request(URL, functionName, '');
+        return request(URL, functionName);
     }
 
     static async getClientById(organisationName: string, clientId: string) {
@@ -28,20 +28,20 @@ class ClientApi {
     static async createClient(client: IPartialClient, organisation: string) {
         const functionName = 'createClient';
         const URL = `${API_URL}/api/clients/${organisation}`;
-        return request(URL, functionName, '', 'POST', 'json', client);
+        return request(URL, functionName, 'POST', 'json', client);
     }
 
     static async deleteClient(clientName: string, organisation: string) {
         const functionName = 'deleteClient';
         const URL = `${API_URL}/api/clients/${organisation}/${clientName}`;
-        return request(URL, functionName, '', 'DELETE');
+        return request(URL, functionName, 'DELETE');
     }
 
     static async getOpenIdSecret(clientName: string, organisationName: string): Promise<string> {
         const functionName = 'getOpenIdSecret';
         const URL = `${API_URL}/api/clients/${organisationName}/${clientName}/secret`;
 
-        return request(URL, functionName, '', 'GET', 'text');
+        return request(URL, functionName, 'GET', 'text');
     }
     // Function to update component in a client
     static async updateComponentInClient(
@@ -61,19 +61,19 @@ class ClientApi {
     // Function to add component to a client
     static async addComponentToClient(URL: string, clientName: string) {
         const functionName = 'addComponentToClient';
-        return await request(URL, functionName, '', 'PUT', 'json', { name: clientName });
+        return await request(URL, functionName, 'PUT', 'json', { name: clientName });
     }
 
     // Function to remove component from a client
     static async removeComponentFromClient(URL: string, clientName: string) {
         const functionName = 'removeComponentFromClient';
-        return await request(URL, functionName, '', 'DELETE', 'json', { name: clientName });
+        return await request(URL, functionName, 'DELETE', 'json', { name: clientName });
     }
 
     // static async updateClient(client: IClient, organisation: Organisation) {
     //     const functionName = 'updateClient';
     //     const URL = `${API_URL}/api/clients/${organisation}/${client.name}`;
-    //     return request(URL, functionName, '','PUT', 'json', {
+    //     return request(URL, functionName,'PUT', 'json', {
     //         name: client.name,
     //         note: client.note,
     //         shortDescription: client.shortDescription
