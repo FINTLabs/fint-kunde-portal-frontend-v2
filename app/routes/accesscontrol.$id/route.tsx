@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import { HStack, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { LoaderFunction } from '@remix-run/node';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import { LoaderFunctionArgs } from '@remix-run/node';
 import { json, useLoaderData } from '@remix-run/react';
-import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
+import ComponentApi from '~/api/ComponentApi';
+import { IComponent } from '~/types/Component';
 
 interface IPageLoaderData {
     templates?: IAccess[] | string;
@@ -22,17 +22,11 @@ export const meta = () => {
     ];
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+    const id = params.id || '';
     try {
-        const selectedOrg = await getSelectedOrganization(request);
-
-        const accesses = await AccessApi.getAllAccess(selectedOrg);
-        const templates = await AccessApi.getAccessTemplates();
-
-        return json({
-            accesses,
-            templates,
-        });
+        const component = await ComponentApi.getComponentById(id);
+        return json(component);
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
@@ -41,17 +35,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Tilgangskontroll', link: '/accesscontrol.$id' }];
-    const { accesses, templates } = useLoaderData<IPageLoaderData>();
-    const [selectedTemplate, setSelectedTemplate] = useState<IAccess | null>(null);
-
-    const isTemplatesArray = Array.isArray(templates);
-
-    const handleSelectTemplate = (template: IAccess) => {
-        setSelectedTemplate(template);
-    };
-    const handleBackClick = () => {
-        setSelectedTemplate(null);
-    };
+    const component = useLoaderData<IComponent>();
 
     return (
         <>

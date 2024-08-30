@@ -4,25 +4,25 @@ import { Alert, Box, Button, HStack, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ServiceTable from '~/routes/samtykke/ServiceTable';
-import AddServiceForm from '~/routes/samtykke/AddServiceForm';
-import AddTjenesteForm from '~/routes/samtykke/AddTjenesteForm';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import { ActionFunctionArgs, json } from '@remix-run/node';
 import ConsentApi from '~/api/ConsentApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
 import { IFetcherResponseData } from '~/types/types';
+import AddPolicyForm from '~/routes/samtykke/AddPolicyForm';
+import AddServiceForm from '~/routes/samtykke/AddServiceForm';
 
 export const loader = async ({ request }: { request: Request }) => {
     const orgName = await getSelectedOrganization(request);
 
     try {
-        const processedConsents = await ConsentApi.getBehandlings(orgName);
+        const policies = await ConsentApi.getBehandlings(orgName);
         const services = await ConsentApi.getTjenste(orgName);
         const personalDataList = await ConsentApi.getPersonopplysning();
         const foundations = await ConsentApi.getBehandlingsgrunnlag();
         return json({
-            processedConsents: processedConsents,
+            policies: policies,
             services: services,
             personalDataList: personalDataList,
             foundations: foundations,
@@ -41,14 +41,18 @@ export async function action({ request }: ActionFunctionArgs) {
     const isActive = String(formData.get('isActive'));
     const actionType = formData.get('actionType');
 
-    console.log('INSIDE ACTION --------------------------');
+    console.log('INSIDE ACTION -------------------------->', actionType);
     let response;
     switch (actionType) {
         case 'setIsActive':
             response = await ConsentApi.setActive(orgName, serviceId, isActive);
             break;
         case 'addService':
-            console.log('ADDING NEW SERVICE');
+            const newServiceName = String(formData.get('newServiceName'));
+            response = await ConsentApi.createService(newServiceName, orgName);
+            break;
+        case 'addPolicy':
+            console.log('adding a policy');
             break;
         default:
             return json({ show: true, message: 'Unknown action type', variant: 'error' });
@@ -58,15 +62,15 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Index() {
+    const [showAddPolicyForm, setShowAddPolicyForm] = useState(false);
     const [showAddServiceForm, setShowAddServiceForm] = useState(false);
-    const [showAddTjenesteForm, setShowAddTjenesteForm] = useState(false);
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
     // console.log(actionData);
     const breadcrumbs = [{ name: 'Samtykke', link: '/samtykke' }];
-    const { processedConsents, services, personalDataList, foundations, error } = useLoaderData<{
-        processedConsents: IBehandling[];
+    const { policies, services, personalDataList, foundations, error } = useLoaderData<{
+        policies: IBehandling[];
         services: ITjeneste[];
         personalDataList: IPersonopplysning[];
         foundations: IBehandlingsgrunnlag[];
@@ -77,39 +81,42 @@ export default function Index() {
         setShow(true);
     }, [fetcher.state]);
 
-    const handleAddServiceClick = () => {
-        setShowAddServiceForm(true);
-        setShowAddTjenesteForm(false);
+    const handleAddConsentClick = () => {
+        setShowAddPolicyForm(true);
+        setShowAddServiceForm(false);
         setShow(false);
     };
 
-    const handleAddTjenesteClick = () => {
-        setShowAddTjenesteForm(true);
-        setShowAddServiceForm(false);
+    const handleAddServiceClick = () => {
+        setShowAddServiceForm(true);
+        setShowAddPolicyForm(false);
         setShow(false);
     };
 
     const handleCancelClick = () => {
+        setShowAddPolicyForm(false);
         setShowAddServiceForm(false);
-        setShowAddTjenesteForm(false);
         setShow(false);
     };
 
-    const handleSaveService = (formData: {
+    const handleSavePolicy = (formData: {
         selectedPersonalData: string;
         selectedFoundation: string;
         selectedService: string;
+        note: string;
     }) => {
         console.log('Saved service data:', formData);
-        setShowAddServiceForm(false);
+        setShowAddPolicyForm(false);
 
-        fetcher.submit(formData);
+        const updatedFormData = { ...formData, actionType: 'addPolicy' };
+        fetcher.submit(updatedFormData, { method: 'post', action: '/samtykke' });
     };
 
-    const handleSaveTjeneste = (formData: { tjenesteNavn: string; tjenesteKode: string }) => {
-        console.log('Saved tjeneste data:', formData);
-        setShowAddTjenesteForm(false);
-        fetcher.submit(formData, { method: 'post', action: '/samtykke' });
+    const handleSaveService = (formData: { newServiceName: string }) => {
+        setShowAddServiceForm(false);
+
+        const updatedFormData = { ...formData, actionType: 'addService' };
+        fetcher.submit(updatedFormData, { method: 'post', action: '/samtykke' });
     };
 
     return (
@@ -125,18 +132,18 @@ export default function Index() {
                     />
                 </VStack>
                 <VStack gap={'3'}>
-                    {!error && !showAddServiceForm && !showAddTjenesteForm && (
+                    {!error && !showAddPolicyForm && !showAddServiceForm && (
                         <>
                             <Button
                                 size="small"
                                 icon={<PlusIcon aria-hidden />}
-                                onClick={handleAddServiceClick}>
+                                onClick={handleAddConsentClick}>
                                 Nytt samtykke
                             </Button>
                             <Button
                                 size="small"
                                 icon={<PlusIcon aria-hidden />}
-                                onClick={handleAddTjenesteClick}>
+                                onClick={handleAddServiceClick}>
                                 Ny tjeneste
                             </Button>
                         </>
@@ -159,28 +166,21 @@ export default function Index() {
                     {error && (
                         <Alert variant="error">Error - feil ved tilkobling til server.</Alert>
                     )}
-                    {showAddServiceForm && (
-                        <AddServiceForm
+                    {showAddPolicyForm && (
+                        <AddPolicyForm
                             personalData={personalDataList}
                             foundation={foundations}
                             service={services}
                             onCancel={handleCancelClick}
-                            f={fetcher}
+                            onSave={handleSavePolicy}
                         />
                     )}
-                    {showAddTjenesteForm && (
-                        <fetcher.Form method="post">
-                            {/*<input type={'hidden'} name={'actionType'} value={'addService'} />*/}
-                            <AddTjenesteForm
-                                onCancel={handleCancelClick}
-                                onSave={handleSaveTjeneste}
-                                // f={fetcher}
-                            />
-                        </fetcher.Form>
+                    {showAddServiceForm && (
+                        <AddServiceForm onCancel={handleCancelClick} onSave={handleSaveService} />
                     )}
-                    {!showAddServiceForm && !showAddTjenesteForm && !error && (
+                    {!showAddPolicyForm && !showAddServiceForm && !error && (
                         <ServiceTable
-                            processedConsents={processedConsents}
+                            policies={policies}
                             services={services}
                             personalDataList={personalDataList}
                             foundations={foundations}

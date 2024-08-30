@@ -106,12 +106,46 @@ class ConsentApi {
             });
     }
 
+    static async createService(serviceName: string, orgName: string) {
+        console.log('Sending a api request with new service name: ', serviceName);
+
+        const request = new Request(`${API_URL}/consent-admin/tjeneste/${orgName}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                navn: serviceName,
+            }),
+        });
+
+        return fetch(request)
+            .then((response) => {
+                if (response.ok) {
+                    return { message: 'Tjeneste er added', variant: 'info' };
+                } else {
+                    return {
+                        message: 'Det oppsto en feil ved tjeneste: ' + response.statusText,
+                        variant: 'error',
+                    };
+                }
+            })
+            .catch((error) => {
+                error('error adding a new tjeneste');
+                return {
+                    message: 'Det oppsto en feil.',
+                    variant: 'error',
+                };
+            });
+    }
+
     private static async fetchData(url: string) {
         const response = await fetch(url, {
             method: 'GET',
             credentials: 'same-origin',
             headers: {
-                // 'x-nin': process.env.PERSONALNUMBER || '',
                 Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
             },
         });
