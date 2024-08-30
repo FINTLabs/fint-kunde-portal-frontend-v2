@@ -1,5 +1,3 @@
-// utils/logger.ts
-
 function getCurrentDateTime() {
     return new Date().toISOString();
 }
@@ -18,6 +16,12 @@ function formatError(error: unknown): string {
     }
 }
 
+// ANSI escape codes for colors
+const Colors = {
+    Reset: '\x1b[0m',
+    Red: '\x1b[31m',
+};
+
 export function log(...messages: any[]) {
     console.log(`[${getCurrentDateTime()}]`, ...messages);
 }
@@ -26,7 +30,8 @@ export function error(...messages: any[]) {
     const formattedMessages = messages.map((message) =>
         message instanceof Error ? formatError(message) : message
     );
-    console.error(`[${getCurrentDateTime()}]`, ...formattedMessages);
+    // Log in red color
+    console.error(`${Colors.Red}[${getCurrentDateTime()}]`, ...formattedMessages, Colors.Reset);
 }
 
 export function warn(...messages: any[]) {
