@@ -5,7 +5,7 @@ class MeApi {
     static async fetchMe(personNumber: string) {
         const functionName = 'fetchMe';
         const URL = `${API_URL}/api/me`;
-        return request(URL, functionName, personNumber).catch((err) => {
+        return request(URL, functionName).catch((err) => {
             console.error('Error fetching me information:', err);
         });
     }
@@ -13,7 +13,7 @@ class MeApi {
     static async fetchOrganisations(personNumber: string) {
         const functionName = 'fetchOrganisations';
         const URL = `${API_URL}/api/contacts/organisations`;
-        return request(URL, functionName, personNumber);
+        return request(URL, functionName);
     }
 }
 

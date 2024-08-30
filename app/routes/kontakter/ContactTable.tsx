@@ -51,10 +51,11 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
             modalState.type === 'fjern' ? 'removeTechnicalContact' : 'setLegalContact'
         );
 
-        fetcher.submit(formData, {
-            method: 'POST',
-            navigate: false,
-        });
+        // fetcher.submit(formData, {
+        //     method: 'POST',
+        //     navigate: false,
+        // });
+        fetcher.submit(formData, { method: 'post', action: '/kontakter' });
         handleCloseModal();
     };
 

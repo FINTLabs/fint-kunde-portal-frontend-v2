@@ -45,34 +45,28 @@ class ContactApi {
         await this.unsetLegalContact(contactNin, organisation);
         const url = `${API_URL}/api/organisations/${organisation}/contacts/technical/${contactNin}`;
 
-        return await request(url, 'setLegalContact', 'PUT', 'json', { name: contactNin });
+        // return await request(url, 'setLegalContact', 'PUT', 'json', { name: contactNin });
 
-        // const functionName = 'setLegalContact';
-        // const URL = `${API_URL}/api/organisations/${orgName}/contacts/legal/${contactNin}`;
-        // const test = await request(URL, functionName,'PUT');
-        // log('HELLO', test);
-        // return 'message';
+        const request = new Request(
+            `${API_URL}/api/organisations/${organisation}/contacts/legal/${contactNin}`,
+            {
+                method: 'PUT',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    'x-nin': process.env.PERSONALNUMBER || '',
+                }),
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    name: contactNin,
+                }),
+            }
+        );
 
-        // const request = new Request(
-        //     `${API_URL}/api/organisations/${orgName}/contacts/legal/${contactNin}`,
-        //     {
-        //         method: 'PUT',
-        //         headers: new Headers({
-        //             'Content-Type': 'application/json',
-        //             'x-nin': process.env.PERSONALNUMBER || '',
-        //         }),
-        //         credentials: 'same-origin',
-        //         body: JSON.stringify({
-        //             name: contactNin,
-        //         }),
-        //     }
-        // );
-
-        // try {
-        //     return await fetch(request);
-        // } catch (error) {
-        //     return error;
-        // }
+        try {
+            return await fetch(request);
+        } catch (error) {
+            return error;
+        }
     }
 
     static async addTechnicalContact(contactNin: string, organisation: string) {
