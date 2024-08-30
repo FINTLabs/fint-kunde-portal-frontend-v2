@@ -15,11 +15,6 @@ function formattedDate(timestamp: number | Date | undefined): string {
     }).format(timestamp);
 }
 
-interface ApiResponse {
-    status: string;
-    response?: string;
-}
-
 const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
     return (
         <>
@@ -28,19 +23,25 @@ const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell scope="col"></Table.HeaderCell>
-                        <Table.HeaderCell scope="col">ID</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">HendelsesID</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Tid</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Action</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Response</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Hendelse</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {logs.map((log, index) => {
-                        // Get the last event's response if it exists
+                        const isError =
+                            log.events.length > 0 &&
+                            log.events[log.events.length - 1].status === 'ERROR'
+                                ? 'bg-red-500'
+                                : '';
+
                         const lastEventResponse =
                             log.events.length > 0
-                                ? log.events[log.events.length - 1].response
-                                : 'No response'; // Default text if there are no events
+                                ? log.events[log.events.length - 1].status +
+                                  log.events[log.events.length - 1].response
+                                : '';
 
                         return (
                             <Table.ExpandableRow
@@ -53,7 +54,7 @@ const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
 
                                             return (
                                                 <CellComponent
-                                                    className="my-4 mx-1"
+                                                    className="my-4 mx-2"
                                                     key={event.id || eventIndex}>
                                                     <HStack>
                                                         <Label>Tid:</Label>
@@ -70,8 +71,12 @@ const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
                                                         <BodyShort>{event.status}</BodyShort>
                                                     </HStack>
                                                     <HStack>
-                                                        <Label>Response:</Label>
+                                                        <Label>Respons:</Label>
                                                         <BodyShort>{event.response}</BodyShort>
+                                                    </HStack>
+                                                    <HStack>
+                                                        <Label>Melding:</Label>
+                                                        <BodyShort>{event.melding}</BodyShort>
                                                     </HStack>
                                                 </CellComponent>
                                             );
@@ -81,8 +86,9 @@ const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
                                 <Table.DataCell scope="row">{log.id}</Table.DataCell>
                                 <Table.DataCell>{formattedDate(log.timestamp)}</Table.DataCell>
                                 <Table.DataCell>{log.action}</Table.DataCell>
-                                <Table.DataCell>{lastEventResponse}</Table.DataCell>{' '}
-                                {/* Insert the last event's response here */}
+                                <Table.DataCell className={isError}>
+                                    {lastEventResponse}
+                                </Table.DataCell>
                             </Table.ExpandableRow>
                         );
                     })}
