@@ -10,7 +10,7 @@ interface ScopedSortState {
 }
 
 interface IServiceTableProps {
-    processedConsents: IBehandling[];
+    policies: IBehandling[];
     services: ITjeneste[];
     personalDataList: IPersonopplysning[];
     foundations: IBehandlingsgrunnlag[];
@@ -18,7 +18,7 @@ interface IServiceTableProps {
 }
 
 const ServiceTable: React.FC<IServiceTableProps> = ({
-    processedConsents,
+    policies,
     services,
     personalDataList,
     foundations,
@@ -50,7 +50,7 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
         return 0;
     };
 
-    const sortedBehandlings = [...processedConsents].sort((a, b) => {
+    const sortedPolicies = [...policies].sort((a, b) => {
         if (sort) {
             return sort.direction === 'ascending'
                 ? comparator(a, b, sort.orderBy)
@@ -92,14 +92,14 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {sortedBehandlings.map((behandling, i) => (
+                    {sortedPolicies.map((policy, i) => (
                         <Table.ExpandableRow
-                            key={i + behandling.id}
+                            key={i + policy.id}
                             content={
                                 <div>
-                                    {behandling.personopplysningIds.map((personopplysningId) => {
+                                    {policy.personopplysningIds.map((personalDataId) => {
                                         const p = personalDataList.find(
-                                            (x) => x.id === personopplysningId
+                                            (x) => x.id === personalDataId
                                         );
                                         return p ? (
                                             <div key={p.id}>{p.id}</div>
@@ -107,8 +107,8 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                                             'Unknown personopplysninger'
                                         );
                                     })}
-                                    {behandling.behandlingsgrunnlagIds.map((grunnlagId) => {
-                                        const b = foundations.find((x) => x.id === grunnlagId);
+                                    {policy.behandlingsgrunnlagIds.map((foundationId) => {
+                                        const b = foundations.find((x) => x.id === foundationId);
                                         return b ? (
                                             <div key={b.id}>{b.navn}</div>
                                         ) : (
@@ -117,38 +117,36 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                                     })}
                                     <ConfirmAction
                                         actionText={
-                                            behandling.aktiv
-                                                ? 'Set active to FALSE'
-                                                : 'Set to active'
+                                            policy.aktiv ? 'Set active to FALSE' : 'Set to active'
                                         }
-                                        targetName={behandling.formal}
+                                        targetName={policy.formal}
                                         f={f}
                                         actionType="setIsActive"
                                         confirmationText={`Change active status:`}
                                         additionalInputs={[
-                                            { name: 'serviceId', value: behandling.id },
+                                            { name: 'serviceId', value: policy.id },
                                             {
                                                 name: 'isActive',
-                                                value: behandling.aktiv ? 'false' : 'true',
+                                                value: policy.aktiv ? 'false' : 'true',
                                             },
                                         ]}
                                     />
                                 </div>
                             }>
-                            <Table.DataCell>{behandling.formal}</Table.DataCell>
+                            <Table.DataCell>{policy.formal}</Table.DataCell>
                             <Table.DataCell>
-                                {behandling.tjenesteIds
-                                    .map((tjenesteId) => {
-                                        const tjeneste = services.find((t) => t.id === tjenesteId);
+                                {policy.tjenesteIds
+                                    .map((serviceId) => {
+                                        const tjeneste = services.find((t) => t.id === serviceId);
                                         return tjeneste ? tjeneste.navn : 'Unknown tjeneste';
                                     })
                                     .join(', ')}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandling.personopplysningIds
-                                    .map((personopplysningId) => {
+                                {policy.personopplysningIds
+                                    .map((personalDataIds) => {
                                         const p = personalDataList.find(
-                                            (x) => x.id === personopplysningId
+                                            (personalData) => personalData.id === personalDataIds
                                         );
                                         return p
                                             ? `${p.navn} (${p.kode})`
@@ -157,7 +155,7 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                                     .join(', ')}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandling.aktiv ? (
+                                {policy.aktiv ? (
                                     <CheckmarkCircleIcon
                                         title="a11y-title"
                                         fontSize="1.5rem"

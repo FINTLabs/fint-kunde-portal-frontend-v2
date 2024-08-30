@@ -155,6 +155,9 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                                 <ChevronRightIcon
                                                                     title="a11y-title"
                                                                     fontSize="1.5rem"
+                                                                    onClick={() =>
+                                                                        handleRowClick(item)
+                                                                    }
                                                                 />
                                                             )}
                                                         </Box>
