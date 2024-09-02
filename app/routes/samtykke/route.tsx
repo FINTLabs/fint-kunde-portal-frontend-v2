@@ -28,7 +28,7 @@ export const loader = async ({ request }: { request: Request }) => {
             foundations: foundations,
         });
     } catch (error) {
-        console.error('Error fetching data HELLO:', error);
+        console.error('Error fetching data:', error);
         return json({ error: 'An error occurred while fetching data.' }, { status: 200 });
     }
 };
