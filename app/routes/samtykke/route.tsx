@@ -28,7 +28,7 @@ export const loader = async ({ request }: { request: Request }) => {
             foundations: foundations,
         });
     } catch (error) {
-        console.error('Error fetching data HELLO:', error);
+        console.error('Error fetching data:', error);
         return json({ error: 'An error occurred while fetching data.' }, { status: 200 });
     }
 };
@@ -164,7 +164,7 @@ export default function Index() {
             <VStack gap={'6'}>
                 <Box className="w-full" padding="6">
                     {error && (
-                        <Alert variant="error">Error - feil ved tilkobling til server.</Alert>
+                        <Alert variant="warning">Error - feil ved tilkobling til server.</Alert>
                     )}
                     {showAddPolicyForm && (
                         <AddPolicyForm

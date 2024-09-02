@@ -36,8 +36,8 @@ class LinkWalkerApi {
                 } else {
                     warn('LinkWalker not ok: ', response.status);
                     return {
-                        message: 'Det oppsto en feil',
-                        variant: 'error',
+                        message: 'Error - feil ved tilkobling til server.',
+                        variant: 'warning',
                     };
                 }
             })
