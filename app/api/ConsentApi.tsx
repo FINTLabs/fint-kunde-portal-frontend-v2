@@ -1,4 +1,5 @@
 import { log } from '~/utils/logger';
+import { request } from '~/api/shared/api';
 
 const API_URL = process.env.CONSENT_API_URL;
 
@@ -7,28 +8,28 @@ class ConsentApi {
         const url = `${API_URL}/consent-admin/behandling/${orgName}`;
         log('url', url);
 
-        return this.fetchData(url);
+        return request(url, 'getBehandlings', 'GET', 'json');
     }
 
     static async getTjenste(orgName: string) {
         const url = `${API_URL}/consent-admin/tjeneste/${orgName}`;
         log('url', url);
 
-        return this.fetchData(url);
+        return request(url, 'getTjenste', 'GET', 'json');
     }
 
     static async getPersonopplysning() {
         const url = `${API_URL}/consent-admin/personopplysning`;
         log('url', url);
 
-        return this.fetchData(url);
+        return request(url, 'getPersonopplysning', 'GET', 'json');
     }
 
     static async getBehandlingsgrunnlag() {
         const url = `${API_URL}/consent-admin/behandlingsgrunnlag`;
         log('url', url);
 
-        return this.fetchData(url);
+        return request(url, 'getBehandlingsgrunnlag', 'GET', 'json');
     }
 
     static setActive(orgName: string, behandlingId: string, isActive: string) {
@@ -139,18 +140,6 @@ class ConsentApi {
                     variant: 'error',
                 };
             });
-    }
-
-    private static async fetchData(url: string) {
-        const response = await fetch(url, {
-            method: 'GET',
-            credentials: 'same-origin',
-            headers: {
-                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
-            },
-        });
-
-        return response.json();
     }
 }
 
