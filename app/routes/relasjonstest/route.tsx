@@ -11,7 +11,7 @@ import ClientApi from '~/api/ClientApi';
 import { error, log } from '~/utils/logger';
 import LinkWalkerApi from '~/api/LinkWalkerApi';
 import ComponentConfigApi from '~/api/ComponentConfigApi';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IFetcherResponseData } from '~/types/types';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
 
@@ -67,6 +67,9 @@ export default function Index() {
         const updatedFormData = { ...formData, actionType: 'runTest' };
         fetcher.submit(updatedFormData, { method: 'post', action: '/relasjonstest' });
     }
+    useEffect(() => {
+        setShow(true);
+    }, [fetcher.state]);
 
     return (
         <>

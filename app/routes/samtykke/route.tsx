@@ -164,7 +164,7 @@ export default function Index() {
             <VStack gap={'6'}>
                 <Box className="w-full" padding="6">
                     {error && (
-                        <Alert variant="error">Error - feil ved tilkobling til server.</Alert>
+                        <Alert variant="warning">Error - feil ved tilkobling til server.</Alert>
                     )}
                     {showAddPolicyForm && (
                         <AddPolicyForm
