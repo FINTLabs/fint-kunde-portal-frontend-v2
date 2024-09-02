@@ -10,6 +10,10 @@ spec:
   env:
     - name: API_URL
       value: http://fint-kunde-portal-backend:8080
+    - name: LINKWALKER_API_URL
+      value: http://fint-link-walker:8080
+    - name: CONSENT_API_URL
+      value: http://fint-samtykke-admin-backend:8080
   url:
     hostname: kunde-remix.felleskomponent.no
     basePath: /
