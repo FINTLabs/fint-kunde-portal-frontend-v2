@@ -25,6 +25,9 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
     const [selectedBaseUrl, setSelectedBaseUrl] = useState(
         'https://play-with-fint.felleskomponent.no'
     );
+    const [selectedResourceError, setSelectedResourceError] = useState<string | undefined>();
+    const [selectedComponentError, setSelectedComponentError] = useState<string | undefined>();
+
     const [matchingConfigs, setMatchingConfigs] = useState<IComponentConfig[]>([]);
 
     function handleChangeComponent(value: string) {
@@ -34,16 +37,33 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
     }
 
     function onRunTest() {
-        const component = components.find((comp) => comp.dn === selectedComponent);
-        const fullUrl = `${selectedBaseUrl}${component?.basePath}/${selectedConfig}`;
-        warn('FULL URL:', fullUrl);
-        // {"url":"https://play-with-fint.felleskomponent.no/utdanning/elev/elev","client":""}
+        let isValid = true;
+        if (selectedComponent === '') {
+            setSelectedComponentError('Komponent er påkrevd');
+            isValid = false;
+        } else {
+            setSelectedComponentError(undefined);
+        }
 
-        const formData = {
-            testUrl: fullUrl,
-            clientName: selectedClient,
-        };
-        runTest(formData);
+        if (selectedComponent === '') {
+            setSelectedResourceError('Ressurs er påkrevd');
+            isValid = false;
+        } else {
+            setSelectedResourceError(undefined);
+        }
+
+        if (isValid) {
+            const component = components.find((comp) => comp.dn === selectedComponent);
+            const fullUrl = `${selectedBaseUrl}${component?.basePath}/${selectedConfig}`;
+            warn('FULL URL:', fullUrl);
+            // {"url":"https://play-with-fint.felleskomponent.no/utdanning/elev/elev","client":""}
+
+            const formData = {
+                testUrl: fullUrl,
+                clientName: selectedClient,
+            };
+            runTest(formData);
+        }
     }
 
     return (
@@ -61,7 +81,9 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
             <Select
                 label="Komponent"
                 size="small"
-                onChange={(e) => handleChangeComponent(e.target.value)}>
+                onChange={(e) => handleChangeComponent(e.target.value)}
+                value={selectedComponent}
+                error={selectedComponentError}>
                 <option value="">Velg</option>
                 {components.map((component, index) => (
                     <option value={component.dn} key={index}>
@@ -75,7 +97,8 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
                 size="small"
                 onChange={(e) => setSelectedConfig(e.target.value)}
                 value={selectedConfig}
-                name={'configClass'}>
+                name={'configClass'}
+                error={selectedResourceError}>
                 <option value="">Velg</option>
                 {matchingConfigs.flatMap((config) =>
                     config.classes.map((item, index) => (
