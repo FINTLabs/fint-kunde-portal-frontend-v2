@@ -8,7 +8,7 @@ import { MenuItem } from '~/types/MenuItem';
 import { IUserSession } from '~/types/types';
 import { log } from '~/utils/logger';
 import CustomLinkPanel from '~/routes/_index/CustomLinkPanelProps';
-import { TerminalIcon } from '@navikt/aksel-icons';
+import { ImageIcon } from '@navikt/aksel-icons';
 
 export const meta: MetaFunction = () => {
     return [
@@ -51,18 +51,24 @@ export default function Index() {
                                 (acc: MenuItem[], curr: MenuDropDown) => [...acc, ...curr.subMenus],
                                 []
                             )
-                            .map((item, index) => (
-                                <CustomLinkPanel
-                                    href={item.path}
-                                    title={item.title}
-                                    IconComponent={item.icon}
-                                />
-                            ))}
-                        <CustomLinkPanel
-                            href={'/samtykke'}
-                            title={'Samtykke'}
-                            IconComponent={TerminalIcon}
-                        />
+                            .map((item, index) => {
+                                const IconComponent = item.icon || ImageIcon;
+
+                                return (
+                                    <CustomLinkPanel
+                                        key={index}
+                                        href={item.path}
+                                        title={item.title}
+                                        IconComponent={IconComponent}
+                                    />
+                                );
+                            })}
+
+                        {/*<CustomLinkPanel*/}
+                        {/*    href={'/samtykke'}*/}
+                        {/*    title={'Samtykke'}*/}
+                        {/*    IconComponent={TerminalIcon}*/}
+                        {/*/> TODO: only show if they have permission */}
                     </HGrid>
                 )}
             </VStack>

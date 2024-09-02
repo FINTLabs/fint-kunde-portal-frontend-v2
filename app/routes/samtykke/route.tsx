@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PlusIcon, TerminalIcon } from '@navikt/aksel-icons';
+import { PassportIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, HStack, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -127,7 +127,7 @@ export default function Index() {
                 <VStack>
                     <InternalPageHeader
                         title={'Samtykke'}
-                        icon={TerminalIcon}
+                        icon={PassportIcon}
                         helpText="samtykke"
                     />
                 </VStack>

@@ -1,47 +1,96 @@
-import React from 'react';
-import { Box, Button, HGrid, Select, TextField } from '@navikt/ds-react';
+import React, { useState } from 'react';
+import { Box, Button, HGrid, Select } from '@navikt/ds-react';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { IComponent } from '~/types/Component';
 import { IClient } from '~/types/Clients';
-import { log } from '~/utils/logger';
-import { IAsset } from '~/types/Asset';
+import { warn } from '~/utils/logger';
+import { IComponentConfig } from '~/types/ComponentConfig';
 
 interface TestAddFormProps {
     components: IComponent[];
     clients: IClient[];
-    assets: IAsset[];
-    runTest: (formData: { testString: string }) => void;
+    configs: IComponentConfig[];
+    runTest: (formData: { testUrl: string; clientName: string }) => void;
 }
 
 const RelationTestAddForm: React.FC<TestAddFormProps> = ({
     components,
     clients,
-    assets,
+    configs,
     runTest,
 }) => {
+    const [selectedComponent, setSelectedComponent] = useState<string>('');
+    const [selectedClient, setSelectedClient] = useState<string>('');
+    const [selectedConfig, setSelectedConfig] = useState<string>('');
+    const [selectedBaseUrl, setSelectedBaseUrl] = useState(
+        'https://play-with-fint.felleskomponent.no'
+    );
+    const [matchingConfigs, setMatchingConfigs] = useState<IComponentConfig[]>([]);
+
+    function handleChangeComponent(value: string) {
+        setSelectedComponent(value);
+        const matchedConfigs = configs.filter((config) => config.dn.includes(value));
+        setMatchingConfigs(matchedConfigs);
+    }
+
     function onRunTest() {
+        const component = components.find((comp) => comp.dn === selectedComponent);
+        const fullUrl = `${selectedBaseUrl}${component?.basePath}/${selectedConfig}`;
+        warn('FULL URL:', fullUrl);
+        // {"url":"https://play-with-fint.felleskomponent.no/utdanning/elev/elev","client":""}
+
         const formData = {
-            testString: 'testing',
+            testUrl: fullUrl,
+            clientName: selectedClient,
         };
         runTest(formData);
     }
 
     return (
         <HGrid gap="6" columns={5}>
-            <Select label="Miljø" size="small">
-                <option value="pwf">Play-With-FINT</option>
-                <option value="beta">BETA</option>
-                <option value="api">Production</option>
+            <Select
+                label="Miljø"
+                size="small"
+                name={'baseUrl'}
+                onChange={(e) => setSelectedBaseUrl(e.target.value)}>
+                <option value="https://play-with-fint.felleskomponent.no">Play-With-FINT</option>
+                <option value="https://beta.felleskomponent.no">BETA</option>
+                <option value="https://api.felleskomponent.no">Production</option>
             </Select>
-            <Select label="Komponent" size="small">
+
+            <Select
+                label="Komponent"
+                size="small"
+                onChange={(e) => handleChangeComponent(e.target.value)}>
                 <option value="">Velg</option>
                 {components.map((component, index) => (
-                    <option value={component.name} key={index}>
+                    <option value={component.dn} key={index}>
                         {component.description}
                     </option>
                 ))}
             </Select>
-            <Select label="Klient" size="small">
+
+            <Select
+                label="Ressurs"
+                size="small"
+                onChange={(e) => setSelectedConfig(e.target.value)}
+                value={selectedConfig}
+                name={'configClass'}>
+                <option value="">Velg</option>
+                {matchingConfigs.flatMap((config) =>
+                    config.classes.map((item, index) => (
+                        <option value={item.name} key={index}>
+                            {item.name}
+                        </option>
+                    ))
+                )}
+            </Select>
+
+            <Select
+                label="Klient"
+                size="small"
+                onChange={(e) => setSelectedClient(e.target.value)}
+                disabled={selectedBaseUrl == 'https://play-with-fint.felleskomponent.no'}>
                 <option value="">Velg</option>
                 {clients.map((client, index) => (
                     <option value={client.name} key={index}>
@@ -49,22 +98,13 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
                     </option>
                 ))}
             </Select>
-            <Select label="Resource" size="small">
-                <option value="">Velg</option>
-                {assets.map((asset, index) => (
-                    <option value={asset.dn} key={index}>
-                        {asset.name}
-                    </option>
-                ))}
-            </Select>
-            {/*<TextField label="Ressurs" size="small" />*/}
+
             <Box>
-                {/*<Button icon={<MagnifyingGlassIcon title="Rediger" />} onClick={onRunTest}/>*/}
                 <Button
                     variant="primary"
-                    onClick={() => onRunTest()}
+                    onClick={onRunTest}
                     icon={<MagnifyingGlassIcon title="Rediger" />}>
-                    run test
+                    Run Test
                 </Button>
             </Box>
         </HGrid>
