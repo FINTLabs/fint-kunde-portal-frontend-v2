@@ -12,3 +12,18 @@ export interface IRelationTest {
     status: string; // Could be further restricted to specific values like "STARTED", "STOPPED", etc.
     org: string;
 }
+
+export interface ILogResults {
+    id: string;
+    url: string;
+    env: string;
+    uri: string;
+    client: string;
+    requests: number;
+    time: string;
+    relationErrors: number;
+    healthyRelations: number;
+    totalRequests: number;
+    status: string;
+    org: string;
+}

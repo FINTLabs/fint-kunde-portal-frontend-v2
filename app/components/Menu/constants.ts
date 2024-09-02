@@ -1,11 +1,12 @@
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { MenuItem } from '~/types/MenuItem';
 import {
+    ArrowsSquarepathIcon,
     BriefcaseIcon,
     ComponentIcon,
-    FileIcon,
     LayersIcon,
     MigrationIcon,
+    PassportIcon,
     PersonGroupIcon,
     TerminalIcon,
 } from '@navikt/aksel-icons'; // Import relevant icons
@@ -63,7 +64,7 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
                 {
                     title: 'Relasjonstest',
                     path: '/relasjonstest',
-                    icon: TerminalIcon,
+                    icon: ArrowsSquarepathIcon,
                 },
             ],
         },
@@ -72,7 +73,7 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
         {
             title: 'Samtykke',
             path: '/samtykke',
-            icon: FileIcon, // Add icon here
+            icon: PassportIcon,
         },
     ],
 };

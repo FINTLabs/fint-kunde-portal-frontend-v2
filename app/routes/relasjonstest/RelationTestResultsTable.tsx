@@ -1,39 +1,62 @@
 import React from 'react';
-import { Table, BodyShort } from '@navikt/ds-react';
+import { BodyShort, Table } from '@navikt/ds-react';
+import { CheckmarkCircleIcon, DownloadIcon } from '@navikt/aksel-icons';
+import { Link } from '@remix-run/react';
+import { ILogResults } from '~/types/RelationTest';
 
 interface TestResultsTableProps {
-    logResults: any[] | null; // Replace 'any[]' with the appropriate type for your log results
+    logResults: ILogResults[];
+    orgName: string;
 }
 
-const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
+const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults, orgName }) => {
     return (
         <>
             {logResults ? (
                 <Table size="small">
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell scope="col">Tid</Table.HeaderCell>
                             <Table.HeaderCell scope="col">Status</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Tid</Table.HeaderCell>
                             <Table.HeaderCell scope="col">Miljø</Table.HeaderCell>
                             <Table.HeaderCell scope="col">Ressurs</Table.HeaderCell>
                             <Table.HeaderCell scope="col">Gjenstående sjekker</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Relasjonsfeil</Table.HeaderCell>
+                            <Table.HeaderCell scope="col" colSpan={2}>
+                                Relasjonsfeil
+                            </Table.HeaderCell>
+
                             <Table.HeaderCell scope="col">Sunne lenker</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Last ned rapport</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         {logResults.map((result, index) => (
-                            <Table.Row key={index}>
-                                <Table.DataCell>{result.tid}</Table.DataCell>
-                                <Table.DataCell>{result.status}</Table.DataCell>
-                                <Table.DataCell>{result.env}</Table.DataCell>
-                                <Table.DataCell>{result.ressurs}</Table.DataCell>
-                                <Table.DataCell>{result.anything}</Table.DataCell>
-                                <Table.DataCell>{result.relasjonsfeil}</Table.DataCell>
-                                <Table.DataCell>{result.sunneLenker}</Table.DataCell>
+                            <Table.Row key={result.id}>
                                 <Table.DataCell>
-                                    <a href={result.rapportLink}>Last ned rapport</a>
+                                    {result.status == 'COMPLETED' && (
+                                        <CheckmarkCircleIcon title="a11y-title" fontSize="1.5rem" />
+                                    )}
+                                </Table.DataCell>
+                                <Table.DataCell>{result.time}</Table.DataCell>{' '}
+                                <Table.DataCell>{result.env}</Table.DataCell>
+                                <Table.DataCell>{result.uri}</Table.DataCell>{' '}
+                                <Table.DataCell align={'center'}>
+                                    {result.totalRequests -
+                                        result.healthyRelations -
+                                        result.relationErrors}
+                                </Table.DataCell>
+                                <Table.DataCell align={'center'}>
+                                    {result.relationErrors}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {result.status !== 'STARTED' && (
+                                        <Link
+                                            to={`/link-walker/tasks/${orgName}/${result.id}/download`}>
+                                            <DownloadIcon title="Rediger" />
+                                        </Link>
+                                    )}
+                                </Table.DataCell>
+                                <Table.DataCell align={'center'}>
+                                    {result.healthyRelations}
                                 </Table.DataCell>
                             </Table.Row>
                         ))}
@@ -41,7 +64,7 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
                 </Table>
             ) : (
                 <div>
-                    <BodyShort>please use the form to create a report</BodyShort>
+                    <BodyShort>Please use the form to create a report</BodyShort>
                 </div>
             )}
         </>
