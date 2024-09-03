@@ -1,55 +1,150 @@
-import React from 'react';
-import { KeyVerticalIcon } from '@navikt/aksel-icons';
-import { HStack, VStack } from '@navikt/ds-react';
+import React, { useEffect } from 'react';
+import { ArrowLeftIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
+import { Alert, Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { LoaderFunctionArgs } from '@remix-run/node';
-import { json, useLoaderData } from '@remix-run/react';
-import { IAccess } from '~/types/Access';
+import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import ComponentApi from '~/api/ComponentApi';
-import { IComponent } from '~/types/Component';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import ComponentConfigApi from '~/api/ComponentConfigApi';
+import { IComponentConfig } from '~/types/ComponentConfig';
+import ConfigClassTable from '~/routes/accesscontrol.$id/ConfigClassTable';
+import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
+import { IFetcherResponseData } from '~/types/types';
 
-interface IPageLoaderData {
-    templates?: IAccess[] | string;
-    accesses?: IAccess[] | string;
-    error?: string;
-}
-
-export const meta = () => {
-    return [
-        { title: 'Tilgangskontroll' },
-        { name: 'description', content: 'Liste over Tilgangskontroll' },
-    ];
-};
-
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const id = params.id || '';
+    // const orgName = await getSelectedOrganization(params.request);
+    const url = new URL(request.url);
+    const adapterName = url.searchParams.get('adapter') || '';
+    const clientName = url.searchParams.get('client') || '';
+
     try {
         const component = await ComponentApi.getComponentById(id);
-        return json(component);
+        const configs = await ComponentConfigApi.getComponentConfigs();
+
+        const matchedConfig = configs.find((config: IComponentConfig) =>
+            config.dn.includes(component?.dn ?? '')
+        );
+
+        return json({ component, matchedConfig, adapterName, clientName });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
     }
 };
 
+export async function action({ request }: ActionFunctionArgs) {
+    // const orgName = await getSelectedOrganization(request);
+    const formData = await request.formData();
+    console.log('IN ACTION');
+    const actionType = formData.get('actionType');
+
+    let response;
+    switch (actionType) {
+        case 'updateAccessControl':
+            response = {
+                show: true,
+                message: 'Access Control updated (not really)',
+                variant: 'info',
+            };
+            break;
+        default:
+            return json({ show: true, message: 'Unknown action type', variant: 'error' });
+    }
+
+    return json({ show: true, message: response?.message, variant: response?.variant });
+}
+
 export default function Index() {
-    const breadcrumbs = [{ name: 'Tilgangskontroll', link: '/accesscontrol.$id' }];
-    const component = useLoaderData<IComponent>();
+    const { component, matchedConfig, adapterName, clientName } = useLoaderData<typeof loader>();
+    const navigate = useNavigate();
+    const [show, setShow] = React.useState(false);
+    const fetcher = useFetcher();
+    const actionData = fetcher.data as IFetcherResponseData;
+
+    const breadcrumbs = [
+        ...(adapterName ? [{ name: adapterName, link: `/adapter/${adapterName}` }] : []),
+        ...(clientName ? [{ name: clientName, link: `/klient/${clientName}` }] : []),
+        { name: 'Tilgangskontroll', link: '/accesscontrol' },
+    ];
+
+    const backButtonPath = adapterName
+        ? `/adapter/${adapterName}`
+        : clientName
+          ? `/klient/${clientName}`
+          : '/accesscontrol';
+
+    const getLabelAndValue = () => {
+        if (adapterName) {
+            return { label: 'Adapter', value: adapterName };
+        } else if (clientName) {
+            return { label: 'Klienter', value: clientName };
+        }
+        return { label: '', value: '' };
+    };
+
+    const { label, value } = getLabelAndValue();
+
+    const handleSaveClick = (formData: { componentId: string }) => {
+        const updatedFormData = { ...formData, actionType: 'updateAccessControl' };
+        console.log('in save');
+        console.log(`/accesscontrol/${component?.name}`);
+        fetcher.submit(updatedFormData, {
+            method: 'post',
+            action: `/accesscontrol/${component?.name}`,
+        });
+    };
+
+    useEffect(() => {
+        setShow(true);
+    }, [fetcher.state]);
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
 
-            <HStack align={'center'} justify={'space-between'}>
-                <VStack>
-                    <InternalPageHeader
-                        title={'Tilgangskontroll'}
-                        icon={KeyVerticalIcon}
-                        helpText="tilgangspakker"
-                    />
-                </VStack>
-            </HStack>
+            <InternalPageHeader title={`Tilgangskontroll ${label}`} icon={KeyVerticalIcon} />
+
+            <HGrid gap="2" align={'start'}>
+                <Box>
+                    <Button
+                        className="relative h-12 w-12 top-2 right-14"
+                        icon={<ArrowLeftIcon title="a11y-title" fontSize="1.5rem" />}
+                        variant="tertiary"
+                        onClick={() => navigate(backButtonPath)}></Button>
+                </Box>
+
+                <Box
+                    className="w-full relative bottom-12"
+                    padding="6"
+                    borderRadius="large"
+                    shadow="small">
+                    <Heading size={'medium'}> Name: {value} </Heading>
+
+                    <Spacer />
+
+                    <Divider className="pt-3" />
+
+                    <HStack gap={'10'}>
+                        <Heading size={'medium'}>Access Control: {component?.name}</Heading>
+                        <Button onClick={handleSaveClick}>Save</Button>
+                    </HStack>
+                    {actionData && show && (
+                        <Alert
+                            className={'!mt-5'}
+                            variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
+                            closeButton
+                            onClose={() => setShow(false)}>
+                            {actionData.message || 'Content'}
+                        </Alert>
+                    )}
+                    <Box padding="4">
+                        <ConfigClassTable matchedConfig={matchedConfig} />
+                    </Box>
+                </Box>
+            </HGrid>
         </>
     );
 }

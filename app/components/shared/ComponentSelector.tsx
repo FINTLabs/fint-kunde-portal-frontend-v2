@@ -5,11 +5,19 @@ import ComponentsTable from '../../routes/komponenter._index/ComponentsTable';
 
 interface ComponentSelectorProps {
     items: IComponent[];
+    adapterName?: string;
+    clientName?: string;
     selectedItems: string[];
     toggle: (name: string, isChecked: boolean) => void;
 }
 
-const ComponentSelector: React.FC<ComponentSelectorProps> = ({ items, selectedItems, toggle }) => {
+const ComponentSelector: React.FC<ComponentSelectorProps> = ({
+    items,
+    adapterName,
+    clientName,
+    selectedItems,
+    toggle,
+}) => {
     return (
         <>
             <Box padding="6">
@@ -21,7 +29,9 @@ const ComponentSelector: React.FC<ComponentSelectorProps> = ({ items, selectedIt
                         items={items}
                         selectedItems={selectedItems}
                         toggle={toggle}
-                        isSubTable={true}
+                        isAccessControl={true}
+                        {...(adapterName && { adapterName })}
+                        {...(clientName && { clientName })}
                     />
                 </HGrid>
             </Box>
