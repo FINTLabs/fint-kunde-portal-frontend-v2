@@ -25,15 +25,14 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
     const [selectedBaseUrl, setSelectedBaseUrl] = useState(
         'https://play-with-fint.felleskomponent.no'
     );
-    const [selectedResourceError, setSelectedResourceError] = useState<string | undefined>();
     const [selectedComponentError, setSelectedComponentError] = useState<string | undefined>();
-
     const [matchingConfigs, setMatchingConfigs] = useState<IComponentConfig[]>([]);
 
     function handleChangeComponent(value: string) {
         setSelectedComponent(value);
         const matchedConfigs = configs.filter((config) => config.dn.includes(value));
         setMatchingConfigs(matchedConfigs);
+        setSelectedComponentError(undefined);
     }
 
     function onRunTest() {
@@ -43,13 +42,6 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
             isValid = false;
         } else {
             setSelectedComponentError(undefined);
-        }
-
-        if (selectedComponent === '') {
-            setSelectedResourceError('Ressurs er påkrevd');
-            isValid = false;
-        } else {
-            setSelectedResourceError(undefined);
         }
 
         if (isValid) {
@@ -97,9 +89,8 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
                 size="small"
                 onChange={(e) => setSelectedConfig(e.target.value)}
                 value={selectedConfig}
-                name={'configClass'}
-                error={selectedResourceError}>
-                <option value="">Velg</option>
+                name={'configClass'}>
+                {/*<option value="">Velg</option>*/}
                 {matchingConfigs.flatMap((config) =>
                     config.classes.map((item, index) => (
                         <option value={item.name} key={index}>

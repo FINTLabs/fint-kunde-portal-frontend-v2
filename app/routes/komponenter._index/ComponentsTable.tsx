@@ -11,7 +11,9 @@ interface ComponentsSectionProps {
     columns?: number;
     selectable?: boolean;
     toggle?: (name: string, checked: boolean) => void;
-    isSubTable?: boolean;
+    isAccessControl?: boolean;
+    adapterName?: string;
+    clientName?: string;
 }
 
 type ComponentType = {
@@ -23,15 +25,25 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
     selectedItems,
     columns = 1,
     toggle,
-    isSubTable = false,
+    isAccessControl = false,
+    adapterName,
+    clientName,
 }) => {
     const navigate = useNavigate();
 
     const sortedComponents = items.sort((a, b) => a.name.localeCompare(b.name));
 
     const handleRowClick = (component: IComponent) => {
-        if (isSubTable) navigate(`/accesscontrol/${component.name}`);
-        else navigate(`/komponenter/${component.name}`);
+        if (isAccessControl) {
+            // Check if adapterName is defined; if not, check for clientName
+            if (adapterName) {
+                navigate(`/accesscontrol/${component.name}?adapter=${adapterName}`);
+            } else if (clientName) {
+                navigate(`/accesscontrol/${component.name}?client=${clientName}`);
+            }
+        } else {
+            navigate(`/komponenter/${component.name}`);
+        }
     };
 
     // Function to split components into chunks
@@ -69,7 +81,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                         <FormSummary key={`${groupName}-${i}`}>
                             <FormSummary.Header>
                                 <HStack align={'center'} justify={'space-between'}>
-                                    {isSubTable && (
+                                    {isAccessControl && (
                                         <KeyVerticalIcon title="a11y-title" fontSize="1.5rem" />
                                     )}
                                     <FormSummary.Heading level="2">
@@ -144,7 +156,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                         <Box
                                                             padding={'2'}
                                                             className="hover:bg-[--a-surface-active] hover:cursor-pointer">
-                                                            {isSubTable ? (
+                                                            {isAccessControl ? (
                                                                 <ChevronRightCircleIcon
                                                                     title="Vis detaljer"
                                                                     onClick={() =>

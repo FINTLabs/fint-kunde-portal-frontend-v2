@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { json, useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import ClientDetails from '~/routes/klienter.$id/ClientDetails';
-import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import type { ActionFunctionArgs } from '@remix-run/node';
 import ClientApi from '~/api/ClientApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, FloppydiskIcon, PencilIcon, TokenIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading, HGrid, HStack, Spacer, VStack } from '@navikt/ds-react';
+import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
@@ -121,6 +120,7 @@ export default function Index() {
                     <ComponentSelector
                         items={components}
                         selectedItems={selectedComponents}
+                        clientName={client.name}
                         toggle={(name, isChecked) => {
                             submit(
                                 {
@@ -196,7 +196,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 orgName,
                 updateType
             );
-            return json({ ok: response.status === 204 ? true : false });
+            return json({ ok: response.status === 204 });
         case 'Passord':
             return 'Not implemented';
         case 'Klient Hemmelighet':

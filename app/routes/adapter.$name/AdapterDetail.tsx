@@ -1,9 +1,9 @@
-import { Box, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Box, HGrid, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { IComponent } from '~/types/Component';
-import { FETCHER_PASSORD_KEY, FETCHER_CLIENT_SECRET_KEY } from './constants';
+import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from './constants';
 import Autentisering from '../../components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { GeneralDetailView } from './GeneralDetailView';
@@ -34,7 +34,6 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
         assetIds: adapter.assetIds,
     };
 
-    console.log(adapter);
     const submit = useSubmit();
 
     return (
@@ -58,6 +57,7 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                     <Divider className="pt-3" />
                     <ComponentSelector
                         items={components}
+                        adapterName={adapter.name}
                         selectedItems={getComponentIds(adapter.components)}
                         toggle={(name, isChecked) => {
                             submit(
