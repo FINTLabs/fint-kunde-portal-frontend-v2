@@ -2,7 +2,7 @@ import React from 'react';
 import { Label, Table } from '@navikt/ds-react';
 import { Log } from '~/types/types';
 import EventTable from '~/routes/hendelseslogg/EventTable';
-import { XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 
 interface HealthStatusProps {
     logs: Log[];
@@ -17,7 +17,7 @@ function formattedDate(timestamp: number | Date | undefined): string {
     }).format(timestamp);
 }
 
-const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
+const LogTable: React.FC<HealthStatusProps> = ({ logs }) => {
     return (
         <>
             <Label>Helsestatus</Label>
@@ -50,7 +50,7 @@ const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
                                 <Table.DataCell>{log.action}</Table.DataCell>
                                 <Table.DataCell>
                                     {hasError && (
-                                        <XMarkOctagonIcon
+                                        <ExclamationmarkTriangleIcon
                                             style={{ color: 'red', marginRight: '0.5rem' }}
                                         />
                                     )}
@@ -64,4 +64,4 @@ const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
     );
 };
 
-export default HealthStatusView;
+export default LogTable;

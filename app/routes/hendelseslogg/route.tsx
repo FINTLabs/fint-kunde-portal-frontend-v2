@@ -12,7 +12,7 @@ import LogApi from '~/api/LogApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { InfoBox } from '~/components/shared/InfoBox';
 import { Log, ReduntantLog } from '~/types/types';
-import HealthStatusView from './HealthStatusView';
+import LogTable from './LogTable';
 import { log } from '~/utils/logger';
 
 interface ActionData {
@@ -97,13 +97,15 @@ export default function Index() {
                         configs={configs}
                     />
 
+                    <Box padding={'10'}>
                     <Search
                         label="Filtrer på ID - Skriv nøyaktig ID"
                         // description="Her kan du søke på forskjellige ting, f.eks. søknadsskjemaer."
                         variant="simple"
+                        size={"small"}
                         hideLabel={false}
                         onChange={(value: string) => setFilterValue(value)}
-                    />
+                    /></Box>
                     {/*<TextField*/}
                     {/*    label="Filtrer på ID - Skriv nøyaktig ID"*/}
                     {/*    size="small"*/}
@@ -127,7 +129,7 @@ export default function Index() {
                         )}
                         {filteredLogs.length > 0 ? (
                             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                                <HealthStatusView logs={filteredLogs} />
+                                <LogTable logs={filteredLogs} />
                             </Box>
                         ) : (
                             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
