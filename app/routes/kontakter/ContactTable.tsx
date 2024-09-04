@@ -9,11 +9,12 @@ import RolesSwitch from '~/routes/kontakter/RoleSwitch';
 interface IContactTableProps {
     contactsData?: IContact[];
     rolesData?: IRole[];
+    onButtonClick: (formData: FormData) => void;
 }
 
 type ModalType = 'fjern' | 'juridisk';
 
-const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData }) => {
+const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, onButtonClick }) => {
     const [modalState, setModalState] = useState<{
         type: ModalType;
         contact?: IContact;
@@ -38,25 +39,16 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData })
     };
 
     const handleConfirm = () => {
-        // todo: Handle confirm action here
-        console.log(`${modalState.type} confirmed for contact:`, modalState.contact);
         const contactNin = (modalState.contact?.nin as string) || '';
 
         const formData = new FormData();
         formData.append('contactNin', contactNin);
-
-        console.log(modalState);
         formData.append(
             'actionType',
             modalState.type === 'fjern' ? 'removeTechnicalContact' : 'setLegalContact'
         );
-
-        // fetcher.submit(formData, {
-        //     method: 'POST',
-        //     navigate: false,
-        // });
-        fetcher.submit(formData, { method: 'post', action: '/kontakter' });
         handleCloseModal();
+        onButtonClick(formData);
     };
 
     function updateRole(contactNin: string, roleId: string, isChecked: boolean) {

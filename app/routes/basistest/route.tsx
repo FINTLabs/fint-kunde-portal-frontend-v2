@@ -12,7 +12,7 @@ import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import { log } from '~/utils/logger';
-import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
+// import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
 import CacheStatusTable from '~/routes/hendelseslogg/CacheStatusTable';
 
 interface ActionData {
@@ -85,13 +85,13 @@ export default function Index() {
 
                         {actionData.data && actionData.data.length > 0 && (
                             <>
-                                <Box
-                                    className="w-full"
-                                    padding="6"
-                                    borderRadius="large"
-                                    shadow="small">
-                                    <HealthStatusTable logResults={actionData.data} />
-                                </Box>
+                                {/*<Box*/}
+                                {/*    className="w-full"*/}
+                                {/*    padding="6"*/}
+                                {/*    borderRadius="large"*/}
+                                {/*    shadow="small">*/}
+                                {/*    <HealthStatusTable logResults={actionData.data} />*/}
+                                {/*</Box>*/}
                                 <Box
                                     className="w-full"
                                     padding="6"

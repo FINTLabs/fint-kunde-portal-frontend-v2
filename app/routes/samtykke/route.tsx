@@ -21,6 +21,7 @@ export const loader = async ({ request }: { request: Request }) => {
         const services = await ConsentApi.getTjenste(orgName);
         const personalDataList = await ConsentApi.getPersonopplysning();
         const foundations = await ConsentApi.getBehandlingsgrunnlag();
+
         return json({
             policies: policies,
             services: services,
