@@ -3,6 +3,7 @@ import { IAdapter, IPartialAdapter } from '~/types/types';
 import { isClientSide } from '~/utils/environment';
 import { error, log } from '~/utils/logger';
 import { Utility } from '~/utils/utility';
+import { rsort } from 'semver';
 
 export type ReturnType = 'text' | 'json';
 
@@ -104,12 +105,14 @@ async function getRequest(
     // log(`RequestOptions: `, requestOptions);
     const response = await fetch(URL, requestOptions);
     logStatus(response.status, functionName);
+
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {
         // log(`Response: `, response);
         const errorMsg = `😡 Error running ${functionName}, status: ${response.status}`;
         // error(errorMsg);
-        return errorMsg;
+        // return errorMsg;
+        throw error;
     }
 }
