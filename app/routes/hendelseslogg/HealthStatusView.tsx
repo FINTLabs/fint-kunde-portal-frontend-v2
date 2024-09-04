@@ -27,7 +27,7 @@ const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
                         <Table.HeaderCell scope="col"></Table.HeaderCell>
                         <Table.HeaderCell scope="col">HendelsesID</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Tid</Table.HeaderCell>
-                        {/*<Table.HeaderCell scope="col">Hendelse</Table.HeaderCell>*/}
+                        <Table.HeaderCell scope="col">Hendelse</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -47,7 +47,7 @@ const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
                                 content={<EventTable events={log.events} />}>
                                 <Table.DataCell scope="row">{log.id}</Table.DataCell>
                                 <Table.DataCell>{formattedDate(log.timestamp)}</Table.DataCell>
-                                {/*<Table.DataCell>{log.action}</Table.DataCell>*/}
+                                <Table.DataCell>{log.action}</Table.DataCell>
                                 <Table.DataCell>
                                     {hasError && (
                                         <XMarkOctagonIcon

@@ -2,7 +2,6 @@ import type { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-ru
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
-import React from 'react';
 import { Alert, BodyShort, Box, VStack } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ComponentApi from '~/api/ComponentApi';
@@ -13,7 +12,7 @@ import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import { log } from '~/utils/logger';
 // import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
-import CacheStatusTable from '~/routes/hendelseslogg/CacheStatusTable';
+import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
 
 interface ActionData {
     message: string;

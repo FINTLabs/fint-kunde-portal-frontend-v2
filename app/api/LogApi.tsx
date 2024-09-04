@@ -1,5 +1,4 @@
 import { request } from '~/api/shared/api';
-import { log } from '~/utils/logger';
 
 const API_URL = process.env.API_URL;
 
@@ -8,11 +7,16 @@ class LogApi {
         environment: string,
         organisation: string,
         componentName: string,
+        resource: string,
         type: string
     ) {
+
         const functionName = 'getLogs';
-        // http://localhost:8080/events/{{orgName}}/{{environment}}/{{component}}/{{action}}
-        const URL = `${API_URL}/api/events/${organisation}/${environment}/${componentName}/${type}`;
+        const formattedComponent = componentName.replace(/_/g, '-');
+        const formattedType = type + '_' + resource.toUpperCase();
+
+        // https://kunde-beta.felleskomponent.no/api/events/fintlabs_no/beta/utdanning-elev/GET_ALL_ELEVTILRETTELEGGING
+        const URL = `${API_URL}/api/events/${organisation}/${environment}/${formattedComponent}/${formattedType}`;
 
         return await request(URL, functionName);
     }
