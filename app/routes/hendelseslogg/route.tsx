@@ -128,22 +128,9 @@ export default function Index() {
                             </Box>
                         )}
                         {logs.length > 0 && (
-                            <>
-                                <Box
-                                    className="w-full"
-                                    padding="6"
-                                    borderRadius="large"
-                                    shadow="small">
-                                    <HealthStatusView logs={mappedLogs} />
-                                </Box>
-                                <Box
-                                    className="w-full"
-                                    padding="6"
-                                    borderRadius="large"
-                                    shadow="small">
-                                    <CacheStatusTable logResults={logs} />
-                                </Box>
-                            </>
+                            <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+                                <HealthStatusView logs={mappedLogs} />
+                            </Box>
                         )}
                     </>
                 ) : (

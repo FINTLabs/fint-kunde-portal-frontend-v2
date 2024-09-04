@@ -41,7 +41,7 @@ const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
                             log.events.length > 0
                                 ? log.events[log.events.length - 1].status +
                                   log.events[log.events.length - 1].response
-                                : '';
+                                : 'NO STATUS';
 
                         return (
                             <Table.ExpandableRow
