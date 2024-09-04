@@ -1,38 +1,31 @@
-import type { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
+import { useState } from 'react';
+import type { ActionFunctionArgs, LoaderFunction } from '@remix-run/node';
+import { json, useFetcher, useLoaderData } from '@remix-run/react';
+import { Alert, BodyShort, Box, Search, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, VStack } from '@navikt/ds-react';
 import LogSearchForm from '~/routes/hendelseslogg/LogSearchForm';
 import ComponentApi from '~/api/ComponentApi';
-import { json, useFetcher, useLoaderData } from '@remix-run/react';
-import { log } from '~/utils/logger';
 import ComponentConfigApi from '~/api/ComponentConfigApi';
 import LogApi from '~/api/LogApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { getFormData } from '~/utils/requestUtils';
 import { InfoBox } from '~/components/shared/InfoBox';
 import { Log, ReduntantLog } from '~/types/types';
 import HealthStatusView from './HealthStatusView';
+import { log } from '~/utils/logger';
 
 interface ActionData {
     message: string;
     data: any;
 }
 
-export const meta: MetaFunction = () => {
-    return [
-        { title: 'Hendelseslogg' },
-        { name: 'description', content: 'Liste over hendelseslogg' },
-    ];
-};
-
 export const loader: LoaderFunction = async ({ request }) => {
     const selectOrg = await getSelectedOrganization(request);
     try {
         const components = await ComponentApi.getOrganisationComponents(selectOrg);
-        const configs = await ComponentConfigApi.getComponentConfigs(); // rename to something else - returns a list of components with associated classes, these classes are the configurations
-        const defaultLogs = await LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', 'GET_ALL');
+        const configs = await ComponentConfigApi.getComponentConfigs();
+        const defaultLogs = await LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', '', 'GET_ALL');
         return json({ components, configs, defaultLogs });
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -41,26 +34,20 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export async function action({ request }: ActionFunctionArgs) {
-    const actionName = 'Action in hendelsesslogg/route.tsx';
     const formData = await request.formData();
-    console.log('formData');
-    console.log(formData);
     const environment = formData.get('environment') as string;
-    const componentName = getFormData(formData.get('component'), 'component', actionName);
-    const action = getFormData(formData.get('action'), 'action', actionName);
-    // const configClass = formData.get('configClass') as string;
-    log('comp:', componentName);
-    log('action:', action);
+    const componentName = formData.get('component') as string;
+    const action = formData.get('action') as string;
+    const resource = formData.get('resource') as string;
 
+    console.log('form submitted', formData);
     const orgName = await getSelectedOrganization(request);
-    // const query = `${component}/${action}_${configClass.toUpperCase()}`;
 
     let response;
     let message = '';
 
     try {
-        response = await LogApi.getLogs(environment, orgName, componentName, action);
-        log('response:', response.length);
+        response = await LogApi.getLogs(environment, orgName, componentName, resource, action);
 
         if (!response) {
             message = 'Error occurred';
@@ -76,22 +63,22 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ message, data: response });
 }
 
-// // Mapped log
-// type LogHashMap = {
-//     [key: string]: ReduntantLog[];
-// };
-
 export default function Index() {
     const breadcrumbs = [{ name: 'Hendelseslogg', link: '/hendelseslogg' }];
     const fetcher = useFetcher();
     const actionData = fetcher.data as ActionData;
 
     const { components, configs, defaultLogs } = useLoaderData<typeof loader>();
-
     const logs = actionData?.data || defaultLogs;
-    console.log('logs uten mapping:', logs);
-
     const mappedLogs = mapLogs(logs);
+    const [filterValue, setFilterValue] = useState('');
+
+    // Conditionally filter logs based on the filter input (only if filterValue is not empty)
+    const filteredLogs = filterValue ? mappedLogs.filter((log: Log) => log.id === filterValue) : mappedLogs;
+
+    const handleFormSubmit = (formData: FormData) => {
+        fetcher.submit(formData, { method: 'post', action: '/hendelseslogg' });
+    };
 
     return (
         <>
@@ -101,31 +88,50 @@ export default function Index() {
                 icon={TerminalIcon}
                 helpText="hendelseslogg"
             />
+
             <VStack gap={'10'}>
                 <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                     <LogSearchForm
-                        // handleSearch={handleSearch}
-                        f={fetcher}
+                        onSearchSubmit={handleFormSubmit}
                         components={components}
                         configs={configs}
                     />
+
+                    <Search
+                        label="Filtrer på ID - Skriv nøyaktig ID"
+                        // description="Her kan du søke på forskjellige ting, f.eks. søknadsskjemaer."
+                        variant="simple"
+                        hideLabel={false}
+                        onChange={(value: string) => setFilterValue(value)}
+                    />
+                    {/*<TextField*/}
+                    {/*    label="Filtrer på ID - Skriv nøyaktig ID"*/}
+                    {/*    size="small"*/}
+                    {/*    name={'filter'}*/}
+                    {/*    value={filterValue}*/}
+                    {/*    onChange={(e) => setFilterValue(e.target.value)} // Update filter state*/}
+                    {/*/>*/}
                 </Box>
 
-                {defaultLogs && (
+                {!actionData && (
                     <InfoBox
                         message={`Displaying default logs: await LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', 'GET_ALL');`}
                     />
                 )}
-                {logs ? (
+                {filteredLogs ? (
                     <>
                         {actionData?.message && (
                             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                                 <Alert variant="info">{actionData.message}</Alert>
                             </Box>
                         )}
-                        {logs.length > 0 && (
+                        {filteredLogs.length > 0 ? (
                             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                                <HealthStatusView logs={mappedLogs} />
+                                <HealthStatusView logs={filteredLogs} />
+                            </Box>
+                        ) : (
+                            <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+                                <BodyShort>No logs found with the specified ID</BodyShort>
                             </Box>
                         )}
                     </>
@@ -138,8 +144,9 @@ export default function Index() {
         </>
     );
 }
+
 function mapLogs(logs: ReduntantLog[]) {
-    const mappedLogs = logs.reduce((acc: Log[], curr: ReduntantLog) => {
+    return logs.reduce((acc: Log[], curr: ReduntantLog) => {
         const existingLog = acc.find((log) => log.id === curr.corrId);
 
         const currentEvent = curr.event;
@@ -150,23 +157,18 @@ function mapLogs(logs: ReduntantLog[]) {
             response: currentEvent.responseStatus || '',
             melding: currentEvent.message || '',
         };
+
         if (!existingLog) {
-            return [
-                ...acc,
-                {
-                    id: curr.corrId,
-                    timestamp: curr.timestamp,
-                    action: curr.event.action,
-                    events: [event],
-                },
-            ];
+            acc.push({
+                id: curr.corrId,
+                timestamp: curr.timestamp,
+                action: curr.event.action,
+                events: [event],
+            });
         } else {
             existingLog.events.push(event);
-            return acc;
         }
-    }, [] as Log[]);
 
-    console.log('MAPPED LOGS');
-    console.log(mappedLogs);
-    return mappedLogs;
+        return acc;
+    }, []);
 }
