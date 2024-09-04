@@ -6,13 +6,9 @@ import { Alert, BodyShort, Box, VStack } from '@navikt/ds-react';
 import LogSearchForm from '~/routes/hendelseslogg/LogSearchForm';
 import ComponentApi from '~/api/ComponentApi';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
-import { IComponent } from '~/types/Component';
 import { log } from '~/utils/logger';
 import ComponentConfigApi from '~/api/ComponentConfigApi';
-import { IComponentConfig } from '~/types/ComponentConfig';
 import LogApi from '~/api/LogApi';
-import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
-import CacheStatusTable from '~/routes/hendelseslogg/CacheStatusTable';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData } from '~/utils/requestUtils';
 import { InfoBox } from '~/components/shared/InfoBox';
@@ -52,7 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const environment = formData.get('environment') as string;
     const componentName = getFormData(formData.get('component'), 'component', actionName);
     const action = getFormData(formData.get('action'), 'action', actionName);
-    const configClass = formData.get('configClass') as string;
+    // const configClass = formData.get('configClass') as string;
     log('comp:', componentName);
     log('action:', action);
 
@@ -80,10 +76,10 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ message, data: response });
 }
 
-// Mapped log
-type LogHashMap = {
-    [key: string]: ReduntantLog[];
-};
+// // Mapped log
+// type LogHashMap = {
+//     [key: string]: ReduntantLog[];
+// };
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Hendelseslogg', link: '/hendelseslogg' }];
