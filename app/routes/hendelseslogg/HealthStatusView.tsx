@@ -1,6 +1,8 @@
 import React from 'react';
-import { Table, BodyShort, Label, VStack, HStack } from '@navikt/ds-react';
+import { Label, Table } from '@navikt/ds-react';
 import { Log } from '~/types/types';
+import EventTable from '~/routes/hendelseslogg/EventTable';
+import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 
 interface HealthStatusProps {
     logs: Log[];
@@ -25,69 +27,33 @@ const HealthStatusView: React.FC<HealthStatusProps> = ({ logs }) => {
                         <Table.HeaderCell scope="col"></Table.HeaderCell>
                         <Table.HeaderCell scope="col">HendelsesID</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Tid</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Hendelse</Table.HeaderCell>
+                        {/*<Table.HeaderCell scope="col">Hendelse</Table.HeaderCell>*/}
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {logs.map((log, index) => {
-                        const isError =
-                            log.events.length > 0 &&
-                            log.events[log.events.length - 1].status === 'ERROR'
-                                ? 'bg-red-500'
-                                : '';
-
-                        const lastEventResponse =
-                            log.events.length > 0
-                                ? log.events[log.events.length - 1].status +
-                                  log.events[log.events.length - 1].response
-                                : 'NO STATUS';
+                        const hasError = log.events.some((event) => event.response === 'ERROR');
+                        //
+                        // const lastEventResponse =
+                        //     log.events.length > 0
+                        //         ? log.events[log.events.length - 1].status +
+                        //           log.events[log.events.length - 1].response
+                        //         : 'NO STATUS';
 
                         return (
                             <Table.ExpandableRow
                                 key={log.id || index}
-                                content={
-                                    <VStack>
-                                        {log.events.map((event, eventIndex) => {
-                                            const isLast = eventIndex === log.events.length - 1;
-                                            const CellComponent = isLast ? VStack : Table.DataCell;
-
-                                            return (
-                                                <CellComponent
-                                                    className="my-4 mx-2"
-                                                    key={event.id || eventIndex}>
-                                                    <HStack>
-                                                        <Label>Tid:</Label>
-                                                        <BodyShort>
-                                                            {formattedDate(event.timestamp)}
-                                                        </BodyShort>
-                                                    </HStack>
-                                                    <HStack>
-                                                        <Label>Klient:</Label>
-                                                        <BodyShort>{event.klient}</BodyShort>
-                                                    </HStack>
-                                                    <HStack>
-                                                        <Label>Status:</Label>
-                                                        <BodyShort>{event.status}</BodyShort>
-                                                    </HStack>
-                                                    <HStack>
-                                                        <Label>Respons:</Label>
-                                                        <BodyShort>{event.response}</BodyShort>
-                                                    </HStack>
-                                                    <HStack>
-                                                        <Label>Melding:</Label>
-                                                        <BodyShort>{event.melding}</BodyShort>
-                                                    </HStack>
-                                                </CellComponent>
-                                            );
-                                        })}
-                                    </VStack>
-                                }>
+                                content={<EventTable events={log.events} />}>
                                 <Table.DataCell scope="row">{log.id}</Table.DataCell>
                                 <Table.DataCell>{formattedDate(log.timestamp)}</Table.DataCell>
-                                <Table.DataCell>{log.action}</Table.DataCell>
-                                <Table.DataCell className={isError}>
-                                    {lastEventResponse}
+                                {/*<Table.DataCell>{log.action}</Table.DataCell>*/}
+                                <Table.DataCell>
+                                    {hasError && (
+                                        <XMarkOctagonIcon
+                                            style={{ color: 'red', marginRight: '0.5rem' }}
+                                        />
+                                    )}
                                 </Table.DataCell>
                             </Table.ExpandableRow>
                         );
