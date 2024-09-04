@@ -48,24 +48,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 };
 
-// export async function action({ request }: ActionFunctionArgs) {
-//     const formData = await request.formData();
-//     const formValues: Record<string, FormDataEntryValue> = {};
-//
-//     for (const [key, value] of formData) {
-//         formValues[key] = value;
-//     }
-//
-//     const contactNin = (formValues['selectedContactNin'] as string) || '';
-//
-//     const session = await getSession(request.headers.get('Cookie'));
-//     const userSession = session.get('user_session');
-//     const selectedOrg = userSession.selectedOrganization.name;
-//
-//     const response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
-//
-//     return json({ show: true, message: response?.message, variant: response?.variant });
-// }
 export async function action({ request }: ActionFunctionArgs) {
     const actionName = 'Action in kontakter/route.tsx';
     const formData = await request.formData();
@@ -83,6 +65,7 @@ export async function action({ request }: ActionFunctionArgs) {
             isOk = response.status === 204;
             return json({
                 ok: isOk,
+                show: true,
                 message: isOk
                     ? 'Kontakten er lagt til. Husk å tildele roller til kontakten.'
                     : `Legge til kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
@@ -93,6 +76,7 @@ export async function action({ request }: ActionFunctionArgs) {
             isOk = response.status === 204;
             return json({
                 ok: isOk,
+                show: true,
                 message: isOk
                     ? 'Kontakten er fjernet som teknisk kontakt'
                     : `Fjerning av teknisk kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
@@ -103,12 +87,12 @@ export async function action({ request }: ActionFunctionArgs) {
             isOk = response.status === 204;
             return json({
                 ok: isOk,
+                show: true,
                 message: isOk
                     ? 'Kontakten er satt som juridisk kontakt'
                     : `Forespørslen feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
                 variant: isOk ? 'success' : 'error',
             });
-            break;
         case 'addRole':
             let roleIdToAdd = getFormData(formData.get('roleId'), 'roleId', actionName);
             response = await RoleApi.addRole(selectedOrg, contactNin, roleIdToAdd);
@@ -135,12 +119,21 @@ export default function Index() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
-
-    console.log('actionData', actionData);
+    console.log('---------------- action data', actionData);
     useEffect(() => {
         setShow(true);
         setIsModalOpen(false);
     }, [fetcher.state]);
+
+    const handleFormSubmit = (formData: FormData) => {
+        // const contactNin = formData.get('contactNin') as string;
+        // const actionType = formData.get('actionType') as string;
+        //
+        // console.log('Saved legal data:', { contactNin, actionType });
+
+        // Assuming fetcher.submit works directly with FormData
+        fetcher.submit(formData, { method: 'post', action: '/kontakter' });
+    };
 
     return (
         <>
@@ -188,7 +181,11 @@ export default function Index() {
                 <InfoBox message={technicalContacts} />
             )}
             {technicalContacts && typeof technicalContacts !== 'string' && (
-                <ContactTable contactsData={technicalContacts} rolesData={rolesData} />
+                <ContactTable
+                    contactsData={technicalContacts}
+                    rolesData={rolesData}
+                    onButtonClick={handleFormSubmit}
+                />
             )}
             <ContactModal
                 isOpen={isModalOpen}
