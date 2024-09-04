@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, BodyShort, Label } from '@navikt/ds-react';
 
 interface TestResultsTableProps {
-    logResults: any[] | null; // Replace 'any[]' with the appropriate type for your log results
+    logResults: any[] | null; // TODO: Replace 'any[]' with the appropriate type for log results
 }
 
 const CacheStatusTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
