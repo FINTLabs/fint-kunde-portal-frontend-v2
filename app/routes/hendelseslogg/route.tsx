@@ -17,7 +17,7 @@ import { log } from '~/utils/logger';
 
 interface ActionData {
     message: string;
-    data: any;
+    data: never;
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
