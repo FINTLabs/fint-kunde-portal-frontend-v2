@@ -3,7 +3,6 @@ import { Button, Table } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon, ShieldLockIcon } from '@navikt/aksel-icons';
 import { IContact, IRole } from '~/types/types';
 import ConfirmModal from './ConfirmModal';
-import { useFetcher } from '@remix-run/react';
 import RolesSwitch from '~/routes/kontakter/RoleSwitch';
 
 interface IContactTableProps {
@@ -20,7 +19,7 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, o
         contact?: IContact;
         open: boolean;
     }>({ type: 'juridisk', contact: undefined, open: false });
-    const fetcher = useFetcher();
+    // const fetcher = useFetcher();
 
     // const userSession = useOutletContext<IUserSession>();
     const hasRole = (currentContact: IContact, roleId: string): boolean => {
@@ -58,11 +57,7 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, o
 
         if (isChecked) formData.append('actionType', 'addRole');
         else formData.append('actionType', 'deleteRole');
-
-        fetcher.submit(formData, {
-            method: 'post',
-            action: '/kontakter',
-        });
+        onButtonClick(formData);
     }
 
     return (
@@ -81,14 +76,13 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, o
                             key={i + contact.dn}
                             content={
                                 <>
-                                    <fetcher.Form method="post">
-                                        <RolesSwitch
-                                            contact={contact}
-                                            rolesData={rolesData}
-                                            hasRole={hasRole}
-                                            updateRole={updateRole}
-                                        />
-                                    </fetcher.Form>
+                                    <RolesSwitch
+                                        contact={contact}
+                                        rolesData={rolesData}
+                                        hasRole={hasRole}
+                                        updateRole={updateRole}
+                                    />
+
                                     <Button
                                         icon={<GavelSoundBlockIcon />}
                                         variant="tertiary"

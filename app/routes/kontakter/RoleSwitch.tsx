@@ -22,7 +22,7 @@ const RolesSwitch: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole, 
                 <Switch
                     size="small"
                     key={index + role.id}
-                    checked={hasRole(contact, role.id)}
+                    checked={isAdmin || hasRole(contact, role.id)}
                     onChange={(e) => handleSwitchChange(role.id, e.target.checked)}
                     disabled={isAdmin && role.id !== 'ROLE_ADMIN'}
                     description={role.description}>

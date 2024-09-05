@@ -12,6 +12,10 @@ class LinkWalkerApi {
         });
     }
 
+    static getLink(orgName:string, resultId:string){
+        console.log('-----------', API_URL)
+        return `${API_URL}/link-walker/tasks/${orgName}/${resultId}/download`
+    }
     static async addTest(testUrl: string, clientName: string, orgName: string) {
         log('TEST DATA', JSON.stringify(testUrl));
 

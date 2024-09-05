@@ -15,19 +15,17 @@ export default class RoleApi {
     static async addRole(orgName: string, contactNin: string, roleId: string) {
         const functionName = 'addRole';
         const URL = `${API_URL}/api/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`;
-        return request(URL, functionName, 'PUT', 'json').catch((err) => {
-            error('Error adding role:', err);
-            return 'catch-error';
-        });
+
+        return request(URL, functionName, 'PUT', 'json');
+        // if (response.status == 202)
+        //     return { message: `Kontaktroller oppdatert: ${roleId}`, variant: 'success' };
+        // else return { message: `Error oppdatering av kontaktrolle: ${roleId}`, variant: 'error' };
     }
 
     static async removeRole(organisationName: string, contactNin: string, roleId: string) {
         const functionName = 'removeRole';
         const URL = `${API_URL}/api/organisations/${organisationName}/contacts/roles/${contactNin}/${roleId}`;
 
-        return request(URL, functionName, 'DELETE', 'json').catch((err) => {
-            console.error('Error removing role:', err);
-            return 'catch-error';
-        });
+        return request(URL, functionName, 'DELETE', 'json');
     }
 }

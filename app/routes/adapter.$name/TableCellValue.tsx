@@ -17,6 +17,7 @@ export function TableCellValue({
         return (
             <fetcher.Form method="post">
                 <input type="hidden" name="actionType" value={label} />
+                *****
                 <Button
                     type="submit"
                     variant="tertiary-neutral"

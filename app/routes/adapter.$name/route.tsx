@@ -16,12 +16,12 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
 import { InfoBox } from '~/components/shared/InfoBox';
 
-export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
     const orgName = await getSelectedOrganization(request);
 
     const adapters = await AdapterAPI.getAdapters(orgName);
     const components = await ComponentApi.getOrganisationComponents(orgName);
-    console.log(components.length);
+
     return json({ adapters, components });
 };
 

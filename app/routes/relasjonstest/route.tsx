@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, LoaderFunction } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
@@ -8,12 +8,16 @@ import ComponentApi from '~/api/ComponentApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import ClientApi from '~/api/ClientApi';
-import { error, log } from '~/utils/logger';
+import { error } from '~/utils/logger';
 import LinkWalkerApi from '~/api/LinkWalkerApi';
 import ComponentConfigApi from '~/api/ComponentConfigApi';
 import React, { useEffect } from 'react';
 import { IFetcherResponseData } from '~/types/types';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
+
+export const meta: MetaFunction = () => {
+    return [{ title: 'Relasjonstest' }, { name: 'description', content: 'Relasjonstest' }];
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
@@ -36,14 +40,12 @@ export async function action({ request }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const formData = await request.formData();
     const actionType = formData.get('actionType');
+    const testUrl = formData.get('testUrl');
+    const clientName = formData.get('clientName');
 
-    log('INSIDE ACTION -------------------------->', actionType);
     let response;
     switch (actionType) {
         case 'runTest':
-            log('RUNNING A TEST');
-            const testUrl = formData.get('testUrl');
-            const clientName = formData.get('clientName');
             response = await LinkWalkerApi.addTest(
                 testUrl as string,
                 clientName as string,

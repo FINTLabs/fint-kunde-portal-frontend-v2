@@ -6,7 +6,10 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 
 export const meta: MetaFunction = () => {
-    return [{ title: 'Adapter' }, { name: 'description', content: 'Liste over adapter' }];
+    return [
+        { title: 'Hjelpe' },
+        { name: 'description', content: 'Hjelpeliste over hjelpetekster' },
+    ];
 };
 
 export default function Index() {

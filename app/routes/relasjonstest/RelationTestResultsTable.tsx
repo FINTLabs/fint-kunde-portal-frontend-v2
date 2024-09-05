@@ -3,6 +3,7 @@ import { BodyShort, Table } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, DownloadIcon } from '@navikt/aksel-icons';
 import { Link } from '@remix-run/react';
 import { ILogResults } from '~/types/RelationTest';
+import LinkWalkerApi from '~/api/LinkWalkerApi';
 
 interface TestResultsTableProps {
     logResults: ILogResults[];
@@ -10,6 +11,7 @@ interface TestResultsTableProps {
 }
 
 const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults, orgName }) => {
+
     return (
         <>
             {logResults ? (
@@ -49,9 +51,9 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults,
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {result.status !== 'STARTED' && (
-                                        <Link
-                                            to={`/link-walker/tasks/${orgName}/${result.id}/download`}>
-                                            <DownloadIcon title="Rediger" />
+                                        <Link to={LinkWalkerApi.getLink(orgName, result.id)}>
+
+                                        <DownloadIcon title="download" />
                                         </Link>
                                     )}
                                 </Table.DataCell>

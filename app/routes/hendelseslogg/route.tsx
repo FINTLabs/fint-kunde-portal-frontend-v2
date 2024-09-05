@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ActionFunctionArgs, LoaderFunction } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import { Alert, BodyShort, Box, Search, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -20,12 +20,21 @@ interface ActionData {
     data: never;
 }
 
+export const meta: MetaFunction = () => {
+    return [{ title: 'Hendelseslogg' }, { name: 'description', content: 'Hendelseslogg' }];
+};
 export const loader: LoaderFunction = async ({ request }) => {
     const selectOrg = await getSelectedOrganization(request);
     try {
         const components = await ComponentApi.getOrganisationComponents(selectOrg);
         const configs = await ComponentConfigApi.getComponentConfigs();
-        const defaultLogs = await LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', '', 'GET_ALL');
+        const defaultLogs = await LogApi.getLogs(
+            'beta',
+            selectOrg,
+            'felles_kodeverk',
+            '',
+            'GET_ALL'
+        );
         return json({ components, configs, defaultLogs });
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -74,7 +83,9 @@ export default function Index() {
     const [filterValue, setFilterValue] = useState('');
 
     // Conditionally filter logs based on the filter input (only if filterValue is not empty)
-    const filteredLogs = filterValue ? mappedLogs.filter((log: Log) => log.id === filterValue) : mappedLogs;
+    const filteredLogs = filterValue
+        ? mappedLogs.filter((log: Log) => log.id === filterValue)
+        : mappedLogs;
 
     const handleFormSubmit = (formData: FormData) => {
         fetcher.submit(formData, { method: 'post', action: '/hendelseslogg' });
@@ -98,14 +109,15 @@ export default function Index() {
                     />
 
                     <Box padding={'10'}>
-                    <Search
-                        label="Filtrer på ID - Skriv nøyaktig ID"
-                        // description="Her kan du søke på forskjellige ting, f.eks. søknadsskjemaer."
-                        variant="simple"
-                        size={"small"}
-                        hideLabel={false}
-                        onChange={(value: string) => setFilterValue(value)}
-                    /></Box>
+                        <Search
+                            label="Filtrer på ID - Skriv nøyaktig ID"
+                            // description="Her kan du søke på forskjellige ting, f.eks. søknadsskjemaer."
+                            variant="simple"
+                            size={'small'}
+                            hideLabel={false}
+                            onChange={(value: string) => setFilterValue(value)}
+                        />
+                    </Box>
                 </Box>
 
                 {!actionData && (

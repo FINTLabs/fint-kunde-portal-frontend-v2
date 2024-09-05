@@ -6,7 +6,6 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import ComponentApi from '~/api/ComponentApi';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ComponentConfigApi from '~/api/ComponentConfigApi';
 import { IComponentConfig } from '~/types/ComponentConfig';
 import ConfigClassTable from '~/routes/accesscontrol.$id/ConfigClassTable';
@@ -87,13 +86,16 @@ export default function Index() {
 
     const { label, value } = getLabelAndValue();
 
-    const handleSaveClick = (formData: { componentId: string }) => {
-        const updatedFormData = { ...formData, actionType: 'updateAccessControl' };
-        console.log('in save');
-        console.log(`/accesscontrol/${component?.name}`);
+    const handleSaveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+
+        // Example: Extracting componentId from somewhere (e.g., a ref, state, or other means)
+        const componentId = component?.name || ''; // Use your method to obtain the componentId
+        const updatedFormData = { componentId, actionType: 'updateAccessControl' };
+
         fetcher.submit(updatedFormData, {
             method: 'post',
-            action: `/accesscontrol/${component?.name}`,
+            action: `/accesscontrol/${componentId}`, // Adjust based on your route setup
         });
     };
 

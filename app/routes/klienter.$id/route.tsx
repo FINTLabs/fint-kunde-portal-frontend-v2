@@ -108,8 +108,8 @@ export default function Index() {
 
                     <Autentisering
                         name={client.name}
-                        passord={passord}
-                        ressourceIds={client.assetId}
+                        password={passord}
+                        resourceIds={client.assetId}
                         clientId={client.clientId}
                         clientSecret={clientSecret}
                         allDetails={allDetails}

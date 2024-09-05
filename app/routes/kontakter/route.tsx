@@ -56,10 +56,11 @@ export async function action({ request }: ActionFunctionArgs) {
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
     const selectedOrg = await getSelectedOrganization(request);
     const contactNin = getFormData(formData.get('contactNin'), 'contactNin', actionName);
-    const roleIdToAdd = getFormData(formData.get('roleId'), 'roleId', actionName);
-    const roleIdToDelete = getFormData(formData.get('roleId'), 'roleId', actionName);
-    
+    const roleIdToAdd = formData.get('roleId') as string;
+    const roleIdToDelete = formData.get('roleId') as string;
+
     let response;
+    let apiResponse;
     let isOk = false;
     switch (actionType) {
         case 'addTechnicalContact':
@@ -96,27 +97,31 @@ export async function action({ request }: ActionFunctionArgs) {
                 variant: isOk ? 'success' : 'error',
             });
         case 'addRole':
-            response = await RoleApi.addRole(selectedOrg, contactNin, roleIdToAdd);
-            isOk = response.status === 204;
-            return json({
-                ok: isOk,
-                show: true,
-                message: isOk
-                    ? 'Kontakten er oppdatert'
-                    : `Forespørslen feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
-                variant: isOk ? 'success' : 'error',
-            });
+            apiResponse = await RoleApi.addRole(selectedOrg, contactNin, roleIdToAdd);
+            if (apiResponse.status == 202)
+                response = {
+                    message: `Kontaktroller oppdatert: ${roleIdToAdd}`,
+                    variant: 'success',
+                };
+            else
+                response = {
+                    message: `Feil ved oppdatering av kontaktrolle. Mer info: Status: ${apiResponse.status}. StatusText ${apiResponse.statusText}`,
+                    variant: 'error',
+                };
+            break;
         case 'deleteRole':
-            response = await RoleApi.removeRole(selectedOrg, contactNin, roleIdToDelete);
-            isOk = response.status === 204;
-            return json({
-                ok: isOk,
-                show: true,
-                message: isOk
-                    ? 'Kontakten er oppdatert'
-                    : `Forespørslen feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
-                variant: isOk ? 'success' : 'error',
-            });
+            apiResponse = await RoleApi.removeRole(selectedOrg, contactNin, roleIdToDelete);
+            if (apiResponse.status == 202)
+                response = {
+                    message: `Kontaktroller oppdatert: ${roleIdToDelete}`,
+                    variant: 'success',
+                };
+            else
+                response = {
+                    message: `Feil ved oppdatering av kontaktrolle. Mer info: Status: ${apiResponse.status}. StatusText ${apiResponse.statusText}`,
+                    variant: 'error',
+                };
+            break;
         default:
             return json({
                 show: true,
@@ -124,6 +129,8 @@ export async function action({ request }: ActionFunctionArgs) {
                 variant: 'error',
             });
     }
+
+    return json({ show: true, message: response?.message, variant: response?.variant });
 }
 
 export default function Index() {

@@ -5,13 +5,17 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ServiceTable from '~/routes/samtykke/ServiceTable';
 import { useFetcher, useLoaderData } from '@remix-run/react';
-import { ActionFunctionArgs, json } from '@remix-run/node';
+import { ActionFunctionArgs, json, MetaFunction } from '@remix-run/node';
 import ConsentApi from '~/api/ConsentApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
 import { IFetcherResponseData } from '~/types/types';
 import AddPolicyForm from '~/routes/samtykke/AddPolicyForm';
 import AddServiceForm from '~/routes/samtykke/AddServiceForm';
+
+export const meta: MetaFunction = () => {
+    return [{ title: 'Samtykke' }, { name: 'description', content: 'Samtykke' }];
+};
 
 export const loader = async ({ request }: { request: Request }) => {
     const orgName = await getSelectedOrganization(request);
