@@ -46,20 +46,6 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
         }
     };
 
-    // Function to split components into chunks
-    const chunkArray = (array: IComponent[], chunkSize: number) => {
-        const chunks = [];
-        for (let i = 0; i < array.length; i += chunkSize) {
-            chunks.push(array.slice(i, i + chunkSize));
-        }
-        return chunks;
-    };
-
-    const componentChunks = chunkArray(
-        sortedComponents,
-        Math.ceil(sortedComponents.length / columns)
-    );
-
     const groupedByType = items.reduce((acc: ComponentType, item: IComponent) => {
         const componentType = item.basePath.split('/')[1];
         if (!acc[componentType]) {

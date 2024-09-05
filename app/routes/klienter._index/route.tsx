@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { json, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
@@ -8,9 +8,13 @@ import { TokenIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Button, HStack, Tabs, VStack, Search } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import type { LoaderFunction } from '@remix-run/node';
+import { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { InfoBox } from '~/components/shared/InfoBox';
+
+export const meta: MetaFunction = () => {
+    return [{ title: 'Klienter' }, { name: 'description', content: 'klienter' }];
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);

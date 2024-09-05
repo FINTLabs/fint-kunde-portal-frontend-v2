@@ -8,8 +8,8 @@ import { ThumbUpIcon, BagdeIcon } from '@navikt/aksel-icons';
 
 type AutentiseringProps = {
     name: string;
-    passord: string;
-    ressourceIds: string;
+    password: string;
+    resourceIds: string;
     clientId: string;
     clientSecret: string;
     allDetails: any;
@@ -17,9 +17,9 @@ type AutentiseringProps = {
 
 function Autentisering({
     name,
-    passord,
+    password,
     clientId,
-    ressourceIds,
+    resourceIds,
     clientSecret,
     allDetails,
 }: AutentiseringProps) {
@@ -38,7 +38,7 @@ function Autentisering({
                         <Table.Row>
                             <TableCellValue
                                 label={'Passord'}
-                                value={passord}
+                                value={password}
                                 fetcherKey={FETCHER_PASSORD_KEY}
                             />
                         </Table.Row>
@@ -54,7 +54,7 @@ function Autentisering({
                             />
                         </Table.Row>
                         <Table.Row>
-                            <TableCellValue label={'RessursId-er'} value={ressourceIds} />
+                            <TableCellValue label={'RessursId-er'} value={resourceIds} />
                         </Table.Row>
                     </Table.Body>
                 </Table>

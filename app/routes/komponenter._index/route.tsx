@@ -74,12 +74,12 @@ export default function Index() {
     );
 }
 
-export const action = async ({ request, params }: ActionFunctionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
     const actionName = 'action update';
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);
 
-    let updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
+    const updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
     const componentName = getFormData(formData.get('componentName'), 'componentName', actionName);
 
     try {

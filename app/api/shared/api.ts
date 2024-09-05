@@ -20,7 +20,7 @@ export async function request(
     try {
         log(`> Calling ${requestMethod} on ${functionName}:`, URL);
 
-        let requestOptions: RequestInit = {
+        const requestOptions: RequestInit = {
             method: requestMethod,
             credentials: 'same-origin',
             headers: {

@@ -46,12 +46,12 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                     <Autentisering
                         name={adapter.name}
                         clientId={adapter.clientId}
-                        ressourceIds={adapter.assetIds.reduce(
+                        resourceIds={adapter.assetIds.reduce(
                             (acc, curr) => acc.concat(!acc ? curr : `, ${curr}`),
                             ''
                         )}
                         clientSecret={clientSecret}
-                        passord={passord}
+                        password={passord}
                         allDetails={allDetails}
                     />
                     <Divider className="pt-3" />
