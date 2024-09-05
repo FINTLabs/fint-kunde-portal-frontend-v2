@@ -56,7 +56,9 @@ export async function action({ request }: ActionFunctionArgs) {
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
     const selectedOrg = await getSelectedOrganization(request);
     const contactNin = getFormData(formData.get('contactNin'), 'contactNin', actionName);
-
+    const roleIdToAdd = getFormData(formData.get('roleId'), 'roleId', actionName);
+    const roleIdToDelete = getFormData(formData.get('roleId'), 'roleId', actionName);
+    
     let response;
     let isOk = false;
     switch (actionType) {
@@ -94,13 +96,27 @@ export async function action({ request }: ActionFunctionArgs) {
                 variant: isOk ? 'success' : 'error',
             });
         case 'addRole':
-            let roleIdToAdd = getFormData(formData.get('roleId'), 'roleId', actionName);
             response = await RoleApi.addRole(selectedOrg, contactNin, roleIdToAdd);
-            break;
+            isOk = response.status === 204;
+            return json({
+                ok: isOk,
+                show: true,
+                message: isOk
+                    ? 'Kontakten er oppdatert'
+                    : `Forespørslen feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
+                variant: isOk ? 'success' : 'error',
+            });
         case 'deleteRole':
-            let roleIdToDelete = getFormData(formData.get('roleId'), 'roleId', actionName);
             response = await RoleApi.removeRole(selectedOrg, contactNin, roleIdToDelete);
-            break;
+            isOk = response.status === 204;
+            return json({
+                ok: isOk,
+                show: true,
+                message: isOk
+                    ? 'Kontakten er oppdatert'
+                    : `Forespørslen feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
+                variant: isOk ? 'success' : 'error',
+            });
         default:
             return json({
                 show: true,
@@ -119,19 +135,12 @@ export default function Index() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
-    console.log('---------------- action data', actionData);
     useEffect(() => {
         setShow(true);
         setIsModalOpen(false);
     }, [fetcher.state]);
 
     const handleFormSubmit = (formData: FormData) => {
-        // const contactNin = formData.get('contactNin') as string;
-        // const actionType = formData.get('actionType') as string;
-        //
-        // console.log('Saved legal data:', { contactNin, actionType });
-
-        // Assuming fetcher.submit works directly with FormData
         fetcher.submit(formData, { method: 'post', action: '/kontakter' });
     };
 

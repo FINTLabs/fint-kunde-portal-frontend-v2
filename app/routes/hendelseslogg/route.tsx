@@ -17,7 +17,7 @@ import { log } from '~/utils/logger';
 
 interface ActionData {
     message: string;
-    data: any;
+    data: never;
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -106,13 +106,6 @@ export default function Index() {
                         hideLabel={false}
                         onChange={(value: string) => setFilterValue(value)}
                     /></Box>
-                    {/*<TextField*/}
-                    {/*    label="Filtrer på ID - Skriv nøyaktig ID"*/}
-                    {/*    size="small"*/}
-                    {/*    name={'filter'}*/}
-                    {/*    value={filterValue}*/}
-                    {/*    onChange={(e) => setFilterValue(e.target.value)} // Update filter state*/}
-                    {/*/>*/}
                 </Box>
 
                 {!actionData && (
