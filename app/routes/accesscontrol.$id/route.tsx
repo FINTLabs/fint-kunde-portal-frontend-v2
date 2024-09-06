@@ -14,7 +14,6 @@ import { IFetcherResponseData } from '~/types/types';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const id = params.id || '';
-    // const orgName = await getSelectedOrganization(params.request);
     const url = new URL(request.url);
     const adapterName = url.searchParams.get('adapter') || '';
     const clientName = url.searchParams.get('client') || '';
@@ -35,9 +34,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 };
 
 export async function action({ request }: ActionFunctionArgs) {
-    // const orgName = await getSelectedOrganization(request);
     const formData = await request.formData();
-    console.log('IN ACTION');
     const actionType = formData.get('actionType');
 
     let response;
@@ -86,16 +83,15 @@ export default function Index() {
 
     const { label, value } = getLabelAndValue();
 
-    const handleSaveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-
-        // Example: Extracting componentId from somewhere (e.g., a ref, state, or other means)
-        const componentId = component?.name || ''; // Use your method to obtain the componentId
-        const updatedFormData = { componentId, actionType: 'updateAccessControl' };
+    const handleSaveClick = () => {
+        // Ensure FormData type is used as per fetcher.submit requirements
+        const updatedFormData = new FormData();
+        updatedFormData.append('componentId', component?.name || '');
+        updatedFormData.append('actionType', 'updateAccessControl');
 
         fetcher.submit(updatedFormData, {
             method: 'post',
-            action: `/accesscontrol/${componentId}`, // Adjust based on your route setup
+            action: `/accesscontrol/${component?.name}`,
         });
     };
 
@@ -131,6 +127,7 @@ export default function Index() {
 
                     <HStack gap={'10'}>
                         <Heading size={'medium'}>Access Control: {component?.name}</Heading>
+                        {/* Attach the correct event handler */}
                         <Button onClick={handleSaveClick}>Save</Button>
                     </HStack>
                     {actionData && show && (
