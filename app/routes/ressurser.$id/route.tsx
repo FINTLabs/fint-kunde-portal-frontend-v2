@@ -1,26 +1,27 @@
-import { type LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { LayersIcon } from '@navikt/aksel-icons';
-import { json, useLoaderData, useParams } from '@remix-run/react';
+import { ArrowLeftIcon, BriefcaseIcon, ComponentIcon, LayersIcon } from '@navikt/aksel-icons';
+import { json, useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Box, HGrid } from '@navikt/ds-react';
+import { Alert, Box, Button, HGrid, Tabs } from '@navikt/ds-react';
 import { GeneralDetailView } from './GeneralDetailView';
-import AdapterSelector from './AdapterSelector';
-import { IAdapter } from '~/types/types';
+import { IAdapter, IFetcherResponseData } from '~/types/types';
 import AdapterAPI from '~/api/AdapterApi';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
-import ClientSelector from './ClientSelector';
 import { DeleteModal } from '~/components/shared/DeleteModal';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import DetailsTable from '~/routes/ressurser.$id/DetailsTable';
+import React, { useEffect } from 'react';
 
 type LoaderData = {
     adapters: IAdapter[];
     asset: IAsset;
     clients: IClient[];
 };
+
 export const meta: MetaFunction = () => {
     return [
         { title: 'Ressurser' },
@@ -46,78 +47,219 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
 export default function Index() {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const { adapters, asset, clients } = useLoaderData<LoaderData>();
+    const fetcher = useFetcher();
+    const actionData = fetcher.data as IFetcherResponseData;
+    const [show, setShow] = React.useState(false);
 
     const breadcrumbs = [
         { name: 'Ressurser', link: '/ressurser' },
         { name: `${id}`, link: `/ressurser/${id}` },
     ];
 
-    const { adapters, asset, clients } = useLoaderData<LoaderData>();
+    useEffect(() => {
+        setShow(true);
+    }, [fetcher.state]);
+
+    const managedAdapters = adapters.filter((adapter) => adapter.managed);
+    const unmanagedAdapters = adapters.filter((adapter) => !adapter.managed);
+
+    const manangedClients = clients.filter((client) => client.managed);
+    const unmanangedClients = clients.filter((client) => !client.managed);
+
+    function onAssetUpdate(description: string) {
+        const formData = {
+            assetId: asset.assetId,
+            assetDescription: description,
+            assetName: asset.name,
+            actionType: 'UPDATE',
+        };
+        fetcher.submit(formData, { method: 'post', action: `/ressurser/${asset.name}` });
+    }
+
+    function onAdapterSwitchChange(adapterName: string, isChecked: boolean) {
+        const formData = {
+            adapterName: adapterName,
+            assetName: asset.name,
+            updateType: isChecked ? 'add' : 'remove',
+            actionType: 'UPDATE_ADAPTER',
+        };
+        fetcher.submit(formData, { method: 'post', action: `/ressurser/${asset.name}` });
+    }
+
+    function onClientSwitchChange(clientName: string, isChecked: boolean) {
+        const formData = {
+            clientName: clientName,
+            assetName: asset.name,
+            updateType: isChecked ? 'add' : 'remove',
+            actionType: 'UPDATE_CLIENT',
+        };
+        fetcher.submit(formData, { method: 'post', action: `/ressurser/${asset.name}` });
+    }
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="assets" />
-            {/* <ClientTable clients={assetData.clients} /> */}
 
-            <Box padding={'2'}>
-                <HGrid gap="2" align={'start'}>
-                    <GeneralDetailView asset={asset} />
+            {actionData && show && (
+                <Alert
+                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
+                    closeButton
+                    onClose={() => setShow(false)}>
+                    {actionData.message || 'Content'}
+                </Alert>
+            )}
 
-                    <AdapterSelector
-                        items={adapters}
-                        selectedItems={asset.adapters.map((a) => {
-                            const match = a.match(/cn=([^,]+)/);
-                            return match ? match[1] : '';
-                        })}
+            <HGrid gap="2" align={'start'}>
+                <Box>
+                    <Button
+                        className="relative h-12 w-12 top-2 right-14"
+                        icon={<ArrowLeftIcon title="a11y-title" fontSize="1.5rem" />}
+                        variant="tertiary"
+                        onClick={() => navigate(`/ressurser`)}
                     />
+                </Box>
 
-                    <ClientSelector
-                        items={clients}
-                        selectedItems={asset.clients.map((a) => {
-                            const match = a.match(/cn=([^,]+)/);
-                            return match ? match[1] : '';
-                        })}
-                    />
+                <Box
+                    className="w-full relative bottom-12"
+                    padding="6"
+                    borderRadius="large"
+                    shadow="small">
+                    <HGrid gap="2" align={'start'}>
+                        <GeneralDetailView asset={asset} onSave={onAssetUpdate} />
 
-                    {/*<HStack>*/}
-                    {/*    <HGrid gap="2" align={'start'}>*/}
-                    {/*        <BackButton*/}
-                    {/*            to={`/ressurser`}*/}
-                    {/*            className="relative h-12 w-12 top-2 right-14"*/}
-                    {/*        />*/}
+                        <Tabs defaultValue="managed" fill>
+                            <Tabs.List>
+                                <Tabs.Tab
+                                    value="managed"
+                                    label="Managed Adapters"
+                                    icon={<BriefcaseIcon aria-hidden />}
+                                />
+                                <Tabs.Tab
+                                    value="unmanaged"
+                                    label="Unmanaged Adapters"
+                                    icon={<BriefcaseIcon aria-hidden />}
+                                />
+                                <Tabs.Tab
+                                    value="manangedClients"
+                                    label="Managed Clients"
+                                    icon={<ComponentIcon aria-hidden />}
+                                />
+                                <Tabs.Tab
+                                    value="unmanangedClients"
+                                    label="Unmanaged Clients"
+                                    icon={<ComponentIcon aria-hidden />}
+                                />
+                            </Tabs.List>
+                            <Tabs.Panel value="managed" className="w-full">
+                                <DetailsTable
+                                    data={managedAdapters}
+                                    assetData={asset.adapters}
+                                    onSwitchChange={onAdapterSwitchChange}
+                                />
+                            </Tabs.Panel>
+                            <Tabs.Panel value="unmanaged" className="w-full">
+                                <DetailsTable
+                                    data={unmanagedAdapters}
+                                    assetData={asset.adapters}
+                                    onSwitchChange={onAdapterSwitchChange}
+                                />
+                            </Tabs.Panel>
 
-                    {/*        <VStack className="flex flex-grow relative bottom-12">*/}
-                    {/*            <Box className="w-full" padding="6" borderRadius="large" shadow="small">*/}
-                    {/*                <VStack gap="5">*/}
-                    {/*                    <GeneralDetailView asset={asset} />*/}
-                    {/*                    <Divider className="pt-3" />*/}
-                    {/*                    <AdapterSelector*/}
-                    {/*                        items={adapters}*/}
-                    {/*                        selectedItems={asset.adapters.map((a) => {*/}
-                    {/*                            const match = a.match(/cn=([^,]+)/);*/}
-                    {/*                            return match ? match[1] : '';*/}
-                    {/*                        })}*/}
-                    {/*                    />*/}
-                    {/*                    <ClientSelector*/}
-                    {/*                        items={clients}*/}
-                    {/*                        selectedItems={asset.clients.map((a) => {*/}
-                    {/*                            const match = a.match(/cn=([^,]+)/);*/}
-                    {/*                            return match ? match[1] : '';*/}
-                    {/*                        })}*/}
-                    {/*                    />*/}
-                    <DeleteModal
-                        title="Slett ressurs"
-                        bodyText="Er du sikker på at du vil slette denne ressursen?"
-                        action="delete"
-                    />
-                    {/*                </VStack>*/}
-                    {/*            </Box>*/}
-                    {/*        </VStack>*/}
-                    {/*    </HGrid>*/}
-                    {/*</HStack>*/}
-                </HGrid>
-            </Box>
+                            <Tabs.Panel value="manangedClients" className="w-full">
+                                <DetailsTable
+                                    data={manangedClients}
+                                    assetData={asset.clients}
+                                    onSwitchChange={onClientSwitchChange}
+                                />
+                            </Tabs.Panel>
+                            <Tabs.Panel value="unmanangedClients" className="w-full">
+                                <DetailsTable
+                                    data={unmanangedClients}
+                                    assetData={asset.clients}
+                                    onSwitchChange={onClientSwitchChange}
+                                />
+                            </Tabs.Panel>
+                        </Tabs>
+                        <DeleteModal
+                            title="Slett ressurs"
+                            bodyText="Er du sikker på at du vil slette denne ressursen?"
+                            action="delete"
+                        />
+                    </HGrid>
+                </Box>
+            </HGrid>
         </>
     );
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const actionType = formData.get('actionType');
+    const selectedOrg = await getSelectedOrganization(request);
+
+    const handleApiResponse = (apiResponse: Response, successMessage: string) => {
+        if (apiResponse.ok) {
+            return {
+                message: successMessage,
+                variant: 'success',
+                show: true,
+            };
+        } else {
+            return {
+                message: `Error updating. More info: Status: ${apiResponse.status}. StatusText: ${apiResponse.statusText}`,
+                variant: 'error',
+                show: true,
+            };
+        }
+    };
+    let response;
+    let updateResponse;
+    switch (actionType) {
+        case 'UPDATE':
+            updateResponse = await AssetApi.updateAsset(
+                {
+                    name: formData.get('assetName') as string,
+                    assetId: formData.get('assetId') as string,
+                    description: formData.get('assetDescription') as string,
+                },
+                selectedOrg
+            );
+            response = handleApiResponse(updateResponse, 'Ressurser oppdatert');
+            break;
+        case 'UPDATE_ADAPTER':
+            updateResponse = await AssetApi.updateAdapterInAsset(
+                formData.get('adapterName') as string,
+                formData.get('assetName') as string,
+                selectedOrg,
+                formData.get('updateType') as string
+            );
+            response = handleApiResponse(
+                updateResponse,
+                `Adapter oppdatert: ${formData.get('adapterName')}`
+            );
+            break;
+        case 'UPDATE_CLIENT':
+            updateResponse = await AssetApi.updateClientInAsset(
+                formData.get('clientName') as string,
+                formData.get('assetName') as string,
+                selectedOrg,
+                formData.get('updateType') as string
+            );
+            response = handleApiResponse(
+                updateResponse,
+                `Klienter oppdatert: ${formData.get('clientName')}`
+            );
+            break;
+        default:
+            return json({
+                show: true,
+                message: `Unknown action type '${actionType}'`,
+                variant: 'error',
+            });
+    }
+
+    return json(response);
 }

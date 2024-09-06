@@ -16,7 +16,8 @@ export function DeleteModal({ title, bodyText, action }: DeleteModalProps) {
             <Button
                 variant="danger"
                 onClick={() => ref.current?.showModal()}
-                icon={<TrashIcon aria-hidden />}>
+                icon={<TrashIcon aria-hidden />}
+                size={'xsmall'}>
                 Slett
             </Button>
             <Modal ref={ref} header={{ heading: title }}>

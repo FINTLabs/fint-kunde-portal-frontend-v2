@@ -1,30 +1,24 @@
-import { VStack, HStack, Heading } from '@navikt/ds-react';
-import { useSubmit } from '@remix-run/react';
-import { useState } from 'react';
-import { EditableTextField } from '../../components/shared/EditableTextField';
+import { Heading, HStack, VStack } from '@navikt/ds-react';
+import React, { useState } from 'react';
+import { EditableTextField } from '~/components/shared/EditableTextField';
 import { IAsset } from '~/types/Asset';
 import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 import { ToggleEditSaveButton } from '~/components/shared/EditSaveButton';
 
-export function GeneralDetailView({ asset }: { asset: IAsset }) {
+interface TestAddFormProps {
+    asset: IAsset;
+    onSave: (description: string) => void;
+}
+
+export const GeneralDetailView: React.FC<TestAddFormProps> = ({ asset, onSave }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [description, setDescription] = useState(asset.description);
-
-    const submit = useSubmit();
 
     const toggleEditSave = () => {
         if (isEditing) {
             if (description.trim() !== asset.description) {
-                submit(
-                    {
-                        description: description,
-                    },
-                    {
-                        method: 'POST',
-                        action: 'update',
-                        navigate: false,
-                    }
-                );
+                //todo: check for blank?
+                onSave(description);
             }
         }
         setIsEditing(!isEditing);
@@ -51,9 +45,10 @@ export function GeneralDetailView({ asset }: { asset: IAsset }) {
                         isEditing={isEditing}
                         setValue={setDescription}
                     />
+
                     <ToggleEditSaveButton isEditing={isEditing} onClick={toggleEditSave} />
                 </HStack>
             </HStack>
         </VStack>
     );
-}
+};
