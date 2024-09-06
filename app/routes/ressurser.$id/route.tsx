@@ -1,11 +1,11 @@
-import { ArrowLeftIcon, BriefcaseIcon, ComponentIcon, LayersIcon } from '@navikt/aksel-icons';
+import { ArrowLeftIcon, LayersIcon } from '@navikt/aksel-icons';
 import { json, useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Alert, Box, Button, HGrid, Tabs } from '@navikt/ds-react';
+import { Alert, Box, Button, HGrid } from '@navikt/ds-react';
 import { GeneralDetailView } from './GeneralDetailView';
 import { IAdapter, IFetcherResponseData } from '~/types/types';
 import AdapterAPI from '~/api/AdapterApi';
@@ -13,8 +13,8 @@ import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import { DeleteModal } from '~/components/shared/DeleteModal';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import DetailsTable from '~/routes/ressurser.$id/DetailsTable';
 import React, { useEffect } from 'react';
+import TabsComponent from '~/routes/ressurser._index/TabsComponent';
 
 type LoaderData = {
     adapters: IAdapter[];
@@ -130,59 +130,15 @@ export default function Index() {
                     <HGrid gap="2" align={'start'}>
                         <GeneralDetailView asset={asset} onSave={onAssetUpdate} />
 
-                        <Tabs defaultValue="managed" fill>
-                            <Tabs.List>
-                                <Tabs.Tab
-                                    value="managed"
-                                    label="Managed Adapters"
-                                    icon={<BriefcaseIcon aria-hidden />}
-                                />
-                                <Tabs.Tab
-                                    value="unmanaged"
-                                    label="Unmanaged Adapters"
-                                    icon={<BriefcaseIcon aria-hidden />}
-                                />
-                                <Tabs.Tab
-                                    value="manangedClients"
-                                    label="Managed Clients"
-                                    icon={<ComponentIcon aria-hidden />}
-                                />
-                                <Tabs.Tab
-                                    value="unmanangedClients"
-                                    label="Unmanaged Clients"
-                                    icon={<ComponentIcon aria-hidden />}
-                                />
-                            </Tabs.List>
-                            <Tabs.Panel value="managed" className="w-full">
-                                <DetailsTable
-                                    data={managedAdapters}
-                                    assetData={asset.adapters}
-                                    onSwitchChange={onAdapterSwitchChange}
-                                />
-                            </Tabs.Panel>
-                            <Tabs.Panel value="unmanaged" className="w-full">
-                                <DetailsTable
-                                    data={unmanagedAdapters}
-                                    assetData={asset.adapters}
-                                    onSwitchChange={onAdapterSwitchChange}
-                                />
-                            </Tabs.Panel>
-
-                            <Tabs.Panel value="manangedClients" className="w-full">
-                                <DetailsTable
-                                    data={manangedClients}
-                                    assetData={asset.clients}
-                                    onSwitchChange={onClientSwitchChange}
-                                />
-                            </Tabs.Panel>
-                            <Tabs.Panel value="unmanangedClients" className="w-full">
-                                <DetailsTable
-                                    data={unmanangedClients}
-                                    assetData={asset.clients}
-                                    onSwitchChange={onClientSwitchChange}
-                                />
-                            </Tabs.Panel>
-                        </Tabs>
+                        <TabsComponent
+                            asset={asset}
+                            managedAdapters={managedAdapters}
+                            unmanagedAdapters={unmanagedAdapters}
+                            managedClients={manangedClients}
+                            unmanagedClients={unmanangedClients}
+                            onAdapterSwitchChange={onAdapterSwitchChange}
+                            onClientSwitchChange={onClientSwitchChange}
+                        />
                         <DeleteModal
                             title="Slett ressurs"
                             bodyText="Er du sikker på at du vil slette denne ressursen?"
