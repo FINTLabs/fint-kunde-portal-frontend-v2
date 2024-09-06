@@ -13,7 +13,7 @@ spec:
     - name: LINKWALKER_API_URL
       value: http://fint-link-walker:8080
     - name: CONSENT_API_URL
-      value: http://fint-samtykke-admin-backend:8080
+      value: https://kunde-beta.felleskomponent.no
   url:
     hostname: kunde-remix.felleskomponent.no
     basePath: /
