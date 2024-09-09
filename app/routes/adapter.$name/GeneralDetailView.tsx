@@ -2,7 +2,7 @@ import { VStack, HStack, Heading, Button } from '@navikt/ds-react';
 import { useSubmit } from '@remix-run/react';
 import { useState } from 'react';
 import { IAdapter } from '~/types/types';
-import { EditableTextField } from '../../components/shared/EditableTextField';
+import { EditableTextField } from '~/components/shared/EditableTextField';
 import { PencilIcon, FloppydiskIcon } from '@navikt/aksel-icons';
 import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 
@@ -36,6 +36,7 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
                 />
                 <HStack className="w-full" align={'end'} justify={'end'}>
                     <Button
+                        disabled={adapter.managed}
                         icon={
                             isEditing ? (
                                 <FloppydiskIcon title="Lagre" />

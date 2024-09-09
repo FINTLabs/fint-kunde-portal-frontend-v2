@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { json, useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import ClientDetails from '~/routes/klienter.$id/ClientDetails';
@@ -20,7 +20,6 @@ import { getFormData, getRequestParam } from '~/utils/requestUtils';
 import ComponentSelector from '~/components/shared/ComponentSelector';
 import { getComponentIds } from '~/utils/helper';
 
-// @ts-ignore
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const id = params.id || '';
@@ -95,6 +94,7 @@ export default function Index() {
                             />
                         ) : (
                             <Button
+                                disabled={client.managed}
                                 icon={<PencilIcon title="Rediger" />}
                                 variant="tertiary"
                                 onClick={() => setIsEditing(true)}
@@ -184,7 +184,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     switch (actionType) {
         case 'UPDATE_COMPONONENT_IN_CLIENT':
-            let updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
+            const updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
             const componentName = getFormData(
                 formData.get('componentName'),
                 'componentName',
