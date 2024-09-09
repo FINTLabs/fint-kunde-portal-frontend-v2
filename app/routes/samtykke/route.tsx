@@ -22,6 +22,7 @@ export const loader = async ({ request }: { request: Request }) => {
 
     try {
         const policies = await ConsentApi.getBehandlings(orgName);
+
         const services = await ConsentApi.getTjenste(orgName);
         const personalDataList = await ConsentApi.getPersonopplysning();
         const foundations = await ConsentApi.getBehandlingsgrunnlag();
@@ -33,46 +34,18 @@ export const loader = async ({ request }: { request: Request }) => {
             foundations: foundations,
         });
     } catch (error) {
-        console.error('Error fetching data:', error);
-        return json({ error: 'An error occurred while fetching data.' }, { status: 200 });
+        console.error('Feil ved henting av data:', error);
+        return json({ error: 'Det oppsto en feil ved henting av data.' }, { status: 200 });
     }
 };
-
-export async function action({ request }: ActionFunctionArgs) {
-    const orgName = await getSelectedOrganization(request);
-    const formData = await request.formData();
-
-    const serviceId = String(formData.get('serviceId'));
-    const isActive = String(formData.get('isActive'));
-    const actionType = formData.get('actionType');
-
-    console.log('INSIDE ACTION -------------------------->', actionType);
-    let response;
-    switch (actionType) {
-        case 'setIsActive':
-            response = await ConsentApi.setActive(orgName, serviceId, isActive);
-            break;
-        case 'addService':
-            const newServiceName = String(formData.get('newServiceName'));
-            response = await ConsentApi.createService(newServiceName, orgName);
-            break;
-        case 'addPolicy':
-            console.log('adding a policy');
-            break;
-        default:
-            return json({ show: true, message: 'Unknown action type', variant: 'error' });
-    }
-
-    return json({ show: true, message: response?.message, variant: response?.variant });
-}
 
 export default function Index() {
     const [showAddPolicyForm, setShowAddPolicyForm] = useState(false);
     const [showAddServiceForm, setShowAddServiceForm] = useState(false);
-    const fetcher = useFetcher();
+    const fetcher = useFetcher<IFetcherResponseData>();
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
-    // console.log(actionData);
+
     const breadcrumbs = [{ name: 'Samtykke', link: '/samtykke' }];
     const { policies, services, personalDataList, foundations, error } = useLoaderData<{
         policies: IBehandling[];
@@ -105,22 +78,21 @@ export default function Index() {
     };
 
     const handleSavePolicy = (formData: {
-        selectedPersonalData: string;
-        selectedFoundation: string;
-        selectedService: string;
-        note: string;
+        personalDataId: string;
+        foundationId: string;
+        serviceId: string;
+        description: string;
     }) => {
-        console.log('Saved service data:', formData);
         setShowAddPolicyForm(false);
 
-        const updatedFormData = { ...formData, actionType: 'addPolicy' };
+        const updatedFormData = { ...formData, actionType: 'ADD_POLICY' };
         fetcher.submit(updatedFormData, { method: 'post', action: '/samtykke' });
     };
 
     const handleSaveService = (formData: { newServiceName: string }) => {
         setShowAddServiceForm(false);
 
-        const updatedFormData = { ...formData, actionType: 'addService' };
+        const updatedFormData = { ...formData, actionType: 'ADD_SERVICE' };
         fetcher.submit(updatedFormData, { method: 'post', action: '/samtykke' });
     };
 
@@ -162,15 +134,13 @@ export default function Index() {
                     variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
                     closeButton
                     onClose={() => setShow(false)}>
-                    {actionData.message || 'Content'}
+                    {actionData.message || 'Innhold'}
                 </Alert>
             )}
 
             <VStack gap={'6'}>
                 <Box className="w-full" padding="6">
-                    {error && (
-                        <Alert variant="warning">Error - feil ved tilkobling til server.</Alert>
-                    )}
+                    {error && <Alert variant="warning">Feil - tilkoblingsfeil til serveren.</Alert>}
                     {showAddPolicyForm && (
                         <AddPolicyForm
                             personalData={personalDataList}
@@ -196,4 +166,59 @@ export default function Index() {
             </VStack>
         </>
     );
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+    const orgName = await getSelectedOrganization(request);
+    const formData = await request.formData();
+    const actionType = formData.get('actionType');
+
+    let serviceName;
+    const handleApiResponse = (apiResponse: Response, successMessage: string) => {
+        if (apiResponse.ok) {
+            return {
+                message: successMessage,
+                variant: 'success',
+                show: true,
+            };
+        } else {
+            return {
+                message: `Feil ved oppdatering. Mer info: Status: ${apiResponse.status}. StatusTekst: ${apiResponse.statusText}`,
+                variant: 'error',
+                show: true,
+            };
+        }
+    };
+
+    let response;
+    let updateResponse;
+    switch (actionType) {
+        case 'SET_ACTIVE':
+            updateResponse = await ConsentApi.setActive(
+                orgName,
+                formData.get('policyId') as string,
+                formData.get('isActive') as string
+            );
+            response = handleApiResponse(updateResponse, 'Aktiv status endret');
+            break;
+        case 'ADD_SERVICE':
+            serviceName = formData.get('newServiceName') as string;
+            updateResponse = await ConsentApi.createService(serviceName, orgName);
+            response = handleApiResponse(updateResponse, `Ny tjeneste lagt til ${serviceName}`);
+            break;
+        case 'ADD_POLICY':
+            updateResponse = await ConsentApi.createPolicy(
+                formData.get('serviceId') as string,
+                formData.get('foundationId') as string,
+                formData.get('personalDataId') as string,
+                formData.get('description') as string,
+                orgName
+            );
+            response = handleApiResponse(updateResponse, `Nytt samtykke lagt til`);
+            break;
+        default:
+            return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
+    }
+
+    return json(response);
 }
