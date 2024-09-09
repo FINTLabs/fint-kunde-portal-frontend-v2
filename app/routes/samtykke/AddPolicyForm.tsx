@@ -8,10 +8,10 @@ interface AddConsentFormProps {
     service: ITjeneste[];
     onCancel: () => void;
     onSave: (formData: {
-        selectedPersonalData: string;
-        selectedFoundation: string;
-        selectedService: string;
-        note: string;
+        personalDataId: string;
+        foundationId: string;
+        serviceId: string;
+        description: string;
     }) => void;
 }
 
@@ -30,7 +30,7 @@ const AddPolicyForm: React.FC<AddConsentFormProps> = ({
     const [selectedPersonalDataError, setSelectedPersonalDataError] = useState<
         string | undefined
     >();
-    const [selectedFoudnationError, setSelectedFoudnationError] = useState<string | undefined>();
+    const [selectedFoundationError, setSelectedFoundationError] = useState<string | undefined>();
     const [selectedServiceError, setSelectedServiceError] = useState<string | undefined>();
 
     const [noteError, setNoteError] = useState<string | undefined>();
@@ -46,10 +46,10 @@ const AddPolicyForm: React.FC<AddConsentFormProps> = ({
         }
 
         if (selectedFoundation === '') {
-            setSelectedFoudnationError('Behandlingsgrunnlag er påkrevd');
+            setSelectedFoundationError('Behandlingsgrunnlag er påkrevd');
             isValid = false;
         } else {
-            setSelectedFoudnationError(undefined);
+            setSelectedFoundationError(undefined);
         }
 
         if (selectedService === '') {
@@ -66,10 +66,10 @@ const AddPolicyForm: React.FC<AddConsentFormProps> = ({
 
         if (isValid) {
             const formData = {
-                selectedPersonalData: selectedPersonalData,
-                selectedFoundation: selectedFoundation,
-                selectedService: selectedService,
-                note: note,
+                personalDataId: selectedPersonalData,
+                foundationId: selectedFoundation,
+                serviceId: selectedService,
+                description: note,
             };
             onSave(formData);
         }
@@ -94,7 +94,7 @@ const AddPolicyForm: React.FC<AddConsentFormProps> = ({
                     label="Behandlingsgrunnlag"
                     value={selectedFoundation}
                     onChange={(e) => setSelectedFoundation(e.target.value)}
-                    error={selectedFoudnationError}>
+                    error={selectedFoundationError}>
                     <option value="">Velg behandlingsgrunnlag</option>
                     {foundation.map((grunn) => (
                         <option key={grunn.id} value={grunn.id}>

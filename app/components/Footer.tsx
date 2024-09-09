@@ -16,11 +16,14 @@ export default function Footer() {
             </Heading>
             <div style={{ marginBottom: '1rem' }}>
                 <BodyLong>
-                    <Link to="/support" style={{ marginRight: '1rem' }}>
+                    <Link to="http://support.novari.no" style={{ marginRight: '1rem' }}>
                         Opprett supportsak
                     </Link>
                     <Link to="/help" style={{ marginRight: '1rem' }}>
                         Brukerhjelp
+                    </Link>
+                    <Link to="http://fintlabs.no" style={{ marginRight: '1rem' }}>
+                        FINT Labs
                     </Link>
                 </BodyLong>
             </div>

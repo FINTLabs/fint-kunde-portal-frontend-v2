@@ -3,6 +3,8 @@ import { Table } from '@navikt/ds-react';
 import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
+import { FetcherWithComponents } from '@remix-run/react';
+import { IFetcherResponseData } from '~/types/types';
 
 interface ScopedSortState {
     orderBy: keyof IBehandling;
@@ -14,7 +16,7 @@ interface IServiceTableProps {
     services: ITjeneste[];
     personalDataList: IPersonopplysning[];
     foundations: IBehandlingsgrunnlag[];
-    f: any;
+    f: FetcherWithComponents<IFetcherResponseData>;
 }
 
 const ServiceTable: React.FC<IServiceTableProps> = ({
@@ -116,15 +118,17 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                                         );
                                     })}
                                     <ConfirmAction
-                                        actionText={
-                                            policy.aktiv ? 'Set active to FALSE' : 'Set to active'
-                                        }
+                                        actionText={policy.aktiv ? 'Deaktiver' : 'Aktiver'}
                                         targetName={policy.formal}
                                         f={f}
-                                        actionType="setIsActive"
-                                        confirmationText={`Change active status:`}
+                                        actionType="SET_ACTIVE"
+                                        confirmationText={
+                                            policy.aktiv
+                                                ? `Denne handlingen vil sette statusen til inaktiv.`
+                                                : `Denne handlingen vil sette statusen til aktiv.`
+                                        }
                                         additionalInputs={[
-                                            { name: 'serviceId', value: policy.id },
+                                            { name: 'policyId', value: policy.id },
                                             {
                                                 name: 'isActive',
                                                 value: policy.aktiv ? 'false' : 'true',

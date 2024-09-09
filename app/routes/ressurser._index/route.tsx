@@ -1,6 +1,5 @@
 import { type LoaderFunction, type MetaFunction } from '@remix-run/node';
-import { LayersIcon } from '@navikt/aksel-icons';
-import React from 'react';
+import { ChevronRightIcon, LayersIcon, PlusIcon } from '@navikt/aksel-icons';
 import { json, useLoaderData, useNavigate } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -8,8 +7,6 @@ import AccessApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { BodyShort, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { ChevronRightIcon } from '@navikt/aksel-icons';
-import { PlusIcon } from '@navikt/aksel-icons';
 import { InfoBox } from '~/components/shared/InfoBox';
 
 export const meta: MetaFunction = () => {

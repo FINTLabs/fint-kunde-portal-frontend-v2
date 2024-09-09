@@ -1,145 +1,110 @@
-import { log } from '~/utils/logger';
-import { request } from '~/api/shared/api';
+import { error, log } from '~/utils/logger';
 
 const API_URL = process.env.CONSENT_API_URL;
+
+interface FetchOptions extends RequestInit {
+    headers?: HeadersInit;
+}
+
+async function fetchWithAuth(url: string, options: FetchOptions = {}) {
+    try {
+        const response = await fetch(url, {
+            ...options,
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json',
+                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
+                ...options.headers,
+            },
+        });
+
+        if (response.ok) {
+            return await response.json();
+        } else {
+            error('Error fetching, status:', response.status);
+            return null;
+        }
+    } catch (err) {
+        error('Error fetching:', err);
+        return null;
+    }
+}
 
 class ConsentApi {
     static async getBehandlings(orgName: string) {
         const url = `${API_URL}/consent-admin/behandling/${orgName}`;
         log('url', url);
-
-        return request(url, 'getBehandlings', 'GET', 'json');
+        return await fetchWithAuth(url, { method: 'GET' });
     }
 
     static async getTjenste(orgName: string) {
         const url = `${API_URL}/consent-admin/tjeneste/${orgName}`;
         log('url', url);
-
-        return request(url, 'getTjenste', 'GET', 'json');
+        return await fetchWithAuth(url, { method: 'GET' });
     }
 
     static async getPersonopplysning() {
         const url = `${API_URL}/consent-admin/personopplysning`;
         log('url', url);
-
-        return request(url, 'getPersonopplysning', 'GET', 'json');
+        return await fetchWithAuth(url, { method: 'GET' });
     }
 
     static async getBehandlingsgrunnlag() {
         const url = `${API_URL}/consent-admin/behandlingsgrunnlag`;
         log('url', url);
-
-        return request(url, 'getBehandlingsgrunnlag', 'GET', 'json');
+        return await fetchWithAuth(url, { method: 'GET' });
     }
 
-    static setActive(orgName: string, behandlingId: string, isActive: string) {
-        const request = new Request(
-            `${API_URL}/consent-admin/behandling/${orgName}/${behandlingId}/${isActive}`,
-            {
-                method: 'PUT',
-                headers: new Headers({
-                    'Content-Type': 'application/json',
-                    Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
-                }),
-                credentials: 'same-origin',
-            }
-        );
-
-        return fetch(request)
-            .then((response) => {
-                if (response.ok) {
-                    return { message: 'Samtykke er oppdatert', variant: 'info' };
-                } else {
-                    return {
-                        message: 'Det oppsto en feil ved oppdatering.',
-                        variant: 'error',
-                    };
-                }
-            })
-            .catch((error) => {
-                error('error setting isActive on samtykke behandling');
-                return {
-                    message: 'Det oppsto en feil.',
-                    variant: 'error',
-                };
-            });
+    static async setActive(orgName: string, behandlingId: string, isActive: string) {
+        const url = `${API_URL}/consent-admin/behandling/${orgName}/${behandlingId}/${isActive}`;
+        log('url', url);
+        return await fetch(url, {
+            method: 'PUT',
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json',
+                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
+            },
+        });
     }
 
-    static createPolicy(
+    static async createPolicy(
         serviceId: string,
-        reasonId: string,
+        foundationId: string,
         personalDataId: string,
         description: string,
         orgName: string
     ) {
-        const request = new Request(`/consent-admin/behandling/${orgName}`, {
+        const url = `${API_URL}/consent-admin/behandling/${orgName}`;
+        log('url', url);
+        return await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
             },
-            credentials: 'same-origin',
             body: JSON.stringify({
                 aktiv: true,
                 formal: description,
-                behandlingsgrunnlagIds: [reasonId],
+                behandlingsgrunnlagIds: [foundationId],
                 tjenesteIds: [serviceId],
                 personopplysningIds: [personalDataId],
             }),
         });
-        return fetch(request)
-            .then((response) => {
-                if (response.ok) {
-                    return { message: 'Samtykke er added', variant: 'info' };
-                } else {
-                    return {
-                        message: 'Det oppsto en feil ved adding.',
-                        variant: 'error',
-                    };
-                }
-            })
-            .catch((error) => {
-                error('error adding a new samtykke');
-                return {
-                    message: 'Det oppsto en feil.',
-                    variant: 'error',
-                };
-            });
     }
 
     static async createService(serviceName: string, orgName: string) {
-        console.log('Sending a api request with new service name: ', serviceName);
-
-        const request = new Request(`${API_URL}/consent-admin/tjeneste/${orgName}`, {
+        const url = `${API_URL}/consent-admin/tjeneste/${orgName}`;
+        log('url', url);
+        log('----------body', serviceName);
+        return await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
             },
-            credentials: 'same-origin',
-            body: JSON.stringify({
-                navn: serviceName,
-            }),
+            body: JSON.stringify({ navn: serviceName }),
         });
-
-        return fetch(request)
-            .then((response) => {
-                if (response.ok) {
-                    return { message: 'Tjeneste er added', variant: 'info' };
-                } else {
-                    return {
-                        message: 'Det oppsto en feil ved tjeneste: ' + response.statusText,
-                        variant: 'error',
-                    };
-                }
-            })
-            .catch((error) => {
-                error('error adding a new tjeneste');
-                return {
-                    message: 'Det oppsto en feil.',
-                    variant: 'error',
-                };
-            });
     }
 }
 

@@ -139,11 +139,13 @@ export default function Index() {
                             onAdapterSwitchChange={onAdapterSwitchChange}
                             onClientSwitchChange={onClientSwitchChange}
                         />
-                        <DeleteModal
-                            title="Slett ressurs"
-                            bodyText="Er du sikker på at du vil slette denne ressursen?"
-                            action="delete"
-                        />
+                        <HGrid columns={4}>
+                            <DeleteModal
+                                title="Slett ressurs"
+                                bodyText="Er du sikker på at du vil slette denne ressursen?"
+                                action="delete"
+                            />
+                        </HGrid>
                     </HGrid>
                 </Box>
             </HGrid>
