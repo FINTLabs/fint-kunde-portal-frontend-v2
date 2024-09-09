@@ -8,14 +8,18 @@ interface FetchOptions extends RequestInit {
 
 async function fetchWithAuth(url: string, options: FetchOptions = {}) {
     try {
+        const headers = {
+            Accept: 'application/json',
+            ...(process.env.NODE_ENV === 'development' && {
+                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
+            }),
+            ...options.headers,
+        };
+
         const response = await fetch(url, {
             ...options,
             credentials: 'same-origin',
-            headers: {
-                Accept: 'application/json',
-                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
-                ...options.headers,
-            },
+            headers,
         });
 
         if (response.ok) {
@@ -55,16 +59,23 @@ class ConsentApi {
         return await fetchWithAuth(url, { method: 'GET' });
     }
 
+    private static buildHeaders(contentType: string = 'application/json') {
+        return {
+            'Content-Type': contentType,
+            Accept: 'application/json',
+            ...(process.env.NODE_ENV === 'development' && {
+                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
+            }),
+        };
+    }
+
     static async setActive(orgName: string, behandlingId: string, isActive: string) {
         const url = `${API_URL}/consent-admin/behandling/${orgName}/${behandlingId}/${isActive}`;
         log('url', url);
         return await fetch(url, {
             method: 'PUT',
             credentials: 'same-origin',
-            headers: {
-                Accept: 'application/json',
-                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
-            },
+            headers: this.buildHeaders(),
         });
     }
 
@@ -79,10 +90,7 @@ class ConsentApi {
         log('url', url);
         return await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
-            },
+            headers: this.buildHeaders(),
             body: JSON.stringify({
                 aktiv: true,
                 formal: description,
@@ -96,13 +104,9 @@ class ConsentApi {
     static async createService(serviceName: string, orgName: string) {
         const url = `${API_URL}/consent-admin/tjeneste/${orgName}`;
         log('url', url);
-        log('----------body', serviceName);
         return await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
-            },
+            headers: this.buildHeaders(),
             body: JSON.stringify({ navn: serviceName }),
         });
     }
