@@ -49,7 +49,6 @@ export async function action({ request }: ActionFunctionArgs) {
     const action = formData.get('action') as string;
     const resource = formData.get('resource') as string;
 
-    console.log('form submitted', formData);
     const orgName = await getSelectedOrganization(request);
 
     let response;
@@ -82,7 +81,6 @@ export default function Index() {
     const mappedLogs = mapLogs(logs);
     const [filterValue, setFilterValue] = useState('');
 
-    // Conditionally filter logs based on the filter input (only if filterValue is not empty)
     const filteredLogs = filterValue
         ? mappedLogs.filter((log: Log) => log.id === filterValue)
         : mappedLogs;

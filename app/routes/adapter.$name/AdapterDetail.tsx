@@ -1,6 +1,6 @@
 import { Box, HGrid, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
-import { useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
+import { useFetcher, useLoaderData, useSubmit } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { IComponent } from '~/types/Component';
 import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from './constants';
@@ -15,8 +15,8 @@ import { getComponentIds } from '~/utils/helper';
 export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
 
-    const navigate = useNavigate();
-    const selectedComponents = adapter.components;
+    // const navigate = useNavigate();
+    // const selectedComponents = adapter.components;
 
     const passordFetcher = useFetcher({ key: FETCHER_PASSORD_KEY });
     const clientSecretFetcher = useFetcher({ key: FETCHER_CLIENT_SECRET_KEY });
@@ -74,11 +74,15 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                             );
                         }}
                     />
-                    <DeleteModal
-                        title="Slett adapter"
-                        bodyText="Er du sikker på at du vil slette dette adapteret?"
-                        action="delete"
-                    />
+                    <HGrid columns={3}>
+                        {!adapter.managed && (
+                            <DeleteModal
+                                title="Slett adapter"
+                                bodyText="Er du sikker på at du vil slette dette adapteret?"
+                                action="delete"
+                            />
+                        )}
+                    </HGrid>
                 </VStack>
             </Box>
         </HGrid>

@@ -1,6 +1,7 @@
 import React from 'react';
-import { BodyShort, HStack, Label, Textarea, TextField, VStack } from '@navikt/ds-react';
+import { Textarea, TextField, VStack } from '@navikt/ds-react';
 import { IClient } from '~/types/Clients';
+import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 
 interface ClientComponentProps {
     client: IClient;
@@ -19,10 +20,7 @@ const ClientDetails: React.FC<ClientComponentProps> = ({ client, isEditing }) =>
                     value={client.shortDescription}
                 />
             ) : (
-                <HStack gap={'2'}>
-                    <Label>Beskrivelse</Label>
-                    <BodyShort>{client.shortDescription}</BodyShort>
-                </HStack>
+                <LabelValuePanel label="Beskrivelse" value={client.shortDescription} />
             )}
 
             {isEditing ? (
@@ -33,26 +31,19 @@ const ClientDetails: React.FC<ClientComponentProps> = ({ client, isEditing }) =>
                     value={client.note}
                 />
             ) : (
-                <HStack gap={'2'}>
-                    <Label>Note</Label>
-                    <BodyShort>{client.note}</BodyShort>
-                </HStack>
+                <LabelValuePanel label="Note" value={client.note} />
             )}
 
-            <HStack gap={'2'}>
-                <Label>Navn</Label>
-                <BodyShort>{client.name}</BodyShort>
-            </HStack>
+            <LabelValuePanel label="Navn" value={client.name} />
 
-            <HStack gap={'2'}>
-                <Label>Asset Id</Label>
-                <BodyShort>{client.assetId}</BodyShort>
-            </HStack>
+            <LabelValuePanel
+                label="Managed"
+                value={client.managed ? 'Automatisk opprettet' : 'Manuelt opprettet'}
+            />
 
-            <HStack gap={'2'}>
-                <Label>Components</Label>
-                <BodyShort>{client.components.length}</BodyShort>
-            </HStack>
+            <LabelValuePanel label="Asset Id" value={client.assetId} />
+
+            <LabelValuePanel label="Components" value={client.components.length.toString()} />
         </VStack>
         {/*</HStack>*/}
     </>

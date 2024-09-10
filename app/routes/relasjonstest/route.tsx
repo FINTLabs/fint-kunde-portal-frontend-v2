@@ -51,12 +51,25 @@ export async function action({ request }: ActionFunctionArgs) {
                 clientName as string,
                 orgName
             );
-            break;
+            if (response.ok) {
+                return {
+                    message: 'Ny relasjonstest lagt til.',
+                    variant: 'success',
+                    show: true,
+                };
+            } else {
+                return {
+                    message: `Feil ved oppdatering. Mer info: Status: ${response.status}. StatusTekst: ${response.statusText}`,
+                    variant: 'error',
+                    show: true,
+                };
+            }
+
         default:
-            return json({ show: true, message: 'Unknown action type', variant: 'error' });
+            return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
     }
 
-    return json({ show: true, message: response?.message, variant: response?.variant });
+    // return json(response);
 }
 export default function Index() {
     const breadcrumbs = [{ name: 'Relasjonstest', link: '/relasjonstest' }];

@@ -3,7 +3,6 @@ import { IAdapter } from '~/types/types';
 import { useNavigate } from '@remix-run/react';
 import { tabInfo } from '~/routes/adaptere/constants';
 import { ChevronRightIcon, CogRotationIcon, NotePencilDashIcon } from '@navikt/aksel-icons';
-import React from 'react';
 
 interface CustomTabsProps<T> {
     items: T[];

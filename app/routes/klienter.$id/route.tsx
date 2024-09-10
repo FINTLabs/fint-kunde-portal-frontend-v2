@@ -154,13 +154,15 @@ export default function Index() {
                         }}
                         columns={2}
                     /> */}
-                    <HStack justify={'center'}>
-                        <DeleteModal
-                            title="Slett klient"
-                            bodyText="Er du sikker på at du vil slette denne klienten?"
-                            action="delete"
-                        />
-                    </HStack>
+                    <HGrid columns={3}>
+                        {!client.managed && (
+                            <DeleteModal
+                                title="Slett klient"
+                                bodyText="Er du sikker på at du vil slette denne klienten?"
+                                action="delete"
+                            />
+                        )}
+                    </HGrid>
                 </Box>
             </HGrid>
         </>

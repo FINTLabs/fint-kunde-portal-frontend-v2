@@ -7,30 +7,26 @@ interface FetchOptions extends RequestInit {
 }
 
 async function fetchWithAuth(url: string, options: FetchOptions = {}) {
-    try {
-        const headers = {
-            Accept: 'application/json',
-            ...(process.env.NODE_ENV === 'development' && {
-                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
-            }),
-            ...options.headers,
-        };
+    const headers = {
+        Accept: 'application/json',
+        ...(process.env.NODE_ENV === 'development' && {
+            Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
+        }),
+        ...options.headers,
+    };
 
-        const response = await fetch(url, {
-            ...options,
-            credentials: 'same-origin',
-            headers,
-        });
+    const response = await fetch(url, {
+        ...options,
+        credentials: 'same-origin',
+        headers,
+    });
 
-        if (response.ok) {
-            return await response.json();
-        } else {
-            error('Error fetching, status:', response.status);
-            return null;
-        }
-    } catch (err) {
-        error('Error fetching:', err);
-        return null;
+    if (response.ok) {
+        return await response.json();
+    } else {
+        const errorMsg = `Error fetching, status: ${response.status}`;
+        error(errorMsg);
+        throw new Error(errorMsg);
     }
 }
 

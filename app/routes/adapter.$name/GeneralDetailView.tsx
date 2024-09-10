@@ -21,6 +21,10 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
                 </Heading>
             </HStack>
             <LabelValuePanel label="Navn" value={adapter.name} />
+            <LabelValuePanel
+                label="Managed"
+                value={adapter.managed ? 'Automatisk opprettet' : 'Manuelt opprettet'}
+            />
             <EditableTextField
                 label={'Tittel'}
                 value={adapterShortDesc}

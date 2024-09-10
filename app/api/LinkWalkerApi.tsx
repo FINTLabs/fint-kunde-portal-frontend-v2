@@ -1,5 +1,5 @@
 import { request } from '~/api/shared/api';
-import { error, log, warn } from '~/utils/logger';
+import { error, log } from '~/utils/logger';
 
 const API_URL = process.env.LINKWALKER_API_URL;
 
@@ -12,13 +12,11 @@ class LinkWalkerApi {
         });
     }
 
-    static getLink(orgName:string, resultId:string){
-        console.log('-----------', API_URL)
-        return `${API_URL}/link-walker/tasks/${orgName}/${resultId}/download`
+    static getLink(orgName: string, resultId: string) {
+        return `${API_URL}/link-walker/tasks/${orgName}/${resultId}/download`;
     }
-    static async addTest(testUrl: string, clientName: string, orgName: string) {
-        log('TEST DATA', JSON.stringify(testUrl));
 
+    static async addTest(testUrl: string, clientName: string, orgName: string) {
         const request = new Request(`${API_URL}/link-walker/tasks/${orgName}`, {
             method: 'POST',
             headers: {
@@ -33,25 +31,15 @@ class LinkWalkerApi {
             }),
         });
 
-        return fetch(request)
-            .then((response) => {
-                if (response.ok) {
-                    return { message: 'test added', variant: 'info' };
-                } else {
-                    warn('LinkWalker not ok: ', response.status);
-                    return {
-                        message: 'Error - feil ved tilkobling til server.',
-                        variant: 'warning',
-                    };
-                }
-            })
-            .catch((e) => {
-                error(e.message);
-                return {
-                    message: 'Det oppsto en feil.',
-                    variant: 'error',
-                };
-            });
+        return fetch(request).then((response) => {
+            if (response.ok) {
+                log('link walker request ok');
+                return response;
+            } else {
+                error('error with linkwalker');
+                throw new Error(`LinkWalker not ok: ${response.status}`);
+            }
+        });
     }
 }
 
