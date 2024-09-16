@@ -1,4 +1,4 @@
-import { Box, HGrid, VStack } from '@navikt/ds-react';
+import { Box, GuidePanel, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
 import { useFetcher, useLoaderData, useSubmit } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
@@ -9,10 +9,18 @@ import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
 import { DeleteModal } from '~/components/shared/DeleteModal';
-import ComponentSelector from '../../components/shared/ComponentSelector';
 import { getComponentIds } from '~/utils/helper';
+import ComponentList from '~/routes/accesscontrol.$id/ComponentList';
+import { SealCheckmarkIcon } from '@navikt/aksel-icons';
+import ComponentSelector from '~/components/shared/ComponentSelector';
 
-export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
+export function AdapterDetail({
+    adapter,
+    hasAccessControl,
+}: {
+    adapter: IAdapter;
+    hasAccessControl: boolean;
+}) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
 
     // const navigate = useNavigate();
@@ -36,6 +44,10 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
 
     const submit = useSubmit();
 
+    function onComponentToggle() {
+        console.log('------- handle component checkbox');
+    }
+
     return (
         <HGrid gap="2" align={'start'}>
             <BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />
@@ -55,25 +67,48 @@ export function AdapterDetail({ adapter }: { adapter: IAdapter }) {
                         allDetails={allDetails}
                     />
                     <Divider className="pt-3" />
-                    <ComponentSelector
-                        items={components}
-                        adapterName={adapter.name}
-                        selectedItems={getComponentIds(adapter.components)}
-                        toggle={(name, isChecked) => {
-                            submit(
-                                {
-                                    componentName: name,
-                                    updateType: isChecked ? 'add' : 'remove',
-                                    actionType: 'UPDATE_COMPONENT_IN_ADAPTER',
-                                },
-                                {
-                                    method: 'POST',
-                                    action: 'update',
-                                    navigate: false,
-                                }
-                            );
-                        }}
-                    />
+
+                    <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
+                    {hasAccessControl ? (
+                        <ComponentList
+                            items={components}
+                            selectedItems={getComponentIds(adapter.components)}
+                            clientName={adapter.name}
+                            onToggle={onComponentToggle}
+                        />
+                    ) : (
+                        <>
+                            <GuidePanel
+                                poster
+                                illustration={
+                                    <SealCheckmarkIcon title="a11y-title" fontSize="1.5rem" />
+                                }>
+                                Vi jobber for tiden med å utvikle et system som vil gjøre det mulig
+                                for brukere å finjustere tilgangen til komponenter i klienter og
+                                adaptere
+                            </GuidePanel>
+                            <ComponentSelector
+                                items={components}
+                                adapterName={adapter.name}
+                                selectedItems={getComponentIds(adapter.components)}
+                                toggle={(name, isChecked) => {
+                                    submit(
+                                        {
+                                            componentName: name,
+                                            updateType: isChecked ? 'add' : 'remove',
+                                            actionType: 'UPDATE_COMPONENT_IN_ADAPTER',
+                                        },
+                                        {
+                                            method: 'POST',
+                                            action: 'update',
+                                            navigate: false,
+                                        }
+                                    );
+                                }}
+                            />
+                        </>
+                    )}
+
                     <HGrid columns={3}>
                         {!adapter.managed && (
                             <DeleteModal

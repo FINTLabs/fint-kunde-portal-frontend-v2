@@ -6,8 +6,14 @@ import type { ActionFunctionArgs } from '@remix-run/node';
 import ClientApi from '~/api/ClientApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { ArrowLeftIcon, FloppydiskIcon, PencilIcon, TokenIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
+import {
+    ArrowLeftIcon,
+    FloppydiskIcon,
+    PencilIcon,
+    SealCheckmarkIcon,
+    TokenIcon,
+} from '@navikt/aksel-icons';
+import { Box, Button, GuidePanel, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
@@ -17,8 +23,10 @@ import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from '../adapter.$name/constants';
 import { DeleteModal } from '~/components/shared/DeleteModal';
 import { getFormData, getRequestParam } from '~/utils/requestUtils';
-import ComponentSelector from '~/components/shared/ComponentSelector';
 import { getComponentIds } from '~/utils/helper';
+import ComponentList from '~/routes/accesscontrol.$id/ComponentList';
+import FeaturesApi from '~/api/FeaturesApi';
+import ComponentSelector from '~/components/shared/ComponentSelector';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
@@ -27,8 +35,9 @@ export async function loader({ request, params }: ActionFunctionArgs) {
     try {
         const client = await ClientApi.getClientById(orgName, id);
         const components = await ComponentApi.getOrganisationComponents(orgName);
+        const features = await FeaturesApi.fetchFeatures();
 
-        return json({ client, components });
+        return json({ client, components, features });
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Response('Not Found', { status: 404 });
@@ -36,9 +45,14 @@ export async function loader({ request, params }: ActionFunctionArgs) {
 }
 
 export default function Index() {
-    const { client, components } = useLoaderData<{ client: IClient; components: IComponent[] }>();
+    const { client, components, features } = useLoaderData<{
+        client: IClient;
+        components: IComponent[];
+        features: Record<string, boolean>;
+    }>();
     const navigate = useNavigate();
-    const selectedComponents = getComponentIds(client.components);
+    // const selectedComponents = getComponentIds(client.components);
+    const hasAccessControl = features['access-controll-new'];
 
     const breadcrumbs = [
         { name: 'Klienter', link: '/klienter' },
@@ -63,6 +77,10 @@ export default function Index() {
     const [isEditing, setIsEditing] = useState(false);
 
     const submit = useSubmit();
+
+    function onComponentToggle() {
+        console.log('------- handle component checkbox');
+    }
 
     return (
         <>
@@ -117,43 +135,47 @@ export default function Index() {
 
                     <Divider className="pt-10" />
 
-                    <ComponentSelector
-                        items={components}
-                        selectedItems={selectedComponents}
-                        clientName={client.name}
-                        toggle={(name, isChecked) => {
-                            submit(
-                                {
-                                    componentName: name,
-                                    updateType: isChecked ? 'add' : 'remove',
-                                    actionType: 'UPDATE_COMPONONENT_IN_CLIENT',
-                                },
-                                {
-                                    method: 'post',
-                                }
-                            );
-                        }}
-                    />
-                    {/* <Heading size={'medium'} spacing>
-                        Komponenter tilknyttet
-                    </Heading>
-                    <ComponentsTable
-                        items={components}
-                        selectedItems={selectedComponents}
-                        toggle={(name, isChecked) => {
-                            submit(
-                                {
-                                    componentName: name,
-                                    updateType: isChecked ? 'add' : 'remove',
-                                    actionType: 'UPDATE_COMPONONENT_IN_CLIENT',
-                                },
-                                {
-                                    method: 'post',
-                                }
-                            );
-                        }}
-                        columns={2}
-                    /> */}
+                    <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
+                    {hasAccessControl ? (
+                        <ComponentList
+                            items={components}
+                            selectedItems={getComponentIds(client.components)}
+                            clientName={client.name}
+                            onToggle={onComponentToggle}
+                        />
+                    ) : (
+                        <>
+                            <GuidePanel
+                                poster
+                                illustration={
+                                    <SealCheckmarkIcon title="a11y-title" fontSize="1.5rem" />
+                                }>
+                                Vi jobber for tiden med å utvikle et system som vil gjøre det mulig
+                                for brukere å finjustere tilgangen til komponenter i klienter og
+                                adaptere
+                            </GuidePanel>
+                            <ComponentSelector
+                                items={components}
+                                adapterName={client.name}
+                                selectedItems={getComponentIds(client.components)}
+                                toggle={(name, isChecked) => {
+                                    submit(
+                                        {
+                                            componentName: name,
+                                            updateType: isChecked ? 'add' : 'remove',
+                                            actionType: 'UPDATE_COMPONENT_IN_ADAPTER',
+                                        },
+                                        {
+                                            method: 'POST',
+                                            action: 'update',
+                                            navigate: false,
+                                        }
+                                    );
+                                }}
+                            />
+                        </>
+                    )}
+
                     <HGrid columns={3}>
                         {!client.managed && (
                             <DeleteModal

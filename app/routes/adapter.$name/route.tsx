@@ -1,8 +1,8 @@
 import {
-    type LoaderFunctionArgs,
-    json,
-    type MetaFunction,
     type ActionFunctionArgs,
+    json,
+    type LoaderFunctionArgs,
+    type MetaFunction,
 } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -15,14 +15,17 @@ import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
 import { InfoBox } from '~/components/shared/InfoBox';
+import FeaturesApi from '~/api/FeaturesApi';
+import { IComponent } from '~/types/Component';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const orgName = await getSelectedOrganization(request);
 
     const adapters = await AdapterAPI.getAdapters(orgName);
     const components = await ComponentApi.getOrganisationComponents(orgName);
+    const features = await FeaturesApi.fetchFeatures();
 
-    return json({ adapters, components });
+    return json({ adapters, components, features });
 };
 
 export const meta: MetaFunction = () => {
@@ -31,10 +34,14 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
     // TODO: get adapter based on ID.
-    const { adapters } = useLoaderData<{ adapters: IAdapter[] }>();
+    const { adapters, components, features } = useLoaderData<{
+        adapters: IAdapter[];
+        components: IComponent[];
+        features: Record<string, boolean>;
+    }>();
 
     const { name } = useParams();
-
+    const hasAccessControl = features['access-controll-new'];
     const breadcrumbs = [
         { name: 'Adaptere', link: '/adaptere' },
         { name: `${name}`, link: `/adapter/${name}` },
@@ -60,7 +67,7 @@ export default function Index() {
                 />
             )}
 
-            {adapter && <AdapterDetail adapter={adapter} />}
+            {adapter && <AdapterDetail adapter={adapter} hasAccessControl={hasAccessControl} />}
         </>
     );
 }

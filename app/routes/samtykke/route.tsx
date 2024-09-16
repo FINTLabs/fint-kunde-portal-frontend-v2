@@ -12,6 +12,7 @@ import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from 
 import { IFetcherResponseData } from '~/types/types';
 import AddPolicyForm from '~/routes/samtykke/AddPolicyForm';
 import AddServiceForm from '~/routes/samtykke/AddServiceForm';
+import { log } from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Samtykke' }, { name: 'description', content: 'Samtykke' }];
@@ -96,6 +97,15 @@ export default function Index() {
         fetcher.submit(updatedFormData, { method: 'post', action: '/samtykke' });
     };
 
+    const handleActiveToggle = (formData: { policyId: string; setIsActive: string }) => {
+        // setShowAddServiceForm(false);
+
+        // actionType="SET_ACTIVE"
+        const updatedFormData = { ...formData, actionType: 'SET_ACTIVE' };
+        log('------------', formData);
+        fetcher.submit(updatedFormData, { method: 'post', action: '/samtykke' });
+    };
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -159,7 +169,7 @@ export default function Index() {
                             services={services}
                             personalDataList={personalDataList}
                             foundations={foundations}
-                            f={fetcher}
+                            onActiveToggle={handleActiveToggle}
                         />
                     )}
                 </Box>
@@ -197,7 +207,7 @@ export async function action({ request }: ActionFunctionArgs) {
             updateResponse = await ConsentApi.setActive(
                 orgName,
                 formData.get('policyId') as string,
-                formData.get('isActive') as string
+                formData.get('setIsActive') as string
             );
             response = handleApiResponse(updateResponse, 'Aktiv status endret');
             break;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack, Loader } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
-import { ChevronRightCircleIcon, ChevronRightIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
+import { ChevronRightIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 
@@ -11,7 +11,7 @@ interface ComponentsSectionProps {
     columns?: number;
     selectable?: boolean;
     toggle?: (name: string, checked: boolean) => void;
-    isAccessControl?: boolean;
+    hideLink?: boolean;
     adapterName?: string;
     clientName?: string;
 }
@@ -25,7 +25,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
     selectedItems,
     columns = 1,
     toggle,
-    isAccessControl = false,
+    hideLink = false,
     adapterName,
     clientName,
 }) => {
@@ -34,7 +34,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
     const sortedComponents = items.sort((a, b) => a.name.localeCompare(b.name));
 
     const handleRowClick = (component: IComponent) => {
-        if (isAccessControl) {
+        if (hideLink) {
             // Check if adapterName is defined; if not, check for clientName
             if (adapterName) {
                 navigate(`/accesscontrol/${component.name}?adapter=${adapterName}`);
@@ -67,7 +67,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                         <FormSummary key={`${groupName}-${i}`}>
                             <FormSummary.Header>
                                 <HStack align={'center'} justify={'space-between'}>
-                                    {isAccessControl && (
+                                    {hideLink && (
                                         <KeyVerticalIcon title="a11y-title" fontSize="1.5rem" />
                                     )}
                                     <FormSummary.Heading level="2">
@@ -142,14 +142,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                         <Box
                                                             padding={'2'}
                                                             className="hover:bg-[--a-surface-active] hover:cursor-pointer">
-                                                            {isAccessControl ? (
-                                                                <ChevronRightCircleIcon
-                                                                    title="Vis detaljer"
-                                                                    onClick={() =>
-                                                                        handleRowClick(item)
-                                                                    }
-                                                                />
-                                                            ) : (
+                                                            {!hideLink && (
                                                                 <ChevronRightIcon
                                                                     title="a11y-title"
                                                                     fontSize="1.5rem"

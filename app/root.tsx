@@ -9,14 +9,14 @@ import {
     useRouteError,
 } from '@remix-run/react';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { createCookie, json } from '@remix-run/node'; // or cloudflare/deno
 import './tailwind.css';
 import '@navikt/ds-css';
 import './data-theme.css';
 import { BodyShort, Box, Heading, Page } from '@navikt/ds-react';
 import React from 'react';
 import Menu from './components/Menu/Menu';
-import { getSession, commitSession } from '~/utils/session';
+import { commitSession, getSession } from '~/utils/session';
 import MeApi from '~/api/MeApi';
 import { FeatureFlags, IMeData, IUserSession, SessionOrganisation } from '~/types/types';
 import Footer from '~/components/Footer';
@@ -25,7 +25,6 @@ import { Organisation } from '~/types/Organisation';
 import { CustomError } from '~/components/shared/CustomError';
 import { log } from './utils/logger';
 import { getFormData } from './utils/requestUtils';
-import { createCookie } from '@remix-run/node'; // or cloudflare/deno
 import { getUserSession, setUserSession } from './utils/selectedOrganization';
 import { Utility } from './utils/utility';
 
@@ -98,6 +97,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     const features = await FeaturesApi.fetchFeatures();
     log('Userorganization:', userSession?.selectedOrganization?.displayName);
+    // log('--------features', features);
     return json({ userSession, features });
 
     // return json({ cookieHeader, cookie: cookieObj, userSession: userSession });
