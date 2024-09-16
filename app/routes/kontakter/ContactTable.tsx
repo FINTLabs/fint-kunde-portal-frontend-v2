@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Button, Table } from '@navikt/ds-react';
+import React from 'react';
+import { Table } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon, ShieldLockIcon } from '@navikt/aksel-icons';
 import { IContact, IRole } from '~/types/types';
-import ConfirmModal from './ConfirmModal';
 import RolesSwitch from '~/routes/kontakter/RoleSwitch';
+import ConfirmAction from '~/components/shared/ConfirmActionModal';
 
 interface IContactTableProps {
     contactsData?: IContact[];
@@ -11,17 +11,7 @@ interface IContactTableProps {
     onButtonClick: (formData: FormData) => void;
 }
 
-type ModalType = 'fjern' | 'juridisk';
-
 const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, onButtonClick }) => {
-    const [modalState, setModalState] = useState<{
-        type: ModalType;
-        contact?: IContact;
-        open: boolean;
-    }>({ type: 'juridisk', contact: undefined, open: false });
-    // const fetcher = useFetcher();
-
-    // const userSession = useOutletContext<IUserSession>();
     const hasRole = (currentContact: IContact, roleId: string): boolean => {
         if (currentContact) {
             return currentContact.roles?.includes(roleId + '@' + 'fintlabs_no') ?? false;
@@ -29,24 +19,17 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, o
         return false;
     };
 
-    const handleOpenModal = (type: ModalType, contact: IContact) => {
-        setModalState({ type, contact, open: true });
-    };
-
-    const handleCloseModal = () => {
-        setModalState({ ...modalState, open: false });
-    };
-
-    const handleConfirm = () => {
-        const contactNin = (modalState.contact?.nin as string) || '';
-
+    const handleUpdateLegalContact = (contactNin: string) => {
         const formData = new FormData();
         formData.append('contactNin', contactNin);
-        formData.append(
-            'actionType',
-            modalState.type === 'fjern' ? 'removeTechnicalContact' : 'setLegalContact'
-        );
-        handleCloseModal();
+        formData.append('actionType', 'SET_LEGAL_CONTACT');
+        onButtonClick(formData);
+    };
+
+    const handleRemoveContact = (contactNin: string) => {
+        const formData = new FormData();
+        formData.append('contactNin', contactNin);
+        formData.append('actionType', 'REMOVE_CONTACT');
         onButtonClick(formData);
     };
 
@@ -83,21 +66,27 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, o
                                         updateRole={updateRole}
                                     />
 
-                                    <Button
+                                    <ConfirmAction
                                         icon={<GavelSoundBlockIcon />}
-                                        variant="tertiary"
-                                        size="small"
-                                        className={'!mt-10'}
-                                        onClick={() => handleOpenModal('juridisk', contact)}>
-                                        Gjør til juridisk kontakt
-                                    </Button>
-                                    <Button
+                                        buttonText={'Gjør til juridisk kontakt'}
+                                        titleText={`Bekreft endring til ${contact.firstName} ${contact.lastName}`}
+                                        buttonVariant={'primary'}
+                                        onConfirm={() => handleUpdateLegalContact(contact.nin)}
+                                        subTitleText={
+                                            'Er du sikker på at du vil endre til juridisk kontakt?'
+                                        }
+                                    />
+
+                                    <ConfirmAction
                                         icon={<LinkBrokenIcon />}
-                                        variant="tertiary"
-                                        size="small"
-                                        onClick={() => handleOpenModal('fjern', contact)}>
-                                        Fjern kontakt
-                                    </Button>
+                                        buttonText={'Fjern kontakt'}
+                                        titleText={`Bekreft fjerning av kontakt ${contact.firstName} ${contact.lastName}`}
+                                        buttonVariant={'primary'}
+                                        onConfirm={() => handleRemoveContact(contact.nin)}
+                                        subTitleText={
+                                            'Er du sikker på at du vil fjerne denne kontakten?'
+                                        }
+                                    />
                                 </>
                             }>
                             <Table.DataCell scope="row">
@@ -113,12 +102,12 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, o
                 </Table.Body>
             </Table>
 
-            <ConfirmModal
-                open={modalState.open}
-                onClose={handleCloseModal}
-                onConfirm={handleConfirm}
-                type={modalState.type}
-            />
+            {/*<ConfirmModal*/}
+            {/*    open={modalState.open}*/}
+            {/*    onClose={handleCloseModal}*/}
+            {/*    onConfirm={handleConfirm}*/}
+            {/*    type={modalState.type}*/}
+            {/*/>*/}
         </>
     );
 };

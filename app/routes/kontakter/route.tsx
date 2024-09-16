@@ -74,7 +74,7 @@ export async function action({ request }: ActionFunctionArgs) {
                     : `Legge til kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
                 variant: isOk ? 'success' : 'error',
             });
-        case 'removeTechnicalContact':
+        case 'REMOVE_CONTACT':
             response = await ContactApi.removeTechnicalContact(contactNin, selectedOrg);
             isOk = response.status === 204;
             return json({
@@ -85,7 +85,7 @@ export async function action({ request }: ActionFunctionArgs) {
                     : `Fjerning av teknisk kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
                 variant: isOk ? 'success' : 'error',
             });
-        case 'setLegalContact':
+        case 'SET_LEGAL_CONTACT':
             response = await ContactApi.setLegalContact(contactNin, selectedOrg);
             isOk = response.status === 204;
             return json({
@@ -186,7 +186,9 @@ export default function Index() {
                 {legalContact ? (
                     <HStack gap="4" align="center" className="px-4">
                         <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4" />
-                        <BodyShort size="medium">{legalContact.firstName}</BodyShort>
+                        <BodyShort size="medium">
+                            {legalContact.firstName} {legalContact.lastName}
+                        </BodyShort>
                     </HStack>
                 ) : (
                     <BodyShort size="medium">Ingen juridisk kontakt funnet</BodyShort>
