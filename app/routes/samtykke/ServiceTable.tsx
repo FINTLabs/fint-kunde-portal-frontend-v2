@@ -3,8 +3,7 @@ import { Table } from '@navikt/ds-react';
 import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
-import { FetcherWithComponents } from '@remix-run/react';
-import { IFetcherResponseData } from '~/types/types';
+import { log } from '~/utils/logger';
 
 interface ScopedSortState {
     orderBy: keyof IBehandling;
@@ -16,7 +15,8 @@ interface IServiceTableProps {
     services: ITjeneste[];
     personalDataList: IPersonopplysning[];
     foundations: IBehandlingsgrunnlag[];
-    f: FetcherWithComponents<IFetcherResponseData>;
+    onActiveToggle: (formData: { policyId: string; setIsActive: string }) => void;
+    // onActiveToggle: () => void;
 }
 
 const ServiceTable: React.FC<IServiceTableProps> = ({
@@ -24,7 +24,7 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
     services,
     personalDataList,
     foundations,
-    f,
+    onActiveToggle,
 }) => {
     const [sort, setSort] = useState<ScopedSortState | undefined>();
 
@@ -60,6 +60,16 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
         }
         return 0;
     });
+
+    const handleActiveToggle = (policyId: string, policyActive: boolean) => {
+        log('------- button clicked!');
+
+        const formData = {
+            policyId: policyId,
+            setIsActive: policyActive ? 'false' : 'true',
+        };
+        onActiveToggle(formData);
+    };
 
     return (
         <>
@@ -118,22 +128,25 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                                         );
                                     })}
                                     <ConfirmAction
-                                        actionText={policy.aktiv ? 'Deaktiver' : 'Aktiver'}
-                                        targetName={policy.formal}
-                                        f={f}
-                                        actionType="SET_ACTIVE"
-                                        confirmationText={
+                                        buttonText={policy.aktiv ? 'Deaktiver' : 'Aktiver'}
+                                        titleText={policy.formal}
+                                        buttonVariant={'primary'}
+                                        onConfirm={() =>
+                                            handleActiveToggle(policy.id, policy.aktiv)
+                                        }
+                                        subTitleText={
                                             policy.aktiv
                                                 ? `Denne handlingen vil sette statusen til inaktiv.`
                                                 : `Denne handlingen vil sette statusen til aktiv.`
                                         }
-                                        additionalInputs={[
-                                            { name: 'policyId', value: policy.id },
-                                            {
-                                                name: 'isActive',
-                                                value: policy.aktiv ? 'false' : 'true',
-                                            },
-                                        ]}
+                                        // additionalInputs={[
+                                        //     { name: 'policyId', value: policy.id },
+                                        //     {
+                                        //         name: 'isActive',
+                                        //         value: policy.aktiv ? 'false' : 'true',
+                                        //     },
+                                        // ]}
+                                        // actionType="SET_ACTIVE"
                                     />
                                 </div>
                             }>

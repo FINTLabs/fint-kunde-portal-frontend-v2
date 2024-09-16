@@ -29,7 +29,7 @@ const ComponentSelector: React.FC<ComponentSelectorProps> = ({
                         items={items}
                         selectedItems={selectedItems}
                         toggle={toggle}
-                        isAccessControl={true}
+                        hideLink={true}
                         {...(adapterName && { adapterName })}
                         {...(clientName && { clientName })}
                     />

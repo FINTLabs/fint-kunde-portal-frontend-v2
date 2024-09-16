@@ -85,6 +85,7 @@ export interface FeatureFlags {
     roles: boolean;
     'audit-log': boolean;
     'roles-init': boolean;
+    'access-controll-new': boolean;
 }
 
 // export interface IComponent {

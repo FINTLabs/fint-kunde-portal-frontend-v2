@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowLeftIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, HGrid, Spacer } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
@@ -8,9 +8,9 @@ import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import ComponentApi from '~/api/ComponentApi';
 import ComponentConfigApi from '~/api/ComponentConfigApi';
 import { IComponentConfig } from '~/types/ComponentConfig';
-import ConfigClassTable from '~/routes/accesscontrol.$id/ConfigClassTable';
-import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { IFetcherResponseData } from '~/types/types';
+import ResourcesTable from '~/routes/accesscontrol.$id/ResourceList';
+import FieldList from '~/routes/accesscontrol.$id/FieldList';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const id = params.id || '';
@@ -25,6 +25,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         const matchedConfig = configs.find((config: IComponentConfig) =>
             config.dn.includes(component?.dn ?? '')
         );
+        // console.log('----', matchedConfig);
 
         return json({ component, matchedConfig, adapterName, clientName });
     } catch (error) {
@@ -39,10 +40,31 @@ export async function action({ request }: ActionFunctionArgs) {
 
     let response;
     switch (actionType) {
-        case 'updateAccessControl':
+        case 'TOGGLE_RESOURCE':
             response = {
                 show: true,
                 message: 'Access Control updated (not really)',
+                variant: 'info',
+            };
+            break;
+        case 'SAVE_FIELDS':
+            response = {
+                show: true,
+                message: 'Fields access updated (not really)',
+                variant: 'info',
+            };
+            break;
+        case 'TOGGLE_NUMBER_POSTINGS':
+            response = {
+                show: true,
+                message: 'Multiple or single postings updated (not really)',
+                variant: 'info',
+            };
+            break;
+        case 'TOGGLE_ACCESS':
+            response = {
+                show: true,
+                message: 'Access rights updated (not really)',
                 variant: 'info',
             };
             break;
@@ -54,16 +76,19 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Index() {
-    const { component, matchedConfig, adapterName, clientName } = useLoaderData<typeof loader>();
+    const { matchedConfig, adapterName, clientName } = useLoaderData<typeof loader>();
     const navigate = useNavigate();
     const [show, setShow] = React.useState(false);
-    const fetcher = useFetcher();
+    const fetcher = useFetcher<IFetcherResponseData>();
     const actionData = fetcher.data as IFetcherResponseData;
+
+    const [selectedResource, setSelectedResource] = useState<string>();
 
     const breadcrumbs = [
         ...(adapterName ? [{ name: adapterName, link: `/adapter/${adapterName}` }] : []),
-        ...(clientName ? [{ name: clientName, link: `/klient/${clientName}` }] : []),
+        ...(clientName ? [{ name: clientName, link: `/klienter/${clientName}` }] : []),
         { name: 'Tilgangskontroll', link: '/accesscontrol' },
+        //TODO: fix link
     ];
 
     const backButtonPath = adapterName
@@ -83,21 +108,32 @@ export default function Index() {
 
     const { label, value } = getLabelAndValue();
 
-    const handleSaveClick = () => {
-        // Ensure FormData type is used as per fetcher.submit requirements
-        const updatedFormData = new FormData();
-        updatedFormData.append('componentId', component?.name || '');
-        updatedFormData.append('actionType', 'updateAccessControl');
-
-        fetcher.submit(updatedFormData, {
-            method: 'post',
-            action: `/accesscontrol/${component?.name}`,
-        });
-    };
-
     useEffect(() => {
         setShow(true);
     }, [fetcher.state]);
+
+    const handleSelectedResource = (resourceName: string) => {
+        setSelectedResource(resourceName);
+        setShow(false);
+    };
+
+    const handleSaveFields = (formData: { resourceId: string }) => {
+        console.log('handle save fields in route clicked');
+        // const updatedFormData = { ...formData, actionType: 'SAVE_FIELDS' };
+        fetcher.submit(formData, {
+            method: 'post',
+            action: `/accesscontrol/utdanning_elev?client=${value}`,
+        });
+    };
+
+    const handleToggleResource = (formData: { resourceId: string }) => {
+        console.log('------- resource checkmark clicked access route');
+        const updatedFormData = { ...formData, actionType: 'TOGGLE_RESOURCE' };
+        fetcher.submit(updatedFormData, {
+            method: 'post',
+            action: `/accesscontrol/utdanning_elev?client=${value}`,
+        });
+    };
 
     return (
         <>
@@ -119,17 +155,8 @@ export default function Index() {
                     padding="6"
                     borderRadius="large"
                     shadow="small">
-                    <Heading size={'medium'}> Name: {value} </Heading>
-
                     <Spacer />
 
-                    <Divider className="pt-3" />
-
-                    <HStack gap={'10'}>
-                        <Heading size={'medium'}>Access Control: {component?.name}</Heading>
-                        {/* Attach the correct event handler */}
-                        <Button onClick={handleSaveClick}>Save</Button>
-                    </HStack>
                     {actionData && show && (
                         <Alert
                             className={'!mt-5'}
@@ -139,8 +166,22 @@ export default function Index() {
                             {actionData.message || 'Content'}
                         </Alert>
                     )}
+
+                    <Heading size={'small'}>{value}</Heading>
+
                     <Box padding="4">
-                        <ConfigClassTable matchedConfig={matchedConfig} />
+                        {selectedResource ? (
+                            <>
+                                <FieldList onSave={handleSaveFields} />
+                            </>
+                        ) : (
+                            <ResourcesTable
+                                matchedConfig={matchedConfig}
+                                type="Utdanning Elev"
+                                onSelected={handleSelectedResource}
+                                onToggle={handleToggleResource}
+                            />
+                        )}
                     </Box>
                 </Box>
             </HGrid>

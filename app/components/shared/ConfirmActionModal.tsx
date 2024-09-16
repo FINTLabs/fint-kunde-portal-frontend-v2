@@ -1,75 +1,74 @@
 import React, { useState } from 'react';
 import { Button, Modal, Heading } from '@navikt/ds-react';
 
-interface AdditionalInput {
-    name: string;
-    value: string;
-}
-
 interface ConfirmActionProps {
-    actionText?: string; // Optional with default value "Delete"
-    targetName: string; // Explicitly defining type as string
-    f: any; // Replace `any` with the actual type
-    actionType: string;
-    confirmationText: string;
-    additionalInputs?: AdditionalInput[];
+    buttonText?: string;
+    titleText: string;
+    subTitleText: string;
+    onConfirm: () => void;
+    buttonVariant?:
+        | 'tertiary'
+        | 'primary'
+        | 'primary-neutral'
+        | 'secondary'
+        | 'secondary-neutral'
+        | 'tertiary-neutral'
+        | 'danger';
+    icon?: React.ReactNode;
 }
 
 const ConfirmAction: React.FC<ConfirmActionProps> = ({
-    actionText = 'Delete',
-    targetName,
-    f, // Consider replacing `any` with a specific type
-    actionType,
-    confirmationText,
-    additionalInputs = [],
+    buttonText = 'Delete',
+    titleText,
+    onConfirm,
+    subTitleText,
+    buttonVariant = 'tertiary',
+    icon,
 }) => {
     const [open, setOpen] = useState(false);
 
     const handleClose = (isConfirmed: boolean) => {
-        console.info(actionType + ' confirmed: ', isConfirmed);
         setOpen(false);
-        //todo: the form is not closing after the action is confirmed
+        if (isConfirmed) onConfirm();
     };
 
     return (
         <>
             <Button
-                variant={actionType === 'delete' ? 'danger' : 'primary'}
+                variant={
+                    buttonVariant as
+                        | 'tertiary'
+                        | 'primary'
+                        | 'primary-neutral'
+                        | 'secondary'
+                        | 'secondary-neutral'
+                        | 'tertiary-neutral'
+                        | 'danger'
+                }
+                icon={icon}
                 size="xsmall"
                 onClick={() => setOpen(true)}>
-                {actionText}
+                {buttonText}
             </Button>
 
             <Modal
                 open={open}
                 header={{
-                    heading: 'Confirmation',
+                    heading: 'Bekreftelse',
                     size: 'small',
                 }}
                 width="small"
                 onClose={() => handleClose(false)}>
                 <Modal.Body>
-                    <Heading size="small">{confirmationText}</Heading>
+                    <Heading size="small">{titleText}</Heading>
                     <Heading size="medium" spacing>
-                        {targetName}
+                        {subTitleText}
                     </Heading>
                 </Modal.Body>
                 <Modal.Footer>
-                    <f.Form method="post">
-                        <input type="hidden" name="actionType" value={actionType} />
-                        <input type="hidden" name={`${actionType}Name`} value={targetName} />
-                        {additionalInputs.map((input, index) => (
-                            <input
-                                key={index}
-                                type="hidden"
-                                name={input.name}
-                                value={input.value}
-                            />
-                        ))}
-                        <Button type="submit" variant="danger" onClick={() => handleClose(true)}>
-                            Ja, jeg er sikker
-                        </Button>
-                    </f.Form>
+                    <Button type="submit" variant="danger" onClick={() => handleClose(true)}>
+                        Ja, jeg er sikker
+                    </Button>
 
                     <Button type="button" variant="secondary" onClick={() => handleClose(false)}>
                         Avbryt
