@@ -20,7 +20,7 @@ export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
         <div key={link} className="flex items-center">
             <ChevronRightIcon title="Spacer" className="mx-1" />
 
-            {link === currentPath ? (
+            {link === '' || link === currentPath ? (
                 <>{name}</>
             ) : (
                 <Link to={link} style={linkStyle}>

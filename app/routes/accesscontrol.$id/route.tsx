@@ -85,10 +85,32 @@ export default function Index() {
     const [selectedResource, setSelectedResource] = useState<string>();
 
     const breadcrumbs = [
-        ...(adapterName ? [{ name: adapterName, link: `/adapter/${adapterName}` }] : []),
-        ...(clientName ? [{ name: clientName, link: `/klienter/${clientName}` }] : []),
-        { name: 'Tilgangskontroll', link: '/accesscontrol' },
-        //TODO: fix link
+        ...(adapterName
+            ? [
+                  {
+                      name:
+                          adapterName.length > 10
+                              ? `${adapterName.substring(0, 10)}...`
+                              : adapterName,
+                      link: `/adapter/${adapterName}`,
+                  },
+              ]
+            : []),
+        ...(clientName
+            ? [
+                  {
+                      name:
+                          clientName.length > 10 ? `${clientName.substring(0, 10)}...` : clientName,
+                      link: `/klienter/${clientName}`,
+                  },
+              ]
+            : []),
+        {
+            name: selectedResource ? 'Utdanning Elev ...' : 'Tilgangskontroll Utdanning Elev',
+
+            link: selectedResource ? 'test.abc' : '', // Set link to 'test.abc' if selectedResource exists
+        },
+        ...(selectedResource ? [{ name: 'Elev', link: '' }] : []), // Add 'Elev' item when selectedResource is present
     ];
 
     const backButtonPath = adapterName

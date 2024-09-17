@@ -14,7 +14,7 @@ import { IClient } from '~/types/Clients';
 import { DeleteModal } from '~/components/shared/DeleteModal';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import React, { useEffect } from 'react';
-import TabsComponent from '~/routes/ressurser._index/TabsComponent';
+import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
 
 type LoaderData = {
     adapters: IAdapter[];

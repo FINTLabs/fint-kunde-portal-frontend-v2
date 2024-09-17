@@ -25,7 +25,7 @@ const ComponentsList: React.FC<ComponentsSectionProps> = ({
                 // borderRadius="xlarge"
             >
                 <HGrid gap="8" columns={columns}>
-                    <Table>
+                    <Table size="small">
                         <Table.Header>
                             <Table.Row>
                                 <Table.ColumnHeader sortKey="status" sortable>
