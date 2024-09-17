@@ -1,4 +1,6 @@
-function getCurrentDateTime() {
+type LogMessage = string | number | boolean | object | Error; // Add more types as needed
+
+function getCurrentDateTime(): string {
     return new Date().toISOString();
 }
 
@@ -34,11 +36,11 @@ const Colors = {
     BrightWhite: '\x1b[97m',
 };
 
-export function log(...messages: any[]) {
+export function log(...messages: LogMessage[]) {
     console.log(`[${getCurrentDateTime()}]`, ...messages);
 }
 
-export function error(...messages: any[]) {
+export function error(...messages: LogMessage[]) {
     const formattedMessages = messages.map((message) =>
         message instanceof Error ? formatError(message) : message
     );
@@ -50,10 +52,14 @@ export function error(...messages: any[]) {
     );
 }
 
-export function warn(...messages: any[]) {
-    console.warn(`${Colors.BrightGreen}[${getCurrentDateTime()}]`, ...messages, Colors.Reset);
+export function warn(...messages: LogMessage[]) {
+    console.warn(`${Colors.BrightYellow}[${getCurrentDateTime()}]`, ...messages, Colors.Reset);
 }
 
-export function info(...messages: any[]) {
-    console.info(`${Colors.BrightYellow}[${getCurrentDateTime()}]`, ...messages, Colors.Reset);
+export function info(...messages: LogMessage[]) {
+    console.info(`${Colors.BrightGreen}[${getCurrentDateTime()}]`, ...messages, Colors.Reset);
+}
+
+export function debug(...messages: LogMessage[]) {
+    console.debug(`${Colors.BrightMagenta}[${getCurrentDateTime()}]`, ...messages, Colors.Reset);
 }

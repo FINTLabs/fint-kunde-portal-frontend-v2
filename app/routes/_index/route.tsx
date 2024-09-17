@@ -6,9 +6,8 @@ import { MENU_ITEMS_LEFT } from '~/components/Menu/constants';
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { MenuItem } from '~/types/MenuItem';
 import { IUserSession } from '~/types/types';
-import { log } from '~/utils/logger';
 import CustomLinkPanel from '~/routes/_index/CustomLinkPanelProps';
-import { ImageIcon } from '@navikt/aksel-icons';
+import { ImageIcon, PersonCheckmarkIcon } from '@navikt/aksel-icons';
 
 export const meta: MetaFunction = () => {
     return [
@@ -31,46 +30,47 @@ function WelcomeMessage({ userSession }: { userSession: IUserSession }) {
 export default function Index() {
     const userSession = useOutletContext<IUserSession>();
 
-    log('userSession', userSession);
-    const [loading, setLoading] = useState(false);
+    // log('userSession', userSession);
+    // const [loading, setLoading] = useState(false);
 
     return (
         <Box className="font-sans p-4">
             <VStack gap="6" justify={'center'} align="center">
                 <WelcomeMessage userSession={userSession}></WelcomeMessage>
 
-                {loading && (
-                    <Box padding="32">
-                        <Loader size="3xlarge" title="Venter..." />
-                    </Box>
-                )}
-                {!loading && (
-                    <HGrid className="pt-4" gap="3" columns={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 3 }}>
-                        {MENU_ITEMS_LEFT.dropdowns
-                            .reduce(
-                                (acc: MenuItem[], curr: MenuDropDown) => [...acc, ...curr.subMenus],
-                                []
-                            )
-                            .map((item, index) => {
-                                const IconComponent = item.icon || ImageIcon;
+                {/*{loading && (*/}
+                {/*    <Box padding="32">*/}
+                {/*        <Loader size="3xlarge" title="Venter..." />*/}
+                {/*    </Box>*/}
+                {/*)}*/}
+                {/*{!loading && (*/}
+                <HGrid className="pt-4" gap="3" columns={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 3 }}>
+                    {MENU_ITEMS_LEFT.dropdowns
+                        .reduce(
+                            (acc: MenuItem[], curr: MenuDropDown) => [...acc, ...curr.subMenus],
+                            []
+                        )
+                        .map((item, index) => {
+                            const IconComponent = item.icon || ImageIcon;
 
-                                return (
-                                    <CustomLinkPanel
-                                        key={index}
-                                        href={item.path}
-                                        title={item.title}
-                                        IconComponent={IconComponent}
-                                    />
-                                );
-                            })}
+                            return (
+                                <CustomLinkPanel
+                                    key={index}
+                                    href={item.path}
+                                    title={item.title}
+                                    IconComponent={IconComponent}
+                                />
+                            );
+                        })}
 
-                        {/*<CustomLinkPanel*/}
-                        {/*    href={'/samtykke'}*/}
-                        {/*    title={'Samtykke'}*/}
-                        {/*    IconComponent={TerminalIcon}*/}
-                        {/*/> TODO: only show if they have permission */}
-                    </HGrid>
-                )}
+                    <CustomLinkPanel
+                        href={'/samtykke'}
+                        title={'Samtykke'}
+                        IconComponent={PersonCheckmarkIcon}
+                    />
+                    {/*TODO: only show if they have permission */}
+                </HGrid>
+                {/*)}*/}
             </VStack>
         </Box>
     );

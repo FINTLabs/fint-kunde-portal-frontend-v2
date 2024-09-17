@@ -23,7 +23,7 @@ import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
 import { Organisation } from '~/types/Organisation';
 import { CustomError } from '~/components/shared/CustomError';
-import { info, log } from './utils/logger';
+import { debug, info, log } from './utils/logger';
 import { getFormData } from './utils/requestUtils';
 import { getUserSession, setUserSession } from './utils/selectedOrganization';
 import { Utility } from './utils/utility';
@@ -79,7 +79,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const features = await FeaturesApi.fetchFeatures();
-    info('Userorganization:', userSession?.selectedOrganization?.displayName);
+    debug('Userorganization:', userSession?.selectedOrganization?.displayName);
     // log('--------features', features);
     return json({ userSession, features });
 };

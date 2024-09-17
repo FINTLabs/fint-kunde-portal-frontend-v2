@@ -1,9 +1,7 @@
 import { IPartialAsset } from '~/types/Asset';
-import { IAdapter, IPartialAdapter } from '~/types/types';
-import { isClientSide } from '~/utils/environment';
-import { error, log } from '~/utils/logger';
+import { IPartialAdapter } from '~/types/types';
+import { error, info, log } from '~/utils/logger';
 import { Utility } from '~/utils/utility';
-import { rsort } from 'semver';
 
 export type ReturnType = 'text' | 'json';
 
@@ -72,9 +70,9 @@ export async function putRequest(
 
 function logStatus(status: number, functionName: string) {
     if (status >= 200 && status < 300) {
-        log(`--> Result: ${functionName} ${status} 🟢`);
+        info(` 🟢--> Result: ${functionName} ${status}`);
     } else {
-        error(`--> Result: ${functionName} ${status} 🔴`);
+        error(`🔴--> Result: ${functionName} ${status} `);
     }
 }
 
@@ -111,7 +109,7 @@ async function getRequest(
     } else {
         // log(`Response: `, response);
         const errorMsg = `😡 Error running ${functionName}, status: ${response.status}`;
-        // error(errorMsg);
+        error(errorMsg);
         // return errorMsg;
         throw error;
     }
