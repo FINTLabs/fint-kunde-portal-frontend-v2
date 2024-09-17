@@ -42,10 +42,15 @@ export async function request(
             case 'DELETE':
                 return await postRequest(URL, functionName, requestOptions, data);
             default:
-                throw new Error(`Unsupported request method: ${requestMethod}`);
+                return new Error(`Unsupported request method: ${requestMethod}`);
         }
     } catch (err) {
-        error(`:( Request failed:  Error running ${functionName}:`, err);
+        if (err instanceof Error) {
+            error(`:( Request failed: Error running ${functionName}:`, err);
+        } else {
+            error(`:( Request failed: Error running ${functionName}:`, String(err));
+        }
+        // Rethrow as a new Error with a descriptive message
         throw new Error(`:( Request failed: Error running ${functionName}`);
     }
 }
