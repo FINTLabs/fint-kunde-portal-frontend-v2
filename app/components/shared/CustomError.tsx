@@ -1,9 +1,10 @@
 import React from 'react';
-import { Box, Heading, Page } from '@navikt/ds-react';
+import { Box, Page } from '@navikt/ds-react';
 
 import '@navikt/ds-css';
 
 import Footer from '~/components/Footer';
+import { Logo } from '~/components/Menu/Logo';
 
 export function CustomError({ children }: { children: React.ReactNode }) {
     return (
@@ -15,9 +16,10 @@ export function CustomError({ children }: { children: React.ReactNode }) {
                     </Page.Block>
                 </Box>
             }>
-            <Box background="surface-neutral-moderate" padding="8" as="header">
+            <Box background="bg-subtle" padding="8" as="header">
                 <Page.Block gutters width="lg">
-                    <Heading size="large">Error</Heading>
+                    <Logo />
+                    {/*<Heading size="large">Error</Heading>*/}
                 </Page.Block>
             </Box>
             <Box padding="8" paddingBlock="2" as="main">

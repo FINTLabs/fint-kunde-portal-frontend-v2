@@ -44,21 +44,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     let userSession = await getUserSession(request);
     Utility.setXnin(request); // root is called on every request, makes sense to set xnin only once here.
 
-    // log('reques  t.headers: ', request.headers);
-    // log('userSessionFromGetSession ', userSession);
-    // let userSession = session.get('user_session');
-
-    // const cookieHeader = request.headers.get('Cookie'); // to get user_session set by SSO (middleware between user and remix app)
-    // const personNumber = request.headers.get('x-nin') || '';
-    // log('cookieHeader in loader', cookieHeader);
-    // const cookieObj = await remix_cookie.parse(cookieHeader); // this is NULL - WHY????
-
-    // log('cookieOBJXT', cookieObj);
-
-    // const user_session = getCookieValue(cookieHeader || '', 'user_session'); // getting cookie value manually
-    // console.log(user_session);
-
-    // log('userSession: ', userSession);
     if (!userSession) {
         const meData: IMeData = await MeApi.fetchMe();
         console.log('meData: ', meData);
@@ -77,8 +62,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             selectedOrganization: organizationDetails[0],
             organizations: organizationDetails,
         };
-        // const session = await getSessionFromCookie(request);
-        // session.set('user_session', userSession);
         const session = await setUserSession(request, userSession);
         const cookie = await commitSession(session);
         let features = await FeaturesApi.fetchFeatures();
@@ -99,8 +82,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     log('Userorganization:', userSession?.selectedOrganization?.displayName);
     // log('--------features', features);
     return json({ userSession, features });
-
-    // return json({ cookieHeader, cookie: cookieObj, userSession: userSession });
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -159,18 +140,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
     const loaderData = useLoaderData<{ userSession: IUserSession; features: FeatureFlags }>();
-    // const { cookieHeader, cookie, userSession } = useLoaderData<typeof loader>();
     const userSession = loaderData?.userSession;
     const features = loaderData?.features;
 
-    // console.log('cookieHeader');
-    // console.log(cookieHeader);
-    // console.log('cookie');
-    // console.log(cookie);
-    // console.log('userSessionFromHeader');
-    // console.log(userSession);
-
-    // return <div>Cookies:</div>;
     return (
         <Page
             footer={
@@ -198,9 +170,6 @@ export default function App() {
     );
 }
 export function ErrorBoundary() {
-    //TODO: can we make the message show?? need an error layout
-    // This will handle JavaScript exceptions thrown in loaders/actions
-
     const error = useRouteError();
 
     if (isRouteErrorResponse(error)) {
@@ -232,13 +201,13 @@ export function ErrorBoundary() {
     }
 }
 
-function getCookieValue(cookieString: string, key: string): string | null {
-    const keyValuePairs = cookieString.split('; ');
-    for (const pair of keyValuePairs) {
-        const [cookieKey, cookieValue] = pair.split('=');
-        if (cookieKey === key) {
-            return decodeURIComponent(cookieValue);
-        }
-    }
-    return null;
-}
+// function getCookieValue(cookieString: string, key: string): string | null {
+//     const keyValuePairs = cookieString.split('; ');
+//     for (const pair of keyValuePairs) {
+//         const [cookieKey, cookieValue] = pair.split('=');
+//         if (cookieKey === key) {
+//             return decodeURIComponent(cookieValue);
+//         }
+//     }
+//     return null;
+// }
