@@ -12,7 +12,7 @@
 
     .my-custom-panel {
         background-color: #f3f4f6; /* Light gray background */
-        padding: 36px 16px 36px 16px;
+        padding: 36px 16px 36px 26px;
         border-radius: 8px;
         display: flex;
         align-items: center;
@@ -30,10 +30,18 @@
 
     /* Icon styles */
     .panel-icon {
-        margin-right: 16px;
-        font-size: 24px;
+        margin-right: 20px;
+        font-size: 34px;
         color: #d2452c; /* NAV blue */
         transition: transform 0.3s ease; /* Smooth scaling transition */
+        border: #d2452c 1px solid;
+        border-radius: 50%; /* Make the border circular */
+        width: 40px; /* Set width and height to the same value */
+        height: 40px; /* Adjust as needed to fit the icon */
+        display: flex; /* Center the icon within the circle */
+        align-items: center; /* Center vertically */
+        justify-content: center; /* Center horizontally */
+        padding: 10px;
     }
 
     /* Description styles */
