@@ -8,7 +8,17 @@
 API_URL=http://localhost:<BACKEND_API_PORT>
 PERSONALNUMBER=<YOUR PERSONAL NUMBER>
 ZENDESK_API_URL=<BACKEND_ZENDESK_PORT>
+CYPRESS_TESTS=true
+
+CONSENT_API_URL=http://localhost:<BACKEND_API_PORT>
+LINKWALKER_API_URL=http://localhost:<BACKEND_API_PORT>
+NODE_ENV=development
+PERSONALNUMBER=<PERSONALNUMBER>
+BEARER_TOKEN=<Bearer token>
 ```
+
+Remember to start up backends for each area you are connecting to locally. 
+A bearer token is necessary for local connection to Samtykke backend.
 
 ## Development
 

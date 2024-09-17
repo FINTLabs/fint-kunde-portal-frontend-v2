@@ -136,7 +136,7 @@ const FieldList: React.FC<FieldListProps> = ({ onSave }) => {
                                                 <Button
                                                     onClick={() => toggleVisibility(i)}
                                                     variant={'tertiary'}
-                                                    size={'small'}
+                                                    size={'xsmall'}
                                                     icon={
                                                         isVisible ? (
                                                             <EyeIcon
@@ -178,12 +178,14 @@ const FieldList: React.FC<FieldListProps> = ({ onSave }) => {
                             <HStack gap={'5'}>
                                 <Button
                                     icon={<PadlockUnlockedIcon aria-hidden />}
-                                    variant={'tertiary'}>
+                                    variant={'tertiary'}
+                                    size={'small'}>
                                     GI FULL TILGANG
                                 </Button>
                                 <Button
                                     icon={<PadlockLockedIcon aria-hidden />}
-                                    variant={'tertiary'}>
+                                    variant={'tertiary'}
+                                    size={'small'}>
                                     FJERNE ALT TILGANG
                                 </Button>
                             </HStack>
