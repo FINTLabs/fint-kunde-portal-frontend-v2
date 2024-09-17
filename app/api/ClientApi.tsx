@@ -1,6 +1,7 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from '~/api/constants';
 import { IClient, IPartialClient } from '~/types/Clients';
+import { error } from '~/utils/logger';
 
 class ClientApi {
     static async getClients(organisationName: string) {
@@ -16,12 +17,12 @@ class ClientApi {
                 if (client) {
                     return client;
                 } else {
-                    console.error('Client not found, clientId:', clientId);
+                    error('Client not found, clientId:', clientId);
                     return null;
                 }
             })
             .catch((err) => {
-                console.error('Error fetching client:', err);
+                error('Error fetching client:', err);
                 return null;
             });
     }
@@ -43,7 +44,7 @@ class ClientApi {
 
         return request(URL, functionName, 'GET', 'text');
     }
-    // Function to update component in a client
+
     static async updateComponentInClient(
         componentName: string,
         clientName: string,
@@ -58,31 +59,15 @@ class ClientApi {
         }
     }
 
-    // Function to add component to a client
     static async addComponentToClient(URL: string, clientName: string) {
         const functionName = 'addComponentToClient';
         return await request(URL, functionName, 'PUT', 'json', { name: clientName });
     }
 
-    // Function to remove component from a client
     static async removeComponentFromClient(URL: string, clientName: string) {
         const functionName = 'removeComponentFromClient';
         return await request(URL, functionName, 'DELETE', 'json', { name: clientName });
     }
-
-    // static async updateClient(client: IClient, organisation: Organisation) {
-    //     const functionName = 'updateClient';
-    //     const URL = `${API_URL}/api/clients/${organisation}/${client.name}`;
-    //     return request(URL, functionName,'PUT', 'json', {
-    //         name: client.name,
-    //         note: client.note,
-    //         shortDescription: client.shortDescription
-    //     }).catch((err) => {
-    //         console.error('Error updating client:', err);
-    //         return null;
-    //     });
-    // }
-    //
 }
 
 export default ClientApi;

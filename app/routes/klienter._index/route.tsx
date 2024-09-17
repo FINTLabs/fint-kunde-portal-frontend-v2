@@ -4,13 +4,13 @@ import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import ClientTable from '~/routes/klienter._index/ClientTable';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { TokenIcon } from '@navikt/aksel-icons';
+import { PlusIcon, TokenIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { Button, HStack, Tabs, VStack, Search } from '@navikt/ds-react';
+import { Button, HStack, Search, Tabs, VStack } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { LoaderFunction, MetaFunction } from '@remix-run/node';
-import { PlusIcon } from '@navikt/aksel-icons';
 import { InfoBox } from '~/components/shared/InfoBox';
+import { error } from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Klienter' }, { name: 'description', content: 'klienter' }];
@@ -22,8 +22,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     try {
         const clientData = await ClientApi.getClients(orgName);
         return json(clientData);
-    } catch (error) {
-        console.error('Error fetching data:', error);
+    } catch (err) {
+        error('Error fetching data:', err);
         throw new Response('Not Found', { status: 404 });
     }
 };

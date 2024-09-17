@@ -8,7 +8,7 @@ class LinkWalkerApi {
         const functionName = 'getTests';
         const URL = `${API_URL}/link-walker/tasks/${orgName}`;
         return request(URL, functionName).catch((err) => {
-            console.error('Error fetching relations tests :', err);
+            error('Error fetching relations tests :', err);
         });
     }
 

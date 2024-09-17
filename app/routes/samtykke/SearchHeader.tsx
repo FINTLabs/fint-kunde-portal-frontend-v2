@@ -1,5 +1,6 @@
 import { InternalHeader, Search, Spacer, Switch } from '@navikt/ds-react';
 import React from 'react';
+import { info } from '~/utils/logger';
 
 const SearchHeader = () => {
     return (
@@ -8,7 +9,7 @@ const SearchHeader = () => {
                 className="self-center px-5"
                 onSubmit={(e) => {
                     e.preventDefault();
-                    console.log('Search!');
+                    info('Search!');
                 }}>
                 <Search
                     label="InternalHeader søk"

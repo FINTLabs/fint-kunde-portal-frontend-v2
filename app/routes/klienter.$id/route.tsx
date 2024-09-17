@@ -27,6 +27,7 @@ import { getComponentIds } from '~/utils/helper';
 import ComponentList from '~/routes/accesscontrol.$id/ComponentList';
 import FeaturesApi from '~/api/FeaturesApi';
 import ComponentSelector from '~/components/shared/ComponentSelector';
+import { error, info } from '~/utils/logger';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
@@ -38,8 +39,8 @@ export async function loader({ request, params }: ActionFunctionArgs) {
         const features = await FeaturesApi.fetchFeatures();
 
         return json({ client, components, features });
-    } catch (error) {
-        console.error('Error fetching data:', error);
+    } catch (err) {
+        error('Error fetching data:', err);
         throw new Response('Not Found', { status: 404 });
     }
 }
@@ -79,7 +80,7 @@ export default function Index() {
     const submit = useSubmit();
 
     function onComponentToggle() {
-        console.log('------- handle component checkbox');
+        info('------- handle component checkbox');
     }
 
     return (
@@ -192,28 +193,17 @@ export default function Index() {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-    // const name = params.name;
     const actionName = 'Action in Klienter.$id';
-
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);
-    // console.log(formData);
-
     const clientName = getRequestParam(params.id, 'id');
-
-    // console.log(clientName);
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
-
+    const updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
+    const componentName = getFormData(formData.get('componentName'), 'componentName', actionName);
     let response = null;
 
     switch (actionType) {
         case 'UPDATE_COMPONONENT_IN_CLIENT':
-            const updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
-            const componentName = getFormData(
-                formData.get('componentName'),
-                'componentName',
-                actionName
-            );
             response = await ClientApi.updateComponentInClient(
                 componentName,
                 clientName,

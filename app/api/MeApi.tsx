@@ -1,12 +1,13 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from './constants';
+import { error } from '~/utils/logger';
 
 class MeApi {
     static async fetchMe() {
         const functionName = 'fetchMe';
         const URL = `${API_URL}/api/me`;
         return request(URL, functionName).catch((err) => {
-            console.error('Error fetching me information:', err);
+            error('Error fetching me information:', err);
         });
     }
 

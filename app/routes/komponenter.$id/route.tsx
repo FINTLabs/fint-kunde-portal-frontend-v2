@@ -1,27 +1,24 @@
-import React, { useState } from 'react';
 import { json, useLoaderData, useNavigate } from '@remix-run/react';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { ArrowLeftIcon, ComponentIcon, PencilIcon } from '@navikt/aksel-icons';
+import { ArrowLeftIcon, ComponentIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import ComponentDetails from '~/routes/komponenter.$id/ComponentDetails';
-import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs } from '@remix-run/node';
 import EndpointTable from '~/routes/komponenter.$id/EndpointTable';
 import SwaggerTable from '~/routes/komponenter.$id/SwaggerTable';
-import OrganisationApi from '~/api/OrganisationApi';
-import { getFormData } from '~/utils/requestUtils';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import { error } from '~/utils/logger';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const id = params.id || '';
     try {
         const component = await ComponentApi.getComponentById(id);
         return json(component);
-    } catch (error) {
-        console.error('Error fetching data:', error);
+    } catch (err) {
+        error('Error fetching data:', err);
         throw new Response('Not Found', { status: 404 });
     }
 };

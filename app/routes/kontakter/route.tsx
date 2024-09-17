@@ -7,7 +7,7 @@ import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
 import OrganisationApi from '~/api/OrganisationApi';
 import ContactTable from '~/routes/kontakter/ContactTable';
-import { log } from '~/utils/logger';
+import { log, error } from '~/utils/logger';
 import { IContact, IFetcherResponseData, IRole } from '~/types/types';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -42,8 +42,8 @@ export const loader: LoaderFunction = async ({ request }) => {
             legalContact,
             allContacts,
         });
-    } catch (error) {
-        console.error('Error fetching data:', error);
+    } catch (err) {
+        error('Error fetching data:', err);
         throw new Response('Not Found', { status: 404 });
     }
 };

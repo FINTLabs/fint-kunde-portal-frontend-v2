@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, HStack, VStack, TextField } from '@navikt/ds-react';
+import { info } from '~/utils/logger';
 
 interface AddTjenesteFormProps {
     onCancel: () => void;
@@ -20,7 +21,7 @@ const AddServiceForm: React.FC<AddTjenesteFormProps> = ({ onCancel, onSave }) =>
             setServiceNameError(undefined);
         }
 
-        console.log(isValid);
+        info(isValid);
         if (isValid) {
             const formData = {
                 newServiceName: newServiceName,

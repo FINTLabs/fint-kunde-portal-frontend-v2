@@ -38,7 +38,6 @@ const ClientTable: React.FC<ClientTableProps> = ({
                                         }
                                         onChange={(e) => {
                                             const isChecked = e.target.checked;
-                                            console.log(item.name);
                                             toggleSwitch && toggleSwitch(item.name, isChecked);
                                         }}>
                                         <Label>{''}</Label>

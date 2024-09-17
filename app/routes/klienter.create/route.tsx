@@ -108,10 +108,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const response = await ClientApi.createClient(newClient, orgName);
 
-    // console.log(response);
     if (response.status === 201) {
         const responseObject = (await response.json()) as IClient;
-        // console.log(responseObject);
         return redirect(`/klienter/${responseObject.name}`);
     } else {
         return json({

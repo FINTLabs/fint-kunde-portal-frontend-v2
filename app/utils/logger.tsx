@@ -43,9 +43,17 @@ export function error(...messages: any[]) {
         message instanceof Error ? formatError(message) : message
     );
     // Log in red color
-    console.error(`${Colors.Red}[${getCurrentDateTime()}]`, ...formattedMessages, Colors.Reset);
+    console.error(
+        `${Colors.BrightRed}[${getCurrentDateTime()}]`,
+        ...formattedMessages,
+        Colors.Reset
+    );
 }
 
 export function warn(...messages: any[]) {
-    console.warn(`${Colors.Yellow}[${getCurrentDateTime()}]`, ...messages, Colors.Reset);
+    console.warn(`${Colors.BrightGreen}[${getCurrentDateTime()}]`, ...messages, Colors.Reset);
+}
+
+export function info(...messages: any[]) {
+    console.info(`${Colors.BrightYellow}[${getCurrentDateTime()}]`, ...messages, Colors.Reset);
 }

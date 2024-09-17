@@ -13,6 +13,7 @@ import { getComponentIds } from '~/utils/helper';
 import ComponentList from '~/routes/accesscontrol.$id/ComponentList';
 import { SealCheckmarkIcon } from '@navikt/aksel-icons';
 import ComponentSelector from '~/components/shared/ComponentSelector';
+import { info } from '~/utils/logger';
 
 export function AdapterDetail({
     adapter,
@@ -45,7 +46,7 @@ export function AdapterDetail({
     const submit = useSubmit();
 
     function onComponentToggle() {
-        console.log('------- handle component checkbox');
+        info('------- handle component checkbox');
     }
 
     return (

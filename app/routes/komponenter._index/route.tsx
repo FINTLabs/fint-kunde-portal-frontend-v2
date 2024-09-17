@@ -10,7 +10,7 @@ import { IComponent } from '~/types/Component';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData } from '~/utils/requestUtils';
 import OrganisationApi from '~/api/OrganisationApi';
-import { log } from '~/utils/logger';
+import { error, log } from '~/utils/logger';
 import { InfoBox } from '~/components/shared/InfoBox';
 
 export const meta: MetaFunction = () => {
@@ -27,8 +27,8 @@ export const loader: LoaderFunction = async ({ request }) => {
         const components = await ComponentApi.getAllComponents();
         const orgName = await getSelectedOrganization(request);
         return json({ components, orgName });
-    } catch (error) {
-        console.error('Error fetching data:', error);
+    } catch (err) {
+        error('Error fetching data:', err);
         throw new Response('Not Found', { status: 404 });
     }
 };
@@ -94,8 +94,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             success,
             message: `${success ? '' : `Failed tu update org: Status: ${response.status}`}`,
         });
-    } catch (error) {
-        console.error('Error updating component:', error);
+    } catch (err) {
+        error('Error updating component:', err);
         return json({ success: false, error: 'Error updating component' }, { status: 500 });
     }
 };

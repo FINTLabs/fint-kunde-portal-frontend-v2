@@ -11,6 +11,7 @@ import { IComponentConfig } from '~/types/ComponentConfig';
 import { IFetcherResponseData } from '~/types/types';
 import ResourcesTable from '~/routes/accesscontrol.$id/ResourceList';
 import FieldList from '~/routes/accesscontrol.$id/FieldList';
+import { error, info } from '~/utils/logger';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const id = params.id || '';
@@ -25,11 +26,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         const matchedConfig = configs.find((config: IComponentConfig) =>
             config.dn.includes(component?.dn ?? '')
         );
-        // console.log('----', matchedConfig);
 
         return json({ component, matchedConfig, adapterName, clientName });
-    } catch (error) {
-        console.error('Error fetching data:', error);
+    } catch (err) {
+        error('Error fetching data:', err);
         throw new Response('Not Found', { status: 404 });
     }
 };
@@ -140,7 +140,7 @@ export default function Index() {
     };
 
     const handleSaveFields = (formData: { resourceId: string }) => {
-        console.log('handle save fields in route clicked');
+        info('handle save fields in route clicked');
         // const updatedFormData = { ...formData, actionType: 'SAVE_FIELDS' };
         fetcher.submit(formData, {
             method: 'post',
@@ -149,7 +149,7 @@ export default function Index() {
     };
 
     const handleToggleResource = (formData: { resourceId: string }) => {
-        console.log('------- resource checkmark clicked access route');
+        info('------- resource checkmark clicked access route');
         const updatedFormData = { ...formData, actionType: 'TOGGLE_RESOURCE' };
         fetcher.submit(updatedFormData, {
             method: 'post',

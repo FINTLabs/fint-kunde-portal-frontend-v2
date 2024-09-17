@@ -23,7 +23,7 @@ import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
 import { Organisation } from '~/types/Organisation';
 import { CustomError } from '~/components/shared/CustomError';
-import { log } from './utils/logger';
+import { info, log } from './utils/logger';
 import { getFormData } from './utils/requestUtils';
 import { getUserSession, setUserSession } from './utils/selectedOrganization';
 import { Utility } from './utils/utility';
@@ -46,7 +46,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     if (!userSession) {
         const meData: IMeData = await MeApi.fetchMe();
-        console.log('meData: ', meData);
+        log('meData: ', meData);
         const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
 
         const organizationDetails = organisationsData.map((org) => ({
@@ -79,7 +79,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const features = await FeaturesApi.fetchFeatures();
-    log('Userorganization:', userSession?.selectedOrganization?.displayName);
+    info('Userorganization:', userSession?.selectedOrganization?.displayName);
     // log('--------features', features);
     return json({ userSession, features });
 };
@@ -89,7 +89,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
 
-    console.log('Updating user org in action');
+    info('Updating user org in action');
     if (actionType === 'UPDATE_SELECTED_ORGANIZATION') {
         const selectedOrganization = getFormData(
             formData.get('selectedOrganization'),

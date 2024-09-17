@@ -30,8 +30,8 @@ export const loader: LoaderFunction = async ({ request }) => {
         const configs = await ComponentConfigApi.getComponentConfigs();
 
         return json({ components, clients, relationTests, configs, orgName });
-    } catch (error) {
-        console.error('Error fetching data:', error);
+    } catch (err) {
+        error('Error fetching data:', err);
         throw new Response('Not Found', { status: 404 });
     }
 };

@@ -1,68 +1,32 @@
-import React from 'react';
-import { Box, Detail, HGrid, Label, Switch, Table } from '@navikt/ds-react';
-import { IComponent } from '~/types/Component';
-import { ChevronRightIcon } from '@navikt/aksel-icons'; // Import HStack
+// AssetsTable.tsx
+import { Table, Heading, BodyShort } from '@navikt/ds-react';
+import { ChevronRightIcon } from '@navikt/aksel-icons';
+import { IAsset } from '~/types/Asset';
 
-interface ComponentsSectionProps {
-    components: IComponent[];
-    selectedComponents: string[];
-    columns?: number;
+interface AssetsTableProps {
+    assets: IAsset[];
+    onRowClick: (id: string) => void;
 }
 
-const ComponentsList: React.FC<ComponentsSectionProps> = ({
-    components,
-    selectedComponents,
-    columns = 1,
-}) => {
+export default function AssetsTable({ assets, onRowClick }: AssetsTableProps) {
     return (
-        <>
-            {/*<Heading size="medium">Components</Heading>*/}
-            <Box
-                // background="surface-subtle"
-                // borderColor="border-alt-3"
-                padding="4"
-                // borderWidth="2"
-                // borderRadius="xlarge"
-            >
-                <HGrid gap="8" columns={columns}>
-                    <Table size="small">
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.ColumnHeader sortKey="status" sortable>
-                                    Status
-                                </Table.ColumnHeader>
-                                <Table.ColumnHeader scope="col" colSpan={2} sortKey="name" sortable>
-                                    Navn
-                                </Table.ColumnHeader>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {components.map((component, index) => (
-                                <Table.Row key={index}>
-                                    <Table.DataCell width={60}>
-                                        <Switch
-                                            checked={selectedComponents.includes(component.dn)}
-                                            onChange={() => {}}
-                                            hideLabel={true}>
-                                            {component.dn}
-                                        </Switch>
-                                    </Table.DataCell>
-                                    <Table.DataCell>
-                                        <Label>{component.description}</Label>
-                                        <Detail>{component.basePath}</Detail>
-                                    </Table.DataCell>
-                                    <Table.DataCell>
-                                        {' '}
-                                        <ChevronRightIcon title="Vis detaljer" fontSize="1.5rem" />
-                                    </Table.DataCell>
-                                </Table.Row>
-                            ))}
-                        </Table.Body>
-                    </Table>
-                </HGrid>
-            </Box>
-        </>
+        <Table>
+            <Table.Body>
+                {assets.map((item, i) => (
+                    <Table.Row
+                        key={i + item.dn}
+                        className="active:bg-[--a-surface-active] hover:cursor-pointer"
+                        onClick={() => onRowClick(item.name)}>
+                        <Table.DataCell>
+                            <Heading size={'small'}>{item.name}</Heading>
+                            <BodyShort textColor="subtle">{item.description}</BodyShort>
+                        </Table.DataCell>
+                        <Table.DataCell>
+                            <ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />
+                        </Table.DataCell>
+                    </Table.Row>
+                ))}
+            </Table.Body>
+        </Table>
     );
-};
-
-export default ComponentsList;
+}
