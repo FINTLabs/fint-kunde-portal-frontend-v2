@@ -12,7 +12,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { createCookie, json } from '@remix-run/node'; // or cloudflare/deno
 import './tailwind.css';
 import '@navikt/ds-css';
-import './data-theme.css';
+import './novari-theme.css';
 import { BodyShort, Box, Heading, Page } from '@navikt/ds-react';
 import React from 'react';
 import Menu from './components/Menu/Menu';
