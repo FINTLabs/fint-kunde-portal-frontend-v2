@@ -32,7 +32,7 @@
     .panel-icon {
         margin-right: 16px;
         font-size: 24px;
-        color: #0067c5; /* NAV blue */
+        color: #d2452c; /* NAV blue */
         transition: transform 0.3s ease; /* Smooth scaling transition */
     }
 
@@ -45,7 +45,7 @@
 
     /* Hover effect */
     .my-custom-panel:hover {
-        background-color: #e0e0e0; /* Darker gray background on hover */
+        background-color: #F8EBDB; /* Darker gray background on hover */
     }
 
     .my-custom-panel:hover .panel-icon {
