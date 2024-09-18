@@ -16,7 +16,7 @@ import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
 
 interface ActionData {
     message: string;
-    data: never;
+    data: any;
 }
 
 export const meta: MetaFunction = () => {
