@@ -9,7 +9,6 @@ import { LayersIcon, PlusIcon } from '@navikt/aksel-icons';
 import { json, useLoaderData, useNavigate } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import AccessApi from '~/api/AssetApi';
 import AssetApi from '~/api/AssetApi';
 import { IAsset, IPartialAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
@@ -29,11 +28,11 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async ({ request }) => {
     try {
         const orgName = await getSelectedOrganization(request);
-        const assets = await AccessApi.getAllAssets(orgName);
+        const assets = await AssetApi.getAllAssets(orgName);
 
         return json(assets);
     } catch (err) {
-        error('Error fetching data:', err);
+        error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };

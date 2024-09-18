@@ -10,13 +10,13 @@ import { IComponent } from '~/types/Component';
 import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
-import { error, log } from '~/utils/logger';
+import { error } from '~/utils/logger';
 // import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
 
 interface ActionData {
     message: string;
-    data: any;
+    data: never;
 }
 
 export const meta: MetaFunction = () => {
@@ -28,9 +28,17 @@ export const loader: LoaderFunction = async ({ request }) => {
     try {
         const components = await ComponentApi.getOrganisationComponents(selectOrg);
         const clients = await ClientApi.getClients(selectOrg);
-        return json({ components, clients });
+
+        const sortedComponents = components.sort((a: IComponent, b: IComponent) =>
+            a.name.localeCompare(b.name)
+        );
+        const sortedClients = clients.sort((a: IClient, b: IClient) =>
+            a.name.localeCompare(b.name)
+        );
+
+        return json({ components: sortedComponents, clients: sortedClients });
     } catch (err) {
-        error('Error fetching data:', err);
+        error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };
@@ -40,15 +48,11 @@ export async function action({ request }: ActionFunctionArgs) {
     const environment = formData.get('environment') as string;
     const component = formData.get('component');
     const client = formData.get('client');
-    log('form data', formData);
-    log('component:', component);
-    log('env:', environment);
-    log('client:', client);
 
     const orgName = await getSelectedOrganization(request);
 
-    let response: never[] = [];
-    let message = 'Run test with: ' + component + ' ' + client + ' ' + environment + orgName;
+    const response: never[] = [];
+    const message = 'Run test with: ' + component + ' ' + client + ' ' + environment + orgName;
 
     return json({ message, data: response });
 }
@@ -103,7 +107,7 @@ export default function Index() {
                     </>
                 ) : (
                     <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                        <BodyShort>Please use the form to create a report</BodyShort>
+                        <BodyShort>Bruk skjemaet for å lage en rapport</BodyShort>
                     </Box>
                 )}{' '}
             </VStack>

@@ -32,22 +32,22 @@ const TabsComponent: React.FC<TabsComponentProps> = ({
             <Tabs.List>
                 <Tabs.Tab
                     value="managed"
-                    label="Managed Adapters"
+                    label="Automatisk Adapters"
                     icon={<BriefcaseIcon aria-hidden />}
                 />
                 <Tabs.Tab
                     value="unmanaged"
-                    label="Unmanaged Adapters"
+                    label="Manuelt Adapters"
                     icon={<BriefcaseIcon aria-hidden />}
                 />
                 <Tabs.Tab
                     value="managedClients"
-                    label="Managed Clients"
+                    label="Automatisk Klienter"
                     icon={<ComponentIcon aria-hidden />}
                 />
                 <Tabs.Tab
                     value="unmanagedClients"
-                    label="Unmanaged Clients"
+                    label="Manuelt Klienter"
                     icon={<ComponentIcon aria-hidden />}
                 />
             </Tabs.List>
