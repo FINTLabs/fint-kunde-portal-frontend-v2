@@ -1,14 +1,13 @@
-import { Dropdown } from '@navikt/ds-react';
+import { Button, Dropdown } from '@navikt/ds-react';
 import { useState } from 'react';
-import { Button } from '@navikt/ds-react';
-import { MenuDropDown } from '../../types/MenuDropDown';
+import { MenuDropDown } from '~/types/MenuDropDown';
 import { NavLinkView } from './NavLinkView';
 
 export const MenuDropdowns = ({ renderItems }: { renderItems: MenuDropDown[] }) => {
-    return renderItems.map(renderMenuItem);
+    return renderItems.map(RenderMenuItem);
 };
 
-const renderMenuItem = (item: MenuDropDown, index: number) => {
+const RenderMenuItem = (item: MenuDropDown, index: number) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (

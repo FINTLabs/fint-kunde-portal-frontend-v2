@@ -40,7 +40,7 @@ export async function loader({ request, params }: ActionFunctionArgs) {
 
         return json({ client, components, features });
     } catch (err) {
-        error('Error fetching data:', err);
+        error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 }

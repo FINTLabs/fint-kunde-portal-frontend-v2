@@ -1,6 +1,5 @@
 import { ActionFunctionArgs, type LoaderFunction, MetaFunction } from '@remix-run/node';
 import { ComponentIcon } from '@navikt/aksel-icons';
-import React, { useEffect, useState } from 'react';
 import { json, useActionData, useLoaderData, useSubmit } from '@remix-run/react';
 import ComponentApi from '~/api/ComponentApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -28,7 +27,9 @@ export const loader: LoaderFunction = async ({ request }) => {
         const orgName = await getSelectedOrganization(request);
         return json({ components, orgName });
     } catch (err) {
-        error('Error fetching data:', err);
+        if (err instanceof Error) {
+            error(`:( Request failed: :`, err);
+        }
         throw new Response('Not Found', { status: 404 });
     }
 };
@@ -95,7 +96,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             message: `${success ? '' : `Failed tu update org: Status: ${response.status}`}`,
         });
     } catch (err) {
-        error('Error updating component:', err);
+        error('Error updating component:', err as Error);
         return json({ success: false, error: 'Error updating component' }, { status: 500 });
     }
 };

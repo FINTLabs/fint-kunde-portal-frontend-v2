@@ -18,7 +18,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
         const component = await ComponentApi.getComponentById(id);
         return json(component);
     } catch (err) {
-        error('Error fetching data:', err);
+        error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };

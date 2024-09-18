@@ -1,18 +1,24 @@
 import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
-import type { MetaFunction } from '@remix-run/node';
-import { useOutletContext } from '@remix-run/react';
+import { json, MetaFunction } from '@remix-run/node';
+import { useLoaderData, useOutletContext } from '@remix-run/react';
 import { MENU_ITEMS_LEFT } from '~/components/Menu/constants';
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { MenuItem } from '~/types/MenuItem';
 import { IUserSession } from '~/types/types';
 import CustomLinkPanel from '~/routes/_index/CustomLinkPanelProps';
-import { ImageIcon, PersonCheckmarkIcon } from '@navikt/aksel-icons';
+import { GavelSoundBlockIcon, ImageIcon } from '@navikt/aksel-icons';
+import FeaturesApi from '~/api/FeaturesApi';
 
 export const meta: MetaFunction = () => {
     return [
         { title: 'Kundeportalen V2' },
         { name: 'description', content: 'Welcome to the new customer portal!' },
     ];
+};
+
+export const loader = async () => {
+    const features = await FeaturesApi.fetchFeatures();
+    return json({ features });
 };
 
 function WelcomeMessage({ userSession }: { userSession: IUserSession }) {
@@ -28,9 +34,7 @@ function WelcomeMessage({ userSession }: { userSession: IUserSession }) {
 
 export default function Index() {
     const userSession = useOutletContext<IUserSession>();
-
-    // log('userSession', userSession);
-    // const [loading, setLoading] = useState(false);
+    const { features } = useLoaderData<Record<string, boolean>>();
 
     return (
         <Box className="font-sans p-4">
@@ -61,15 +65,14 @@ export default function Index() {
                                 />
                             );
                         })}
-
-                    <CustomLinkPanel
-                        href={'/samtykke'}
-                        title={'Samtykke'}
-                        IconComponent={PersonCheckmarkIcon}
-                    />
-                    {/*TODO: only show if they have permission */}
+                    {features['samtykke-admin-new' as keyof typeof features] && (
+                        <CustomLinkPanel
+                            href={'/samtykke'}
+                            title={'Samtykke'}
+                            IconComponent={GavelSoundBlockIcon}
+                        />
+                    )}
                 </HGrid>
-                {/*)}*/}
             </VStack>
         </Box>
     );
