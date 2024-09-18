@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack, Loader } from '@navikt/ds-react';
+import React from 'react';
+import { Box, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 import { ChevronRightIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
@@ -23,7 +23,6 @@ type ComponentType = {
 const ComponentsTable: React.FC<ComponentsSectionProps> = ({
     items,
     selectedItems,
-    columns = 1,
     toggle,
     hideLink = false,
     adapterName,
@@ -35,7 +34,6 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
 
     const handleRowClick = (component: IComponent) => {
         if (hideLink) {
-            // Check if adapterName is defined; if not, check for clientName
             if (adapterName) {
                 navigate(`/accesscontrol/${component.name}?adapter=${adapterName}`);
             } else if (clientName) {
@@ -46,7 +44,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
         }
     };
 
-    const groupedByType = items.reduce((acc: ComponentType, item: IComponent) => {
+    const groupedByType = sortedComponents.reduce((acc: ComponentType, item: IComponent) => {
         const componentType = item.basePath.split('/')[1];
         if (!acc[componentType]) {
             acc[componentType] = [];
@@ -61,7 +59,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                 {Object.keys(groupedByType).map((groupName, i) => {
                     const groupComponents = groupedByType[groupName];
                     const selectedItemsInGroupNames = groupComponents
-                        .filter((item) => selectedItems.includes(item.name)) // based on components list
+                        .filter((item) => selectedItems.includes(item.name))
                         .map((item) => item.name);
                     return (
                         <FormSummary key={`${groupName}-${i}`}>
@@ -82,29 +80,10 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                         hideLegend
                                         value={selectedItemsInGroupNames}
                                         legend={groupName.toUpperCase()}
-                                        // defaultValue={names}
-                                        onChange={(names) => {}}
+                                        onChange={() => {}}
                                         size="small">
                                         {groupComponents.map((item, i) => {
                                             const splitted = item.description.split(' ');
-
-                                            const isComponentOn = selectedItems.some(
-                                                (selected) => selected === item.dn
-                                            );
-
-                                            const [loadingState, setLoadingState] = useState({
-                                                loading: false,
-                                                isOn: isComponentOn,
-                                            });
-
-                                            // To update switch loading state to false
-                                            useEffect(() => {
-                                                setLoadingState((prevState) => ({
-                                                    ...prevState,
-                                                    isOn: isComponentOn,
-                                                    loading: false,
-                                                }));
-                                            }, [isComponentOn]);
 
                                             return (
                                                 <HStack
@@ -113,30 +92,21 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                     align={'center'}>
                                                     <HStack align={'center'} gap={'0'}>
                                                         <Checkbox
-                                                            disabled={loadingState.loading}
                                                             value={item.name}
                                                             key={groupName + i}
                                                             onChange={(e) => {
                                                                 const checkedStatus =
                                                                     e.target.checked;
-                                                                setLoadingState({
-                                                                    loading: true,
-                                                                    isOn: isComponentOn,
-                                                                });
                                                                 toggle &&
                                                                     toggle(
                                                                         item.name,
                                                                         checkedStatus
                                                                     );
                                                             }}>
-                                                            {' '}
-                                                        </Checkbox>
-                                                        <HStack gap={'1'}>
                                                             {splitted.length > 1
                                                                 ? splitted[1]
                                                                 : splitted[0]}
-                                                            {loadingState.loading && <Loader />}
-                                                        </HStack>
+                                                        </Checkbox>
                                                     </HStack>
                                                     <HStack align={'center'}>
                                                         <Box
@@ -164,84 +134,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                 })}
             </HGrid>
 
-            {/*<Box padding="10"></Box>*/}
             <Divider />
-            {/*<Box padding="10"></Box>*/}
-
-            {/*<Heading size="large">Old view</Heading>*/}
-            {/*<Box padding="10"></Box>*/}
-            {/*<HGrid gap="8" columns={columns}>*/}
-            {/*    {componentChunks.map((chunk, chunkIndex) => (*/}
-            {/*        <Table key={chunkIndex} size={'small'}>*/}
-            {/*            <Table.Body>*/}
-            {/*                {chunk.map((item, index) => {*/}
-            {/*                    const isComponentSwitchedOn = selectedItems.some(*/}
-            {/*                        (selected) => selected === item.dn*/}
-            {/*                    );*/}
-
-            {/*                    const [switchLoadingState, setSwitchLoadingState] = useState({*/}
-            {/*                        loading: false,*/}
-            {/*                        isOn: isComponentSwitchedOn,*/}
-            {/*                    });*/}
-
-            {/*                    // To update switch loading state to false*/}
-            {/*                    useEffect(() => {*/}
-            {/*                        setSwitchLoadingState((prevState) => ({*/}
-            {/*                            ...prevState,*/}
-            {/*                            isOn: isComponentSwitchedOn,*/}
-            {/*                            loading: false,*/}
-            {/*                        }));*/}
-            {/*                    }, [isComponentSwitchedOn]);*/}
-
-            {/*                    return (*/}
-            {/*                        <Table.Row key={index}>*/}
-            {/*                            <Table.DataCell>*/}
-            {/*                                <Switch*/}
-            {/*                                    loading={switchLoadingState.loading}*/}
-            {/*                                    checked={isComponentSwitchedOn}*/}
-            {/*                                    onChange={(e) => {*/}
-            {/*                                        const checkedStatus = e.target.checked;*/}
-            {/*                                        // console.log(item.name);*/}
-            {/*                                        setSwitchLoadingState({*/}
-            {/*                                            loading: true,*/}
-            {/*                                            isOn: isComponentSwitchedOn,*/}
-            {/*                                        });*/}
-            {/*                                        toggle && toggle(item.name, checkedStatus);*/}
-            {/*                                    }}>*/}
-            {/*                                    {''}*/}
-            {/*                                </Switch>*/}
-            {/*                            </Table.DataCell>*/}
-            {/*                            <Table.DataCell onClick={() => handleRowClick(item)}>*/}
-            {/*                                <Label>{item.description}</Label>*/}
-            {/*                                <Detail>{item.basePath}</Detail>*/}
-            {/*                            </Table.DataCell>*/}
-            {/*                            <Table.DataCell onClick={() => handleRowClick(item)}>*/}
-            {/*                                {item.common && (*/}
-            {/*                                    <Tag variant="info" size={'xsmall'}>*/}
-            {/*                                        Felles*/}
-            {/*                                    </Tag>*/}
-            {/*                                )}*/}
-            {/*                            </Table.DataCell>*/}
-            {/*                            <Table.DataCell onClick={() => handleRowClick(item)}>*/}
-            {/*                                {item.openData && (*/}
-            {/*                                    <Tag variant="neutral" size={'xsmall'}>*/}
-            {/*                                        Åpne Data*/}
-            {/*                                    </Tag>*/}
-            {/*                                )}*/}
-            {/*                            </Table.DataCell>*/}
-            {/*                            <Table.DataCell onClick={() => handleRowClick(item)}>*/}
-            {/*                                <ChevronRightIcon*/}
-            {/*                                    title="a11y-title"*/}
-            {/*                                    fontSize="1.5rem"*/}
-            {/*                                />*/}
-            {/*                            </Table.DataCell>*/}
-            {/*                        </Table.Row>*/}
-            {/*                    );*/}
-            {/*                })}*/}
-            {/*            </Table.Body>*/}
-            {/*        </Table>*/}
-            {/*    ))}*/}
-            {/*</HGrid>*/}
         </Box>
     );
 };
