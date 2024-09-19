@@ -93,7 +93,7 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                             sortKey="personopplysningIds"
                             sortable
                             onClick={() => handleSort('personopplysningIds')}>
-                            Person Opplysnings
+                            Personopplysning
                         </Table.ColumnHeader>
                         <Table.ColumnHeader
                             sortKey="aktiv"

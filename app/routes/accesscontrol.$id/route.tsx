@@ -29,7 +29,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
         return json({ component, matchedConfig, adapterName, clientName });
     } catch (err) {
-        error('Error fetching data:', err);
+        error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };
