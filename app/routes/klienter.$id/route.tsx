@@ -200,8 +200,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const clientName = getRequestParam(params.id, 'id');
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
-    const updateType = getFormData(formData.get('updateType'), 'updateType', actionName);
-    const componentName = getFormData(formData.get('componentName'), 'componentName', actionName);
+    const updateType = formData.get('updateType') as string;
+    // const componentName = getFormData(formData.get('componentName'), 'componentName', actionName);
+    const componentName = formData.get('componentName') as string;
     let response = null;
 
     switch (actionType) {
