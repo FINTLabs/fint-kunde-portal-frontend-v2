@@ -23,7 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         const clientData = await ClientApi.getClients(orgName);
         return json(clientData);
     } catch (err) {
-        error('Error fetching data:', err);
+        error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };

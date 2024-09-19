@@ -1,5 +1,5 @@
-import { BodyShort, Button, CopyButton, HStack, Label, VStack, Table } from '@navikt/ds-react';
-import { ThumbUpIcon, ArrowCirclepathIcon, DownloadIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, CopyButton, Table } from '@navikt/ds-react';
+import { DownloadIcon } from '@navikt/aksel-icons';
 import { useFetcher } from '@remix-run/react';
 
 export function TableCellValue({
@@ -29,7 +29,10 @@ export function TableCellValue({
     return (
         <>
             <Table.DataCell>{label}</Table.DataCell>
-            <Table.DataCell className="max-w-xs">{value ? value : <Fetcher />}</Table.DataCell>
+            <Table.DataCell className="max-w-xs">
+                {value ? <BodyShort truncate>{value}</BodyShort> : <Fetcher />}
+            </Table.DataCell>
+
             <Table.DataCell>{!!value && <CopyButton copyText={value} />}</Table.DataCell>
         </>
     );

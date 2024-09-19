@@ -168,7 +168,7 @@ export default function Index() {
                                         },
                                         {
                                             method: 'POST',
-                                            action: 'update',
+                                            // action: 'update',
                                             navigate: false,
                                         }
                                     );
@@ -193,8 +193,10 @@ export default function Index() {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-    const actionName = 'Action in Klienter.$id';
+    const actionName = 'Action in klienter.$id';
+
     const formData = await request.formData();
+    console.error('--------------', formData.get('updateType'));
     const orgName = await getSelectedOrganization(request);
     const clientName = getRequestParam(params.id, 'id');
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
@@ -203,7 +205,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     let response = null;
 
     switch (actionType) {
-        case 'UPDATE_COMPONONENT_IN_CLIENT':
+        case 'UPDATE_COMPONENT_IN_ADAPTER':
             response = await ClientApi.updateComponentInClient(
                 componentName,
                 clientName,

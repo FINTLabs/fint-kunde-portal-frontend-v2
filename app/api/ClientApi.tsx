@@ -51,6 +51,7 @@ class ClientApi {
         organisationName: string,
         updateType: string
     ) {
+        console.log('------------------ update', updateType);
         const URL = `${API_URL}/api/components/organisation/${organisationName}/${componentName}/clients/${clientName}`;
         if (updateType === 'add') {
             return await ClientApi.addComponentToClient(URL, componentName);
