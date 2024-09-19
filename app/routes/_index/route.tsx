@@ -1,12 +1,12 @@
-import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { Box, GuidePanel, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { json, MetaFunction } from '@remix-run/node';
-import { useLoaderData, useOutletContext } from '@remix-run/react';
+import { Link, useLoaderData, useOutletContext } from '@remix-run/react';
 import { MENU_ITEMS_LEFT } from '~/components/Menu/constants';
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { MenuItem } from '~/types/MenuItem';
 import { IUserSession } from '~/types/types';
 import CustomLinkPanel from '~/routes/_index/CustomLinkPanelProps';
-import { GavelSoundBlockIcon, ImageIcon } from '@navikt/aksel-icons';
+import { ExclamationmarkTriangleIcon, ImageIcon, PassportIcon } from '@navikt/aksel-icons';
 import FeaturesApi from '~/api/FeaturesApi';
 
 export const meta: MetaFunction = () => {
@@ -39,6 +39,15 @@ export default function Index() {
     return (
         <Box className="font-sans p-4">
             <VStack gap="6" justify={'center'} align="center">
+                <GuidePanel
+                    illustration={
+                        <ExclamationmarkTriangleIcon title="a11y-title" className={'p-2'} />
+                    }>
+                    ** Dette nettstedet er for øyeblikket under testing. **
+                    <br />
+                    For å få tilgang til den offisielle versjonen, vennligst besøk vår nettside her:{' '}
+                    <Link to={'https://kunde.felleskomponent.no/dashboard'}>Kundeportalen</Link>
+                </GuidePanel>
                 <WelcomeMessage userSession={userSession}></WelcomeMessage>
 
                 {/*{loading && (*/}
@@ -69,7 +78,7 @@ export default function Index() {
                         <CustomLinkPanel
                             href={'/samtykke'}
                             title={'Samtykke'}
-                            IconComponent={GavelSoundBlockIcon}
+                            IconComponent={PassportIcon}
                         />
                     )}
                 </HGrid>
