@@ -1,22 +1,24 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
-import { GavelSoundBlockIcon, LinkBrokenIcon, ShieldLockIcon } from '@navikt/aksel-icons';
 import { IContact, IRole } from '~/types/types';
-import RolesSwitch from '~/routes/kontakter/RoleSwitch';
-import ConfirmAction from '~/components/shared/ConfirmActionModal';
+import RoleTags from './RoleTags';
+import ExpandableRowContent from './ExpandableRowContent';
 
 interface IContactTableProps {
     contactsData?: IContact[];
     rolesData?: IRole[];
     onButtonClick: (formData: FormData) => void;
+    selectedOrg: string;
 }
 
-const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, onButtonClick }) => {
+const ContactTable: React.FC<IContactTableProps> = ({
+    contactsData,
+    rolesData,
+    onButtonClick,
+    selectedOrg,
+}) => {
     const hasRole = (currentContact: IContact, roleId: string): boolean => {
-        if (currentContact) {
-            return currentContact.roles?.includes(roleId + '@' + 'fintlabs_no') ?? false;
-        }
-        return false;
+        return currentContact?.roles?.includes(roleId + '@' + selectedOrg) ?? false;
     };
 
     const handleUpdateLegalContact = (contactNin: string) => {
@@ -33,7 +35,7 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, o
         onButtonClick(formData);
     };
 
-    function updateRole(contactNin: string, roleId: string, isChecked: boolean) {
+    const updateRole = (contactNin: string, roleId: string, isChecked: boolean) => {
         const formData = new FormData();
         formData.append('contactNin', contactNin);
         formData.append('roleId', roleId);
@@ -41,74 +43,54 @@ const ContactTable: React.FC<IContactTableProps> = ({ contactsData, rolesData, o
         if (isChecked) formData.append('actionType', 'addRole');
         else formData.append('actionType', 'deleteRole');
         onButtonClick(formData);
-    }
+    };
+
+    const getUserRolesForOrg = (contact: IContact): string[] => {
+        return (
+            contact.roles
+                ?.filter((role) => role.endsWith(`@${selectedOrg}`))
+                .map((role) => role.split('@')[0]) ?? []
+        );
+    };
 
     return (
-        <>
-            <Table zebraStripes>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell />
-                        <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Admin</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {contactsData?.map((contact, i) => (
-                        <Table.ExpandableRow
-                            key={i + contact.dn}
-                            content={
-                                <>
-                                    <RolesSwitch
-                                        contact={contact}
-                                        rolesData={rolesData}
-                                        hasRole={hasRole}
-                                        updateRole={updateRole}
-                                    />
-
-                                    <ConfirmAction
-                                        icon={<GavelSoundBlockIcon />}
-                                        buttonText={'Gjør til juridisk kontakt'}
-                                        titleText={`Bekreft endring til ${contact.firstName} ${contact.lastName}`}
-                                        buttonVariant={'primary'}
-                                        onConfirm={() => handleUpdateLegalContact(contact.nin)}
-                                        subTitleText={
-                                            'Er du sikker på at du vil endre til juridisk kontakt?'
-                                        }
-                                    />
-
-                                    <ConfirmAction
-                                        icon={<LinkBrokenIcon />}
-                                        buttonText={'Fjern kontakt'}
-                                        titleText={`Bekreft fjerning av kontakt ${contact.firstName} ${contact.lastName}`}
-                                        buttonVariant={'primary'}
-                                        onConfirm={() => handleRemoveContact(contact.nin)}
-                                        subTitleText={
-                                            'Er du sikker på at du vil fjerne denne kontakten?'
-                                        }
-                                    />
-                                </>
-                            }>
-                            <Table.DataCell scope="row">
-                                {contact.firstName} {contact.lastName}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                {hasRole(contact, 'ROLE_ADMIN') && (
-                                    <ShieldLockIcon title="a11y-title" fontSize="1.5rem" />
-                                )}
-                            </Table.DataCell>
-                        </Table.ExpandableRow>
-                    ))}
-                </Table.Body>
-            </Table>
-
-            {/*<ConfirmModal*/}
-            {/*    open={modalState.open}*/}
-            {/*    onClose={handleCloseModal}*/}
-            {/*    onConfirm={handleConfirm}*/}
-            {/*    type={modalState.type}*/}
-            {/*/>*/}
-        </>
+        <Table zebraStripes>
+            <Table.Header>
+                <Table.Row>
+                    <Table.HeaderCell />
+                    <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Roller</Table.HeaderCell>
+                </Table.Row>
+            </Table.Header>
+            <Table.Body>
+                {contactsData?.map((contact, i) => (
+                    <Table.ExpandableRow
+                        key={i + contact.dn}
+                        content={
+                            <ExpandableRowContent
+                                contact={contact}
+                                rolesData={rolesData}
+                                hasRole={hasRole}
+                                updateRole={updateRole}
+                                handleUpdateLegalContact={handleUpdateLegalContact}
+                                handleRemoveContact={handleRemoveContact}
+                            />
+                        }>
+                        <Table.DataCell scope="row">
+                            {contact.firstName} {contact.lastName}
+                        </Table.DataCell>
+                        <Table.DataCell>
+                            {/* Render the RoleTags component */}
+                            <RoleTags
+                                contact={contact}
+                                hasRole={hasRole}
+                                getUserRolesForOrg={getUserRolesForOrg}
+                            />
+                        </Table.DataCell>
+                    </Table.ExpandableRow>
+                ))}
+            </Table.Body>
+        </Table>
     );
 };
 

@@ -1,9 +1,10 @@
-import { VStack, HStack, Heading, Button } from '@navikt/ds-react';
+import { VStack, HStack, Heading, Button, Label, BodyShort } from '@navikt/ds-react';
 import { useSubmit } from '@remix-run/react';
 import { useState } from 'react';
 import { IAdapter } from '~/types/types';
 import { EditableTextField } from '~/components/shared/EditableTextField';
-import { PencilIcon, FloppydiskIcon } from '@navikt/aksel-icons';
+import { PencilIcon, FloppydiskIcon, XMarkIcon } from '@navikt/aksel-icons';
+
 import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 
 export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
@@ -13,6 +14,14 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
 
     const submit = useSubmit();
 
+    const handleCancel = () => {
+        // Reset the values back to the original adapter values
+        setAdapterShortDesc(adapter.shortDescription);
+        setAdapterNote(adapter.note);
+        // Exit edit mode
+        setIsEditing(false);
+    };
+
     return (
         <VStack gap="6">
             <HStack justify={'space-between'} align={'center'}>
@@ -21,6 +30,7 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
                 </Heading>
             </HStack>
             <LabelValuePanel label="Navn" value={adapter.name} />
+
             <LabelValuePanel label="Opprettet" value={adapter.managed ? 'Automatisk' : 'Manuelt'} />
             <EditableTextField
                 label={'Tittel'}
@@ -35,7 +45,8 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
                     isEditing={isEditing}
                     setValue={setAdapterNote}
                 />
-                <HStack className="w-full" align={'end'} justify={'end'}>
+                <HStack className="w-full" align={'end'} justify={'end'} gap="2">
+                    {/* Save Button */}
                     <Button
                         disabled={adapter.managed}
                         icon={
@@ -69,6 +80,14 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
                             setIsEditing(!isEditing);
                         }}
                     />
+
+                    {isEditing && (
+                        <Button
+                            icon={<XMarkIcon title="Avbryt" fontSize="1.5rem" />}
+                            variant="tertiary"
+                            onClick={handleCancel}
+                        />
+                    )}
                 </HStack>
             </HStack>
         </VStack>

@@ -19,11 +19,12 @@ export default function Footer() {
                     <Link to="http://support.novari.no" style={{ marginRight: '1rem' }}>
                         Opprett supportsak
                     </Link>
-                    <Link to="/help" style={{ marginRight: '1rem' }}>
-                        Brukerhjelp
+                    <Link to="http://novari.no" style={{ marginRight: '1rem' }}>
+                        Novari.no
                     </Link>
+
                     <Link to="http://fintlabs.no" style={{ marginRight: '1rem' }}>
-                        FINT Labs
+                        Brukerhjelp
                     </Link>
                 </BodyLong>
             </div>

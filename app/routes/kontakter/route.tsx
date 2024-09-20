@@ -21,6 +21,7 @@ interface IPageLoaderData {
     rolesData?: IRole[];
     allContacts?: IContact[];
     error?: string;
+    selectedOrg: string;
 }
 
 export const meta: MetaFunction = () => {
@@ -41,9 +42,10 @@ export const loader: LoaderFunction = async ({ request }) => {
             rolesData,
             legalContact,
             allContacts,
+            selectedOrg,
         });
     } catch (err) {
-        error('Error fetching data:', err);
+        error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };
@@ -135,7 +137,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
-    const { legalContact, technicalContacts, allContacts, rolesData } = useLoaderData<
+    const { legalContact, technicalContacts, allContacts, rolesData, selectedOrg } = useLoaderData<
         IPageLoaderData & { legalContact?: IContact }
     >();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -203,6 +205,7 @@ export default function Index() {
                     contactsData={technicalContacts}
                     rolesData={rolesData}
                     onButtonClick={handleFormSubmit}
+                    selectedOrg={selectedOrg}
                 />
             )}
             <ContactModal

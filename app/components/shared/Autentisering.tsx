@@ -40,6 +40,7 @@ function Autentisering({
                                 label={'Passord'}
                                 value={password}
                                 fetcherKey={FETCHER_PASSORD_KEY}
+                                type={'password'}
                             />
                         </Table.Row>
                         <Table.Row>
@@ -66,6 +67,7 @@ function Autentisering({
                 activeText="Autentiseringsinformasjon er kopiert"
                 icon={<BagdeIcon aria-hidden />}
                 activeIcon={<ThumbUpIcon aria-hidden />}
+                variant={'action'}
             />
         </Box>
     );

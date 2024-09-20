@@ -51,7 +51,7 @@ export default function Index() {
                     borderRadius="large"
                     shadow="small">
                     <HStack gap={'1'}>
-                        <Heading size={'medium'}>Details</Heading>
+                        <Heading size={'medium'}>Detaljer</Heading>
                         <Spacer />
                     </HStack>
 

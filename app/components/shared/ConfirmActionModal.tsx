@@ -3,7 +3,7 @@ import { Button, Modal, Heading } from '@navikt/ds-react';
 
 interface ConfirmActionProps {
     buttonText?: string;
-    titleText: string;
+    titleText?: string;
     subTitleText: string;
     onConfirm: () => void;
     buttonVariant?:

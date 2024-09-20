@@ -1,4 +1,3 @@
-// ContactModal.tsx
 import React, { useState } from 'react';
 import { Button, Modal, Pagination, Table, TextField } from '@navikt/ds-react';
 import { IContact } from '~/types/types';
@@ -16,11 +15,13 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
     const [filter, setFilter] = useState<string>('');
     const [selectedContactNin, setSelectedContactNin] = useState<string>('');
 
-    const filteredContacts = contacts.filter(
-        (contact) =>
-            contact.firstName.toLowerCase().includes(filter.toLowerCase()) ||
-            contact.lastName.toLowerCase().includes(filter.toLowerCase())
-    );
+    const filteredContacts = filter
+        ? contacts.filter(
+              (contact) =>
+                  contact.firstName.toLowerCase().startsWith(filter.toLowerCase()) ||
+                  contact.lastName.toLowerCase().startsWith(filter.toLowerCase())
+          )
+        : [];
 
     const [page, setPage] = useState(1);
     const rowsPerPage = 4;
@@ -41,15 +42,8 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
 
     function handleSetSelectedContact(nin: string) {
         log('Selected Contact:', nin);
-        //TODO: figure this out
-
-        // const formData = new FormData();
-        // formData.append('selectedContactNin', nin);
-        // f.submit(formData, { method: 'post' });
-        // f.submit({ method: 'POST' }, { selectedContactNin: nin });
         setSelectedContactNin(nin);
         f.submit();
-        // handleClose();
     }
 
     return (
@@ -58,48 +52,61 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
             onClose={handleClose}
             aria-labelledby="modal-heading"
             width={'small'}
-            // size={'medium'}
             header={{
                 label: 'Kontakter',
                 heading: 'Legg til ny',
             }}>
             <Modal.Body>
                 <TextField
-                    label="Filter Contacts"
-                    placeholder="Type to filter by name"
+                    label="Filtrer kontakter"
+                    placeholder="Skriv for å filtrere etter navn"
                     value={filter}
                     onChange={handleFilterChange}
                 />
                 <f.Form method="POST">
                     <input type={'hidden'} name={'contactNin'} value={selectedContactNin} />
                     <input type={'hidden'} name={'actionType'} value={'addTechnicalContact'} />
-                    <Table>
-                        <Table.Body>
-                            {sortData.map((contact) => (
-                                <Table.Row key={contact.dn}>
-                                    <Table.DataCell>
-                                        {contact.firstName} {contact.lastName}
-                                    </Table.DataCell>
-                                    <Table.DataCell width={'1'}>
-                                        <Button
-                                            icon={<PersonPlusIcon title="Rediger" />}
-                                            size="xsmall"
-                                            onClick={() => {
-                                                handleSetSelectedContact(contact.nin);
-                                            }}
-                                        />
-                                    </Table.DataCell>
-                                </Table.Row>
-                            ))}
-                        </Table.Body>
-                    </Table>
+
+                    {/* Set a fixed height for the table wrapper */}
+                    <div style={{ minHeight: '200px' }}>
+                        <Table>
+                            <Table.Body>
+                                {sortData.length === 0 && filter !== '' ? (
+                                    <Table.Row>
+                                        <Table.DataCell colSpan={2}>
+                                            Ingen kontakter funnet.
+                                        </Table.DataCell>
+                                    </Table.Row>
+                                ) : (
+                                    sortData.map((contact) => (
+                                        <Table.Row key={contact.dn}>
+                                            <Table.DataCell>
+                                                {contact.firstName} {contact.lastName}
+                                            </Table.DataCell>
+                                            <Table.DataCell width={'1'}>
+                                                <Button
+                                                    icon={<PersonPlusIcon title="Rediger" />}
+                                                    size="xsmall"
+                                                    onClick={() => {
+                                                        handleSetSelectedContact(contact.nin);
+                                                    }}
+                                                />
+                                            </Table.DataCell>
+                                        </Table.Row>
+                                    ))
+                                )}
+                            </Table.Body>
+                        </Table>
+                    </div>
                 </f.Form>
-                <Pagination
-                    page={page}
-                    onPageChange={setPage}
-                    count={Math.ceil(filteredContacts.length / rowsPerPage)}
-                    size="small"
-                />
+                {filteredContacts.length > 0 && (
+                    <Pagination
+                        page={page}
+                        onPageChange={setPage}
+                        count={Math.ceil(filteredContacts.length / rowsPerPage)}
+                        size="small"
+                    />
+                )}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={onClose} size="xsmall">

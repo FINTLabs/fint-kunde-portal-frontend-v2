@@ -34,18 +34,18 @@ const ComponentDetails: React.FC<ComponentDetailProps> = ({ component }) => {
                     <BodyShort>{component.basePath}</BodyShort>
                 </HStack>
                 <HStack gap={'2'}>
-                    <Label>Adapters</Label>
+                    <Label>Adaptere</Label>
                     <BodyShort>{component.adapters.length}</BodyShort>
                 </HStack>
                 <HStack gap={'2'}>
-                    <Label>Clients</Label>
+                    <Label>Klienter</Label>
                     <BodyShort>{component.clients.length}</BodyShort>
                 </HStack>
             </VStack>
             <VStack>
                 <HStack>
                     <CheckboxGroup
-                        legend="Title"
+                        legend="Tilgjengelighet"
                         // onChange={handleChange}
                         value={selectedValuesEnv}
                         size="small"
