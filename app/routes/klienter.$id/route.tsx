@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { json, useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import ClientDetails from '~/routes/klienter.$id/ClientDetails';
@@ -6,14 +6,8 @@ import type { ActionFunctionArgs } from '@remix-run/node';
 import ClientApi from '~/api/ClientApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import {
-    ArrowLeftIcon,
-    FloppydiskIcon,
-    PencilIcon,
-    SealCheckmarkIcon,
-    TokenIcon,
-} from '@navikt/aksel-icons';
-import { Box, Button, GuidePanel, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
+import { ArrowLeftIcon, SealCheckmarkIcon, TokenIcon } from '@navikt/aksel-icons';
+import { Alert, Box, Button, GuidePanel, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
@@ -21,13 +15,14 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import Autentisering from '~/components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from '../adapter.$name/constants';
-import { DeleteModal } from '~/components/shared/DeleteModal';
 import { getFormData, getRequestParam } from '~/utils/requestUtils';
 import { getComponentIds } from '~/utils/helper';
 import ComponentList from '~/routes/accesscontrol.$id/ComponentList';
 import FeaturesApi from '~/api/FeaturesApi';
 import ComponentSelector from '~/components/shared/ComponentSelector';
-import { error, info } from '~/utils/logger';
+import { error, info, log } from '~/utils/logger';
+import { IFetcherResponseData } from '~/types/types';
+import ClientActionButtons from '~/routes/klienter.$id/ClientActionButtons';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
@@ -76,17 +71,63 @@ export default function Index() {
         assetIds: client.assetId,
     };
     const [isEditing, setIsEditing] = useState(false);
+    const [shortDescription, setShortDescription] = useState(client.shortDescription);
+    const [note, setNote] = useState(client.note);
+    const fetcher = useFetcher();
+    const actionData = fetcher.data as IFetcherResponseData;
+    const [show, setShow] = React.useState(false);
+    useEffect(() => {
+        setShow(true);
+    }, [fetcher.state]);
 
     const submit = useSubmit();
+
+    const handleSave = () => {
+        const formData = new FormData();
+        formData.append('shortDescription', shortDescription);
+        formData.append('note', note);
+        formData.append('actionType', 'UPDATE_CLIENT');
+
+        fetcher.submit(formData, {
+            method: 'post',
+            action: `/klienter/${client.name}`,
+        });
+
+        setIsEditing(false);
+    };
 
     function onComponentToggle() {
         info('------- handle component checkbox');
     }
 
+    const handleConfirmDelete = () => {
+        submit(null, {
+            method: 'POST',
+            action: 'delete',
+            navigate: false,
+        });
+        log('Adapter deleted');
+    };
+    const handleCancel = () => {
+        // Reset values if canceled
+        setShortDescription(client.shortDescription);
+        setNote(client.note);
+        setIsEditing(false);
+    };
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={client.shortDescription} icon={TokenIcon} />
+
+            {actionData && show && (
+                <Alert
+                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
+                    closeButton
+                    onClose={() => setShow(false)}>
+                    {actionData.message || 'Content'}
+                </Alert>
+            )}
 
             <HGrid gap="2" align={'start'}>
                 <Box>
@@ -105,23 +146,22 @@ export default function Index() {
                     <HStack>
                         <Heading size={'medium'}>Details</Heading>
                         <Spacer />
-                        {isEditing ? (
-                            <Button
-                                icon={<FloppydiskIcon title="Rediger" />}
-                                variant="tertiary"
-                                onClick={() => setIsEditing(false)}
-                            />
-                        ) : (
-                            <Button
-                                disabled={client.managed}
-                                icon={<PencilIcon title="Rediger" />}
-                                variant="tertiary"
-                                onClick={() => setIsEditing(true)}
-                            />
-                        )}
+                        <ClientActionButtons
+                            isEditing={isEditing}
+                            handleSave={handleSave}
+                            handleCancel={handleCancel}
+                            setIsEditing={setIsEditing}
+                            clientManaged={client.managed}
+                            handleConfirmDelete={handleConfirmDelete}
+                        />
                     </HStack>
 
-                    <ClientDetails client={client} isEditing={isEditing} />
+                    <ClientDetails
+                        client={{ ...client, shortDescription, note }}
+                        isEditing={isEditing}
+                        onChangeShortDescription={setShortDescription}
+                        onChangeNote={setNote}
+                    />
 
                     <Divider className="pt-3" />
 
@@ -177,15 +217,15 @@ export default function Index() {
                         </>
                     )}
 
-                    <HGrid columns={3}>
-                        {!client.managed && (
-                            <DeleteModal
-                                title="Slett klient"
-                                bodyText="Er du sikker på at du vil slette denne klienten?"
-                                action="delete"
-                            />
-                        )}
-                    </HGrid>
+                    {/*<HGrid columns={3}>*/}
+                    {/*    {!client.managed && (*/}
+                    {/*        <DeleteModal*/}
+                    {/*            title="Slett klient"*/}
+                    {/*            bodyText="Er du sikker på at du vil slette denne klienten?"*/}
+                    {/*            action="delete"*/}
+                    {/*        />*/}
+                    {/*    )}*/}
+                    {/*</HGrid>*/}
                 </Box>
             </HGrid>
         </>
@@ -205,7 +245,25 @@ export async function action({ request, params }: ActionFunctionArgs) {
     const componentName = formData.get('componentName') as string;
     let response = null;
 
+    let apiResponse;
+    let isOk = false;
     switch (actionType) {
+        case 'UPDATE_CLIENT':
+            apiResponse = await ClientApi.updateClient(
+                clientName,
+                formData.get('shortDescription') as string,
+                formData.get('note') as string,
+                orgName
+            );
+            isOk = apiResponse.status;
+            return json({
+                ok: isOk,
+                show: true,
+                message: apiResponse.ok
+                    ? 'Klient oppdatert med suksess.'
+                    : `Oppdatering av klient feilet. Mer info: Status: ${apiResponse.status}. StatusTekst: ${apiResponse.statusText}`,
+                variant: isOk ? 'success' : 'error',
+            });
         case 'UPDATE_COMPONENT_IN_ADAPTER':
             response = await ClientApi.updateComponentInClient(
                 componentName,

@@ -37,7 +37,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         );
         return json({ components, configs, defaultLogs });
     } catch (err) {
-        error('Error fetching data:', error);
+        error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };
@@ -62,10 +62,10 @@ export async function action({ request }: ActionFunctionArgs) {
         } else if (response && response.length === 0) {
             message = 'No logs found';
         }
-    } catch (error) {
+    } catch (err) {
         message = 'Error occurred';
         response = null;
-        log('Error fetching logs:', error);
+        error('Error fetching logs:', err as Error);
     }
 
     return json({ message, data: response });
@@ -104,18 +104,8 @@ export default function Index() {
                         onSearchSubmit={handleFormSubmit}
                         components={components}
                         configs={configs}
+                        onFilter={(value: string) => setFilterValue(value)}
                     />
-
-                    <Box padding={'10'}>
-                        <Search
-                            label="Filtrer på ID - Skriv nøyaktig ID"
-                            // description="Her kan du søke på forskjellige ting, f.eks. søknadsskjemaer."
-                            variant="simple"
-                            size={'small'}
-                            hideLabel={false}
-                            onChange={(value: string) => setFilterValue(value)}
-                        />
-                    </Box>
                 </Box>
 
                 {!actionData && (

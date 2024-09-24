@@ -1,7 +1,7 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from '~/api/constants';
 import { IClient, IPartialClient } from '~/types/Clients';
-import { error } from '~/utils/logger';
+import { debug, error } from '~/utils/logger';
 
 class ClientApi {
     static async getClients(organisationName: string) {
@@ -30,6 +30,24 @@ class ClientApi {
         const functionName = 'createClient';
         const URL = `${API_URL}/api/clients/${organisation}`;
         return request(URL, functionName, 'POST', 'json', client);
+    }
+
+    static updateClient(
+        clientName: string,
+        clientShortDescription: string,
+        clientNote: string,
+        organisation: string
+    ) {
+        const partialClient: IPartialClient = {
+            name: clientName, // Assuming this is the current client name
+            shortDescription: clientShortDescription,
+            note: clientNote,
+        };
+
+        const functionName = 'updateClient';
+        const URL = `${API_URL}/api/clients/${organisation}/${clientName}`;
+        debug('adding:', URL, partialClient);
+        return request(URL, functionName, 'PUT', 'json', partialClient);
     }
 
     static async deleteClient(clientName: string, organisation: string) {

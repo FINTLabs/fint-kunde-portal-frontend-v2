@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Button, HGrid, Select, VStack } from '@navikt/ds-react';
+import { Box, Button, HGrid, Search, Select, VStack } from '@navikt/ds-react';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { IComponent } from '~/types/Component';
 import { IComponentConfig } from '~/types/ComponentConfig';
+import { debug } from '~/utils/logger';
 
 interface LogSearchFormProps {
     // handleSearch: (
@@ -14,9 +15,15 @@ interface LogSearchFormProps {
     onSearchSubmit: (formData: FormData) => void;
     components: IComponent[];
     configs: IComponentConfig[];
+    onFilter: (searchValue: string) => void;
 }
 
-const LogSearchForm: React.FC<LogSearchFormProps> = ({ onSearchSubmit, components, configs }) => {
+const LogSearchForm: React.FC<LogSearchFormProps> = ({
+    onSearchSubmit,
+    components,
+    configs,
+    onFilter,
+}) => {
     const [selectedComponent, setSelectedComponent] = useState<string>('');
     const [selectedConfig, setSelectedConfig] = useState<string>('');
     const [selectedAction, setSelectedAction] = useState<string>('');
@@ -40,6 +47,10 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({ onSearchSubmit, component
         formData.append('resource', selectedConfig);
         formData.append('action', selectedAction);
         onSearchSubmit(formData);
+    }
+
+    function setFilterValue(value: string) {
+        debug('--- set filter value');
     }
 
     return (
@@ -102,13 +113,14 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({ onSearchSubmit, component
                     </Button>
                 </Box>
             </HGrid>
-            {/*<HGrid gap={'10'} columns={2}>*/}
-            {/*    <TextField*/}
-            {/*        label="Filtrer på ID - Ved blank vises alle"*/}
-            {/*        size="small"*/}
-            {/*        name={'filter'}*/}
-            {/*    />*/}
-            {/*</HGrid>*/}
+
+            <Search
+                label="Filtrer på ID - Skriv nøyaktig ID"
+                variant="simple"
+                size={'small'}
+                hideLabel={false}
+                onChange={(value: string) => onFilter(value)}
+            />
         </VStack>
     );
 };

@@ -55,6 +55,13 @@ export function AdapterDetail({
             <Box padding="6" borderRadius="large" shadow="small" className="relative bottom-12">
                 <VStack gap="5">
                     <GeneralDetailView adapter={adapter} />
+                    {/*{!adapter.managed && (*/}
+                    {/*    <DeleteModal*/}
+                    {/*        title="Slett adapter"*/}
+                    {/*        bodyText="Er du sikker på at du vil slette dette adapteret?"*/}
+                    {/*        action="delete"*/}
+                    {/*    />*/}
+                    {/*)}*/}
                     <Divider className="pt-3" />
                     <Autentisering
                         name={adapter.name}
@@ -67,6 +74,7 @@ export function AdapterDetail({
                         password={passord}
                         allDetails={allDetails}
                     />
+
                     <Divider className="pt-3" />
 
                     <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
@@ -110,15 +118,15 @@ export function AdapterDetail({
                         </>
                     )}
 
-                    <HGrid columns={3}>
-                        {!adapter.managed && (
-                            <DeleteModal
-                                title="Slett adapter"
-                                bodyText="Er du sikker på at du vil slette dette adapteret?"
-                                action="delete"
-                            />
-                        )}
-                    </HGrid>
+                    {/*<HGrid columns={3}>*/}
+                    {/*    {!adapter.managed && (*/}
+                    {/*        <DeleteModal*/}
+                    {/*            title="Slett adapter"*/}
+                    {/*            bodyText="Er du sikker på at du vil slette dette adapteret?"*/}
+                    {/*            action="delete"*/}
+                    {/*        />*/}
+                    {/*    )}*/}
+                    {/*</HGrid>*/}
                 </VStack>
             </Box>
         </HGrid>

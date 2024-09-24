@@ -4,8 +4,10 @@ import { Button, Modal, Heading } from '@navikt/ds-react';
 interface ConfirmActionProps {
     buttonText?: string;
     titleText?: string;
+    showButtonText?: boolean;
     subTitleText: string;
     onConfirm: () => void;
+    buttonSize?: 'xsmall' | 'small' | 'medium';
     buttonVariant?:
         | 'tertiary'
         | 'primary'
@@ -19,9 +21,11 @@ interface ConfirmActionProps {
 
 const ConfirmAction: React.FC<ConfirmActionProps> = ({
     buttonText = 'Delete',
+    showButtonText = true,
     titleText,
     onConfirm,
     subTitleText,
+    buttonSize,
     buttonVariant = 'tertiary',
     icon,
 }) => {
@@ -46,9 +50,9 @@ const ConfirmAction: React.FC<ConfirmActionProps> = ({
                         | 'danger'
                 }
                 icon={icon}
-                size="xsmall"
+                size={buttonSize ? (buttonSize as 'xsmall' | 'small' | 'medium') : 'xsmall'}
                 onClick={() => setOpen(true)}>
-                {buttonText}
+                {showButtonText ? buttonText : ''}
             </Button>
 
             <Modal

@@ -3,9 +3,11 @@ import { useSubmit } from '@remix-run/react';
 import { useState } from 'react';
 import { IAdapter } from '~/types/types';
 import { EditableTextField } from '~/components/shared/EditableTextField';
-import { PencilIcon, FloppydiskIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { PencilIcon, FloppydiskIcon, XMarkIcon, TrashIcon } from '@navikt/aksel-icons';
 
 import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
+import ConfirmAction from '~/components/shared/ConfirmActionModal';
+import { log } from '~/utils/logger';
 
 export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -15,11 +17,19 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
     const submit = useSubmit();
 
     const handleCancel = () => {
-        // Reset the values back to the original adapter values
         setAdapterShortDesc(adapter.shortDescription);
         setAdapterNote(adapter.note);
-        // Exit edit mode
         setIsEditing(false);
+    };
+
+    const handleConfirmDelete = () => {
+        // Using useSubmit to submit a form for deletion
+        submit(null, {
+            method: 'POST',
+            action: 'delete',
+            navigate: false,
+        });
+        log('Adapter deleted');
     };
 
     return (
@@ -80,6 +90,19 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
                             setIsEditing(!isEditing);
                         }}
                     />
+
+                    {!isEditing && !adapter.managed && (
+                        <ConfirmAction
+                            buttonText={'delete'}
+                            titleText={'Slett adapter'}
+                            showButtonText={false}
+                            subTitleText={'Er du sikker på at du vil slette dette adapteret?'}
+                            onConfirm={handleConfirmDelete}
+                            buttonVariant="tertiary"
+                            buttonSize={'medium'}
+                            icon={<TrashIcon aria-hidden />}
+                        />
+                    )}
 
                     {isEditing && (
                         <Button

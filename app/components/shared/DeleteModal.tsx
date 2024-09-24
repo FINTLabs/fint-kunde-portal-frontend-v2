@@ -14,7 +14,7 @@ export function DeleteModal({ title, bodyText, action }: DeleteModalProps) {
     return (
         <>
             <Button
-                variant="danger"
+                // variant="danger"
                 onClick={() => ref.current?.showModal()}
                 icon={<TrashIcon aria-hidden />}
                 size={'xsmall'}>
