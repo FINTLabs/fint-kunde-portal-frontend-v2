@@ -1,4 +1,5 @@
 import { error, log } from '~/utils/logger';
+import { request } from '~/api/shared/api';
 
 const API_URL = process.env.CONSENT_API_URL;
 
@@ -34,7 +35,9 @@ class ConsentApi {
     static async getBehandlings(orgName: string) {
         const url = `${API_URL}/consent-admin/behandling/${orgName}`;
         log('url', url);
-        return await fetchWithAuth(url, { method: 'GET' });
+        // return await fetchWithAuth(url, { method: 'GET' });
+        const functionName = 'getBehandlings';
+        return await request(url, functionName, 'GET');
     }
 
     static async getTjenste(orgName: string) {
@@ -46,7 +49,9 @@ class ConsentApi {
     static async getPersonopplysning() {
         const url = `${API_URL}/consent-admin/personopplysning`;
         log('url', url);
-        return await fetchWithAuth(url, { method: 'GET' });
+        const functionName = 'getPersonopplysning';
+        return await request(url, functionName, 'GET');
+        // return await fetchWithAuth(url, { method: 'GET' });
     }
 
     static async getBehandlingsgrunnlag() {
