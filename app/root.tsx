@@ -46,7 +46,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     if (!userSession) {
         const meData: IMeData = await MeApi.fetchMe();
-        log('meData: ', meData);
         const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
 
         const organizationDetails = organisationsData.map((org) => ({
