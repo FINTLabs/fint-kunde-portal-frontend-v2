@@ -10,7 +10,6 @@ import ComponentDetails from '~/routes/komponenter.$id/ComponentDetails';
 import { LoaderFunctionArgs } from '@remix-run/node';
 import EndpointTable from '~/routes/komponenter.$id/EndpointTable';
 import SwaggerTable from '~/routes/komponenter.$id/SwaggerTable';
-import { error } from '~/utils/logger';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const id = params.id || '';
@@ -18,7 +17,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
         const component = await ComponentApi.getComponentById(id);
         return json(component);
     } catch (err) {
-        error('Error fetching data:', err as Error);
+        console.error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };

@@ -20,31 +20,38 @@ import { getComponentIds } from '~/utils/helper';
 import ComponentList from '~/routes/accesscontrol.$id/ComponentList';
 import FeaturesApi from '~/api/FeaturesApi';
 import ComponentSelector from '~/components/shared/ComponentSelector';
-import { error, info, log } from '~/utils/logger';
 import { IFetcherResponseData } from '~/types/types';
 import ClientActionButtons from '~/routes/klienter.$id/ClientActionButtons';
+import AccessApi from '~/api/AccessApi';
+import { IAccess } from '~/types/Access';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const id = params.id || '';
+
+    let access;
+    if (id) {
+        access = await AccessApi.getAccess(id);
+    }
 
     try {
         const client = await ClientApi.getClientById(orgName, id);
         const components = await ComponentApi.getOrganisationComponents(orgName);
         const features = await FeaturesApi.fetchFeatures();
 
-        return json({ client, components, features });
+        return json({ client, components, features, access });
     } catch (err) {
-        error('Error fetching data:', err as Error);
+        console.error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 }
 
 export default function Index() {
-    const { client, components, features } = useLoaderData<{
+    const { client, components, features, access } = useLoaderData<{
         client: IClient;
         components: IComponent[];
         features: Record<string, boolean>;
+        access: IAccess[];
     }>();
     const navigate = useNavigate();
     // const selectedComponents = getComponentIds(client.components);
@@ -97,7 +104,7 @@ export default function Index() {
     };
 
     function onComponentToggle() {
-        info('------- handle component checkbox');
+        console.info('------- handle component checkbox');
     }
 
     const handleConfirmDelete = () => {
@@ -106,7 +113,7 @@ export default function Index() {
             action: 'delete',
             navigate: false,
         });
-        log('Adapter deleted');
+        console.debug('Adapter deleted');
     };
     const handleCancel = () => {
         // Reset values if canceled
@@ -179,8 +186,8 @@ export default function Index() {
                     <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
                     {hasAccessControl ? (
                         <ComponentList
-                            items={components}
-                            selectedItems={getComponentIds(client.components)}
+                            accessList={access}
+                            // selectedItems={getComponentIds(client.components)}
                             clientName={client.name}
                             onToggle={onComponentToggle}
                         />

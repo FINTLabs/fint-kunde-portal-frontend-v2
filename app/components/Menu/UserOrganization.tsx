@@ -2,7 +2,6 @@ import { IUserSession } from '~/types/types';
 import { Select } from '@navikt/ds-react';
 import { ChangeEvent, useState } from 'react';
 import { useSubmit } from '@remix-run/react';
-import { info } from '~/utils/logger';
 
 export const UserOrganization = ({ userSession }: { userSession: IUserSession }) => {
     const submit = useSubmit();
@@ -11,7 +10,7 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
 
     const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setOrgName(event.target.value);
-        info(`Change org to ${event.target.value}`);
+        console.info(`Change org to ${event.target.value}`);
         submit(
             {
                 selectedOrganization: event.target.value,

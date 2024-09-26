@@ -11,7 +11,6 @@ import { IComponentConfig } from '~/types/ComponentConfig';
 import { IFetcherResponseData } from '~/types/types';
 import ResourcesTable from '~/routes/accesscontrol.$id/ResourceList';
 import FieldList from '~/routes/accesscontrol.$id/FieldList';
-import { error, info } from '~/utils/logger';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const id = params.id || '';
@@ -29,7 +28,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
         return json({ component, matchedConfig, adapterName, clientName });
     } catch (err) {
-        error('Error fetching data:', err as Error);
+        console.error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };
@@ -140,7 +139,7 @@ export default function Index() {
     };
 
     const handleSaveFields = (formData: { resourceId: string }) => {
-        info('handle save fields in route clicked');
+        console.info('handle save fields in route clicked');
         // const updatedFormData = { ...formData, actionType: 'SAVE_FIELDS' };
         fetcher.submit(formData, {
             method: 'post',
@@ -149,7 +148,7 @@ export default function Index() {
     };
 
     const handleToggleResource = (formData: { resourceId: string }) => {
-        info('------- resource checkmark clicked access route');
+        console.info('------- resource checkmark clicked access route');
         const updatedFormData = { ...formData, actionType: 'TOGGLE_RESOURCE' };
         fetcher.submit(updatedFormData, {
             method: 'post',

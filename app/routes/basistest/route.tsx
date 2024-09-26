@@ -10,7 +10,6 @@ import { IComponent } from '~/types/Component';
 import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
-import { error } from '~/utils/logger';
 // import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
 
@@ -38,7 +37,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
         return json({ components: sortedComponents, clients: sortedClients });
     } catch (err) {
-        error('Error fetching data:', err as Error);
+        console.error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };

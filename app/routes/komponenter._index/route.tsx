@@ -9,7 +9,6 @@ import { IComponent } from '~/types/Component';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData } from '~/utils/requestUtils';
 import OrganisationApi from '~/api/OrganisationApi';
-import { error, log } from '~/utils/logger';
 import { InfoBox } from '~/components/shared/InfoBox';
 
 export const meta: MetaFunction = () => {
@@ -20,7 +19,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    log('Calling loader in komponenter_index.tsx');
+    console.log('Calling loader in komponenter_index.tsx');
 
     try {
         const components = await ComponentApi.getAllComponents();
@@ -28,7 +27,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         return json({ components, orgName });
     } catch (err) {
         if (err instanceof Error) {
-            error(`:( Request failed: :`, err);
+            console.error(`:( Request failed: :`, err);
         }
         throw new Response('Not Found', { status: 404 });
     }
@@ -88,7 +87,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const successResponse = response.status === 204;
 
         if (!successResponse) {
-            log(`${actionName} failed: Response: ${response.status}`);
+            console.error(`${actionName} failed: Response: ${response.status}`);
         }
         const success = response.status === 204;
         return json({
@@ -96,7 +95,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             message: `${success ? '' : `Failed tu update org: Status: ${response.status}`}`,
         });
     } catch (err) {
-        error('Error updating component:', err as Error);
+        console.error('Error updating component:', err as Error);
         return json({ success: false, error: 'Error updating component' }, { status: 500 });
     }
 };

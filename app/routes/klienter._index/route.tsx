@@ -10,7 +10,6 @@ import { Button, HStack, Search, Tabs, VStack } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { InfoBox } from '~/components/shared/InfoBox';
-import { error } from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Klienter' }, { name: 'description', content: 'klienter' }];
@@ -23,7 +22,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         const clientData = await ClientApi.getClients(orgName);
         return json(clientData);
     } catch (err) {
-        error('Error fetching data:', err as Error);
+        console.error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };
@@ -88,7 +87,7 @@ export default function Index() {
                 variant="secondary"
                 size="small"
                 onChange={(value: string) => handleSearch(value)}
-                placeholder="Søk etter navn eller description"
+                placeholder="Søk etter navn eller beskrivelse"
                 className={'pb-6'}
             />
 

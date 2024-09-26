@@ -7,7 +7,6 @@ import { PencilIcon, FloppydiskIcon, XMarkIcon, TrashIcon } from '@navikt/aksel-
 
 import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
-import { log } from '~/utils/logger';
 
 export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -29,7 +28,6 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
             action: 'delete',
             navigate: false,
         });
-        log('Adapter deleted');
     };
 
     return (

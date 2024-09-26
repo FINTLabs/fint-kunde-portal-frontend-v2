@@ -8,7 +8,6 @@ import ComponentApi from '~/api/ComponentApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import ClientApi from '~/api/ClientApi';
-import { error } from '~/utils/logger';
 import LinkWalkerApi from '~/api/LinkWalkerApi';
 import ComponentConfigApi from '~/api/ComponentConfigApi';
 import React, { useEffect } from 'react';
@@ -22,7 +21,7 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
 
-    error('testing errors');
+    console.error('testing errors');
     try {
         const components = await ComponentApi.getOrganisationComponents(orgName);
         const clients = await ClientApi.getClients(orgName);
@@ -31,7 +30,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
         return json({ components, clients, relationTests, configs, orgName });
     } catch (err) {
-        error('Error fetching data:', err);
+        console.error('Error fetching data:', err);
         throw new Response('Not Found', { status: 404 });
     }
 };

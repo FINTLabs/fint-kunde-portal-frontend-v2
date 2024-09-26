@@ -1,14 +1,13 @@
 import React from 'react';
 import { BodyShort, Checkbox, CheckboxGroup, HStack, Label, VStack } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
-import { info } from '~/utils/logger';
 
 interface ComponentDetailProps {
     component: IComponent;
 }
 
 const ComponentDetails: React.FC<ComponentDetailProps> = ({ component }) => {
-    info(component);
+    console.info(component);
     const selectedValuesEnv = [];
     if (component.inProduction) selectedValuesEnv.push('api');
     if (component.inPlayWithFint) selectedValuesEnv.push('pwf');

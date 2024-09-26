@@ -1,7 +1,6 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from '~/api/constants';
 import { IClient, IPartialClient } from '~/types/Clients';
-import { debug, error } from '~/utils/logger';
 
 class ClientApi {
     static async getClients(organisationName: string) {
@@ -17,12 +16,12 @@ class ClientApi {
                 if (client) {
                     return client;
                 } else {
-                    error('Client not found, clientId:', clientId);
+                    console.error('Client not found, clientId:', clientId);
                     return null;
                 }
             })
             .catch((err) => {
-                error('Error fetching client:', err);
+                console.error('Error fetching client:', err);
                 return null;
             });
     }
@@ -46,7 +45,7 @@ class ClientApi {
 
         const functionName = 'updateClient';
         const URL = `${API_URL}/api/clients/${organisation}/${clientName}`;
-        debug('adding:', URL, partialClient);
+        console.debug('adding:', URL, partialClient);
         return request(URL, functionName, 'PUT', 'json', partialClient);
     }
 

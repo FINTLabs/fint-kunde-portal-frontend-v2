@@ -13,7 +13,7 @@ import { createCookie, json } from '@remix-run/node'; // or cloudflare/deno
 import './tailwind.css';
 import '@navikt/ds-css';
 import './novari-theme.css';
-import { BodyShort, Box, Heading, Page } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Heading, Page } from '@navikt/ds-react';
 import React from 'react';
 import Menu from './components/Menu/Menu';
 import { commitSession, getSession } from '~/utils/session';
@@ -23,7 +23,6 @@ import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
 import { Organisation } from '~/types/Organisation';
 import { CustomError } from '~/components/shared/CustomError';
-import { info, log } from './utils/logger';
 import { getFormData } from './utils/requestUtils';
 import { getUserSession, setUserSession } from './utils/selectedOrganization';
 import { Utility } from './utils/utility';
@@ -40,7 +39,7 @@ export const remix_cookie = createCookie('remix_cookie', {
 });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    log('Calling loader in root.tsx');
+    console.debug('Calling loader in root.tsx');
     let userSession = await getUserSession(request);
     Utility.setXnin(request); // root is called on every request, makes sense to set xnin only once here.
 
@@ -78,8 +77,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const features = await FeaturesApi.fetchFeatures();
-    // debug('Userorganization:', userSession?.selectedOrganization?.displayName);
-    // log('--------features', features);
     return json({ userSession, features });
 };
 
@@ -88,7 +85,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
 
-    info('Updating user org in action');
+    console.debug('Updating user org in action');
     if (actionType === 'UPDATE_SELECTED_ORGANIZATION') {
         const selectedOrganization = getFormData(
             formData.get('selectedOrganization'),
@@ -177,26 +174,28 @@ export function ErrorBoundary() {
                 <Heading size="medium" spacing>
                     {error.status} {error.statusText}
                 </Heading>
-                <Box padding="8" borderColor="border-danger" borderWidth="4" borderRadius={'large'}>
-                    <BodyShort>{error.data}</BodyShort>
-                </Box>
+                <Alert variant="error">{error.data}</Alert>
             </CustomError>
         );
-    } else if (error instanceof Error) {
+        // } else if (error instanceof Error) {
+        //     return (
+        //         <CustomError>
+        //             <h1>Error</h1>
+        //             <p>{error.message}</p>
+        //             <p>The stack trace is:</p>
+        //             <p>
+        //                 <pre className="overflow-auto whitespace-pre-wrap break-words max-w-full p-4 bg-gray-100 border border-gray-300 rounded-md">
+        //                     {error.stack}
+        //                 </pre>
+        //             </p>
+        //         </CustomError>
+        //     );
+    } else {
         return (
             <CustomError>
-                <h1>Error</h1>
-                <p>{error.message}</p>
-                <p>The stack trace is:</p>
-                <p>
-                    <pre className="overflow-auto whitespace-pre-wrap break-words max-w-full p-4 bg-gray-100 border border-gray-300 rounded-md">
-                        {error.stack}
-                    </pre>
-                </p>
+                <Alert variant="error">Ukjent feil</Alert>
             </CustomError>
         );
-    } else {
-        return <h1>Unknown Error</h1>;
     }
 }
 

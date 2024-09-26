@@ -3,7 +3,6 @@ import { IUserSession } from '~/types/types';
 import { LogoutButton } from './LogoutButton';
 import { UserOrganization } from './UserOrganization';
 import { NavLinkView } from './NavLinkView';
-import { log } from '~/utils/logger';
 
 type MenuRightType = {
     userSession: IUserSession;

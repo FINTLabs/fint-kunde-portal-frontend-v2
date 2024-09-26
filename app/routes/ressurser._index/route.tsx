@@ -16,7 +16,6 @@ import { Button, HStack, VStack } from '@navikt/ds-react';
 import { InfoBox } from '~/components/shared/InfoBox';
 import CreateForm from '~/routes/ressurser._index/CreateForm';
 import AssetsTable from '~/routes/ressurser._index/ResourcesTable';
-import { error, info } from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [
@@ -32,7 +31,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
         return json(assets);
     } catch (err) {
-        error('Error fetching data:', err as Error);
+        console.error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };
@@ -49,7 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
         name: name,
         description,
     };
-    info('---------', newAsset);
+    console.info('---------', newAsset);
     const response = await AssetApi.createAsset(newAsset, orgName);
 
     if (response.status === 201) {

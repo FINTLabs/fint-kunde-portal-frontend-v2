@@ -8,19 +8,20 @@ import Autentisering from '../../components/shared/Autentisering';
 import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
-import { DeleteModal } from '~/components/shared/DeleteModal';
 import { getComponentIds } from '~/utils/helper';
 import ComponentList from '~/routes/accesscontrol.$id/ComponentList';
 import { SealCheckmarkIcon } from '@navikt/aksel-icons';
 import ComponentSelector from '~/components/shared/ComponentSelector';
-import { info } from '~/utils/logger';
+import { IAccess } from '~/types/Access';
 
 export function AdapterDetail({
     adapter,
     hasAccessControl,
+    access,
 }: {
     adapter: IAdapter;
     hasAccessControl: boolean;
+    access: IAccess[];
 }) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
 
@@ -46,7 +47,7 @@ export function AdapterDetail({
     const submit = useSubmit();
 
     function onComponentToggle() {
-        info('------- handle component checkbox');
+        console.info('------- handle component checkbox');
     }
 
     return (
@@ -80,8 +81,9 @@ export function AdapterDetail({
                     <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
                     {hasAccessControl ? (
                         <ComponentList
-                            items={components}
-                            selectedItems={getComponentIds(adapter.components)}
+                            accessList={access}
+                            // selectedItems={getComponentIds(adapter.components)}
+                            // selectedItems={access}
                             clientName={adapter.name}
                             onToggle={onComponentToggle}
                         />

@@ -1,8 +1,7 @@
 import AdapterAPI from '~/api/AdapterApi';
-import { info } from '~/utils/logger';
 
 const resetPassword = async (setPassord: React.Dispatch<React.SetStateAction<string>>) => {
-    info('handle reset password and post the password to backend');
+    console.info('handle reset password and post the password to backend');
     setTimeout(() => {
         setPassord('*******');
     }, 400);

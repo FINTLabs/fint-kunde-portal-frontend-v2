@@ -1,7 +1,6 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from './constants';
 import { IClient } from '~/types/Clients';
-import { error } from '~/utils/logger';
 
 class ComponentApi {
     static async getAllComponents() {
@@ -17,12 +16,12 @@ class ComponentApi {
                 if (client) {
                     return client;
                 } else {
-                    error('Component not found, componentName:', componentName);
+                    console.error('Component not found, componentName:', componentName);
                     return null;
                 }
             })
             .catch((err) => {
-                error('Error fetching components:', err);
+                console.error('Error fetching components:', err);
                 return null;
             });
     }

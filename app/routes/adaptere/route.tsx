@@ -3,7 +3,6 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Tabs, VStack } from '@navikt/ds-react';
-import { log } from '~/utils/logger';
 import AdapterAPI from '~/api/AdapterApi';
 import { useLoaderData, useNavigate } from '@remix-run/react';
 import { IAdapter } from '~/types/types';

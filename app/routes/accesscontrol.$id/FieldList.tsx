@@ -13,7 +13,6 @@ import React, { useState } from 'react';
 import ResourceSelect from '~/routes/accesscontrol.$id/ResourceSelect';
 import IconToggleButtons from '~/routes/accesscontrol.$id/IconToggleButtons';
 import { mockData } from './MockData';
-import { warn, log, error, info } from '~/utils/logger';
 
 interface DataItem {
     name: string;
@@ -31,17 +30,17 @@ const FieldList: React.FC<FieldListProps> = ({ onSave }) => {
     const [data, setData] = useState<DataItem[]>(mockData);
 
     const handleEditClick = () => {
-        info('-----EDIT', isEditing);
+        console.info('-----EDIT', isEditing);
         setIsEditing(true);
     };
 
     const handleCancelClick = () => {
-        info('-----cancel', isEditing);
+        console.info('-----cancel', isEditing);
         setIsEditing(false);
     };
 
     const handleSaveClick = () => {
-        info('-----save', isEditing);
+        console.info('-----save', isEditing);
         const formData = {
             resourceId: 'newServiceName',
             actionType: 'SAVE_FIELDS',

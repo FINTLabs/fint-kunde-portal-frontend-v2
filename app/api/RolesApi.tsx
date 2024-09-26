@@ -1,13 +1,12 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from '~/api/constants';
-import { error } from '~/utils/logger';
 
 export default class RoleApi {
     static async getRoles() {
         const functionName = 'getRoles';
         const URL = `${API_URL}/api/role`;
         return request(URL, functionName).catch((err) => {
-            error('Error fetching roles:', err);
+            console.error('Error fetching roles:', err);
             throw new Error('Error fetching roles');
         });
     }

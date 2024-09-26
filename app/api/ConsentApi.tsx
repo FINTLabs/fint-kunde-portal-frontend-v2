@@ -1,4 +1,3 @@
-import { error, log } from '~/utils/logger';
 import { request } from '~/api/shared/api';
 
 const API_URL = process.env.CONSENT_API_URL;
@@ -26,7 +25,7 @@ async function fetchWithAuth(url: string, options: FetchOptions = {}) {
         return await response.json();
     } else {
         const errorMsg = `Error fetching, status: ${response.status}`;
-        error(errorMsg);
+        console.error(errorMsg);
         throw new Error(errorMsg);
     }
 }
@@ -34,7 +33,7 @@ async function fetchWithAuth(url: string, options: FetchOptions = {}) {
 class ConsentApi {
     static async getBehandlings(orgName: string) {
         const url = `${API_URL}/consent-admin/behandling/${orgName}`;
-        log('url', url);
+        console.debug('url', url);
         // return await fetchWithAuth(url, { method: 'GET' });
         const functionName = 'getBehandlings';
         return await request(url, functionName, 'GET');
@@ -42,13 +41,13 @@ class ConsentApi {
 
     static async getTjenste(orgName: string) {
         const url = `${API_URL}/consent-admin/tjeneste/${orgName}`;
-        log('url', url);
+        console.debug('url', url);
         return await fetchWithAuth(url, { method: 'GET' });
     }
 
     static async getPersonopplysning() {
         const url = `${API_URL}/consent-admin/personopplysning`;
-        log('url', url);
+        console.debug('url', url);
         const functionName = 'getPersonopplysning';
         return await request(url, functionName, 'GET');
         // return await fetchWithAuth(url, { method: 'GET' });
@@ -56,7 +55,7 @@ class ConsentApi {
 
     static async getBehandlingsgrunnlag() {
         const url = `${API_URL}/consent-admin/behandlingsgrunnlag`;
-        log('url', url);
+        console.debug('url', url);
         return await fetchWithAuth(url, { method: 'GET' });
     }
 
@@ -72,7 +71,7 @@ class ConsentApi {
 
     static async setActive(orgName: string, behandlingId: string, isActive: string) {
         const url = `${API_URL}/consent-admin/behandling/${orgName}/${behandlingId}/${isActive}`;
-        log('url', url);
+        console.debug('url', url);
         return await fetch(url, {
             method: 'PUT',
             credentials: 'same-origin',
@@ -88,7 +87,7 @@ class ConsentApi {
         orgName: string
     ) {
         const url = `${API_URL}/consent-admin/behandling/${orgName}`;
-        log('url', url);
+        console.debug('url', url);
         return await fetch(url, {
             method: 'POST',
             headers: this.buildHeaders(),
@@ -104,7 +103,7 @@ class ConsentApi {
 
     static async createService(serviceName: string, orgName: string) {
         const url = `${API_URL}/consent-admin/tjeneste/${orgName}`;
-        log('url', url);
+        console.debug('url', url);
         return await fetch(url, {
             method: 'POST',
             headers: this.buildHeaders(),

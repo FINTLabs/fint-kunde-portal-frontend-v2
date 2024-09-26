@@ -13,7 +13,6 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { InfoBox } from '~/components/shared/InfoBox';
 import { Log, ReduntantLog } from '~/types/types';
 import LogTable from './LogTable';
-import { log, error } from '~/utils/logger';
 
 interface ActionData {
     message: string;
@@ -37,7 +36,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         );
         return json({ components, configs, defaultLogs });
     } catch (err) {
-        error('Error fetching data:', err as Error);
+        console.error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };
@@ -65,7 +64,7 @@ export async function action({ request }: ActionFunctionArgs) {
     } catch (err) {
         message = 'Error occurred';
         response = null;
-        error('Error fetching logs:', err as Error);
+        console.error('Error fetching logs:', err as Error);
     }
 
     return json({ message, data: response });

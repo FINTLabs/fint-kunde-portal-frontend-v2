@@ -17,15 +17,22 @@ import { fetchClientSecret } from '../../components/shared/actions/autentisering
 import { InfoBox } from '~/components/shared/InfoBox';
 import FeaturesApi from '~/api/FeaturesApi';
 import { IComponent } from '~/types/Component';
+import AccessApi from '~/api/AccessApi';
+import { IAccess } from '~/types/Access';
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const orgName = await getSelectedOrganization(request);
 
+    const adapterName = params.name;
+    let access;
+    if (adapterName) {
+        access = await AccessApi.getAccess(adapterName);
+    }
     const adapters = await AdapterAPI.getAdapters(orgName);
     const components = await ComponentApi.getOrganisationComponents(orgName);
     const features = await FeaturesApi.fetchFeatures();
 
-    return json({ adapters, components, features });
+    return json({ adapters, components, features, access });
 };
 
 export const meta: MetaFunction = () => {
@@ -34,10 +41,11 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
     // TODO: get adapter based on ID.
-    const { adapters, components, features } = useLoaderData<{
+    const { adapters, components, features, access } = useLoaderData<{
         adapters: IAdapter[];
         components: IComponent[];
         features: Record<string, boolean>;
+        access: IAccess[];
     }>();
 
     const { name } = useParams();
@@ -67,7 +75,13 @@ export default function Index() {
                 />
             )}
 
-            {adapter && <AdapterDetail adapter={adapter} hasAccessControl={hasAccessControl} />}
+            {adapter && (
+                <AdapterDetail
+                    adapter={adapter}
+                    hasAccessControl={hasAccessControl}
+                    access={access}
+                />
+            )}
         </>
     );
 }

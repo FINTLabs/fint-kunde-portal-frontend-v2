@@ -15,7 +15,6 @@ import { DeleteModal } from '~/components/shared/DeleteModal';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import React, { useEffect } from 'react';
 import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
-import { error } from '~/utils/logger';
 
 type LoaderData = {
     adapters: IAdapter[];
@@ -41,7 +40,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
         return json({ asset: asset, adapters: adapters, clients: clients });
     } catch (err) {
-        error('Error fetching data:', err as Error);
+        console.error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };

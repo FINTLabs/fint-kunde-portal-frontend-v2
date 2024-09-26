@@ -3,7 +3,6 @@ import { Table } from '@navikt/ds-react';
 import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
-import { log } from '~/utils/logger';
 
 interface ScopedSortState {
     orderBy: keyof IBehandling;
@@ -62,8 +61,6 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
     });
 
     const handleActiveToggle = (policyId: string, policyActive: boolean) => {
-        log('------- button clicked!');
-
         const formData = {
             policyId: policyId,
             setIsActive: policyActive ? 'false' : 'true',

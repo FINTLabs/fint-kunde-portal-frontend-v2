@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Button, Modal, Pagination, Table, TextField } from '@navikt/ds-react';
 import { IContact } from '~/types/types';
 import { PersonPlusIcon } from '@navikt/aksel-icons';
-import { log } from '~/utils/logger';
 
 interface ContactModalProps {
     isOpen: boolean;
@@ -41,7 +40,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
     }
 
     function handleSetSelectedContact(nin: string) {
-        log('Selected Contact:', nin);
+        console.debug('Selected Contact:', nin);
         setSelectedContactNin(nin);
         f.submit();
     }

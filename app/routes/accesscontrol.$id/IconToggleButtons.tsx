@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { HStack } from '@navikt/ds-react';
 import { CodeIcon, EthernetIcon, NotePencilDashIcon, NotePencilIcon } from '@navikt/aksel-icons';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
-import { log } from '~/utils/logger';
 
 interface IconToggleButtonsProps {
     resourceName: string;
@@ -18,13 +17,13 @@ const IconToggleButtons: React.FC<IconToggleButtonsProps> = ({
     const [isBookmarkIcon, setIsBookmarkIcon] = useState(true);
 
     const handleConfirmPosting = () => {
-        log('------- confirmed!');
+        console.debug('------- confirmed!');
         setIsBookmarkIcon((prev) => !prev);
         onConfirmPosting();
     };
 
     const handleConfirmAccess = () => {
-        log('------- confirmed!');
+        console.debug('------- confirmed!');
         setIsPencilIcon((prev) => !prev);
         onConfirmAccess();
     };

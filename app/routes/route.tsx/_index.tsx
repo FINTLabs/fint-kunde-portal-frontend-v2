@@ -6,7 +6,6 @@ import { MENU_ITEMS_LEFT } from '~/components/Menu/constants';
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { MenuItem } from '~/types/MenuItem';
 import { IUserSession } from '~/types/types';
-import { log } from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [
@@ -29,7 +28,6 @@ function WelcomeMessage({ userSession }: { userSession: IUserSession }) {
 export default function Index() {
     const userSession = useOutletContext<IUserSession>();
 
-    log('userSession', userSession);
     const [loading, setLoading] = useState(false);
 
     return (

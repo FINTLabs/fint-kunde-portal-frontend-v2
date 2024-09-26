@@ -1,5 +1,3 @@
-import { error } from './logger';
-
 export function getRequestParam(value: string | undefined, name: string) {
     if (!value) throw new Response(` Invalid ${name} in request params`, { status: 400 });
 

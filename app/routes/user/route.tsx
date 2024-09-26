@@ -7,7 +7,6 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { BackButton } from '~/components/shared/BackButton';
 import FeaturesApi from '~/api/FeaturesApi';
-import { error, warn } from '~/utils/logger';
 
 type LoaderData = {
     user: IMeData;

@@ -3,7 +3,6 @@ import { Box, Button, HGrid, Select } from '@navikt/ds-react';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { IComponent } from '~/types/Component';
 import { IClient } from '~/types/Clients';
-import { warn } from '~/utils/logger';
 import { IComponentConfig } from '~/types/ComponentConfig';
 
 interface TestAddFormProps {
@@ -47,7 +46,7 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
         if (isValid) {
             const component = components.find((comp) => comp.dn === selectedComponent);
             const fullUrl = `${selectedBaseUrl}${component?.basePath}/${selectedConfig}`;
-            warn('FULL URL:', fullUrl);
+            console.warn('FULL URL:', fullUrl);
             // {"url":"https://play-with-fint.felleskomponent.no/utdanning/elev/elev","client":""}
 
             const formData = {

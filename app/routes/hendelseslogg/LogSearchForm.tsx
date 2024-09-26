@@ -3,7 +3,6 @@ import { Box, Button, HGrid, Search, Select, VStack } from '@navikt/ds-react';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { IComponent } from '~/types/Component';
 import { IComponentConfig } from '~/types/ComponentConfig';
-import { debug } from '~/utils/logger';
 
 interface LogSearchFormProps {
     // handleSearch: (
@@ -50,7 +49,7 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
     }
 
     function setFilterValue(value: string) {
-        debug('--- set filter value');
+        console.debug('--- set filter value');
     }
 
     return (

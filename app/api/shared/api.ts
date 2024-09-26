@@ -1,6 +1,5 @@
 import { IPartialAsset } from '~/types/Asset';
 import { IPartialAdapter } from '~/types/types';
-import { error, info, log } from '~/utils/logger';
 import { Utility } from '~/utils/utility';
 
 export type ReturnType = 'text' | 'json';
@@ -16,7 +15,7 @@ export async function request(
     data?: PostDataType
 ) {
     try {
-        log(`> Calling ${requestMethod} on ${functionName}:`, URL);
+        console.debug(`> Calling ${requestMethod} on ${functionName}:`, URL);
 
         const requestOptions: RequestInit = {
             method: requestMethod,
@@ -46,9 +45,9 @@ export async function request(
         }
     } catch (err) {
         if (err instanceof Error) {
-            error(`:( Request failed: Error running ${functionName}:`, err);
+            console.error(`:( Request failed: Error running ${functionName}:`, err);
         } else {
-            error(`:( Request failed: Error running ${functionName}:`, String(err));
+            console.error(`:( Request failed: Error running ${functionName}:`, String(err));
         }
         // Rethrow as a new Error with a descriptive message
         throw new Error(`:( Request failed: Error running ${functionName}`);
@@ -75,9 +74,9 @@ export async function putRequest(
 
 function logStatus(status: number, functionName: string) {
     if (status >= 200 && status < 300) {
-        info(` 🟢--> Result: ${functionName} ${status}`);
+        console.debug(` 🟢--> Result: ${functionName} ${status}`);
     } else {
-        error(`🔴--> Result: ${functionName} ${status} `);
+        console.error(`🔴--> Result: ${functionName} ${status} `);
     }
 }
 
@@ -114,8 +113,9 @@ async function getRequest(
     } else {
         // log(`Response: `, response);
         const errorMsg = `😡 Error running ${functionName}, status: ${response.status}`;
-        error(errorMsg);
+        console.error(errorMsg);
         // return errorMsg;
-        throw error;
+        // throw error;
+        throw new Error(errorMsg);
     }
 }

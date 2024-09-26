@@ -7,7 +7,6 @@ import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
 import OrganisationApi from '~/api/OrganisationApi';
 import ContactTable from '~/routes/kontakter/ContactTable';
-import { log, error } from '~/utils/logger';
 import { IContact, IFetcherResponseData, IRole } from '~/types/types';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -45,7 +44,7 @@ export const loader: LoaderFunction = async ({ request }) => {
             selectedOrg,
         });
     } catch (err) {
-        error('Error fetching data:', err as Error);
+        console.error('Error fetching data:', err as Error);
         throw new Response('Not Found', { status: 404 });
     }
 };
@@ -54,7 +53,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const actionName = 'Action in kontakter/route.tsx';
     const formData = await request.formData();
 
-    log(formData);
+    console.debug(formData);
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
     const selectedOrg = await getSelectedOrganization(request);
     const contactNin = getFormData(formData.get('contactNin'), 'contactNin', actionName);

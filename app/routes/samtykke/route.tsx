@@ -12,7 +12,6 @@ import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from 
 import { IFetcherResponseData } from '~/types/types';
 import AddPolicyForm from '~/routes/samtykke/AddPolicyForm';
 import AddServiceForm from '~/routes/samtykke/AddServiceForm';
-import { log } from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Samtykke' }, { name: 'description', content: 'Samtykke' }];
@@ -102,7 +101,6 @@ export default function Index() {
 
         // actionType="SET_ACTIVE"
         const updatedFormData = { ...formData, actionType: 'SET_ACTIVE' };
-        log('------------', formData);
         fetcher.submit(updatedFormData, { method: 'post', action: '/samtykke' });
     };
 

@@ -1,5 +1,4 @@
 import { request } from '~/api/shared/api';
-import { error, log } from '~/utils/logger';
 
 const API_URL = process.env.LINKWALKER_API_URL;
 
@@ -8,7 +7,7 @@ class LinkWalkerApi {
         const functionName = 'getTests';
         const URL = `${API_URL}/link-walker/tasks/${orgName}`;
         return request(URL, functionName).catch((err) => {
-            error('Error fetching relations tests :', err);
+            console.error('Error fetching relations tests :', err);
         });
     }
 
@@ -33,10 +32,10 @@ class LinkWalkerApi {
 
         return fetch(request).then((response) => {
             if (response.ok) {
-                log('link walker request ok');
+                console.debug('link walker request ok');
                 return response;
             } else {
-                error('error with linkwalker');
+                console.error('error with linkwalker');
                 throw new Error(`LinkWalker not ok: ${response.status}`);
             }
         });
