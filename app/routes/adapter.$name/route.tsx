@@ -21,18 +21,27 @@ import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-    const orgName = await getSelectedOrganization(request);
+    try {
+        const orgName = await getSelectedOrganization(request);
+        const adapterName = params.name;
 
-    const adapterName = params.name;
-    let access;
-    if (adapterName) {
-        access = await AccessApi.getAccess(adapterName);
+        const [adapters, components, features] = await Promise.all([
+            AdapterAPI.getAdapters(orgName),
+            ComponentApi.getOrganisationComponents(orgName),
+            FeaturesApi.fetchFeatures(),
+        ]);
+
+        let access;
+        if (adapterName && features['access-controll-new']) {
+            access = await AccessApi.getAccess(adapterName);
+        }
+
+        return json({ adapters, components, features, access });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+
+        throw new Response('Kunne ikke laste data. Vennligst prøv igjen senere.', { status: 500 });
     }
-    const adapters = await AdapterAPI.getAdapters(orgName);
-    const components = await ComponentApi.getOrganisationComponents(orgName);
-    const features = await FeaturesApi.fetchFeatures();
-
-    return json({ adapters, components, features, access });
 };
 
 export const meta: MetaFunction = () => {

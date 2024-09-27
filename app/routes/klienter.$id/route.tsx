@@ -29,20 +29,20 @@ export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const id = params.id || '';
 
-    let access;
-    if (id) {
-        access = await AccessApi.getAccess(id);
-    }
-
     try {
         const client = await ClientApi.getClientById(orgName, id);
         const components = await ComponentApi.getOrganisationComponents(orgName);
         const features = await FeaturesApi.fetchFeatures();
 
+        let access;
+        if (id && features['access-controll-new']) {
+            access = await AccessApi.getAccess(id);
+        }
+
         return json({ client, components, features, access });
     } catch (err) {
         console.error('Error fetching data:', err as Error);
-        throw new Response('Not Found', { status: 404 });
+        throw new Response('Kunne ikke laste data. Vennligst prøv igjen senere.', { status: 404 });
     }
 }
 
