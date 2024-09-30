@@ -36,7 +36,7 @@ export async function loader({ request, params }: ActionFunctionArgs) {
 
         let access;
         if (id && features['access-controll-new']) {
-            access = await AccessApi.getAccess(id);
+            access = await AccessApi.getClientorAdapterAccess(id);
         }
 
         return json({ client, components, features, access });

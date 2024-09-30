@@ -13,7 +13,7 @@ import { createCookie, json } from '@remix-run/node'; // or cloudflare/deno
 import './tailwind.css';
 import '@navikt/ds-css';
 import './novari-theme.css';
-import { Alert, BodyShort, Box, Heading, Page } from '@navikt/ds-react';
+import { Alert, Box, Heading, Page } from '@navikt/ds-react';
 import React from 'react';
 import Menu from './components/Menu/Menu';
 import { commitSession, getSession } from '~/utils/session';
@@ -177,19 +177,6 @@ export function ErrorBoundary() {
                 <Alert variant="error">{error.data}</Alert>
             </CustomError>
         );
-        // } else if (error instanceof Error) {
-        //     return (
-        //         <CustomError>
-        //             <h1>Error</h1>
-        //             <p>{error.message}</p>
-        //             <p>The stack trace is:</p>
-        //             <p>
-        //                 <pre className="overflow-auto whitespace-pre-wrap break-words max-w-full p-4 bg-gray-100 border border-gray-300 rounded-md">
-        //                     {error.stack}
-        //                 </pre>
-        //             </p>
-        //         </CustomError>
-        //     );
     } else {
         return (
             <CustomError>
@@ -198,14 +185,3 @@ export function ErrorBoundary() {
         );
     }
 }
-
-// function getCookieValue(cookieString: string, key: string): string | null {
-//     const keyValuePairs = cookieString.split('; ');
-//     for (const pair of keyValuePairs) {
-//         const [cookieKey, cookieValue] = pair.split('=');
-//         if (cookieKey === key) {
-//             return decodeURIComponent(cookieValue);
-//         }
-//     }
-//     return null;
-// }

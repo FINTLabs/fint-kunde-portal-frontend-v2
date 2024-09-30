@@ -25,7 +25,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         const matchedConfig = configs.find((config: IComponentConfig) =>
             config.dn.includes(component?.dn ?? '')
         );
-
+        console.log('....', matchedConfig);
         return json({ component, matchedConfig, adapterName, clientName });
     } catch (err) {
         console.error('Error fetching data:', err as Error);

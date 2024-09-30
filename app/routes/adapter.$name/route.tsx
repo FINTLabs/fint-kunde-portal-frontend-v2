@@ -33,7 +33,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
         let access;
         if (adapterName && features['access-controll-new']) {
-            access = await AccessApi.getAccess(adapterName);
+            access = await AccessApi.getClientorAdapterAccess(adapterName);
         }
 
         return json({ adapters, components, features, access });
