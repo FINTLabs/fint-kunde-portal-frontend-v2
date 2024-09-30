@@ -17,11 +17,12 @@ const RenderMenuItem = (item: MenuDropDown, index: number) => {
             open={isOpen}
             onOpenChange={() => setIsOpen(!isOpen)}>
             <Button
-                style={{
-                    backgroundColor: isOpen ? 'var(--a-lightblue-700)' : 'transparent',
-                    color: isOpen ? 'var(--a-gray-50)' : 'var(--a-gray-800)',
-                }}
-                variant="tertiary"
+                // style={{
+                //     backgroundColor: isOpen ? 'var(--a-lightblue-700)' : 'transparent',
+                //     color: isOpen ? 'var(--a-gray-50)' : 'var(--a-gray-800)',
+                // }}
+                variant="tertiary-neutral"
+                // className="hover:!bg-transparent"
                 as={Dropdown.Toggle}>
                 {item.title}
             </Button>

@@ -1,18 +1,19 @@
-import { HStack } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { Logo } from './Logo';
 import { MENU_ITEMS_LEFT } from './constants';
 import { MenuDropdowns } from './MenuDropdowns';
-import { Samtykke } from './Samtykke';
+import { Link } from '@remix-run/react';
 
-type MenuLeftType = {
-    displaySamtykke: boolean;
-};
-export const MenuLeft = ({ displaySamtykke }: MenuLeftType) => {
+export const MenuLeft = () => {
     return (
         <HStack gap="2">
             <Logo />
             <MenuDropdowns renderItems={MENU_ITEMS_LEFT.dropdowns} />
-            <Samtykke displaySamtykke={displaySamtykke} />
+            <Link to="/samtykke" className="!uppercase !hover:bg-transparent">
+                <Button as="a" variant="tertiary-neutral" className=" !text-neutral !uppercase">
+                    Samtykke
+                </Button>
+            </Link>
         </HStack>
     );
 };
