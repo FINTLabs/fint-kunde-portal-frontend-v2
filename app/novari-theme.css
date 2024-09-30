@@ -6,9 +6,9 @@
     --ac-button-primary-active-bg: var(--a-gray-50);
     --ac-button-tertiary-active-bg: var(--a-lightblue-900);
     --ac-button-tertiary-active-hover-bg: var(--a-lightblue-900);
-    --a-bg-subtle: #F8EBDB;
+    --a-bg-subtle: #f8ebdb;
     --ac-button-primary-bg: #448086;
-    --ac-button-primary-hover-bg: #AB5692;
+    --ac-button-primary-hover-bg: #ab5692;
 
     .my-custom-panel {
         background-color: #f3f4f6; /* Light gray background */
@@ -53,13 +53,10 @@
 
     /* Hover effect */
     .my-custom-panel:hover {
-        background-color: #F8EBDB; /* Darker gray background on hover */
+        background-color: #f8ebdb; /* Darker gray background on hover */
     }
 
     .my-custom-panel:hover .panel-icon {
         transform: scale(1.7); /* Enlarge the icon on hover */
     }
-
-
 }
-

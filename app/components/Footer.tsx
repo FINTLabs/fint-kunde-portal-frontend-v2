@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react';
-import { Heading, BodyLong, Box } from '@navikt/ds-react';
+import { Heading, BodyLong, Box, HStack } from '@navikt/ds-react';
 import logo from '/images/logo_new.png';
 
 export default function Footer() {
@@ -15,18 +15,13 @@ export default function Footer() {
                 <img src={logo} width={100} height={50} alt={'Novari Logo'} />
             </Heading>
             <div style={{ marginBottom: '1rem' }}>
-                <BodyLong>
-                    <Link to="http://support.novari.no" style={{ marginRight: '1rem' }}>
-                        Opprett supportsak
-                    </Link>
-                    <Link to="http://novari.no" style={{ marginRight: '1rem' }}>
-                        Novari.no
-                    </Link>
-
-                    <Link to="http://fintlabs.no" style={{ marginRight: '1rem' }}>
-                        Brukerhjelp
-                    </Link>
-                </BodyLong>
+                <HStack gap="4">
+                    <Link to="http://support.novari.no">Opprett supportsak</Link>
+                    <p>|</p>
+                    <Link to="http://novari.no">Novari.no</Link>
+                    <p>|</p>
+                    <Link to="http://fintlabs.no">Brukerhjelp</Link>
+                </HStack>
             </div>
         </Box>
     );

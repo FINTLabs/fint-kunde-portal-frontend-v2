@@ -103,12 +103,13 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
                     <option value="GET">GET</option>
                     <option value="UPDATE">UPDATE</option>
                 </Select>
-                <Box>
+                <Box className="flex items-end">
                     {/*<Button icon={<MagnifyingGlassIcon title="Rediger" />} onClick={onSearch} />*/}
                     <Button
+                        size="small"
                         icon={<MagnifyingGlassIcon title="Rediger" />}
                         onClick={handleFormSubmit}>
-                        Search
+                        Søk
                     </Button>
                 </Box>
             </HGrid>
