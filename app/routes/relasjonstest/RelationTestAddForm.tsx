@@ -112,12 +112,13 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
                 ))}
             </Select>
 
-            <Box>
+            <Box className="flex items-end">
                 <Button
+                    size="small"
                     variant="primary"
                     onClick={onRunTest}
                     icon={<MagnifyingGlassIcon title="Rediger" />}>
-                    Run Test
+                    Kjør Test
                 </Button>
             </Box>
         </HGrid>
