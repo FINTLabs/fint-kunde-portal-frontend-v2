@@ -1,7 +1,7 @@
 apiVersion: fintlabs.no/v1alpha1
 kind: Application
 metadata:
-  name: fint-kunde-portal-frontend-v2
+  name: fint-kunde-portal-frontend
   namespace: fintlabs-no
 spec:
   port: 8000

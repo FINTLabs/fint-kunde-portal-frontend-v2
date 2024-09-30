@@ -3,8 +3,8 @@ kind: Kustomization
 resources:
   - flais.yaml
 commonLabels:
-  app.kubernetes.io/name: fint-kunde-portal-frontend-v2
-  app.kubernetes.io/instance: fint-kunde-portal-frontend-v2_fintlabs_no
+  app.kubernetes.io/name: fint-kunde-portal-frontend
+  app.kubernetes.io/instance: fint-kunde-portal-frontend_fintlabs_no
   app.kubernetes.io/version: latest
   app.kubernetes.io/component: frontend
   app.kubernetes.io/part-of: fint-core
