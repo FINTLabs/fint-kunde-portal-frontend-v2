@@ -15,7 +15,7 @@ spec:
     - name: CONSENT_API_URL
       value: http://fint-samtykke-admin-backend:8080
   url:
-    hostname: kunde-remix.felleskomponent.no
+    hostname: kunde-beta.felleskomponent.no
     basePath: /
   ingress:
     enabled: true
