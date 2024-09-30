@@ -12,9 +12,9 @@ export const NavLinkView = ({ item }: NavLinkViewType) => {
             className={({ isActive, isPending }) =>
                 `text-[--a-gray-600] hover:text-[--a-gray-200] w-full ${
                     isPending ? 'pending' : isActive ? 'active' : ''
-                }`
+                } `
             }>
-            <div className="p-[--a-spacing-3] hover:bg-[--a-lightblue-600] hover:text-[--a-gray-50] w-full">
+            <div className="p-[--a-spacing-3] hover:!bg-[#f8ebdb] hover:text-black w-full">
                 {item.title}
             </div>
         </NavLink>
