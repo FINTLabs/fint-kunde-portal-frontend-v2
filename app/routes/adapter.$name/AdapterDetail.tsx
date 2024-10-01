@@ -1,18 +1,15 @@
-import { Box, GuidePanel, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { IAdapter } from '~/types/types';
-import { useFetcher, useLoaderData, useSubmit } from '@remix-run/react';
+import { useLoaderData, useSubmit } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { IComponent } from '~/types/Component';
-import { FETCHER_CLIENT_SECRET_KEY, FETCHER_PASSORD_KEY } from './constants';
-import Autentisering from '../../components/shared/Autentisering';
-import { AutentiseringDetail } from '~/types/AutentinseringDetail';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
 import { getComponentIds } from '~/utils/helper';
 import ComponentList from '~/routes/accesscontrol.$id/ComponentList';
-import { SealCheckmarkIcon } from '@navikt/aksel-icons';
 import ComponentSelector from '~/components/shared/ComponentSelector';
 import { IAccess } from '~/types/Access';
+import { AuthTable } from '~/components/shared/AuthTable';
 
 export function AdapterDetail({
     adapter,
@@ -24,30 +21,10 @@ export function AdapterDetail({
     access: IAccess[];
 }) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
-
-    // const navigate = useNavigate();
-    // const selectedComponents = adapter.components;
-
-    const passordFetcher = useFetcher({ key: FETCHER_PASSORD_KEY });
-    const clientSecretFetcher = useFetcher({ key: FETCHER_CLIENT_SECRET_KEY });
-
-    const clientSecret = clientSecretFetcher.data ? (clientSecretFetcher.data as string) : '';
-    const passord = passordFetcher.data ? (passordFetcher.data as string) : '';
-
-    const allDetails: AutentiseringDetail = {
-        username: adapter.name,
-        password: passord,
-        clientId: adapter.clientId,
-        openIdSecret: clientSecret,
-        scope: 'fint-client',
-        idpUri: 'https://idp.felleskomponent.no/nidp/oauth/nam/token',
-        assetIds: adapter.assetIds,
-    };
-
     const submit = useSubmit();
 
     function onComponentToggle() {
-        console.info('------- handle component checkbox');
+        console.info('------- handle component checkbox (function not in use yet)');
     }
 
     return (
@@ -64,16 +41,11 @@ export function AdapterDetail({
                     {/*    />*/}
                     {/*)}*/}
                     <Divider className="pt-3" />
-                    <Autentisering
-                        name={adapter.name}
-                        clientId={adapter.clientId}
-                        resourceIds={adapter.assetIds.reduce(
-                            (acc, curr) => acc.concat(!acc ? curr : `, ${curr}`),
-                            ''
-                        )}
-                        clientSecret={clientSecret}
-                        password={passord}
-                        allDetails={allDetails}
+                    <Heading size={'medium'}>Autentisering</Heading>
+                    <AuthTable
+                        entity={adapter} // Adapter object
+                        entityType="adapter" // Specify that it's for an adapter
+                        actionName="adapterName" // Use adapterName in the form
                     />
 
                     <Divider className="pt-3" />
@@ -88,36 +60,25 @@ export function AdapterDetail({
                             onToggle={onComponentToggle}
                         />
                     ) : (
-                        <>
-                            <GuidePanel
-                                poster
-                                illustration={
-                                    <SealCheckmarkIcon title="a11y-title" fontSize="1.5rem" />
-                                }>
-                                Vi jobber for tiden med å utvikle et system som vil gjøre det mulig
-                                for brukere å finjustere tilgangen til komponenter i klienter og
-                                adaptere
-                            </GuidePanel>
-                            <ComponentSelector
-                                items={components}
-                                adapterName={adapter.name}
-                                selectedItems={getComponentIds(adapter.components)}
-                                toggle={(name, isChecked) => {
-                                    submit(
-                                        {
-                                            componentName: name,
-                                            updateType: isChecked ? 'add' : 'remove',
-                                            actionType: 'UPDATE_COMPONENT_IN_ADAPTER',
-                                        },
-                                        {
-                                            method: 'POST',
-                                            action: 'update',
-                                            navigate: false,
-                                        }
-                                    );
-                                }}
-                            />
-                        </>
+                        <ComponentSelector
+                            items={components}
+                            adapterName={adapter.name}
+                            selectedItems={getComponentIds(adapter.components)}
+                            toggle={(name, isChecked) => {
+                                submit(
+                                    {
+                                        componentName: name,
+                                        updateType: isChecked ? 'add' : 'remove',
+                                        actionType: 'UPDATE_COMPONENT_IN_ADAPTER',
+                                    },
+                                    {
+                                        method: 'POST',
+                                        action: 'update',
+                                        navigate: false,
+                                    }
+                                );
+                            }}
+                        />
                     )}
 
                     {/*<HGrid columns={3}>*/}

@@ -6,7 +6,7 @@ export interface IPartialClient {
 
 export interface IClient extends IPartialClient {
     dn: string;
-    assetId: string;
+    assetId: string[];
     asset: string;
     clientId: string;
     components: string[];

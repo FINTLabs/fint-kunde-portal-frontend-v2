@@ -53,8 +53,13 @@ class AdapterAPI {
     static async getOpenIdSecret(adapterName: string, organisationName: string) {
         const functionName = 'getOpenIdSecret';
         const URL = `${API_URL}/api/adapters/${organisationName}/${adapterName}/secret`;
-
         return await request(URL, functionName, 'GET', 'text');
+    }
+
+    static async setPassword(adapterName: string, password: string, organisationName: string) {
+        const functionName = 'setPasswordAdapter';
+        const URL = `${API_URL}/api/adapters/${organisationName}/${adapterName}/password`;
+        return await request(URL, functionName, 'PUT', 'text');
     }
 }
 export default AdapterAPI;

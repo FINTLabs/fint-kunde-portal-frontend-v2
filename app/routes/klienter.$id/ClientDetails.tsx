@@ -44,7 +44,7 @@ const ClientDetails: React.FC<ClientComponentProps> = ({
             label={client.managed ? 'Automatisk opprettet' : 'Manuelt opprettet'}
             value=""
         />
-        <LabelValuePanel label="Asset Id" value={client.assetId} />
+        <LabelValuePanel label="Asset Id" value={client.assetId.toString()} />
         <LabelValuePanel label="Components" value={client.components.length.toString()} />
     </VStack>
 );

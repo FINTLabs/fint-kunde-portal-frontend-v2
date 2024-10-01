@@ -22,9 +22,6 @@ const ComponentSelector: React.FC<ComponentSelectorProps> = ({
         <>
             <Box padding="6">
                 <HGrid gap="2">
-                    <Heading size="medium" spacing>
-                        Komponenter tilknyttet
-                    </Heading>
                     <ComponentsTable
                         items={items}
                         selectedItems={selectedItems}

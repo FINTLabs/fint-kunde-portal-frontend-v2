@@ -15,6 +15,7 @@ import { DeleteModal } from '~/components/shared/DeleteModal';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import React, { useEffect } from 'react';
 import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
+import { handleApiResponse } from '~/utils/handleApiResponse';
 
 type LoaderData = {
     adapters: IAdapter[];
@@ -158,21 +159,6 @@ export async function action({ request }: ActionFunctionArgs) {
     const actionType = formData.get('actionType');
     const selectedOrg = await getSelectedOrganization(request);
 
-    const handleApiResponse = (apiResponse: Response, successMessage: string) => {
-        if (apiResponse.ok) {
-            return {
-                message: successMessage,
-                variant: 'success',
-                show: true,
-            };
-        } else {
-            return {
-                message: `Error updating. More info: Status: ${apiResponse.status}. StatusText: ${apiResponse.statusText}`,
-                variant: 'error',
-                show: true,
-            };
-        }
-    };
     let response;
     let updateResponse;
     switch (actionType) {

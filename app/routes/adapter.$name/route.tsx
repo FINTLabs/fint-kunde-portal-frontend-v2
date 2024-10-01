@@ -12,13 +12,13 @@ import { AdapterDetail } from './AdapterDetail';
 import { IAdapter } from '~/types/types';
 import ComponentApi from '~/api/ComponentApi';
 import AdapterAPI from '~/api/AdapterApi';
+import AdapterApi from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { fetchClientSecret } from '../../components/shared/actions/autentiseringActions';
 import { InfoBox } from '~/components/shared/InfoBox';
 import FeaturesApi from '~/api/FeaturesApi';
-import { IComponent } from '~/types/Component';
 import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
+import { handleApiResponse } from '~/utils/handleApiResponse';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     try {
@@ -36,7 +36,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
             access = await AccessApi.getClientorAdapterAccess(adapterName);
         }
 
-        return json({ adapters, components, features, access });
+        return json({ adapters, components, features, access, orgName });
     } catch (error) {
         console.error('Error fetching data:', error);
 
@@ -50,9 +50,8 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
     // TODO: get adapter based on ID.
-    const { adapters, components, features, access } = useLoaderData<{
+    const { adapters, features, access } = useLoaderData<{
         adapters: IAdapter[];
-        components: IComponent[];
         features: Record<string, boolean>;
         access: IAccess[];
     }>();
@@ -106,11 +105,41 @@ export async function action({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
 
     const actionType = formData.get('actionType') as string;
-    if (actionType === 'Passord') {
-        const response = 'Not implemented';
-        return response;
-    } else {
-        const response = await fetchClientSecret(name, orgName);
-        return response;
+    // if (actionType === 'Passord') {
+    //     const response = 'Not implemented';
+    //     return response;
+    // } else {
+    //     const response = await fetchClientSecret(name, orgName);
+    //     return response;
+    // }
+    let response;
+    let updateResponse;
+    switch (actionType) {
+        case 'UPDATE_PASSWORD':
+            updateResponse = await AdapterApi.setPassword(
+                formData.get('adapterName') as string,
+                formData.get('password') as string,
+                orgName
+            );
+            response = handleApiResponse(updateResponse, 'Ressurser oppdatert');
+            break;
+        case 'GET_SECRET':
+            updateResponse = await AdapterApi.getOpenIdSecret(
+                formData.get('adapterName') as string,
+                orgName
+            );
+            return json({
+                clientSecret: await updateResponse,
+                message: 'Adapter secret fetched successfully',
+                variant: 'success',
+                show: true,
+            });
+        default:
+            return json({
+                show: true,
+                message: `Unknown action type '${actionType}'`,
+                variant: 'error',
+            });
     }
+    return json(response);
 }

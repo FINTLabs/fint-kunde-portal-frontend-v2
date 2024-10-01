@@ -49,6 +49,89 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 };
 
+export default function Index() {
+    const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
+    const { legalContact, technicalContacts, allContacts, rolesData, selectedOrg } = useLoaderData<
+        IPageLoaderData & { legalContact?: IContact }
+    >();
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const fetcher = useFetcher();
+    const actionData = fetcher.data as IFetcherResponseData;
+    const [show, setShow] = React.useState(false);
+    useEffect(() => {
+        setShow(true);
+        setIsModalOpen(false);
+    }, [fetcher.state]);
+
+    const handleFormSubmit = (formData: FormData) => {
+        fetcher.submit(formData, { method: 'post', action: '/kontakter' });
+    };
+
+    return (
+        <>
+            <Breadcrumbs breadcrumbs={breadcrumbs} />
+            <HStack align={'center'} justify={'space-between'}>
+                <VStack>
+                    <InternalPageHeader
+                        title={'Kontakter'}
+                        icon={PersonGroupIcon}
+                        helpText="contacts"
+                    />
+                </VStack>
+                <VStack>
+                    <Button
+                        size="small"
+                        onClick={() => setIsModalOpen(true)}
+                        icon={<PlusIcon aria-hidden />}>
+                        Legg til
+                    </Button>
+                </VStack>
+            </HStack>
+
+            {actionData && show && (
+                <Alert
+                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
+                    closeButton
+                    onClose={() => setShow(false)}>
+                    {actionData.message || 'Content'}
+                </Alert>
+            )}
+
+            <Box className="m-10">
+                <Heading size="xsmall">Juridisk kontakt</Heading>
+                {legalContact ? (
+                    <HStack gap="4" align="center" className="px-4">
+                        <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4" />
+                        <BodyShort size="medium">
+                            {legalContact.firstName} {legalContact.lastName}
+                        </BodyShort>
+                    </HStack>
+                ) : (
+                    <BodyShort size="medium">Ingen juridisk kontakt funnet</BodyShort>
+                )}
+            </Box>
+
+            {technicalContacts && typeof technicalContacts === 'string' && (
+                <InfoBox message={technicalContacts} />
+            )}
+            {technicalContacts && typeof technicalContacts !== 'string' && (
+                <ContactTable
+                    contactsData={technicalContacts}
+                    rolesData={rolesData}
+                    onButtonClick={handleFormSubmit}
+                    selectedOrg={selectedOrg}
+                />
+            )}
+            <ContactModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                contacts={allContacts || []}
+                f={fetcher}
+            />
+        </>
+    );
+}
+
 export async function action({ request }: ActionFunctionArgs) {
     const actionName = 'Action in kontakter/route.tsx';
     const formData = await request.formData();
@@ -132,87 +215,4 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     return json({ show: true, message: response?.message, variant: response?.variant });
-}
-
-export default function Index() {
-    const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
-    const { legalContact, technicalContacts, allContacts, rolesData, selectedOrg } = useLoaderData<
-        IPageLoaderData & { legalContact?: IContact }
-    >();
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const fetcher = useFetcher();
-    const actionData = fetcher.data as IFetcherResponseData;
-    const [show, setShow] = React.useState(false);
-    useEffect(() => {
-        setShow(true);
-        setIsModalOpen(false);
-    }, [fetcher.state]);
-
-    const handleFormSubmit = (formData: FormData) => {
-        fetcher.submit(formData, { method: 'post', action: '/kontakter' });
-    };
-
-    return (
-        <>
-            <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <HStack align={'center'} justify={'space-between'}>
-                <VStack>
-                    <InternalPageHeader
-                        title={'Kontakter'}
-                        icon={PersonGroupIcon}
-                        helpText="contacts"
-                    />
-                </VStack>
-                <VStack>
-                    <Button
-                        size="small"
-                        onClick={() => setIsModalOpen(true)}
-                        icon={<PlusIcon aria-hidden />}>
-                        Legg til
-                    </Button>
-                </VStack>
-            </HStack>
-
-            {actionData && show && (
-                <Alert
-                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
-                    closeButton
-                    onClose={() => setShow(false)}>
-                    {actionData.message || 'Content'}
-                </Alert>
-            )}
-
-            <Box className="m-10">
-                <Heading size="xsmall">Juridisk kontakt</Heading>
-                {legalContact ? (
-                    <HStack gap="4" align="center" className="px-4">
-                        <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4" />
-                        <BodyShort size="medium">
-                            {legalContact.firstName} {legalContact.lastName}
-                        </BodyShort>
-                    </HStack>
-                ) : (
-                    <BodyShort size="medium">Ingen juridisk kontakt funnet</BodyShort>
-                )}
-            </Box>
-
-            {technicalContacts && typeof technicalContacts === 'string' && (
-                <InfoBox message={technicalContacts} />
-            )}
-            {technicalContacts && typeof technicalContacts !== 'string' && (
-                <ContactTable
-                    contactsData={technicalContacts}
-                    rolesData={rolesData}
-                    onButtonClick={handleFormSubmit}
-                    selectedOrg={selectedOrg}
-                />
-            )}
-            <ContactModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                contacts={allContacts || []}
-                f={fetcher}
-            />
-        </>
-    );
 }
