@@ -98,17 +98,11 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
                         <Table.HeaderCell scope="row">Passord</Table.HeaderCell>
                         <Table.DataCell>{password}</Table.DataCell>
                         <TableDataCell>
-                            {/*<ArrowsSquarepathIcon*/}
-                            {/*    title="Regenerate password"*/}
-                            {/*    fontSize="1.5rem"*/}
-                            {/*    onClick={generatePassword}*/}
-                            {/*    style={{ cursor: 'pointer' }}*/}
-                            {/*/>*/}
                             <ConfirmAction
                                 buttonVariant={'tertiary-neutral'}
                                 buttonText=""
                                 subTitleText="Er du sikker på at du vil sette nytt passord? Hvis du gjør det må alle som bruker autentiseringsinformasjonen få det nye passordet og konfigurere tjenesten sin på nytt!"
-                                onConfirm={generatePassword} // Use the confirmation modal before generating the password
+                                onConfirm={generatePassword}
                                 icon={
                                     <ArrowsSquarepathIcon
                                         title="Regenerate password"
