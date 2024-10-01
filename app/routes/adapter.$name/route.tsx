@@ -103,31 +103,25 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);
-
     const actionType = formData.get('actionType') as string;
-    // if (actionType === 'Passord') {
-    //     const response = 'Not implemented';
-    //     return response;
-    // } else {
-    //     const response = await fetchClientSecret(name, orgName);
-    //     return response;
-    // }
+
     let response;
     let updateResponse;
     switch (actionType) {
         case 'UPDATE_PASSWORD':
             updateResponse = await AdapterApi.setPassword(
-                formData.get('adapterName') as string,
+                formData.get('entityName') as string,
                 formData.get('password') as string,
                 orgName
             );
-            response = handleApiResponse(updateResponse, 'Ressurser oppdatert');
+            response = handleApiResponse(updateResponse, 'Ressurser password oppdatert');
             break;
         case 'GET_SECRET':
             updateResponse = await AdapterApi.getOpenIdSecret(
                 formData.get('adapterName') as string,
                 orgName
             );
+            console.debug('........ adapter name?', formData.get('adapterName'));
             return json({
                 clientSecret: await updateResponse,
                 message: 'Adapter secret fetched successfully',

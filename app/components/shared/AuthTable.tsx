@@ -5,6 +5,7 @@ import { TableDataCell } from '@navikt/ds-react/Table';
 import { useFetcher } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
 import { IClient } from '~/types/Clients';
+import { enGB } from 'date-fns/locale';
 
 type FetcherResponse = {
     clientSecret?: string;
@@ -12,13 +13,12 @@ type FetcherResponse = {
     variant?: string;
 };
 
-// Create a union type for entity (adapter or client)
 type AuthEntity = IAdapter | IClient;
 
 interface AuthTableProps {
-    entity: AuthEntity; // The entity can be either an adapter or a client
-    entityType: 'adapter' | 'client'; // To distinguish between the two
-    actionName: string; // The name to be used in the form's hidden input (e.g., adapterName or clientName)
+    entity: AuthEntity;
+    entityType: 'adapter' | 'client';
+    actionName: string;
 }
 
 export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) => {
@@ -31,8 +31,8 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
 
     useEffect(() => {
         if (fetcher.data?.clientSecret) {
-            setClientSecret(fetcher.data.clientSecret); // Update client secret
-            setIsCopySecretEnabled(true); // Enable copy functionality
+            setClientSecret(fetcher.data.clientSecret);
+            setIsCopySecretEnabled(true);
         }
     }, [fetcher.data]);
 
@@ -48,17 +48,26 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
     }
 
     const generatePassword = () => {
-        setPassword(generatePass());
+        const newPassword = generatePass();
+        setPassword(newPassword);
         setIsPasswordGenerated(true);
         setIsCopyPasswordEnabled(true);
-        // TODO: Save password to backend
+
+        fetcher.submit(
+            {
+                actionType: 'UPDATE_PASSWORD',
+                // actionName: actionName,
+                password: newPassword,
+                entityName: entity.name,
+            },
+            { method: 'post' }
+        );
     };
 
-    // Handle assetId (string for IClient) and assetIds (array for IAdapter)
     const assetIdsString =
         entityType === 'adapter'
-            ? ((entity as IAdapter).assetIds || []).join(', ') // Ensure it's a string by joining the array for IAdapter
-            : (entity as IClient).assetId || ''; // Use assetId for IClient, default to empty string if undefined
+            ? ((entity as IAdapter).assetIds || []).join(', ')
+            : (entity as IClient).assetId || '';
 
     const generateAuthInfo = () => {
         const authInfo = {

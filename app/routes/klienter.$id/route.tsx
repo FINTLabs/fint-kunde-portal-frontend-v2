@@ -172,11 +172,7 @@ export default function Index() {
 
                     <Divider className="pt-3" />
                     <Heading size={'medium'}>Autentisering</Heading>
-                    <AuthTable
-                        entity={client} // Client object
-                        entityType="client" // Specify that it's for a client
-                        actionName="clientName" // Use clientName in the form
-                    />
+                    <AuthTable entity={client} entityType="client" actionName="clientName" />
 
                     {/*<Autentisering*/}
                     {/*    name={client.name}*/}
@@ -276,12 +272,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
             );
             return json({ ok: response.status === 204 });
         case 'UPDATE_PASSWORD':
-            updateResponse = await AdapterApi.setPassword(
-                formData.get('clientName') as string,
+            updateResponse = await ClientApi.setPassword(
+                formData.get('entityName') as string,
                 formData.get('password') as string,
                 orgName
             );
-            response = handleApiResponse(updateResponse, 'Klienter oppdatert');
+            response = handleApiResponse(updateResponse, 'Klienter password oppdatert');
             break;
         case 'GET_SECRET':
             updateResponse = await ClientApi.getOpenIdSecret(
@@ -312,4 +308,5 @@ export async function action({ request, params }: ActionFunctionArgs) {
     //     // const response = await fetchClientSecret(name, orgName);
     //     return response;
     // }
+    return response;
 }

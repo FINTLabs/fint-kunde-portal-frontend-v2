@@ -1,6 +1,7 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from './constants';
 import { IAdapter, IPartialAdapter } from '~/types/types';
+import organisationApi from '~/api/OrganisationApi';
 class AdapterAPI {
     static async getAdapters(organisationName: string) {
         const functionName = 'getAdapters';
@@ -57,9 +58,26 @@ class AdapterAPI {
     }
 
     static async setPassword(adapterName: string, password: string, organisationName: string) {
-        const functionName = 'setPasswordAdapter';
-        const URL = `${API_URL}/api/adapters/${organisationName}/${adapterName}/password`;
-        return await request(URL, functionName, 'PUT', 'text');
+        console.log('Create new password adapter: ', adapterName, password);
+        const request = new Request(
+            `${API_URL}/api/adapters/${organisationName}/${adapterName}/password`,
+            {
+                method: 'PUT',
+                headers: {
+                    Accept: '*/*',
+                    'Content-Type': 'text/plain',
+                },
+                credentials: 'same-origin',
+                body: password,
+            }
+        );
+        return fetch(request)
+            .then((response) => {
+                return response;
+            })
+            .catch((error) => {
+                return error;
+            });
     }
 }
 export default AdapterAPI;

@@ -86,6 +86,29 @@ class ClientApi {
         const functionName = 'removeComponentFromClient';
         return await request(URL, functionName, 'DELETE', 'json', { name: clientName });
     }
+
+    static async setPassword(adapterName: string, password: string, organisationName: string) {
+        console.log('Create new password client: ', adapterName, password);
+        const request = new Request(
+            `${API_URL}/api/clients/${organisationName}/${adapterName}/password`,
+            {
+                method: 'PUT',
+                headers: {
+                    Accept: '*/*',
+                    'Content-Type': 'text/plain',
+                },
+                credentials: 'same-origin',
+                body: password,
+            }
+        );
+        return fetch(request)
+            .then((response) => {
+                return response;
+            })
+            .catch((error) => {
+                return error;
+            });
+    }
 }
 
 export default ClientApi;

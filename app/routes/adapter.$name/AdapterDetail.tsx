@@ -33,20 +33,10 @@ export function AdapterDetail({
             <Box padding="6" borderRadius="large" shadow="small" className="relative bottom-12">
                 <VStack gap="5">
                     <GeneralDetailView adapter={adapter} />
-                    {/*{!adapter.managed && (*/}
-                    {/*    <DeleteModal*/}
-                    {/*        title="Slett adapter"*/}
-                    {/*        bodyText="Er du sikker på at du vil slette dette adapteret?"*/}
-                    {/*        action="delete"*/}
-                    {/*    />*/}
-                    {/*)}*/}
+
                     <Divider className="pt-3" />
                     <Heading size={'medium'}>Autentisering</Heading>
-                    <AuthTable
-                        entity={adapter} // Adapter object
-                        entityType="adapter" // Specify that it's for an adapter
-                        actionName="adapterName" // Use adapterName in the form
-                    />
+                    <AuthTable entity={adapter} entityType="adapter" actionName="adapterName" />
 
                     <Divider className="pt-3" />
 
@@ -54,8 +44,6 @@ export function AdapterDetail({
                     {hasAccessControl ? (
                         <ComponentList
                             accessList={access}
-                            // selectedItems={getComponentIds(adapter.components)}
-                            // selectedItems={access}
                             clientName={adapter.name}
                             onToggle={onComponentToggle}
                         />
@@ -80,16 +68,6 @@ export function AdapterDetail({
                             }}
                         />
                     )}
-
-                    {/*<HGrid columns={3}>*/}
-                    {/*    {!adapter.managed && (*/}
-                    {/*        <DeleteModal*/}
-                    {/*            title="Slett adapter"*/}
-                    {/*            bodyText="Er du sikker på at du vil slette dette adapteret?"*/}
-                    {/*            action="delete"*/}
-                    {/*        />*/}
-                    {/*    )}*/}
-                    {/*</HGrid>*/}
                 </VStack>
             </Box>
         </HGrid>
