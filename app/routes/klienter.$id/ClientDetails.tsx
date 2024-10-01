@@ -45,7 +45,7 @@ const ClientDetails: React.FC<ClientComponentProps> = ({
             value=""
         />
         <LabelValuePanel label="Asset Id" value={client.assetId.toString()} />
-        <LabelValuePanel label="Components" value={client.components.length.toString()} />
+        <LabelValuePanel label="Komponenter" value={client.components.length.toString()} />
     </VStack>
 );
 

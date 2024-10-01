@@ -5,7 +5,6 @@ import { TableDataCell } from '@navikt/ds-react/Table';
 import { useFetcher } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
 import { IClient } from '~/types/Clients';
-import { enGB } from 'date-fns/locale';
 
 type FetcherResponse = {
     clientSecret?: string;
@@ -76,6 +75,8 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
             clientId: entity.clientId,
             clientSecret: clientSecret,
             assetIds: assetIdsString,
+            scope: 'fint-client',
+            idpUri: 'https://idp.felleskomponent.no/nidp/oauth/nam/token',
         };
         return JSON.stringify(authInfo, null, 2);
     };
@@ -100,6 +101,7 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
                                 title="Regenerate password"
                                 fontSize="1.5rem"
                                 onClick={generatePassword}
+                                style={{ cursor: 'pointer' }}
                             />
                         </TableDataCell>
                         <Table.DataCell>
