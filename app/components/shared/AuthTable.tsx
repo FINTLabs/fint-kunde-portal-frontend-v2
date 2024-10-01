@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { CopyButton, Table } from '@navikt/ds-react';
+import { Button, CopyButton, Table } from '@navikt/ds-react';
 import { ArrowsSquarepathIcon, BagdeIcon, DownloadIcon, ThumbUpIcon } from '@navikt/aksel-icons';
 import { TableDataCell } from '@navikt/ds-react/Table';
 import { useFetcher } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
 import { IClient } from '~/types/Clients';
+import ConfirmAction from '~/components/shared/ConfirmActionModal';
 
 type FetcherResponse = {
     clientSecret?: string;
@@ -97,11 +98,23 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
                         <Table.HeaderCell scope="row">Passord</Table.HeaderCell>
                         <Table.DataCell>{password}</Table.DataCell>
                         <TableDataCell>
-                            <ArrowsSquarepathIcon
-                                title="Regenerate password"
-                                fontSize="1.5rem"
-                                onClick={generatePassword}
-                                style={{ cursor: 'pointer' }}
+                            {/*<ArrowsSquarepathIcon*/}
+                            {/*    title="Regenerate password"*/}
+                            {/*    fontSize="1.5rem"*/}
+                            {/*    onClick={generatePassword}*/}
+                            {/*    style={{ cursor: 'pointer' }}*/}
+                            {/*/>*/}
+                            <ConfirmAction
+                                buttonVariant={'tertiary-neutral'}
+                                buttonText=""
+                                subTitleText="Er du sikker på at du vil sette nytt passord? Hvis du gjør det må alle som bruker autentiseringsinformasjonen få det nye passordet og konfigurere tjenesten sin på nytt!"
+                                onConfirm={generatePassword} // Use the confirmation modal before generating the password
+                                icon={
+                                    <ArrowsSquarepathIcon
+                                        title="Regenerate password"
+                                        fontSize="1.5rem"
+                                    />
+                                }
                             />
                         </TableDataCell>
                         <Table.DataCell>
@@ -127,12 +140,18 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
                             <fetcher.Form method="post">
                                 <input type="hidden" name="actionType" value="GET_SECRET" />
                                 <input type="hidden" name={actionName} value={entity.name} />
-                                <button type="submit">
-                                    <DownloadIcon
-                                        title="Trykk for å hente hemmeligheten"
-                                        fontSize="1.5rem"
-                                    />
-                                </button>
+
+                                <Button
+                                    variant="tertiary-neutral"
+                                    icon={
+                                        <DownloadIcon
+                                            title="Trykk for å hente hemmeligheten"
+                                            fontSize="1.5rem"
+                                        />
+                                    }
+                                    size="small"
+                                    type="submit"
+                                />
                             </fetcher.Form>
                         </Table.DataCell>
                         <Table.DataCell>
