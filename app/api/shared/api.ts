@@ -1,6 +1,7 @@
 import { IPartialAsset } from '~/types/Asset';
 import { IPartialAdapter } from '~/types/types';
 import { Utility } from '~/utils/utility';
+import { err } from '@remix-run/dev/dist/result';
 
 export type ReturnType = 'text' | 'json';
 
@@ -22,9 +23,7 @@ export async function request(
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
-                'x-nin': Utility.getXnin(), //  process.env.PERSONALNUMBER || '', // TODO: get x-nin from headers
-                // Cookie: cookies ?? '', // Include cookies in the request headers
-                // Authorization: `Bearer ${process.env.ACCESS_TOKEN}`, // TODO: this is just a temporary solution, change this to fetch accesstoken from OAuth 2.0 log in
+                'x-nin': Utility.getXnin(),
             },
         };
 
@@ -45,12 +44,15 @@ export async function request(
         }
     } catch (err) {
         if (err instanceof Error) {
-            console.error(`:( Request failed: Error running ${functionName}:`, err);
+            logStatus(500, functionName, err.message);
+            // console.error(`:( Request failed: Error running ${functionName}:`, err);
         } else {
+            logStatus(500, functionName, String(err));
             console.error(`:( Request failed: Error running ${functionName}:`, String(err));
         }
-        // Rethrow as a new Error with a descriptive message
-        throw new Error(`:( Request failed: Error running ${functionName}`);
+        throw new Response(`Request failed: Error running ${functionName}`, {
+            status: 500,
+        });
     }
 }
 
@@ -72,11 +74,12 @@ export async function putRequest(
     return response;
 }
 
-function logStatus(status: number, functionName: string) {
+function logStatus(status: number, functionName: string, errorMessage?: string) {
     if (status >= 200 && status < 300) {
         console.debug(` 🟢--> Result: ${functionName} ${status}`);
     } else {
         console.error(`🔴--> Result: ${functionName} ${status} `);
+        console.debug(errorMessage);
     }
 }
 
@@ -111,11 +114,9 @@ async function getRequest(
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {
-        // log(`Response: `, response);
-        const errorMsg = `😡 Error running ${functionName}, status: ${response.status}`;
-        console.error(errorMsg);
-        // return errorMsg;
-        // throw error;
-        throw new Error(errorMsg);
+        logStatus(response.status, functionName);
+        throw new Response(`Request failed: Error running ${functionName}`, {
+            status: 500,
+        });
     }
 }

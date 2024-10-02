@@ -134,7 +134,6 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
                             <fetcher.Form method="post">
                                 <input type="hidden" name="actionType" value="GET_SECRET" />
                                 <input type="hidden" name={actionName} value={entity.name} />
-
                                 <Button
                                     variant="tertiary-neutral"
                                     icon={

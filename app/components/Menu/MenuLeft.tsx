@@ -10,7 +10,7 @@ export const MenuLeft = () => {
             <Logo />
             <MenuDropdowns renderItems={MENU_ITEMS_LEFT.dropdowns} />
             <Link to="/samtykke" className="!uppercase !hover:bg-transparent">
-                <Button as="a" variant="tertiary-neutral" className=" !text-neutral !uppercase">
+                <Button variant="tertiary-neutral" className="!text-neutral !uppercase">
                     Samtykke
                 </Button>
             </Link>

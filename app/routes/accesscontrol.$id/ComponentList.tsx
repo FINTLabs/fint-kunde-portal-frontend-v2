@@ -12,24 +12,14 @@ interface Access {
 interface ComponentListProps {
     accessList: Access[];
     onToggle: (domain: string, packageName: string, checked: boolean) => void;
-    adapterName?: string;
-    clientName?: string;
+    entity: string;
 }
 
-const ComponentList: React.FC<ComponentListProps> = ({
-    accessList,
-    onToggle,
-    adapterName,
-    clientName,
-}) => {
+const ComponentList: React.FC<ComponentListProps> = ({ accessList, onToggle, entity }) => {
     const navigate = useNavigate();
 
     const handleRowClick = (domain: string, packageName: string) => {
-        if (adapterName) {
-            navigate(`/accesscontrol/${domain}?package=${packageName}&adapter=${adapterName}`);
-        } else if (clientName) {
-            navigate(`/accesscontrol/${domain}?package=${packageName}&client=${clientName}`);
-        }
+        navigate(`/accesscontrol/${entity}?entity=${domain}_${packageName}`);
     };
 
     // Group the accessList by domain

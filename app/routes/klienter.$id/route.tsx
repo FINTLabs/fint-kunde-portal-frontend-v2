@@ -22,7 +22,6 @@ import ClientActionButtons from '~/routes/klienter.$id/ClientActionButtons';
 import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
 import { AuthTable } from '~/components/shared/AuthTable';
-import AdapterApi from '~/api/AdapterApi';
 import { handleApiResponse } from '~/utils/handleApiResponse';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
@@ -62,21 +61,6 @@ export default function Index() {
         { name: client.name, link: `/klienter/${client.name}` },
     ];
 
-    // const passordFetcher = useFetcher({ key: FETCHER_PASSORD_KEY });
-    // const clientSecretFetcher = useFetcher({ key: FETCHER_CLIENT_SECRET_KEY });
-
-    // const clientSecret = clientSecretFetcher.data ? (clientSecretFetcher.data as string) : '';
-    // const passord = passordFetcher.data ? (passordFetcher.data as string) : '';
-
-    // const allDetails: AutentiseringDetail = {
-    //     username: client.name,
-    //     password: passord,
-    //     clientId: client.clientId,
-    //     openIdSecret: clientSecret,
-    //     scope: 'fint-client',
-    //     idpUri: 'https://idp.felleskomponent.no/nidp/oauth/nam/token',
-    //     assetIds: client.assetId,
-    // };
     const [isEditing, setIsEditing] = useState(false);
     const [shortDescription, setShortDescription] = useState(client.shortDescription);
     const [note, setNote] = useState(client.note);
@@ -174,15 +158,6 @@ export default function Index() {
                     <Heading size={'medium'}>Autentisering</Heading>
                     <AuthTable entity={client} entityType="client" actionName="clientName" />
 
-                    {/*<Autentisering*/}
-                    {/*    name={client.name}*/}
-                    {/*    password={passord}*/}
-                    {/*    resourceIds={client.assetId}*/}
-                    {/*    clientId={client.clientId}*/}
-                    {/*    clientSecret={clientSecret}*/}
-                    {/*    allDetails={allDetails}*/}
-                    {/*/>*/}
-
                     <Divider className="pt-10" />
 
                     <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
@@ -190,7 +165,7 @@ export default function Index() {
                         <ComponentList
                             accessList={access}
                             // selectedItems={getComponentIds(client.components)}
-                            clientName={client.name}
+                            entity={client.name}
                             onToggle={onComponentToggle}
                         />
                     ) : (
@@ -214,16 +189,6 @@ export default function Index() {
                             }}
                         />
                     )}
-
-                    {/*<HGrid columns={3}>*/}
-                    {/*    {!client.managed && (*/}
-                    {/*        <DeleteModal*/}
-                    {/*            title="Slett klient"*/}
-                    {/*            bodyText="Er du sikker på at du vil slette denne klienten?"*/}
-                    {/*            action="delete"*/}
-                    {/*        />*/}
-                    {/*    )}*/}
-                    {/*</HGrid>*/}
                 </Box>
             </HGrid>
         </>

@@ -2,22 +2,21 @@ import React from 'react';
 import { Button, Checkbox, FormSummary, HStack } from '@navikt/ds-react';
 import { IComponentConfig } from '~/types/ComponentConfig';
 import { ChevronRightCircleIcon } from '@navikt/aksel-icons';
+import { IAccessComponent } from '~/types/Access';
 
 interface ConfigClassTableProps {
-    matchedConfig: IComponentConfig;
+    accessComponent: IAccessComponent[];
     type: string;
     onSelected: (fieldName: string) => void;
     onToggle: (formData: { resourceId: string }) => void;
 }
 
 const ResourcesTable: React.FC<ConfigClassTableProps> = ({
-    matchedConfig,
+    accessComponent,
     type,
     onSelected,
     onToggle,
 }) => {
-    const data = matchedConfig.classes;
-
     function handleCheckbox() {
         const formData = {
             resourceId: 'newServiceName',
@@ -36,9 +35,9 @@ const ResourcesTable: React.FC<ConfigClassTableProps> = ({
                 </FormSummary.Header>
                 <FormSummary.Answers>
                     <FormSummary.Answer>
-                        {data.map((x, i) => {
+                        {accessComponent.map((x, i) => {
                             return (
-                                <HStack key={x.path + i} justify={'space-between'} align={'center'}>
+                                <HStack key={i} justify={'space-between'} align={'center'}>
                                     {/*<HStack align={'center'} gap={'0'}>*/}
                                     <Checkbox
                                         onChange={handleCheckbox}
