@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, CopyButton, Table } from '@navikt/ds-react';
 import { ArrowsSquarepathIcon, BagdeIcon, DownloadIcon, ThumbUpIcon } from '@navikt/aksel-icons';
-import { TableDataCell } from '@navikt/ds-react/Table';
 import { useFetcher } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
 import { IClient } from '~/types/Clients';
@@ -89,17 +88,18 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
                     <Table.Row>
                         <Table.HeaderCell scope="row">Brukernavn</Table.HeaderCell>
                         <Table.DataCell>{entity.name}</Table.DataCell>
-                        <TableDataCell />
+                        <Table.DataCell />
                         <Table.DataCell>
                             <CopyButton copyText={entity.name} />
                         </Table.DataCell>
                     </Table.Row>
+
                     <Table.Row>
                         <Table.HeaderCell scope="row">Passord</Table.HeaderCell>
                         <Table.DataCell>{password}</Table.DataCell>
-                        <TableDataCell>
+                        <Table.DataCell>
                             <ConfirmAction
-                                buttonVariant={'tertiary-neutral'}
+                                buttonVariant="tertiary-neutral"
                                 buttonText=""
                                 subTitleText="Er du sikker på at du vil sette nytt passord? Hvis du gjør det må alle som bruker autentiseringsinformasjonen få det nye passordet og konfigurere tjenesten sin på nytt!"
                                 onConfirm={generatePassword}
@@ -110,24 +110,26 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
                                     />
                                 }
                             />
-                        </TableDataCell>
+                        </Table.DataCell>
                         <Table.DataCell>
                             <CopyButton copyText={password} disabled={!isPasswordGenerated} />
                         </Table.DataCell>
                     </Table.Row>
+
                     <Table.Row>
                         <Table.HeaderCell scope="row">
-                            {entityType == 'client' ? 'Klient Id' : 'Adaptere Id'}
+                            {entityType === 'client' ? 'Klient Id' : 'Adaptere Id'}
                         </Table.HeaderCell>
                         <Table.DataCell>{entity.clientId}</Table.DataCell>
-                        <TableDataCell />
+                        <Table.DataCell />
                         <Table.DataCell>
                             <CopyButton copyText={entity.clientId} />
                         </Table.DataCell>
                     </Table.Row>
+
                     <Table.Row>
                         <Table.HeaderCell scope="row">
-                            {entityType == 'client' ? 'Klient' : 'Adaptere'} Hemmelighet
+                            {entityType === 'client' ? 'Klient' : 'Adaptere'} Hemmelighet
                         </Table.HeaderCell>
                         <Table.DataCell>{clientSecret}</Table.DataCell>
                         <Table.DataCell>
@@ -151,9 +153,11 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
                             <CopyButton copyText={clientSecret} disabled={!isCopySecretEnabled} />
                         </Table.DataCell>
                     </Table.Row>
+
                     <Table.Row>
                         <Table.HeaderCell scope="row">RessursId-er</Table.HeaderCell>
-                        <Table.DataCell>{assetIdsString}</Table.DataCell> <TableDataCell />
+                        <Table.DataCell>{assetIdsString}</Table.DataCell>
+                        <Table.DataCell />
                         <Table.DataCell>
                             <CopyButton copyText={assetIdsString.toString()} />
                         </Table.DataCell>

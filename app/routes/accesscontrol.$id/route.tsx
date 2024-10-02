@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeftIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Heading, HGrid, Spacer } from '@navikt/ds-react';
+import { Alert, Box, Button, HGrid, Spacer } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import { IFetcherResponseData } from '~/types/types';
-import ResourcesTable from '~/routes/accesscontrol.$id/ResourceList';
+import ResourcesList from '~/routes/accesscontrol.$id/ResourcesList';
 import FieldList from '~/routes/accesscontrol.$id/FieldList';
 import AccessApi from '~/api/AccessApi';
 
@@ -147,7 +147,7 @@ export default function Index() {
                                 <FieldList onSave={handleSaveFields} />
                             </>
                         ) : (
-                            <ResourcesTable
+                            <ResourcesList
                                 accessComponent={access}
                                 type={entity || ''}
                                 onSelected={handleSelectedResource}

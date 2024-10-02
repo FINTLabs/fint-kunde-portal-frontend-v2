@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Checkbox, FormSummary, HStack } from '@navikt/ds-react';
-import { IComponentConfig } from '~/types/ComponentConfig';
 import { ChevronRightCircleIcon } from '@navikt/aksel-icons';
 import { IAccessComponent } from '~/types/Access';
 
@@ -11,7 +10,7 @@ interface ConfigClassTableProps {
     onToggle: (formData: { resourceId: string }) => void;
 }
 
-const ResourcesTable: React.FC<ConfigClassTableProps> = ({
+const ResourcesList: React.FC<ConfigClassTableProps> = ({
     accessComponent,
     type,
     onSelected,
@@ -80,4 +79,4 @@ const ResourcesTable: React.FC<ConfigClassTableProps> = ({
 
 // checked={x.name == 'elevforhold' || x.name == 'elev' ? true : false}
 // disabled={x.name == 'elev' ? true : false}
-export default ResourcesTable;
+export default ResourcesList;
