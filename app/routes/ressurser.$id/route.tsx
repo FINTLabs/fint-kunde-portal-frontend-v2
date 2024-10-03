@@ -162,6 +162,16 @@ export async function action({ request }: ActionFunctionArgs) {
     let response;
     let updateResponse;
     switch (actionType) {
+        case 'CREATE':
+            updateResponse = await AssetApi.createAsset(
+                {
+                    name: formData.get('assetName') as string,
+                    description: formData.get('assetDescription') as string,
+                },
+                selectedOrg
+            );
+            response = handleApiResponse(updateResponse, 'Ressurser created');
+            break;
         case 'UPDATE':
             updateResponse = await AssetApi.updateAsset(
                 {

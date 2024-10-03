@@ -152,7 +152,7 @@ export default function App() {
                 <Page.Block gutters width="lg">
                     <Menu
                         userSession={userSession}
-                        displaySamtykke={features['samtykke-admin-new']}
+                        // displaySamtykke={features['samtykke-admin-new']}
                     />
                 </Page.Block>
             </Box>

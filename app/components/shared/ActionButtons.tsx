@@ -3,7 +3,7 @@ import { Button } from '@navikt/ds-react';
 import { FloppydiskIcon, PencilIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
 
-interface ClientActionButtonsProps {
+interface ActionButtonsProps {
     isEditing: boolean;
     handleSave: () => void;
     handleCancel: () => void;
@@ -12,7 +12,7 @@ interface ClientActionButtonsProps {
     handleConfirmDelete: () => void;
 }
 
-const ClientActionButtons: React.FC<ClientActionButtonsProps> = ({
+const ActionButtons: React.FC<ActionButtonsProps> = ({
     isEditing,
     handleSave,
     handleCancel,
@@ -44,10 +44,10 @@ const ClientActionButtons: React.FC<ClientActionButtonsProps> = ({
                             onClick={() => setIsEditing(true)}
                         />
                         <ConfirmAction
-                            buttonText={'delete'}
-                            titleText={'Delete adapter'}
+                            buttonText={'fjerne'}
+                            titleText={'Fjerne klient'}
                             showButtonText={false}
-                            subTitleText={'Are you sure you want to delete this adapter?'}
+                            subTitleText={'Er du sikker på at du vil fjerne denne klient?'}
                             onConfirm={handleConfirmDelete}
                             buttonVariant="tertiary"
                             buttonSize={'medium'}
@@ -60,4 +60,4 @@ const ClientActionButtons: React.FC<ClientActionButtonsProps> = ({
     );
 };
 
-export default ClientActionButtons;
+export default ActionButtons;

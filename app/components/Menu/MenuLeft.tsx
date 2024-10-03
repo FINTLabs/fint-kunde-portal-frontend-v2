@@ -9,11 +9,11 @@ export const MenuLeft = () => {
         <HStack gap="2">
             <Logo />
             <MenuDropdowns renderItems={MENU_ITEMS_LEFT.dropdowns} />
-            <Link to="/samtykke" className="!uppercase !hover:bg-transparent">
-                <Button variant="tertiary-neutral" className="!text-neutral !uppercase">
-                    Samtykke
-                </Button>
-            </Link>
+            {/*<Link to="/samtykke" className="!uppercase !hover:bg-transparent">*/}
+            {/*    <Button variant="tertiary-neutral" className="!text-neutral !uppercase">*/}
+            {/*        Samtykke*/}
+            {/*    </Button>*/}
+            {/*</Link>*/}
         </HStack>
     );
 };

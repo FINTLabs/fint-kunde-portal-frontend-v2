@@ -4,11 +4,10 @@ import { MenuLeft } from './MenuLeft';
 
 type MenuType = {
     userSession: IUserSession;
-    displaySamtykke: boolean;
 };
 
-export default function Menu({ userSession, displaySamtykke }: MenuType) {
-    if (!userSession || !displaySamtykke) {
+export default function Menu({ userSession }: MenuType) {
+    if (!userSession) {
         return <div>Loading...</div>;
     }
     return (

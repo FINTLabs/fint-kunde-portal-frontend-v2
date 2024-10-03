@@ -6,7 +6,7 @@ import {
     redirect,
 } from '@remix-run/node';
 import { LayersIcon, PlusIcon } from '@navikt/aksel-icons';
-import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
+import { json, useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
@@ -70,12 +70,9 @@ export default function Index() {
     const assets = useLoaderData<IAsset[]>();
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate();
-    const fetcher = useFetcher();
-    const actionData = fetcher.data as IFetcherResponseData;
-    const [show, setShow] = React.useState(false);
-    useEffect(() => {
-        setShow(true);
-    }, [fetcher.state]);
+    const [searchParams] = useSearchParams();
+    const deletedName = searchParams.get('deleted');
+
     const handleClick = (id: string) => {
         navigate(`/ressurser/${id}`);
     };
@@ -104,17 +101,11 @@ export default function Index() {
                     </Button>
                 </VStack>
             </HStack>
-            {actionData && show && (
-                <Alert
-                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
-                    closeButton
-                    onClose={() => setShow(false)}>
-                    {actionData.message || 'Content'}
-                </Alert>
-            )}
+            {deletedName && <InfoBox message={`Ressurser ${deletedName} slettet`} />}
+
             {!assets && <InfoBox message="Fant ingen ressurser" />}
             {isCreating ? (
-                <CreateForm onCancel={handleCancel} />
+                <CreateForm onCancel={handleCancel} onSave={handleCreate} />
             ) : (
                 assets && <AssetsTable assets={assets} onRowClick={handleClick} />
             )}

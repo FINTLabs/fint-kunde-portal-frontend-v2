@@ -1,5 +1,5 @@
 export interface IPartialAsset {
-    assetId: string;
+    assetId?: string;
     name: string;
     description: string;
 }

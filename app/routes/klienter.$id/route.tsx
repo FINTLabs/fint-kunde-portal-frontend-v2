@@ -18,11 +18,11 @@ import ComponentList from '~/components/shared/ComponentList';
 import FeaturesApi from '~/api/FeaturesApi';
 import ComponentSelector from '~/components/shared/ComponentSelector';
 import { IFetcherResponseData } from '~/types/types';
-import ClientActionButtons from '~/routes/klienter.$id/ClientActionButtons';
 import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
 import { AuthTable } from '~/components/shared/AuthTable';
 import { handleApiResponse } from '~/utils/handleApiResponse';
+import ActionButtons from '~/components/shared/ActionButtons';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
@@ -137,7 +137,7 @@ export default function Index() {
                     <HStack>
                         <Heading size={'medium'}>Details</Heading>
                         <Spacer />
-                        <ClientActionButtons
+                        <ActionButtons
                             isEditing={isEditing}
                             handleSave={handleSave}
                             handleCancel={handleCancel}

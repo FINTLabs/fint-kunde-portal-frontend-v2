@@ -1,6 +1,6 @@
 // CreateForm.tsx
 import { Form, useActionData } from '@remix-run/react';
-import { Button, FormSummary, HStack, TextField, VStack } from '@navikt/ds-react';
+import { Button, FormSummary, HStack, TextField } from '@navikt/ds-react';
 
 interface ActionData {
     errors?: {
@@ -9,7 +9,13 @@ interface ActionData {
     };
 }
 
-export default function CreateForm({ onCancel }: { onCancel: () => void }) {
+export default function CreateForm({
+    onCancel,
+    onSave,
+}: {
+    onCancel: () => void;
+    onSave: () => void;
+}) {
     const actionData = useActionData<ActionData>();
 
     return (
