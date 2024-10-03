@@ -1,12 +1,12 @@
-import { Box, GuidePanel, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { json, MetaFunction } from '@remix-run/node';
-import { Link, useLoaderData, useOutletContext } from '@remix-run/react';
+import { useLoaderData, useOutletContext } from '@remix-run/react';
 import { MENU_ITEMS_LEFT } from '~/components/Menu/constants';
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { MenuItem } from '~/types/MenuItem';
 import { IUserSession } from '~/types/types';
 import CustomLinkPanel from '~/routes/_index/CustomLinkPanelProps';
-import { ExclamationmarkTriangleIcon, ImageIcon, PassportIcon } from '@navikt/aksel-icons';
+import { ImageIcon } from '@navikt/aksel-icons';
 import FeaturesApi from '~/api/FeaturesApi';
 
 export const meta: MetaFunction = () => {
@@ -65,13 +65,13 @@ export default function Index() {
                                 />
                             );
                         })}
-                    {features['samtykke-admin-new' as keyof typeof features] && (
-                        <CustomLinkPanel
-                            href={'/samtykke'}
-                            title={'Samtykke'}
-                            IconComponent={PassportIcon}
-                        />
-                    )}
+                    {/*{features['samtykke-admin-new' as keyof typeof features] && (*/}
+                    {/*    <CustomLinkPanel*/}
+                    {/*        href={'/samtykke'}*/}
+                    {/*        title={'Samtykke'}*/}
+                    {/*        IconComponent={PassportIcon}*/}
+                    {/*    />*/}
+                    {/*)}*/}
                 </HGrid>
             </VStack>
         </Box>
