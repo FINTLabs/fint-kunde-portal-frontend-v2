@@ -6,7 +6,7 @@ import { IComponent } from '~/types/Component';
 import { GeneralDetailView } from './GeneralDetailView';
 import { BackButton } from '~/components/shared/BackButton';
 import { getComponentIds } from '~/utils/helper';
-import ComponentList from '~/routes/accesscontrol.$id/ComponentList';
+import ComponentList from '~/components/shared/ComponentList';
 import ComponentSelector from '~/components/shared/ComponentSelector';
 import { IAccess } from '~/types/Access';
 import { AuthTable } from '~/components/shared/AuthTable';

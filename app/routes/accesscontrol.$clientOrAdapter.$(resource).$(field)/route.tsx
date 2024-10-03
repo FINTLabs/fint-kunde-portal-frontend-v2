@@ -6,27 +6,41 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import { IFetcherResponseData } from '~/types/types';
-import ResourcesList from '~/routes/accesscontrol.$id/ResourcesList';
-import FieldList from '~/routes/accesscontrol.$id/FieldList';
 import AccessApi from '~/api/AccessApi';
+import FieldList from '~/routes/accesscontrol.$clientOrAdapter.$(resource).$(field)/FieldList';
+import ResourcesList from '~/routes/accesscontrol.$clientOrAdapter.$(resource).$(field)/ResourcesList';
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-    const id = params.id || '';
+    const clientOrAdapter = params.clientOrAdapter || '';
+    const resource = params.resource || '';
+    const field = params.field || '';
 
     const url = new URL(request.url);
     const entity = url.searchParams.get('entity');
+    console.log('Resource:', resource, 'clientOrAdapter:', entity, 'Field:', field);
 
-    let access;
+    let resourceList;
+    let fieldList;
+
     if (entity) {
-        access = await AccessApi.getComponentAccess(entity, id);
+        if (field) {
+            // If field exists, get field-specific access
+            fieldList = await AccessApi.getFieldAccess(clientOrAdapter, resource, field);
+        } else {
+            // If no field, get the component access
+            resourceList = await AccessApi.getComponentAccess(clientOrAdapter, resource);
+        }
     }
-    console.log(id, entity);
 
-    return json({ access, entity, id });
+    return json({
+        resourceList, // This will be undefined if field exists
+        fieldList, // This will be undefined if field does not exist
+        clientOrAdapter,
+    });
 };
 
 export default function Index() {
-    const { access, entity, id } = useLoaderData<typeof loader>();
+    const { resourceList, clientOrAdapter, fieldList } = useLoaderData<typeof loader>();
     const navigate = useNavigate();
     const [show, setShow] = React.useState(false);
     const fetcher = useFetcher<IFetcherResponseData>();
@@ -85,7 +99,11 @@ export default function Index() {
     }, [fetcher.state]);
 
     const handleSelectedResource = (resourceName: string) => {
-        setSelectedResource(resourceName);
+        console.debug('...........', resourceName);
+        // setSelectedResource(resourceName);
+        navigate(
+            `/accesscontrol//fint-samtykke-service-backend-client-ymlez@client.fintlabs.no/${resourceName}?entity=utdanning_vurdering`
+        );
         setShow(false);
     };
 
@@ -111,7 +129,10 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
 
-            <InternalPageHeader title={`Tilgangskontroll: ${id}`} icon={KeyVerticalIcon} />
+            <InternalPageHeader
+                title={`Tilgangskontroll: ${clientOrAdapter}`}
+                icon={KeyVerticalIcon}
+            />
 
             <HGrid gap="2" align={'start'}>
                 <Box>
@@ -143,13 +164,16 @@ export default function Index() {
 
                     <Box padding="4">
                         {selectedResource ? (
-                            <>
-                                <FieldList onSave={handleSaveFields} />
-                            </>
+                            <FieldList
+                                onSave={handleSaveFields}
+                                selectedResource={selectedResource}
+                                type={clientOrAdapter || ''}
+                                fieldList={fieldList || []} // Pass the dynamic fieldList
+                            />
                         ) : (
                             <ResourcesList
-                                accessComponent={access}
-                                type={entity || ''}
+                                accessComponent={resourceList}
+                                clientOrAdapter={clientOrAdapter || ''}
                                 onSelected={handleSelectedResource}
                                 onToggle={handleToggleResource}
                             />

@@ -39,15 +39,6 @@ export default function Index() {
     return (
         <Box className="font-sans p-4">
             <VStack gap="6" justify={'center'} align="center">
-                <GuidePanel
-                    illustration={
-                        <ExclamationmarkTriangleIcon title="a11y-title" className={'p-2'} />
-                    }>
-                    ** Dette nettstedet er for øyeblikket under testing. **
-                    <br />
-                    For å få tilgang til den offisielle versjonen, vennligst besøk vår nettside her:{' '}
-                    <Link to={'https://kunde.felleskomponent.no/dashboard'}>Kundeportalen</Link>
-                </GuidePanel>
                 <WelcomeMessage userSession={userSession}></WelcomeMessage>
 
                 {/*{loading && (*/}

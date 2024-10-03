@@ -14,7 +14,7 @@ import { IComponent } from '~/types/Component';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData, getRequestParam } from '~/utils/requestUtils';
 import { getComponentIds } from '~/utils/helper';
-import ComponentList from '~/routes/accesscontrol.$id/ComponentList';
+import ComponentList from '~/components/shared/ComponentList';
 import FeaturesApi from '~/api/FeaturesApi';
 import ComponentSelector from '~/components/shared/ComponentSelector';
 import { IFetcherResponseData } from '~/types/types';

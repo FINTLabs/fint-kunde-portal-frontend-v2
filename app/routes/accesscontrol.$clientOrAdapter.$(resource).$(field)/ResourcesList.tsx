@@ -5,14 +5,14 @@ import { IAccessComponent } from '~/types/Access';
 
 interface ConfigClassTableProps {
     accessComponent: IAccessComponent[];
-    type: string;
+    clientOrAdapter: string;
     onSelected: (fieldName: string) => void;
     onToggle: (formData: { resourceId: string }) => void;
 }
 
 const ResourcesList: React.FC<ConfigClassTableProps> = ({
     accessComponent,
-    type,
+    clientOrAdapter,
     onSelected,
     onToggle,
 }) => {
@@ -28,7 +28,9 @@ const ResourcesList: React.FC<ConfigClassTableProps> = ({
             <FormSummary key={`x`}>
                 <FormSummary.Header>
                     {/*<HStack align={'center'} justify={'space-between'}>*/}
-                    <FormSummary.Heading level="2">Customize: {type}</FormSummary.Heading>
+                    <FormSummary.Heading level="2">
+                        Customize: {clientOrAdapter}
+                    </FormSummary.Heading>
                     {/*</HStack>
                     //TODO: make this a grid? to bring it closer */}
                 </FormSummary.Header>

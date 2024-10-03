@@ -19,7 +19,7 @@ class AccessApi {
         componentName: string,
         resourceName: string
     ) {
-        const functionName = 'getComponentAccess';
+        const functionName = 'getFieldAccess';
         const URL = `${API_URL}/access/${clientOrAdapter}/${componentName}/${resourceName}`;
         console.log('.............', URL);
         return await request(URL, functionName);
