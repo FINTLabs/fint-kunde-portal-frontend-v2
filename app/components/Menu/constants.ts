@@ -70,10 +70,10 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
         },
     ],
     links: [
-        {
-            title: 'Samtykke',
-            path: '/samtykke',
-            icon: PassportIcon,
-        },
+        // {
+        //     title: 'Samtykke',
+        //     path: '/samtykke',
+        //     icon: PassportIcon,
+        // },
     ],
 };
