@@ -85,7 +85,7 @@ jobs:
         uses: azure/k8s-bake@v2
         with:
           renderEngine: 'kustomize'
-          kustomizationPath: 'kustomize/base'
+          kustomizationPath: 'kustomize/overlays/${{ steps.environment.outputs.result }}'
 
       - uses: azure/login@v1
         with:

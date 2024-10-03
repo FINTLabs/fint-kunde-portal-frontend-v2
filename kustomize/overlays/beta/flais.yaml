@@ -1,0 +1,21 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: Application
+metadata:
+  name: fint-kunde-portal-frontend
+  namespace: fintlabs-no
+spec:
+  port: 8000
+  orgId: fintlabs.no
+  image: ghcr.io/fintlabs/fint-kunde-portal-frontend-v2:latest
+  env:
+    - name: API_URL
+      value: http://fint-kunde-portal-backend:8080
+    - name: LINKWALKER_API_URL
+      value: http://fint-link-walker:8080
+    - name: CONSENT_API_URL
+      value: http://fint-samtykke-admin-backend:8080
+  url:
+    hostname: kunde-beta.felleskomponent.no
+    basePath: /
+  ingress:
+    enabled: true
