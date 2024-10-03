@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     type ActionFunctionArgs,
     type LoaderFunction,
@@ -6,16 +6,17 @@ import {
     redirect,
 } from '@remix-run/node';
 import { LayersIcon, PlusIcon } from '@navikt/aksel-icons';
-import { json, useLoaderData, useNavigate } from '@remix-run/react';
+import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset, IPartialAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Button, HStack, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, VStack } from '@navikt/ds-react';
 import { InfoBox } from '~/components/shared/InfoBox';
 import CreateForm from '~/routes/ressurser._index/CreateForm';
 import AssetsTable from '~/routes/ressurser._index/ResourcesTable';
+import { IFetcherResponseData } from '~/types/types';
 
 export const meta: MetaFunction = () => {
     return [
@@ -69,7 +70,12 @@ export default function Index() {
     const assets = useLoaderData<IAsset[]>();
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate();
-
+    const fetcher = useFetcher();
+    const actionData = fetcher.data as IFetcherResponseData;
+    const [show, setShow] = React.useState(false);
+    useEffect(() => {
+        setShow(true);
+    }, [fetcher.state]);
     const handleClick = (id: string) => {
         navigate(`/ressurser/${id}`);
     };
@@ -98,6 +104,14 @@ export default function Index() {
                     </Button>
                 </VStack>
             </HStack>
+            {actionData && show && (
+                <Alert
+                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
+                    closeButton
+                    onClose={() => setShow(false)}>
+                    {actionData.message || 'Content'}
+                </Alert>
+            )}
             {!assets && <InfoBox message="Fant ingen ressurser" />}
             {isCreating ? (
                 <CreateForm onCancel={handleCancel} />
