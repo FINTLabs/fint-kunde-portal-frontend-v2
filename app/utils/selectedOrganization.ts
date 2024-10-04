@@ -7,12 +7,12 @@ export async function getSelectedOrganization(request: Request) {
     if (!userSession.selectedOrganization)
         throw new Response('User selected organization is undefined', { status: 404 });
 
+    console.log('USER SESSION ORG:', userSession.selectedOrganization);
     return userSession.selectedOrganization.name;
 }
 
 export async function getSessionFromCookie(request: Request) {
-    const session = await getSession(request.headers.get('Cookie'));
-    return session;
+    return await getSession(request.headers.get('Cookie'));
 }
 
 export async function getUserSession(request: Request) {

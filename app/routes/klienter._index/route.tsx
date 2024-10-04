@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { json, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
@@ -37,6 +37,10 @@ export default function Index() {
     const deletedClientName = searchParams.get('deleted');
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setFilteredClients(clientData);
+    }, [clientData]);
 
     function handleTabClick(newValue: string) {
         setIsManaged(newValue);

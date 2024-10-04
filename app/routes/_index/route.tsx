@@ -6,7 +6,7 @@ import { MenuDropDown } from '~/types/MenuDropDown';
 import { MenuItem } from '~/types/MenuItem';
 import { IUserSession } from '~/types/types';
 import CustomLinkPanel from '~/routes/_index/CustomLinkPanelProps';
-import { ImageIcon } from '@navikt/aksel-icons';
+import { ImageIcon, PassportIcon } from '@navikt/aksel-icons';
 import FeaturesApi from '~/api/FeaturesApi';
 
 export const meta: MetaFunction = () => {
@@ -35,6 +35,7 @@ function WelcomeMessage({ userSession }: { userSession: IUserSession }) {
 export default function Index() {
     const userSession = useOutletContext<IUserSession>();
     const { features } = useLoaderData<Record<string, boolean>>();
+    console.log('............', features);
 
     return (
         <Box className="font-sans p-4">
@@ -65,13 +66,13 @@ export default function Index() {
                                 />
                             );
                         })}
-                    {/*{features['samtykke-admin-new' as keyof typeof features] && (*/}
-                    {/*    <CustomLinkPanel*/}
-                    {/*        href={'/samtykke'}*/}
-                    {/*        title={'Samtykke'}*/}
-                    {/*        IconComponent={PassportIcon}*/}
-                    {/*    />*/}
-                    {/*)}*/}
+                    {features['samtykke-admin-new' as keyof typeof features] && (
+                        <CustomLinkPanel
+                            href={'/samtykke'}
+                            title={'Samtykke'}
+                            IconComponent={PassportIcon}
+                        />
+                    )}
                 </HGrid>
             </VStack>
         </Box>
