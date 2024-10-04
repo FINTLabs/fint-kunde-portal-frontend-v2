@@ -120,7 +120,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 formData.get('adapterName') as string,
                 orgName
             );
-            console.debug('........ adapter name?', formData.get('adapterName'));
             return json({
                 clientSecret: await updateResponse,
                 message: 'Adapter secret fetched successfully',

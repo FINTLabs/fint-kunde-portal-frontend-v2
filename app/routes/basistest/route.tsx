@@ -12,11 +12,14 @@ import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 // import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
+import { IBasisTest } from '~/types/BasisTest';
+import BasicTestApi from '~/api/BasicTestApi';
+import { handleApiResponse } from '~/utils/handleApiResponse';
 // import BasicTestApi from '~/api/BasicTestApi';
 
 interface ActionData {
     message: string;
-    data: never;
+    data: IBasisTest[];
 }
 
 export const meta: MetaFunction = () => {
@@ -39,23 +42,9 @@ export const loader: LoaderFunction = async ({ request }) => {
         return json({ components: sortedComponents, clients: sortedClients });
     } catch (err) {
         console.error('Error fetching data:', err as Error);
-        throw new Response('Not Found', { status: 404 });
+        throw new Response('Error fetching data', { status: 404 });
     }
 };
-
-export async function action({ request }: ActionFunctionArgs) {
-    const formData = await request.formData();
-    const environment = formData.get('environment') as string;
-    const component = formData.get('component');
-    const client = formData.get('client');
-
-    const orgName = await getSelectedOrganization(request);
-
-    const response: never[] = [];
-    const message = 'Run test with: ' + component + ' ' + client + ' ' + environment + orgName;
-
-    return json({ message, data: response });
-}
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Basistest', link: '/basistest' }];
@@ -114,4 +103,26 @@ export default function Index() {
             </VStack>
         </>
     );
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const environment = formData.get('environment') as string;
+    const component = formData.get('component');
+    const client = formData.get('client');
+
+    const orgName = await getSelectedOrganization(request);
+    const test = environment + component + client;
+
+    const message = 'Run test with: ' + component + ' ' + client + ' ' + environment + orgName;
+    let apiResponse;
+    let response;
+    try {
+        apiResponse = BasicTestApi.runTest(orgName, test);
+        response = handleApiResponse(apiResponse, message);
+    } catch {
+        throw new Response('Error loading data.', { status: 404 });
+    }
+
+    return json({ show: true, message: response?.message, variant: response?.variant });
 }

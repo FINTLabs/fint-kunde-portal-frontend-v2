@@ -14,6 +14,7 @@ import ContactModal from '~/routes/kontakter/ContactModal';
 import { getSelectedOrganization as getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData } from '~/utils/requestUtils';
 import { InfoBox } from '~/components/shared/InfoBox';
+import { handleApiResponse } from '~/utils/handleApiResponse';
 
 interface IPageLoaderData {
     technicalContacts?: IContact[] | string;
@@ -145,66 +146,29 @@ export async function action({ request }: ActionFunctionArgs) {
 
     let response;
     let apiResponse;
-    let isOk = false;
     switch (actionType) {
         case 'addTechnicalContact':
-            response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
-            isOk = response.status === 204;
-            return json({
-                ok: isOk,
-                show: true,
-                message: isOk
-                    ? 'Kontakten er lagt til. Husk å tildele roller til kontakten.'
-                    : `Legge til kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
-                variant: isOk ? 'success' : 'error',
-            });
+            apiResponse = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
+            response = handleApiResponse(
+                apiResponse,
+                'Kontakten er lagt til. Husk å tildele roller til kontakten.'
+            );
+            break;
         case 'REMOVE_CONTACT':
-            response = await ContactApi.removeTechnicalContact(contactNin, selectedOrg);
-            isOk = response.status === 204;
-            return json({
-                ok: isOk,
-                show: true,
-                message: isOk
-                    ? 'Kontakten er fjernet som teknisk kontakt'
-                    : `Fjerning av teknisk kontakt feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
-                variant: isOk ? 'success' : 'error',
-            });
+            apiResponse = await ContactApi.removeTechnicalContact(contactNin, selectedOrg);
+            response = handleApiResponse(apiResponse, 'Kontakten er fjernet som teknisk kontakt');
+            break;
         case 'SET_LEGAL_CONTACT':
-            response = await ContactApi.setLegalContact(contactNin, selectedOrg);
-            isOk = response.status === 204;
-            return json({
-                ok: isOk,
-                show: true,
-                message: isOk
-                    ? 'Kontakten er satt som juridisk kontakt'
-                    : `Forespørslen feilet. Mer info: Status: ${response.status}. StatusText ${response.statusText}`,
-                variant: isOk ? 'success' : 'error',
-            });
+            apiResponse = await ContactApi.setLegalContact(contactNin, selectedOrg);
+            response = handleApiResponse(apiResponse, 'Kontakten er satt som juridisk kontakt');
+            break;
         case 'addRole':
             apiResponse = await RoleApi.addRole(selectedOrg, contactNin, roleIdToAdd);
-            if (apiResponse.status == 202)
-                response = {
-                    message: `Kontaktroller oppdatert: ${roleIdToAdd}`,
-                    variant: 'success',
-                };
-            else
-                response = {
-                    message: `Feil ved oppdatering av kontaktrolle. Mer info: Status: ${apiResponse.status}. StatusText ${apiResponse.statusText}`,
-                    variant: 'error',
-                };
+            response = handleApiResponse(apiResponse, `Kontaktroller oppdatert: ${roleIdToAdd}`);
             break;
         case 'deleteRole':
             apiResponse = await RoleApi.removeRole(selectedOrg, contactNin, roleIdToDelete);
-            if (apiResponse.status == 202)
-                response = {
-                    message: `Kontaktroller oppdatert: ${roleIdToDelete}`,
-                    variant: 'success',
-                };
-            else
-                response = {
-                    message: `Feil ved oppdatering av kontaktrolle. Mer info: Status: ${apiResponse.status}. StatusText ${apiResponse.statusText}`,
-                    variant: 'error',
-                };
+            response = handleApiResponse(apiResponse, `Kontaktroller oppdatert: ${roleIdToDelete}`);
             break;
         default:
             return json({

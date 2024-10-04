@@ -1,12 +1,11 @@
 import { json, type LoaderFunction, type MetaFunction } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { MigrationIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Tabs, VStack } from '@navikt/ds-react';
+import { MigrationIcon, PlusIcon } from '@navikt/aksel-icons';
+import { Button, HStack, VStack } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
-import { useLoaderData, useNavigate } from '@remix-run/react';
+import { useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
-import { PlusIcon } from '@navikt/aksel-icons';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { CustomTabs } from '~/components/shared/CustomTabs';
 import { InfoBox } from '~/components/shared/InfoBox';
@@ -28,10 +27,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Adaptere', link: '/adaptere' }];
-
     const { adapters, error } = useLoaderData<IPageLoaderData>();
-
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const deleted = searchParams.get('deleted');
 
     const handleCreate = () => {
         navigate(`/adapter/create`);
@@ -40,6 +39,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
+            {deleted && <InfoBox message={`Adaptere ${deleted} slettet`} />}
             <HStack align={'center'} justify={'space-between'}>
                 <VStack>
                     <InternalPageHeader

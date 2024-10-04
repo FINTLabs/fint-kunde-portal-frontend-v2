@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import {
     type ActionFunctionArgs,
     type LoaderFunction,
@@ -6,17 +5,17 @@ import {
     redirect,
 } from '@remix-run/node';
 import { LayersIcon, PlusIcon } from '@navikt/aksel-icons';
-import { json, useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
+import { json, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset, IPartialAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Alert, Button, HStack, VStack } from '@navikt/ds-react';
+import { Button, HStack, VStack } from '@navikt/ds-react';
 import { InfoBox } from '~/components/shared/InfoBox';
 import CreateForm from '~/routes/ressurser._index/CreateForm';
 import AssetsTable from '~/routes/ressurser._index/ResourcesTable';
-import { IFetcherResponseData } from '~/types/types';
+import { useState } from 'react';
 
 export const meta: MetaFunction = () => {
     return [
@@ -71,7 +70,7 @@ export default function Index() {
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const deletedName = searchParams.get('deleted');
+    const deleted = searchParams.get('deleted');
 
     const handleClick = (id: string) => {
         navigate(`/ressurser/${id}`);
@@ -88,6 +87,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
+            {deleted && <InfoBox message={`Ressurser ${deleted} slettet`} />}
             <HStack align={'center'} justify={'space-between'}>
                 <VStack>
                     <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="assets" />
@@ -101,7 +101,6 @@ export default function Index() {
                     </Button>
                 </VStack>
             </HStack>
-            {deletedName && <InfoBox message={`Ressurser ${deletedName} slettet`} />}
 
             {!assets && <InfoBox message="Fant ingen ressurser" />}
             {isCreating ? (

@@ -1,19 +1,18 @@
-import { IPartialAsset } from '~/types/Asset';
-import { IPartialAdapter } from '~/types/types';
+// import { IPartialAsset } from '~/types/Asset';
+// import { IPartialAdapter } from '~/types/types';
 import { Utility } from '~/utils/utility';
-import { err } from '@remix-run/dev/dist/result';
 
 export type ReturnType = 'text' | 'json';
 
 export type IMiniAdapter = { name: string };
-export type PostDataType = IPartialAdapter | IPartialAsset | IMiniAdapter;
+// export type PostDataType = IPartialAdapter | IPartialAsset | IMiniAdapter;
 
-export async function request(
+export async function request<T = unknown>(
     URL: string,
     functionName: string,
     requestMethod = 'GET',
     returnType: ReturnType = 'json',
-    data?: PostDataType
+    data?: T
 ) {
     try {
         console.debug(`> Calling ${requestMethod} on ${functionName}:`, URL);
@@ -27,14 +26,14 @@ export async function request(
             },
         };
 
-        // log('requestOptions in request');
-        // log(requestOptions);
-
         switch (requestMethod) {
             case 'GET':
                 return await getRequest(URL, functionName, requestOptions, returnType);
             case 'POST':
-                return await postRequest(URL, functionName, requestOptions, data);
+                if (data) {
+                    return await postRequest(URL, functionName, requestOptions, data);
+                }
+                break;
             case 'PUT':
                 return await putRequest(URL, functionName, requestOptions, data);
             case 'DELETE':
@@ -45,10 +44,8 @@ export async function request(
     } catch (err) {
         if (err instanceof Error) {
             logStatus(500, functionName, err.message);
-            // console.error(`:( Request failed: Error running ${functionName}:`, err);
         } else {
             logStatus(500, functionName, String(err));
-            console.error(`:( Request failed: Error running ${functionName}:`, String(err));
         }
         throw new Response(`Request failed: Error running ${functionName}`, {
             status: 500,
@@ -56,11 +53,11 @@ export async function request(
     }
 }
 
-export async function putRequest(
+export async function putRequest<T = unknown>(
     URL: string,
     functionName: string,
     requestOptions: RequestInit,
-    data?: PostDataType
+    data?: T
 ) {
     if (data) {
         requestOptions = {
@@ -74,20 +71,11 @@ export async function putRequest(
     return response;
 }
 
-function logStatus(status: number, functionName: string, errorMessage?: string) {
-    if (status >= 200 && status < 300) {
-        console.debug(` 🟢--> Result: ${functionName} ${status}`);
-    } else {
-        console.error(`🔴--> Result: ${functionName} ${status} `);
-        console.debug(errorMessage);
-    }
-}
-
-export async function postRequest(
+export async function postRequest<T = unknown>(
     URL: string,
     functionName: string,
     requestOptions: RequestInit,
-    data?: PostDataType
+    data?: T
 ) {
     if (data) {
         requestOptions = {
@@ -107,7 +95,6 @@ async function getRequest(
     requestOptions: RequestInit,
     returnType: ReturnType
 ) {
-    // log(`RequestOptions: `, requestOptions);
     const response = await fetch(URL, requestOptions);
     logStatus(response.status, functionName);
 
@@ -118,5 +105,16 @@ async function getRequest(
         throw new Response(`Request failed: Error running ${functionName}`, {
             status: 500,
         });
+    }
+}
+
+function logStatus(status: number, functionName: string, errorMessage?: string) {
+    if (status >= 200 && status < 300) {
+        console.debug(`🟢--> Result: ${functionName} ${status}`);
+    } else {
+        console.error(`🔴--> Result: ${functionName} ${status}`);
+        if (errorMessage) {
+            console.debug(errorMessage);
+        }
     }
 }
