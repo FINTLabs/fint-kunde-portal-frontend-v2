@@ -6,8 +6,8 @@ class LinkWalkerApi {
     static async getTests(orgName: string) {
         const functionName = 'getTests';
         const URL = `${API_URL}/link-walker/tasks/${orgName}`;
-        return request(URL, functionName).catch((err) => {
-            console.error('Error fetching relations tests :', err);
+        return request(URL, functionName, 'GET', 'json').catch((err) => {
+            console.error('Error fetching relations tests:', err);
         });
     }
 
@@ -16,29 +16,15 @@ class LinkWalkerApi {
     }
 
     static async addTest(testUrl: string, clientName: string, orgName: string) {
-        const request = new Request(`${API_URL}/link-walker/tasks/${orgName}`, {
-            method: 'POST',
-            headers: {
-                Accept: '*/*',
-                'Content-Type': 'application/json',
-                'x-nin': process.env.PERSONALNUMBER || '',
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify({
-                url: testUrl,
-                client: clientName,
-            }),
-        });
+        const functionName = 'addTest';
+        const URL = `${API_URL}/link-walker/tasks/${orgName}`;
 
-        return fetch(request).then((response) => {
-            if (response.ok) {
-                console.debug('link walker request ok');
-                return response;
-            } else {
-                console.error('error with linkwalker');
-                throw new Error(`LinkWalker not ok: ${response.status}`);
-            }
-        });
+        const data = {
+            url: testUrl,
+            client: clientName,
+        };
+
+        return request(URL, functionName, 'POST', 'json', data);
     }
 }
 

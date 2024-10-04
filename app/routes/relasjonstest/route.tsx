@@ -58,14 +58,15 @@ export async function action({ request }: ActionFunctionArgs) {
                 };
             } else {
                 return {
-                    message: `Feil ved oppdatering. Mer info: Status: ${response.status}. StatusTekst: ${response.statusText}`,
+                    message: `Feil ved kjører testen. Mer info: Status: ${response.status}. StatusTekst: ${response.statusText}`,
                     variant: 'error',
                     show: true,
                 };
             }
 
         default:
-            return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
+            // return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
+            throw new Response('Not Found', { status: 404 });
     }
 
     // return json(response);
@@ -94,15 +95,6 @@ export default function Index() {
                 helpText="relasjonstest"
             />
             <VStack gap={'6'}>
-                <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                    <RelationTestAddForm
-                        components={components}
-                        clients={clients}
-                        configs={configs}
-                        runTest={runTest}
-                    />
-                </Box>
-
                 {actionData && show && (
                     <Alert
                         className={'!mt-5'}
@@ -112,6 +104,15 @@ export default function Index() {
                         {actionData.message || 'Content'}
                     </Alert>
                 )}
+
+                <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+                    <RelationTestAddForm
+                        components={components}
+                        clients={clients}
+                        configs={configs}
+                        runTest={runTest}
+                    />
+                </Box>
 
                 <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                     <RelationTestResultsTable logResults={relationTests} orgName={orgName} />
