@@ -11,7 +11,6 @@ import { useLoaderData, useParams } from '@remix-run/react';
 import { AdapterDetail } from './AdapterDetail';
 import { IAdapter } from '~/types/types';
 import ComponentApi from '~/api/ComponentApi';
-import AdapterAPI from '~/api/AdapterApi';
 import AdapterApi from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { InfoBox } from '~/components/shared/InfoBox';
@@ -26,7 +25,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         const adapterName = params.name;
 
         const [adapters, components, features] = await Promise.all([
-            AdapterAPI.getAdapters(orgName),
+            AdapterApi.getAdapters(orgName),
             ComponentApi.getOrganisationComponents(orgName),
             FeaturesApi.fetchFeatures(),
         ]);

@@ -144,6 +144,7 @@ export default function Index() {
                             setIsEditing={setIsEditing}
                             clientManaged={client.managed}
                             handleConfirmDelete={handleConfirmDelete}
+                            nameText={client.name}
                         />
                     </HStack>
 

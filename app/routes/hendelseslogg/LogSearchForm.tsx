@@ -26,6 +26,7 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
     const [selectedComponent, setSelectedComponent] = useState<string>('');
     const [selectedConfig, setSelectedConfig] = useState<string>('');
     const [selectedAction, setSelectedAction] = useState<string>('');
+    const [selectedEnv, setSelectedEnv] = useState<string>('');
     const [matchingConfigs, setMatchingConfigs] = useState<IComponentConfig[]>([]);
 
     function handleChangeComponent(value: string) {
@@ -41,26 +42,23 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
 
     function handleFormSubmit() {
         const formData = new FormData();
-        formData.append('environment', 'beta');
+        formData.append('environment', selectedEnv);
         formData.append('component', selectedComponent);
         formData.append('resource', selectedConfig);
         formData.append('action', selectedAction);
         onSearchSubmit(formData);
     }
 
-    function setFilterValue(value: string) {
-        console.debug('--- set filter value');
-    }
-
     return (
         <VStack gap={'10'}>
-            <input type={'hidden'} name={'component'} value={selectedComponent} />
+            <input
+                type={'hidden'}
+                name={'component'}
+                value={selectedComponent}
+                onChange={(e) => setSelectedEnv(e.target.value)}
+            />
             <HGrid gap="6" columns={5}>
-                <Select
-                    label="Miljø"
-                    size="small"
-                    // onChange={(e) => setSelectedEnvironment(e.target.value)}
-                    name={'environment'}>
+                <Select label="Miljø" size="small" name={'environment'}>
                     <option value="api">API</option>
                     <option value="beta">BETA</option>
                     <option value="alpha">ALPHA</option>

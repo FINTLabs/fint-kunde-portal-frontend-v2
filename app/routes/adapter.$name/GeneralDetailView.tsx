@@ -1,9 +1,9 @@
-import { VStack, HStack, Heading, Button, Label, BodyShort } from '@navikt/ds-react';
+import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useSubmit } from '@remix-run/react';
 import { useState } from 'react';
 import { IAdapter } from '~/types/types';
 import { EditableTextField } from '~/components/shared/EditableTextField';
-import { PencilIcon, FloppydiskIcon, XMarkIcon, TrashIcon } from '@navikt/aksel-icons';
+import { FloppydiskIcon, PencilIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 
 import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
@@ -92,9 +92,9 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
                     {!isEditing && !adapter.managed && (
                         <ConfirmAction
                             buttonText={'delete'}
-                            titleText={'Slett adapter'}
+                            // titleText={'Slett adapter'}
                             showButtonText={false}
-                            subTitleText={'Er du sikker på at du vil slette dette adapteret?'}
+                            subTitleText={`Er du sikker på at du vil slette ${adapter.name}?`}
                             onConfirm={handleConfirmDelete}
                             buttonVariant="tertiary"
                             buttonSize={'medium'}

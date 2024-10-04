@@ -66,7 +66,7 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
                 onChange={(e) => setSelectedBaseUrl(e.target.value)}>
                 <option value="https://play-with-fint.felleskomponent.no">Play-With-FINT</option>
                 <option value="https://beta.felleskomponent.no">BETA</option>
-                <option value="https://api.felleskomponent.no">Production</option>
+                <option value="https://api.felleskomponent.no">Produksjon</option>
             </Select>
 
             <Select

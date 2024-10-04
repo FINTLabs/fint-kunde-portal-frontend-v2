@@ -10,6 +10,7 @@ interface ActionButtonsProps {
     setIsEditing: (value: boolean) => void;
     clientManaged: boolean;
     handleConfirmDelete: () => void;
+    nameText: string;
 }
 
 const ActionButtons: React.FC<ActionButtonsProps> = ({
@@ -19,6 +20,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
     setIsEditing,
     clientManaged,
     handleConfirmDelete,
+    nameText,
 }) => {
     return (
         <>
@@ -45,9 +47,9 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
                         />
                         <ConfirmAction
                             buttonText={'fjerne'}
-                            titleText={'Fjerne klient'}
+                            // titleText={'Fjerne klient'}
                             showButtonText={false}
-                            subTitleText={'Er du sikker på at du vil fjerne denne klient?'}
+                            subTitleText={`Er du sikker på at du vil fjerne ${nameText}?`}
                             onConfirm={handleConfirmDelete}
                             buttonVariant="tertiary"
                             buttonSize={'medium'}

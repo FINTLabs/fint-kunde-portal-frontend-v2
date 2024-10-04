@@ -44,7 +44,7 @@ export function AdapterDetail({
                     {hasAccessControl ? (
                         <ComponentList
                             accessList={access}
-                            clientName={adapter.name}
+                            entity={adapter.name}
                             onToggle={onComponentToggle}
                         />
                     ) : (

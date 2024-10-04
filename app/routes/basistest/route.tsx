@@ -12,10 +12,11 @@ import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 // import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
+// import BasicTestApi from '~/api/BasicTestApi';
 
 interface ActionData {
     message: string;
-    data: any;
+    data: never;
 }
 
 export const meta: MetaFunction = () => {
@@ -65,6 +66,10 @@ export default function Index() {
         components: IComponent[];
         clients: IClient[];
     }>();
+
+    const handleFormSubmit = (formData: FormData) => {
+        fetcher.submit(formData, { method: 'post', action: '/basistest' });
+    };
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -75,7 +80,11 @@ export default function Index() {
                     når du kjører en test. Bruk av en dedikert klient for testing anbefales.
                 </Alert>
                 <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                    <BasicTestAddForm components={components} clients={clients} f={fetcher} />
+                    <BasicTestAddForm
+                        components={components}
+                        clients={clients}
+                        onSearchSubmit={handleFormSubmit}
+                    />
                 </Box>
                 {actionData ? (
                     <>
@@ -87,13 +96,6 @@ export default function Index() {
 
                         {actionData.data && actionData.data.length > 0 && (
                             <>
-                                {/*<Box*/}
-                                {/*    className="w-full"*/}
-                                {/*    padding="6"*/}
-                                {/*    borderRadius="large"*/}
-                                {/*    shadow="small">*/}
-                                {/*    <HealthStatusTable logResults={actionData.data} />*/}
-                                {/*</Box>*/}
                                 <Box
                                     className="w-full"
                                     padding="6"

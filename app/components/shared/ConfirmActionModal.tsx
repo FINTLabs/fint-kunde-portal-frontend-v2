@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Modal, Heading } from '@navikt/ds-react';
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 
 interface ConfirmActionProps {
     buttonText?: string;
@@ -58,8 +59,9 @@ const ConfirmAction: React.FC<ConfirmActionProps> = ({
             <Modal
                 open={open}
                 header={{
-                    heading: 'Bekreftelse',
+                    heading: `Bekreftelse`,
                     size: 'small',
+                    icon: <ExclamationmarkTriangleIcon />,
                 }}
                 width="small"
                 onClose={() => handleClose(false)}>
@@ -70,11 +72,19 @@ const ConfirmAction: React.FC<ConfirmActionProps> = ({
                     </Heading>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" variant="danger" onClick={() => handleClose(true)}>
+                    <Button
+                        type="submit"
+                        variant="danger"
+                        onClick={() => handleClose(true)}
+                        size={'small'}>
                         Ja, jeg er sikker
                     </Button>
 
-                    <Button type="button" variant="secondary" onClick={() => handleClose(false)}>
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => handleClose(false)}
+                        size={'small'}>
                         Avbryt
                     </Button>
                 </Modal.Footer>
