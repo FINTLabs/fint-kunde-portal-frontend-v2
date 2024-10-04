@@ -12,6 +12,7 @@ import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from 
 import { IFetcherResponseData } from '~/types/types';
 import AddPolicyForm from '~/routes/samtykke/AddPolicyForm';
 import AddServiceForm from '~/routes/samtykke/AddServiceForm';
+import FeaturesApi from '~/api/FeaturesApi';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Samtykke' }, { name: 'description', content: 'Samtykke' }];
@@ -21,21 +22,31 @@ export const loader = async ({ request }: { request: Request }) => {
     const orgName = await getSelectedOrganization(request);
 
     try {
-        const policies = await ConsentApi.getBehandlings(orgName);
+        const features = await FeaturesApi.fetchFeatures();
+        console.debug('...........', features['samtykke-admin-new']);
+        if (features['samtykke-admin-new']) {
+            const policies = await ConsentApi.getBehandlings(orgName);
 
-        const services = await ConsentApi.getTjenste(orgName);
-        const personalDataList = await ConsentApi.getPersonopplysning();
-        const foundations = await ConsentApi.getBehandlingsgrunnlag();
+            const services = await ConsentApi.getTjenste(orgName);
+            const personalDataList = await ConsentApi.getPersonopplysning();
+            const foundations = await ConsentApi.getBehandlingsgrunnlag();
 
-        return json({
-            policies: policies,
-            services: services,
-            personalDataList: personalDataList,
-            foundations: foundations,
-        });
+            return json({
+                policies: policies,
+                services: services,
+                personalDataList: personalDataList,
+                foundations: foundations,
+            });
+        } else {
+            return json(
+                { error: 'Det oppsto en feil ved henting av data: Tilgang nektet' },
+                { status: 200 }
+            );
+        }
     } catch (error) {
         console.error('Feil ved henting av data:', error);
-        return json({ error: 'Det oppsto en feil ved henting av data.' }, { status: 200 });
+        // throw json({ error: 'Det oppsto en feil ved henting av data.' }, { status: 200 });
+        throw new Response('Det oppsto en feil ved henting av data.', { status: 500 });
     }
 };
 
@@ -148,7 +159,7 @@ export default function Index() {
 
             <VStack gap={'6'}>
                 <Box className="w-full" padding="6">
-                    {error && <Alert variant="warning">Feil - tilkoblingsfeil til serveren.</Alert>}
+                    {error && <Alert variant="warning">{error}</Alert>}
                     {showAddPolicyForm && (
                         <AddPolicyForm
                             personalData={personalDataList}
