@@ -1,8 +1,6 @@
 [data-theme='novari'] {
-    /* novari logo color: #F76650*/
-    /* button */
-    /* --ac-button-tertiary-hover-bg: var(--a-lightblue-800); */
-    /*--ac-button-primary-text: #FF0000;*/
+    /* Novari logo color: #F76650 */
+    /* Button configurations */
     --ac-button-primary-active-bg: var(--a-gray-50);
     --ac-button-tertiary-active-bg: var(--a-lightblue-900);
     --ac-button-tertiary-active-hover-bg: var(--a-lightblue-900);
@@ -10,6 +8,7 @@
     --ac-button-primary-bg: #448086;
     --ac-button-primary-hover-bg: #ab5692;
 
+    /* Styles for the active panel */
     .my-custom-panel {
         background-color: #f3f4f6; /* Light gray background */
         padding: 36px 16px 36px 26px;
@@ -17,15 +16,19 @@
         display: flex;
         align-items: center;
         transition: background-color 0.3s ease; /* Smooth background transition */
+        cursor: pointer; /* Indicate interactivity */
     }
 
+    /* Styles for the disabled panel */
     .my-custom-panel-disabled {
-        background-color: #cccccc; /* Light gray background */
+        background-color: #e0e0e0; /* Gray background to indicate disabled state */
         padding: 36px 16px 36px 26px;
         border-radius: 8px;
         display: flex;
         align-items: center;
         transition: background-color 0.3s ease; /* Smooth background transition */
+        opacity: 0.6; /* Slightly transparent to emphasize the disabled state */
+        cursor: not-allowed; /* Show that interaction is not possible */
     }
 
     /* Styles for the title within the panel */
@@ -37,8 +40,9 @@
         margin: 0;
     }
 
+    /* Styles for the disabled title */
     .panel-title-disabled {
-        color: #e0e0e0;
+        color: #b0b0b0; /* Lighter gray to indicate disabled text */
     }
 
     /* Icon styles */
@@ -57,11 +61,22 @@
         padding: 10px;
     }
 
+    /* Styles for the disabled icon */
+    .panel-icon-disabled {
+        color: #b0b0b0; /* Lighter color for the icon */
+        border: #b0b0b0 1px solid; /* Lighter border for the disabled icon */
+    }
+
     /* Description styles */
     .panel-description {
         margin-top: 4px;
         font-size: 16px;
         color: #3e3832;
+    }
+
+    /* Styles for disabled description */
+    .panel-description-disabled {
+        color: #a0a0a0; /* Dimmed color for disabled description text */
     }
 
     /* Hover effect */
@@ -71,5 +86,19 @@
 
     .my-custom-panel:hover .panel-icon {
         transform: scale(1.7); /* Enlarge the icon on hover */
+    }
+
+    /* Disable hover effect on the title and icon when the panel is disabled */
+    .my-custom-panel-disabled:hover {
+        background-color: #e0e0e0; /* Maintain the disabled background color */
+    }
+
+    .my-custom-panel-disabled:hover .panel-icon-disabled {
+        transform: none; /* Prevent icon scaling on hover */
+    }
+
+    .my-custom-panel-disabled:hover .panel-title-disabled {
+        text-decoration: none; /* Prevent any hover effect on the title */
+        cursor: default; /* Indicate that the title is not clickable */
     }
 }

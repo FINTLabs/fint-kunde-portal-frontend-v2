@@ -23,10 +23,18 @@ const CustomLinkPanel: React.FC<CustomLinkPanelProps> = ({
             className={userHasRole ? 'my-custom-panel' : 'my-custom-panel-disabled'}>
             <LinkPanel.Title
                 className={`panel-title ${!userHasRole ? 'panel-title-disabled' : ''}`}>
-                <IconComponent aria-hidden className="panel-icon " />
+                <IconComponent
+                    aria-hidden
+                    className={`panel-icon ${!userHasRole ? 'panel-icon-disabled' : ''}`}
+                />
                 {title}
             </LinkPanel.Title>
-            {description && <BodyLong className="panel-description">{description}</BodyLong>}
+            {description && (
+                <BodyLong
+                    className={`panel-description ${!userHasRole ? 'panel-description-disabled' : ''}`}>
+                    {description}
+                </BodyLong>
+            )}
         </LinkPanel>
     );
 };
