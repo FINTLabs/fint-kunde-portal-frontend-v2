@@ -5,10 +5,7 @@ export default class RoleApi {
     static async getRoles() {
         const functionName = 'getRoles';
         const URL = `${API_URL}/api/role`;
-        return request(URL, functionName).catch((err) => {
-            console.error('Error fetching roles:', err);
-            throw new Error('Error fetching roles');
-        });
+        return request(URL, functionName);
     }
 
     static async addRole(orgName: string, contactNin: string, roleId: string) {

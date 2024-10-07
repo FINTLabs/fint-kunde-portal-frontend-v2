@@ -19,8 +19,6 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    console.log('Calling loader in komponenter_index.tsx');
-
     try {
         const components = await ComponentApi.getAllComponents();
         const orgName = await getSelectedOrganization(request);

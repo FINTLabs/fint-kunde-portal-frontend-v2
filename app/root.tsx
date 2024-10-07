@@ -26,6 +26,7 @@ import { CustomError } from '~/components/shared/CustomError';
 import { getFormData } from './utils/requestUtils';
 import { getUserSession, setUserSession } from './utils/selectedOrganization';
 import { Utility } from './utils/utility';
+import logger from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [
@@ -39,7 +40,6 @@ export const remix_cookie = createCookie('remix_cookie', {
 });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    console.debug('Calling loader in root.tsx');
     let userSession = await getUserSession(request);
     Utility.setXnin(request); // root is called on every request, makes sense to set xnin only once here.
 
@@ -85,7 +85,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
 
-    console.debug('Updating user org in action');
+    logger.debug('Updating user org in action');
     if (actionType === 'UPDATE_SELECTED_ORGANIZATION') {
         const selectedOrganization = getFormData(
             formData.get('selectedOrganization'),
@@ -137,7 +137,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
     const loaderData = useLoaderData<{ userSession: IUserSession; features: FeatureFlags }>();
     const userSession = loaderData?.userSession;
-    const features = loaderData?.features;
+    // const features = loaderData?.features;
 
     return (
         <Page

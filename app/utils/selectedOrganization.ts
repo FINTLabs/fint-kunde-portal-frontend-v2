@@ -7,7 +7,7 @@ export async function getSelectedOrganization(request: Request) {
     if (!userSession.selectedOrganization)
         throw new Response('User selected organization is undefined', { status: 404 });
 
-    console.log('USER SESSION ORG:', userSession.selectedOrganization);
+    console.debug('USER SESSION ORG:', userSession.selectedOrganization);
     return userSession.selectedOrganization.name;
 }
 

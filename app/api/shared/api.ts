@@ -1,6 +1,7 @@
 // import { IPartialAsset } from '~/types/Asset';
 // import { IPartialAdapter } from '~/types/types';
 import { Utility } from '~/utils/utility';
+import logger from '~/utils/logger'; // Import your Winston logger
 
 export type ReturnType = 'text' | 'json';
 
@@ -21,7 +22,7 @@ export async function request<T = unknown>(
     data?: T
 ) {
     try {
-        console.debug(`> Calling ${requestMethod} on ${functionName}:`, URL);
+        logger.debug(`Calling ${requestMethod} on ${functionName}: ${URL}`);
 
         const requestOptions: RequestInit = {
             method: requestMethod,
@@ -45,18 +46,22 @@ export async function request<T = unknown>(
             case 'DELETE':
                 return await postRequest(URL, functionName, requestOptions, data);
             default:
-                return new Error(`Unsupported request method: ${requestMethod}`);
+                throw new Response(`Unsupported request method: ${requestMethod}`, {
+                    status: 404,
+                    statusText: 'Something went wrong!',
+                });
+            // throw new Error(`Unsupported request method: ${requestMethod}`);
         }
     } catch (err) {
         if (isErrorWithStatusAndBody(err)) {
-            const errorStatus = err.status; // Now TypeScript knows err has status and body properties
+            const errorStatus = err.status;
             const errorBody = err.body;
-            logStatus(errorStatus, errorBody);
+            logStatus(errorStatus, functionName, errorBody);
             throw new Response(`${errorBody}`, {
                 status: errorStatus,
             });
         } else {
-            logStatus(500, 'Internal Server Error');
+            logStatus(500, functionName, 'Internal Server Error');
             throw new Response("500 Internal Server Error ( Error: Couldn't connect to server)", {
                 status: 500,
                 statusText: 'Something went wrong!',
@@ -109,19 +114,15 @@ async function getRequest(
 ) {
     const response = await fetch(URL, requestOptions);
     logStatus(response.status, functionName);
-    // return returnType === 'json' ? await response.json() : await response.text();
 
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {
         const errorData = await response.json();
-
-        // Create a more user-friendly error message
         const errorMessage = `Error ${errorData.status} (${errorData.error}): Får ikke tilgang ${errorData.path}`;
 
         throw {
             status: response.status,
-            // statusText: ${errorData.error},
             body: `${errorMessage}`,
         };
     }
@@ -129,11 +130,11 @@ async function getRequest(
 
 function logStatus(status: number, functionName: string, errorMessage?: string) {
     if (status >= 200 && status < 300) {
-        console.debug(`🟢--> Result: ${functionName} ${status}`);
+        logger.info(`🟢--> Result: ${functionName} ${status}`);
     } else {
-        console.error(`🔴--> Result: ${functionName} ${status}`);
+        logger.error(`🔴--> Result: ${functionName} ${status}`);
         if (errorMessage) {
-            console.debug(errorMessage);
+            logger.debug(`Error Message: ${errorMessage}`);
         }
     }
 }
