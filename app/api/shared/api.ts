@@ -51,12 +51,15 @@ export async function request<T = unknown>(
         if (isErrorWithStatusAndBody(err)) {
             const errorStatus = err.status; // Now TypeScript knows err has status and body properties
             const errorBody = err.body;
+            logStatus(errorStatus, errorBody);
             throw new Response(`${errorBody}`, {
                 status: errorStatus,
             });
         } else {
-            throw new Response('500 Internal Server Error', {
+            logStatus(500, 'Internal Server Error');
+            throw new Response("500 Internal Server Error ( Error: Couldn't connect to server)", {
                 status: 500,
+                statusText: 'Something went wrong!',
             });
         }
     }
@@ -112,13 +115,13 @@ async function getRequest(
         return returnType === 'json' ? await response.json() : await response.text();
     } else {
         const errorData = await response.json();
-        logStatus(response.status, functionName);
 
         // Create a more user-friendly error message
         const errorMessage = `Error ${errorData.status} (${errorData.error}): Får ikke tilgang ${errorData.path}`;
 
         throw {
             status: response.status,
+            // statusText: ${errorData.error},
             body: `${errorMessage}`,
         };
     }
