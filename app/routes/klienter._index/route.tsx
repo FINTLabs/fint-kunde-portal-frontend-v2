@@ -18,13 +18,8 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
 
-    try {
-        const clientData = await ClientApi.getClients(orgName);
-        return json(clientData);
-    } catch (err) {
-        console.error('Error fetching data:', err as Error);
-        throw new Response('Not Found', { status: 404 });
-    }
+    const clientData = await ClientApi.getClients(orgName);
+    return json(clientData);
 };
 
 export default function Index() {

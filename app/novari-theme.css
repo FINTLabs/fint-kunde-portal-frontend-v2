@@ -19,6 +19,15 @@
         transition: background-color 0.3s ease; /* Smooth background transition */
     }
 
+    .my-custom-panel-disabled {
+        background-color: #cccccc; /* Light gray background */
+        padding: 36px 16px 36px 26px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.3s ease; /* Smooth background transition */
+    }
+
     /* Styles for the title within the panel */
     .panel-title {
         display: flex;
@@ -26,6 +35,10 @@
         font-size: 20px;
         font-weight: 600;
         margin: 0;
+    }
+
+    .panel-title-disabled {
+        color: #e0e0e0;
     }
 
     /* Icon styles */

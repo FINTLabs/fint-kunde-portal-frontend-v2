@@ -22,17 +22,13 @@ export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
 
     console.error('testing errors');
-    try {
-        const components = await ComponentApi.getOrganisationComponents(orgName);
-        const clients = await ClientApi.getClients(orgName);
-        const relationTests = await LinkWalkerApi.getTests(orgName);
-        const configs = await ComponentConfigApi.getComponentConfigs();
 
-        return json({ components, clients, relationTests, configs, orgName });
-    } catch (err) {
-        console.error('Error fetching data:', err);
-        throw new Response('Not Found', { status: 404 });
-    }
+    const components = await ComponentApi.getOrganisationComponents(orgName);
+    const clients = await ClientApi.getClients(orgName);
+    const relationTests = await LinkWalkerApi.getTests(orgName);
+    const configs = await ComponentConfigApi.getComponentConfigs();
+
+    return json({ components, clients, relationTests, configs, orgName });
 };
 
 export async function action({ request }: ActionFunctionArgs) {

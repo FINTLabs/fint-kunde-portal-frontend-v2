@@ -4,10 +4,11 @@ import { useLoaderData, useOutletContext } from '@remix-run/react';
 import { MENU_ITEMS_LEFT } from '~/components/Menu/constants';
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { MenuItem } from '~/types/MenuItem';
-import { IUserSession } from '~/types/types';
+import { IMeData, IUserSession } from '~/types/types';
 import CustomLinkPanel from '~/routes/_index/CustomLinkPanelProps';
 import { ImageIcon, PassportIcon } from '@navikt/aksel-icons';
 import FeaturesApi from '~/api/FeaturesApi';
+import MeApi from '~/api/MeApi';
 
 export const meta: MetaFunction = () => {
     return [
@@ -18,7 +19,9 @@ export const meta: MetaFunction = () => {
 
 export const loader = async () => {
     const features = await FeaturesApi.fetchFeatures();
-    return json({ features });
+    const user = await MeApi.fetchMe();
+
+    return json({ features, user });
 };
 
 function WelcomeMessage({ userSession }: { userSession: IUserSession }) {
@@ -34,8 +37,17 @@ function WelcomeMessage({ userSession }: { userSession: IUserSession }) {
 
 export default function Index() {
     const userSession = useOutletContext<IUserSession>();
-    const { features } = useLoaderData<Record<string, boolean>>();
-    console.log('............', features);
+
+    const { features, user } = useLoaderData<{
+        features: Record<string, boolean>;
+        user: IMeData;
+    }>();
+
+    const hasRole = (roleId: string): boolean => {
+        return (
+            user?.roles?.includes(roleId + '@' + userSession.selectedOrganization?.name) ?? false
+        );
+    };
 
     return (
         <Box className="font-sans p-4">
@@ -56,6 +68,8 @@ export default function Index() {
                         )
                         .map((item, index) => {
                             const IconComponent = item.icon || ImageIcon;
+                            const userHasRole =
+                                hasRole('ROLE_ADMIN') || (!!item.role && hasRole(item.role));
 
                             return (
                                 <CustomLinkPanel
@@ -63,6 +77,7 @@ export default function Index() {
                                     href={item.path}
                                     title={item.title}
                                     IconComponent={IconComponent}
+                                    userHasRole={userHasRole}
                                 />
                             );
                         })}
@@ -71,6 +86,7 @@ export default function Index() {
                             href={'/samtykke'}
                             title={'Samtykke'}
                             IconComponent={PassportIcon}
+                            userHasRole={true}
                         />
                     )}
                 </HGrid>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
-import { Alert, BodyShort, Box, Search, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
@@ -24,21 +24,11 @@ export const meta: MetaFunction = () => {
 };
 export const loader: LoaderFunction = async ({ request }) => {
     const selectOrg = await getSelectedOrganization(request);
-    try {
-        const components = await ComponentApi.getOrganisationComponents(selectOrg);
-        const configs = await ComponentConfigApi.getComponentConfigs();
-        const defaultLogs = await LogApi.getLogs(
-            'beta',
-            selectOrg,
-            'felles_kodeverk',
-            '',
-            'GET_ALL'
-        );
-        return json({ components, configs, defaultLogs });
-    } catch (err) {
-        console.error('Error fetching data:', err as Error);
-        throw new Response('Not Found', { status: 404 });
-    }
+
+    const components = await ComponentApi.getOrganisationComponents(selectOrg);
+    const configs = await ComponentConfigApi.getComponentConfigs();
+    const defaultLogs = await LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', '', 'GET_ALL');
+    return json({ components, configs, defaultLogs });
 };
 
 export async function action({ request }: ActionFunctionArgs) {

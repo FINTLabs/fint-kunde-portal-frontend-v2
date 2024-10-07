@@ -7,6 +7,12 @@ export type ReturnType = 'text' | 'json';
 export type IMiniAdapter = { name: string };
 // export type PostDataType = IPartialAdapter | IPartialAsset | IMiniAdapter;
 
+function isErrorWithStatusAndBody(err: unknown): err is { status: number; body: string } {
+    return (
+        typeof err === 'object' && err !== null && 'status' in err && 'body' in err && true && true
+    );
+}
+
 export async function request<T = unknown>(
     URL: string,
     functionName: string,
@@ -42,14 +48,17 @@ export async function request<T = unknown>(
                 return new Error(`Unsupported request method: ${requestMethod}`);
         }
     } catch (err) {
-        if (err instanceof Error) {
-            logStatus(500, functionName, err.message);
+        if (isErrorWithStatusAndBody(err)) {
+            const errorStatus = err.status; // Now TypeScript knows err has status and body properties
+            const errorBody = err.body;
+            throw new Response(`${errorBody}`, {
+                status: errorStatus,
+            });
         } else {
-            logStatus(500, functionName, String(err));
+            throw new Response('500 Internal Server Error', {
+                status: 500,
+            });
         }
-        throw new Response(`Request failed: Error running ${functionName}`, {
-            status: 500,
-        });
     }
 }
 
@@ -97,14 +106,21 @@ async function getRequest(
 ) {
     const response = await fetch(URL, requestOptions);
     logStatus(response.status, functionName);
+    // return returnType === 'json' ? await response.json() : await response.text();
 
     if (response.ok) {
         return returnType === 'json' ? await response.json() : await response.text();
     } else {
+        const errorData = await response.json();
         logStatus(response.status, functionName);
-        throw new Response(`Request failed: Error running ${functionName}`, {
-            status: 500,
-        });
+
+        // Create a more user-friendly error message
+        const errorMessage = `Error ${errorData.status} (${errorData.error}): Får ikke tilgang ${errorData.path}`;
+
+        throw {
+            status: response.status,
+            body: `${errorMessage}`,
+        };
     }
 }
 

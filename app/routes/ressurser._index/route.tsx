@@ -25,15 +25,10 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    try {
-        const orgName = await getSelectedOrganization(request);
-        const assets = await AssetApi.getAllAssets(orgName);
+    const orgName = await getSelectedOrganization(request);
+    const assets = await AssetApi.getAllAssets(orgName);
 
-        return json(assets);
-    } catch (err) {
-        console.error('Error fetching data:', err as Error);
-        throw new Response('Not Found', { status: 404 });
-    }
+    return json(assets);
 };
 
 export async function action({ request }: ActionFunctionArgs) {

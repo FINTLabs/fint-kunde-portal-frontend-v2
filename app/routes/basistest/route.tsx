@@ -28,22 +28,16 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
     const selectOrg = await getSelectedOrganization(request);
-    try {
-        const components = await ComponentApi.getOrganisationComponents(selectOrg);
-        const clients = await ClientApi.getClients(selectOrg);
 
-        const sortedComponents = components.sort((a: IComponent, b: IComponent) =>
-            a.name.localeCompare(b.name)
-        );
-        const sortedClients = clients.sort((a: IClient, b: IClient) =>
-            a.name.localeCompare(b.name)
-        );
+    const components = await ComponentApi.getOrganisationComponents(selectOrg);
+    const clients = await ClientApi.getClients(selectOrg);
 
-        return json({ components: sortedComponents, clients: sortedClients });
-    } catch (err) {
-        console.error('Error fetching data:', err as Error);
-        throw new Response('Error fetching data', { status: 404 });
-    }
+    const sortedComponents = components.sort((a: IComponent, b: IComponent) =>
+        a.name.localeCompare(b.name)
+    );
+    const sortedClients = clients.sort((a: IClient, b: IClient) => a.name.localeCompare(b.name));
+
+    return json({ components: sortedComponents, clients: sortedClients });
 };
 
 export default function Index() {
@@ -118,7 +112,7 @@ export async function action({ request }: ActionFunctionArgs) {
     let apiResponse;
     let response;
     try {
-        apiResponse = BasicTestApi.runTest(orgName, test);
+        apiResponse = await BasicTestApi.runTest(orgName, test, 'component', '');
         response = handleApiResponse(apiResponse, message);
     } catch {
         throw new Response('Error loading data.', { status: 404 });

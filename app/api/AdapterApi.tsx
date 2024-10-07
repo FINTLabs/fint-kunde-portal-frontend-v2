@@ -1,7 +1,7 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from './constants';
-import { IAdapter, IPartialAdapter } from '~/types/types';
-import organisationApi from '~/api/OrganisationApi';
+import { IPartialAdapter } from '~/types/types';
+
 class AdapterAPI {
     static async getAdapters(organisationName: string) {
         const functionName = 'getAdapters';

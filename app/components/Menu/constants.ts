@@ -9,7 +9,7 @@ import {
     PassportIcon,
     PersonGroupIcon,
     TerminalIcon,
-} from '@navikt/aksel-icons'; // Import relevant icons
+} from '@navikt/aksel-icons';
 
 type MenuItemsLeft = {
     dropdowns: MenuDropDown[];
@@ -24,17 +24,20 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
                 {
                     title: 'Kontakter',
                     path: '/kontakter',
-                    icon: PersonGroupIcon, // Add icon here
+                    icon: PersonGroupIcon,
+                    role: 'ROLE_ORGANISATION',
                 },
                 {
                     title: 'Komponenter',
                     path: '/komponenter',
                     icon: ComponentIcon,
+                    role: 'ROLE_COMPONENT',
                 },
                 {
                     title: 'Adaptere',
                     path: '/adaptere',
                     icon: BriefcaseIcon,
+                    role: 'ROLE_ADAPTER',
                 },
                 {
                     title: 'Klienter',
@@ -45,6 +48,7 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
                     title: 'Ressurser',
                     path: '/ressurser',
                     icon: LayersIcon,
+                    role: 'ROLE_ASSET',
                 },
             ],
         },
@@ -55,16 +59,19 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
                     title: 'Hendelseslogg',
                     path: '/hendelseslogg',
                     icon: TerminalIcon,
+                    role: 'ROLE_LOG',
                 },
                 {
                     title: 'Basistest',
                     path: '/basistest',
                     icon: TerminalIcon,
+                    role: 'ROLE_LOG',
                 },
                 {
                     title: 'Relasjonstest',
                     path: '/relasjonstest',
                     icon: ArrowsSquarepathIcon,
+                    role: 'ROLE_LOG',
                 },
             ],
         },

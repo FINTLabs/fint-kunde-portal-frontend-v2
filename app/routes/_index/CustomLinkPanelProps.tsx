@@ -4,8 +4,9 @@ import { LinkPanel, BodyLong } from '@navikt/ds-react';
 interface CustomLinkPanelProps {
     href: string;
     title: string;
-    IconComponent: React.ComponentType<React.SVGProps<SVGSVGElement>>; // Typing for SVG icons
-    description?: string; // Optional description
+    IconComponent: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+    description?: string;
+    userHasRole: boolean;
 }
 
 const CustomLinkPanel: React.FC<CustomLinkPanelProps> = ({
@@ -13,11 +14,16 @@ const CustomLinkPanel: React.FC<CustomLinkPanelProps> = ({
     title,
     IconComponent,
     description,
+    userHasRole,
 }) => {
     return (
-        <LinkPanel href={href} border className="my-custom-panel">
-            <LinkPanel.Title className="panel-title">
-                <IconComponent aria-hidden className="panel-icon" />
+        <LinkPanel
+            href={userHasRole ? href : undefined}
+            border
+            className={userHasRole ? 'my-custom-panel' : 'my-custom-panel-disabled'}>
+            <LinkPanel.Title
+                className={`panel-title ${!userHasRole ? 'panel-title-disabled' : ''}`}>
+                <IconComponent aria-hidden className="panel-icon " />
                 {title}
             </LinkPanel.Title>
             {description && <BodyLong className="panel-description">{description}</BodyLong>}
