@@ -14,7 +14,7 @@
         "format:check": "prettier --check ."
     },
     "resolutions": {
-        "cookie": "0.6.0"
+        "cookie": "0.7.0"
     },
     "dependencies": {
         "@navikt/ds-css": "^6.11.0",
