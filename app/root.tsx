@@ -42,9 +42,9 @@ export const remix_cookie = createCookie('remix_cookie', {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     let userSession = await getUserSession(request);
     Utility.setXnin(request); // root is called on every request, makes sense to set xnin only once here.
+    const meData: IMeData = await MeApi.fetchMe(); //Should we do this so often? otherwise it will require a logout to change
 
     if (!userSession) {
-        const meData: IMeData = await MeApi.fetchMe();
         const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
 
         const organizationDetails = organisationsData.map((org) => ({
@@ -77,7 +77,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const features = await FeaturesApi.fetchFeatures();
-    return json({ userSession, features });
+    const roles = meData.roles;
+
+    return json({ userSession, features, roles });
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -135,10 +137,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    const loaderData = useLoaderData<{ userSession: IUserSession; features: FeatureFlags }>();
+    const loaderData = useLoaderData<{
+        userSession: IUserSession;
+        features: FeatureFlags;
+        roles: string[];
+    }>();
     const userSession = loaderData?.userSession;
+    const roles = loaderData?.roles;
     // const features = loaderData?.features;
 
+    console.debug('user roles: ', roles);
     return (
         <Page
             footer={

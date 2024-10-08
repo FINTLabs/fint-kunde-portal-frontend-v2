@@ -9,6 +9,11 @@ export const MenuDropdowns = ({ renderItems }: { renderItems: MenuDropDown[] }) 
 
 const RenderMenuItem = (item: MenuDropDown, index: number) => {
     const [isOpen, setIsOpen] = useState(false);
+    // const { roles } = useLoaderData<{
+    //     roles: string[];
+    // }>();
+    // console.log(roles);
+    //TODO: disable menu item if no role
 
     return (
         <Dropdown
