@@ -1,0 +1,20 @@
+{
+  "dn": "cn=calvin12345,ou=contacts,o=mock",
+  "nin": "11107345678",
+  "firstName": "Calvin",
+  "lastName": "Watterson",
+  "mail": "calvin@calvinball.com",
+  "mobile": "90012345",
+  "technical": [
+    "ou=calvin_organizations,ou=organisations,o=mock",
+    "ou=hobbes_enterprises,ou=organisations,o=mock"
+  ],
+  "legal": [
+    "ou=calvin_organizations,ou=organisations,o=mock"
+  ],
+  "supportId": "1234567890",
+  "roles": [
+    "ROLE_ADMIN@calvin_organizations",
+    "ROLE_ADMIN@hobbes_enterprises"
+  ]
+}

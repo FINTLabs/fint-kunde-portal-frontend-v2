@@ -1,0 +1,13 @@
+{
+  "access-controll-new": false,
+  "audit-log-new": true,
+  "access-packages": false,
+  "samtykke-admin": false,
+  "roles-new": true,
+  "roles-init-new": true,
+  "roles": false,
+  "access-packages-new": true,
+  "audit-log": false,
+  "roles-init": false,
+  "samtykke-admin-new": true
+}

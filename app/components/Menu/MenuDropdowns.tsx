@@ -4,43 +4,51 @@ import { MenuDropDown } from '~/types/MenuDropDown';
 import { NavLinkView } from './NavLinkView';
 
 export const MenuDropdowns = ({ renderItems }: { renderItems: MenuDropDown[] }) => {
-    return renderItems.map(RenderMenuItem);
+    const [openMenuIndex, setOpenMenuIndex] = useState<number | null>(null);
+
+    const handleOpenChange = (index: number) => {
+        setOpenMenuIndex(openMenuIndex === index ? null : index);
+    };
+
+    return renderItems.map((item, index) => (
+        <RenderMenuItem
+            key={`menu-item-${index}`}
+            item={item}
+            index={index}
+            isOpen={openMenuIndex === index}
+            onOpenChange={() => handleOpenChange(index)}
+        />
+    ));
 };
 
-const RenderMenuItem = (item: MenuDropDown, index: number) => {
-    const [isOpen, setIsOpen] = useState(false);
-    // const { roles } = useLoaderData<{
-    //     roles: string[];
-    // }>();
-    // console.log(roles);
-    //TODO: disable menu item if no role
-
+const RenderMenuItem = ({
+    item,
+    index,
+    isOpen,
+    onOpenChange,
+}: {
+    item: MenuDropDown;
+    index: number;
+    isOpen: boolean;
+    onOpenChange: () => void;
+}) => {
     return (
         <Dropdown
             key={`key-${index}`}
             defaultOpen={false}
             open={isOpen}
-            onOpenChange={() => setIsOpen(!isOpen)}>
-            <Button
-                // style={{
-                //     backgroundColor: isOpen ? 'var(--a-lightblue-700)' : 'transparent',
-                //     color: isOpen ? 'var(--a-gray-50)' : 'var(--a-gray-800)',
-                // }}
-                variant="tertiary-neutral"
-                // className="hover:!bg-transparent"
-                as={Dropdown.Toggle}>
+            onOpenChange={onOpenChange}>
+            <Button variant="tertiary-neutral" as={Dropdown.Toggle}>
                 {item.title}
             </Button>
             <Dropdown.Menu className="!border-0 !rounded-none !p-0" placement="bottom-start">
                 <Dropdown.Menu.List>
-                    {item.subMenus.map((subMenu, index) => (
+                    {item.subMenus.map((subMenu, subIndex) => (
                         <Dropdown.Menu.List.Item
                             className="!p-0"
-                            key={`key-${index}`}
-                            onClick={() => {
-                                if (isOpen) setIsOpen(!isOpen);
-                            }}>
-                            <NavLinkView item={subMenu}></NavLinkView>
+                            key={`sub-item-${subIndex}`}
+                            onClick={onOpenChange}>
+                            <NavLinkView item={subMenu} />
                         </Dropdown.Menu.List.Item>
                     ))}
                 </Dropdown.Menu.List>

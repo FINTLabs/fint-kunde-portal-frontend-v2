@@ -1,0 +1,43 @@
+[
+  {
+    "dn": "ou=calvin_organizations,ou=organisations,o=mock",
+    "name": "calvin_organizations",
+    "orgNumber": "111111111",
+    "displayName": "Calvin's Enterprises",
+    "components": [
+      "ou=spaceman_spiff_adventures,ou=components,o=mock",
+      "ou=grossology,ou=components,o=mock",
+      "ou=time_machine,ou=components,o=mock",
+      "ou=transmogrifier,ou=components,o=mock",
+      "ou=duplicator,ou=components,o=mock",
+      "ou=stupendous_man_rescue_missions,ou=components,o=mock",
+      "ou=galactic_conquests,ou=components,o=mock",
+      "ou=tiger_friendly_universe,ou=components,o=mock",
+      "ou=calvinball_league,ou=components,o=mock"
+    ],
+    "legalContact": "cn=calvin12345,ou=contacts,o=mock",
+    "techicalContacts": [
+      "cn=calvin12345,ou=contacts,o=mock",
+      "cn=hobbes67890,ou=contacts,o=mock",
+      "cn=spiff11122,ou=contacts,o=mock"
+    ],
+    "k8sSize": "large",
+    "customer": true,
+    "primaryAssetId": "asset001"
+  },
+  {
+    "dn": "ou=hobbes_enterprises,ou=organisations,o=mock",
+    "name": "hobbes_enterprises",
+    "orgNumber": "222222222",
+    "displayName": "Hobbes Enterprises",
+    "components": [],
+    "legalContact": "cn=hobbes67890,ou=contacts,o=mock",
+    "techicalContacts": [
+      "cn=hobbes67890,ou=contacts,o=mock",
+      "cn=spiff11122,ou=contacts,o=mock"
+    ],
+    "k8sSize": "small",
+    "customer": false,
+    "primaryAssetId": "asset002"
+  }
+]

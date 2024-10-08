@@ -1,9 +1,9 @@
 import React from 'react';
 import { BodyShort, Table } from '@navikt/ds-react';
-import { CheckmarkCircleIcon, DownloadIcon } from '@navikt/aksel-icons';
-import { Link } from '@remix-run/react';
+import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
+// import { Link } from '@remix-run/react';
 import { ILogResults } from '~/types/RelationTest';
-import LinkWalkerApi from '~/api/LinkWalkerApi';
+// import LinkWalkerApi from '~/api/LinkWalkerApi';
 
 interface TestResultsTableProps {
     logResults: ILogResults[];
@@ -11,7 +11,7 @@ interface TestResultsTableProps {
 }
 
 const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults, orgName }) => {
-
+    console.log('LOG RESULTS:', logResults, orgName);
     return (
         <>
             {logResults ? (
@@ -32,7 +32,7 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults,
                     </Table.Header>
                     <Table.Body>
                         {logResults.map((result, index) => (
-                            <Table.Row key={result.id}>
+                            <Table.Row key={index}>
                                 <Table.DataCell>
                                     {result.status == 'COMPLETED' && (
                                         <CheckmarkCircleIcon title="a11y-title" fontSize="1.5rem" />
@@ -50,12 +50,11 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults,
                                     {result.relationErrors}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {result.status !== 'STARTED' && (
-                                        <Link to={LinkWalkerApi.getLink(orgName, result.id)}>
-
-                                        <DownloadIcon title="download" />
-                                        </Link>
-                                    )}
+                                    {/*{result.status !== 'STARTED' && (*/}
+                                    {/*    <Link to={LinkWalkerApi.getLink(orgName, result.id)}>*/}
+                                    {/*        <DownloadIcon title="download" />*/}
+                                    {/*    </Link>*/}
+                                    {/*)}*/}
                                 </Table.DataCell>
                                 <Table.DataCell align={'center'}>
                                     {result.healthyRelations}

@@ -1,0 +1,122 @@
+[
+  {
+    "dn": "cn=3a1bc7dcb8fb554beccbd8c6e0a12071,ou=contacts,o=fint",
+    "nin": "3a1bc7dcb8fb554beccbd8c6e0a12071",
+    "firstName": "Calvin",
+    "lastName": "Watterson",
+    "mail": "calvin.watterson@fint.com",
+    "mobile": "+4712345678",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=746abf31fe4254fbd78622e7e8c9f52a,ou=contacts,o=fint",
+    "nin": "746abf31fe4254fbd78622e7e8c9f52a",
+    "firstName": "Hobbes",
+    "lastName": "Tiger",
+    "mail": "hobbes.tiger@fint.com",
+    "mobile": "+4798765432",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": ["ROLE_ADMIN@fint.com"]
+  },
+  {
+    "dn": "cn=8fa6f3c8ed0e4d7b9abf7a4b0891d073,ou=contacts,o=fint",
+    "nin": "8fa6f3c8ed0e4d7b9abf7a4b0891d073",
+    "firstName": "Susie",
+    "lastName": "Derkins",
+    "mail": "susie.derkins@fint.com",
+    "mobile": "+4745678910",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=0a7d1c6b4db74980a2a86c6c9d4a1378,ou=contacts,o=fint",
+    "nin": "0a7d1c6b4db74980a2a86c6c9d4a1378",
+    "firstName": "Moe",
+    "lastName": "Bulldog",
+    "mail": "moe.bulldog@fint.com",
+    "mobile": "+4723456789",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=14bfaa4dd2b747ac8c9e74fcfc52c86b,ou=contacts,o=fint",
+    "nin": "14bfaa4dd2b747ac8c9e74fcfc52c86b",
+    "firstName": "Miss",
+    "lastName": "Wormwood",
+    "mail": "miss.wormwood@fint.com",
+    "mobile": "+4792345678",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=315fae3a6c3b4c5093e72a6bc3c8c7d5,ou=contacts,o=fint",
+    "nin": "315fae3a6c3b4c5093e72a6bc3c8c7d5",
+    "firstName": "Rosalyn",
+    "lastName": "Thompson",
+    "mail": "rosalyn.thompson@fint.com",
+    "mobile": "+4743210987",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": ["ROLE_SUPPORT@fint.com"]
+  },
+  {
+    "dn": "cn=6891baf8337e453a89f7e9a89955c5cb,ou=contacts,o=fint",
+    "nin": "6891baf8337e453a89f7e9a89955c5cb",
+    "firstName": "Calvin's",
+    "lastName": "Mom",
+    "mail": "mom.watterson@fint.com",
+    "mobile": "+4747654321",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=38d45fc142de47fb92e39f6e98b9a2b8,ou=contacts,o=fint",
+    "nin": "38d45fc142de47fb92e39f6e98b9a2b8",
+    "firstName": "Calvin's",
+    "lastName": "Dad",
+    "mail": "dad.watterson@fint.com",
+    "mobile": "+4741230987",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=93ab10f84c5a4769938c2fcbb085e0e1,ou=contacts,o=fint",
+    "nin": "93ab10f84c5a4769938c2fcbb085e0e1",
+    "firstName": "Spaceman",
+    "lastName": "Spiff",
+    "mail": "spaceman.spiff@fint.com",
+    "mobile": "+4798765432",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": ["ROLE_TECHNICAL@fint.com"]
+  },
+  {
+    "dn": "cn=291fa3b11c84430896b08b8ebadffde3,ou=contacts,o=fint",
+    "nin": "291fa3b11c84430896b08b8ebadffde3",
+    "firstName": "Tracer",
+    "lastName": "Bullet",
+    "mail": "tracer.bullet@fint.com",
+    "mobile": "+4748765432",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": ["ROLE_SECURITY@fint.com"]
+  }
+]

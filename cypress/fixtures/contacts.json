@@ -1,0 +1,122 @@
+[
+  {
+    "dn": "cn=12a4f1d8b2e1ef59c8d6fb0a7089fa11,ou=contacts,o=fint",
+    "nin": "12a4f1d8b2e1ef59c8d6fb0a7089fa11",
+    "firstName": "Calvin",
+    "lastName": "Ball",
+    "mail": "calvin.ball@fint.no",
+    "mobile": "+4712345678",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=34b7b1b73d9ea91f3c4db9b06ea2c482,ou=contacts,o=fint",
+    "nin": "34b7b1b73d9ea91f3c4db9b06ea2c482",
+    "firstName": "Hobbes",
+    "lastName": "Tiger",
+    "mail": "hobbes.tiger@fint.no",
+    "mobile": "+4798765432",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=4e8e9247d6fb759b2e6e7d243c1ac2a7,ou=contacts,o=fint",
+    "nin": "4e8e9247d6fb759b2e6e7d243c1ac2a7",
+    "firstName": "Susie",
+    "lastName": "Derkins",
+    "mail": "susie.derkins@fint.no",
+    "mobile": "+4745127890",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=6f23a7c9ebdff6c89a7d1b0e1a17e6c4,ou=contacts,o=fint",
+    "nin": "6f23a7c9ebdff6c89a7d1b0e1a17e6c4",
+    "firstName": "Rosalyn",
+    "lastName": "Babysitter",
+    "mail": "rosalyn.babysitter@fint.no",
+    "mobile": "+4776543210",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=a1d3e7b82f9f5d8c6b6f2b4f7e1a6c3d,ou=contacts,o=fint",
+    "nin": "a1d3e7b82f9f5d8c6b6f2b4f7e1a6c3d",
+    "firstName": "Moe",
+    "lastName": "Bully",
+    "mail": "moe.bully@fint.no",
+    "mobile": "+4791234567",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=b5a6d4e2f1c7d9a3e4b6f8c2d7e1b5a9,ou=contacts,o=fint",
+    "nin": "b5a6d4e2f1c7d9a3e4b6f8c2d7e1b5a9",
+    "firstName": "Miss",
+    "lastName": "Wormwood",
+    "mail": "miss.wormwood@fint.no",
+    "mobile": "+4787654321",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=c8f2d3b7e6a9c1f5d8e2b4a7d6c1b3f9,ou=contacts,o=fint",
+    "nin": "c8f2d3b7e6a9c1f5d8e2b4a7d6c1b3f9",
+    "firstName": "Mr.",
+    "lastName": "Bun",
+    "mail": "mr.bun@fint.no",
+    "mobile": "+4723415678",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=d9e8b7f6c4a2f1b3d7e6c8a4b1f5d2e1,ou=contacts,o=fint",
+    "nin": "d9e8b7f6c4a2f1b3d7e6c8a4b1f5d2e1",
+    "firstName": "Stupendous",
+    "lastName": "Man",
+    "mail": "stupendous.man@fint.no",
+    "mobile": "+4798123456",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=e7f8b6c4d9a3e2b1f5d7c6a8b4e1f3d2,ou=contacts,o=fint",
+    "nin": "e7f8b6c4d9a3e2b1f5d7c6a8b4e1f3d2",
+    "firstName": "Tracer",
+    "lastName": "Bullet",
+    "mail": "tracer.bullet@fint.no",
+    "mobile": "+4781234567",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  },
+  {
+    "dn": "cn=f5e6d4c8b7a9f1e2d3b4c6a7e1f5b8d9,ou=contacts,o=fint",
+    "nin": "f5e6d4c8b7a9f1e2d3b4c6a7e1f5b8d9",
+    "firstName": "Spaceman",
+    "lastName": "Spiff",
+    "mail": "spaceman.spiff@fint.no",
+    "mobile": "+4790987654",
+    "technical": [],
+    "legal": [],
+    "supportId": null,
+    "roles": []
+  }
+]

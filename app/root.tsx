@@ -140,13 +140,12 @@ export default function App() {
     const loaderData = useLoaderData<{
         userSession: IUserSession;
         features: FeatureFlags;
-        roles: string[];
+        // roles: string[];
     }>();
     const userSession = loaderData?.userSession;
-    const roles = loaderData?.roles;
+    // const roles = loaderData?.roles;
     // const features = loaderData?.features;
 
-    console.debug('user roles: ', roles);
     return (
         <Page
             footer={

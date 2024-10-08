@@ -6,9 +6,7 @@ class LinkWalkerApi {
     static async getTests(orgName: string) {
         const functionName = 'getTests';
         const URL = `${API_URL}/link-walker/tasks/${orgName}`;
-        return request(URL, functionName, 'GET', 'json').catch((err) => {
-            console.error('Error fetching relations tests:', err);
-        });
+        return request(URL, functionName, 'GET', 'json');
     }
 
     static getLink(orgName: string, resultId: string) {

@@ -29,25 +29,20 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    try {
-        const selectedOrg = await getSelectedOrganization(request);
+    const selectedOrg = await getSelectedOrganization(request);
 
-        const technicalContacts = await ContactApi.getTechnicalContacts(selectedOrg);
-        const rolesData = await RoleApi.getRoles();
-        const legalContact = await OrganisationApi.getLegalContact(selectedOrg);
-        const allContacts = await ContactApi.getAllContacts();
+    const technicalContacts = await ContactApi.getTechnicalContacts(selectedOrg);
+    const rolesData = await RoleApi.getRoles();
+    const legalContact = await OrganisationApi.getLegalContact(selectedOrg);
+    const allContacts = await ContactApi.getAllContacts();
 
-        return json({
-            technicalContacts,
-            rolesData,
-            legalContact,
-            allContacts,
-            selectedOrg,
-        });
-    } catch (err) {
-        console.error('Error fetching data:', err as Error);
-        throw new Response('Not Found', { status: 404 });
-    }
+    return json({
+        technicalContacts,
+        rolesData,
+        legalContact,
+        allContacts,
+        selectedOrg,
+    });
 };
 
 export default function Index() {
@@ -134,7 +129,7 @@ export default function Index() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    const actionName = 'Action in kontakter/route.tsx';
+    const actionName = 'Action in kontakter/route-hold.tsx';
     const formData = await request.formData();
 
     console.debug(formData);

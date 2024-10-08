@@ -1,0 +1,12 @@
+{
+  "dn": "cn=12a4f1d8b2e1ef59c8d6fb0a7089fa11,ou=contacts,o=fint",
+  "nin": "12a4f1d8b2e1ef59c8d6fb0a7089fa11",
+  "firstName": "Calvin",
+  "lastName": "Ball",
+  "mail": "calvin.ball@fint.no",
+  "mobile": "+4712345678",
+  "technical": [],
+  "legal": [],
+  "supportId": null,
+  "roles": []
+}
