@@ -19,5 +19,3 @@ spec:
     basePath: /
   ingress:
     enabled: true
-    middlewares:
-      - fint-test-runner-sso
