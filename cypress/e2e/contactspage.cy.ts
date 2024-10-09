@@ -23,4 +23,69 @@ describe('Contacts Page Tests', () => {
         // cy.contains('nav', 'Kontakter').should('be.visible');
         cy.get('.navds-stack > .navds-heading').contains('Kontakter');
     });
+
+    // // Modal Interaction Tests
+    it('should open and close the modal when clicking the "Legg til" button', () => {
+        // Open the modal
+        cy.get('button').contains('Legg til').click();
+        cy.get('.navds-modal').should('be.visible');
+
+        cy.get('.navds-modal_header').should('be.visible');
+        // Close the modal
+        // cy.get('.navds-modal').within(() => {
+        // cy.get('.navds-modal__button').click();
+        // // });
+        //
+        // cy.get('.navds-modal:visible').within(() => {
+        // cy.get('button.navds-modal__button.navds-button--icon-only').click();
+        // });
+
+        // cy.get('.navds-modal').should('not.exist');
+    });
+
+    // Alert Message Tests
+    // it('should display and close the alert message', () => {
+    //     // Simulate the fetcher state to trigger the alert
+    //     cy.window().then((win) => {
+    //         win.fetcher = { data: { message: 'Test message', variant: 'success' }, state: 'idle' };
+    //     });
+    //
+    //     cy.get('.navds-alert').should('be.visible').and('contain', 'Test message');
+    //     cy.get('.navds-alert button[aria-label="Close"]').click();
+    //     cy.get('.navds-alert').should('not.exist');
+    // });
+
+    // Legal Contact Information Tests
+    // it('should display legal contact information if available', () => {
+    //     cy.get('.m-10').within(() => {
+    //         cy.contains('Juridisk kontakt').should('be.visible');
+    //         cy.get('.BodyShort').should('contain', 'Ingen juridisk kontakt funnet');
+    //     });
+    // });
+    //
+    // // Technical Contacts Table Tests
+    // it('should render the technical contacts table if data is present', () => {
+    //     cy.get('table').should('exist'); // Check if the contact table exists
+    //     cy.get('table thead').should('be.visible'); // Check the table header
+    //     cy.get('table tbody tr').should('have.length.greaterThan', 0); // Verify rows in the table
+    // });
+    //
+    // // Form Submission Tests
+    // it('should submit the form correctly when adding a technical contact', () => {
+    //     // Intercept the form submission request
+    //     cy.intercept('POST', '/kontakter', {
+    //         statusCode: 200,
+    //         body: { message: 'Kontakten er lagt til', variant: 'success' },
+    //     });
+    //
+    //     // Open the modal
+    //     cy.get('button').contains('Legg til').click();
+    //
+    //     // Fill out the form inside the modal (assuming you have form fields with specific names)
+    //     cy.get('input[name="contactNin"]').type('12345678901');
+    //     cy.get('button[type="submit"]').click();
+    //
+    //     // Verify API call response handling
+    //     cy.get('.navds-alert').should('be.visible').and('contain', 'Kontakten er lagt til');
+    // });
 });

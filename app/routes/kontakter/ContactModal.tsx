@@ -7,12 +7,13 @@ interface ContactModalProps {
     isOpen: boolean;
     onClose: () => void;
     contacts: IContact[];
-    f: any; //TODO fix this type
+    onAddContact: (contactNin: string) => void;
 }
 
-const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, f }) => {
+const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, onAddContact }) => {
     const [filter, setFilter] = useState<string>('');
-    const [selectedContactNin, setSelectedContactNin] = useState<string>('');
+    // const [selectedContactNin, setSelectedContactNin] = useState<string>('');
+    // const fetcher = useFetcher();
 
     const filteredContacts = filter
         ? contacts.filter(
@@ -40,9 +41,8 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
     }
 
     function handleSetSelectedContact(nin: string) {
-        console.debug('Selected Contact:', nin);
-        setSelectedContactNin(nin);
-        f.submit();
+        onAddContact(nin);
+        handleClose();
     }
 
     return (
@@ -62,42 +62,38 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
                     value={filter}
                     onChange={handleFilterChange}
                 />
-                <f.Form method="POST">
-                    <input type={'hidden'} name={'contactNin'} value={selectedContactNin} />
-                    <input type={'hidden'} name={'actionType'} value={'addTechnicalContact'} />
 
-                    {/* Set a fixed height for the table wrapper */}
-                    <div style={{ minHeight: '200px' }}>
-                        <Table>
-                            <Table.Body>
-                                {sortData.length === 0 && filter !== '' ? (
-                                    <Table.Row>
-                                        <Table.DataCell colSpan={2}>
-                                            Ingen kontakter funnet.
+                {/* Set a fixed height for the table wrapper */}
+                <div style={{ minHeight: '200px' }}>
+                    <Table>
+                        <Table.Body>
+                            {sortData.length === 0 && filter !== '' ? (
+                                <Table.Row>
+                                    <Table.DataCell colSpan={2}>
+                                        Ingen kontakter funnet.
+                                    </Table.DataCell>
+                                </Table.Row>
+                            ) : (
+                                sortData.map((contact) => (
+                                    <Table.Row key={contact.dn}>
+                                        <Table.DataCell>
+                                            {contact.firstName} {contact.lastName}
+                                        </Table.DataCell>
+                                        <Table.DataCell width={'1'}>
+                                            <Button
+                                                icon={<PersonPlusIcon title="Rediger" />}
+                                                size="xsmall"
+                                                onClick={() => {
+                                                    handleSetSelectedContact(contact.nin);
+                                                }}
+                                            />
                                         </Table.DataCell>
                                     </Table.Row>
-                                ) : (
-                                    sortData.map((contact) => (
-                                        <Table.Row key={contact.dn}>
-                                            <Table.DataCell>
-                                                {contact.firstName} {contact.lastName}
-                                            </Table.DataCell>
-                                            <Table.DataCell width={'1'}>
-                                                <Button
-                                                    icon={<PersonPlusIcon title="Rediger" />}
-                                                    size="xsmall"
-                                                    onClick={() => {
-                                                        handleSetSelectedContact(contact.nin);
-                                                    }}
-                                                />
-                                            </Table.DataCell>
-                                        </Table.Row>
-                                    ))
-                                )}
-                            </Table.Body>
-                        </Table>
-                    </div>
-                </f.Form>
+                                ))
+                            )}
+                        </Table.Body>
+                    </Table>
+                </div>
                 {filteredContacts.length > 0 && (
                     <Pagination
                         page={page}

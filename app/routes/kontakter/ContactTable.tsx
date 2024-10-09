@@ -40,8 +40,8 @@ const ContactTable: React.FC<IContactTableProps> = ({
         formData.append('contactNin', contactNin);
         formData.append('roleId', roleId);
 
-        if (isChecked) formData.append('actionType', 'addRole');
-        else formData.append('actionType', 'deleteRole');
+        if (isChecked) formData.append('actionType', 'ADD_ROLE');
+        else formData.append('actionType', 'DELETE_ROLE');
         onButtonClick(formData);
     };
 

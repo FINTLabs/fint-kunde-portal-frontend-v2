@@ -54,6 +54,7 @@ export default function Index() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
+
     useEffect(() => {
         setShow(true);
         setIsModalOpen(false);
@@ -62,6 +63,17 @@ export default function Index() {
     const handleFormSubmit = (formData: FormData) => {
         fetcher.submit(formData, { method: 'post', action: '/kontakter' });
     };
+
+    function handleAddContact(nin: string) {
+        const formData = new FormData();
+        formData.append('contactNin', nin);
+        formData.append('actionType', 'ADD_TECHNICAL_CONTACT');
+
+        fetcher.submit(formData, {
+            method: 'post',
+            action: `/kontakter/`,
+        });
+    }
 
     return (
         <>
@@ -122,17 +134,16 @@ export default function Index() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 contacts={allContacts || []}
-                f={fetcher}
+                onAddContact={handleAddContact}
             />
         </>
     );
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    const actionName = 'Action in kontakter/route-hold.tsx';
+    const actionName = 'Action in kontakter/route.tsx';
     const formData = await request.formData();
 
-    console.debug(formData);
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
     const selectedOrg = await getSelectedOrganization(request);
     const contactNin = getFormData(formData.get('contactNin'), 'contactNin', actionName);
@@ -142,7 +153,7 @@ export async function action({ request }: ActionFunctionArgs) {
     let response;
     let apiResponse;
     switch (actionType) {
-        case 'addTechnicalContact':
+        case 'ADD_TECHNICAL_CONTACT':
             apiResponse = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
             response = handleApiResponse(
                 apiResponse,
@@ -157,11 +168,11 @@ export async function action({ request }: ActionFunctionArgs) {
             apiResponse = await ContactApi.setLegalContact(contactNin, selectedOrg);
             response = handleApiResponse(apiResponse, 'Kontakten er satt som juridisk kontakt');
             break;
-        case 'addRole':
+        case 'ADD_ROLE':
             apiResponse = await RoleApi.addRole(selectedOrg, contactNin, roleIdToAdd);
             response = handleApiResponse(apiResponse, `Kontaktroller oppdatert: ${roleIdToAdd}`);
             break;
-        case 'deleteRole':
+        case 'DELETE_ROLE':
             apiResponse = await RoleApi.removeRole(selectedOrg, contactNin, roleIdToDelete);
             response = handleApiResponse(apiResponse, `Kontaktroller oppdatert: ${roleIdToDelete}`);
             break;
@@ -173,5 +184,6 @@ export async function action({ request }: ActionFunctionArgs) {
             });
     }
 
-    return json({ show: true, message: response?.message, variant: response?.variant });
+    // return json({ show: true, message: response?.message, variant: response?.variant });
+    return response;
 }
