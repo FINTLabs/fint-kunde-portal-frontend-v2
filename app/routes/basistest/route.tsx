@@ -104,6 +104,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const environment = formData.get('environment') as string;
     const component = formData.get('component');
     const client = formData.get('client');
+    const cookies = request.headers.get("Cookie") || ""
 
     const orgName = await getSelectedOrganization(request);
     const test = environment + component + client;
@@ -112,7 +113,7 @@ export async function action({ request }: ActionFunctionArgs) {
     let apiResponse;
     let response;
     try {
-        apiResponse = await BasicTestApi.runTest(orgName, test, 'component', '');
+        apiResponse = await BasicTestApi.runTest(orgName, test, 'component', '', cookies);
         response = handleApiResponse(apiResponse, message);
     } catch {
         throw new Response('Error loading data.', { status: 404 });
