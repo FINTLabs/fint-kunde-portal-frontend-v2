@@ -19,7 +19,8 @@ export async function request<T = unknown>(
     functionName: string,
     requestMethod = 'GET',
     returnType: ReturnType = 'json',
-    data?: T
+    data?: T,
+    cookies: string = ""
 ) {
     try {
         logger.debug(`Calling ${requestMethod} on ${functionName}: ${URL}`);
@@ -30,6 +31,7 @@ export async function request<T = unknown>(
             headers: {
                 'Content-Type': 'application/json',
                 'x-nin': Utility.getXnin(),
+                'Cookie': cookies
             },
         };
 
