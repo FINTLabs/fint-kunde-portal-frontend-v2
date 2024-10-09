@@ -1,6 +1,6 @@
 // import { IPartialAsset } from '~/types/Asset';
 // import { IPartialAdapter } from '~/types/types';
-import { Utility } from '~/utils/utility';
+import { HeaderProperties } from '~/utils/headerProperties';
 import logger from '~/utils/logger'; // Import your Winston logger
 
 export type ReturnType = 'text' | 'json';
@@ -30,7 +30,7 @@ export async function request<T = unknown>(
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
-                'x-nin': Utility.getXnin(),
+                'x-nin': HeaderProperties.getXnin(),
                 'Cookie': cookies
             },
         };
