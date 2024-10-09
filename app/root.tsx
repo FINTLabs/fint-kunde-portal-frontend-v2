@@ -25,7 +25,7 @@ import { Organisation } from '~/types/Organisation';
 import { CustomError } from '~/components/shared/CustomError';
 import { getFormData } from './utils/requestUtils';
 import { getUserSession, setUserSession } from './utils/selectedOrganization';
-import { Utility } from './utils/utility';
+import { HeaderProperties } from './utils/headerProperties';
 import logger from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
@@ -41,7 +41,7 @@ export const remix_cookie = createCookie('remix_cookie', {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     let userSession = await getUserSession(request);
-    Utility.setXnin(request); // root is called on every request, makes sense to set xnin only once here.
+    HeaderProperties.setProperties(request); // root is called on every request, makes sense to set xnin only once here.
     const meData: IMeData = await MeApi.fetchMe(); //Should we do this so often? otherwise it will require a logout to change
 
     if (!userSession) {

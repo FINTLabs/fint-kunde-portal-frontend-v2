@@ -1,6 +1,6 @@
 // import { IPartialAsset } from '~/types/Asset';
 // import { IPartialAdapter } from '~/types/types';
-import { Utility } from '~/utils/utility';
+import { HeaderProperties } from '~/utils/headerProperties';
 import logger from '~/utils/logger'; // Import your Winston logger
 
 export type ReturnType = 'text' | 'json';
@@ -19,8 +19,7 @@ export async function request<T = unknown>(
     functionName: string,
     requestMethod = 'GET',
     returnType: ReturnType = 'json',
-    data?: T,
-    cookies: string = ""
+    data?: T
 ) {
     try {
         logger.debug(`Calling ${requestMethod} on ${functionName}: ${URL}`);
@@ -30,8 +29,8 @@ export async function request<T = unknown>(
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
-                'x-nin': Utility.getXnin(),
-                'Cookie': cookies
+                'x-nin': HeaderProperties.getXnin(),
+                'Cookie': HeaderProperties.getCookie()
             },
         };
 
