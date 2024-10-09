@@ -14,6 +14,8 @@ spec:
       value: http://fint-link-walker:8080
     - name: CONSENT_API_URL
       value: http://fint-samtykke-admin-backend:8080
+    - name: TEST_RUNNER_API_URL
+      value: https://kunde.felleskomponent.no
   url:
     hostname: kunde-beta.felleskomponent.no
     basePath: /
