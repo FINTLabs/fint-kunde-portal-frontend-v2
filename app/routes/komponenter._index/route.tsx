@@ -19,16 +19,16 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    try {
-        const components = await ComponentApi.getAllComponents();
-        const orgName = await getSelectedOrganization(request);
-        return json({ components, orgName });
-    } catch (err) {
-        if (err instanceof Error) {
-            console.error(`:( Request failed: :`, err);
-        }
-        throw new Response('Not Found', { status: 404 });
-    }
+    // try {
+    const components = await ComponentApi.getAllComponents();
+    const orgName = await getSelectedOrganization(request);
+    return json({ components, orgName });
+    // } catch (err) {
+    //     if (err instanceof Error) {
+    //         console.error(`:( Request failed: :`, err);
+    //     }
+    //     throw new Response('Not Found', { status: 404 });
+    // }
 };
 
 type ActionData = {

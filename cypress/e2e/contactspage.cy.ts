@@ -24,36 +24,12 @@ describe('Contacts Page Tests', () => {
         cy.get('.navds-stack > .navds-heading').contains('Kontakter');
     });
 
-    // // Modal Interaction Tests
-    it('should open and close the modal when clicking the "Legg til" button', () => {
-        // Open the modal
-        cy.get('button').contains('Legg til').click();
-        cy.get('.navds-modal').should('be.visible');
-
-        cy.get('.navds-modal_header').should('be.visible');
-        // Close the modal
-        // cy.get('.navds-modal').within(() => {
-        // cy.get('.navds-modal__button').click();
-        // // });
-        //
-        // cy.get('.navds-modal:visible').within(() => {
-        // cy.get('button.navds-modal__button.navds-button--icon-only').click();
-        // });
-
-        // cy.get('.navds-modal').should('not.exist');
+    // // Technical Contacts Table Tests
+    it('should render the technical contacts table if data is present', () => {
+        cy.get('table').should('exist');
+        cy.get('table thead').should('be.visible');
+        cy.get('table tbody tr').should('have.length.greaterThan', 0);
     });
-
-    // Alert Message Tests
-    // it('should display and close the alert message', () => {
-    //     // Simulate the fetcher state to trigger the alert
-    //     cy.window().then((win) => {
-    //         win.fetcher = { data: { message: 'Test message', variant: 'success' }, state: 'idle' };
-    //     });
-    //
-    //     cy.get('.navds-alert').should('be.visible').and('contain', 'Test message');
-    //     cy.get('.navds-alert button[aria-label="Close"]').click();
-    //     cy.get('.navds-alert').should('not.exist');
-    // });
 
     // Legal Contact Information Tests
     // it('should display legal contact information if available', () => {
@@ -62,13 +38,49 @@ describe('Contacts Page Tests', () => {
     //         cy.get('.BodyShort').should('contain', 'Ingen juridisk kontakt funnet');
     //     });
     // });
+
+    // Check table row expansion
+    it('should expand a row', () => {
+        cy.get(
+            ':nth-child(1) > .navds-table__toggle-expand-cell > .navds-table__toggle-expand-button'
+        ).click();
+        cy.wait(1500);
+    });
+
+    // Modal Interaction Tests
+    it('should open and close the modal when clicking the "Legg til" button', () => {
+        // Open the modal
+        cy.get('button').contains('Legg til').click();
+        cy.get('.navds-modal').should('be.visible');
+
+        // Close the modal
+        cy.get('.navds-modal__button').should('be.visible');
+        cy.wait(1500);
+        cy.get('.navds-modal:visible').within(() => {
+            cy.get('button.navds-modal__button.navds-button--icon-only').click();
+        });
+
+        cy.get('.navds-modal').then(($modal) => {
+            console.log('Modal state after close attempt:', $modal);
+        });
+        cy.get('.navds-modal').should('not.be.visible');
+    });
+
+    // Alert Message Tests
+    // it('should display and close the alert message', () => {
+    //     // Simulate the fetcher state to trigger the alert
+    //     cy.window().then((win) => {
+    //         (win as any).fetcher = {
+    //             data: { message: 'Test message', variant: 'success', show: true },
+    //             state: 'warning',
+    //         };
+    //     });
     //
-    // // Technical Contacts Table Tests
-    // it('should render the technical contacts table if data is present', () => {
-    //     cy.get('table').should('exist'); // Check if the contact table exists
-    //     cy.get('table thead').should('be.visible'); // Check the table header
-    //     cy.get('table tbody tr').should('have.length.greaterThan', 0); // Verify rows in the table
+    //     cy.get('.navds-alert').should('be.visible').and('contain', 'Test message');
+    //     cy.get('.navds-alert button[aria-label="Close"]').click();
+    //     cy.get('.navds-alert').should('not.exist');
     // });
+
     //
     // // Form Submission Tests
     // it('should submit the form correctly when adding a technical contact', () => {
