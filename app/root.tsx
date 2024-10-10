@@ -13,7 +13,7 @@ import { createCookie, json } from '@remix-run/node'; // or cloudflare/deno
 import './tailwind.css';
 import '@navikt/ds-css';
 import './novari-theme.css';
-import { Alert, BodyShort, Box, Heading, Page } from '@navikt/ds-react';
+import { Alert, Box, Page } from '@navikt/ds-react';
 import React from 'react';
 import Menu from './components/Menu/Menu';
 import { commitSession, getSession } from '~/utils/session';
@@ -177,17 +177,14 @@ export function ErrorBoundary() {
     const error = useRouteError();
 
     if (isRouteErrorResponse(error)) {
+        console.log('........', error);
         return (
             <CustomErrorLayout>
-                <BodyShort textColor="subtle" size="small">
-                    Statuskode {error.status}
-                </BodyShort>
-
-                <Heading size="medium" spacing>
-                    {error.statusText}
-                </Heading>
-                <Alert variant="error">{error.data}</Alert>
-                {error.status == 500 && <CustomError />}
+                <CustomError
+                    statusCode={error.status}
+                    errorData={error.data}
+                    statusTitle={error.statusText}
+                />
             </CustomErrorLayout>
         );
     } else {
