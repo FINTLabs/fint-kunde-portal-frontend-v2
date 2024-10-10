@@ -1,17 +1,18 @@
 [data-theme='novari'] {
     /* Novari logo color: #F76650 */
     /* Button configurations */
-    --ac-button-primary-active-bg: var(--a-gray-50);
-    --ac-button-tertiary-active-bg: var(--a-lightblue-900);
-    --ac-button-tertiary-active-hover-bg: var(--a-lightblue-900);
+    /*--ac-button-primary-active-bg: var(--a-gray-50);*/
+    /*--ac-button-tertiary-active-bg: var(--a-lightblue-900);*/
+    /*--ac-button-tertiary-active-hover-bg: var(--a-lightblue-900);*/
     --a-bg-subtle: #f8ebdb;
-    --ac-button-primary-bg: #7F78E8;
-    --ac-button-primary-hover-bg: #ab5692;
+    /*--ac-button-primary-bg: #7F78E8;*/
+    /*--ac-button-primary-hover-bg: #ab5692;*/
     --a-surface-alt-3-strong: #6B133D;
     --a-surface-action: #7F78E8;
     --a-text-action: #7F78E8;
     --a-icon-action:#7F78E8;
     --a-surface-action-selected: #7F78E8;
+    --a-surface-action-hover: #5A51E1;
 
 
     /* NOVARI Footer and header */
