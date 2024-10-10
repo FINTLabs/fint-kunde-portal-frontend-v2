@@ -166,7 +166,7 @@ export default function App() {
                 </Box>
             }>
             <Box as="header" className={'novari-header'}>
-                <Page.Block gutters width="lg">
+                <Page.Block gutters width="lg" className={'pt-2 pb-2'}>
                     <Menu
                         userSession={userSession}
                         // displaySamtykke={features['samtykke-admin-new']}

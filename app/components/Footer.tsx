@@ -1,5 +1,6 @@
 import { Link } from '@remix-run/react';
 import { Box, Heading, HStack } from '@navikt/ds-react';
+import { Logo } from '~/components/Menu/Logo';
 
 export default function Footer() {
     return (
@@ -11,7 +12,7 @@ export default function Footer() {
                 // textAlign: "center",
             }}>
             <Heading level="2" size="medium" spacing>
-                <img src="/images/logo_new.png" width={100} height={50} alt="Novari Logo" />
+                <Logo width={100} />
             </Heading>
             <div style={{ marginBottom: '1rem' }}>
                 <HStack gap="4">

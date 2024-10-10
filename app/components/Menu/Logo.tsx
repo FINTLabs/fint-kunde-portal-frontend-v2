@@ -1,8 +1,16 @@
-import logo from '/images/logo_new.png';
 import { NavLink } from '@remix-run/react';
 
-export const Logo = () => (
-    <NavLink to="/" className={'flex items-center'}>
-        <img src={logo} width={100} height={50} alt={'Novari Logo'} />
+interface LogoProps {
+    width?: number; // Optional prop to set the logo width
+}
+
+export const Logo = ({ width = 150 }: LogoProps) => (
+    <NavLink to="/" className="flex items-center">
+        <img
+            src="/images/logo_new.png"
+            width={width}
+            height={width * (50 / 150)} // Maintain the aspect ratio based on the width
+            alt="Novari Logo"
+        />
     </NavLink>
 );
