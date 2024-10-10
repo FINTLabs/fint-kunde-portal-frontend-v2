@@ -6,7 +6,7 @@ import '@navikt/ds-css';
 import Footer from '~/components/Footer';
 import { Logo } from '~/components/Menu/Logo';
 
-export function CustomError({ children }: { children: React.ReactNode }) {
+export function CustomErrorLayout({ children }: { children: React.ReactNode }) {
     return (
         <Page
             footer={

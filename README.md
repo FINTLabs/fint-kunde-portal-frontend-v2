@@ -8,7 +8,8 @@
 API_URL=http://localhost:<BACKEND_API_PORT>
 PERSONALNUMBER=<YOUR PERSONAL NUMBER>
 ZENDESK_API_URL=<BACKEND_ZENDESK_PORT>
-CYPRESS_TESTS=true
+CYPRESS_TESTS=false
+LOG_LEVEL=debug
 
 CONSENT_API_URL=http://localhost:<BACKEND_API_PORT>
 LINKWALKER_API_URL=http://localhost:<BACKEND_API_PORT>
@@ -19,6 +20,27 @@ BEARER_TOKEN=<Bearer token>
 
 Remember to start up backends for each area you are connecting to locally. 
 A bearer token is necessary for local connection to Samtykke backend.
+### Environment Variables
+
+#### LOG_LEVEL
+
+The `LOG_LEVEL` environment variable controls the verbosity of logging in the application. You can set it to one of the following levels:
+
+| Level   | Description           |
+|---------|-----------------------|
+| `error` | 0 - Only log errors   |
+| `warn`  | 1 - Log warnings and errors |
+| `info`  | 2 - Standard log messages, warnings, and errors |
+| `http`  | 3 - HTTP logs along with info, warnings, and errors |
+| `verbose` | 4 - More detailed logs |
+| `debug` | 5 - Debug-level logs for troubleshooting |
+| `silly` | 6 - Most detailed log level for in-depth analysis |
+
+**Example usage:**
+
+```plaintext
+LOG_LEVEL=debug
+
 
 ## Development
 

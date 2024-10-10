@@ -30,7 +30,7 @@ export async function request<T = unknown>(
             headers: {
                 'Content-Type': 'application/json',
                 'x-nin': HeaderProperties.getXnin(),
-                'Cookie': HeaderProperties.getCookie()
+                Cookie: HeaderProperties.getCookie(),
             },
         };
 
@@ -49,7 +49,7 @@ export async function request<T = unknown>(
             default:
                 throw new Response(`Unsupported request method: ${requestMethod}`, {
                     status: 404,
-                    statusText: 'Something went wrong!',
+                    statusText: 'Beklager, noe gikk galt.',
                 });
             // throw new Error(`Unsupported request method: ${requestMethod}`);
         }
@@ -63,9 +63,11 @@ export async function request<T = unknown>(
             });
         } else {
             logStatus(500, functionName, 'Internal Server Error');
-            throw new Response("500 Internal Server Error ( Error: Couldn't connect to server)", {
+            const errorMessage = `Internal Server Error (Error: Couldn't connect to server: ${functionName})`;
+
+            throw new Response(errorMessage, {
                 status: 500,
-                statusText: 'Something went wrong!',
+                statusText: 'Beklager, noe gikk galt.',
             });
         }
     }

@@ -13,7 +13,7 @@ import { createCookie, json } from '@remix-run/node'; // or cloudflare/deno
 import './tailwind.css';
 import '@navikt/ds-css';
 import './novari-theme.css';
-import { Alert, Box, Heading, Page } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Heading, Page } from '@navikt/ds-react';
 import React from 'react';
 import Menu from './components/Menu/Menu';
 import { commitSession, getSession } from '~/utils/session';
@@ -22,11 +22,12 @@ import { FeatureFlags, IMeData, IUserSession, SessionOrganisation } from '~/type
 import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
 import { Organisation } from '~/types/Organisation';
-import { CustomError } from '~/components/shared/CustomError';
+import { CustomErrorLayout } from '~/components/errors/CustomErrorLayout';
 import { getFormData } from './utils/requestUtils';
 import { getUserSession, setUserSession } from './utils/selectedOrganization';
 import { HeaderProperties } from './utils/headerProperties';
 import logger from '~/utils/logger';
+import CustomError from '~/components/errors/CustomError';
 
 export const meta: MetaFunction = () => {
     return [
@@ -149,7 +150,7 @@ export default function App() {
     return (
         <Page
             footer={
-                <Box background="bg-subtle" padding="1" as="footer">
+                <Box padding="1" as="footer" className={'novari-footer'}>
                     <Page.Block gutters width="lg">
                         <Footer />
                     </Page.Block>
@@ -177,18 +178,23 @@ export function ErrorBoundary() {
 
     if (isRouteErrorResponse(error)) {
         return (
-            <CustomError>
+            <CustomErrorLayout>
+                <BodyShort textColor="subtle" size="small">
+                    Statuskode {error.status}
+                </BodyShort>
+
                 <Heading size="medium" spacing>
-                    {error.status} {error.statusText}
+                    {error.statusText}
                 </Heading>
                 <Alert variant="error">{error.data}</Alert>
-            </CustomError>
+                {error.status == 500 && <CustomError />}
+            </CustomErrorLayout>
         );
     } else {
         return (
-            <CustomError>
+            <CustomErrorLayout>
                 <Alert variant="error">Ukjent feil</Alert>
-            </CustomError>
+            </CustomErrorLayout>
         );
     }
 }
