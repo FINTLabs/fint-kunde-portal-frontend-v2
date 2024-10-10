@@ -5,9 +5,20 @@
     --ac-button-tertiary-active-bg: var(--a-lightblue-900);
     --ac-button-tertiary-active-hover-bg: var(--a-lightblue-900);
     --a-bg-subtle: #f8ebdb;
-    --ac-button-primary-bg: #448086;
+    --ac-button-primary-bg: #7F78E8;
     --ac-button-primary-hover-bg: #ab5692;
+    --a-surface-alt-3-strong: #6B133D;
+    --a-surface-action: #7F78E8;
+    --a-text-action: #7F78E8;
 
+
+    /* NOVARI Footer and header */
+    .novari-footer{
+        background: var(--a-surface-alt-3-strong)
+    }
+    .novari-header {
+        background: var(--a-bg-subtle);
+    }
     /* Styles for the active panel */
     .my-custom-panel {
         background-color: #f3f4f6; /* Light gray background */

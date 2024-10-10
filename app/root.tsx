@@ -156,7 +156,7 @@ export default function App() {
                     </Page.Block>
                 </Box>
             }>
-            <Box background="bg-subtle" as="header">
+            <Box as="header" className={'novari-header'}>
                 <Page.Block gutters width="lg">
                     <Menu
                         userSession={userSession}
@@ -177,7 +177,6 @@ export function ErrorBoundary() {
     const error = useRouteError();
 
     if (isRouteErrorResponse(error)) {
-        console.log('........', error);
         return (
             <CustomErrorLayout>
                 <CustomError

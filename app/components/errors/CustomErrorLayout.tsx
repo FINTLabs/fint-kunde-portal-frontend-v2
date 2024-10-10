@@ -10,14 +10,14 @@ export function CustomErrorLayout({ children }: { children: React.ReactNode }) {
     return (
         <Page
             footer={
-                <Box background="surface-neutral-moderate" padding="8" as="footer">
+                <Box padding="1" as="footer" className={'novari-footer'}>
                     <Page.Block gutters width="lg">
                         <Footer />
                     </Page.Block>
                 </Box>
             }>
-            <Box background="bg-subtle" padding="8" as="header">
-                <Page.Block gutters width="lg">
+            <Box as="header" className={'novari-header'}>
+                <Page.Block gutters width="lg" className={'pt-5 pb-5'}>
                     <Logo />
                     {/*<Heading size="large">Error</Heading>*/}
                 </Page.Block>
