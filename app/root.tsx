@@ -8,7 +8,12 @@ import {
     useLoaderData,
     useRouteError,
 } from '@remix-run/react';
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type {
+    ActionFunctionArgs,
+    LinksFunction,
+    LoaderFunctionArgs,
+    MetaFunction,
+} from '@remix-run/node';
 import { createCookie, json } from '@remix-run/node'; // or cloudflare/deno
 import './tailwind.css';
 import '@navikt/ds-css';
@@ -34,6 +39,10 @@ export const meta: MetaFunction = () => {
         { title: 'Novari Kundeportalen' },
         { name: 'description', content: 'Welcome to the kundeportalen!' },
     ];
+};
+
+export const links: LinksFunction = () => {
+    return [{ rel: 'stylesheet', href: 'https://www.cdnfonts.com/brockmann.font' }];
 };
 
 export const remix_cookie = createCookie('remix_cookie', {
