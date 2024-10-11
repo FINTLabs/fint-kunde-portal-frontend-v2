@@ -51,14 +51,18 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
 
     return (
         <VStack gap={'10'}>
-            <input
-                type={'hidden'}
-                name={'component'}
-                value={selectedComponent}
-                onChange={(e) => setSelectedEnv(e.target.value)}
-            />
+            {/*<input*/}
+            {/*    type={'hidden'}*/}
+            {/*    name={'component'}*/}
+            {/*    value={selectedComponent}*/}
+            {/*    onChange={(e) => setSelectedEnv(e.target.value)}*/}
+            {/*/>*/}
             <HGrid gap="6" columns={5}>
-                <Select label="Miljø" size="small" name={'environment'}>
+                <Select
+                    label="Miljø"
+                    size="small"
+                    name={'environment'}
+                    onChange={(e) => setSelectedEnv(e.target.value)}>
                     <option value="api">API</option>
                     <option value="beta">BETA</option>
                     <option value="alpha">ALPHA</option>

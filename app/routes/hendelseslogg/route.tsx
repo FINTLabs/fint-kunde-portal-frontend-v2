@@ -13,6 +13,7 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { InfoBox } from '~/components/shared/InfoBox';
 import { Log, ReduntantLog } from '~/types/types';
 import LogTable from './LogTable';
+import logger from '~/utils/logger';
 
 interface ActionData {
     message: string;
@@ -38,6 +39,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const action = formData.get('action') as string;
     const resource = formData.get('resource') as string;
 
+    logger.info('environment: ', environment);
     const orgName = await getSelectedOrganization(request);
 
     let response;

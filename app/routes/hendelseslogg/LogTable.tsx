@@ -2,7 +2,7 @@ import React from 'react';
 import { Label, Table } from '@navikt/ds-react';
 import { Log } from '~/types/types';
 import EventTable from '~/routes/hendelseslogg/EventTable';
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 
 interface HealthStatusProps {
     logs: Log[];
@@ -49,9 +49,15 @@ const LogTable: React.FC<HealthStatusProps> = ({ logs }) => {
                                 <Table.DataCell>{formattedDate(log.timestamp)}</Table.DataCell>
                                 <Table.DataCell>{log.action}</Table.DataCell>
                                 <Table.DataCell>
-                                    {hasError && (
+                                    {hasError ? (
                                         <ExclamationmarkTriangleIcon
                                             style={{ color: 'red', marginRight: '0.5rem' }}
+                                        />
+                                    ) : (
+                                        <CheckmarkCircleIcon
+                                            title="a11y-title"
+                                            fontSize="1.5rem"
+                                            style={{ color: 'green', marginRight: '0.5rem' }}
                                         />
                                     )}
                                 </Table.DataCell>

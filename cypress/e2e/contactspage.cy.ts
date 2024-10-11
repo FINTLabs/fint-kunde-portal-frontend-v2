@@ -67,19 +67,19 @@ describe('Contacts Page Tests', () => {
     });
 
     // Alert Message Tests
-    // it('should display and close the alert message', () => {
-    //     // Simulate the fetcher state to trigger the alert
-    //     cy.window().then((win) => {
-    //         (win as any).fetcher = {
-    //             data: { message: 'Test message', variant: 'success', show: true },
-    //             state: 'warning',
-    //         };
-    //     });
-    //
-    //     cy.get('.navds-alert').should('be.visible').and('contain', 'Test message');
-    //     cy.get('.navds-alert button[aria-label="Close"]').click();
-    //     cy.get('.navds-alert').should('not.exist');
-    // });
+    it('should display and close the alert message', () => {
+        // Simulate the fetcher state to trigger the alert
+        cy.window().then((win) => {
+            (win as any).fetcher = {
+                data: { message: 'Test message', variant: 'success', show: true },
+                state: 'warning',
+            };
+        });
+
+        cy.get('.navds-alert').should('be.visible').and('contain', 'Test message');
+        cy.get('.navds-alert button[aria-label="Close"]').click();
+        cy.get('.navds-alert').should('not.exist');
+    });
 
     //
     // // Form Submission Tests
