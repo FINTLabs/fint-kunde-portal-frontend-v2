@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Button, HGrid, Search, Select, VStack } from '@navikt/ds-react';
+import { Box, Button, HGrid, Search, Select, VStack, Label } from '@navikt/ds-react';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { IComponent } from '~/types/Component';
 import { IComponentConfig } from '~/types/ComponentConfig';
 
 interface LogSearchFormProps {
-    // handleSearch: (
-    //     environment: string,
-    //     component: string,
-    //     configClass: string,
-    //     selectedAction: string
-    // ) => void;
     onSearchSubmit: (formData: FormData) => void;
     components: IComponent[];
     configs: IComponentConfig[];
@@ -29,11 +23,17 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
     const [selectedEnv, setSelectedEnv] = useState<string>('');
     const [matchingConfigs, setMatchingConfigs] = useState<IComponentConfig[]>([]);
 
+    const [errors, setErrors] = useState({
+        environment: false,
+        component: false,
+        configClass: false,
+        action: false,
+    });
+
     function handleChangeComponent(value: string) {
         setSelectedComponent(value);
         const matchedConfigs = configs.filter((config) => config.dn.includes(value));
         setMatchingConfigs(matchedConfigs);
-        // setSelectedComponentError(undefined);
     }
 
     if (!components) {
@@ -41,6 +41,21 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
     }
 
     function handleFormSubmit() {
+        // Validate the form fields
+        const hasErrors = {
+            environment: !selectedEnv,
+            component: !selectedComponent,
+            configClass: !selectedConfig,
+            action: !selectedAction,
+        };
+
+        setErrors(hasErrors);
+
+        // If there are any errors, do not submit the form
+        if (Object.values(hasErrors).some((error) => error)) {
+            return;
+        }
+
         const formData = new FormData();
         formData.append('environment', selectedEnv);
         formData.append('component', selectedComponent);
@@ -50,27 +65,39 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
     }
 
     return (
-        <VStack gap={'10'}>
-            {/*<input*/}
-            {/*    type={'hidden'}*/}
-            {/*    name={'component'}*/}
-            {/*    value={selectedComponent}*/}
-            {/*    onChange={(e) => setSelectedEnv(e.target.value)}*/}
-            {/*/>*/}
+        <VStack gap="10">
             <HGrid gap="6" columns={5}>
                 <Select
-                    label="Miljø"
+                    label={
+                        <Label>
+                            Miljø {errors.environment && <span style={{ color: 'red' }}>*</span>}
+                        </Label>
+                    }
                     size="small"
-                    name={'environment'}
-                    onChange={(e) => setSelectedEnv(e.target.value)}>
+                    name="environment"
+                    error={errors.environment ? 'required' : undefined}
+                    onChange={(e) => {
+                        setSelectedEnv(e.target.value);
+                        setErrors((prev) => ({ ...prev, environment: false }));
+                    }}>
+                    <option value="">Velg</option>
                     <option value="api">API</option>
                     <option value="beta">BETA</option>
                     <option value="alpha">ALPHA</option>
                 </Select>
+
                 <Select
-                    label="Komponent"
+                    label={
+                        <Label>
+                            Komponent {errors.component && <span style={{ color: 'red' }}>*</span>}
+                        </Label>
+                    }
                     size="small"
-                    onChange={(e) => handleChangeComponent(e.target.value)}>
+                    onChange={(e) => {
+                        handleChangeComponent(e.target.value);
+                        setErrors((prev) => ({ ...prev, component: false }));
+                    }}
+                    error={errors.component ? 'required' : undefined}>
                     <option value="">Velg</option>
                     {components
                         .sort((a, b) => a.description.localeCompare(b.description))
@@ -82,11 +109,19 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
                 </Select>
 
                 <Select
-                    label="Ressurs"
+                    label={
+                        <Label>
+                            Ressurs {errors.configClass && <span style={{ color: 'red' }}>*</span>}
+                        </Label>
+                    }
                     size="small"
-                    onChange={(e) => setSelectedConfig(e.target.value)}
+                    onChange={(e) => {
+                        setSelectedConfig(e.target.value);
+                        setErrors((prev) => ({ ...prev, configClass: false }));
+                    }}
                     value={selectedConfig}
-                    name={'configClass'}>
+                    name="configClass"
+                    error={errors.configClass ? 'required' : undefined}>
                     <option value="">Velg</option>
                     {matchingConfigs.flatMap((config) =>
                         config.classes.map((item, index) => (
@@ -96,20 +131,30 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
                         ))
                     )}
                 </Select>
+
                 <Select
-                    label="Type"
+                    label={
+                        <Label>
+                            Type {errors.action && <span style={{ color: 'red' }}>*</span>}
+                        </Label>
+                    }
                     size="small"
-                    onChange={(e) => setSelectedAction(e.target.value)}
-                    name={'action'}>
+                    onChange={(e) => {
+                        setSelectedAction(e.target.value);
+                        setErrors((prev) => ({ ...prev, action: false }));
+                    }}
+                    name="action"
+                    error={errors.action ? 'required' : undefined}>
+                    <option value="">Velg</option>
                     <option value="GET_ALL">GET_ALL</option>
                     <option value="GET">GET</option>
                     <option value="UPDATE">UPDATE</option>
                 </Select>
+
                 <Box className="flex items-end">
-                    {/*<Button icon={<MagnifyingGlassIcon title="Rediger" />} onClick={onSearch} />*/}
                     <Button
                         size="small"
-                        icon={<MagnifyingGlassIcon title="Rediger" />}
+                        icon={<MagnifyingGlassIcon title="Søk" />}
                         onClick={handleFormSubmit}>
                         Søk
                     </Button>
@@ -119,7 +164,7 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
             <Search
                 label="Filtrer på ID - Skriv nøyaktig ID"
                 variant="simple"
-                size={'small'}
+                size="small"
                 hideLabel={false}
                 onChange={(value: string) => onFilter(value)}
             />
