@@ -18,6 +18,7 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
     const [selectedEnv, setSelectedEnv] = useState<string>('');
 
     function handleFormSubmit() {
+        console.log('.......... handleFormSubmit');
         const formData = new FormData();
         formData.append('environment', selectedEnv);
         formData.append('component', selectedComponent);
@@ -34,9 +35,11 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
                         size="small"
                         name={'environment'}
                         onChange={(e) => setSelectedEnv(e.target.value)}>
-                        <option value="pwf">Play-With-FINT</option>
-                        <option value="beta">BETA</option>
-                        <option value="api">Produksjon</option>
+                        <option value="https://play-with-fint.felleskomponent.no/">
+                            Play-With-FINT
+                        </option>
+                        <option value="https://beta.felleskomponent.no/">BETA</option>
+                        <option value="https://api.felleskomponent.no/">Produksjon</option>
                     </Select>
 
                     <Select

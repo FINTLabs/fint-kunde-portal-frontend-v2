@@ -1,6 +1,5 @@
 import { IUserSession } from '~/types/types';
 import { getSession } from './session';
-import logger from '~/utils/logger';
 
 export async function getSelectedOrganization(request: Request) {
     const userSession: IUserSession | undefined = await getUserSession(request);
@@ -8,7 +7,7 @@ export async function getSelectedOrganization(request: Request) {
     if (!userSession.selectedOrganization)
         throw new Response('User selected organization is undefined', { status: 404 });
 
-    logger.debug(`USER SESSION ORG: ${JSON.stringify(userSession.selectedOrganization)}`);
+    console.debug(`USER SESSION ORG: ${JSON.stringify(userSession.selectedOrganization)}`);
     return userSession.selectedOrganization.name;
 }
 

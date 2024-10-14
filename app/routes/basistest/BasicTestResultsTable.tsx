@@ -1,8 +1,9 @@
 import React from 'react';
 import { Table, BodyShort } from '@navikt/ds-react';
+import { IBasicTestResult } from '~/types/BasicTest';
 
 interface TestResultsTableProps {
-    logResults: any[] | null; // Replace 'any[]' with the appropriate type for your log results
+    logResults: IBasicTestResult[] | null;
 }
 
 const BasicTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
@@ -12,29 +13,21 @@ const BasicTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) 
                 <Table size="small">
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell scope="col">Tid</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Status</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Miljø</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Ressurs</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Gjenstående sjekker</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Relasjonsfeil</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Sunne lenker</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Last ned rapport</Table.HeaderCell>
+                            <Table.HeaderCell>Status</Table.HeaderCell>
+                            <Table.HeaderCell>Ressurs</Table.HeaderCell>
+                            <Table.HeaderCell>Sist oppdatert</Table.HeaderCell>
+                            <Table.HeaderCell>Cache størrelse</Table.HeaderCell>
+                            <Table.HeaderCell>Melding</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         {logResults.map((result, index) => (
                             <Table.Row key={index}>
-                                <Table.DataCell>{result.tid}</Table.DataCell>
                                 <Table.DataCell>{result.status}</Table.DataCell>
-                                <Table.DataCell>{result.env}</Table.DataCell>
-                                <Table.DataCell>{result.ressurs}</Table.DataCell>
-                                <Table.DataCell>{result.anything}</Table.DataCell>
-                                <Table.DataCell>{result.relasjonsfeil}</Table.DataCell>
-                                <Table.DataCell>{result.sunneLenker}</Table.DataCell>
-                                <Table.DataCell>
-                                    <a href={result.rapportLink}>Last ned rapport</a>
-                                </Table.DataCell>
+                                <Table.DataCell>{result.resource}</Table.DataCell>
+                                <Table.DataCell>{result.lastUpdated}</Table.DataCell>
+                                <Table.DataCell>{result.size}</Table.DataCell>
+                                <Table.DataCell>{result.message}</Table.DataCell>
                             </Table.Row>
                         ))}
                     </Table.Body>

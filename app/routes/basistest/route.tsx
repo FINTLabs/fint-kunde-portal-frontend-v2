@@ -10,16 +10,14 @@ import { IComponent } from '~/types/Component';
 import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
-// import HealthStatusTable from '~/routes/hendelseslogg/HealthStatusTable';
-import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
-import { IBasisTest } from '~/types/BasisTest';
+import { IBasicTestResult } from '~/types/BasicTest';
 import BasicTestApi from '~/api/BasicTestApi';
 import { handleApiResponse } from '~/utils/handleApiResponse';
-// import BasicTestApi from '~/api/BasicTestApi';
+import BasicTestResultsTable from '~/routes/basistest/BasicTestResultsTable';
 
 interface ActionData {
     message: string;
-    data: IBasisTest[];
+    data: IBasicTestResult[];
 }
 
 export const meta: MetaFunction = () => {
@@ -51,6 +49,7 @@ export default function Index() {
     }>();
 
     const handleFormSubmit = (formData: FormData) => {
+        console.debug('...........handleFormSubmit', formData);
         fetcher.submit(formData, { method: 'post', action: '/basistest' });
     };
     return (
@@ -84,7 +83,7 @@ export default function Index() {
                                     padding="6"
                                     borderRadius="large"
                                     shadow="small">
-                                    <CacheStatusTable logResults={actionData.data} />
+                                    <BasicTestResultsTable logResults={actionData.data} />
                                 </Box>
                             </>
                         )}
