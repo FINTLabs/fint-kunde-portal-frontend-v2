@@ -7,7 +7,7 @@ import { IClient } from '~/types/Clients';
 interface TestAddFormProps {
     components: IComponent[];
     clients: IClient[];
-    onSearchSubmit: (formData: FormData) => void;
+    onSearchSubmit: (baseUrl: string, endpoint: string, clientName: string) => void;
 }
 
 const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onSearchSubmit }) => {
@@ -18,12 +18,13 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
     const [selectedEnv, setSelectedEnv] = useState<string>('');
 
     function handleFormSubmit() {
-        console.log('.......... handleFormSubmit');
-        const formData = new FormData();
-        formData.append('environment', selectedEnv);
-        formData.append('component', selectedComponent);
-        formData.append('client', selectedClient);
-        onSearchSubmit(formData);
+        // const formData = new FormData();
+        // formData.append('environment', selectedEnv);
+        // formData.append('component', selectedComponent);
+        // formData.append('client', selectedClient);
+        ref.current?.close();
+
+        onSearchSubmit(selectedEnv, selectedComponent, selectedClient);
     }
 
     return (
@@ -35,11 +36,11 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
                         size="small"
                         name={'environment'}
                         onChange={(e) => setSelectedEnv(e.target.value)}>
-                        <option value="https://play-with-fint.felleskomponent.no/">
+                        <option value="https://play-with-fint.felleskomponent.no">
                             Play-With-FINT
                         </option>
-                        <option value="https://beta.felleskomponent.no/">BETA</option>
-                        <option value="https://api.felleskomponent.no/">Produksjon</option>
+                        <option value="https://beta.felleskomponent.no">BETA</option>
+                        <option value="https://api.felleskomponent.no">Produksjon</option>
                     </Select>
 
                     <Select
@@ -51,7 +52,7 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
                         {components
                             .sort((a, b) => a.description.localeCompare(b.description))
                             .map((component, index) => (
-                                <option value={component.description} key={index}>
+                                <option value={component.basePath} key={index}>
                                     {component.description}
                                 </option>
                             ))}

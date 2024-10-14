@@ -13,11 +13,16 @@ import { IClient } from '~/types/Clients';
 import { IBasicTestResult } from '~/types/BasicTest';
 import BasicTestApi from '~/api/BasicTestApi';
 import { handleApiResponse } from '~/utils/handleApiResponse';
-import BasicTestResultsTable from '~/routes/basistest/BasicTestResultsTable';
+import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
+import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
 
 interface ActionData {
     message: string;
+    healthMessage?: string;
+    variant?: string;
     data: IBasicTestResult[];
+    healthTestData?: IBasicTestResult[];
+    cacheStatusData?: IBasicTestResult[];
 }
 
 export const meta: MetaFunction = () => {
@@ -48,9 +53,22 @@ export default function Index() {
         clients: IClient[];
     }>();
 
-    const handleFormSubmit = (formData: FormData) => {
-        console.debug('...........handleFormSubmit', formData);
-        fetcher.submit(formData, { method: 'post', action: '/basistest' });
+    const onSearchSubmit = (baseUrl: string, endpoint: string, clientName: string) => {
+        console.debug('...........onSearchSubmit', baseUrl, endpoint, clientName);
+
+        // const formData = new FormData();
+        // formData.append('environment', env);
+        // formData.append('component', component);
+        // formData.append('client', client);
+        fetcher.submit(
+            {
+                baseUrl: baseUrl,
+                endpoint: endpoint,
+                clientName: clientName,
+            },
+            { method: 'post', action: `/basistest/` }
+        );
+        // fetcher.submit(formData, { method: 'post', action: '/basistest' });
     };
     return (
         <>
@@ -65,7 +83,7 @@ export default function Index() {
                     <BasicTestAddForm
                         components={components}
                         clients={clients}
-                        onSearchSubmit={handleFormSubmit}
+                        onSearchSubmit={onSearchSubmit}
                     />
                 </Box>
                 {actionData ? (
@@ -76,14 +94,28 @@ export default function Index() {
                             </Box>
                         )}
 
-                        {actionData.data && actionData.data.length > 0 && (
+                        {actionData.healthTestData && actionData.healthTestData.length > 0 && (
                             <>
                                 <Box
                                     className="w-full"
                                     padding="6"
                                     borderRadius="large"
                                     shadow="small">
-                                    <BasicTestResultsTable logResults={actionData.data} />
+                                    <HealthTestResultsTable
+                                        logResults={actionData.healthTestData}
+                                    />
+                                </Box>
+                            </>
+                        )}
+
+                        {actionData.cacheStatusData && actionData.cacheStatusData.length > 0 && (
+                            <>
+                                <Box
+                                    className="w-full"
+                                    padding="6"
+                                    borderRadius="large"
+                                    shadow="small">
+                                    <CacheStatusTable logResults={actionData.cacheStatusData} />
                                 </Box>
                             </>
                         )}
@@ -100,22 +132,47 @@ export default function Index() {
 
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
-    const environment = formData.get('environment') as string;
-    const component = formData.get('component');
-    const client = formData.get('client');
+    const baseUrl = formData.get('baseUrl') as string;
+    const endpoint = formData.get('endpoint') as string;
+    const clientName = formData.get('clientName') as string;
 
     const orgName = await getSelectedOrganization(request);
-    const test = environment + component + client;
 
-    const message = 'Run test with: ' + component + ' ' + client + ' ' + environment + orgName;
+    const message = 'Run test with: ' + baseUrl + ' ' + endpoint + ' ' + clientName + ' ' + orgName;
+
     let apiResponse;
+    let healthResponse;
     let response;
+
     try {
-        apiResponse = await BasicTestApi.runTest(orgName, test, 'component', '');
-        response = handleApiResponse(apiResponse, message);
-    } catch {
+        // Run the first test
+        apiResponse = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
+
+        // Run the second test (health check)
+        healthResponse = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
+
+        // Handle responses
+        const testResponse = handleApiResponse(apiResponse, message);
+        const healthTestResponse = handleApiResponse(healthResponse, 'Health test completed');
+
+        // Combine the data from both responses
+        response = {
+            testMessage: testResponse?.message,
+            healthTestMessage: healthTestResponse?.message,
+            variant: testResponse?.variant || healthTestResponse?.variant, // pick a variant from either response
+        };
+    } catch (error) {
+        console.error('Error running tests:', error);
         throw new Response('Error loading data.', { status: 404 });
     }
 
-    return json({ show: true, message: response?.message, variant: response?.variant });
+    console.log('--------', message);
+
+    // Return both the first and second API results in the JSON response
+    return json({
+        show: true,
+        message: response.testMessage,
+        healthMessage: response.healthTestMessage,
+        variant: response.variant,
+    });
 }

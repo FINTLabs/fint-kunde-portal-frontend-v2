@@ -6,7 +6,7 @@ interface TestResultsTableProps {
     logResults: IBasicTestResult[] | null;
 }
 
-const BasicTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
+const HealthTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
     return (
         <>
             {logResults ? (
@@ -14,10 +14,8 @@ const BasicTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) 
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Status</Table.HeaderCell>
-                            <Table.HeaderCell>Ressurs</Table.HeaderCell>
-                            <Table.HeaderCell>Sist oppdatert</Table.HeaderCell>
-                            <Table.HeaderCell>Cache størrelse</Table.HeaderCell>
-                            <Table.HeaderCell>Melding</Table.HeaderCell>
+                            <Table.HeaderCell>Component</Table.HeaderCell>
+                            <Table.HeaderCell>Time</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -26,8 +24,6 @@ const BasicTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) 
                                 <Table.DataCell>{result.status}</Table.DataCell>
                                 <Table.DataCell>{result.resource}</Table.DataCell>
                                 <Table.DataCell>{result.lastUpdated}</Table.DataCell>
-                                <Table.DataCell>{result.size}</Table.DataCell>
-                                <Table.DataCell>{result.message}</Table.DataCell>
                             </Table.Row>
                         ))}
                     </Table.Body>
@@ -41,4 +37,4 @@ const BasicTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) 
     );
 };
 
-export default BasicTestResultsTable;
+export default HealthTestResultsTable;

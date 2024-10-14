@@ -1,8 +1,9 @@
 import React from 'react';
 import { Table, BodyShort, Label } from '@navikt/ds-react';
+import { IBasicTestResult } from '~/types/BasicTest';
 
 interface TestResultsTableProps {
-    logResults: any[] | null; // TODO: Replace 'any[]' with the appropriate type for log results
+    logResults: IBasicTestResult[] | null;
 }
 
 const CacheStatusTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
@@ -25,10 +26,10 @@ const CacheStatusTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
                             {logResults.map((result, index) => (
                                 <Table.Row key={index}>
                                     <Table.DataCell>{result.status}</Table.DataCell>
-                                    <Table.DataCell>{result.env}</Table.DataCell>
-                                    <Table.DataCell>{result.ressurs}</Table.DataCell>
-                                    <Table.DataCell>{result.anything}</Table.DataCell>
-                                    <Table.DataCell>{result.relasjonsfeil}</Table.DataCell>
+                                    <Table.DataCell>{result.resource}</Table.DataCell>
+                                    <Table.DataCell>{result.lastUpdated}</Table.DataCell>
+                                    <Table.DataCell>{result.size}</Table.DataCell>
+                                    <Table.DataCell>{result.message}</Table.DataCell>
                                 </Table.Row>
                             ))}
                         </Table.Body>
