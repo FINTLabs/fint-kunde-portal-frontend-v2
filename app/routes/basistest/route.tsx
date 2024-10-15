@@ -138,7 +138,6 @@ export async function action({ request }: ActionFunctionArgs) {
     const cacheData = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
     const healthData = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
 
-    // Return both the first and second API results in the JSON response
     return {
         message: message,
         variant: 'info',

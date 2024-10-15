@@ -22,8 +22,6 @@ class LinkWalkerApi {
             client: clientName,
         };
 
-        console.info('........ link walker test:', data);
-
         return request(URL, functionName, 'POST', 'json', data);
     }
 }
