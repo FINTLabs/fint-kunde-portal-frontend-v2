@@ -65,7 +65,7 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
                         onChange={(e) => setSelectedClient(e.target.value)}>
                         <option value="">Velg</option>
                         {clients.map((client) => (
-                            <option value={client.shortDescription} key={client.dn}>
+                            <option value={client.name} key={client.dn}>
                                 {client.shortDescription}
                             </option>
                         ))}
