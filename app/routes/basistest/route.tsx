@@ -12,15 +12,12 @@ import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import { IBasicTestResult } from '~/types/BasicTest';
 import BasicTestApi from '~/api/BasicTestApi';
-import { handleApiResponse } from '~/utils/handleApiResponse';
 import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
 
 interface ActionData {
     message: string;
-    healthMessage?: string;
     variant?: string;
-    data: IBasicTestResult[];
     healthTestData?: IBasicTestResult[];
     cacheStatusData?: IBasicTestResult[];
 }
@@ -135,44 +132,17 @@ export async function action({ request }: ActionFunctionArgs) {
     const baseUrl = formData.get('baseUrl') as string;
     const endpoint = formData.get('endpoint') as string;
     const clientName = formData.get('clientName') as string;
-
     const orgName = await getSelectedOrganization(request);
-
     const message = 'Run test with: ' + baseUrl + ' ' + endpoint + ' ' + clientName + ' ' + orgName;
 
-    let apiResponse;
-    let healthResponse;
-    let response;
-
-    try {
-        // Run the first test
-        apiResponse = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
-
-        // Run the second test (health check)
-        healthResponse = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
-
-        // Handle responses
-        const testResponse = handleApiResponse(apiResponse, message);
-        const healthTestResponse = handleApiResponse(healthResponse, 'Health test completed');
-
-        // Combine the data from both responses
-        response = {
-            testMessage: testResponse?.message,
-            healthTestMessage: healthTestResponse?.message,
-            variant: testResponse?.variant || healthTestResponse?.variant, // pick a variant from either response
-        };
-    } catch (error) {
-        console.error('Error running tests:', error);
-        throw new Response('Error loading data.', { status: 404 });
-    }
-
-    console.log('--------', message);
+    const cacheData = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
+    const healthData = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
 
     // Return both the first and second API results in the JSON response
-    return json({
-        show: true,
-        message: response.testMessage,
-        healthMessage: response.healthTestMessage,
-        variant: response.variant,
-    });
+    return {
+        message: message,
+        variant: 'info',
+        healthTestData: healthData,
+        cacheStatusData: cacheData,
+    };
 }

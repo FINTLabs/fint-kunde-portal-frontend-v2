@@ -40,9 +40,17 @@ export default function Index() {
         setShow(true);
     }, [fetcher.state]);
 
-    function runTest(formData: { testUrl: string; clientName: string }) {
-        const updatedFormData = { ...formData, actionType: 'runTest' };
-        fetcher.submit(updatedFormData, { method: 'post', action: '/relasjonstest' });
+    function runTest(testUrl: string, client: string) {
+        fetcher.submit(
+            {
+                testUrl: testUrl,
+                clientName: client,
+            },
+            { method: 'post', action: `/relasjonstest/` }
+        );
+
+        // const updatedFormData = { ...formData, actionType: 'runTest' };
+        // fetcher.submit(updatedFormData, { method: 'post', action: '/relasjonstest' });
     }
 
     return (

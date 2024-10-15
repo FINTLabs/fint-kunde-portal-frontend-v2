@@ -9,7 +9,7 @@ interface TestAddFormProps {
     components: IComponent[];
     clients: IClient[];
     configs: IComponentConfig[];
-    runTest: (formData: { testUrl: string; clientName: string }) => void;
+    runTest: (testUrl: string, clientName: string) => void;
 }
 
 const RelationTestAddForm: React.FC<TestAddFormProps> = ({
@@ -49,11 +49,11 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
             console.warn('FULL URL:', fullUrl);
             // {"url":"https://play-with-fint.felleskomponent.no/utdanning/elev/elev","client":""}
 
-            const formData = {
-                testUrl: fullUrl,
-                clientName: selectedClient,
-            };
-            runTest(formData);
+            // const formData = {
+            //     testUrl: fullUrl,
+            //     clientName: selectedClient,
+            // };
+            runTest(fullUrl, selectedClient);
         }
     }
 
