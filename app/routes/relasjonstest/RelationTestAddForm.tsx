@@ -44,8 +44,8 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
         }
 
         if (isValid) {
-            const component = components.find((comp) => comp.dn === selectedComponent);
-            const fullUrl = `${selectedBaseUrl}${component?.basePath}/${selectedConfig}`;
+            // const component = components.find((comp) => comp.dn === selectedComponent);
+            const fullUrl = `${selectedBaseUrl}${selectedConfig}`;
             console.warn('FULL URL:', fullUrl);
             // {"url":"https://play-with-fint.felleskomponent.no/utdanning/elev/elev","client":""}
 
@@ -92,7 +92,7 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
                 {/*<option value="">Velg</option>*/}
                 {matchingConfigs.flatMap((config) =>
                     config.classes.map((item, index) => (
-                        <option value={item.name} key={index}>
+                        <option value={item.path} key={index}>
                             {item.name}
                         </option>
                     ))

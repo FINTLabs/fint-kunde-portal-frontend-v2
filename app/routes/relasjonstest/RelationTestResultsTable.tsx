@@ -1,6 +1,6 @@
 import React from 'react';
 import { BodyShort, Table } from '@navikt/ds-react';
-import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { ILogResults } from '~/types/RelationTest';
 
 // import LinkWalkerApi from '~/api/LinkWalkerApi';
@@ -32,6 +32,13 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
                         {logResults.map((result, index) => (
                             <Table.Row key={index}>
                                 <Table.DataCell>
+                                    {result.status == 'FAILED' && (
+                                        <XMarkOctagonIcon
+                                            title="a11y-title"
+                                            fontSize="1.5rem"
+                                            className={'navds-error-message'}
+                                        />
+                                    )}
                                     {result.status == 'COMPLETED' && (
                                         <CheckmarkCircleIcon title="a11y-title" fontSize="1.5rem" />
                                     )}
