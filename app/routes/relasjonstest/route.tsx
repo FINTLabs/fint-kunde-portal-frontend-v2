@@ -1,4 +1,4 @@
-import { LoaderFunction, MetaFunction } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
@@ -26,7 +26,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const configs = await ComponentConfigApi.getComponentConfigs();
     const relationTests = await LinkWalkerApi.getTests(orgName);
 
-    return json({ components, clients, relationTests, configs, orgName });
+    return json({ components, clients, relationTests, configs });
 };
 
 export default function Index() {
@@ -34,13 +34,16 @@ export default function Index() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
-    const { components, clients, relationTests, configs, orgName } = useLoaderData<typeof loader>();
+    const { components, clients, relationTests, configs } = useLoaderData<typeof loader>();
 
     useEffect(() => {
         setShow(true);
     }, [fetcher.state]);
 
-    function runTest() {}
+    function runTest(formData: { testUrl: string; clientName: string }) {
+        const updatedFormData = { ...formData, actionType: 'runTest' };
+        fetcher.submit(updatedFormData, { method: 'post', action: '/relasjonstest' });
+    }
 
     return (
         <>
@@ -72,8 +75,44 @@ export default function Index() {
             </Box>
 
             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                <RelationTestResultsTable logResults={relationTests} orgName={orgName} />
+                <RelationTestResultsTable logResults={relationTests} />
             </Box>
         </>
     );
+}
+export async function action({ request }: ActionFunctionArgs) {
+    const orgName = await getSelectedOrganization(request);
+    const formData = await request.formData();
+    const actionType = formData.get('actionType');
+    const testUrl = formData.get('testUrl');
+    const clientName = formData.get('clientName');
+
+    let response;
+    switch (actionType) {
+        case 'runTest':
+            response = await LinkWalkerApi.addTest(
+                testUrl as string,
+                clientName as string,
+                orgName
+            );
+            if (response.ok) {
+                return {
+                    message: 'Ny relasjonstest lagt til.',
+                    variant: 'success',
+                    show: true,
+                };
+            } else {
+                return {
+                    message: `Feil ved kjører testen. Mer info: Status: ${response.status}. StatusTekst: ${response.statusText}`,
+                    variant: 'error',
+                    show: true,
+                };
+            }
+
+        default:
+            // return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
+            throw new Response('Not Found', { status: 404 });
+    }
+
+    // return json(response);
 }

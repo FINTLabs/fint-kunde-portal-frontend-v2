@@ -1,17 +1,15 @@
 import React from 'react';
 import { BodyShort, Table } from '@navikt/ds-react';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
-// import { Link } from '@remix-run/react';
 import { ILogResults } from '~/types/RelationTest';
+
 // import LinkWalkerApi from '~/api/LinkWalkerApi';
 
 interface TestResultsTableProps {
     logResults: ILogResults[];
-    orgName: string;
 }
 
-const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults, orgName }) => {
-    console.log('LOG RESULTS:', logResults, orgName);
+const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
     return (
         <>
             {logResults ? (
@@ -50,6 +48,7 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults,
                                     {result.relationErrors}
                                 </Table.DataCell>
                                 <Table.DataCell>
+                                    &nbsp;
                                     {/*{result.status !== 'STARTED' && (*/}
                                     {/*    <Link to={LinkWalkerApi.getLink(orgName, result.id)}>*/}
                                     {/*        <DownloadIcon title="download" />*/}
