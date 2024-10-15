@@ -45,6 +45,7 @@ export default function Index() {
             {
                 testUrl: testUrl,
                 clientName: client,
+                actionType: 'RUN_TEST',
             },
             { method: 'post', action: `/relasjonstest/` }
         );
@@ -96,8 +97,9 @@ export async function action({ request }: ActionFunctionArgs) {
     const clientName = formData.get('clientName');
 
     let response;
+    //TODO: this needs some work, make it more like the others with the return
     switch (actionType) {
-        case 'runTest':
+        case 'RUN_TEST':
             response = await LinkWalkerApi.addTest(
                 testUrl as string,
                 clientName as string,
@@ -117,9 +119,9 @@ export async function action({ request }: ActionFunctionArgs) {
                 };
             }
 
-        default:
-            // return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
-            throw new Response('Not Found', { status: 404 });
+        // default:
+        //     // return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
+        //     throw new Response('Not Found', { status: 404 });
     }
 
     // return json(response);
