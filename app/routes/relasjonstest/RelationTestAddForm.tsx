@@ -106,7 +106,7 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
                 disabled={selectedBaseUrl == 'https://play-with-fint.felleskomponent.no'}>
                 <option value="">Velg</option>
                 {clients.map((client, index) => (
-                    <option value={client.assetId} key={index}>
+                    <option value={client.name} key={index}>
                         {client.shortDescription}
                     </option>
                 ))}
