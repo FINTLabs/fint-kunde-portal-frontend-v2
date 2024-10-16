@@ -1,9 +1,9 @@
 import React from 'react';
 import { Table, BodyShort } from '@navikt/ds-react';
-import { IBasicTestResult } from '~/types/BasicTest';
+import { IHealthTestResult } from '~/types/BasicTest';
 
 interface TestResultsTableProps {
-    logResults: IBasicTestResult[] | null;
+    logResults: IHealthTestResult[] | null;
 }
 
 const HealthTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
@@ -22,8 +22,8 @@ const HealthTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults })
                         {logResults.map((result, index) => (
                             <Table.Row key={index}>
                                 <Table.DataCell>{result.status}</Table.DataCell>
-                                <Table.DataCell>{result.resource}</Table.DataCell>
-                                <Table.DataCell>{result.lastUpdated}</Table.DataCell>
+                                <Table.DataCell>{result.component}</Table.DataCell>
+                                <Table.DataCell>{result.time}</Table.DataCell>
                             </Table.Row>
                         ))}
                     </Table.Body>

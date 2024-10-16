@@ -7,6 +7,13 @@ export interface IBasicTestResult {
     message: string;
 }
 
+export interface IHealthTestResult {
+    component: string;
+    status: string;
+    timestamp: number;
+    time: string;
+}
+
 export interface IBasicTest {
     baseUrl: string;
     endpoint: string;

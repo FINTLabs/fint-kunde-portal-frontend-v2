@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, BodyShort, Label } from '@navikt/ds-react';
 import { IBasicTestResult } from '~/types/BasicTest';
+import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 
 interface TestResultsTableProps {
     logResults: IBasicTestResult[] | null;
@@ -25,7 +26,21 @@ const CacheStatusTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
                         <Table.Body>
                             {logResults.map((result, index) => (
                                 <Table.Row key={index}>
-                                    <Table.DataCell>{result.status}</Table.DataCell>
+                                    <Table.DataCell>
+                                        {result.status === 'ok' ? (
+                                            <CheckmarkCircleIcon
+                                                title="a11y-title"
+                                                fontSize="1.5rem"
+                                                className={'navds-alert--success'}
+                                            />
+                                        ) : (
+                                            <XMarkOctagonIcon
+                                                title="a11y-title"
+                                                fontSize="1.5rem"
+                                                className={'navds-error-message'}
+                                            />
+                                        )}
+                                    </Table.DataCell>
                                     <Table.DataCell>{result.resource}</Table.DataCell>
                                     <Table.DataCell>{result.lastUpdated}</Table.DataCell>
                                     <Table.DataCell>{result.size}</Table.DataCell>

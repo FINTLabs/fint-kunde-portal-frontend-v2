@@ -87,6 +87,7 @@ export async function putRequest<T = unknown>(
         throw new Error();
     }
     logStatus(response.status, functionName);
+
     return response;
 }
 
@@ -108,7 +109,16 @@ export async function postRequest<T = unknown>(
 
     if (response.ok) {
         logStatus(response.status, functionName);
-        return response;
+
+        const contentType = response.headers.get('Content-Type');
+        if (contentType && contentType.includes('application/json')) {
+            const responseData = await response.json();
+            logger.debug('POST request successful (JSON):', responseData);
+            return responseData; // Return the parsed JSON data
+        } else {
+            logger.debug('POST request successful (non-JSON response)');
+            return response.ok; // Return true for non-JSON responses
+        }
     } else {
         const errorData = await response.json();
         const errorMessage = `Error ${errorData.status} (${errorData.error}): Får ikke tilgang ${errorData.path}`;

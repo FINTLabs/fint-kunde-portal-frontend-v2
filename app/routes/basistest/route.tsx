@@ -145,7 +145,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return {
         message: message,
         variant: 'info',
-        healthTestData: healthData,
-        cacheStatusData: cacheData,
+        healthTestData: healthData.healthData,
+        cacheStatusData: cacheData.resourceResults,
     };
 }
