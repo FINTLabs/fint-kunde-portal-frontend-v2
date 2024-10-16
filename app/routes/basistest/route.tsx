@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-ru
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Loader, VStack } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ComponentApi from '~/api/ComponentApi';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
@@ -84,45 +84,58 @@ export default function Index() {
                         onSearchSubmit={onSearchSubmit}
                     />
                 </Box>
-                {actionData ? (
+                {fetcher.state === 'submitting' && (
+                    <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+                        <Loader size="large" title="Laster inn data..." />
+                    </Box>
+                )}
+                {fetcher.state !== 'submitting' && (
                     <>
-                        {actionData.message && (
+                        {actionData ? (
+                            <>
+                                {actionData.message && (
+                                    <Box
+                                        className="w-full"
+                                        padding="6"
+                                        borderRadius="large"
+                                        shadow="small">
+                                        <Alert variant="info">{actionData.message}</Alert>
+                                    </Box>
+                                )}
+
+                                {actionData.healthTestData &&
+                                    actionData.healthTestData.length > 0 && (
+                                        <Box
+                                            className="w-full"
+                                            padding="6"
+                                            borderRadius="large"
+                                            shadow="small">
+                                            <HealthTestResultsTable
+                                                logResults={actionData.healthTestData}
+                                            />
+                                        </Box>
+                                    )}
+
+                                {actionData.cacheStatusData &&
+                                    actionData.cacheStatusData.length > 0 && (
+                                        <Box
+                                            className="w-full"
+                                            padding="6"
+                                            borderRadius="large"
+                                            shadow="small">
+                                            <CacheStatusTable
+                                                logResults={actionData.cacheStatusData}
+                                            />
+                                        </Box>
+                                    )}
+                            </>
+                        ) : (
                             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                                <Alert variant="info">{actionData.message}</Alert>
+                                <BodyShort>Bruk skjemaet for å lage en rapport</BodyShort>
                             </Box>
                         )}
-
-                        {actionData.healthTestData && actionData.healthTestData.length > 0 && (
-                            <>
-                                <Box
-                                    className="w-full"
-                                    padding="6"
-                                    borderRadius="large"
-                                    shadow="small">
-                                    <HealthTestResultsTable
-                                        logResults={actionData.healthTestData}
-                                    />
-                                </Box>
-                            </>
-                        )}
-
-                        {actionData.cacheStatusData && actionData.cacheStatusData.length > 0 && (
-                            <>
-                                <Box
-                                    className="w-full"
-                                    padding="6"
-                                    borderRadius="large"
-                                    shadow="small">
-                                    <CacheStatusTable logResults={actionData.cacheStatusData} />
-                                </Box>
-                            </>
-                        )}
                     </>
-                ) : (
-                    <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                        <BodyShort>Bruk skjemaet for å lage en rapport</BodyShort>
-                    </Box>
-                )}{' '}
+                )}
             </VStack>
         </>
     );
