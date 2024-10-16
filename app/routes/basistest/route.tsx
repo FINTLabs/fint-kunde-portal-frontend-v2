@@ -10,7 +10,7 @@ import { IComponent } from '~/types/Component';
 import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
-import { IBasicTestResult } from '~/types/BasicTest';
+import { IBasicTestResult, IHealthTestResult } from '~/types/BasicTest';
 import BasicTestApi from '~/api/BasicTestApi';
 import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
@@ -19,7 +19,7 @@ import logger from '~/utils/logger';
 interface ActionData {
     message: string;
     variant?: string;
-    healthTestData?: IBasicTestResult[];
+    healthTestData?: IHealthTestResult[];
     cacheStatusData?: IBasicTestResult[];
 }
 
