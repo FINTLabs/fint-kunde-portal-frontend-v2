@@ -1,18 +1,12 @@
 // import { IPartialAsset } from '~/types/Asset';
 // import { IPartialAdapter } from '~/types/types';
 import { HeaderProperties } from '~/utils/headerProperties';
-import logger from '~/utils/logger'; // Import your Winston logger
+import logger from '~/utils/logger';
 
 export type ReturnType = 'text' | 'json';
 
 export type IMiniAdapter = { name: string };
 // export type PostDataType = IPartialAdapter | IPartialAsset | IMiniAdapter;
-
-function isErrorWithStatusAndBody(err: unknown): err is { status: number; body: string } {
-    return (
-        typeof err === 'object' && err !== null && 'status' in err && 'body' in err && true && true
-    );
-}
 
 export async function request<T = unknown>(
     URL: string,
@@ -54,16 +48,18 @@ export async function request<T = unknown>(
             // throw new Error(`Unsupported request method: ${requestMethod}`);
         }
     } catch (err) {
-        if (isErrorWithStatusAndBody(err)) {
-            const errorStatus = err.status;
-            const errorBody = err.body;
+        if (err && typeof err === 'object' && 'status' in err && 'body' in err) {
+            const errorStatus = err.status as number;
+            const errorBody = err.body as string;
             logStatus(errorStatus, functionName, errorBody);
-            throw new Response(`${errorBody}`, {
+
+            // Re-throw the custom error with correct status and message
+            throw new Response(errorBody, {
                 status: errorStatus,
             });
         } else {
             logStatus(500, functionName, 'Internal Server Error');
-            const errorMessage = `Internal Server Error (Error: Couldn't connect to server: ${functionName})`;
+            const errorMessage = `Internal Server Error (Error: Possible Couldn't connect to server: ${functionName})`;
 
             throw new Response(errorMessage, {
                 status: 500,
@@ -87,6 +83,9 @@ export async function putRequest<T = unknown>(
     }
 
     const response = await fetch(URL, requestOptions);
+    if (!response.ok) {
+        throw new Error();
+    }
     logStatus(response.status, functionName);
     return response;
 }
@@ -106,8 +105,19 @@ export async function postRequest<T = unknown>(
     }
 
     const response = await fetch(URL, requestOptions);
-    logStatus(response.status, functionName);
-    return response;
+
+    if (response.ok) {
+        logStatus(response.status, functionName);
+        return response;
+    } else {
+        const errorData = await response.json();
+        const errorMessage = `Error ${errorData.status} (${errorData.error}): Får ikke tilgang ${errorData.path}`;
+
+        throw {
+            status: response.status,
+            body: errorMessage,
+        };
+    }
 }
 
 async function getRequest(
