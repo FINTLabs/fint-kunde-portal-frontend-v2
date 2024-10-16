@@ -48,7 +48,7 @@ export async function request<T = unknown>(
                 return await postRequest(URL, functionName, requestOptions, data);
             default:
                 throw new Response(`Unsupported request method: ${requestMethod}`, {
-                    status: 404,
+                    status: 500,
                     statusText: 'Beklager, noe gikk galt.',
                 });
             // throw new Error(`Unsupported request method: ${requestMethod}`);
@@ -102,6 +102,7 @@ export async function postRequest<T = unknown>(
             ...requestOptions,
             body: JSON.stringify(data),
         };
+        logger.debug(`POST request data: ${JSON.stringify(data)}`);
     }
 
     const response = await fetch(URL, requestOptions);

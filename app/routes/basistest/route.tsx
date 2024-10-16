@@ -14,6 +14,7 @@ import { IBasicTestResult } from '~/types/BasicTest';
 import BasicTestApi from '~/api/BasicTestApi';
 import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
+import logger from '~/utils/logger';
 
 interface ActionData {
     message: string;
@@ -138,6 +139,8 @@ export async function action({ request }: ActionFunctionArgs) {
     const cacheData = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
     const healthData = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
 
+    logger.debug('......data: ', cacheData);
+    logger.debug('......data: ', healthData);
     return {
         message: message,
         variant: 'info',

@@ -11,7 +11,7 @@ class BasicTestApi {
             clientName,
         };
 
-        logger.debug('Running basic test ', testBody.baseUrl);
+        logger.debug('........Running basic test ', testBody.baseUrl);
         const URL = `${API_URL}/test-runner/${orgName}/run`;
         const functionName = 'runBasicTest';
 
@@ -30,7 +30,7 @@ class BasicTestApi {
             clientName,
         };
 
-        logger.debug('Running basic test ', testBody.baseUrl);
+        logger.debug('.........Running health test ', testBody.baseUrl);
         const URL = `${API_URL}/test-runner/${orgName}/health`;
         const functionName = 'runBasicTest';
 
