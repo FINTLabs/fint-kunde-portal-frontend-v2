@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, BodyShort, Label } from '@navikt/ds-react';
+import { Table, BodyShort, Label, Tooltip } from '@navikt/ds-react';
 import { IBasicTestResult } from '~/types/BasicTest';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 
@@ -27,19 +27,21 @@ const CacheStatusTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
                             {logResults.map((result, index) => (
                                 <Table.Row key={index}>
                                     <Table.DataCell>
-                                        {result.status === 'ok' ? (
-                                            <CheckmarkCircleIcon
-                                                title="a11y-title"
-                                                fontSize="1.5rem"
-                                                className={'navds-alert--success'}
-                                            />
-                                        ) : (
-                                            <XMarkOctagonIcon
-                                                title="a11y-title"
-                                                fontSize="1.5rem"
-                                                className={'navds-error-message'}
-                                            />
-                                        )}
+                                        <Tooltip content={result.status}>
+                                            {result.status === 'OK' ? (
+                                                <CheckmarkCircleIcon
+                                                    title="a11y-title"
+                                                    fontSize="1.5rem"
+                                                    className={'text-green-600'}
+                                                />
+                                            ) : (
+                                                <XMarkOctagonIcon
+                                                    title="a11y-title"
+                                                    fontSize="1.5rem"
+                                                    className={'navds-error-message'}
+                                                />
+                                            )}
+                                        </Tooltip>
                                     </Table.DataCell>
                                     <Table.DataCell>{result.resource}</Table.DataCell>
                                     <Table.DataCell>{result.lastUpdated}</Table.DataCell>
