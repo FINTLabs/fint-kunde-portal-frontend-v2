@@ -34,7 +34,7 @@ export default function Index() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setFilteredClients(clientData);
+        setFilteredClients(clientData.filter((client) => !client.managed));
     }, [clientData]);
 
     function handleTabClick(newValue: string) {
