@@ -1,12 +1,20 @@
-import { type ActionFunctionArgs, json, type MetaFunction, redirect } from '@remix-run/node';
+import {
+    type ActionFunctionArgs,
+    json,
+    type LoaderFunction,
+    type MetaFunction,
+    redirect,
+} from '@remix-run/node';
 import { Box, Button, FormSummary, HStack, Textarea, TextField } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { Form, useActionData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ClientApi from '~/api/ClientApi';
 import { IPartialClient } from '~/types/Clients';
 import logger from '~/utils/logger';
-
+interface IPageLoaderData {
+    orgName: string;
+}
 export const meta: MetaFunction = () => {
     return [{ title: 'Opprett ny klient' }, { name: 'description', content: 'Opprett ny klient' }];
 };
@@ -17,8 +25,14 @@ type ActionData = {
     status: number;
 };
 
+export const loader: LoaderFunction = async ({ request }) => {
+    const orgName = await getSelectedOrganization(request);
+    return json({ orgName: orgName });
+};
+
 export default function Index() {
     const actionData = useActionData<ActionData>();
+    const { orgName } = useLoaderData<IPageLoaderData>();
 
     const breadcrumbs = [
         { name: 'Klienter', link: '/klienter' },
@@ -51,6 +65,9 @@ export default function Index() {
                                         htmlSize={20}
                                         error={actionData?.errors?.name}
                                     />
+                                    <span className="pb-3.5">
+                                        @client.{orgName.replace(/_/g, '.')}
+                                    </span>
                                 </HStack>
                             </FormSummary.Answer>
 

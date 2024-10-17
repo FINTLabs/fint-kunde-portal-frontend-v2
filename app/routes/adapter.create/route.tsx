@@ -1,10 +1,19 @@
-import { type ActionFunctionArgs, json, type MetaFunction } from '@remix-run/node';
+import {
+    type ActionFunctionArgs,
+    json,
+    type LoaderFunction,
+    type MetaFunction,
+} from '@remix-run/node';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { Form, redirect, useActionData } from '@remix-run/react';
+import { Form, redirect, useActionData, useLoaderData } from '@remix-run/react';
 import { IPartialAdapter } from '~/types/types';
 import { Box, Button, FormSummary, HStack, Textarea, TextField } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
+
+interface IPageLoaderData {
+    orgName: string;
+}
 
 export const meta: MetaFunction = () => {
     return [
@@ -17,8 +26,14 @@ type ActionData = {
     errors?: Errors;
 };
 
+export const loader: LoaderFunction = async ({ request }) => {
+    const orgName = await getSelectedOrganization(request);
+    return json({ orgName: orgName });
+};
+
 export default function Index() {
     const actionData = useActionData<ActionData>();
+    const { orgName } = useLoaderData<IPageLoaderData>();
 
     const breadcrumbs = [
         { name: 'Adaptere', link: '/adaptere' },
@@ -46,6 +61,9 @@ export default function Index() {
                                         htmlSize={20}
                                         error={actionData?.errors?.name}
                                     />
+                                    <span className="pb-3.5">
+                                        @adapter.{orgName.replace(/_/g, '.')}
+                                    </span>
                                 </HStack>
                             </FormSummary.Answer>
 
