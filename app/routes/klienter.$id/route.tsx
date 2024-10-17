@@ -150,9 +150,17 @@ export default function Index() {
                         onChangeNote={setNote}
                     />
 
-                    <Divider className="pt-3" />
-                    <Heading size={'medium'}>Autentisering</Heading>
-                    <AuthTable entity={client} entityType="client" actionName="clientName" />
+                    {!client.managed && (
+                        <>
+                            <Heading size={'medium'}>Autentisering</Heading>
+                            <AuthTable
+                                entity={client}
+                                entityType="client"
+                                actionName="clientName"
+                            />
+                            <Divider className="pt-10" />
+                        </>
+                    )}
 
                     <Divider className="pt-10" />
 
@@ -251,23 +259,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 variant: 'success',
                 show: true,
             });
-        // case 'Passord':
-        //     return 'Not implemented';
-        // case 'Klient Hemmelighet':
-        //     response = await ClientApi.getOpenIdSecret(clientName, orgName);
-        //     return response;
+
         default:
             return null;
-        // return redirect(`/adapter/${adapterName}`);
     }
-    // const type = formData.get('type') as string;
-    // if (type === 'Passord') {
-    //     const response = 'Implement me. What is the API CALL?';
-    //     return response;
-    // } else {
-    //     const response = 'Implement me. What is the API call?';
-    //     // const response = await fetchClientSecret(name, orgName);
-    //     return response;
-    // }
     return response;
 }

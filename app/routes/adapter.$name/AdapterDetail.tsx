@@ -34,10 +34,17 @@ export function AdapterDetail({
                 <VStack gap="5">
                     <GeneralDetailView adapter={adapter} />
 
-                    <Divider className="pt-3" />
-                    <Heading size={'medium'}>Autentisering</Heading>
-                    <AuthTable entity={adapter} entityType="adapter" actionName="adapterName" />
-
+                    {!adapter.managed && (
+                        <>
+                            <Divider className="pt-3" />
+                            <Heading size={'medium'}>Autentisering</Heading>
+                            <AuthTable
+                                entity={adapter}
+                                entityType="adapter"
+                                actionName="adapterName"
+                            />
+                        </>
+                    )}
                     <Divider className="pt-3" />
 
                     <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
