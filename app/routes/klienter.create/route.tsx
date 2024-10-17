@@ -51,7 +51,6 @@ export default function Index() {
                                         htmlSize={20}
                                         error={actionData?.errors?.name}
                                     />
-                                    <span className="pb-3.5">@client.fintlabs.no</span>
                                 </HStack>
                             </FormSummary.Answer>
 
