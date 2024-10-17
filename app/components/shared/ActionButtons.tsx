@@ -8,7 +8,6 @@ interface ActionButtonsProps {
     handleSave: () => void;
     handleCancel: () => void;
     setIsEditing: (value: boolean) => void;
-    clientManaged: boolean;
     handleConfirmDelete: () => void;
     nameText: string;
 }
@@ -18,7 +17,6 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
     handleSave,
     handleCancel,
     setIsEditing,
-    clientManaged,
     handleConfirmDelete,
     nameText,
 }) => {
@@ -38,25 +36,23 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
                     />
                 </>
             ) : (
-                !clientManaged && (
-                    <>
-                        <Button
-                            icon={<PencilIcon title="Edit" />}
-                            variant="tertiary"
-                            onClick={() => setIsEditing(true)}
-                        />
-                        <ConfirmAction
-                            buttonText={'fjerne'}
-                            // titleText={'Fjerne klient'}
-                            showButtonText={false}
-                            subTitleText={`Er du sikker på at du vil fjerne ${nameText}?`}
-                            onConfirm={handleConfirmDelete}
-                            buttonVariant="tertiary"
-                            buttonSize={'medium'}
-                            icon={<TrashIcon aria-hidden />}
-                        />
-                    </>
-                )
+                <>
+                    <Button
+                        icon={<PencilIcon title="Edit" />}
+                        variant="tertiary"
+                        onClick={() => setIsEditing(true)}
+                    />
+                    <ConfirmAction
+                        buttonText={'fjerne'}
+                        // titleText={'Fjerne klient'}
+                        showButtonText={false}
+                        subTitleText={`Er du sikker på at du vil fjerne ${nameText}?`}
+                        onConfirm={handleConfirmDelete}
+                        buttonVariant="tertiary"
+                        buttonSize={'medium'}
+                        icon={<TrashIcon aria-hidden />}
+                    />
+                </>
             )}
         </>
     );

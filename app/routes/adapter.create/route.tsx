@@ -1,8 +1,8 @@
-import { json, type MetaFunction, type ActionFunctionArgs } from '@remix-run/node';
+import { type ActionFunctionArgs, json, type MetaFunction } from '@remix-run/node';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Form, redirect, useActionData } from '@remix-run/react';
-import { IAdapter, IPartialAdapter } from '~/types/types';
-import { Box, Button, FormSummary, HStack, TextField, Textarea } from '@navikt/ds-react';
+import { IPartialAdapter } from '~/types/types';
+import { Box, Button, FormSummary, HStack, Textarea, TextField } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
@@ -102,9 +102,8 @@ export async function action({ request }: ActionFunctionArgs) {
     };
     const response = await AdapterAPI.createAdapter(newAdapter, orgName);
 
-    if (response.status === 201) {
-        const responseAdapter = (await response.json()) as IAdapter;
-        return redirect(`/adapter/${responseAdapter.name}`);
+    if (response.name) {
+        return redirect(`/adapter/${response.name}`);
     } else {
         const responseData = await response.json();
         return json({

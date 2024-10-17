@@ -132,15 +132,16 @@ export default function Index() {
                     <HStack>
                         <Heading size={'medium'}>Details</Heading>
                         <Spacer />
-                        <ActionButtons
-                            isEditing={isEditing}
-                            handleSave={handleSave}
-                            handleCancel={handleCancel}
-                            setIsEditing={setIsEditing}
-                            clientManaged={client.managed}
-                            handleConfirmDelete={handleConfirmDelete}
-                            nameText={client.name}
-                        />
+                        {!client.managed && (
+                            <ActionButtons
+                                isEditing={isEditing}
+                                handleSave={handleSave}
+                                handleCancel={handleCancel}
+                                setIsEditing={setIsEditing}
+                                handleConfirmDelete={handleConfirmDelete}
+                                nameText={client.name}
+                            />
+                        )}
                     </HStack>
 
                     <ClientDetails

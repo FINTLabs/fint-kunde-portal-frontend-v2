@@ -1,10 +1,11 @@
-import { json, type MetaFunction, type ActionFunctionArgs, redirect } from '@remix-run/node';
+import { type ActionFunctionArgs, json, type MetaFunction, redirect } from '@remix-run/node';
 import { Box, Button, FormSummary, HStack, Textarea, TextField } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Form, useActionData } from '@remix-run/react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ClientApi from '~/api/ClientApi';
-import { IClient, IPartialClient } from '~/types/Clients';
+import { IPartialClient } from '~/types/Clients';
+import logger from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Opprett ny klient' }, { name: 'description', content: 'Opprett ny klient' }];
@@ -28,6 +29,11 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <Box paddingBlock="10" paddingInline="20">
+                {actionData?.errors?.apiError && (
+                    <Box padding="4" background="surface-danger-subtle">
+                        {actionData.errors.apiError}
+                    </Box>
+                )}
                 <Form method="post">
                     <FormSummary>
                         <FormSummary.Header>
@@ -72,12 +78,6 @@ export default function Index() {
                         </FormSummary.Answers>
                     </FormSummary>
                 </Form>
-
-                {actionData?.errors?.apiError && (
-                    <Box padding="4" background="surface-danger-subtle">
-                        {actionData.errors.apiError}
-                    </Box>
-                )}
             </Box>
         </>
     );
@@ -108,15 +108,16 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const response = await ClientApi.createClient(newClient, orgName);
 
-    if (response.status === 201) {
-        const responseObject = (await response.json()) as IClient;
-        return redirect(`/klienter/${responseObject.name}`);
+    logger.debug(`.... Response Client Create: ${JSON.stringify(response)}`);
+    logger.debug('Response client name:', response.name);
+
+    if (response.name) {
+        return redirect(`/klienter/${response.name}`);
     } else {
         return json({
             errors: {
-                apiError: `Feil oppretting av klient. Status: ${response.status}, statusText: ${response.statusText}`,
+                apiError: `Feil oppretting av klient. Responsen inneholder ikke navn.`,
             },
-            status: response.status,
         });
     }
 }
