@@ -6,47 +6,37 @@
 
 ```
 API_URL=http://localhost:<BACKEND_API_PORT>
-PERSONALNUMBER=<YOUR PERSONAL NUMBER>
 ZENDESK_API_URL=<BACKEND_ZENDESK_PORT>
+LINKWALKER_API_URL=http://localhost:<BACKEND_LINK-WALKER_PORT>
+CONSENT_API_URL=http://localhost:<BACKEND_SAMTYKE_PORT>
+TEST_RUNNER_API_URL=http://localhost:<BACKEND_TEST-RUNNER_PORT>
+
 CYPRESS_TESTS=false
 LOG_LEVEL=debug
-
-CONSENT_API_URL=http://localhost:<BACKEND_API_PORT>
-LINKWALKER_API_URL=http://localhost:<BACKEND_API_PORT>
 NODE_ENV=development
-PERSONALNUMBER=<PERSONALNUMBER>
-BEARER_TOKEN=<Bearer token>
 ```
 
 Remember to start up backends for each area you are connecting to locally. 
 A bearer token is necessary for local connection to Samtykke backend.
-### Environment Variables
+### Environment Variables Explained
 
 #### LOG_LEVEL
 
 The `LOG_LEVEL` environment variable controls the verbosity of logging in the application. You can set it to one of the following levels:
 
-| Level   | Description           |
-|---------|-----------------------|
-| `error` | 0 - Only log errors   |
-| `warn`  | 1 - Log warnings and errors |
-| `info`  | 2 - Standard log messages, warnings, and errors |
-| `http`  | 3 - HTTP logs along with info, warnings, and errors |
-| `verbose` | 4 - More detailed logs |
-| `debug` | 5 - Debug-level logs for troubleshooting |
-| `silly` | 6 - Most detailed log level for in-depth analysis |
+| Level   | Description       |
+|---------|-------------------|
+| `error` | Only log errors   |
+| `warn`  | Log warnings and errors |
+| `info`  | Standard log messages, warnings, and errors |
+| `http`  | HTTP logs along with info, warnings, and errors |
+| `verbose` | More detailed logs |
+| `debug` | Debug-level logs for troubleshooting |
+| `silly` | Most detailed log level for in-depth analysis |
 
-**Example usage:**
+### Start locally:
 
-```plaintext
-LOG_LEVEL=debug
-
-
-## Development
-
-Run the dev server:
-
-```shellscript
+```sh
 npm run dev
 ```
 
@@ -77,4 +67,4 @@ Make sure to deploy the output of `npm run build`
 
 ## Styling
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+Tailwind, Aksel, and Novari-theme
