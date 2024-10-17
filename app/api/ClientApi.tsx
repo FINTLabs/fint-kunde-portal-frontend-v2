@@ -1,6 +1,7 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from '~/api/constants';
 import { IClient, IPartialClient } from '~/types/Clients';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 class ClientApi {
     static async getClients(organisationName: string) {
@@ -96,6 +97,7 @@ class ClientApi {
                 headers: {
                     Accept: '*/*',
                     'Content-Type': 'text/plain',
+                    'x-nin': HeaderProperties.getXnin()
                 },
                 credentials: 'same-origin',
                 body: password,
