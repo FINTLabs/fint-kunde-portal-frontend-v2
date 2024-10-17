@@ -43,10 +43,10 @@ export async function action({ request }: ActionFunctionArgs) {
         name: name,
         description,
     };
-    console.info('---------', newAsset);
+
     const response = await AssetApi.createAsset(newAsset, orgName);
 
-    if (response.status === 201) {
+    if (response.name) {
         // const newAdapter = (await response.json()) as IAsset;
         return redirect(`/ressurser/${newAsset.assetId}_fintlabs_no`);
     } else {

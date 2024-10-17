@@ -2,13 +2,13 @@ import { json, type LoaderFunction, type MetaFunction } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Button, HStack, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, VStack } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
 import { useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { CustomTabs } from '~/components/shared/CustomTabs';
-import { InfoBox } from '~/components/shared/InfoBox';
+import React from 'react';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
@@ -39,7 +39,8 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            {deleted && <InfoBox message={`Adaptere ${deleted} slettet`} />}
+            {deleted && <Alert variant="info">Adaptere {deleted} slettet</Alert>}
+
             <HStack align={'center'} justify={'space-between'}>
                 <VStack>
                     <InternalPageHeader
@@ -58,8 +59,8 @@ export default function Index() {
                 </VStack>
             </HStack>
 
-            {error && <InfoBox message={error}></InfoBox>}
-            {adapters && adapters.length == 0 && <InfoBox message="Ingen adaptere" />}
+            {error && <Alert variant="error">{error}</Alert>}
+            {adapters && adapters.length == 0 && <Alert variant="warning">Ingen adaptere</Alert>}
 
             {/* {adapters && <AdapterList items={adapters} />} */}
             {adapters && <CustomTabs items={adapters} />}
