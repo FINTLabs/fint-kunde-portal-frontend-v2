@@ -17,6 +17,11 @@ import CreateForm from '~/routes/ressurser._index/CreateForm';
 import AssetsTable from '~/routes/ressurser._index/ResourcesTable';
 import { useState } from 'react';
 
+interface IPageLoaderData {
+    assets: IAsset[];
+    orgName: string;
+}
+
 export const meta: MetaFunction = () => {
     return [
         { title: 'Ressurser' },
@@ -28,7 +33,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
     const assets = await AssetApi.getAllAssets(orgName);
 
-    return json(assets);
+    return json({ assets: assets, orgName: orgName });
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -61,7 +66,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Ressurser', link: '/ressurser' }];
-    const assets = useLoaderData<IAsset[]>();
+    const { assets, orgName } = useLoaderData<IPageLoaderData>();
+
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -99,7 +105,7 @@ export default function Index() {
 
             {!assets && <InfoBox message="Fant ingen ressurser" />}
             {isCreating ? (
-                <CreateForm onCancel={handleCancel} onSave={handleCreate} />
+                <CreateForm onCancel={handleCancel} orgName={orgName} />
             ) : (
                 assets && <AssetsTable assets={assets} onRowClick={handleClick} />
             )}

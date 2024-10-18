@@ -152,8 +152,8 @@ export async function action({ request }: ActionFunctionArgs) {
     const cacheData = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
     const healthData = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
 
-    logger.debug(`cache request data: ${JSON.stringify(cacheData)}`);
-    logger.debug(`health request data: ${JSON.stringify(healthData)}`);
+    logger.silly(`cache request data: ${JSON.stringify(cacheData)}`);
+    logger.silly(`health request data: ${JSON.stringify(healthData)}`);
 
     return {
         message: message,

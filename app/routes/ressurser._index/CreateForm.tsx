@@ -11,10 +11,10 @@ interface ActionData {
 
 export default function CreateForm({
     onCancel,
-    onSave,
+    orgName,
 }: {
     onCancel: () => void;
-    onSave: () => void;
+    orgName: string;
 }) {
     const actionData = useActionData<ActionData>();
 
@@ -37,7 +37,7 @@ export default function CreateForm({
                                 htmlSize={20}
                                 error={actionData?.errors?.name}
                             />
-                            <span className="pb-3.5">_fintlabs_no</span>
+                            <span className="pb-3.5">_{orgName}</span>
                         </HStack>
                     </FormSummary.Answer>
 

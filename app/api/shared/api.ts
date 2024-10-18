@@ -140,7 +140,9 @@ async function getRequest(
     logStatus(response.status, functionName);
 
     if (response.ok) {
-        return returnType === 'json' ? await response.json() : await response.text();
+        const responseData = returnType === 'json' ? await response.json() : await response.text();
+        logger.silly(`Data returned from ${functionName}: ${JSON.stringify(responseData)}`);
+        return responseData;
     } else {
         const errorData = await response.json();
         const errorMessage = `Error ${errorData.status} (${errorData.error}): Får ikke tilgang ${errorData.path}`;
