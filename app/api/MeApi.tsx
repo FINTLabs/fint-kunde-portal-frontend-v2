@@ -13,6 +13,7 @@ class MeApi {
     static async fetchOrganisations() {
         const functionName = 'fetchOrganisations';
         const URL = `${API_URL}/api/contacts/organisations`;
+        console.log("Fetching organisations" + URL);
         return request(URL, functionName);
     }
 }
