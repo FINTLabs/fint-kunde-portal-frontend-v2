@@ -7,6 +7,7 @@ spec:
   port: 8000
   orgId: fintlabs.no
   image: ghcr.io/fintlabs/fint-kunde-portal-frontend-v2:latest
+  imagePullPolicy: Always
   env:
     - name: API_URL
       value: http://fint-kunde-portal-backend:8080
