@@ -53,13 +53,12 @@ export async function request<T = unknown>(
             const errorBody = err.body as string;
             logStatus(errorStatus, functionName, errorBody);
 
-            // Re-throw the custom error with correct status and message
             throw new Response(errorBody, {
                 status: errorStatus,
             });
         } else {
             logStatus(500, functionName, 'Internal Server Error');
-            const errorMessage = `Internal Server Error (Error: Possible Couldn't connect to server: ${functionName})`;
+            const errorMessage = `Internal Server Error - ${functionName} failed`;
 
             throw new Response(errorMessage, {
                 status: 500,

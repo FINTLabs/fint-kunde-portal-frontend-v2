@@ -45,7 +45,6 @@ export default function Index() {
             {
                 testUrl: testUrl,
                 clientName: client,
-                actionType: 'RUN_TEST',
             },
             { method: 'post', action: `/relasjonstest/` }
         );
@@ -92,37 +91,22 @@ export default function Index() {
 export async function action({ request }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const formData = await request.formData();
-    const actionType = formData.get('actionType');
     const testUrl = formData.get('testUrl');
     const clientName = formData.get('clientName');
 
-    let response;
-    //TODO: this needs some work, make it more like the others with the return
-    switch (actionType) {
-        case 'RUN_TEST':
-            response = await LinkWalkerApi.addTest(
-                testUrl as string,
-                clientName as string,
-                orgName
-            );
-            if (response.ok) {
-                return {
-                    message: 'Ny relasjonstest lagt til.',
-                    variant: 'success',
-                    show: true,
-                };
-            } else {
-                return {
-                    message: `Feil ved kjører testen. Mer info: Status: ${response.status}. StatusTekst: ${response.statusText}`,
-                    variant: 'error',
-                    show: true,
-                };
-            }
+    let response = await LinkWalkerApi.addTest(testUrl as string, clientName as string, orgName);
 
-        // default:
-        //     // return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
-        //     throw new Response('Not Found', { status: 404 });
+    if (response.id) {
+        return json({
+            message: 'Ny relasjonstest lagt til.',
+            variant: 'success',
+            show: true,
+        });
+    } else {
+        return json({
+            message: `Feil ved kjører testen. `,
+            variant: 'error',
+            show: true,
+        });
     }
-
-    // return json(response);
 }
