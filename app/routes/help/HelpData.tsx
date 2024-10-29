@@ -97,11 +97,4 @@ export const helpData: HelpDataItem[] = [
         title: 'Hendelseslogg',
         description: 'This needs to be written!!!!',
     },
-    {
-        id: 'tilgangspakker',
-        title: 'Tilgangspakker',
-        description:
-            '    En tilgangspakke benyttes for å sette opp riktige tilganger til klienter du oppretter i kundeportalen.\n' +
-            '    Du kan velge fra pakkeoversikten for å se innholdet i standardpakker eller lage en egendefinert tilgangspakke.',
-    },
 ];
