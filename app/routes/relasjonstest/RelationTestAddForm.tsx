@@ -29,8 +29,21 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
 
     function handleChangeComponent(value: string) {
         setSelectedComponent(value);
-        const matchedConfigs = configs.filter((config) => config.dn.includes(value));
-        setMatchingConfigs(matchedConfigs);
+
+        // Find the first matching config that has `dn` containing the `value`
+        const matchedConfig = configs.find((config) => config.dn.includes(value));
+
+        if (matchedConfig) {
+            console.log('Path:', matchedConfig.path);
+            // Set the path or use it as needed
+            setSelectedConfig(matchedConfig.path);
+            // You can now use selectedPath wherever needed
+        } else {
+            console.log('No matching config found');
+        }
+
+        // Update the matching configs and reset the error
+        setMatchingConfigs(matchedConfig ? [matchedConfig] : []);
         setSelectedComponentError(undefined);
     }
 
