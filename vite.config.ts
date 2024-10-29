@@ -10,6 +10,15 @@ export default defineConfig({
                 v3_relativeSplatPath: true,
                 v3_throwAbortReason: true,
             },
+            routes(defineRoutes) {
+                return defineRoutes((route) => {
+                    route('tilgang/:id/:element', 'routes/tilgang/id/element/route.tsx');
+                    route(
+                        'tilgang/:id/:element/:resource',
+                        'routes/tilgang/id/element/resource/route.tsx'
+                    );
+                });
+            },
         }),
         tsconfigPaths(),
     ],

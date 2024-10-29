@@ -23,7 +23,7 @@ Cypress.on('uncaught:exception', (err) => {
 // });
 describe('Dashboard', () => {
     beforeEach(() => {
-        // Visit the root page before each test
+        // Visit the root page before each testA
         // cy.viewport('macbook-15'); // Simulate a 15-inch MacBook screen
 
         cy.visit('http://localhost:3000/', { failOnStatusCode: false });

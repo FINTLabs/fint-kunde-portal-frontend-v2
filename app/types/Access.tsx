@@ -6,14 +6,14 @@ export interface IAccess {
 
 export interface IField {
     name: string;
-    shouldContain: string[]; // Assuming shouldContain is an array of strings
+    shouldContain: string[];
     isHidden: boolean;
 }
 
 export interface IAccessComponent {
     name: string;
     fields: IField[];
-    readingOption: 'MULTIPLE' | 'SINGLE'; // Based on the value provided
+    readingOption: 'MULTIPLE' | 'SINGLE';
     enabled: boolean;
     isWriteable: boolean;
 }

@@ -28,9 +28,7 @@ const ResourcesList: React.FC<ConfigClassTableProps> = ({
             <FormSummary key={`x`}>
                 <FormSummary.Header>
                     {/*<HStack align={'center'} justify={'space-between'}>*/}
-                    <FormSummary.Heading level="2">
-                        Customize: {clientOrAdapter}
-                    </FormSummary.Heading>
+                    <FormSummary.Heading level="2">List Of Resources</FormSummary.Heading>
                     {/*</HStack>
                     //TODO: make this a grid? to bring it closer */}
                 </FormSummary.Header>

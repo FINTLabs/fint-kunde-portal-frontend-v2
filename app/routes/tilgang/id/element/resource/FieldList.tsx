@@ -1,6 +1,5 @@
 import { Button, FormSummary, HStack, Table, TextField } from '@navikt/ds-react';
 import {
-    ArrowRightIcon,
     EyeIcon,
     EyeSlashIcon,
     FloppydiskIcon,
@@ -63,11 +62,7 @@ const FieldList: React.FC<FieldListProps> = ({ onSave, selectedResource, type, f
         <FormSummary key={`x`}>
             <FormSummary.Header>
                 <FormSummary.Heading level="2">
-                    <HStack gap={'3'}>
-                        Tilpasse tilgang: {type}
-                        <ArrowRightIcon title="ArrowRightIcon" fontSize="1.5rem" />{' '}
-                        {selectedResource}
-                    </HStack>
+                    <HStack gap={'3'}>List of fields</HStack>
                 </FormSummary.Heading>
                 <FormSummary.EditLink href="#">
                     {isEditing ? (

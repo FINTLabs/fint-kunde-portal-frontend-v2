@@ -31,6 +31,13 @@ export default function Footer() {
                         |
                     </p>
                     <Link to="http://fintlabs.no">Brukerhjelp</Link>
+                    <p
+                        style={{
+                            color: 'var(--a-text-on-neutral)',
+                        }}>
+                        |
+                    </p>
+                    <Link to="/help">Ordliste</Link>
                 </HStack>
             </div>
         </Box>

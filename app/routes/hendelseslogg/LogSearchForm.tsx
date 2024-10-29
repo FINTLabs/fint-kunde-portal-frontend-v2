@@ -41,7 +41,7 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
     }
 
     function handleFormSubmit() {
-        // Validate the form fields
+        // Validate the form resource
         const hasErrors = {
             environment: !selectedEnv,
             component: !selectedComponent,

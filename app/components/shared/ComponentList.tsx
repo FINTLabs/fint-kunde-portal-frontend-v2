@@ -19,7 +19,7 @@ const ComponentList: React.FC<ComponentListProps> = ({ accessList, onToggle, ent
     const navigate = useNavigate();
 
     const handleRowClick = (domain: string, packageName: string) => {
-        navigate(`/accesscontrol/${entity}?entity=${domain}_${packageName}`);
+        navigate(`/tilgang/${entity}/${domain}_${packageName}`);
     };
 
     // Group the accessList by domain

@@ -10,6 +10,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     if (response) {
         return redirect(`/ressurser?deleted=${id}`);
     } else {
-        return json({ status: response.status, error: 'Failed to delete resource' });
+        return json({ status: response.status, error: 'Failed to delete element' });
     }
 };

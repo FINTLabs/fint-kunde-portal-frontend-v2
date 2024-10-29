@@ -1,5 +1,4 @@
 import { request } from '~/api/shared/api';
-import logger from '~/utils/logger';
 
 const API_URL = process.env.ACCESS_URL;
 class AccessApi {
@@ -22,7 +21,6 @@ class AccessApi {
     ) {
         const functionName = 'getFieldAccess';
         const URL = `${API_URL}/access/${clientOrAdapter}/${componentName}/${resourceName}`;
-        logger.log('.............', URL);
         return await request(URL, functionName);
     }
 }

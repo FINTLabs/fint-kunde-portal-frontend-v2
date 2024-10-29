@@ -93,7 +93,7 @@ describe('Contacts Page Tests', () => {
     //     // Open the modal
     //     cy.get('button').contains('Legg til').click();
     //
-    //     // Fill out the form inside the modal (assuming you have form fields with specific names)
+    //     // Fill out the form inside the modal (assuming you have form resource with specific names)
     //     cy.get('input[name="contactNin"]').type('12345678901');
     //     cy.get('button[type="submit"]').click();
     //
