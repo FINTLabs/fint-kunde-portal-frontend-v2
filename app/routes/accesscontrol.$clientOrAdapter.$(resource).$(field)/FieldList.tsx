@@ -65,7 +65,8 @@ const FieldList: React.FC<FieldListProps> = ({ onSave, selectedResource, type, f
                 <FormSummary.Heading level="2">
                     <HStack gap={'3'}>
                         Tilpasse tilgang: {type}
-                        <ArrowRightIcon title="a11y-title" fontSize="1.5rem" /> {selectedResource}
+                        <ArrowRightIcon title="ArrowRightIcon" fontSize="1.5rem" />{' '}
+                        {selectedResource}
                     </HStack>
                 </FormSummary.Heading>
                 <FormSummary.EditLink href="#">

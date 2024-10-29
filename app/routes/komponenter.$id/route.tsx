@@ -39,7 +39,7 @@ export default function Index() {
                 <Box>
                     <Button
                         className="relative h-12 w-12 top-2 right-14"
-                        icon={<ArrowLeftIcon title="a11y-title" fontSize="1.5rem" />}
+                        icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
                         variant="tertiary"
                         onClick={() => navigate(`/komponenter`)}></Button>
                 </Box>

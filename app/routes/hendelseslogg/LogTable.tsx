@@ -55,7 +55,7 @@ const LogTable: React.FC<HealthStatusProps> = ({ logs }) => {
                                         />
                                     ) : (
                                         <CheckmarkCircleIcon
-                                            title="a11y-title"
+                                            title="CheckmarkCircleIcon"
                                             fontSize="1.5rem"
                                             style={{ color: 'green', marginRight: '0.5rem' }}
                                         />

@@ -41,7 +41,7 @@ const ComponentList: React.FC<ComponentListProps> = ({ accessList, onToggle, ent
                         <FormSummary key={`${domain}-${i}`}>
                             <FormSummary.Header>
                                 <HStack align={'center'} justify={'space-between'}>
-                                    <KeyVerticalIcon title="a11y-title" fontSize="1.5rem" />
+                                    <KeyVerticalIcon title="key icon" fontSize="1.5rem" />
                                     <FormSummary.Heading level="2">
                                         {capitalizeFirstLetter(domain)}
                                     </FormSummary.Heading>

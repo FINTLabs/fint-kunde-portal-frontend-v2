@@ -34,13 +34,13 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
                                 <Table.DataCell>
                                     {result.status == 'FAILED' && (
                                         <XMarkOctagonIcon
-                                            title="a11y-title"
+                                            title="FAILED"
                                             fontSize="1.5rem"
                                             className={'navds-error-message'}
                                         />
                                     )}
                                     {result.status == 'COMPLETED' && (
-                                        <CheckmarkCircleIcon title="a11y-title" fontSize="1.5rem" />
+                                        <CheckmarkCircleIcon title="COMPLETED" fontSize="1.5rem" />
                                     )}
                                 </Table.DataCell>
                                 <Table.DataCell>{result.time}</Table.DataCell>{' '}

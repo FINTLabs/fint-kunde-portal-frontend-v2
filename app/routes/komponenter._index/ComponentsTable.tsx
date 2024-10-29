@@ -66,7 +66,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                             <FormSummary.Header>
                                 <HStack align={'center'} justify={'space-between'}>
                                     {hideLink && (
-                                        <KeyVerticalIcon title="a11y-title" fontSize="1.5rem" />
+                                        <KeyVerticalIcon title="key icon" fontSize="1.5rem" />
                                     )}
                                     <FormSummary.Heading level="2">
                                         {capitalizeFirstLetter(groupName)}
@@ -114,7 +114,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                             className="hover:bg-[--a-surface-active] hover:cursor-pointer">
                                                             {!hideLink && (
                                                                 <ChevronRightIcon
-                                                                    title="a11y-title"
+                                                                    title="ChevronRightIcon"
                                                                     fontSize="1.5rem"
                                                                     onClick={() =>
                                                                         handleRowClick(item)

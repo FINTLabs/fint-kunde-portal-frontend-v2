@@ -26,7 +26,7 @@ const InternalPageHeader: React.FC<LayoutHeaderProps> = ({
                         <HStack align="start" gap="2">
                             <Hide below="md">
                                 {IconComponent && (
-                                    <IconComponent title="a11y-title" fontSize="2.5rem" />
+                                    <IconComponent title="Header Icon" fontSize="2.5rem" />
                                 )}
                             </Hide>
                             <Heading className="" level="1" size="large">

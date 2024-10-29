@@ -171,13 +171,13 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                             <Table.DataCell>
                                 {policy.aktiv ? (
                                     <CheckmarkCircleIcon
-                                        title="a11y-title"
+                                        title="CheckmarkCircleIcon"
                                         fontSize="1.5rem"
                                         className={'text-green-600'}
                                     />
                                 ) : (
                                     <XMarkOctagonIcon
-                                        title="a11y-title"
+                                        title="XMarkOctagonIcon"
                                         fontSize="1.5rem"
                                         className={'text-red-600'}
                                     />

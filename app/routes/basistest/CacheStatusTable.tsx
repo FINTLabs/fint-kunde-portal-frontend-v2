@@ -30,13 +30,13 @@ const CacheStatusTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
                                         <Tooltip content={result.status}>
                                             {result.status === 'OK' ? (
                                                 <CheckmarkCircleIcon
-                                                    title="a11y-title"
+                                                    title="ok"
                                                     fontSize="1.5rem"
                                                     className={'text-green-600'}
                                                 />
                                             ) : (
                                                 <XMarkOctagonIcon
-                                                    title="a11y-title"
+                                                    title="error"
                                                     fontSize="1.5rem"
                                                     className={'navds-error-message'}
                                                 />
