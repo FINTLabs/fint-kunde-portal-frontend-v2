@@ -1,6 +1,7 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from './constants';
 import { IPartialAdapter } from '~/types/types';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 class AdapterAPI {
     static async getAdapters(organisationName: string) {
@@ -66,6 +67,7 @@ class AdapterAPI {
                 headers: {
                     Accept: '*/*',
                     'Content-Type': 'text/plain',
+                    'x-nin': HeaderProperties.getXnin()
                 },
                 credentials: 'same-origin',
                 body: password,
