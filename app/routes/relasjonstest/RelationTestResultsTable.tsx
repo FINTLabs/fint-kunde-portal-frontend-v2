@@ -10,6 +10,20 @@ interface TestResultsTableProps {
 }
 
 const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
+    const parseDate = (timeString: string) => {
+        const [datePart, timePart] = timeString.split(' ');
+        const [day, month] = datePart.split('/').map(Number);
+        const [hours, minutes] = timePart.split(':').map(Number);
+        const date = new Date();
+        date.setDate(day);
+        date.setMonth(month - 1); // JavaScript months are 0-indexed
+        date.setHours(hours);
+        date.setMinutes(minutes);
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        return date;
+    };
+
     return (
         <>
             {logResults ? (
@@ -29,44 +43,51 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {logResults.map((result, index) => (
-                            <Table.Row key={index}>
-                                <Table.DataCell>
-                                    {result.status == 'FAILED' && (
-                                        <XMarkOctagonIcon
-                                            title="FAILED"
-                                            fontSize="1.5rem"
-                                            className={'navds-error-message'}
-                                        />
-                                    )}
-                                    {result.status == 'COMPLETED' && (
-                                        <CheckmarkCircleIcon title="COMPLETED" fontSize="1.5rem" />
-                                    )}
-                                </Table.DataCell>
-                                <Table.DataCell>{result.time}</Table.DataCell>{' '}
-                                <Table.DataCell>{result.env}</Table.DataCell>
-                                <Table.DataCell>{result.uri}</Table.DataCell>{' '}
-                                <Table.DataCell align={'center'}>
-                                    {result.totalRequests -
-                                        result.healthyRelations -
-                                        result.relationErrors}
-                                </Table.DataCell>
-                                <Table.DataCell align={'center'}>
-                                    {result.relationErrors}
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    &nbsp;
-                                    {/*{result.status !== 'STARTED' && (*/}
-                                    {/*    <Link to={LinkWalkerApi.getLink(orgName, result.id)}>*/}
-                                    {/*        <DownloadIcon title="download" />*/}
-                                    {/*    </Link>*/}
-                                    {/*)}*/}
-                                </Table.DataCell>
-                                <Table.DataCell align={'center'}>
-                                    {result.healthyRelations}
-                                </Table.DataCell>
-                            </Table.Row>
-                        ))}
+                        {logResults
+                            .sort(
+                                (a, b) => parseDate(b.time).getTime() - parseDate(a.time).getTime()
+                            )
+                            .map((result, index) => (
+                                <Table.Row key={index}>
+                                    <Table.DataCell>
+                                        {result.status == 'FAILED' && (
+                                            <XMarkOctagonIcon
+                                                title="FAILED"
+                                                fontSize="1.5rem"
+                                                className={'navds-error-message'}
+                                            />
+                                        )}
+                                        {result.status == 'COMPLETED' && (
+                                            <CheckmarkCircleIcon
+                                                title="COMPLETED"
+                                                fontSize="1.5rem"
+                                            />
+                                        )}
+                                    </Table.DataCell>
+                                    <Table.DataCell>{result.time}</Table.DataCell>{' '}
+                                    <Table.DataCell>{result.env}</Table.DataCell>
+                                    <Table.DataCell>{result.uri}</Table.DataCell>{' '}
+                                    <Table.DataCell align={'center'}>
+                                        {result.totalRequests -
+                                            result.healthyRelations -
+                                            result.relationErrors}
+                                    </Table.DataCell>
+                                    <Table.DataCell align={'center'}>
+                                        {result.relationErrors}
+                                    </Table.DataCell>
+                                    <Table.DataCell>
+                                        &nbsp;
+                                        {/*{result.status !== 'STARTED' && (*/}
+                                        {/*    <Link to={LinkWalkerApi.getLink(orgName, result.id)}>*/}
+                                        {/*        <DownloadIcon title="download" />*/}
+                                        {/*    </Link>*/}
+                                        {/*)}*/}
+                                    </Table.DataCell>
+                                    <Table.DataCell align={'center'}>
+                                        {result.healthyRelations}
+                                    </Table.DataCell>
+                                </Table.Row>
+                            ))}
                     </Table.Body>
                 </Table>
             ) : (
