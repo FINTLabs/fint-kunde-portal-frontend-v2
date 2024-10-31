@@ -18,15 +18,22 @@ interface FieldListProps {
     onSave: (formData: { resourceId: string }) => void;
     selectedResource: string;
     type: string;
-    fieldList: Field[]; // Add fieldList as a prop
+    title: string;
+    fieldList: Field[];
 }
 
-const FieldList: React.FC<FieldListProps> = ({ onSave, selectedResource, type, fieldList }) => {
+const FieldList: React.FC<FieldListProps> = ({
+    onSave,
+    selectedResource,
+    type,
+    title,
+    fieldList,
+}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [data, setData] = useState<Field[]>(fieldList); // Use fieldList instead of mockData
 
     useEffect(() => {
-        setData(fieldList); // Update data when fieldList changes
+        setData(fieldList);
     }, [fieldList]);
 
     const handleEditClick = () => {
@@ -62,7 +69,7 @@ const FieldList: React.FC<FieldListProps> = ({ onSave, selectedResource, type, f
         <FormSummary key={`x`}>
             <FormSummary.Header>
                 <FormSummary.Heading level="2">
-                    <HStack gap={'3'}>List of fields</HStack>
+                    <HStack gap={'3'}>{title}</HStack>
                 </FormSummary.Heading>
                 <FormSummary.EditLink href="#">
                     {isEditing ? (

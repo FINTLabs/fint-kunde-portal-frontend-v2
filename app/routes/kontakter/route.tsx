@@ -174,6 +174,7 @@ export async function action({ request }: ActionFunctionArgs) {
             break;
         case 'DELETE_ROLE':
             apiResponse = await RoleApi.removeRole(selectedOrg, contactNin, roleIdToDelete);
+            console.log('......... DELETE RESPONSE:', apiResponse);
             response = handleApiResponse(apiResponse, `Kontaktroller oppdatert: ${roleIdToDelete}`);
             break;
         default:

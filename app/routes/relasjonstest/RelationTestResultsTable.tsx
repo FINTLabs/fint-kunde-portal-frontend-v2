@@ -16,7 +16,7 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
         const [hours, minutes] = timePart.split(':').map(Number);
         const date = new Date();
         date.setDate(day);
-        date.setMonth(month - 1); // JavaScript months are 0-indexed
+        date.setMonth(month - 1);
         date.setHours(hours);
         date.setMinutes(minutes);
         date.setSeconds(0);

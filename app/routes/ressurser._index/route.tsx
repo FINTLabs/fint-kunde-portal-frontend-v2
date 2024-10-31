@@ -11,11 +11,11 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset, IPartialAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Button, HStack, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, VStack } from '@navikt/ds-react';
 import { InfoBox } from '~/components/shared/InfoBox';
 import CreateForm from '~/routes/ressurser._index/CreateForm';
 import AssetsTable from '~/routes/ressurser._index/ResourcesTable';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 interface IPageLoaderData {
     assets: IAsset[];
@@ -23,10 +23,7 @@ interface IPageLoaderData {
 }
 
 export const meta: MetaFunction = () => {
-    return [
-        { title: 'Ressurser' },
-        { name: 'description', content: 'Liste over ressurser._index' },
-    ];
+    return [{ title: 'Ressurser' }, { name: 'description', content: 'Liste over ressurser' }];
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -67,28 +64,36 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function Index() {
     const breadcrumbs = [{ name: 'Ressurser', link: '/ressurser' }];
     const { assets, orgName } = useLoaderData<IPageLoaderData>();
-
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const deleted = searchParams.get('deleted');
+    const [show, setShow] = React.useState(!!(deleted && deleted.trim() !== ''));
 
     const handleClick = (id: string) => {
         navigate(`/ressurser/${id}`);
     };
 
     const handleCreate = () => {
+        setShow(false);
         setIsCreating(true);
     };
 
     const handleCancel = () => {
+        setShow(false);
         setIsCreating(false);
     };
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            {deleted && <InfoBox message={`Ressurser ${deleted} slettet`} />}
+
+            {deleted && show && (
+                <Alert variant={'success'} closeButton onClose={() => setShow(false)}>
+                    {`Ressurser ${deleted} slettet` || 'Content'}
+                </Alert>
+            )}
+
             <HStack align={'center'} justify={'space-between'}>
                 <VStack>
                     <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="assets" />

@@ -3,6 +3,9 @@ import { useLoaderData, useNavigate } from '@remix-run/react';
 import AccessApi from '~/api/AccessApi';
 import ResourcesList from '~/routes/tilgang/id/element/ResourcesList';
 import React from 'react';
+import Breadcrumbs from '~/components/shared/breadcrumbs';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { KeyVerticalIcon } from '@navikt/aksel-icons';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const clientOrAdapter = params.id || '';
@@ -20,6 +23,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export default function Route() {
     const { clientOrAdapter, resourceList, element } = useLoaderData<typeof loader>();
     const navigate = useNavigate();
+    const resourceTitle = `${clientOrAdapter}/${element}`;
 
     const handleSelectedResource = (resourceName: string) => {
         console.debug('...........', resourceName);
@@ -28,16 +32,24 @@ export default function Route() {
         // setShow(false);
     };
 
+    const breadcrumbs = [
+        { name: clientOrAdapter, link: '/' },
+        {
+            name: element,
+            link: '/',
+        },
+    ];
+
     function handleToggleResource() {}
 
     return (
         <div>
-            <h1>{clientOrAdapter}</h1>
-            <h1>{element}</h1>
+            <Breadcrumbs breadcrumbs={breadcrumbs} />
+            <InternalPageHeader title={'Tilgang'} icon={KeyVerticalIcon} helpText="NEED_THIS" />
 
             <ResourcesList
                 accessComponent={resourceList}
-                clientOrAdapter={clientOrAdapter || ''}
+                title={resourceTitle || ''}
                 onSelected={handleSelectedResource}
                 onToggle={handleToggleResource}
             />

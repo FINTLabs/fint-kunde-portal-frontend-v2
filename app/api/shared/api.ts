@@ -113,10 +113,10 @@ export async function postRequest<T = unknown>(
         if (contentType && contentType.includes('application/json')) {
             const responseData = await response.json();
             logger.debug('POST request successful (JSON):', responseData);
-            return responseData; // Return the parsed JSON data
+            return responseData;
         } else {
             logger.debug('POST request successful (non-JSON response)');
-            return response.ok; // Return true for non-JSON responses
+            return response;
         }
     } else {
         const errorData = await response.json();

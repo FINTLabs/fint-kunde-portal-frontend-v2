@@ -22,7 +22,7 @@ const ClientDetails: React.FC<ClientComponentProps> = ({
                 label="Beskrivelse"
                 size="small"
                 value={client.shortDescription}
-                onChange={(e) => onChangeShortDescription(e.target.value)} // Update via parent handler
+                onChange={(e) => onChangeShortDescription(e.target.value)}
             />
         ) : (
             <LabelValuePanel label="Beskrivelse" value={client.shortDescription} />
@@ -33,7 +33,7 @@ const ClientDetails: React.FC<ClientComponentProps> = ({
                 label="Note"
                 size="small"
                 value={client.note}
-                onChange={(e) => onChangeNote(e.target.value)} // Update via parent handler
+                onChange={(e) => onChangeNote(e.target.value)}
             />
         ) : (
             <LabelValuePanel label="Note" value={client.note} />

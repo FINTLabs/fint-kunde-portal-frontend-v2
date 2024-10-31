@@ -5,17 +5,17 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Alert, Box, Button, HGrid } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import { GeneralDetailView } from './GeneralDetailView';
 import { IAdapter, IFetcherResponseData } from '~/types/types';
 import AdapterAPI from '~/api/AdapterApi';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
-import { DeleteModal } from '~/components/shared/DeleteModal';
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import React, { useEffect } from 'react';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, redirect } from '@remix-run/node';
+import React, { useEffect, useState } from 'react';
 import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
 import { handleApiResponse } from '~/utils/handleApiResponse';
+import ActionButtons from '~/components/shared/ActionButtons';
 
 type LoaderData = {
     adapters: IAdapter[];
@@ -24,10 +24,7 @@ type LoaderData = {
 };
 
 export const meta: MetaFunction = () => {
-    return [
-        { title: 'Ressurser' },
-        { name: 'description', content: 'Liste over ressurser._index' },
-    ];
+    return [{ title: 'Ressurser' }, { name: 'description', content: 'Liste over ressurser' }];
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -53,6 +50,8 @@ export default function Index() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [description, setDescription] = useState(asset.description);
 
     const breadcrumbs = [
         { name: 'Ressurser', link: '/ressurser' },
@@ -69,7 +68,7 @@ export default function Index() {
     const manangedClients = clients.filter((client) => client.managed);
     const unmanangedClients = clients.filter((client) => !client.managed);
 
-    function onAssetUpdate(description: string) {
+    function onAssetUpdate() {
         const formData = {
             assetId: asset.assetId,
             assetDescription: description,
@@ -77,6 +76,7 @@ export default function Index() {
             actionType: 'UPDATE',
         };
         fetcher.submit(formData, { method: 'post', action: `/ressurser/${asset.name}` });
+        setIsEditing(false);
     }
 
     function onAdapterSwitchChange(adapterName: string, isChecked: boolean) {
@@ -98,6 +98,22 @@ export default function Index() {
         };
         fetcher.submit(formData, { method: 'post', action: `/ressurser/${asset.name}` });
     }
+
+    const handleCancel = () => {
+        // Reset values if canceled
+        setDescription(asset.description);
+        setIsEditing(false);
+    };
+
+    const handleConfirmDelete = () => {
+        console.info('Deleting asset');
+
+        setShow(false);
+        const formData = new FormData();
+        formData.append('actionType', 'DELETE');
+        formData.append('assetName', asset.name);
+        fetcher.submit(formData, { method: 'post' });
+    };
 
     return (
         <>
@@ -129,7 +145,25 @@ export default function Index() {
                     borderRadius="large"
                     shadow="small">
                     <HGrid gap="2" align={'start'}>
-                        <GeneralDetailView asset={asset} onSave={onAssetUpdate} />
+                        <HStack>
+                            <Heading size={'medium'}>Details</Heading>
+                            <Spacer />
+                            <ActionButtons
+                                isEditing={isEditing}
+                                handleSave={onAssetUpdate}
+                                handleCancel={handleCancel}
+                                setIsEditing={setIsEditing}
+                                handleConfirmDelete={handleConfirmDelete}
+                                nameText={asset.name}
+                            />
+                        </HStack>
+
+                        <GeneralDetailView
+                            asset={asset}
+                            description={description}
+                            onChangeDescription={setDescription}
+                            isEditing={isEditing}
+                        />
 
                         <TabsComponent
                             asset={asset}
@@ -140,13 +174,6 @@ export default function Index() {
                             onAdapterSwitchChange={onAdapterSwitchChange}
                             onClientSwitchChange={onClientSwitchChange}
                         />
-                        <HGrid columns={4}>
-                            <DeleteModal
-                                title="Slett ressurs"
-                                bodyText="Er du sikker på at du vil slette denne ressursen?"
-                                action="delete"
-                            />
-                        </HGrid>
                     </HGrid>
                 </Box>
             </HGrid>
@@ -158,6 +185,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const actionType = formData.get('actionType');
     const selectedOrg = await getSelectedOrganization(request);
+    const orgName = await getSelectedOrganization(request);
 
     let response;
     let updateResponse;
@@ -183,6 +211,17 @@ export async function action({ request }: ActionFunctionArgs) {
             );
             response = handleApiResponse(updateResponse, 'Ressurser oppdatert');
             break;
+        case 'DELETE':
+            const assetName = formData.get('assetName') as string;
+            updateResponse = await AssetApi.deleteAsset(assetName, orgName);
+            if (updateResponse) {
+                return redirect(`/ressurser?deleted=${assetName}`);
+            } else {
+                return json({
+                    status: updateResponse.status,
+                    error: 'Kunne ikke slette elementet',
+                });
+            }
         case 'UPDATE_ADAPTER':
             updateResponse = await AssetApi.updateAdapterInAsset(
                 formData.get('adapterName') as string,

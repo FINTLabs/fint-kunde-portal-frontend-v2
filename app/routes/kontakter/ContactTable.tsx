@@ -49,7 +49,11 @@ const ContactTable: React.FC<IContactTableProps> = ({
         return (
             contact.roles
                 ?.filter((role) => role.endsWith(`@${selectedOrg}`))
-                .map((role) => role.split('@')[0]) ?? []
+                .map((role) => {
+                    const roleName = role.split('@')[0];
+                    const matchedRole = rolesData?.find((r) => r.id === roleName);
+                    return matchedRole ? matchedRole.name : roleName;
+                }) ?? []
         );
     };
 
@@ -80,7 +84,6 @@ const ContactTable: React.FC<IContactTableProps> = ({
                             {contact.firstName} {contact.lastName}
                         </Table.DataCell>
                         <Table.DataCell>
-                            {/* Render the RoleTags component */}
                             <RoleTags
                                 contact={contact}
                                 hasRole={hasRole}

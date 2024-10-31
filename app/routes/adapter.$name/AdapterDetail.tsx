@@ -10,16 +10,23 @@ import ComponentList from '~/components/shared/ComponentList';
 import ComponentSelector from '~/components/shared/ComponentSelector';
 import { IAccess } from '~/types/Access';
 import { AuthTable } from '~/components/shared/AuthTable';
+import React from 'react';
+
+interface IAdapterDetailProps {
+    adapter: IAdapter;
+    hasAccessControl: boolean;
+    access: IAccess[];
+    onUpdate: (formData: FormData) => void;
+    onDelete: (formData: FormData) => void;
+}
 
 export function AdapterDetail({
     adapter,
     hasAccessControl,
     access,
-}: {
-    adapter: IAdapter;
-    hasAccessControl: boolean;
-    access: IAccess[];
-}) {
+    onUpdate,
+    onDelete,
+}: IAdapterDetailProps) {
     const { components } = useLoaderData<{ components: IComponent[] }>();
     const submit = useSubmit();
 
@@ -32,7 +39,7 @@ export function AdapterDetail({
             <BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />
             <Box padding="6" borderRadius="large" shadow="small" className="relative bottom-12">
                 <VStack gap="5">
-                    <GeneralDetailView adapter={adapter} />
+                    <GeneralDetailView adapter={adapter} onUpdate={onUpdate} onDelete={onDelete} />
 
                     {!adapter.managed && (
                         <>

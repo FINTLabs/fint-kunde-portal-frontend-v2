@@ -1,28 +1,22 @@
-import { Heading, HStack, VStack } from '@navikt/ds-react';
-import React, { useState } from 'react';
-import { EditableTextField } from '~/components/shared/EditableTextField';
+import { Heading, HStack, TextField, VStack } from '@navikt/ds-react';
+import React from 'react';
 import { IAsset } from '~/types/Asset';
 import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
-import { ToggleEditSaveButton } from '~/components/shared/EditSaveButton';
 
 interface TestAddFormProps {
     asset: IAsset;
-    onSave: (description: string) => void;
+    onChangeDescription: (value: string) => void;
+    isEditing: boolean;
+    description: string;
 }
 
-export const GeneralDetailView: React.FC<TestAddFormProps> = ({ asset, onSave }) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [description, setDescription] = useState(asset.description);
-
-    const toggleEditSave = () => {
-        if (isEditing) {
-            if (description.trim() !== asset.description) {
-                //todo: check for blank?
-                onSave(description);
-            }
-        }
-        setIsEditing(!isEditing);
-    };
+export const GeneralDetailView: React.FC<TestAddFormProps> = ({
+    asset,
+    onChangeDescription,
+    isEditing,
+    description,
+}) => {
+    //const [description, setDescription] = useState(asset.description);
 
     return (
         <VStack gap="3">
@@ -39,14 +33,16 @@ export const GeneralDetailView: React.FC<TestAddFormProps> = ({ asset, onSave })
                 </VStack>
 
                 <HStack className="w-full" align={'end'} justify={'space-between'}>
-                    <EditableTextField
-                        label={'Beskrivelse'}
-                        value={description}
-                        isEditing={isEditing}
-                        setValue={setDescription}
-                    />
-
-                    <ToggleEditSaveButton isEditing={isEditing} onClick={toggleEditSave} />
+                    {isEditing ? (
+                        <TextField
+                            label="Beskrivelse"
+                            size="small"
+                            value={description}
+                            onChange={(e) => onChangeDescription(e.target.value)}
+                        />
+                    ) : (
+                        <LabelValuePanel label="Beskrivelse" value={asset.description} />
+                    )}
                 </HStack>
             </HStack>
         </VStack>

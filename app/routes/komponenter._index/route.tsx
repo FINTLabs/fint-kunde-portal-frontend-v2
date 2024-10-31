@@ -12,10 +12,7 @@ import OrganisationApi from '~/api/OrganisationApi';
 import { InfoBox } from '~/components/shared/InfoBox';
 
 export const meta: MetaFunction = () => {
-    return [
-        { title: 'Komponenter' },
-        { name: 'description', content: 'Liste over komponenter._index' },
-    ];
+    return [{ title: 'Komponenter' }, { name: 'description', content: 'Liste over komponenter' }];
 };
 
 export const loader: LoaderFunction = async ({ request }) => {

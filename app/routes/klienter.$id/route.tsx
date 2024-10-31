@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { json, useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import ClientDetails from '~/routes/klienter.$id/ClientDetails';
-import type { ActionFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs, redirect } from '@remix-run/node';
 import ClientApi from '~/api/ClientApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -23,6 +23,7 @@ import { IAccess } from '~/types/Access';
 import { AuthTable } from '~/components/shared/AuthTable';
 import { handleApiResponse } from '~/utils/handleApiResponse';
 import ActionButtons from '~/components/shared/ActionButtons';
+import logger from '~/utils/logger';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
@@ -87,12 +88,13 @@ export default function Index() {
     }
 
     const handleConfirmDelete = () => {
-        submit(null, {
-            method: 'POST',
-            action: 'delete',
-            navigate: false,
-        });
-        console.debug('Adapter deleted');
+        console.info('Deleting client');
+
+        setShow(false);
+        const formData = new FormData();
+        formData.append('actionType', 'DELETE_CLIENT');
+        formData.append('clientId', client.name);
+        fetcher.submit(formData, { method: 'post' });
     };
     const handleCancel = () => {
         // Reset values if canceled
@@ -201,15 +203,13 @@ export default function Index() {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-    const actionName = 'Action in klienter.$id';
+    const actionName = 'Action in klienter id';
 
     const formData = await request.formData();
-    console.error('--------------', formData.get('updateType'));
     const orgName = await getSelectedOrganization(request);
     const clientName = getRequestParam(params.id, 'id');
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
     const updateType = formData.get('updateType') as string;
-    // const componentName = getFormData(formData.get('componentName'), 'componentName', actionName);
     const componentName = formData.get('componentName') as string;
     let response = null;
 
@@ -233,6 +233,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
                     : `Oppdatering av klient feilet. Mer info: Status: ${apiResponse.status}. StatusTekst: ${apiResponse.statusText}`,
                 variant: isOk ? 'success' : 'error',
             });
+        case 'DELETE_CLIENT':
+            const clientId = formData.get('clientId') as string;
+            apiResponse = await ClientApi.deleteClient(clientId, orgName);
+            logger.debug(`delete client response: ${JSON.stringify(response)}`);
+            return redirect(`/klienter?deleted=${clientId}`);
         case 'UPDATE_COMPONENT_IN_ADAPTER':
             response = await ClientApi.updateComponentInClient(
                 componentName,

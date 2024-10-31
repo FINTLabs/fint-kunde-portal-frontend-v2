@@ -1,5 +1,4 @@
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import { useSubmit } from '@remix-run/react';
 import { useState } from 'react';
 import { IAdapter } from '~/types/types';
 import { EditableTextField } from '~/components/shared/EditableTextField';
@@ -8,12 +7,18 @@ import { FloppydiskIcon, PencilIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-
 import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
 
-export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
+export function GeneralDetailView({
+    adapter,
+    onUpdate,
+    onDelete,
+}: {
+    adapter: IAdapter;
+    onUpdate: (formData: FormData) => void;
+    onDelete: (formData: FormData) => void;
+}) {
     const [isEditing, setIsEditing] = useState(false);
     const [adapterShortDesc, setAdapterShortDesc] = useState(adapter.shortDescription);
     const [adapterNote, setAdapterNote] = useState(adapter.note);
-
-    const submit = useSubmit();
 
     const handleCancel = () => {
         setAdapterShortDesc(adapter.shortDescription);
@@ -22,12 +27,23 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
     };
 
     const handleConfirmDelete = () => {
-        // Using useSubmit to submit a form for deletion
-        submit(null, {
-            method: 'POST',
-            action: 'delete',
-            navigate: false,
-        });
+        const formData = new FormData();
+        formData.append('adapterName', adapter.name);
+        onDelete(formData);
+    };
+
+    const handleSave = () => {
+        if (
+            adapterNote.trim() !== adapter.note ||
+            adapterShortDesc.trim() !== adapter.shortDescription
+        ) {
+            const formData = new FormData();
+            formData.append('note', adapterNote);
+            formData.append('shortDescription', adapterShortDesc);
+            formData.append('adapterName', adapter.name);
+            onUpdate(formData);
+        }
+        setIsEditing(false);
     };
 
     return (
@@ -65,34 +81,12 @@ export function GeneralDetailView({ adapter }: { adapter: IAdapter }) {
                             )
                         }
                         variant="tertiary"
-                        type="submit"
-                        onClick={() => {
-                            if (isEditing) {
-                                if (
-                                    adapterNote.trim() !== adapter.note ||
-                                    adapterShortDesc.trim() !== adapter.shortDescription
-                                ) {
-                                    submit(
-                                        {
-                                            note: adapterNote,
-                                            shortDescription: adapterShortDesc,
-                                        },
-                                        {
-                                            method: 'POST',
-                                            action: 'update',
-                                            navigate: false,
-                                        }
-                                    );
-                                }
-                            }
-                            setIsEditing(!isEditing);
-                        }}
+                        onClick={isEditing ? handleSave : () => setIsEditing(true)}
                     />
 
                     {!isEditing && !adapter.managed && (
                         <ConfirmAction
                             buttonText={'delete'}
-                            // titleText={'Slett adapter'}
                             showButtonText={false}
                             subTitleText={`Er du sikker på at du vil slette ${adapter.name}?`}
                             onConfirm={handleConfirmDelete}
