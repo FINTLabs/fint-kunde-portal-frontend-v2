@@ -2,7 +2,7 @@ import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/nod
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
-import { Alert, Box, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, HStack, Switch, VStack } from '@navikt/ds-react';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import React, { useEffect } from 'react';
 import { IFetcherResponseData } from '~/types/types';
@@ -13,6 +13,7 @@ import ClientApi from '~/api/ClientApi';
 import ComponentConfigApi from '~/api/ComponentConfigApi';
 import LinkWalkerApi from '~/api/LinkWalkerApi';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
+import { EraserIcon } from '@navikt/aksel-icons';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Relasjonstest' }, { name: 'description', content: 'Relasjonstest' }];
@@ -35,22 +36,42 @@ export default function Index() {
     const actionData = fetcher.data as IFetcherResponseData;
     const [show, setShow] = React.useState(false);
     const { components, clients, relationTests, configs } = useLoaderData<typeof loader>();
+    const [autoRefresh, setAutoRefresh] = React.useState(false);
 
     useEffect(() => {
         setShow(true);
     }, [fetcher.state]);
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+
+        if (autoRefresh) {
+            interval = setInterval(() => {
+                fetcher.load('/relasjonstest'); // Trigger the loader to refresh the data
+            }, 30000);
+        }
+        console.log('refreshing page');
+        return () => clearInterval(interval);
+    }, [autoRefresh, fetcher]);
 
     function runTest(testUrl: string, client: string) {
         fetcher.submit(
             {
                 testUrl: testUrl,
                 clientName: client,
+                actionType: 'ADD_TEST',
             },
             { method: 'post', action: `/relasjonstest/` }
         );
 
         // const updatedFormData = { ...formData, actionType: 'runTest' };
         // fetcher.submit(updatedFormData, { method: 'post', action: '/relasjonstest' });
+    }
+
+    function removeAllTests() {
+        const formData = new FormData();
+        formData.append('actionType', 'CLEAR_TESTS');
+        fetcher.submit(formData, { method: 'post' });
     }
 
     return (
@@ -61,6 +82,7 @@ export default function Index() {
                 icon={ArrowsSquarepathIcon}
                 helpText="relasjonstest"
             />
+
             <VStack gap={'6'}>
                 {actionData && show && (
                     <Alert
@@ -82,6 +104,24 @@ export default function Index() {
                 />
             </Box>
 
+            <Box className="w-full" padding="6">
+                <HStack gap={'10'}>
+                    <Button
+                        size={'xsmall'}
+                        variant={'secondary'}
+                        icon={<EraserIcon aria-hidden />}
+                        onClick={removeAllTests}>
+                        Fjern alle tester
+                    </Button>
+                    <Switch
+                        checked={autoRefresh}
+                        onChange={() => setAutoRefresh(!autoRefresh)}
+                        size="small">
+                        Auto Refresh
+                    </Switch>
+                </HStack>
+            </Box>
+
             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                 <RelationTestResultsTable logResults={relationTests} />
             </Box>
@@ -94,19 +134,44 @@ export async function action({ request }: ActionFunctionArgs) {
     const testUrl = formData.get('testUrl');
     const clientName = formData.get('clientName');
 
-    let response = await LinkWalkerApi.addTest(testUrl as string, clientName as string, orgName);
+    const actionType = formData.get('actionType') as string;
+    let response;
+    switch (actionType) {
+        case 'ADD_TEST':
+            response = await LinkWalkerApi.addTest(
+                testUrl as string,
+                clientName as string,
+                orgName
+            );
 
-    if (response.id) {
-        return json({
-            message: 'Ny relasjonstest lagt til.',
-            variant: 'success',
-            show: true,
-        });
-    } else {
-        return json({
-            message: `Feil ved kjører testen. `,
-            variant: 'error',
-            show: true,
-        });
+            if (response.id) {
+                return json({
+                    message: `Ny relasjonstest lagt til: ${response.id}`,
+                    variant: 'success',
+                    show: true,
+                });
+            } else {
+                return json({
+                    message: `Feil ved kjører testen. `,
+                    variant: 'error',
+                    show: true,
+                });
+            }
+        case 'CLEAR_TESTS':
+            response = await LinkWalkerApi.clearTests(orgName);
+
+            if (response.ok) {
+                return json({
+                    message: 'Alle tester fjernet',
+                    variant: 'success',
+                    show: true,
+                });
+            } else {
+                return json({
+                    message: `Feil ved fjern alle tester. `,
+                    variant: 'error',
+                    show: true,
+                });
+            }
     }
 }

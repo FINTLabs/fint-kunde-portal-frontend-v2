@@ -24,6 +24,13 @@ class LinkWalkerApi {
 
         return request(URL, functionName, 'POST', 'json', data);
     }
+
+    static clearTests(orgName: string) {
+        const functionName = 'clearTests';
+        const URL = `${API_URL}/link-walker/tasks/${orgName}`;
+
+        return request(URL, functionName, 'PUT', 'json');
+    }
 }
 
 export default LinkWalkerApi;
