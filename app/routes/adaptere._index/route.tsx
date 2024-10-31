@@ -107,7 +107,7 @@ export default function Index() {
 
                     {(actionData && show) || (show && deleteName) ? (
                         <Alert
-                            className={'!mt-5'}
+                            className={'!mt-5 mb-10'}
                             variant={
                                 (actionData?.variant || 'success') as
                                     | 'error'
