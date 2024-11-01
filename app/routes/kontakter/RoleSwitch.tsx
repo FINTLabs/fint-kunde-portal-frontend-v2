@@ -17,7 +17,7 @@ const RolesSwitch: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole, 
     };
 
     return (
-        <Fieldset legend="Roles" className="flex-wrap">
+        <Fieldset legend="Roller" className="flex-wrap">
             {rolesData?.map((role, index) => (
                 <Switch
                     size="small"
