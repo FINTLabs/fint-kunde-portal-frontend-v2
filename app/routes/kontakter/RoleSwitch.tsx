@@ -1,5 +1,5 @@
 import React from 'react';
-import { Fieldset, Switch } from '@navikt/ds-react';
+import { BodyShort, Fieldset, Switch } from '@navikt/ds-react';
 import { IContact, IRole } from '~/types/types';
 
 interface IRolesChipsProps {
@@ -18,17 +18,30 @@ const RolesSwitch: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole, 
 
     return (
         <Fieldset legend="Roller" className="flex-wrap">
-            {rolesData?.map((role, index) => (
-                <Switch
-                    size="small"
-                    key={index + role.id}
-                    checked={isAdmin || hasRole(contact, role.id)}
-                    onChange={(e) => handleSwitchChange(role.id, e.target.checked)}
-                    disabled={isAdmin && role.id !== 'ROLE_ADMIN'}
-                    description={role.description}>
-                    {role.name}
-                </Switch>
-            ))}
+            {rolesData?.map((role, index) => {
+                const isSwitchDisabled = isAdmin && role.id !== 'ROLE_ADMIN';
+
+                return (
+                    <>
+                        <Switch
+                            size="small"
+                            checked={isAdmin || hasRole(contact, role.id)}
+                            onChange={(e) => handleSwitchChange(role.id, e.target.checked)}
+                            disabled={isSwitchDisabled}>
+                            {role.name}
+                        </Switch>
+
+                        {role.description.split('...').map((item, key) => (
+                            <BodyShort
+                                key={key}
+                                size="small"
+                                className={`pl-5 ${isSwitchDisabled ? 'opacity-30' : ''}`}>
+                                {item}
+                            </BodyShort>
+                        ))}
+                    </>
+                );
+            })}
         </Fieldset>
     );
 };
