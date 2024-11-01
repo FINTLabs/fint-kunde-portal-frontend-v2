@@ -14,7 +14,7 @@ import type {
     LoaderFunctionArgs,
     MetaFunction,
 } from '@remix-run/node';
-import { createCookie, json } from '@remix-run/node'; // or cloudflare/deno
+import { createCookie, json } from '@remix-run/node';
 import './tailwind.css';
 import '@navikt/ds-css';
 import './novari-theme.css';

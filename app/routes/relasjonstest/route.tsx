@@ -48,7 +48,7 @@ export default function Index() {
         if (autoRefresh) {
             interval = setInterval(() => {
                 fetcher.load('/relasjonstest'); // Trigger the loader to refresh the data
-            }, 30000);
+            }, 15000);
         }
         console.log('refreshing page');
         return () => clearInterval(interval);
