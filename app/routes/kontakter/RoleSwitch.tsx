@@ -6,14 +6,21 @@ interface IRolesChipsProps {
     contact: IContact;
     rolesData?: IRole[];
     hasRole: (currentContact: IContact, roleId: string) => boolean;
-    updateRole: (contactNin: string, roleId: string, isChecked: boolean) => void;
+    updateRole: (formData: FormData) => void;
 }
 
 const RolesSwitch: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole, updateRole }) => {
     const isAdmin = hasRole(contact, 'ROLE_ADMIN');
 
-    const handleSwitchChange = (roleId: string, isChecked: boolean) => {
-        updateRole(contact.nin, roleId, isChecked);
+    const handleSwitchChange = (roleId: string, isChecked: boolean, roleName: string) => {
+        const formData = new FormData();
+        formData.append('contactNin', contact.nin);
+        formData.append('roleId', roleId);
+        formData.append('isChecked', isChecked ? 'true' : 'false');
+        formData.append('contactName', `${contact.firstName} ${contact.lastName}`);
+        formData.append('roleName', roleName);
+        // updateRole(contact.nin, roleId, isChecked, contact.firstName, roleName);
+        updateRole(formData);
     };
 
     return (
@@ -27,7 +34,9 @@ const RolesSwitch: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole, 
                             key={index}
                             size="small"
                             checked={isAdmin || hasRole(contact, role.id)}
-                            onChange={(e) => handleSwitchChange(role.id, e.target.checked)}
+                            onChange={(e) =>
+                                handleSwitchChange(role.id, e.target.checked, role.name)
+                            }
                             disabled={isSwitchDisabled}>
                             {role.name}
                         </Switch>

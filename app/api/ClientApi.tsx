@@ -71,7 +71,7 @@ class ClientApi {
     ) {
         console.log('------------------ update', updateType);
         const URL = `${API_URL}/api/components/organisation/${organisationName}/${componentName}/clients/${clientName}`;
-        if (updateType === 'add') {
+        if (updateType === 'true') {
             return await ClientApi.addComponentToClient(URL, componentName);
         } else {
             return await ClientApi.removeComponentFromClient(URL, componentName);
@@ -97,7 +97,7 @@ class ClientApi {
                 headers: {
                     Accept: '*/*',
                     'Content-Type': 'text/plain',
-                    'x-nin': HeaderProperties.getXnin()
+                    'x-nin': HeaderProperties.getXnin(),
                 },
                 credentials: 'same-origin',
                 body: password,

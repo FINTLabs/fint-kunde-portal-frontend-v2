@@ -5,17 +5,19 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Alert, Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
+import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import { GeneralDetailView } from './GeneralDetailView';
 import { IAdapter, IFetcherResponseData } from '~/types/types';
 import AdapterAPI from '~/api/AdapterApi';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, redirect } from '@remix-run/node';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
 import { handleApiResponse } from '~/utils/handleApiResponse';
 import ActionButtons from '~/components/shared/ActionButtons';
+import AlertManager from '~/components/AlertManager';
+import useAlerts from '~/components/useAlerts';
 
 type LoaderData = {
     adapters: IAdapter[];
@@ -49,18 +51,14 @@ export default function Index() {
     const { adapters, asset, clients } = useLoaderData<LoaderData>();
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
-    const [show, setShow] = React.useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [description, setDescription] = useState(asset.description);
+    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state);
 
     const breadcrumbs = [
         { name: 'Ressurser', link: '/ressurser' },
         { name: `${id}`, link: `/ressurser/${id}` },
     ];
-
-    useEffect(() => {
-        setShow(true);
-    }, [fetcher.state]);
 
     const managedAdapters = adapters.filter((adapter) => adapter.managed);
     const unmanagedAdapters = adapters.filter((adapter) => !adapter.managed);
@@ -106,9 +104,6 @@ export default function Index() {
     };
 
     const handleConfirmDelete = () => {
-        console.info('Deleting asset');
-
-        setShow(false);
         const formData = new FormData();
         formData.append('actionType', 'DELETE');
         formData.append('assetName', asset.name);
@@ -119,15 +114,7 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="assets" />
-
-            {actionData && show && (
-                <Alert
-                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
-                    closeButton
-                    onClose={() => setShow(false)}>
-                    {actionData.message || 'Content'}
-                </Alert>
-            )}
+            <AlertManager alerts={alerts} />
 
             <HGrid gap="2" align={'start'}>
                 <Box>

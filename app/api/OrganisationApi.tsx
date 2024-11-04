@@ -17,10 +17,10 @@ class OrganisationApi {
     static async updateComponent(
         componentName: string,
         organisationName: string,
-        updateType: string
+        isChecked: string
     ) {
         const URL = `${API_URL}/api/organisations/${organisationName}/components/${componentName}`;
-        if (updateType === 'add') {
+        if (isChecked === 'true') {
             return await OrganisationApi.addComponentToOrganisation(URL, componentName);
         } else {
             return await OrganisationApi.removeComponentFromOrganisation(URL, componentName);
@@ -36,7 +36,6 @@ class OrganisationApi {
         const functionName = 'removeComponentFromOrganisation';
         return await request(URL, functionName, 'DELETE', 'json', { name: componentName });
     }
-
 }
 
 export default OrganisationApi;

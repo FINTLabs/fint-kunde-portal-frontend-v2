@@ -1,10 +1,12 @@
-// utils/handleApiResponse.ts
-
-export const handleApiResponse = (apiResponse: Response, successMessage: string) => {
+export const handleApiResponse = (
+    apiResponse: Response,
+    successMessage: string,
+    isWarning?: boolean
+) => {
     if (apiResponse.ok) {
         return {
             message: successMessage,
-            variant: 'success',
+            variant: isWarning ? 'warning' : 'success',
             show: true,
         };
     } else {
@@ -15,3 +17,4 @@ export const handleApiResponse = (apiResponse: Response, successMessage: string)
         };
     }
 };
+//TODO remove show

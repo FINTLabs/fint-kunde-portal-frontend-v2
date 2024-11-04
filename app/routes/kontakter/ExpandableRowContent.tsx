@@ -9,9 +9,9 @@ interface ExpandableRowContentProps {
     contact: IContact;
     rolesData?: IRole[];
     hasRole: (contact: IContact, roleId: string) => boolean;
-    updateRole: (contactNin: string, roleId: string, isChecked: boolean) => void;
+    updateRole: (formData: FormData) => void;
     handleUpdateLegalContact: (contactNin: string) => void;
-    handleRemoveContact: (contactNin: string) => void;
+    handleRemoveContact: (formData: FormData) => void;
 }
 
 const ExpandableRowContent: React.FC<ExpandableRowContentProps> = ({
@@ -22,6 +22,13 @@ const ExpandableRowContent: React.FC<ExpandableRowContentProps> = ({
     handleUpdateLegalContact,
     handleRemoveContact,
 }) => {
+    function onRemoveContact() {
+        const formData = new FormData();
+        formData.append('contactNin', contact.nin);
+        formData.append('contactNAme', `${contact.firstName} ${contact.lastName}`);
+        handleRemoveContact(formData);
+    }
+
     return (
         <>
             <RolesSwitch
@@ -43,7 +50,7 @@ const ExpandableRowContent: React.FC<ExpandableRowContentProps> = ({
                     icon={<LinkBrokenIcon />}
                     buttonText={'Fjern kontakt'}
                     buttonVariant={'primary'}
-                    onConfirm={() => handleRemoveContact(contact.nin)}
+                    onConfirm={onRemoveContact}
                     subTitleText={`Er du sikker på at du vil fjerne ${contact.firstName} ${contact.lastName} ?`}
                 />
             </HGrid>

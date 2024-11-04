@@ -11,7 +11,7 @@ interface Access {
 
 interface ComponentListProps {
     accessList: Access[];
-    onToggle: (domain: string, packageName: string, checked: boolean) => void;
+    onToggle: (formData: FormData) => void;
     entity: string;
 }
 
@@ -56,13 +56,13 @@ const ComponentList: React.FC<ComponentListProps> = ({ accessList, onToggle, ent
                                             justify={'space-between'}
                                             align={'center'}>
                                             <Checkbox
-                                                onClick={() =>
-                                                    onToggle(
-                                                        item.domain,
-                                                        item.packageName,
-                                                        item.status === 'ENABLED'
-                                                    )
-                                                }
+                                                // onClick={() =>
+                                                //     onToggle(
+                                                //         item.domain,
+                                                //         item.packageName,
+                                                //         item.status === 'ENABLED'
+                                                //     )
+                                                // }
                                                 value={item.packageName}
                                                 size={'small'}
                                                 checked={item.status === 'ENABLED'}>

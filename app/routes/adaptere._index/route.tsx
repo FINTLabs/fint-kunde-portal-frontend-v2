@@ -16,6 +16,7 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { CustomTabs } from '~/components/shared/CustomTabs';
 import React, { useEffect, useState } from 'react';
 import AdapterCreateForm from '~/routes/adaptere._index/CreateForm';
+import AlertManager from '~/components/AlertManager';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
@@ -46,10 +47,30 @@ export default function Index() {
     const [show, setShow] = React.useState(false);
     const [isCreating, setIsCreating] = useState(false);
     const [filteredAdapter, setFilteredAdapter] = useState(adapters);
+    const [alerts, setAlerts] = useState<AlertType[]>([]);
 
     useEffect(() => {
-        setShow(true);
-    }, [fetcher.state]);
+        if (deleteName) {
+            setAlerts((prev) => [
+                ...prev,
+                {
+                    id: Date.now(),
+                    message: `Adapter '${deleteName}' har blitt slettet` || 'Action completed',
+                    variant: 'warning',
+                },
+            ]);
+        }
+        if (fetcher.state === 'idle' && actionData) {
+            setAlerts((prev) => [
+                ...prev,
+                {
+                    id: Date.now(),
+                    message: actionData.message || 'Action completed',
+                    variant: actionData.variant as 'error' | 'info' | 'warning' | 'success',
+                },
+            ]);
+        }
+    }, [fetcher.state, actionData]);
 
     const handleCreate = () => {
         setIsCreating(true);
@@ -104,6 +125,7 @@ export default function Index() {
                             </Button>
                         </VStack>
                     </HStack>
+                    <AlertManager alerts={alerts} />
 
                     {(actionData && show) || (show && deleteName) ? (
                         <Alert

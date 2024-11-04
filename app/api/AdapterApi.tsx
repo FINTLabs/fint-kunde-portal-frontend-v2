@@ -29,7 +29,7 @@ class AdapterAPI {
         updateType: string
     ) {
         const URL = `${API_URL}/api/components/organisation/${organisationName}/${componentName}/adapters/${adapterName}`;
-        if (updateType === 'add') {
+        if (updateType === 'true') {
             return await AdapterAPI.addComponentToAdapter(URL, componentName);
         } else {
             return await AdapterAPI.removeComponentFromAdapter(URL, componentName);
@@ -67,7 +67,7 @@ class AdapterAPI {
                 headers: {
                     Accept: '*/*',
                     'Content-Type': 'text/plain',
-                    'x-nin': HeaderProperties.getXnin()
+                    'x-nin': HeaderProperties.getXnin(),
                 },
                 credentials: 'same-origin',
                 body: password,

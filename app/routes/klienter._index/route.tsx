@@ -3,15 +3,16 @@ import { json, useFetcher, useLoaderData, useSearchParams } from '@remix-run/rea
 import ClientApi from '~/api/ClientApi';
 import { IClient, IPartialClient } from '~/types/Clients';
 import ClientTable from '~/routes/klienter._index/ClientTable';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { PlusIcon, TokenIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { Alert, Button, HStack, Search, Tabs, VStack } from '@navikt/ds-react';
+import { Tabs } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { type ActionFunctionArgs, LoaderFunction, MetaFunction, redirect } from '@remix-run/node';
 import ClientCreateForm from '~/routes/klienter._index/CreateForm';
 import { IFetcherResponseData } from '~/types/types';
 import logger from '~/utils/logger';
+import AlertManager from '~/components/AlertManager';
+import useAlerts from '~/components/useAlerts';
+import ClientPageHeader from '~/routes/klienter._index/ClientPageHeader';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Klienter' }, { name: 'description', content: 'klienter' }];
@@ -19,7 +20,6 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
-
     const clientData = await ClientApi.getClients(orgName);
     return json({ clientData, orgName });
 };
@@ -28,6 +28,7 @@ interface IPageLoaderData {
     clientData: IClient[];
     orgName: string;
 }
+
 export default function Index() {
     const { clientData, orgName } = useLoaderData<IPageLoaderData>();
     const breadcrumbs = [{ name: 'Klienter', link: '/klienter' }];
@@ -35,14 +36,10 @@ export default function Index() {
     const [filteredClients, setFilteredClients] = useState(clientData);
     const [searchParams] = useSearchParams();
     const deleteName = searchParams.get('deleted');
-    // const navigate = useNavigate();
     const [isCreating, setIsCreating] = useState(false);
-    const [show, setShow] = React.useState(false);
     const fetcher = useFetcher<IFetcherResponseData>();
     const actionData = fetcher.data as IFetcherResponseData;
-    useEffect(() => {
-        setShow(true);
-    }, [fetcher.state]);
+    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state, deleteName);
 
     useEffect(() => {
         setFilteredClients(clientData.filter((client) => !client.managed));
@@ -58,7 +55,6 @@ export default function Index() {
     }
 
     const handleCreate = () => {
-        // navigate(`/klienter._index/create`);
         setIsCreating(true);
     };
 
@@ -75,7 +71,6 @@ export default function Index() {
 
     function handleCancelCreate() {
         setIsCreating(false);
-        setShow(false);
     }
 
     const handleSave = (formData: FormData) => {
@@ -85,6 +80,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
+            <AlertManager alerts={alerts} />
             {isCreating ? (
                 <ClientCreateForm
                     onCancel={handleCancelCreate}
@@ -93,50 +89,11 @@ export default function Index() {
                 />
             ) : (
                 <>
-                    <HStack align={'center'} justify={'space-between'}>
-                        <VStack>
-                            <InternalPageHeader
-                                title={'Klienter'}
-                                icon={TokenIcon}
-                                helpText="klienter"
-                            />
-                        </VStack>
-                        <VStack>
-                            <Button
-                                className="float-right"
-                                onClick={handleCreate}
-                                icon={<PlusIcon aria-hidden />}>
-                                Legg til
-                            </Button>
-                        </VStack>
-                    </HStack>
-
-                    {(actionData && show) || (show && deleteName) ? (
-                        <Alert
-                            className={'!mt-5 mb-10'}
-                            variant={
-                                (actionData?.variant || 'success') as
-                                    | 'error'
-                                    | 'info'
-                                    | 'warning'
-                                    | 'success'
-                            }
-                            closeButton
-                            onClose={() => setShow(false)}>
-                            {actionData?.message ||
-                                `Klient '${deleteName}' har blitt slettet` ||
-                                'Innhold'}
-                        </Alert>
-                    ) : null}
-
-                    <Search
-                        label="Søk etter klienter"
-                        hideLabel
-                        variant="secondary"
-                        size="small"
-                        onChange={(value: string) => handleSearch(value)}
-                        placeholder="Søk etter navn eller beskrivelse"
-                        className={'pb-6'}
+                    <ClientPageHeader
+                        title="Klienter"
+                        helpText="klienter"
+                        onCreate={handleCreate}
+                        onSearch={handleSearch}
                     />
 
                     <Tabs
@@ -180,9 +137,9 @@ export async function action({ request }: ActionFunctionArgs) {
         return redirect(`/klienter/${response.name}`);
     } else {
         return json({
-            errors: {
-                apiError: `Feil oppretting av klient. Responsen inneholder ikke navn.`,
-            },
+            show: true,
+            message: `Feil oppretting av klient.'`,
+            variant: 'error',
         });
     }
 }

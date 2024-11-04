@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { json, useFetcher, useLoaderData, useNavigate, useSubmit } from '@remix-run/react';
+import React, { useState } from 'react';
+import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import ClientDetails from '~/routes/klienter.$id/ClientDetails';
 import { ActionFunctionArgs, redirect } from '@remix-run/node';
@@ -7,7 +7,7 @@ import ClientApi from '~/api/ClientApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
+import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
@@ -16,7 +16,6 @@ import { getFormData, getRequestParam } from '~/utils/requestUtils';
 import { getComponentIds } from '~/utils/helper';
 import ComponentList from '~/components/shared/ComponentList';
 import FeaturesApi from '~/api/FeaturesApi';
-import ComponentSelector from '~/components/shared/ComponentSelector';
 import { IFetcherResponseData } from '~/types/types';
 import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
@@ -24,11 +23,13 @@ import { AuthTable } from '~/components/shared/AuthTable';
 import { handleApiResponse } from '~/utils/handleApiResponse';
 import ActionButtons from '~/components/shared/ActionButtons';
 import logger from '~/utils/logger';
+import AlertManager from '~/components/AlertManager';
+import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
+import useAlerts from '~/components/useAlerts';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const id = params.id || '';
-
     const client = await ClientApi.getClientById(orgName, id);
     const components = await ComponentApi.getOrganisationComponents(orgName);
     const features = await FeaturesApi.fetchFeatures();
@@ -39,6 +40,10 @@ export async function loader({ request, params }: ActionFunctionArgs) {
     }
 
     return json({ client, components, features, access });
+}
+
+interface IExtendedFetcherResponseData extends IFetcherResponseData {
+    clientSecret?: string;
 }
 
 export default function Index() {
@@ -61,13 +66,8 @@ export default function Index() {
     const [shortDescription, setShortDescription] = useState(client.shortDescription);
     const [note, setNote] = useState(client.note);
     const fetcher = useFetcher();
-    const actionData = fetcher.data as IFetcherResponseData;
-    const [show, setShow] = React.useState(false);
-    useEffect(() => {
-        setShow(true);
-    }, [fetcher.state]);
-
-    const submit = useSubmit();
+    const actionData = fetcher.data as IExtendedFetcherResponseData;
+    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state);
 
     const handleSave = () => {
         const formData = new FormData();
@@ -77,7 +77,6 @@ export default function Index() {
 
         fetcher.submit(formData, {
             method: 'post',
-            action: `/klienter/${client.name}`,
         });
 
         setIsEditing(false);
@@ -88,34 +87,38 @@ export default function Index() {
     }
 
     const handleConfirmDelete = () => {
-        console.info('Deleting client');
-
-        setShow(false);
         const formData = new FormData();
         formData.append('actionType', 'DELETE_CLIENT');
         formData.append('clientId', client.name);
         fetcher.submit(formData, { method: 'post' });
     };
     const handleCancel = () => {
-        // Reset values if canceled
         setShortDescription(client.shortDescription);
         setNote(client.note);
         setIsEditing(false);
+    };
+
+    const handleUpdatePassword = (formData: FormData) => {
+        formData.append('actionType', 'UPDATE_PASSWORD');
+        fetcher.submit(formData, { method: 'post' });
+    };
+
+    const handleUpdateAuthInfo = (formData: FormData) => {
+        formData.append('actionType', 'GET_SECRET');
+        fetcher.submit(formData, { method: 'post' });
+    };
+
+    const handleToggle = (formData: FormData) => {
+        formData.append('actionType', 'UPDATE_COMPONENT_IN_CLIENT');
+        formData.append('adapterName', client?.name as string);
+        fetcher.submit(formData, { method: 'post' });
     };
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={client.shortDescription} icon={TokenIcon} />
-
-            {actionData && show && (
-                <Alert
-                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
-                    closeButton
-                    onClose={() => setShow(false)}>
-                    {actionData.message || 'Content'}
-                </Alert>
-            )}
+            <AlertManager alerts={alerts} />
 
             <HGrid gap="2" align={'start'}>
                 <Box>
@@ -159,7 +162,11 @@ export default function Index() {
                             <AuthTable
                                 entity={client}
                                 entityType="client"
-                                actionName="clientName"
+                                onUpdatePassword={handleUpdatePassword}
+                                onUpdateAuthInfo={handleUpdateAuthInfo}
+                                {...(actionData?.clientSecret
+                                    ? { clientSecret: actionData.clientSecret }
+                                    : {})}
                             />
                             <Divider className="pt-10" />
                         </>
@@ -167,34 +174,26 @@ export default function Index() {
 
                     <Divider className="pt-10" />
 
-                    <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
                     {hasAccessControl ? (
-                        <ComponentList
-                            accessList={access}
-                            // selectedItems={getComponentIds(client.components)}
-                            entity={client.name}
-                            onToggle={onComponentToggle}
-                        />
+                        <>
+                            <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
+                            <ComponentList
+                                accessList={access}
+                                // selectedItems={getComponentIds(client.components)}
+                                entity={client.name}
+                                onToggle={onComponentToggle}
+                            />
+                        </>
                     ) : (
-                        <ComponentSelector
-                            items={components}
-                            adapterName={client.name}
-                            selectedItems={getComponentIds(client.components)}
-                            toggle={(name, isChecked) => {
-                                submit(
-                                    {
-                                        componentName: name,
-                                        updateType: isChecked ? 'add' : 'remove',
-                                        actionType: 'UPDATE_COMPONENT_IN_ADAPTER',
-                                    },
-                                    {
-                                        method: 'POST',
-                                        // action: 'update',
-                                        navigate: false,
-                                    }
-                                );
-                            }}
-                        />
+                        <>
+                            <Heading size={'medium'}>Komponenter</Heading>
+                            <ComponentsTable
+                                items={components}
+                                selectedItems={getComponentIds(client.components)}
+                                toggle={handleToggle}
+                                hideLink={true}
+                            />
+                        </>
                     )}
                 </Box>
             </HGrid>
@@ -209,7 +208,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const clientName = getRequestParam(params.id, 'id');
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
-    const updateType = formData.get('updateType') as string;
+    const updateType = formData.get('isChecked') as string;
     const componentName = formData.get('componentName') as string;
     let response = null;
 
@@ -238,14 +237,22 @@ export async function action({ request, params }: ActionFunctionArgs) {
             apiResponse = await ClientApi.deleteClient(clientId, orgName);
             logger.debug(`delete client response: ${JSON.stringify(response)}`);
             return redirect(`/klienter?deleted=${clientId}`);
-        case 'UPDATE_COMPONENT_IN_ADAPTER':
-            response = await ClientApi.updateComponentInClient(
+        case 'UPDATE_COMPONENT_IN_CLIENT':
+            updateResponse = await ClientApi.updateComponentInClient(
                 componentName,
                 clientName,
                 orgName,
                 updateType
             );
-            return json({ ok: response.status === 204 });
+            if (updateType === 'true')
+                response = handleApiResponse(updateResponse, 'Komponent lagt til klienter');
+            else
+                response = handleApiResponse(
+                    updateResponse,
+                    'Komponenten fjernet fra klienter',
+                    true
+                );
+            break;
         case 'UPDATE_PASSWORD':
             updateResponse = await ClientApi.setPassword(
                 formData.get('entityName') as string,
@@ -256,12 +263,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
             break;
         case 'GET_SECRET':
             updateResponse = await ClientApi.getOpenIdSecret(
-                formData.get('clientName') as string,
+                formData.get('entityName') as string,
                 orgName
             );
             return json({
                 clientSecret: updateResponse,
-                message: 'Client secret fetched successfully',
+                message: 'Klienthemmeligheten ble hentet',
                 variant: 'success',
                 show: true,
             });

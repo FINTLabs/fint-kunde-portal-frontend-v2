@@ -1,8 +1,8 @@
 import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, HStack, Switch, VStack } from '@navikt/ds-react';
+import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
+import { Box, Button, HStack, Switch } from '@navikt/ds-react';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import React, { useEffect } from 'react';
 import { IFetcherResponseData } from '~/types/types';
@@ -13,7 +13,8 @@ import ClientApi from '~/api/ClientApi';
 import ComponentConfigApi from '~/api/ComponentConfigApi';
 import LinkWalkerApi from '~/api/LinkWalkerApi';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
-import { EraserIcon } from '@navikt/aksel-icons';
+import useAlerts from '~/components/useAlerts';
+import AlertManager from '~/components/AlertManager';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Relasjonstest' }, { name: 'description', content: 'Relasjonstest' }];
@@ -34,13 +35,9 @@ export default function Index() {
     const breadcrumbs = [{ name: 'Relasjonstest', link: '/relasjonstest' }];
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
-    const [show, setShow] = React.useState(false);
     const { components, clients, relationTests, configs } = useLoaderData<typeof loader>();
     const [autoRefresh, setAutoRefresh] = React.useState(false);
-
-    useEffect(() => {
-        setShow(true);
-    }, [fetcher.state]);
+    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -50,7 +47,7 @@ export default function Index() {
                 fetcher.load('/relasjonstest'); // Trigger the loader to refresh the data
             }, 15000);
         }
-        console.log('refreshing page');
+        console.log('refreshing page', fetcher.state);
         return () => clearInterval(interval);
     }, [autoRefresh, fetcher]);
 
@@ -82,18 +79,7 @@ export default function Index() {
                 icon={ArrowsSquarepathIcon}
                 helpText="relasjonstest"
             />
-
-            <VStack gap={'6'}>
-                {actionData && show && (
-                    <Alert
-                        className={'!mt-5'}
-                        variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
-                        closeButton
-                        onClose={() => setShow(false)}>
-                        {actionData.message || 'Content'}
-                    </Alert>
-                )}
-            </VStack>
+            <AlertManager alerts={alerts} />
 
             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                 <RelationTestAddForm
@@ -163,7 +149,7 @@ export async function action({ request }: ActionFunctionArgs) {
             if (response.ok) {
                 return json({
                     message: 'Alle tester fjernet',
-                    variant: 'success',
+                    variant: 'warning',
                     show: true,
                 });
             } else {

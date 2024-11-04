@@ -5,17 +5,20 @@ import {
     redirect,
 } from '@remix-run/node';
 import { LayersIcon, PlusIcon } from '@navikt/aksel-icons';
-import { json, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
+import { json, useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset, IPartialAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Alert, Button, HStack, VStack } from '@navikt/ds-react';
+import { Button, HStack, VStack } from '@navikt/ds-react';
 import { InfoBox } from '~/components/shared/InfoBox';
 import CreateForm from '~/routes/ressurser._index/CreateForm';
 import AssetsTable from '~/routes/ressurser._index/ResourcesTable';
 import React, { useState } from 'react';
+import { IFetcherResponseData } from '~/types/types';
+import useAlerts from '~/components/useAlerts';
+import AlertManager from '~/components/AlertManager';
 
 interface IPageLoaderData {
     assets: IAsset[];
@@ -33,66 +36,33 @@ export const loader: LoaderFunction = async ({ request }) => {
     return json({ assets: assets, orgName: orgName });
 };
 
-export async function action({ request }: ActionFunctionArgs) {
-    const formData = await request.formData();
-
-    const name = formData.get('name') as string;
-    const description = formData.get('description') as string;
-
-    const orgName = await getSelectedOrganization(request);
-    const newAsset: IPartialAsset = {
-        assetId: name,
-        name: name,
-        description,
-    };
-
-    const response = await AssetApi.createAsset(newAsset, orgName);
-
-    if (response.name) {
-        // const newAdapter = (await response.json()) as IAsset;
-        return redirect(`/ressurser/${newAsset.assetId}_fintlabs_no`);
-    } else {
-        return json({
-            errors: {
-                apiError: `Unable to create resource: Status: ${response.status}, statusText: ${response.statusText}`,
-            },
-            status: response.status,
-        });
-    }
-}
-
 export default function Index() {
     const breadcrumbs = [{ name: 'Ressurser', link: '/ressurser' }];
     const { assets, orgName } = useLoaderData<IPageLoaderData>();
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const deleted = searchParams.get('deleted');
-    const [show, setShow] = React.useState(!!(deleted && deleted.trim() !== ''));
+    const deleteName = searchParams.get('deleted');
+    const fetcher = useFetcher<IFetcherResponseData>();
+    const actionData = fetcher.data as IFetcherResponseData;
+    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state, deleteName);
 
     const handleClick = (id: string) => {
         navigate(`/ressurser/${id}`);
     };
 
     const handleCreate = () => {
-        setShow(false);
         setIsCreating(true);
     };
 
     const handleCancel = () => {
-        setShow(false);
         setIsCreating(false);
     };
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-
-            {deleted && show && (
-                <Alert variant={'success'} closeButton onClose={() => setShow(false)}>
-                    {`Ressurser ${deleted} slettet` || 'Content'}
-                </Alert>
-            )}
+            <AlertManager alerts={alerts} />
 
             <HStack align={'center'} justify={'space-between'}>
                 <VStack>
@@ -116,4 +86,30 @@ export default function Index() {
             )}
         </>
     );
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+
+    const name = formData.get('name') as string;
+    const description = formData.get('description') as string;
+
+    const orgName = await getSelectedOrganization(request);
+    const newAsset: IPartialAsset = {
+        assetId: name,
+        name: name,
+        description,
+    };
+
+    const response = await AssetApi.createAsset(newAsset, orgName);
+
+    if (response.name) {
+        return redirect(`/ressurser/${response.name}`);
+    } else {
+        return json({
+            show: true,
+            message: `Feil oppretting av ressurs.'`,
+            variant: 'error',
+        });
+    }
 }

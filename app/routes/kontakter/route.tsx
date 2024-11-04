@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
@@ -15,6 +15,8 @@ import { getSelectedOrganization as getSelectedOrganization } from '~/utils/sele
 import { getFormData } from '~/utils/requestUtils';
 import { InfoBox } from '~/components/shared/InfoBox';
 import { handleApiResponse } from '~/utils/handleApiResponse';
+import AlertManager from '~/components/AlertManager';
+import useAlerts from '~/components/useAlerts';
 
 interface IPageLoaderData {
     technicalContacts?: IContact[] | string;
@@ -53,25 +55,16 @@ export default function Index() {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
-    const [show, setShow] = React.useState(false);
-
-    useEffect(() => {
-        setShow(true);
-        setIsModalOpen(false);
-    }, [fetcher.state]);
+    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state);
 
     const handleFormSubmit = (formData: FormData) => {
         fetcher.submit(formData, { method: 'post', action: '/kontakter' });
     };
 
-    function handleAddContact(nin: string) {
-        const formData = new FormData();
-        formData.append('contactNin', nin);
+    function handleAddContact(formData: FormData) {
         formData.append('actionType', 'ADD_TECHNICAL_CONTACT');
-
         fetcher.submit(formData, {
             method: 'post',
-            action: `/kontakter/`,
         });
     }
 
@@ -96,14 +89,7 @@ export default function Index() {
                 </VStack>
             </HStack>
 
-            {actionData && show && (
-                <Alert
-                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
-                    closeButton
-                    onClose={() => setShow(false)}>
-                    {actionData.message || 'Content'}
-                </Alert>
-            )}
+            <AlertManager alerts={alerts} />
 
             <Box className="m-10">
                 <Heading size="xsmall">Juridisk kontakt</Heading>
@@ -147,6 +133,8 @@ export async function action({ request }: ActionFunctionArgs) {
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
     const selectedOrg = await getSelectedOrganization(request);
     const contactNin = getFormData(formData.get('contactNin'), 'contactNin', actionName);
+    const contactName = formData.get('contactName') as string;
+    const roleName = formData.get('roleName') as string;
     const roleIdToAdd = formData.get('roleId') as string;
     const roleIdToDelete = formData.get('roleId') as string;
 
@@ -162,7 +150,11 @@ export async function action({ request }: ActionFunctionArgs) {
             break;
         case 'REMOVE_CONTACT':
             apiResponse = await ContactApi.removeTechnicalContact(contactNin, selectedOrg);
-            response = handleApiResponse(apiResponse, 'Kontakten er fjernet som teknisk kontakt');
+            response = handleApiResponse(
+                apiResponse,
+                'Kontakten er fjernet som teknisk kontakt',
+                true
+            );
             break;
         case 'SET_LEGAL_CONTACT':
             apiResponse = await ContactApi.setLegalContact(contactNin, selectedOrg);
@@ -170,16 +162,18 @@ export async function action({ request }: ActionFunctionArgs) {
             break;
         case 'ADD_ROLE':
             apiResponse = await RoleApi.addRole(selectedOrg, contactNin, roleIdToAdd);
-            response = handleApiResponse(apiResponse, `Kontaktroller oppdatert: ${roleIdToAdd}`);
+            response = handleApiResponse(apiResponse, ` ${roleName} Lagt til ${contactName}`);
             break;
         case 'DELETE_ROLE':
             apiResponse = await RoleApi.removeRole(selectedOrg, contactNin, roleIdToDelete);
-            console.log('......... DELETE RESPONSE:', apiResponse);
-            response = handleApiResponse(apiResponse, `Kontaktroller oppdatert: ${roleIdToDelete}`);
+            response = handleApiResponse(
+                apiResponse,
+                ` ${roleName} fjernet fra ${contactName}`,
+                true
+            );
             break;
         default:
             return json({
-                show: true,
                 message: `Unknown action type '${actionType}'`,
                 variant: 'error',
             });

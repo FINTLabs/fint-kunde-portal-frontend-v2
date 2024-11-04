@@ -1,39 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, CopyButton, Table } from '@navikt/ds-react';
 import { ArrowsSquarepathIcon, BagdeIcon, DownloadIcon, ThumbUpIcon } from '@navikt/aksel-icons';
-import { useFetcher } from '@remix-run/react';
 import { IAdapter } from '~/types/types';
 import { IClient } from '~/types/Clients';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
-
-type FetcherResponse = {
-    clientSecret?: string;
-    message?: string;
-    variant?: string;
-};
 
 type AuthEntity = IAdapter | IClient;
 
 interface AuthTableProps {
     entity: AuthEntity;
     entityType: 'adapter' | 'client';
-    actionName: string;
+    onUpdatePassword: (formData: FormData) => void;
+    onUpdateAuthInfo: (formData: FormData) => void;
+    clientSecret?: string;
 }
 
-export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) => {
+export const AuthTable = ({
+    entity,
+    entityType,
+    onUpdatePassword,
+    onUpdateAuthInfo,
+    clientSecret,
+}: AuthTableProps) => {
     const [password, setPassword] = useState('******************************');
     const [isPasswordGenerated, setIsPasswordGenerated] = useState(false);
     const [isCopyPasswordEnabled, setIsCopyPasswordEnabled] = useState(false);
-    const [isCopySecretEnabled, setIsCopySecretEnabled] = useState(false);
-    const [clientSecret, setClientSecret] = useState('******************************');
-    const fetcher = useFetcher<FetcherResponse>();
-
-    useEffect(() => {
-        if (fetcher.data?.clientSecret) {
-            setClientSecret(fetcher.data.clientSecret);
-            setIsCopySecretEnabled(true);
-        }
-    }, [fetcher.data]);
 
     function generatePass() {
         let pass = '';
@@ -52,15 +43,10 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
         setIsPasswordGenerated(true);
         setIsCopyPasswordEnabled(true);
 
-        fetcher.submit(
-            {
-                actionType: 'UPDATE_PASSWORD',
-                // actionName: actionName,
-                password: newPassword,
-                entityName: entity.name,
-            },
-            { method: 'post' }
-        );
+        const formData = new FormData();
+        formData.append('password', newPassword);
+        formData.append('entityName', entity.name);
+        onUpdatePassword(formData);
     };
 
     const assetIdsString =
@@ -79,6 +65,12 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
             idpUri: 'https://idp.felleskomponent.no/nidp/oauth/nam/token',
         };
         return JSON.stringify(authInfo, null, 2);
+    };
+
+    const handleUpdateAuthInfo = () => {
+        const formData = new FormData();
+        formData.append('entityName', entity.name);
+        onUpdateAuthInfo(formData);
     };
 
     return (
@@ -101,7 +93,10 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
                             <ConfirmAction
                                 buttonVariant="tertiary-neutral"
                                 buttonText=""
-                                subTitleText="Er du sikker på at du vil sette nytt passord? Hvis du gjør det må alle som bruker autentiseringsinformasjonen få det nye passordet og konfigurere tjenesten sin på nytt!"
+                                titleText={
+                                    'Hvis du gjør det må alle som bruker autentiseringsinformasjonen få det nye passordet og konfigurere tjenesten sin på nytt!'
+                                }
+                                subTitleText="Er du sikker på at du vil sette nytt passord? "
                                 onConfirm={generatePassword}
                                 icon={
                                     <ArrowsSquarepathIcon
@@ -131,26 +126,28 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
                         <Table.HeaderCell scope="row">
                             {entityType === 'client' ? 'Klient' : 'Adaptere'} Hemmelighet
                         </Table.HeaderCell>
-                        <Table.DataCell>{clientSecret}</Table.DataCell>
-                        <Table.DataCell>
-                            <fetcher.Form method="post">
-                                <input type="hidden" name="actionType" value="GET_SECRET" />
-                                <input type="hidden" name={actionName} value={entity.name} />
-                                <Button
-                                    variant="tertiary-neutral"
-                                    icon={
-                                        <DownloadIcon
-                                            title="Trykk for å hente hemmeligheten"
-                                            fontSize="1.5rem"
-                                        />
-                                    }
-                                    size="small"
-                                    type="submit"
-                                />
-                            </fetcher.Form>
+                        <Table.DataCell style={{ wordBreak: 'break-all', whiteSpace: 'normal' }}>
+                            {clientSecret ? clientSecret : '******************************'}
                         </Table.DataCell>
                         <Table.DataCell>
-                            <CopyButton copyText={clientSecret} disabled={!isCopySecretEnabled} />
+                            <Button
+                                variant="tertiary-neutral"
+                                icon={
+                                    <DownloadIcon
+                                        title="Trykk for å hente hemmeligheten"
+                                        fontSize="1.5rem"
+                                    />
+                                }
+                                size="small"
+                                type="submit"
+                                onClick={handleUpdateAuthInfo}
+                            />
+                        </Table.DataCell>
+                        <Table.DataCell>
+                            <CopyButton
+                                copyText={clientSecret ? clientSecret : ''}
+                                disabled={clientSecret ? false : true}
+                            />
                         </Table.DataCell>
                     </Table.Row>
 
@@ -173,7 +170,7 @@ export const AuthTable = ({ entity, entityType, actionName }: AuthTableProps) =>
                 icon={<BagdeIcon aria-hidden />}
                 activeIcon={<ThumbUpIcon aria-hidden />}
                 variant={'action'}
-                disabled={!isCopyPasswordEnabled || !isCopySecretEnabled}
+                disabled={!isCopyPasswordEnabled || !clientSecret}
             />
         </>
     );

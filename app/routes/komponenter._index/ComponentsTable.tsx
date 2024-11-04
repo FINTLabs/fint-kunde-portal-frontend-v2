@@ -10,7 +10,7 @@ interface ComponentsSectionProps {
     selectedItems: string[];
     columns?: number;
     selectable?: boolean;
-    toggle?: (name: string, checked: boolean) => void;
+    toggle?: (formData: FormData) => void;
     hideLink?: boolean;
     adapterName?: string;
     clientName?: string;
@@ -52,6 +52,20 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
         acc[componentType].push(item);
         return acc;
     }, {});
+
+    const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value; // The value of the checkbox
+        const isChecked = e.target.checked; // Whether the checkbox is checked or unchecked
+
+        console.log('Toggled component:', value, 'Checked:', isChecked);
+
+        if (toggle) {
+            const formData = new FormData();
+            formData.append('componentName', value);
+            formData.append('isChecked', isChecked.toString());
+            toggle(formData);
+        }
+    };
 
     return (
         <Box>
@@ -95,13 +109,7 @@ const ComponentsTable: React.FC<ComponentsSectionProps> = ({
                                                             value={item.name}
                                                             key={groupName + i}
                                                             onChange={(e) => {
-                                                                const checkedStatus =
-                                                                    e.target.checked;
-                                                                toggle &&
-                                                                    toggle(
-                                                                        item.name,
-                                                                        checkedStatus
-                                                                    );
+                                                                handleToggle(e);
                                                             }}>
                                                             {splitted.length > 1
                                                                 ? splitted[1]

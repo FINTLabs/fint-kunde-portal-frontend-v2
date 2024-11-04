@@ -7,7 +7,7 @@ interface ConfigClassTableProps {
     accessComponent: IAccessComponent[];
     title: string;
     onSelected: (fieldName: string) => void;
-    onToggle: (formData: { resourceId: string }) => void;
+    onToggle: (formData: FormData) => void;
 }
 
 const ResourcesList: React.FC<ConfigClassTableProps> = ({
@@ -16,16 +16,16 @@ const ResourcesList: React.FC<ConfigClassTableProps> = ({
     onSelected,
     onToggle,
 }) => {
-    function handleCheckbox() {
-        const formData = {
-            resourceId: 'newServiceName',
-        };
+    function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
+        const formData = new FormData();
+        formData.append('resourceId', 'newServiceName');
+        formData.append('checkMarkValue', e.target.value);
         onToggle(formData);
     }
 
     return (
         <>
-            <FormSummary key={`x`}>
+            <FormSummary>
                 <FormSummary.Header>
                     {/*<HStack align={'center'} justify={'space-between'}>*/}
                     <FormSummary.Heading level="2">{title}</FormSummary.Heading>
@@ -36,10 +36,10 @@ const ResourcesList: React.FC<ConfigClassTableProps> = ({
                     <FormSummary.Answer>
                         {accessComponent.map((x, i) => {
                             return (
-                                <HStack key={i} justify={'space-between'} align={'center'}>
+                                <HStack key={x.name} justify={'space-between'} align={'center'}>
                                     {/*<HStack align={'center'} gap={'0'}>*/}
                                     <Checkbox
-                                        onChange={handleCheckbox}
+                                        onChange={(e) => handleCheckbox(e)}
                                         // value={x.name}
                                         key={x.name + i}
                                         readOnly={x.name === 'elev'}

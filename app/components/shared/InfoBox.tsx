@@ -7,3 +7,4 @@ export function InfoBox({ message }: { message: string }) {
         </Box>
     );
 }
+//TODO: remove this file

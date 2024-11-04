@@ -7,7 +7,7 @@ interface ContactModalProps {
     isOpen: boolean;
     onClose: () => void;
     contacts: IContact[];
-    onAddContact: (contactNin: string) => void;
+    onAddContact: (formData: FormData) => void;
 }
 
 const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, onAddContact }) => {
@@ -40,8 +40,11 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
         onClose();
     }
 
-    function handleSetSelectedContact(nin: string) {
-        onAddContact(nin);
+    function handleSetSelectedContact(nin: string, firstName: string) {
+        const formData = new FormData();
+        formData.append('contactNin', nin);
+        formData.append('contactName', firstName);
+        onAddContact(formData);
         handleClose();
     }
 
@@ -84,7 +87,10 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
                                                 icon={<PersonPlusIcon title="Rediger" />}
                                                 size="xsmall"
                                                 onClick={() => {
-                                                    handleSetSelectedContact(contact.nin);
+                                                    handleSetSelectedContact(
+                                                        contact.nin,
+                                                        contact.firstName
+                                                    );
                                                 }}
                                             />
                                         </Table.DataCell>

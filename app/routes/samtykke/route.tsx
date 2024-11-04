@@ -13,6 +13,7 @@ import { IFetcherResponseData } from '~/types/types';
 import AddPolicyForm from '~/routes/samtykke/AddPolicyForm';
 import AddServiceForm from '~/routes/samtykke/AddServiceForm';
 import FeaturesApi from '~/api/FeaturesApi';
+import { handleApiResponse } from '~/utils/handleApiResponse';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Samtykke' }, { name: 'description', content: 'Samtykke' }];
@@ -193,21 +194,21 @@ export async function action({ request }: ActionFunctionArgs) {
     const actionType = formData.get('actionType');
 
     let serviceName;
-    const handleApiResponse = (apiResponse: Response, successMessage: string) => {
-        if (apiResponse.ok) {
-            return {
-                message: successMessage,
-                variant: 'success',
-                show: true,
-            };
-        } else {
-            return {
-                message: `Feil ved oppdatering. Mer info: Status: ${apiResponse.status}. StatusTekst: ${apiResponse.statusText}`,
-                variant: 'error',
-                show: true,
-            };
-        }
-    };
+    // const handleApiResponse = (apiResponse: Response, successMessage: string) => {
+    //     if (apiResponse.ok) {
+    //         return {
+    //             message: successMessage,
+    //             variant: 'success',
+    //             show: true,
+    //         };
+    //     } else {
+    //         return {
+    //             message: `Feil ved oppdatering. Mer info: Status: ${apiResponse.status}. StatusTekst: ${apiResponse.statusText}`,
+    //             variant: 'error',
+    //             show: true,
+    //         };
+    //     }
+    // };
 
     let response;
     let updateResponse;

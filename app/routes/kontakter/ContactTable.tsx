@@ -28,19 +28,19 @@ const ContactTable: React.FC<IContactTableProps> = ({
         onButtonClick(formData);
     };
 
-    const handleRemoveContact = (contactNin: string) => {
-        const formData = new FormData();
-        formData.append('contactNin', contactNin);
+    const handleRemoveContact = (formData: FormData) => {
+        // const formData = new FormData();
         formData.append('actionType', 'REMOVE_CONTACT');
         onButtonClick(formData);
     };
 
-    const updateRole = (contactNin: string, roleId: string, isChecked: boolean) => {
-        const formData = new FormData();
-        formData.append('contactNin', contactNin);
-        formData.append('roleId', roleId);
+    const updateRole = (formData: FormData) => {
+        // const formData = new FormData();
+        // formData.append('contactNin', contactNin);
+        // formData.append('contactName', contactName);
+        // formData.append('roleId', roleId);
 
-        if (isChecked) formData.append('actionType', 'ADD_ROLE');
+        if (formData.get('isChecked') === 'true') formData.append('actionType', 'ADD_ROLE');
         else formData.append('actionType', 'DELETE_ROLE');
         onButtonClick(formData);
     };
