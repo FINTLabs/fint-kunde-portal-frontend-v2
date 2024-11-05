@@ -20,19 +20,17 @@ const RolesSwitch: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole, 
         formData.append('isChecked', isChecked ? 'true' : 'false');
         formData.append('contactName', `${contact.firstName} ${contact.lastName}`);
         formData.append('roleName', roleName);
-        // updateRole(contact.nin, roleId, isChecked, contact.firstName, roleName);
         updateRole(formData);
     };
 
     return (
         <Fieldset legend="Roller" className="flex-wrap">
-            {rolesData?.map((role, index) => {
+            {rolesData?.map((role) => {
                 const isSwitchDisabled = isAdmin && role.id !== 'ROLE_ADMIN';
 
                 return (
-                    <>
+                    <React.Fragment key={role.id}>
                         <Switch
-                            key={index}
                             size="small"
                             checked={isAdmin || hasRole(contact, role.id)}
                             onChange={(e) =>
@@ -44,13 +42,13 @@ const RolesSwitch: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole, 
 
                         {role.description.split('...').map((item, key) => (
                             <BodyShort
-                                key={key}
+                                key={`${role.id}_description_${key}`}
                                 size="small"
                                 className={`pl-5 ${isSwitchDisabled ? 'opacity-30' : ''}`}>
                                 {item}
                             </BodyShort>
                         ))}
-                    </>
+                    </React.Fragment>
                 );
             })}
         </Fieldset>
