@@ -9,18 +9,16 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
-import { IAdapter, IFetcherResponseData } from '~/types/types';
 import ComponentApi from '~/api/ComponentApi';
 import AdapterApi from '~/api/AdapterApi';
 import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { InfoBox } from '~/components/shared/InfoBox';
 import FeaturesApi from '~/api/FeaturesApi';
 import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
 import { handleApiResponse } from '~/utils/handleApiResponse';
 import React from 'react';
-import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { BodyLong, Box, Heading, HGrid, VStack } from '@navikt/ds-react';
 import logger from '~/utils/logger';
 import AlertManager from '~/components/AlertManager';
 import { BackButton } from '~/components/shared/BackButton';
@@ -32,6 +30,8 @@ import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import { getComponentIds } from '~/utils/helper';
 import { IComponent } from '~/types/Component';
 import useAlerts from '~/components/useAlerts';
+import { IFetcherResponseData } from '~/types/FetcherResponseData';
+import { IAdapter } from '~/types/Adapter';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Adapter Detaljer' }, { name: 'description', content: 'Adapter Detaljer' }];
@@ -85,7 +85,7 @@ export default function Index() {
     const filteredAdapters = adapters.filter((a) => a.name === name);
     const adapter = filteredAdapters.length > 0 ? filteredAdapters[0] : null;
     const displayName = adapter?.name.split('@')[0] || '';
-    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state);
+    const { alerts } = useAlerts(actionData, fetcher.state);
 
     const handleUpdate = (formData: FormData) => {
         formData.append('actionType', 'UPDATE_ADAPTER');
@@ -125,9 +125,11 @@ export default function Index() {
             <AlertManager alerts={alerts} />
 
             {!adapter ? (
-                <InfoBox
-                    message={`Det finnes ingen adapter ved navn ${name} i listen over adaptere`}
-                />
+                <Box padding="8" background="surface-info-moderate">
+                    <BodyLong>
+                        `Det finnes ingen adapter ved navn ${name} i listen over adaptere`
+                    </BodyLong>
+                </Box>
             ) : (
                 <HGrid gap="2" align={'start'}>
                     <BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />
@@ -225,10 +227,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 clientSecret: await updateResponse,
                 message: 'Adapter secret fetched successfully',
                 variant: 'success',
-                show: true,
             });
         case 'UPDATE_ADAPTER':
-            await AdapterAPI.updateAdapter(
+            updateResponse = await AdapterAPI.updateAdapter(
                 {
                     name: formData.get('adapterName') as string,
                     shortDescription: formData.get('shortDescription') as string,
@@ -236,11 +237,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 },
                 orgName
             );
-            return json({
-                show: true,
-                message: `Adapter oppdatert`,
-                variant: 'success',
-            });
+            response = handleApiResponse(updateResponse, 'Adapter oppdatert');
+            break;
         case 'UPDATE_COMPONENT_IN_ADAPTER':
             const isChecked = formData.get('isChecked') as string;
             updateResponse = await AdapterAPI.updateComponentInAdapter(
@@ -264,7 +262,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
             return redirect(`/adaptere?deleted=${name}`);
         default:
             return json({
-                show: true,
                 message: `Unknown action type '${actionType}'`,
                 variant: 'error',
             });

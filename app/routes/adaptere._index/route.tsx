@@ -11,12 +11,14 @@ import { MigrationIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Alert, Button, HStack, Search, VStack } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
 import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
-import { IAdapter, IFetcherResponseData, IPartialAdapter } from '~/types/types';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { CustomTabs } from '~/components/shared/CustomTabs';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AdapterCreateForm from '~/routes/adaptere._index/CreateForm';
 import AlertManager from '~/components/AlertManager';
+import { IAdapter, IPartialAdapter } from '~/types/Adapter';
+import { IFetcherResponseData } from '~/types/FetcherResponseData';
+import useAlerts from '~/components/useAlerts';
 
 interface IPageLoaderData {
     adapters?: IAdapter[];
@@ -44,33 +46,9 @@ export default function Index() {
     const deleteName = searchParams.get('deleted');
     const fetcher = useFetcher<IFetcherResponseData>();
     const actionData = fetcher.data as IFetcherResponseData;
-    const [show, setShow] = React.useState(false);
     const [isCreating, setIsCreating] = useState(false);
     const [filteredAdapter, setFilteredAdapter] = useState(adapters);
-    const [alerts, setAlerts] = useState<AlertType[]>([]);
-
-    useEffect(() => {
-        if (deleteName) {
-            setAlerts((prev) => [
-                ...prev,
-                {
-                    id: Date.now(),
-                    message: `Adapter '${deleteName}' har blitt slettet` || 'Action completed',
-                    variant: 'warning',
-                },
-            ]);
-        }
-        if (fetcher.state === 'idle' && actionData) {
-            setAlerts((prev) => [
-                ...prev,
-                {
-                    id: Date.now(),
-                    message: actionData.message || 'Action completed',
-                    variant: actionData.variant as 'error' | 'info' | 'warning' | 'success',
-                },
-            ]);
-        }
-    }, [fetcher.state, actionData]);
+    const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
 
     const handleCreate = () => {
         setIsCreating(true);
@@ -78,7 +56,6 @@ export default function Index() {
 
     const handleCancelCreate = () => {
         setIsCreating(false);
-        setShow(false);
     };
 
     const handleSave = (formData: FormData) => {
@@ -126,24 +103,6 @@ export default function Index() {
                         </VStack>
                     </HStack>
                     <AlertManager alerts={alerts} />
-
-                    {(actionData && show) || (show && deleteName) ? (
-                        <Alert
-                            className={'!mt-5 mb-10'}
-                            variant={
-                                (actionData?.variant || 'success') as
-                                    | 'error'
-                                    | 'info'
-                                    | 'warning'
-                                    | 'success'
-                            }
-                            closeButton
-                            onClose={() => setShow(false)}>
-                            {actionData?.message ||
-                                `Adapter '${deleteName}' har blitt slettet` ||
-                                'Innhold'}
-                        </Alert>
-                    ) : null}
 
                     <Search
                         label="Søk etter adaptere"

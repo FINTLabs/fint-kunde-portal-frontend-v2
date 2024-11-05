@@ -1,6 +1,6 @@
-import { IUserSession } from '~/types/types';
 import { MenuRight } from './MenuRight';
 import { MenuLeft } from './MenuLeft';
+import { IUserSession } from '~/types/Session';
 
 type MenuType = {
     userSession: IUserSession;

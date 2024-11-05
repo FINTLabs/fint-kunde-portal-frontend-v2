@@ -8,11 +8,11 @@ import { Tabs } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { type ActionFunctionArgs, LoaderFunction, MetaFunction, redirect } from '@remix-run/node';
 import ClientCreateForm from '~/routes/klienter._index/CreateForm';
-import { IFetcherResponseData } from '~/types/types';
 import logger from '~/utils/logger';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
 import ClientPageHeader from '~/routes/klienter._index/ClientPageHeader';
+import { IFetcherResponseData } from '~/types/FetcherResponseData';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Klienter' }, { name: 'description', content: 'klienter' }];
@@ -39,7 +39,7 @@ export default function Index() {
     const [isCreating, setIsCreating] = useState(false);
     const fetcher = useFetcher<IFetcherResponseData>();
     const actionData = fetcher.data as IFetcherResponseData;
-    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state, deleteName);
+    const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
 
     useEffect(() => {
         setFilteredClients(clientData.filter((client) => !client.managed));

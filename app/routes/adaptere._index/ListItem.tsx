@@ -1,7 +1,7 @@
 import { BodyLong, Box, HStack, Label, VStack } from '@navikt/ds-react';
-import { IAdapter } from '~/types/types';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
+import { IAdapter } from '~/types/Adapter';
 
 export function ListItem({ adapter }: { adapter: IAdapter }) {
     const navigate = useNavigate();

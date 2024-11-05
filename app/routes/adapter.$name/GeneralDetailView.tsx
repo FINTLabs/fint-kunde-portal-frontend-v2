@@ -1,11 +1,11 @@
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
-import { IAdapter } from '~/types/types';
 import { EditableTextField } from '~/components/shared/EditableTextField';
 import { FloppydiskIcon, PencilIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 
 import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
+import { IAdapter } from '~/types/Adapter';
 
 export function GeneralDetailView({
     adapter,

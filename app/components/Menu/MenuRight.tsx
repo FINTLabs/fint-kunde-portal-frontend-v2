@@ -1,8 +1,8 @@
 import { HStack } from '@navikt/ds-react';
-import { IUserSession } from '~/types/types';
 import { LogoutButton } from './LogoutButton';
 import { UserOrganization } from './UserOrganization';
 import { NavLinkView } from './NavLinkView';
+import { IUserSession } from '~/types/Session';
 
 type MenuRightType = {
     userSession: IUserSession;

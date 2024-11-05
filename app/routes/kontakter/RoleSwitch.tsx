@@ -1,6 +1,7 @@
 import React from 'react';
 import { BodyShort, Fieldset, Switch } from '@navikt/ds-react';
-import { IContact, IRole } from '~/types/types';
+import { IContact } from '~/types/Contact';
+import { IRole } from '~/types/Role';
 
 interface IRolesChipsProps {
     contact: IContact;

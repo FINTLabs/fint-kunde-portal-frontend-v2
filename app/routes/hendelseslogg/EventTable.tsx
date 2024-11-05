@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
-import { LogEvent } from '~/types/types';
+import { LogEvent } from '~/types/LogEvent';
 
 interface EventTableProps {
     events: LogEvent[];

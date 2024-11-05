@@ -4,11 +4,12 @@ import { useLoaderData, useOutletContext } from '@remix-run/react';
 import { MENU_ITEMS_LEFT } from '~/components/Menu/constants';
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { MenuItem } from '~/types/MenuItem';
-import { IMeData, IUserSession } from '~/types/types';
 import CustomLinkPanel from '~/routes/_index/CustomLinkPanelProps';
 import { ImageIcon, PassportIcon } from '@navikt/aksel-icons';
 import FeaturesApi from '~/api/FeaturesApi';
 import MeApi from '~/api/MeApi';
+import { IUserSession } from '~/types/Session';
+import { IMeData } from '~/types/Me';
 
 export const meta: MetaFunction = () => {
     return [

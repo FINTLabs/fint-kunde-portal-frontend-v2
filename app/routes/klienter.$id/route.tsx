@@ -16,7 +16,6 @@ import { getFormData, getRequestParam } from '~/utils/requestUtils';
 import { getComponentIds } from '~/utils/helper';
 import ComponentList from '~/components/shared/ComponentList';
 import FeaturesApi from '~/api/FeaturesApi';
-import { IFetcherResponseData } from '~/types/types';
 import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
 import { AuthTable } from '~/components/shared/AuthTable';
@@ -26,6 +25,7 @@ import logger from '~/utils/logger';
 import AlertManager from '~/components/AlertManager';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import useAlerts from '~/components/useAlerts';
+import { IFetcherResponseData } from '~/types/FetcherResponseData';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
@@ -67,7 +67,7 @@ export default function Index() {
     const [note, setNote] = useState(client.note);
     const fetcher = useFetcher();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
-    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state);
+    const { alerts } = useAlerts(actionData, fetcher.state);
 
     const handleSave = () => {
         const formData = new FormData();

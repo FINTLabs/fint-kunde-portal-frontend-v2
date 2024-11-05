@@ -1,8 +1,8 @@
 import React from 'react';
 import { Label, Table } from '@navikt/ds-react';
-import { Log } from '~/types/types';
 import EventTable from '~/routes/hendelseslogg/EventTable';
 import { CheckmarkCircleIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { Log } from '~/types/LogEvent';
 
 interface HealthStatusProps {
     logs: Log[];

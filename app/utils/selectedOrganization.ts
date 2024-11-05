@@ -1,5 +1,5 @@
-import { IUserSession } from '~/types/types';
 import { getSession } from './session';
+import { IUserSession } from '~/types/Session';
 
 export async function getSelectedOrganization(request: Request) {
     const userSession: IUserSession | undefined = await getUserSession(request);

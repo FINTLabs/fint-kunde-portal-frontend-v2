@@ -5,8 +5,8 @@ import { Tabs } from '@navikt/ds-react';
 import DetailsTable from '~/routes/ressurser.$id/DetailsTable';
 import React from 'react';
 import { IAsset } from '~/types/Asset';
-import { IAdapter } from '~/types/types';
 import { IClient } from '~/types/Clients';
+import { IAdapter } from '~/types/Adapter';
 
 interface TabsComponentProps {
     asset: IAsset;

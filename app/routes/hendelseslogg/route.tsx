@@ -10,16 +10,11 @@ import ComponentApi from '~/api/ComponentApi';
 import ComponentConfigApi from '~/api/ComponentConfigApi';
 import LogApi from '~/api/LogApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Log, ReduntantLog } from '~/types/types';
 import LogTable from './LogTable';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
-
-// interface ActionData {
-//     message: IFetcherResponseData;
-//     data: never;
-// }
+import { Log, ReduntantLog } from '~/types/LogEvent';
 
 interface IExtendedFetcherResponseData extends IFetcherResponseData {
     data?: never;
@@ -45,7 +40,7 @@ export default function Index() {
     const logs = actionData?.data || defaultLogs;
     const mappedLogs = mapLogs(logs);
     const [filterValue, setFilterValue] = useState('');
-    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state);
+    const { alerts, addAlert } = useAlerts(actionData, fetcher.state);
     const [defaultAlertAdded, setDefaultAlertAdded] = useState(false);
 
     const filteredLogs = filterValue
@@ -153,18 +148,15 @@ export async function action({ request }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
 
     let response;
-    let message;
 
     response = await LogApi.getLogs(environment, orgName, componentName, resource, action);
     if (Array.isArray(response) && response.length === 0) {
         return json({
-            show: true,
-            message: `ingen logger funnet.'`,
+            message: `Ingen logger funnet.'`,
             variant: 'error',
         });
     } else {
         return json({
-            show: true,
             message: `Logg(er) ble lagt til.'`,
             variant: 'success',
             data: response,

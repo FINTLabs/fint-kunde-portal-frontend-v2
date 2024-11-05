@@ -1,12 +1,12 @@
 import { BodyLong, Box, HGrid, Label, Tag } from '@navikt/ds-react';
 import { json, useLoaderData } from '@remix-run/react';
-import { IMeData } from '~/types/types';
 import MeApi from '~/api/MeApi';
 import { PersonIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { BackButton } from '~/components/shared/BackButton';
 import FeaturesApi from '~/api/FeaturesApi';
+import { IMeData } from '~/types/Me';
 
 type LoaderData = {
     user: IMeData;

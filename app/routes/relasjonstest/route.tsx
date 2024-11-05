@@ -5,7 +5,6 @@ import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Switch } from '@navikt/ds-react';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import React, { useEffect } from 'react';
-import { IFetcherResponseData } from '~/types/types';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ComponentApi from '~/api/ComponentApi';
@@ -15,6 +14,7 @@ import LinkWalkerApi from '~/api/LinkWalkerApi';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
 import useAlerts from '~/components/useAlerts';
 import AlertManager from '~/components/AlertManager';
+import { IFetcherResponseData } from '~/types/FetcherResponseData';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Relasjonstest' }, { name: 'description', content: 'Relasjonstest' }];
@@ -37,7 +37,7 @@ export default function Index() {
     const actionData = fetcher.data as IFetcherResponseData;
     const { components, clients, relationTests, configs } = useLoaderData<typeof loader>();
     const [autoRefresh, setAutoRefresh] = React.useState(false);
-    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state);
+    const { alerts } = useAlerts(actionData, fetcher.state);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;

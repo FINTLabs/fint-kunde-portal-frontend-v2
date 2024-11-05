@@ -11,14 +11,13 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset, IPartialAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Button, HStack, VStack } from '@navikt/ds-react';
-import { InfoBox } from '~/components/shared/InfoBox';
+import { BodyLong, Box, Button, HStack, VStack } from '@navikt/ds-react';
 import CreateForm from '~/routes/ressurser._index/CreateForm';
 import AssetsTable from '~/routes/ressurser._index/ResourcesTable';
 import React, { useState } from 'react';
-import { IFetcherResponseData } from '~/types/types';
 import useAlerts from '~/components/useAlerts';
 import AlertManager from '~/components/AlertManager';
+import { IFetcherResponseData } from '~/types/FetcherResponseData';
 
 interface IPageLoaderData {
     assets: IAsset[];
@@ -45,7 +44,7 @@ export default function Index() {
     const deleteName = searchParams.get('deleted');
     const fetcher = useFetcher<IFetcherResponseData>();
     const actionData = fetcher.data as IFetcherResponseData;
-    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state, deleteName);
+    const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
 
     const handleClick = (id: string) => {
         navigate(`/ressurser/${id}`);
@@ -78,7 +77,11 @@ export default function Index() {
                 </VStack>
             </HStack>
 
-            {!assets && <InfoBox message="Fant ingen ressurser" />}
+            {!assets && (
+                <Box padding="8" background="surface-info-moderate">
+                    <BodyLong>Fant ingen ressurser</BodyLong>
+                </Box>
+            )}
             {isCreating ? (
                 <CreateForm onCancel={handleCancel} orgName={orgName} />
             ) : (
@@ -103,13 +106,5 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const response = await AssetApi.createAsset(newAsset, orgName);
 
-    if (response.name) {
-        return redirect(`/ressurser/${response.name}`);
-    } else {
-        return json({
-            show: true,
-            message: `Feil oppretting av ressurs.'`,
-            variant: 'error',
-        });
-    }
+    return redirect(`/ressurser/${response.name}`);
 }

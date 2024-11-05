@@ -1,9 +1,10 @@
 import React from 'react';
 import { HGrid } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon } from '@navikt/aksel-icons';
-import { IContact, IRole } from '~/types/types';
 import RolesSwitch from '~/routes/kontakter/RoleSwitch';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
+import { IContact } from '~/types/Contact';
+import { IRole } from '~/types/Role';
 
 interface ExpandableRowContentProps {
     contact: IContact;

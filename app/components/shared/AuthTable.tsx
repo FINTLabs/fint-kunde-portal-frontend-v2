@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Button, CopyButton, Table } from '@navikt/ds-react';
 import { ArrowsSquarepathIcon, BagdeIcon, DownloadIcon, ThumbUpIcon } from '@navikt/aksel-icons';
-import { IAdapter } from '~/types/types';
 import { IClient } from '~/types/Clients';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
+import { IAdapter } from '~/types/Adapter';
 
 type AuthEntity = IAdapter | IClient;
 
@@ -146,7 +146,7 @@ export const AuthTable = ({
                         <Table.DataCell>
                             <CopyButton
                                 copyText={clientSecret ? clientSecret : ''}
-                                disabled={clientSecret ? false : true}
+                                disabled={!clientSecret}
                             />
                         </Table.DataCell>
                     </Table.Row>

@@ -1,7 +1,7 @@
 import { request } from '~/api/shared/api';
 import { API_URL } from './constants';
-import { IPartialAdapter } from '~/types/types';
 import { HeaderProperties } from '~/utils/headerProperties';
+import { IPartialAdapter } from '~/types/Adapter';
 
 class AdapterAPI {
     static async getAdapters(organisationName: string) {

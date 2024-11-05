@@ -1,7 +1,7 @@
 import React from 'react';
 import { HStack, Tag } from '@navikt/ds-react';
 import { ShieldLockIcon } from '@navikt/aksel-icons';
-import { IContact } from '~/types/types';
+import { IContact } from '~/types/Contact';
 
 interface RoleTagsProps {
     contact: IContact;

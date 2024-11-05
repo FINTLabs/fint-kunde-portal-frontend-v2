@@ -7,8 +7,8 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { IFetcherResponseData } from '~/types/types';
 import { Alert, HStack } from '@navikt/ds-react';
+import { IFetcherResponseData } from '~/types/FetcherResponseData';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const clientOrAdapter = params.id || '';

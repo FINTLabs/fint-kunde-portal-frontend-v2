@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, Pagination, Table, TextField } from '@navikt/ds-react';
-import { IContact } from '~/types/types';
 import { PersonPlusIcon } from '@navikt/aksel-icons';
+import { IContact } from '~/types/Contact';
 
 interface ContactModalProps {
     isOpen: boolean;

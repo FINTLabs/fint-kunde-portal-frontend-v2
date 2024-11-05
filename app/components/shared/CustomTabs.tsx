@@ -1,8 +1,8 @@
 import { BodyShort, Heading, Label, Switch, Table, Tabs } from '@navikt/ds-react';
-import { IAdapter } from '~/types/types';
 import { useNavigate } from '@remix-run/react';
 import { ChevronRightIcon, CogRotationIcon, NotePencilDashIcon } from '@navikt/aksel-icons';
 import { tabInfo } from '~/routes/adaptere._index/constants';
+import { IAdapter } from '~/types/Adapter';
 
 interface CustomTabsProps<T> {
     items: T[];

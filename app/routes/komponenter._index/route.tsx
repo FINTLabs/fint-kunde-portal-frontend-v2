@@ -1,6 +1,6 @@
 import { ActionFunctionArgs, type LoaderFunction, MetaFunction } from '@remix-run/node';
 import { ComponentIcon } from '@navikt/aksel-icons';
-import { json, useFetcher, useLoaderData, useSubmit } from '@remix-run/react';
+import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import ComponentApi from '~/api/ComponentApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -10,8 +10,8 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData } from '~/utils/requestUtils';
 import OrganisationApi from '~/api/OrganisationApi';
 import React, { useEffect, useState } from 'react';
-import { IFetcherResponseData } from '~/types/types';
 import AlertManager from '~/components/AlertManager';
+import { IFetcherResponseData } from '~/types/FetcherResponseData';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Komponenter' }, { name: 'description', content: 'Liste over komponenter' }];
@@ -62,7 +62,6 @@ export default function Index() {
     const handleFormSubmit = (formData: FormData) => {
         fetcher.submit(formData, { method: 'post' });
     };
-    const submit = useSubmit();
 
     return (
         <>
@@ -94,7 +93,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         if (!successResponse) {
             console.error(`${actionName} failed: Response: ${response.status}`);
         }
-        const success = response.status === 204;
+
         if (updateType === 'true')
             return json({
                 show: true,

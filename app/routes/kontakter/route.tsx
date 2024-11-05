@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
 import OrganisationApi from '~/api/OrganisationApi';
 import ContactTable from '~/routes/kontakter/ContactTable';
-import { IContact, IFetcherResponseData, IRole } from '~/types/types';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ContactModal from '~/routes/kontakter/ContactModal';
 import { getSelectedOrganization as getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getFormData } from '~/utils/requestUtils';
-import { InfoBox } from '~/components/shared/InfoBox';
 import { handleApiResponse } from '~/utils/handleApiResponse';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
+import { IContact } from '~/types/Contact';
+import { IRole } from '~/types/Role';
+import { IFetcherResponseData } from '~/types/FetcherResponseData';
 
 interface IPageLoaderData {
     technicalContacts?: IContact[] | string;
@@ -55,7 +56,7 @@ export default function Index() {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
-    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state);
+    const { alerts } = useAlerts(actionData, fetcher.state);
 
     const handleFormSubmit = (formData: FormData) => {
         fetcher.submit(formData, { method: 'post', action: '/kontakter' });
@@ -106,7 +107,9 @@ export default function Index() {
             </Box>
 
             {technicalContacts && typeof technicalContacts === 'string' && (
-                <InfoBox message={technicalContacts} />
+                <Box padding="8" background="surface-info-moderate">
+                    <BodyLong>{technicalContacts}</BodyLong>
+                </Box>
             )}
             {technicalContacts && typeof technicalContacts !== 'string' && (
                 <ContactTable

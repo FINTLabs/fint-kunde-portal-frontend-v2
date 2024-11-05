@@ -7,7 +7,6 @@ import { IAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import { GeneralDetailView } from './GeneralDetailView';
-import { IAdapter, IFetcherResponseData } from '~/types/types';
 import AdapterAPI from '~/api/AdapterApi';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
@@ -18,6 +17,8 @@ import { handleApiResponse } from '~/utils/handleApiResponse';
 import ActionButtons from '~/components/shared/ActionButtons';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
+import { IAdapter } from '~/types/Adapter';
+import { IFetcherResponseData } from '~/types/FetcherResponseData';
 
 type LoaderData = {
     adapters: IAdapter[];
@@ -53,7 +54,7 @@ export default function Index() {
     const actionData = fetcher.data as IFetcherResponseData;
     const [isEditing, setIsEditing] = useState(false);
     const [description, setDescription] = useState(asset.description);
-    const { alerts, addAlert, removeAlert } = useAlerts(actionData, fetcher.state);
+    const { alerts } = useAlerts(actionData, fetcher.state);
 
     const breadcrumbs = [
         { name: 'Ressurser', link: '/ressurser' },
@@ -210,29 +211,43 @@ export async function action({ request }: ActionFunctionArgs) {
                 });
             }
         case 'UPDATE_ADAPTER':
+            const updateType = formData.get('updateType') as string;
+            const message =
+                updateType === 'add'
+                    ? `Adapter lagt til: ${formData.get('adapterName')}`
+                    : `Adapter fjernet: ${formData.get('adapterName')}`;
+
             updateResponse = await AssetApi.updateAdapterInAsset(
                 formData.get('adapterName') as string,
                 formData.get('assetName') as string,
                 selectedOrg,
-                formData.get('updateType') as string
+                updateType
             );
-            response = handleApiResponse(
-                updateResponse,
-                `Adapter oppdatert: ${formData.get('adapterName')}`
-            );
+
+            const isRemoved = updateType !== 'add';
+
+            response = handleApiResponse(updateResponse, message, isRemoved);
             break;
+
         case 'UPDATE_CLIENT':
+            const updateTypeClient = formData.get('updateType') as string;
+            const clientMessage =
+                updateTypeClient === 'add'
+                    ? `Klient lagt til: ${formData.get('clientName')}`
+                    : `Klient fjernet: ${formData.get('clientName')}`;
+
             updateResponse = await AssetApi.updateClientInAsset(
                 formData.get('clientName') as string,
                 formData.get('assetName') as string,
                 selectedOrg,
-                formData.get('updateType') as string
+                updateTypeClient
             );
-            response = handleApiResponse(
-                updateResponse,
-                `Klienter oppdatert: ${formData.get('clientName')}`
-            );
+
+            const clientRemoved = updateTypeClient !== 'add';
+
+            response = handleApiResponse(updateResponse, clientMessage, clientRemoved);
             break;
+
         default:
             return json({
                 show: true,

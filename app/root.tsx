@@ -23,7 +23,6 @@ import React from 'react';
 import Menu from './components/Menu/Menu';
 import { commitSession, getSession } from '~/utils/session';
 import MeApi from '~/api/MeApi';
-import { FeatureFlags, IMeData, IUserSession, SessionOrganisation } from '~/types/types';
 import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
 import { Organisation } from '~/types/Organisation';
@@ -33,6 +32,9 @@ import { getUserSession, setUserSession } from './utils/selectedOrganization';
 import { HeaderProperties } from './utils/headerProperties';
 import logger from '~/utils/logger';
 import CustomError from '~/components/errors/CustomError';
+import { IMeData } from '~/types/Me';
+import { IUserSession, SessionOrganisation } from '~/types/Session';
+import { FeatureFlags } from '~/types/FeatureFlag';
 
 export const meta: MetaFunction = () => {
     return [
