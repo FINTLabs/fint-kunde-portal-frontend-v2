@@ -33,12 +33,25 @@ export const loader: LoaderFunction = async ({ request }) => {
     const components = await ComponentApi.getOrganisationComponents(selectOrg);
     const clients = await ClientApi.getClients(selectOrg);
 
-    const sortedComponents = components.sort((a: IComponent, b: IComponent) =>
-        a.name.localeCompare(b.name)
-    );
-    const sortedClients = clients.sort((a: IClient, b: IClient) => a.name.localeCompare(b.name));
+    // const sortedComponents = components.sort((a: IComponent, b: IComponent) =>
+    //     a.name.localeCompare(b.name)
+    // );
+    //
+    // console.log(
+    //     'BEFORE:',
+    //     clients.map((client: IClient) => client.name)
+    // );
+    // const filteredClients = clients.filter((client: IClient) => !client.managed);
+    // const sortedClients = filteredClients.sort((a: IClient, b: IClient) =>
+    //     a.name.localeCompare(b.name)
+    // );
+    //
+    // console.log(
+    //     'AFTER:',
+    //     sortedClients.map((client: IClient) => client.name)
+    // );
 
-    return json({ components: sortedComponents, clients: sortedClients });
+    return json({ components: components, clients: clients });
 };
 
 export default function Index() {

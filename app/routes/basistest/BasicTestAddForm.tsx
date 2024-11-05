@@ -17,6 +17,11 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
     const [selectedClient, setSelectedClient] = useState<string>('');
     const [selectedEnv, setSelectedEnv] = useState<string>('');
 
+    const filteredClients = clients.filter((client: IClient) => !client.managed);
+    const sortedClients = filteredClients.sort((a: IClient, b: IClient) =>
+        a.shortDescription.localeCompare(b.shortDescription)
+    );
+
     function handleFormSubmit() {
         // const formData = new FormData();
         // formData.append('environment', selectedEnv);
@@ -64,7 +69,7 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
                         name="client"
                         onChange={(e) => setSelectedClient(e.target.value)}>
                         <option value="">Velg</option>
-                        {clients.map((client) => (
+                        {sortedClients.map((client) => (
                             <option value={client.name} key={client.dn}>
                                 {client.shortDescription}
                             </option>
