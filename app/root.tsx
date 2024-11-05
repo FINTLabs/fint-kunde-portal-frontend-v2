@@ -35,6 +35,7 @@ import CustomError from '~/components/errors/CustomError';
 import { IMeData } from '~/types/Me';
 import { IUserSession, SessionOrganisation } from '~/types/Session';
 import { FeatureFlags } from '~/types/FeatureFlag';
+import { parseCookie } from '~/utils/ParseCookie';
 
 export const meta: MetaFunction = () => {
     return [
@@ -65,13 +66,26 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             displayName: org.displayName,
         }));
 
+        // Get the selected organization from the persistent cookie, if available
+        const cookies = parseCookie(request.headers.get('Cookie'));
+        const selectedOrganizationFromCookie = cookies['selectedOrganization'];
+
+        let selectedOrganization = organizationDetails[0];
+        if (selectedOrganizationFromCookie) {
+            selectedOrganization =
+                organizationDetails.find(
+                    (org) => org.orgNumber === selectedOrganizationFromCookie
+                ) || organizationDetails[0];
+        }
+
         userSession = {
             firstName: meData.firstName,
             lastName: meData.lastName,
             organizationCount: organisationsData.length,
-            selectedOrganization: organizationDetails[0],
+            selectedOrganization,
             organizations: organizationDetails,
         };
+
         const session = await setUserSession(request, userSession);
         const cookie = await commitSession(session);
         let features = await FeaturesApi.fetchFeatures();
