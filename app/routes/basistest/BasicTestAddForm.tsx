@@ -23,12 +23,7 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
     );
 
     function handleFormSubmit() {
-        // const formData = new FormData();
-        // formData.append('environment', selectedEnv);
-        // formData.append('component', selectedComponent);
-        // formData.append('client', selectedClient);
         ref.current?.close();
-
         onSearchSubmit(selectedEnv, selectedComponent, selectedClient);
     }
 

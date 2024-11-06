@@ -2,13 +2,15 @@ import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/node';
 import { useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import AccessApi from '~/api/AccessApi';
 import ResourcesList from '~/routes/tilgang/id/element/ResourcesList';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Alert, HStack } from '@navikt/ds-react';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
+import useAlerts from '~/components/useAlerts';
+import AlertManager from '~/components/AlertManager';
+import { handleApiResponse } from '~/utils/handleApiResponse';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const clientOrAdapter = params.id || '';
@@ -29,11 +31,7 @@ export default function Route() {
     const resourceTitle = `${clientOrAdapter}/${element}`;
     const fetcher = useFetcher<IFetcherResponseData>();
     const actionData = fetcher.data as IFetcherResponseData;
-    const [show, setShow] = React.useState(false);
-
-    useEffect(() => {
-        setShow(true);
-    }, [fetcher.state]);
+    const { alerts } = useAlerts(actionData, fetcher.state);
 
     const handleSelectedResource = (resourceName: string) => {
         console.debug('...........', resourceName);
@@ -52,27 +50,17 @@ export default function Route() {
 
     function handleToggleResource(formData: FormData) {
         console.log('inside toggle');
-        setShow(false);
-        formData.append('actionType', 'SET_ACTIVE');
+        formData.append('actionType', 'TOGGLE_ELEMENT');
         fetcher.submit(formData, { method: 'post' });
     }
 
     return (
         <div>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <HStack>
-                <InternalPageHeader title={'Tilgang'} icon={KeyVerticalIcon} helpText="NEED_THIS" />
 
-                {actionData && show && (
-                    <Alert
-                        className={'!mb-1 ml-auto'}
-                        variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
-                        closeButton
-                        onClose={() => setShow(false)}>
-                        {actionData.message || 'Innhold'}
-                    </Alert>
-                )}
-            </HStack>
+            <InternalPageHeader title={'Tilgang'} icon={KeyVerticalIcon} helpText="NEED_THIS" />
+
+            <AlertManager alerts={alerts} />
             <ResourcesList
                 accessComponent={resourceList}
                 title={resourceTitle || ''}
@@ -89,16 +77,13 @@ export async function action({ request }: ActionFunctionArgs) {
     const actionType = formData.get('actionType');
     const checkMarkValue = formData.get('checkMarkValue');
 
+    let apiResponse;
     let response;
-    let updateResponse;
     switch (actionType) {
-        case 'SET_ACTIVE':
-            //response = handleApiResponse(updateResponse, 'Aktiv status endret');
-            response = {
-                message: `Checkmark: ${checkMarkValue}`,
-                variant: 'success',
-                show: true,
-            };
+        case 'TOGGLE_ELEMENT':
+            apiResponse = new Response(null, { status: 200 });
+            const variant = checkMarkValue === 'on' ? 'success' : 'warning';
+            response = handleApiResponse(apiResponse, `Checkmark: ${checkMarkValue}`, variant);
             break;
         case 'ADD_POLICY':
             response = {

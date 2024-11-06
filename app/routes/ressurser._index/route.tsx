@@ -105,6 +105,5 @@ export async function action({ request }: ActionFunctionArgs) {
     };
 
     const response = await AssetApi.createAsset(newAsset, orgName);
-
     return redirect(`/ressurser/${response.name}`);
 }

@@ -16,10 +16,9 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
     // const fetcher = useFetcher();
 
     const filteredContacts = filter
-        ? contacts.filter(
-              (contact) =>
-                  contact.firstName.toLowerCase().startsWith(filter.toLowerCase()) ||
-                  contact.lastName.toLowerCase().startsWith(filter.toLowerCase())
+        ? contacts.filter((contact) =>
+              // contact.firstName.toLowerCase().startsWith(filter.toLowerCase()) ||
+              contact.lastName.toLowerCase().startsWith(filter.toLowerCase())
           )
         : [];
 

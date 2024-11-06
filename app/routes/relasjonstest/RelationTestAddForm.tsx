@@ -27,22 +27,23 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
     const [selectedComponentError, setSelectedComponentError] = useState<string | undefined>();
     const [matchingConfigs, setMatchingConfigs] = useState<IComponentConfig[]>([]);
 
+    const filteredClients = clients.filter((client: IClient) => !client.managed);
+    const sortedClients = filteredClients.sort((a: IClient, b: IClient) =>
+        a.shortDescription.localeCompare(b.shortDescription)
+    );
+
     function handleChangeComponent(value: string) {
         setSelectedComponent(value);
 
-        // Find the first matching config that has `dn` containing the `value`
         const matchedConfig = configs.find((config) => config.dn.includes(value));
 
         if (matchedConfig) {
             console.log('Path:', matchedConfig.path);
-            // Set the path or use it as needed
             setSelectedConfig(matchedConfig.path);
-            // You can now use selectedPath wherever needed
         } else {
             console.log('No matching config found');
         }
 
-        // Update the matching configs and reset the error
         setMatchingConfigs(matchedConfig ? [matchedConfig] : []);
         setSelectedComponentError(undefined);
     }
@@ -60,12 +61,6 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
             // const component = components.find((comp) => comp.dn === selectedComponent);
             const fullUrl = `${selectedBaseUrl}${selectedConfig}`;
             console.warn('FULL URL:', fullUrl);
-            // {"url":"https://play-with-fint.felleskomponent.no/utdanning/elev/elev","client":""}
-
-            // const formData = {
-            //     testUrl: fullUrl,
-            //     clientName: selectedClient,
-            // };
             runTest(fullUrl, selectedClient);
         }
     }
@@ -118,7 +113,7 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
                 onChange={(e) => setSelectedClient(e.target.value)}
                 disabled={selectedBaseUrl == 'https://play-with-fint.felleskomponent.no'}>
                 <option value="">Velg</option>
-                {clients.map((client, index) => (
+                {sortedClients.map((client, index) => (
                     <option value={client.name} key={index}>
                         {client.shortDescription}
                     </option>

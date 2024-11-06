@@ -12,28 +12,17 @@ import OrganisationApi from '~/api/OrganisationApi';
 import React, { useEffect, useState } from 'react';
 import AlertManager from '~/components/AlertManager';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
+import { handleApiResponse } from '~/utils/handleApiResponse';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Komponenter' }, { name: 'description', content: 'Liste over komponenter' }];
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-    // try {
     const components = await ComponentApi.getAllComponents();
     const orgName = await getSelectedOrganization(request);
     return json({ components, orgName });
-    // } catch (err) {
-    //     if (err instanceof Error) {
-    //         console.error(`:( Request failed: :`, err);
-    //     }
-    //     throw new Response('Not Found', { status: 404 });
-    // }
 };
-
-// type ActionData = {
-//     success: boolean;
-//     message: string;
-// };
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter' }];
@@ -82,36 +71,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const actionName = 'action update';
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);
-
     const updateType = getFormData(formData.get('isChecked'), 'isChecked', actionName);
     const componentName = getFormData(formData.get('componentName'), 'componentName', actionName);
 
-    try {
-        const response = await OrganisationApi.updateComponent(componentName, orgName, updateType);
-        const successResponse = response.status === 204;
+    const updateResponse = await OrganisationApi.updateComponent(
+        componentName,
+        orgName,
+        updateType
+    );
+    let response;
 
-        if (!successResponse) {
-            console.error(`${actionName} failed: Response: ${response.status}`);
-        }
+    if (updateType === 'true')
+        response = handleApiResponse(updateResponse, `Komponent ${componentName} lagt til`);
+    else
+        response = handleApiResponse(
+            updateResponse,
+            `Komponent ${componentName} fjernet`,
+            'warning'
+        );
 
-        if (updateType === 'true')
-            return json({
-                show: true,
-                message: `Komponent ${componentName} lagt til`,
-                variant: 'success',
-            });
-        else
-            return json({
-                show: true,
-                message: `Komponent ${componentName} fjernet`,
-                variant: 'warning',
-            });
-    } catch (err) {
-        console.error('Error updating component:', err as Error);
-        return json({
-            show: true,
-            message: `Ukjent handlingstype`,
-            variant: 'success',
-        });
-    }
+    return response;
 };

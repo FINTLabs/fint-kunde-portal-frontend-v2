@@ -33,24 +33,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     const components = await ComponentApi.getOrganisationComponents(selectOrg);
     const clients = await ClientApi.getClients(selectOrg);
 
-    // const sortedComponents = components.sort((a: IComponent, b: IComponent) =>
-    //     a.name.localeCompare(b.name)
-    // );
-    //
-    // console.log(
-    //     'BEFORE:',
-    //     clients.map((client: IClient) => client.name)
-    // );
-    // const filteredClients = clients.filter((client: IClient) => !client.managed);
-    // const sortedClients = filteredClients.sort((a: IClient, b: IClient) =>
-    //     a.name.localeCompare(b.name)
-    // );
-    //
-    // console.log(
-    //     'AFTER:',
-    //     sortedClients.map((client: IClient) => client.name)
-    // );
-
     return json({ components: components, clients: clients });
 };
 
@@ -65,12 +47,6 @@ export default function Index() {
     }>();
 
     const onSearchSubmit = (baseUrl: string, endpoint: string, clientName: string) => {
-        console.debug('...........onSearchSubmit', baseUrl, endpoint, clientName);
-
-        // const formData = new FormData();
-        // formData.append('environment', env);
-        // formData.append('component', component);
-        // formData.append('client', client);
         fetcher.submit(
             {
                 baseUrl: baseUrl,
@@ -79,7 +55,6 @@ export default function Index() {
             },
             { method: 'post', action: `/basistest/` }
         );
-        // fetcher.submit(formData, { method: 'post', action: '/basistest' });
     };
     return (
         <>

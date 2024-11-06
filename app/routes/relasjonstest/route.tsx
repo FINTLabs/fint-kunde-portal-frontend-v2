@@ -15,6 +15,7 @@ import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResults
 import useAlerts from '~/components/useAlerts';
 import AlertManager from '~/components/AlertManager';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
+import { handleApiResponse } from '~/utils/handleApiResponse';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Relasjonstest' }, { name: 'description', content: 'Relasjonstest' }];
@@ -119,45 +120,33 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const testUrl = formData.get('testUrl');
     const clientName = formData.get('clientName');
-
     const actionType = formData.get('actionType') as string;
+
+    let apiResponse;
     let response;
     switch (actionType) {
         case 'ADD_TEST':
-            response = await LinkWalkerApi.addTest(
+            apiResponse = await LinkWalkerApi.addTest(
                 testUrl as string,
                 clientName as string,
                 orgName
             );
 
-            if (response.id) {
-                return json({
-                    message: `Ny relasjonstest lagt til: ${response.id}`,
-                    variant: 'success',
-                    show: true,
-                });
-            } else {
-                return json({
-                    message: `Feil ved kjører testen. `,
-                    variant: 'error',
-                    show: true,
-                });
-            }
+            response = handleApiResponse(
+                apiResponse,
+                `Ny relasjonstest lagt til: ${apiResponse.id}`
+            );
+            break;
         case 'CLEAR_TESTS':
-            response = await LinkWalkerApi.clearTests(orgName);
-
-            if (response.ok) {
-                return json({
-                    message: 'Alle tester fjernet',
-                    variant: 'warning',
-                    show: true,
-                });
-            } else {
-                return json({
-                    message: `Feil ved fjern alle tester. `,
-                    variant: 'error',
-                    show: true,
-                });
-            }
+            apiResponse = await LinkWalkerApi.clearTests(orgName);
+            response = handleApiResponse(apiResponse, 'Alle tester fjernet');
+            break;
+        default:
+            return json({
+                show: true,
+                message: `Unknown action type '${actionType}'`,
+                variant: 'error',
+            });
     }
+    return json(response);
 }

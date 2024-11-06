@@ -1,12 +1,12 @@
 export const handleApiResponse = (
     apiResponse: Response,
     successMessage: string,
-    isWarning?: boolean
+    variant?: 'success' | 'warning' | 'error' | 'info'
 ) => {
     if (apiResponse.ok) {
         return {
             message: successMessage,
-            variant: isWarning ? 'warning' : 'success',
+            variant: variant || 'success',
         };
     } else {
         return {

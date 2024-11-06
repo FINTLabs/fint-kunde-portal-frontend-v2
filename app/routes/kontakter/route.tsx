@@ -156,7 +156,7 @@ export async function action({ request }: ActionFunctionArgs) {
             response = handleApiResponse(
                 apiResponse,
                 'Kontakten er fjernet som teknisk kontakt',
-                true
+                'warning'
             );
             break;
         case 'SET_LEGAL_CONTACT':
@@ -172,7 +172,7 @@ export async function action({ request }: ActionFunctionArgs) {
             response = handleApiResponse(
                 apiResponse,
                 ` ${roleName} fjernet fra ${contactName}`,
-                true
+                'warning'
             );
             break;
         default:

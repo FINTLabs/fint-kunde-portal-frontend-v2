@@ -138,11 +138,7 @@ export const action: ActionFunction = async ({ request }) => {
         shortDescription: description,
         note: detailedInfo,
     };
-    const response = await AdapterAPI.createAdapter(newAdapter, orgName);
 
-    if (response.name) {
-        return redirect(`/adapter/${response.name}`);
-    } else {
-        return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
-    }
+    const response = await AdapterAPI.createAdapter(newAdapter, orgName);
+    return redirect(`/adapter/${response.name}`);
 };

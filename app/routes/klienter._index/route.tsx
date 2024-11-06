@@ -8,7 +8,6 @@ import { Tabs } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { type ActionFunctionArgs, LoaderFunction, MetaFunction, redirect } from '@remix-run/node';
 import ClientCreateForm from '~/routes/klienter._index/CreateForm';
-import logger from '~/utils/logger';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
 import ClientPageHeader from '~/routes/klienter._index/ClientPageHeader';
@@ -129,17 +128,5 @@ export async function action({ request }: ActionFunctionArgs) {
     };
 
     const response = await ClientApi.createClient(newClient, orgName);
-
-    logger.debug(`.... Response Client Create: ${JSON.stringify(response)}`);
-    logger.debug('Response client name:', response.name);
-
-    if (response.name) {
-        return redirect(`/klienter/${response.name}`);
-    } else {
-        return json({
-            show: true,
-            message: `Feil oppretting av klient.'`,
-            variant: 'error',
-        });
-    }
+    return redirect(`/klienter/${response.name}`);
 }

@@ -21,7 +21,6 @@ import { IAccess } from '~/types/Access';
 import { AuthTable } from '~/components/shared/AuthTable';
 import { handleApiResponse } from '~/utils/handleApiResponse';
 import ActionButtons from '~/components/shared/ActionButtons';
-import logger from '~/utils/logger';
 import AlertManager from '~/components/AlertManager';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import useAlerts from '~/components/useAlerts';
@@ -214,7 +213,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     let apiResponse;
     let updateResponse;
-    let isOk = false;
     switch (actionType) {
         case 'UPDATE_CLIENT':
             apiResponse = await ClientApi.updateClient(
@@ -223,19 +221,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 formData.get('note') as string,
                 orgName
             );
-            isOk = apiResponse.status;
-            return json({
-                ok: isOk,
-                show: true,
-                message: apiResponse.ok
-                    ? 'Klient oppdatert med suksess.'
-                    : `Oppdatering av klient feilet. Mer info: Status: ${apiResponse.status}. StatusTekst: ${apiResponse.statusText}`,
-                variant: isOk ? 'success' : 'error',
-            });
+            response = handleApiResponse(apiResponse, 'Klient oppdatert med suksess.');
+            break;
         case 'DELETE_CLIENT':
             const clientId = formData.get('clientId') as string;
             apiResponse = await ClientApi.deleteClient(clientId, orgName);
-            logger.debug(`delete client response: ${JSON.stringify(response)}`);
             return redirect(`/klienter?deleted=${clientId}`);
         case 'UPDATE_COMPONENT_IN_CLIENT':
             updateResponse = await ClientApi.updateComponentInClient(
@@ -250,7 +240,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 response = handleApiResponse(
                     updateResponse,
                     'Komponenten fjernet fra klienter',
-                    true
+                    'warning'
                 );
             break;
         case 'UPDATE_PASSWORD':
@@ -270,11 +260,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 clientSecret: updateResponse,
                 message: 'Klienthemmeligheten ble hentet',
                 variant: 'success',
-                show: true,
             });
 
         default:
-            return null;
+            return json({
+                message: `Ukjent handlingstype: '${actionType}'`,
+                variant: 'error',
+            });
     }
     return response;
 }

@@ -6,6 +6,7 @@ import contactsTechnical from '../fixtures/contactsTechnical.json';
 import role from '../fixtures/role.json';
 import contactsLegal from '../fixtures/contactsLegal.json';
 import contacts from '../fixtures/contacts.json';
+import components from '../fixtures/components.json';
 
 const API_URL = process.env.API_URL;
 console.log(' api url', API_URL);
@@ -37,5 +38,10 @@ export const handlers = [
 
     http.get(`${API_URL}/api/organisations/calvin_organizations/contacts/legal`, () => {
         return HttpResponse.json(contactsLegal);
+    }),
+
+    http.get(`${API_URL}/api/components`, () => {
+        console.log('GET ALL COMPONENTS');
+        return HttpResponse.json(components);
     }),
 ];

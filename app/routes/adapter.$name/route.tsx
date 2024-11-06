@@ -253,7 +253,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 response = handleApiResponse(
                     updateResponse,
                     'Komponenten fjernet fra adapteren',
-                    true
+                    'warning'
                 );
             break;
         case 'DELETE_ADAPTER':
@@ -262,7 +262,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
             return redirect(`/adaptere?deleted=${name}`);
         default:
             return json({
-                message: `Unknown action type '${actionType}'`,
+                message: `Ukjent handlingstype: '${actionType}'`,
                 variant: 'error',
             });
     }

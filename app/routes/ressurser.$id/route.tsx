@@ -224,9 +224,8 @@ export async function action({ request }: ActionFunctionArgs) {
                 updateType
             );
 
-            const isRemoved = updateType !== 'add';
-
-            response = handleApiResponse(updateResponse, message, isRemoved);
+            const variant = updateType === 'add' ? 'success' : 'warning';
+            response = handleApiResponse(updateResponse, message, variant);
             break;
 
         case 'UPDATE_CLIENT':
@@ -243,8 +242,7 @@ export async function action({ request }: ActionFunctionArgs) {
                 updateTypeClient
             );
 
-            const clientRemoved = updateTypeClient !== 'add';
-
+            const clientRemoved = updateTypeClient === 'add' ? 'success' : 'warning';
             response = handleApiResponse(updateResponse, clientMessage, clientRemoved);
             break;
 
