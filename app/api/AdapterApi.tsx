@@ -59,7 +59,6 @@ class AdapterAPI {
     }
 
     static async setPassword(adapterName: string, password: string, organisationName: string) {
-        console.log('Create new password adapter: ', adapterName, password);
         const request = new Request(
             `${API_URL}/api/adapters/${organisationName}/${adapterName}/password`,
             {
