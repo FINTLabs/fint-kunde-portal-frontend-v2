@@ -35,7 +35,7 @@ import CustomError from '~/components/errors/CustomError';
 import { IMeData } from '~/types/Me';
 import { IUserSession, SessionOrganisation } from '~/types/Session';
 import { FeatureFlags } from '~/types/FeatureFlag';
-// import { parseCookie } from '~/utils/ParseCookie';
+import { parseCookie } from '~/utils/ParseCookie';
 
 export const meta: MetaFunction = () => {
     return [
@@ -67,8 +67,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         }));
 
         // // Get the selected organization from the persistent cookie, if available
-        // const cookies = parseCookie(request.headers.get('Cookie'));
-        // const selectedOrganizationFromCookie = cookies['selectedOrganization'];
+        const cookies = parseCookie(request.headers.get('Cookie'));
+        const selectedOrganizationFromCookie = cookies['persistentOrg'];
+        if (selectedOrganizationFromCookie) {
+            console.log(' SELECTED ORG FROM COOKIE: ', selectedOrganizationFromCookie);
+        } else {
+            console.log(' NO COOKIE WITH SELECTED ORG ');
+        }
         //
         // let selectedOrganization = organizationDetails[0];
         // if (selectedOrganizationFromCookie) {
@@ -84,6 +89,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             organizationCount: organisationsData.length,
             selectedOrganization: organizationDetails[0],
             organizations: organizationDetails,
+            persistentOrg: organizationDetails[0].orgNumber,
         };
 
         const session = await setUserSession(request, userSession);

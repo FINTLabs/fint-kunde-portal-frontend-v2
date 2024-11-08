@@ -4,11 +4,13 @@ import { getSession, destroySession } from '~/utils/session';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const session = await getSession(request.headers.get('Cookie'));
-    // const userSession = session.get('user-session') || session.get('user_session');
+    const userSession = session.get('user-session') || session.get('user_session');
+
+    console.log('LOGOUT ORG TO SAVE:', userSession.persistentOrg);
 
     // Save the selected organization in a persistent cookie before destroying the session
     // let selectedOrganizationCookie = '';
-    // if (userSession && userSession.selectedOrganization) {
+    // if (session && session.selectedOrganization) {
     //     selectedOrganizationCookie = `selectedOrganization=${userSession.selectedOrganization.orgNumber}; Path=/; HttpOnly; Max-Age=31536000`; // 1 year expiration
     // }
 
