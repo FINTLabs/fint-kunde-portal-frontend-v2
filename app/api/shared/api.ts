@@ -57,7 +57,7 @@ export async function request<T = unknown>(
                 status: errorStatus,
             });
         } else {
-            logStatus(500, functionName, 'Internal Server Error');
+            logStatus(500, functionName, 'Internal Server Error', URL);
             const errorMessage = `Internal Server Error - ${functionName} failed`;
 
             throw new Response(errorMessage, {
@@ -85,7 +85,7 @@ export async function putRequest<T = unknown>(
     if (!response.ok) {
         throw new Error();
     }
-    logStatus(response.status, functionName);
+    logStatus(response.status, functionName, URL);
 
     return response;
 }
@@ -101,7 +101,7 @@ export async function postRequest<T = unknown>(
             ...requestOptions,
             body: JSON.stringify(data),
         };
-        logger.debug(`POST request data: ${JSON.stringify(data)}`);
+        logger.silly(`POST request data: ${JSON.stringify(data)}`);
     }
 
     const response = await fetch(URL, requestOptions);
@@ -121,7 +121,7 @@ export async function postRequest<T = unknown>(
     } else {
         const errorData = await response.json();
         const errorMessage = `Error ${errorData.status} (${errorData.error}): Får ikke tilgang ${errorData.path}`;
-
+        logStatus(response.status, functionName, URL);
         throw {
             status: response.status,
             body: errorMessage,
@@ -153,10 +153,11 @@ async function getRequest(
     }
 }
 
-function logStatus(status: number, functionName: string, errorMessage?: string) {
+function logStatus(status: number, functionName: string, errorMessage?: string, URL?: string) {
     if (status >= 200 && status < 300) {
         logger.info(`🟢--> Result: ${functionName} ${status}`);
     } else {
+        logger.error('URL:', URL);
         logger.error(`🔴--> Result: ${functionName} ${status}`);
         if (errorMessage) {
             logger.debug(`Error Message: ${errorMessage}`);
