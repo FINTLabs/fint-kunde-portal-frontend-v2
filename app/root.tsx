@@ -74,22 +74,21 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         } else {
             console.log(' NO COOKIE WITH SELECTED ORG ');
         }
-        //
-        // let selectedOrganization = organizationDetails[0];
-        // if (selectedOrganizationFromCookie) {
-        //     selectedOrganization =
-        //         organizationDetails.find(
-        //             (org) => org.orgNumber === selectedOrganizationFromCookie
-        //         ) || organizationDetails[0];
-        // }
+
+        let selectedOrganization = organizationDetails[0];
+        if (selectedOrganizationFromCookie) {
+            selectedOrganization =
+                organizationDetails.find(
+                    (org) => org.orgNumber === selectedOrganizationFromCookie
+                ) || organizationDetails[0];
+        }
 
         userSession = {
             firstName: meData.firstName,
             lastName: meData.lastName,
             organizationCount: organisationsData.length,
-            selectedOrganization: organizationDetails[0],
+            selectedOrganization: selectedOrganization,
             organizations: organizationDetails,
-            persistentOrg: organizationDetails[0].orgNumber,
         };
 
         const session = await setUserSession(request, userSession);

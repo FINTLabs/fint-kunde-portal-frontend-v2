@@ -1,12 +1,12 @@
 import { LoaderFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { getSession, destroySession } from '~/utils/session';
+// import { getSession, destroySession } from '~/utils/session';
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const session = await getSession(request.headers.get('Cookie'));
-    const userSession = session.get('user-session') || session.get('user_session');
-
-    console.log('LOGOUT ORG TO SAVE:', userSession.persistentOrg);
+    // const session = await getSession(request.headers.get('Cookie'));
+    // const userSession = session.get('user-session') || session.get('user_session');
+    //
+    // console.log('LOGOUT ORG TO SAVE:', userSession.persistentOrg);
 
     // Save the selected organization in a persistent cookie before destroying the session
     // let selectedOrganizationCookie = '';
@@ -14,13 +14,13 @@ export const loader: LoaderFunction = async ({ request }) => {
     //     selectedOrganizationCookie = `selectedOrganization=${userSession.selectedOrganization.orgNumber}; Path=/; HttpOnly; Max-Age=31536000`; // 1 year expiration
     // }
 
-    const cookieHeader = await destroySession(session);
+    // const cookieHeader = await destroySession(session);
 
     return redirect('https://idp.felleskomponent.no/nidp/app/logout', {
-        headers: {
-            // 'Set-Cookie': `${cookieHeader}, ${selectedOrganizationCookie}`,
-            'Set-Cookie': `${cookieHeader}`,
-        },
+        // headers: {
+        //     // 'Set-Cookie': `${cookieHeader}, ${selectedOrganizationCookie}`,
+        //     'Set-Cookie': `${cookieHeader}`,
+        // },
     });
 };
 

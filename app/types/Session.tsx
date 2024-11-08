@@ -9,5 +9,4 @@ export interface IUserSession {
     organizationCount: number;
     selectedOrganization: SessionOrganisation | null;
     organizations: SessionOrganisation[];
-    persistentOrg: string;
 }
