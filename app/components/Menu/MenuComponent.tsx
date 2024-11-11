@@ -3,7 +3,7 @@ import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { MENU_ITEMS_LEFT } from '~/components/Menu/constants';
 
-//TODO: This is in BETA in Aksel, check for uppate and fix
+//TODO: This is in BETA in Aksel, check for update and fix
 const MenuComponent = () => {
     return (
         <div>

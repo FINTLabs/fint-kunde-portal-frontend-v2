@@ -14,6 +14,8 @@ import AddServiceForm from '~/routes/samtykke/AddServiceForm';
 import FeaturesApi from '~/api/FeaturesApi';
 import { handleApiResponse } from '~/utils/handleApiResponse';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
+import AlertManager from '~/components/AlertManager';
+import useAlerts from '~/components/useAlerts';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Samtykke' }, { name: 'description', content: 'Samtykke' }];
@@ -56,7 +58,8 @@ export default function Index() {
     const [showAddServiceForm, setShowAddServiceForm] = useState(false);
     const fetcher = useFetcher<IFetcherResponseData>();
     const actionData = fetcher.data as IFetcherResponseData;
-    const [show, setShow] = React.useState(false);
+
+    const { alerts } = useAlerts(actionData, fetcher.state);
 
     const breadcrumbs = [{ name: 'Samtykke', link: '/samtykke' }];
     const { policies, services, personalDataList, foundations, error } = useLoaderData<{
@@ -67,26 +70,21 @@ export default function Index() {
         error?: string;
     }>();
 
-    useEffect(() => {
-        setShow(true);
-    }, [fetcher.state]);
+    useEffect(() => {}, [fetcher.state]);
 
     const handleAddConsentClick = () => {
         setShowAddPolicyForm(true);
         setShowAddServiceForm(false);
-        setShow(false);
     };
 
     const handleAddServiceClick = () => {
         setShowAddServiceForm(true);
         setShowAddPolicyForm(false);
-        setShow(false);
     };
 
     const handleCancelClick = () => {
         setShowAddPolicyForm(false);
         setShowAddServiceForm(false);
-        setShow(false);
     };
 
     const handleSavePolicy = (formData: {
@@ -119,6 +117,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
+            <AlertManager alerts={alerts} />
 
             <HStack align={'center'} justify={'space-between'}>
                 <VStack>
@@ -147,16 +146,6 @@ export default function Index() {
                     )}
                 </VStack>
             </HStack>
-
-            {actionData && show && (
-                <Alert
-                    className={'!mt-5'}
-                    variant={actionData.variant as 'error' | 'info' | 'warning' | 'success'}
-                    closeButton
-                    onClose={() => setShow(false)}>
-                    {actionData.message || 'Innhold'}
-                </Alert>
-            )}
 
             <VStack gap={'6'}>
                 <Box className="w-full" padding="6">

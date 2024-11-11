@@ -40,7 +40,7 @@ import { parseCookie } from '~/utils/ParseCookie';
 export const meta: MetaFunction = () => {
     return [
         { title: 'Novari Kundeportalen' },
-        { name: 'description', content: 'Welcome to the kundeportalen!' },
+        { name: 'description', content: 'Velkommen til Novari kundeportalen!' },
     ];
 };
 
@@ -66,7 +66,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             displayName: org.displayName,
         }));
 
-        // // Get the selected organization from the persistent cookie, if available
+        // Get the selected organization from the persistent cookie, if available
         const cookies = parseCookie(request.headers.get('Cookie'));
         const selectedOrganizationFromCookie = cookies['persistentOrg'];
         if (selectedOrganizationFromCookie) {
