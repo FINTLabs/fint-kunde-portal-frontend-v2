@@ -68,7 +68,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
         // Get the selected organization from the persistent cookie, if available
         const cookies = parseCookie(request.headers.get('Cookie'));
-        const selectedOrganizationFromCookie = cookies['persistentOrg'];
+        const selectedOrganizationFromCookie = cookies['selectedOrganization'];
         if (selectedOrganizationFromCookie) {
             console.log(' SELECTED ORG FROM COOKIE: ', selectedOrganizationFromCookie);
         } else {
