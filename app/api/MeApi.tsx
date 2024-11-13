@@ -23,7 +23,7 @@ class MeApi {
             if (response.ok) {
                 return await response.json();
             } else if (response.status === 404) {
-                logger.error(response);
+                console.log(response);
 
                 throw {
                     status: 403,
