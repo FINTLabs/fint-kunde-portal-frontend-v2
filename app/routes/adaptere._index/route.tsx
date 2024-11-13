@@ -78,6 +78,7 @@ export default function Index() {
         );
     };
 
+    //TODO: clear search on org change
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />

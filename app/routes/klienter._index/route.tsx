@@ -76,6 +76,7 @@ export default function Index() {
         fetcher.submit(formData, { method: 'post', action: '/klienter' });
     };
 
+    //TODO: clear search on org change
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />

@@ -23,6 +23,8 @@ class MeApi {
             if (response.ok) {
                 return await response.json();
             } else if (response.status === 404) {
+                logger.error(response);
+
                 throw {
                     status: 403,
                     body: 'Du har ikke opprettet bruker.',
