@@ -1,6 +1,6 @@
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Modal } from '@navikt/ds-react';
-import { useNavigate } from '@remix-run/react';
+import { Link, useNavigate } from '@remix-run/react';
 import { useRef } from 'react';
 
 export function LogoutButton() {
@@ -22,14 +22,11 @@ export function LogoutButton() {
                     <Button type="button" onClick={() => ref.current?.close()}>
                         Nei
                     </Button>
-                    <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={() => {
-                            navigate('/logout');
-                        }}>
-                        Ja
-                    </Button>
+                    <Link to={'https://idp.felleskomponent.no/nidp/app/logout'}>
+                        <Button as="a" variant="secondary">
+                            Ja
+                        </Button>
+                    </Link>
                 </Modal.Footer>
             </Modal>
         </>
