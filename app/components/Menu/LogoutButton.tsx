@@ -23,9 +23,7 @@ export function LogoutButton() {
                         Nei
                     </Button>
                     <Link to={'https://idp.felleskomponent.no/nidp/app/logout'}>
-                        <Button as="a" variant="secondary">
-                            Ja
-                        </Button>
+                        <Button variant="secondary">Ja</Button>
                     </Link>
                 </Modal.Footer>
             </Modal>
