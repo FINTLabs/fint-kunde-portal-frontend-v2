@@ -136,7 +136,8 @@ async function getRequest(
     returnType: ReturnType
 ) {
     const response = await fetch(URL, requestOptions);
-    logStatus(response.status, functionName);
+    logger.info(URL);
+    logStatus(response.status, functionName, URL);
 
     if (response.ok) {
         const responseData = returnType === 'json' ? await response.json() : await response.text();

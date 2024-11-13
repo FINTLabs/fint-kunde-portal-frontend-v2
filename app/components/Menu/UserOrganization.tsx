@@ -6,7 +6,7 @@ import { IUserSession } from '~/types/Session';
 export const UserOrganization = ({ userSession }: { userSession: IUserSession }) => {
     const submit = useSubmit();
 
-    const [orgName, setOrgName] = useState(userSession.selectedOrganization?.displayName);
+    const [orgName, setOrgName] = useState(userSession.selectedOrganization?.name);
 
     const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setOrgName(event.target.value);
@@ -15,7 +15,7 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
         submit(
             {
                 selectedOrganization: event.target.value,
-                actionType: 'UPDATE_SELECTED_ORGANIZATION', // not used
+                actionType: 'UPDATE_SELECTED_ORGANIZATION',
             },
             {
                 method: 'POST',
@@ -37,7 +37,7 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
                     onChange={handleOrgChange}
                     defaultValue={orgName}>
                     {userSession.organizations.map((org, index) => (
-                        <option key={`key-${index}`} value={org.displayName}>
+                        <option key={`key-${index}`} value={org.name}>
                             {org.displayName}
                         </option>
                     ))}

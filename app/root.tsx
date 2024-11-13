@@ -20,22 +20,20 @@ import '@navikt/ds-css';
 import './novari-theme.css';
 import { Alert, Box, Page } from '@navikt/ds-react';
 import React from 'react';
-import Menu from './components/Menu/Menu';
-import { commitSession, getSession } from '~/utils/session';
 import MeApi from '~/api/MeApi';
 import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
-import { Organisation } from '~/types/Organisation';
+import { IOrganisation } from '~/types/Organisation';
 import { CustomErrorLayout } from '~/components/errors/CustomErrorLayout';
 import { getFormData } from './utils/requestUtils';
-import { getUserSession, setUserSession } from './utils/selectedOrganization';
 import { HeaderProperties } from './utils/headerProperties';
 import logger from '~/utils/logger';
 import CustomError from '~/components/errors/CustomError';
 import { IMeData } from '~/types/Me';
-import { IUserSession, SessionOrganisation } from '~/types/Session';
-import { FeatureFlags } from '~/types/FeatureFlag';
-import { parseCookie } from '~/utils/ParseCookie';
+import { myCookie } from '~/utils/cookie';
+import { MenuLeft } from '~/components/Menu/MenuLeft';
+import { MenuRight } from '~/components/Menu/MenuRight';
+import { IUserSession } from '~/types/Session';
 
 export const meta: MetaFunction = () => {
     return [
@@ -53,64 +51,48 @@ export const remix_cookie = createCookie('remix_cookie', {
 });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    let userSession = await getUserSession(request);
-    HeaderProperties.setProperties(request); // root is called on every request, makes sense to set xnin only once here.
-    const meData: IMeData = await MeApi.fetchMe(); //Should we do this so often? otherwise it will require a logout to change
+    HeaderProperties.setProperties(request);
 
-    if (!userSession) {
-        const organisationsData: Organisation[] = await MeApi.fetchOrganisations();
+    const meData: IMeData = await MeApi.fetchMe();
 
-        const organizationDetails = organisationsData.map((org) => ({
-            name: org.name,
-            orgNumber: org.orgNumber,
-            displayName: org.displayName,
-        }));
+    if (meData.nin) {
+        const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
+        const features = await FeaturesApi.fetchFeatures('in root');
 
-        // Get the selected organization from the persistent cookie, if available
-        const cookies = parseCookie(request.headers.get('Cookie'));
-        const selectedOrganizationFromCookie = cookies['selectedOrganization'];
-        if (selectedOrganizationFromCookie) {
-            console.log(' SELECTED ORG FROM COOKIE: ', selectedOrganizationFromCookie);
-        } else {
-            console.log(' NO COOKIE WITH SELECTED ORG ');
-        }
+        console.log(features);
 
-        let selectedOrganization = organizationDetails[0];
-        if (selectedOrganizationFromCookie) {
-            selectedOrganization =
-                organizationDetails.find(
-                    (org) => org.orgNumber === selectedOrganizationFromCookie
-                ) || organizationDetails[0];
-        }
+        const cookieHeader = request.headers.get('Cookie');
+        const cookieValue = await myCookie.parse(cookieHeader);
 
-        userSession = {
-            firstName: meData.firstName,
-            lastName: meData.lastName,
+        let selectedOrganization =
+            cookieValue && organisationsData.find((org) => org.name === cookieValue);
+
+        const userSession: IUserSession = {
+            meData: meData,
             organizationCount: organisationsData.length,
             selectedOrganization: selectedOrganization,
-            organizations: organizationDetails,
+            organizations: organisationsData,
+            features: features,
         };
 
-        const session = await setUserSession(request, userSession);
-        const cookie = await commitSession(session);
-        let features = await FeaturesApi.fetchFeatures();
+        if (!selectedOrganization) {
+            selectedOrganization = organisationsData[0];
+            const newCookieHeader = await myCookie.serialize(selectedOrganization.name);
+            userSession.selectedOrganization = selectedOrganization;
 
-        features = features ? features : {};
-
-        return json(
-            { userSession, features }, // Ensure features is defined
-            {
-                headers: {
-                    'Set-Cookie': cookie,
-                },
-            }
-        );
+            return json(
+                { userSession },
+                {
+                    headers: {
+                        'Set-Cookie': newCookieHeader,
+                    },
+                }
+            );
+        } else {
+            logger.info(`USING COOKIE VALUE: ${selectedOrganization.name}`);
+            return json({ userSession });
+        }
     }
-
-    const features = await FeaturesApi.fetchFeatures();
-    const roles = meData.roles;
-
-    return json({ userSession, features, roles });
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -118,7 +100,6 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
 
-    logger.debug('Updating user org in action');
     if (actionType === 'UPDATE_SELECTED_ORGANIZATION') {
         const selectedOrganization = getFormData(
             formData.get('selectedOrganization'),
@@ -126,20 +107,12 @@ export async function action({ request }: ActionFunctionArgs) {
             actionName
         );
 
-        const sessionString = request.url.includes('localhost') ? 'user-session' : 'user_session';
-        const session = await getSession(request.headers.get('Cookie'));
-        const userSession = session.get(sessionString);
-        userSession.selectedOrganization = userSession.organizations.find(
-            (org: SessionOrganisation) => org.displayName === selectedOrganization
-        );
-
-        session.set(sessionString, userSession);
-        const cookie = await commitSession(session);
+        const newCookieHeader = await myCookie.serialize(selectedOrganization);
         return json(
-            { userSession },
+            { revalidate: true },
             {
                 headers: {
-                    'Set-Cookie': cookie,
+                    'Set-Cookie': newCookieHeader,
                 },
             }
         );
@@ -168,14 +141,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    const loaderData = useLoaderData<{
+    const { userSession } = useLoaderData<{
         userSession: IUserSession;
-        features: FeatureFlags;
-        // roles: string[];
     }>();
-    const userSession = loaderData?.userSession;
-    // const roles = loaderData?.roles;
-    // const features = loaderData?.features;
 
     return (
         <Page
@@ -188,10 +156,10 @@ export default function App() {
             }>
             <Box as="header" className={'novari-header'}>
                 <Page.Block gutters width="lg" className={'pt-2 pb-2'}>
-                    <Menu
-                        userSession={userSession}
-                        // displaySamtykke={features['samtykke-admin-new']}
-                    />
+                    <div className="flex justify-between">
+                        <MenuLeft userSession={userSession} />
+                        <MenuRight userSession={userSession} />
+                    </div>
                 </Page.Block>
             </Box>
 

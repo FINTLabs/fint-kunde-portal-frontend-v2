@@ -6,7 +6,7 @@ export const { getSession, commitSession, destroySession } = createCookieSession
         name: 'user_session',
         // other cookie options like domain, path, httpOnly, etc.
         httpOnly: true,
-        maxAge: 60 * 60 * 24, // 1 day
+        // maxAge: 60 * 60 * 24, // 1 day
         path: '/',
         sameSite: 'lax',
         secure: process.env.NODE_ENV === 'production',

@@ -24,40 +24,51 @@ const CustomErrorPage: React.FC<CustomErrorPageProps> = ({
                             <Heading level="1" size="large" spacing>
                                 {statusTitle}
                             </Heading>
-                            <BodyShort spacing>
-                                En teknisk feil på våre servere gjør at siden er utilgjengelig.
-                                Dette skyldes ikke noe du gjorde.
-                            </BodyShort>
-                            <BodyShort>Du kan prøve å</BodyShort>
-                            <List>
-                                <List.Item>
-                                    vente noen minutter og{' '}
-                                    <Link href="#" onClick={() => location.reload()}>
-                                        laste siden på nytt
+                            {statusCode === 403 ? (
+                                <>
+                                    <Link
+                                        href="https://registrering.felleskomponent.no"
+                                        className="navds-link">
+                                        <Button>Trykk her for å opprette konto</Button>
                                     </Link>
-                                </List.Item>
-                                <List.Item>
-                                    <Link href="#" onClick={() => history.back()}>
-                                        gå tilbake til forrige side
+                                </>
+                            ) : (
+                                <>
+                                    <BodyShort spacing>
+                                        En teknisk feil på våre servere gjør at siden er
+                                        utilgjengelig.
+                                    </BodyShort>
+                                    <BodyShort>Du kan prøve å</BodyShort>
+                                    <List>
+                                        <List.Item>
+                                            vente noen minutter og{' '}
+                                            <Link href="#" onClick={() => location.reload()}>
+                                                laste siden på nytt
+                                            </Link>
+                                        </List.Item>
+                                        <List.Item>
+                                            <Link href="#" onClick={() => history.back()}>
+                                                gå tilbake til forrige side
+                                            </Link>
+                                        </List.Item>
+                                    </List>
+                                    <BodyShort>
+                                        Hvis problemet vedvarer, kan du{' '}
+                                        <Link href="https://support.novari.no/" target="_blank">
+                                            kontakte oss (åpnes i ny fane)
+                                        </Link>
+                                        .
+                                    </BodyShort>
+                                    <Link href="/" className="navds-link">
+                                        <Button>Gå til Kundeportalen Dashboard</Button>
                                     </Link>
-                                </List.Item>
-                            </List>
-                            <BodyShort>
-                                Hvis problemet vedvarer, kan du{' '}
-                                <Link href="https://support.novari.no/" target="_blank">
-                                    kontakte oss (åpnes i ny fane)
-                                </Link>
-                                .
-                            </BodyShort>
+                                </>
+                            )}
                         </div>
 
                         <BodyShort size="small" textColor="subtle">
                             Feil-data: {statusCode} - {errorData}
                         </BodyShort>
-
-                        <Link href="/" className="navds-link">
-                            <Button>Gå til Kundeportalen Dashboard</Button>
-                        </Link>
                     </VStack>
 
                     {/* DO WE WANT ENGLISH?? */}

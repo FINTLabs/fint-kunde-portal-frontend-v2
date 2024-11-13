@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { json, useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
+import { json, useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import ClientDetails from '~/routes/klienter.$id/ClientDetails';
 import { ActionFunctionArgs, redirect } from '@remix-run/node';
@@ -7,7 +7,7 @@ import ClientApi from '~/api/ClientApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
@@ -56,14 +56,15 @@ export default function Index() {
     // const selectedComponents = getComponentIds(client.components);
     const hasAccessControl = features['access-controll-new'];
 
+    const { id } = useParams();
     const breadcrumbs = [
         { name: 'Klienter', link: '/klienter' },
-        { name: client.name, link: `/klienter/${client.name}` },
+        { name: `${id}`, link: `/klienter/${id}` },
     ];
 
     const [isEditing, setIsEditing] = useState(false);
-    const [shortDescription, setShortDescription] = useState(client.shortDescription);
-    const [note, setNote] = useState(client.note);
+    const [shortDescription, setShortDescription] = useState(client?.shortDescription || '');
+    const [note, setNote] = useState(client?.note || '');
     const fetcher = useFetcher();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
     const { alerts } = useAlerts(actionData, fetcher.state);
@@ -116,86 +117,90 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={client.shortDescription} icon={TokenIcon} />
+            <InternalPageHeader title={client?.shortDescription || ''} icon={TokenIcon} />
             <AlertManager alerts={alerts} />
 
-            <HGrid gap="2" align={'start'}>
-                <Box>
-                    <Button
-                        className="relative h-12 w-12 top-2 right-14"
-                        icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
-                        variant="tertiary"
-                        onClick={() => navigate(`/klienter`)}></Button>
-                </Box>
+            {!client ? (
+                <Alert variant="warning">Det finnes ingen klienter ved navn {id} i listen</Alert>
+            ) : (
+                <HGrid gap="2" align={'start'}>
+                    <Box>
+                        <Button
+                            className="relative h-12 w-12 top-2 right-14"
+                            icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
+                            variant="tertiary"
+                            onClick={() => navigate(`/klienter`)}></Button>
+                    </Box>
 
-                <Box
-                    className="w-full relative bottom-12"
-                    padding="6"
-                    borderRadius="large"
-                    shadow="small">
-                    <HStack>
-                        <Heading size={'medium'}>Details</Heading>
-                        <Spacer />
+                    <Box
+                        className="w-full relative bottom-12"
+                        padding="6"
+                        borderRadius="large"
+                        shadow="small">
+                        <HStack>
+                            <Heading size={'medium'}>Details</Heading>
+                            <Spacer />
+                            {!client.managed && (
+                                <ActionButtons
+                                    isEditing={isEditing}
+                                    handleSave={handleSave}
+                                    handleCancel={handleCancel}
+                                    setIsEditing={setIsEditing}
+                                    handleConfirmDelete={handleConfirmDelete}
+                                    nameText={client.name}
+                                />
+                            )}
+                        </HStack>
+
+                        <ClientDetails
+                            client={{ ...client, shortDescription, note }}
+                            isEditing={isEditing}
+                            onChangeShortDescription={setShortDescription}
+                            onChangeNote={setNote}
+                        />
+
                         {!client.managed && (
-                            <ActionButtons
-                                isEditing={isEditing}
-                                handleSave={handleSave}
-                                handleCancel={handleCancel}
-                                setIsEditing={setIsEditing}
-                                handleConfirmDelete={handleConfirmDelete}
-                                nameText={client.name}
-                            />
+                            <>
+                                <Heading size={'medium'}>Autentisering</Heading>
+                                <AuthTable
+                                    entity={client}
+                                    entityType="client"
+                                    onUpdatePassword={handleUpdatePassword}
+                                    onUpdateAuthInfo={handleUpdateAuthInfo}
+                                    {...(actionData?.clientSecret
+                                        ? { clientSecret: actionData.clientSecret }
+                                        : {})}
+                                />
+                                <Divider className="pt-10" />
+                            </>
                         )}
-                    </HStack>
 
-                    <ClientDetails
-                        client={{ ...client, shortDescription, note }}
-                        isEditing={isEditing}
-                        onChangeShortDescription={setShortDescription}
-                        onChangeNote={setNote}
-                    />
+                        <Divider className="pt-10" />
 
-                    {!client.managed && (
-                        <>
-                            <Heading size={'medium'}>Autentisering</Heading>
-                            <AuthTable
-                                entity={client}
-                                entityType="client"
-                                onUpdatePassword={handleUpdatePassword}
-                                onUpdateAuthInfo={handleUpdateAuthInfo}
-                                {...(actionData?.clientSecret
-                                    ? { clientSecret: actionData.clientSecret }
-                                    : {})}
-                            />
-                            <Divider className="pt-10" />
-                        </>
-                    )}
-
-                    <Divider className="pt-10" />
-
-                    {hasAccessControl ? (
-                        <>
-                            <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
-                            <ComponentList
-                                accessList={access}
-                                // selectedItems={getComponentIds(client.components)}
-                                entity={client.name}
-                                onToggle={onComponentToggle}
-                            />
-                        </>
-                    ) : (
-                        <>
-                            <Heading size={'medium'}>Komponenter</Heading>
-                            <ComponentsTable
-                                items={components}
-                                selectedItems={getComponentIds(client.components)}
-                                toggle={handleToggle}
-                                hideLink={true}
-                            />
-                        </>
-                    )}
-                </Box>
-            </HGrid>
+                        {hasAccessControl ? (
+                            <>
+                                <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
+                                <ComponentList
+                                    accessList={access}
+                                    // selectedItems={getComponentIds(client.components)}
+                                    entity={client.name}
+                                    onToggle={onComponentToggle}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <Heading size={'medium'}>Komponenter</Heading>
+                                <ComponentsTable
+                                    items={components}
+                                    selectedItems={getComponentIds(client.components)}
+                                    toggle={handleToggle}
+                                    hideLink={true}
+                                />
+                            </>
+                        )}
+                    </Box>
+                </HGrid>
+            )}
         </>
     );
 }

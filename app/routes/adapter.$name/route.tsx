@@ -18,7 +18,7 @@ import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
 import { handleApiResponse } from '~/utils/handleApiResponse';
 import React from 'react';
-import { BodyLong, Box, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { Alert, Box, Heading, HGrid, VStack } from '@navikt/ds-react';
 import logger from '~/utils/logger';
 import AlertManager from '~/components/AlertManager';
 import { BackButton } from '~/components/shared/BackButton';
@@ -117,7 +117,7 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader
-                title={displayName}
+                title={displayName ? displayName : 'Error'}
                 icon={MigrationIcon}
                 helpText="adapter detaljer"
             />
@@ -125,11 +125,9 @@ export default function Index() {
             <AlertManager alerts={alerts} />
 
             {!adapter ? (
-                <Box padding="8" background="surface-info-moderate">
-                    <BodyLong>
-                        `Det finnes ingen adapter ved navn ${name} i listen over adaptere`
-                    </BodyLong>
-                </Box>
+                <Alert variant="warning">
+                    Det finnes ingen adapter ved navn ${name} i listen over adaptere
+                </Alert>
             ) : (
                 <HGrid gap="2" align={'start'}>
                     <BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />

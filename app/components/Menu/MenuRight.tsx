@@ -16,7 +16,7 @@ export const MenuRight = ({ userSession }: MenuRightType) => {
             <div className="flex items-center">
                 <NavLinkView
                     item={{
-                        title: userSession.firstName,
+                        title: userSession.meData.firstName,
                         path: '/user',
                     }}></NavLinkView>
             </div>

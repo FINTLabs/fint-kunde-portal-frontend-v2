@@ -13,7 +13,7 @@ import AdapterAPI from '~/api/AdapterApi';
 import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { CustomTabs } from '~/components/shared/CustomTabs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdapterCreateForm from '~/routes/adaptere._index/CreateForm';
 import AlertManager from '~/components/AlertManager';
 import { IAdapter, IPartialAdapter } from '~/types/Adapter';
@@ -49,6 +49,10 @@ export default function Index() {
     const [isCreating, setIsCreating] = useState(false);
     const [filteredAdapter, setFilteredAdapter] = useState(adapters);
     const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
+
+    useEffect(() => {
+        setFilteredAdapter(adapters);
+    }, [adapters]);
 
     const handleCreate = () => {
         setIsCreating(true);
