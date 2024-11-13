@@ -64,6 +64,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         const cookieHeader = request.headers.get('Cookie');
         const cookieValue = await myCookie.parse(cookieHeader);
 
+        logger.debug(`Cookie value: ${cookieValue}`);
+
         let selectedOrganization =
             cookieValue && organisationsData.find((org) => org.name === cookieValue);
 
@@ -74,6 +76,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             organizations: organisationsData,
             features: features,
         };
+
+        logger.info(
+            `List of organization names: ${organisationsData.map((org) => org.name).join(', ')}`
+        );
 
         if (!selectedOrganization) {
             selectedOrganization = organisationsData[0];
