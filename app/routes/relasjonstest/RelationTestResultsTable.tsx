@@ -32,9 +32,9 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
                             <Table.HeaderCell scope="col">Tid</Table.HeaderCell>
                             <Table.HeaderCell scope="col">Miljø</Table.HeaderCell>
                             <Table.HeaderCell scope="col">Ressurs</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Gjenstående sjekker</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Relasjonsfeil</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Sunne lenker</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Gjenstående</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Feil</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Ok</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
