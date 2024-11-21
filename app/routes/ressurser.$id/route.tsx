@@ -134,7 +134,7 @@ export default function Index() {
                     shadow="small">
                     <HGrid gap="2" align={'start'}>
                         <HStack>
-                            <Heading size={'medium'}>Details</Heading>
+                            <Heading size={'medium'}>Detaljer</Heading>
                             <Spacer />
                             <ActionButtons
                                 isEditing={isEditing}

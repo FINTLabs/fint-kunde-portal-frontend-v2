@@ -20,12 +20,6 @@ export const GeneralDetailView: React.FC<TestAddFormProps> = ({
 
     return (
         <VStack gap="3">
-            <HStack justify={'space-between'} align={'center'}>
-                <Heading align="start" size="medium">
-                    Detaljer
-                </Heading>
-            </HStack>
-
             <HStack justify={'space-between'} gap="8">
                 <VStack gap="6">
                     <LabelValuePanel label="Ressurs Id" value={asset.assetId} />
