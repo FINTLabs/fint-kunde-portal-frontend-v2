@@ -24,51 +24,41 @@ const CustomErrorPage: React.FC<CustomErrorPageProps> = ({
                             <Heading level="1" size="large" spacing>
                                 {statusTitle}
                             </Heading>
-                            {statusCode === 403 ? (
-                                <>
-                                    <Link
-                                        href="https://registrering.felleskomponent.no"
-                                        className="navds-link">
-                                        <Button>Trykk her for å opprette konto</Button>
+
+                            <BodyShort spacing>
+                                En teknisk feil på våre servere gjør at siden er utilgjengelig.
+                            </BodyShort>
+                            <BodyShort>Du kan prøve å</BodyShort>
+                            <List>
+                                <List.Item>
+                                    vente noen minutter og{' '}
+                                    <Link href="#" onClick={() => location.reload()}>
+                                        laste siden på nytt
                                     </Link>
-                                </>
-                            ) : (
-                                <>
-                                    <BodyShort spacing>
-                                        En teknisk feil på våre servere gjør at siden er
-                                        utilgjengelig.
-                                    </BodyShort>
-                                    <BodyShort>Du kan prøve å</BodyShort>
-                                    <List>
-                                        <List.Item>
-                                            vente noen minutter og{' '}
-                                            <Link href="#" onClick={() => location.reload()}>
-                                                laste siden på nytt
-                                            </Link>
-                                        </List.Item>
-                                        <List.Item>
-                                            <Link href="#" onClick={() => history.back()}>
-                                                gå tilbake til forrige side
-                                            </Link>
-                                        </List.Item>
-                                    </List>
-                                    <BodyShort>
-                                        Hvis problemet vedvarer, kan du{' '}
-                                        <Link href="https://support.novari.no/" target="_blank">
-                                            kontakte oss (åpnes i ny fane)
-                                        </Link>
-                                        .
-                                    </BodyShort>
-                                    <Link href="/" className="navds-link">
-                                        <Button>Gå til Kundeportalen Dashboard</Button>
+                                </List.Item>
+                                <List.Item>
+                                    <Link href="#" onClick={() => history.back()}>
+                                        gå tilbake til forrige side
                                     </Link>
-                                </>
-                            )}
+                                </List.Item>
+                            </List>
+                            <BodyShort>
+                                Hvis problemet vedvarer, kan du{' '}
+                                <Link href="https://support.novari.no/" target="_blank">
+                                    kontakte oss (åpnes i ny fane)
+                                </Link>
+                                .
+                            </BodyShort>
+                            <Link href="/" className="navds-link">
+                                <Button>Gå til Kundeportalen Dashboard</Button>
+                            </Link>
                         </div>
 
-                        <BodyShort size="small" textColor="subtle">
-                            Feil-data: {statusCode} - {errorData}
-                        </BodyShort>
+                        {statusCode != 403 && (
+                            <BodyShort size="small" textColor="subtle">
+                                Feil-data: {statusCode} - {errorData}
+                            </BodyShort>
+                        )}
                     </VStack>
 
                     {/* DO WE WANT ENGLISH?? */}

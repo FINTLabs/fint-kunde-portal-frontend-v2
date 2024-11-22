@@ -59,7 +59,7 @@ export const AuthTable = ({
             username: entity.name,
             password: password,
             clientId: entity.clientId,
-            clientSecret: clientSecret,
+            openIdSecret: clientSecret,
             assetIds: assetIdsString,
             scope: 'fint-client',
             idpUri: 'https://idp.felleskomponent.no/nidp/oauth/nam/token',
@@ -112,9 +112,7 @@ export const AuthTable = ({
                     </Table.Row>
 
                     <Table.Row>
-                        <Table.HeaderCell scope="row">
-                            {entityType === 'client' ? 'Klient Id' : 'Adaptere Id'}
-                        </Table.HeaderCell>
+                        <Table.HeaderCell scope="row">Klient Id</Table.HeaderCell>
                         <Table.DataCell>{entity.clientId}</Table.DataCell>
                         <Table.DataCell />
                         <Table.DataCell>

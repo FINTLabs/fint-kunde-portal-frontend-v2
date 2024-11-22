@@ -165,7 +165,7 @@ export async function action({ request }: ActionFunctionArgs) {
             break;
         case 'ADD_ROLE':
             apiResponse = await RoleApi.addRole(selectedOrg, contactNin, roleIdToAdd);
-            response = handleApiResponse(apiResponse, ` ${roleName} Lagt til ${contactName}`);
+            response = handleApiResponse(apiResponse, ` ${roleName} lagt til ${contactName}`);
             break;
         case 'DELETE_ROLE':
             apiResponse = await RoleApi.removeRole(selectedOrg, contactNin, roleIdToDelete);

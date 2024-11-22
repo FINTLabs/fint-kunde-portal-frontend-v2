@@ -34,6 +34,8 @@ import { myCookie } from '~/utils/cookie';
 import { MenuLeft } from '~/components/Menu/MenuLeft';
 import { MenuRight } from '~/components/Menu/MenuRight';
 import { IUserSession } from '~/types/Session';
+import CustomErrorNoUser from '~/components/errors/CustomErrorNoUser';
+import CustomErrorNoOrg from '~/components/errors/CustomErrorNoOrg';
 
 export const meta: MetaFunction = () => {
     return [
@@ -55,7 +57,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     const meData: IMeData = await MeApi.fetchMe();
 
-    if (meData.nin) {
+    if (meData.nin && meData.technical.length > 0) {
         const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
         const features = await FeaturesApi.fetchFeatures('in root');
 
@@ -98,6 +100,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             logger.info(`USING COOKIE VALUE: ${selectedOrganization.name}`);
             return json({ userSession });
         }
+    } else {
+        const message =
+            'Du er ikke tilknyttet en organisasjon. Gå til FINT administratoren i organisasjonen din for å få tilgang.';
+        throw new Response('errorMessage', {
+            status: 401,
+            statusText: message,
+        });
     }
 };
 
@@ -181,6 +190,21 @@ export function ErrorBoundary() {
     const error = useRouteError();
 
     if (isRouteErrorResponse(error)) {
+        // Custom handling for specific status codes
+        if (error.status === 403) {
+            return (
+                <CustomErrorLayout>
+                    <CustomErrorNoUser />
+                </CustomErrorLayout>
+            );
+        } else if (error.status === 401) {
+            return (
+                <CustomErrorLayout>
+                    <CustomErrorNoOrg />
+                </CustomErrorLayout>
+            );
+        }
+
         return (
             <CustomErrorLayout>
                 <CustomError
@@ -193,7 +217,7 @@ export function ErrorBoundary() {
     } else {
         return (
             <CustomErrorLayout>
-                <Alert variant="error">Ukjent feil</Alert>
+                <Alert variant="error">500: Ukjent feil </Alert>
             </CustomErrorLayout>
         );
     }

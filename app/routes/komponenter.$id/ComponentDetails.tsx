@@ -32,14 +32,6 @@ const ComponentDetails: React.FC<ComponentDetailProps> = ({ component }) => {
                     <Label>Sti</Label>
                     <BodyShort>{component.basePath}</BodyShort>
                 </HStack>
-                <HStack gap={'2'}>
-                    <Label>Adaptere</Label>
-                    <BodyShort>{component.adapters.length}</BodyShort>
-                </HStack>
-                <HStack gap={'2'}>
-                    <Label>Klienter</Label>
-                    <BodyShort>{component.clients.length}</BodyShort>
-                </HStack>
             </VStack>
             <VStack>
                 <HStack>
@@ -49,7 +41,7 @@ const ComponentDetails: React.FC<ComponentDetailProps> = ({ component }) => {
                         value={selectedValuesEnv}
                         size="small"
                         readOnly>
-                        <Checkbox value="openData">Åpne Data</Checkbox>
+                        <Checkbox value="openData">Åpne data</Checkbox>
                         <Checkbox value="common">Felles</Checkbox>
                     </CheckboxGroup>
                 </HStack>

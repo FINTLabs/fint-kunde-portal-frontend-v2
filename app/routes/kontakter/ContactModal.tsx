@@ -51,16 +51,17 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
         <Modal
             open={isOpen}
             onClose={handleClose}
+            closeOnBackdropClick={true}
             aria-labelledby="modal-heading"
             width={'small'}
             header={{
                 label: 'Kontakter',
-                heading: 'Legg til ny',
+                heading: 'Søk etter en kontakt',
             }}>
             <Modal.Body>
                 <TextField
                     label="Filtrer kontakter"
-                    placeholder="Skriv for å filtrere etter navn"
+                    placeholder="Skriv inn etternavn for å søke"
                     value={filter}
                     onChange={handleFilterChange}
                 />
@@ -108,11 +109,6 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, 
                     />
                 )}
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={onClose} size="xsmall">
-                    Close
-                </Button>
-            </Modal.Footer>
         </Modal>
     );
 };
