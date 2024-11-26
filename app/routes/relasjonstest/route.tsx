@@ -2,7 +2,7 @@ import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/nod
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, Switch } from '@navikt/ds-react';
+import { Box, Button, HStack } from '@navikt/ds-react';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import React, { useEffect } from 'react';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
@@ -16,6 +16,7 @@ import useAlerts from '~/components/useAlerts';
 import AlertManager from '~/components/AlertManager';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { handleApiResponse } from '~/utils/handleApiResponse';
+import logger from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Relasjonstest' }, { name: 'description', content: 'Relasjonstest' }];
@@ -37,20 +38,30 @@ export default function Index() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
     const { components, clients, relationTests, configs } = useLoaderData<typeof loader>();
-    const [autoRefresh, setAutoRefresh] = React.useState(false);
     const { alerts } = useAlerts(actionData, fetcher.state);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
 
-        if (autoRefresh) {
+        if (
+            relationTests.some((test: { status: string }) =>
+                [
+                    'STARTED',
+                    'FETCHING_RESOURCES',
+                    'CREATING_ENTRY_REPORTS',
+                    'PROCESSING_LINKS',
+                ].includes(test.status)
+            )
+        ) {
             interval = setInterval(() => {
-                fetcher.load('/relasjonstest'); // Trigger the loader to refresh the data
+                fetcher.formData?.set('message', 'test');
+                fetcher.load('/relasjonstest');
             }, 15000);
         }
-        console.log('refreshing page', fetcher.state);
+
+        console.log('refreshing page', fetcher);
         return () => clearInterval(interval);
-    }, [autoRefresh, fetcher]);
+    }, [relationTests, fetcher]);
 
     function runTest(testUrl: string, client: string) {
         fetcher.submit(
@@ -71,6 +82,32 @@ export default function Index() {
         formData.append('actionType', 'CLEAR_TESTS');
         fetcher.submit(formData, { method: 'post' });
     }
+
+    // function downloadLogAsCSV() {
+    //     const headers = ['Test ID', 'URL', 'Status', 'Client', 'Start Time', 'End Time'];
+    //     const rows = relationTests.map((test: any) => [
+    //         test.id,
+    //         test.url,
+    //         test.status,
+    //         test.client,
+    //         test.startTime,
+    //         test.endTime,
+    //     ]);
+    //
+    //     let csvContent = 'data:text/csv;charset=utf-8,';
+    //     csvContent += headers.join(',') + '\n';
+    //     rows.forEach(row => {
+    //         csvContent += row.join(',') + '\n';
+    //     });
+    //
+    //     const encodedUri = encodeURI(csvContent);
+    //     const link = document.createElement('a');
+    //     link.setAttribute('href', encodedUri);
+    //     link.setAttribute('download', 'relation_tests_log.csv');
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     document.body.removeChild(link);
+    // }
 
     return (
         <>
@@ -100,12 +137,6 @@ export default function Index() {
                         onClick={removeAllTests}>
                         Fjern alle tester
                     </Button>
-                    <Switch
-                        checked={autoRefresh}
-                        onChange={() => setAutoRefresh(!autoRefresh)}
-                        size="small">
-                        Auto Refresh
-                    </Switch>
                 </HStack>
             </Box>
 
@@ -122,8 +153,10 @@ export async function action({ request }: ActionFunctionArgs) {
     const clientName = formData.get('clientName');
     const actionType = formData.get('actionType') as string;
 
+    logger.debug('ACTION TYPE', actionType);
     let apiResponse;
     let response;
+
     switch (actionType) {
         case 'ADD_TEST':
             apiResponse = await LinkWalkerApi.addTest(
@@ -131,22 +164,26 @@ export async function action({ request }: ActionFunctionArgs) {
                 clientName as string,
                 orgName
             );
-
-            response = handleApiResponse(
-                apiResponse,
-                `Ny relasjonstest lagt til: ${apiResponse.id}`
-            );
+            response = {
+                show: true,
+                message: `Ny test lagt til`,
+                variant: 'success',
+            };
             break;
+
         case 'CLEAR_TESTS':
             apiResponse = await LinkWalkerApi.clearTests(orgName);
             response = handleApiResponse(apiResponse, 'Alle tester fjernet');
             break;
+
         default:
-            return json({
+            response = {
                 show: true,
                 message: `Unknown action type '${actionType}'`,
                 variant: 'error',
-            });
+            };
+            break;
     }
+
     return json(response);
 }

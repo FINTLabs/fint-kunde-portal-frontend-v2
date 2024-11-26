@@ -26,7 +26,7 @@ class MeApi {
                 console.log(response);
 
                 throw {
-                    status: 403,
+                    status: 999,
                     body: 'Du har ikke opprettet bruker.',
                 };
             }

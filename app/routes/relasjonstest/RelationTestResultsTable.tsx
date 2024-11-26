@@ -1,5 +1,5 @@
 import React from 'react';
-import { BodyShort, Table } from '@navikt/ds-react';
+import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
 import { ArrowCirclepathIcon, CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { ILogResults } from '~/types/RelationTest';
 
@@ -46,11 +46,16 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
                                 <Table.Row key={index}>
                                     <Table.DataCell>
                                         {result.status === 'FAILED' && (
-                                            <XMarkOctagonIcon
-                                                title="FAILED"
-                                                fontSize="1.5rem"
-                                                className={'navds-error-message'}
-                                            />
+                                            <Tooltip
+                                                content={
+                                                    result.errorMessage || 'An error occurred'
+                                                }>
+                                                <XMarkOctagonIcon
+                                                    title="FAILED"
+                                                    fontSize="1.5rem"
+                                                    className={'navds-error-message'}
+                                                />
+                                            </Tooltip>
                                         )}
                                         {result.status === 'COMPLETED' && (
                                             <CheckmarkCircleIcon
@@ -58,37 +63,35 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
                                                 fontSize="1.5rem"
                                             />
                                         )}
-                                        {result.status === 'RUNNING' && (
+                                        {[
+                                            'STARTED',
+                                            'FETCHING_RESOURCES',
+                                            'CREATING_ENTRY_REPORTS',
+                                            'PROCESSING_LINKS',
+                                        ].includes(result.status) && (
                                             <ArrowCirclepathIcon
-                                                title="RUNNING"
+                                                title={result.status}
                                                 fontSize="1.5rem"
                                             />
                                         )}
                                     </Table.DataCell>
                                     <Table.DataCell>{result.time}</Table.DataCell>
                                     <Table.DataCell>{result.env}</Table.DataCell>
-                                    <Table.DataCell>{result.uri}</Table.DataCell>
-                                    {result.status === 'FAILED' ? (
-                                        <>
-                                            <Table.DataCell colSpan={3}>
-                                                {result.errorMessage}
-                                            </Table.DataCell>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Table.DataCell align={'center'}>
-                                                {result.totalRequests -
-                                                    result.healthyRelations -
-                                                    result.relationErrors}
-                                            </Table.DataCell>
-                                            <Table.DataCell align={'center'}>
-                                                {result.relationErrors}
-                                            </Table.DataCell>
-                                            <Table.DataCell align={'center'}>
-                                                {result.healthyRelations}
-                                            </Table.DataCell>
-                                        </>
-                                    )}
+                                    <Table.DataCell>
+                                        {result.uri} -- {result.id}
+                                    </Table.DataCell>
+
+                                    <Table.DataCell align={'center'}>
+                                        {result.totalRequests -
+                                            result.healthyRelations -
+                                            result.relationErrors}
+                                    </Table.DataCell>
+                                    <Table.DataCell align={'center'}>
+                                        {result.relationErrors}
+                                    </Table.DataCell>
+                                    <Table.DataCell align={'center'}>
+                                        {result.healthyRelations}
+                                    </Table.DataCell>
                                 </Table.Row>
                             ))}
                     </Table.Body>

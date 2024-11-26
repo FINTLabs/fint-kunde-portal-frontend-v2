@@ -93,10 +93,10 @@ export const AuthTable = ({
                             <ConfirmAction
                                 buttonVariant="tertiary-neutral"
                                 buttonText=""
-                                titleText={
+                                subTitleText={
                                     'Hvis du gjør det må alle som bruker autentiseringsinformasjonen få det nye passordet og konfigurere tjenesten sin på nytt!'
                                 }
-                                subTitleText="Er du sikker på at du vil sette nytt passord? "
+                                titleText="Er du sikker på at du vil sette nytt passord? "
                                 onConfirm={generatePassword}
                                 icon={
                                     <ArrowsSquarepathIcon

@@ -67,9 +67,9 @@ const ConfirmAction: React.FC<ConfirmActionProps> = ({
                 onClose={() => handleClose(false)}>
                 <Modal.Body>
                     <Heading size="small">{titleText}</Heading>
-                    <Heading size="medium" spacing>
-                        {subTitleText}
-                    </Heading>
+                    {/*<Heading size="medium" spacing>*/}
+                    {subTitleText}
+                    {/*</Heading>*/}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button

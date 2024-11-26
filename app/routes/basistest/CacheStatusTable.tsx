@@ -8,6 +8,7 @@ interface TestResultsTableProps {
 }
 
 const CacheStatusTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
+    console.log(logResults);
     return (
         <>
             {logResults ? (
@@ -44,8 +45,14 @@ const CacheStatusTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
                                         </Tooltip>
                                     </Table.DataCell>
                                     <Table.DataCell>{result.resource}</Table.DataCell>
-                                    <Table.DataCell>{result.lastUpdated}</Table.DataCell>
-                                    <Table.DataCell>{result.size}</Table.DataCell>
+                                    <Table.DataCell>
+                                        {Number(result.lastUpdated) === -1
+                                            ? '0'
+                                            : result.lastUpdated}
+                                    </Table.DataCell>
+                                    <Table.DataCell>
+                                        {Number(result.size) === -1 ? '0' : result.size}
+                                    </Table.DataCell>
                                     <Table.DataCell>{result.message}</Table.DataCell>
                                 </Table.Row>
                             ))}
