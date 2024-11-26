@@ -77,9 +77,7 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
                                     </Table.DataCell>
                                     <Table.DataCell>{result.time}</Table.DataCell>
                                     <Table.DataCell>{result.env}</Table.DataCell>
-                                    <Table.DataCell>
-                                        {result.uri} -- {result.id}
-                                    </Table.DataCell>
+                                    <Table.DataCell>{result.uri}</Table.DataCell>
 
                                     <Table.DataCell align={'center'}>
                                         {result.totalRequests -
