@@ -36,6 +36,7 @@ import { MenuRight } from '~/components/Menu/MenuRight';
 import { IUserSession } from '~/types/Session';
 import CustomErrorNoUser from '~/components/errors/CustomErrorNoUser';
 import CustomErrorNoOrg from '~/components/errors/CustomErrorNoOrg';
+import CustomErrorNoAccess from '~/components/errors/CustomErrorNoAccess';
 
 export const meta: MetaFunction = () => {
     return [
@@ -186,12 +187,13 @@ export default function App() {
         </Page>
     );
 }
+
 export function ErrorBoundary() {
     const error = useRouteError();
 
     if (isRouteErrorResponse(error)) {
-        // Custom handling for specific status codes
-        if (error.status === 403) {
+        // Handle a 404 from me - special case
+        if (error.status === 999) {
             return (
                 <CustomErrorLayout>
                     <CustomErrorNoUser />
@@ -203,8 +205,13 @@ export function ErrorBoundary() {
                     <CustomErrorNoOrg />
                 </CustomErrorLayout>
             );
+        } else if (error.status === 403) {
+            return (
+                <CustomErrorLayout>
+                    <CustomErrorNoAccess />
+                </CustomErrorLayout>
+            );
         }
-
         return (
             <CustomErrorLayout>
                 <CustomError
