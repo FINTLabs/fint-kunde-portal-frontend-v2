@@ -23,7 +23,7 @@ class MeApi {
             if (response.ok) {
                 return await response.json();
             } else if (response.status === 404) {
-                console.log(response);
+                logger.debug(`ME 404 RESPONSE ${response.body}`);
 
                 throw {
                     status: 999,
@@ -34,7 +34,7 @@ class MeApi {
             if (err && typeof err === 'object' && 'status' in err && 'body' in err) {
                 const errorStatus = err.status as number;
                 const errorBody = err.body as string;
-                logger.error(`Error in MeAPI: ${err.status}`);
+                logger.error(`----> Error in MeAPI: ${errorStatus}`);
 
                 throw new Response(errorBody, {
                     status: errorStatus,
@@ -42,7 +42,7 @@ class MeApi {
                 });
             }
             const errorMessage = `Internal Server Error - ${functionName} failed`;
-
+            logger.error(`Error in MeAPI-->: ${errorMessage}`);
             throw new Response(errorMessage, {
                 status: 500,
                 statusText: 'Beklager, noe gikk galt.',
@@ -53,7 +53,7 @@ class MeApi {
     static async fetchOrganisations() {
         const functionName = 'fetchOrganisations';
         const URL = `${API_URL}/api/contacts/organisations`;
-        console.log('Fetching organisations' + URL);
+
         return request(URL, functionName);
     }
 }

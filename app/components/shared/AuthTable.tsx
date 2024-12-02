@@ -112,7 +112,7 @@ export const AuthTable = ({
                     </Table.Row>
 
                     <Table.Row>
-                        <Table.HeaderCell scope="row">Klient Id</Table.HeaderCell>
+                        <Table.HeaderCell scope="row">Klient id</Table.HeaderCell>
                         <Table.DataCell>{entity.clientId}</Table.DataCell>
                         <Table.DataCell />
                         <Table.DataCell>
@@ -121,9 +121,7 @@ export const AuthTable = ({
                     </Table.Row>
 
                     <Table.Row>
-                        <Table.HeaderCell scope="row">
-                            {entityType === 'client' ? 'Klient' : 'Adaptere'} Hemmelighet
-                        </Table.HeaderCell>
+                        <Table.HeaderCell scope="row">Klient hemmelighet</Table.HeaderCell>
                         <Table.DataCell style={{ wordBreak: 'break-all', whiteSpace: 'normal' }}>
                             {clientSecret ? clientSecret : '******************************'}
                         </Table.DataCell>
@@ -150,7 +148,7 @@ export const AuthTable = ({
                     </Table.Row>
 
                     <Table.Row>
-                        <Table.HeaderCell scope="row">RessursId-er</Table.HeaderCell>
+                        <Table.HeaderCell scope="row">Ressursider</Table.HeaderCell>
                         <Table.DataCell>{assetIdsString}</Table.DataCell>
                         <Table.DataCell />
                         <Table.DataCell>

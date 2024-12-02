@@ -16,7 +16,7 @@ export async function request<T = unknown>(
     data?: T
 ) {
     try {
-        logger.debug(`Calling ${requestMethod} on ${functionName}: ${URL}`);
+        logger.verbose(`Calling ${requestMethod} on ${functionName}: ${URL}`);
 
         const requestOptions: RequestInit = {
             method: requestMethod,
@@ -57,7 +57,7 @@ export async function request<T = unknown>(
                 status: errorStatus,
             });
         } else {
-            logStatus(500, functionName, 'Internal Server Error', URL);
+            logStatus(500, functionName, 'Internal Server Error');
             const errorMessage = `Internal Server Error - ${functionName} failed`;
 
             throw new Response(errorMessage, {
@@ -75,6 +75,8 @@ export async function putRequest<T = unknown>(
     data?: T
 ) {
     if (data) {
+        const jsonData = JSON.stringify(data);
+        logger.debug(`PUT request body: ${jsonData}`);
         requestOptions = {
             ...requestOptions,
             body: JSON.stringify(data),
@@ -82,10 +84,11 @@ export async function putRequest<T = unknown>(
     }
 
     const response = await fetch(URL, requestOptions);
+    logStatus(response.status, functionName);
+
     if (!response.ok) {
         throw new Error();
     }
-    logStatus(response.status, functionName, URL);
 
     return response;
 }
@@ -97,18 +100,18 @@ export async function postRequest<T = unknown>(
     data?: T
 ) {
     if (data) {
+        const jsonData = JSON.stringify(data);
+        logger.debug(`POST request body: ${jsonData}`);
         requestOptions = {
             ...requestOptions,
             body: JSON.stringify(data),
         };
-        logger.silly(`POST request data: ${JSON.stringify(data)}`);
     }
 
     const response = await fetch(URL, requestOptions);
+    logStatus(response.status, functionName);
 
     if (response.ok) {
-        logStatus(response.status, functionName);
-
         const contentType = response.headers.get('Content-Type');
         if (contentType && contentType.includes('application/json')) {
             const responseData = await response.json();
@@ -121,7 +124,7 @@ export async function postRequest<T = unknown>(
     } else {
         const errorData = await response.json();
         const errorMessage = `Error ${errorData.status} (${errorData.error}): Får ikke tilgang ${errorData.path}`;
-        logStatus(response.status, functionName, URL);
+
         throw {
             status: response.status,
             body: errorMessage,
@@ -136,8 +139,7 @@ async function getRequest(
     returnType: ReturnType
 ) {
     const response = await fetch(URL, requestOptions);
-    logger.info(URL);
-    logStatus(response.status, functionName, URL);
+    logStatus(response.status, functionName);
 
     if (response.ok) {
         const responseData = returnType === 'json' ? await response.json() : await response.text();
@@ -154,14 +156,13 @@ async function getRequest(
     }
 }
 
-function logStatus(status: number, functionName: string, errorMessage?: string, URL?: string) {
+function logStatus(status: number, functionName: string, errorMessage?: string) {
     if (status >= 200 && status < 300) {
         logger.info(`🟢--> Result: ${functionName} ${status}`);
     } else {
-        logger.error('URL:', URL);
         logger.error(`🔴--> Result: ${functionName} ${status}`);
         if (errorMessage) {
-            logger.debug(`Error Message: ${errorMessage}`);
+            logger.error(`Error Message: ${errorMessage}`);
         }
     }
 }

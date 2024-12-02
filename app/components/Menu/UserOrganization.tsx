@@ -6,7 +6,7 @@ import { IUserSession } from '~/types/Session';
 export const UserOrganization = ({ userSession }: { userSession: IUserSession }) => {
     const submit = useSubmit();
 
-    const [orgName, setOrgName] = useState(userSession.selectedOrganization?.name);
+    const [orgName, setOrgName] = useState(userSession.selectedOrganization?.displayName);
 
     const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setOrgName(event.target.value);

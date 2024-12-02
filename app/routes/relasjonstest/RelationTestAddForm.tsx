@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, HGrid, Select } from '@navikt/ds-react';
-import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
+import { PlayIcon } from '@navikt/aksel-icons';
 import { IComponent } from '~/types/Component';
 import { IClient } from '~/types/Clients';
 import { IComponentConfig } from '~/types/ComponentConfig';
@@ -125,7 +125,7 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
                     size="small"
                     variant="primary"
                     onClick={onRunTest}
-                    icon={<MagnifyingGlassIcon title="Rediger" />}>
+                    icon={<PlayIcon title="Rediger" />}>
                     kjør test
                 </Button>
             </Box>

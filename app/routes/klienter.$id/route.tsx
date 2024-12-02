@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { json, useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
-import ClientDetails from '~/routes/klienter.$id/ClientDetails';
 import { ActionFunctionArgs, redirect } from '@remix-run/node';
 import ClientApi from '~/api/ClientApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, HGrid } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
@@ -20,11 +19,11 @@ import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
 import { AuthTable } from '~/components/shared/AuthTable';
 import { handleApiResponse } from '~/utils/handleApiResponse';
-import ActionButtons from '~/components/shared/ActionButtons';
 import AlertManager from '~/components/AlertManager';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import useAlerts from '~/components/useAlerts';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
+import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
@@ -52,8 +51,8 @@ export default function Index() {
         features: Record<string, boolean>;
         access: IAccess[];
     }>();
+
     const navigate = useNavigate();
-    // const selectedComponents = getComponentIds(client.components);
     const hasAccessControl = features['access-controll-new'];
 
     const { id } = useParams();
@@ -69,12 +68,8 @@ export default function Index() {
     const actionData = fetcher.data as IExtendedFetcherResponseData;
     const { alerts } = useAlerts(actionData, fetcher.state);
 
-    const handleSave = () => {
-        const formData = new FormData();
-        formData.append('shortDescription', shortDescription);
-        formData.append('note', note);
+    const handleUpdate = (formData: FormData) => {
         formData.append('actionType', 'UPDATE_CLIENT');
-
         fetcher.submit(formData, {
             method: 'post',
         });
@@ -86,7 +81,7 @@ export default function Index() {
         console.info('------- handle component checkbox');
     }
 
-    const handleConfirmDelete = () => {
+    const handleDelete = () => {
         const formData = new FormData();
         formData.append('actionType', 'DELETE_CLIENT');
         formData.append('clientId', client.name);
@@ -137,26 +132,10 @@ export default function Index() {
                         padding="6"
                         borderRadius="large"
                         shadow="small">
-                        <HStack>
-                            <Heading size={'medium'}>Details</Heading>
-                            <Spacer />
-                            {!client.managed && (
-                                <ActionButtons
-                                    isEditing={isEditing}
-                                    handleSave={handleSave}
-                                    handleCancel={handleCancel}
-                                    setIsEditing={setIsEditing}
-                                    handleConfirmDelete={handleConfirmDelete}
-                                    nameText={client.name}
-                                />
-                            )}
-                        </HStack>
-
-                        <ClientDetails
-                            client={{ ...client, shortDescription, note }}
-                            isEditing={isEditing}
-                            onChangeShortDescription={setShortDescription}
-                            onChangeNote={setNote}
+                        <GeneralDetailView
+                            resource={client}
+                            onUpdate={handleUpdate}
+                            onDelete={handleDelete}
                         />
 
                         {!client.managed && (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json, useFetcher, useLoaderData } from '@remix-run/react';
 import { BodyShort, Box, VStack } from '@navikt/ds-react';
@@ -28,8 +28,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const components = await ComponentApi.getOrganisationComponents(selectOrg);
     const configs = await ComponentConfigApi.getComponentConfigs();
-    const defaultLogs = await LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', '', 'GET_ALL');
-    return json({ components, configs, defaultLogs });
+    // const defaultLogs = await LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', '', 'GET_ALL');
+    return json({ components, configs });
 };
 
 export default function Index() {
@@ -37,11 +37,11 @@ export default function Index() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
     const { components, configs, defaultLogs } = useLoaderData<typeof loader>();
-    const logs = actionData?.data || defaultLogs;
+    const logs = actionData?.data || [];
     const mappedLogs = mapLogs(logs);
     const [filterValue, setFilterValue] = useState('');
     const { alerts, addAlert } = useAlerts(actionData, fetcher.state);
-    const [defaultAlertAdded, setDefaultAlertAdded] = useState(false);
+    // const [defaultAlertAdded, setDefaultAlertAdded] = useState(false);
 
     const filteredLogs = filterValue
         ? mappedLogs.filter((log: Log) => log.id === filterValue)
@@ -52,16 +52,16 @@ export default function Index() {
         fetcher.submit(formData, { method: 'post', action: '/hendelseslogg' });
     };
 
-    useEffect(() => {
-        if (!actionData && !defaultAlertAdded) {
-            addAlert({
-                variant: 'info',
-                header: `Displaying default logs:`,
-                message: `LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', 'GET_ALL');`,
-            });
-            setDefaultAlertAdded(true);
-        }
-    }, [actionData, defaultAlertAdded, addAlert]);
+    // useEffect(() => {
+    //     if (!actionData && !defaultAlertAdded) {
+    //         addAlert({
+    //             variant: 'info',
+    //             header: `Displaying default logs:`,
+    //             message: `LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', 'GET_ALL');`,
+    //         });
+    //         setDefaultAlertAdded(true);
+    //     }
+    // }, [actionData, defaultAlertAdded, addAlert]);
 
     return (
         <>
@@ -83,26 +83,13 @@ export default function Index() {
                 </Box>
                 <AlertManager alerts={alerts} />
 
-                {filteredLogs ? (
-                    <>
-                        {/*{actionData?.message && (*/}
-                        {/*    <Box className="w-full" padding="6" borderRadius="large" shadow="small">*/}
-                        {/*        <Alert variant="info">{actionData.message}</Alert>*/}
-                        {/*    </Box>*/}
-                        {/*)}*/}
-                        {filteredLogs.length > 0 ? (
-                            <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                                <LogTable logs={filteredLogs} />
-                            </Box>
-                        ) : (
-                            <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                                <BodyShort>No logs found with the specified ID</BodyShort>
-                            </Box>
-                        )}
-                    </>
+                {filteredLogs.length > 0 ? (
+                    <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+                        <LogTable logs={filteredLogs} />
+                    </Box>
                 ) : (
                     <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                        <BodyShort>Please use the form to create a report</BodyShort>
+                        <BodyShort>Bruk skjemaet for å lage en rapport</BodyShort>
                     </Box>
                 )}
             </VStack>

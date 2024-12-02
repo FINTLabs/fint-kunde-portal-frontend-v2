@@ -60,10 +60,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     if (meData.nin && meData.technical.length > 0) {
         const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
-        const features = await FeaturesApi.fetchFeatures('in root');
-
-        console.log(features);
-
+        const features = await FeaturesApi.fetchFeatures();
         const cookieHeader = request.headers.get('Cookie');
         const cookieValue = await myCookie.parse(cookieHeader);
 

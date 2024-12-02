@@ -4,13 +4,13 @@
 services=(
   "fint-kunde-portal-backend"
   "fint-link-walker"
-#  "fint-test-runner"
+  "fint-test-runner-kotlin"
   "fint-samtykke-admin-backend"
 )
 ports=(
   "8080:8080"
   "8086:8080"
-#  "8088:8080"
+  "8088:8080"
   "8084:8080"
 )
 

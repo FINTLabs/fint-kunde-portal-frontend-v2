@@ -1,46 +1,36 @@
-import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import { useState } from 'react';
+import { BodyShort, Button, Heading, HStack, Label, VStack } from '@navikt/ds-react';
+import React, { useState } from 'react';
 import { EditableTextField } from '~/components/shared/EditableTextField';
 import { FloppydiskIcon, PencilIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-
-import { LabelValuePanel } from '~/components/shared/LabelValuePanel';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
-import { IAdapter } from '~/types/Adapter';
+import { IAsset } from '~/types/Asset';
 
-export function GeneralDetailView({
-    adapter,
-    onUpdate,
-    onDelete,
-}: {
-    adapter: IAdapter;
+type DetailsViewProps = {
+    asset: IAsset;
     onUpdate: (formData: FormData) => void;
     onDelete: (formData: FormData) => void;
-}) {
+};
+
+export function DetailsView({ asset, onUpdate, onDelete }: DetailsViewProps) {
     const [isEditing, setIsEditing] = useState(false);
-    const [adapterShortDesc, setAdapterShortDesc] = useState(adapter.shortDescription);
-    const [adapterNote, setAdapterNote] = useState(adapter.note);
+    const [resourceShortDesc, setResourceShortDesc] = useState(asset.description);
 
     const handleCancel = () => {
-        setAdapterShortDesc(adapter.shortDescription);
-        setAdapterNote(adapter.note);
+        setResourceShortDesc(asset.description);
         setIsEditing(false);
     };
 
     const handleConfirmDelete = () => {
         const formData = new FormData();
-        formData.append('adapterName', adapter.name);
+        //formData.append('resourceName', resource.name);
         onDelete(formData);
     };
 
     const handleSave = () => {
-        if (
-            adapterNote.trim() !== adapter.note ||
-            adapterShortDesc.trim() !== adapter.shortDescription
-        ) {
+        if (resourceShortDesc.trim() !== asset.description) {
             const formData = new FormData();
-            formData.append('note', adapterNote);
-            formData.append('shortDescription', adapterShortDesc);
-            formData.append('adapterName', adapter.name);
+            formData.append('assetDescription', resourceShortDesc);
+            // formData.append('resourceName', resource.name);
             onUpdate(formData);
         }
         setIsEditing(false);
@@ -53,26 +43,25 @@ export function GeneralDetailView({
                     Detaljer
                 </Heading>
             </HStack>
-            <LabelValuePanel label="Navn" value={adapter.name} />
+            <VStack>
+                <Label>Navn</Label>
+                <BodyShort>{asset.name}</BodyShort>
+            </VStack>
+            <VStack>
+                <Label>Assetid</Label>
+                <BodyShort>{asset.assetId}</BodyShort>
+            </VStack>
 
-            <LabelValuePanel label="Opprettet" value={adapter.managed ? 'Automatisk' : 'Manuelt'} />
             <EditableTextField
-                label={'Tittel'}
-                value={adapterShortDesc}
+                label={'Beskrivelse'}
+                value={resourceShortDesc}
                 isEditing={isEditing}
-                setValue={setAdapterShortDesc}
+                setValue={setResourceShortDesc}
             />
             <HStack justify={'space-between'}>
-                <EditableTextField
-                    label={'Beskrivelse'}
-                    value={adapterNote}
-                    isEditing={isEditing}
-                    setValue={setAdapterNote}
-                />
                 <HStack className="w-full" align={'end'} justify={'end'} gap="2">
                     {/* Save Button */}
                     <Button
-                        disabled={adapter.managed}
                         icon={
                             isEditing ? (
                                 <FloppydiskIcon title="Lagre" />
@@ -84,11 +73,11 @@ export function GeneralDetailView({
                         onClick={isEditing ? handleSave : () => setIsEditing(true)}
                     />
 
-                    {!isEditing && !adapter.managed && (
+                    {!isEditing && (
                         <ConfirmAction
                             buttonText={'delete'}
                             showButtonText={false}
-                            subTitleText={`Er du sikker på at du vil slette ${adapter.name}?`}
+                            subTitleText={`Er du sikker på at du vil slette ${asset.name}?`}
                             onConfirm={handleConfirmDelete}
                             buttonVariant="tertiary"
                             buttonSize={'medium'}

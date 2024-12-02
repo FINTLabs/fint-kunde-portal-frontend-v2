@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Button, HGrid, Search, Select, VStack, Label } from '@navikt/ds-react';
-import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
+import { Box, Button, HGrid, Label, Search, Select, VStack } from '@navikt/ds-react';
+import { PlayIcon } from '@navikt/aksel-icons';
 import { IComponent } from '~/types/Component';
 import { IComponentConfig } from '~/types/ComponentConfig';
 
@@ -154,7 +154,7 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
                 <Box className="flex items-end">
                     <Button
                         size="small"
-                        icon={<MagnifyingGlassIcon title="Søk" />}
+                        icon={<PlayIcon title="Start Test" />}
                         onClick={handleFormSubmit}>
                         Søk
                     </Button>
@@ -162,7 +162,7 @@ const LogSearchForm: React.FC<LogSearchFormProps> = ({
             </HGrid>
 
             <Search
-                label="Filtrer på ID - Skriv nøyaktig ID"
+                label="Filtrer på id:"
                 variant="simple"
                 size="small"
                 hideLabel={false}

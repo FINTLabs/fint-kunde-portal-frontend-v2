@@ -17,11 +17,13 @@ const RoleTags: React.FC<RoleTagsProps> = ({ contact, hasRole, getUserRolesForOr
                     Admin
                 </Tag>
             ) : (
-                getUserRolesForOrg(contact).map((role, index) => (
-                    <Tag key={index} variant="info" size={'xsmall'}>
-                        {role}
-                    </Tag>
-                ))
+                getUserRolesForOrg(contact)
+                    .filter((role) => role !== 'ROLE_DASHBOARD' && role !== 'ROLE_SUPPORT')
+                    .map((role, index) => (
+                        <Tag key={index} variant="info" size={'xsmall'}>
+                            {role}
+                        </Tag>
+                    ))
             )}
         </HStack>
     );

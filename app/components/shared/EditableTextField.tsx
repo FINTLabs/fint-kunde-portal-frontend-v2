@@ -1,5 +1,5 @@
-import { HStack, VStack, TextField } from '@navikt/ds-react';
-import { LabelValuePanel } from './LabelValuePanel';
+import { HStack, VStack, TextField, Label, BodyShort } from '@navikt/ds-react';
+import React from 'react';
 
 export function EditableTextField({
     label,
@@ -15,7 +15,7 @@ export function EditableTextField({
     const maxChars = 94;
     return (
         <HStack justify={'space-between'}>
-            <VStack className="h-20">
+            <VStack>
                 {isEditing ? (
                     <TextField
                         value={value}
@@ -24,7 +24,10 @@ export function EditableTextField({
                         label={label}
                         onChange={(e) => setValue(e.target.value)}></TextField>
                 ) : (
-                    <LabelValuePanel label={label} value={value}></LabelValuePanel>
+                    <>
+                        <Label>{label}</Label>
+                        <BodyShort>{value}</BodyShort>
+                    </>
                 )}
             </VStack>
         </HStack>

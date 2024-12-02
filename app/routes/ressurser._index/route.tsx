@@ -4,14 +4,14 @@ import {
     type MetaFunction,
     redirect,
 } from '@remix-run/node';
-import { LayersIcon, PlusIcon } from '@navikt/aksel-icons';
+import { LayersIcon } from '@navikt/aksel-icons';
 import { json, useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset, IPartialAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { BodyLong, Box, Button, HStack, VStack } from '@navikt/ds-react';
+import { BodyLong, Box } from '@navikt/ds-react';
 import CreateForm from '~/routes/ressurser._index/CreateForm';
 import AssetsTable from '~/routes/ressurser._index/ResourcesTable';
 import React, { useState } from 'react';
@@ -63,19 +63,12 @@ export default function Index() {
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <AlertManager alerts={alerts} />
 
-            <HStack align={'center'} justify={'space-between'}>
-                <VStack>
-                    <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="assets" />
-                </VStack>
-                <VStack>
-                    <Button
-                        className="float-right"
-                        onClick={handleCreate}
-                        icon={<PlusIcon aria-hidden />}>
-                        Legg til
-                    </Button>
-                </VStack>
-            </HStack>
+            <InternalPageHeader
+                title={'Ressurser'}
+                icon={LayersIcon}
+                helpText="assets"
+                onAddClick={handleCreate}
+            />
 
             {!assets && (
                 <Box padding="8" background="surface-info-moderate">

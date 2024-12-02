@@ -19,7 +19,7 @@ export default function Index() {
     const userSession = useOutletContext<IUserSession>();
 
     const hasRole = (roleId: string): boolean => {
-        console.log('checking for a role: ', userSession.selectedOrganization?.name, roleId);
+        console.debug('checking for a role: ', userSession.selectedOrganization?.name, roleId);
         return (
             userSession.meData?.roles?.includes(
                 roleId + '@' + userSession.selectedOrganization?.name

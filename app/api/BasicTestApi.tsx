@@ -11,7 +11,6 @@ class BasicTestApi {
             clientName,
         };
 
-        console.log('........Running basic test ', testBody);
         const URL = `${API_URL}/test-runner/${orgName}/run`;
         const functionName = 'runBasicTest';
 

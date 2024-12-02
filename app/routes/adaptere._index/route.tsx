@@ -7,10 +7,10 @@ import {
 } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { MigrationIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Alert, Button, HStack, Search, VStack } from '@navikt/ds-react';
+import { MigrationIcon } from '@navikt/aksel-icons';
+import { Alert, Search } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
-import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { CustomTabs } from '~/components/shared/CustomTabs';
 import React, { useEffect, useState } from 'react';
@@ -33,6 +33,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
     const adapters = await AdapterAPI.getAdapters(orgName);
 
+    adapters.sort((a: { shortDescription: string }, b: { shortDescription: any }) =>
+        a.shortDescription.localeCompare(b.shortDescription)
+    );
+
     return json({
         adapters: adapters,
         orgName,
@@ -49,6 +53,7 @@ export default function Index() {
     const [isCreating, setIsCreating] = useState(false);
     const [filteredAdapter, setFilteredAdapter] = useState(adapters);
     const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setFilteredAdapter(adapters);
@@ -69,13 +74,20 @@ export default function Index() {
 
     const handleSearch = (value: string) => {
         const query = value.toLowerCase();
-        setFilteredAdapter(
-            adapters?.filter(
-                (adapter) =>
-                    adapter.name.toLowerCase().includes(query) ||
-                    adapter.shortDescription.toLowerCase().includes(query)
-            )
+        const filtered = adapters?.filter(
+            (adapter) =>
+                adapter.name.toLowerCase().includes(query) ||
+                adapter.shortDescription.toLowerCase().includes(query)
         );
+
+        // Sort filtered adapters alphabetically by name
+        filtered?.sort((a, b) => a.shortDescription.localeCompare(b.shortDescription));
+
+        setFilteredAdapter(filtered);
+    };
+
+    const showDetails = (id: string) => {
+        navigate(`/adapter/${id}`);
     };
 
     //TODO: clear search on org change
@@ -90,23 +102,15 @@ export default function Index() {
                 />
             ) : (
                 <>
-                    <HStack align={'center'} justify={'space-between'}>
-                        <VStack>
-                            <InternalPageHeader
-                                title={'Adaptere'}
-                                icon={MigrationIcon}
-                                helpText="adaptere"
-                            />
-                        </VStack>
-                        <VStack>
-                            <Button
-                                className="float-right"
-                                onClick={handleCreate}
-                                icon={<PlusIcon aria-hidden />}>
-                                Legg til
-                            </Button>
-                        </VStack>
-                    </HStack>
+                    {/*<HStack align={'center'} justify={'space-between'}>*/}
+                    <InternalPageHeader
+                        title={'Adaptere'}
+                        icon={MigrationIcon}
+                        helpText="adaptere"
+                        onAddClick={handleCreate}
+                    />
+
+                    {/*</HStack>*/}
                     <AlertManager alerts={alerts} />
 
                     <Search
@@ -123,7 +127,15 @@ export default function Index() {
                         <Alert variant="warning">Ingen adaptere</Alert>
                     )}
 
-                    {filteredAdapter && <CustomTabs items={filteredAdapter} />}
+                    {filteredAdapter && (
+                        <CustomTabs
+                            items={filteredAdapter}
+                            showDetails={showDetails}
+                            getItemName={(item) => item.name}
+                            getItemDescription={(item) => item.shortDescription}
+                            isManaged={(item) => item.managed}
+                        />
+                    )}
                 </>
             )}
         </>

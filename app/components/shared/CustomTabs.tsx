@@ -1,28 +1,28 @@
 import { BodyShort, Heading, Label, Switch, Table, Tabs } from '@navikt/ds-react';
-import { useNavigate } from '@remix-run/react';
 import { ChevronRightIcon, CogRotationIcon, NotePencilDashIcon } from '@navikt/aksel-icons';
 import { tabInfo } from '~/routes/adaptere._index/constants';
-import { IAdapter } from '~/types/Adapter';
 
 interface CustomTabsProps<T> {
     items: T[];
     selectable?: boolean;
     selectedItems?: string[];
     toggleSwitch?: (name: string, checked: boolean) => void;
+    showDetails: (id: string) => void;
+    getItemName: (item: T) => string;
+    getItemDescription: (item: T) => string;
+    isManaged: (item: T) => boolean;
 }
 
-export function CustomTabs<T extends IAdapter>({
+export function CustomTabs<T>({
     items,
     selectable = false,
     selectedItems,
     toggleSwitch,
+    showDetails,
+    getItemName,
+    getItemDescription,
+    isManaged,
 }: CustomTabsProps<T>) {
-    const navigate = useNavigate();
-
-    const showDetails = (id: string) => {
-        navigate(`/adapter/${id}`);
-    };
-
     if (!items) {
         return <div>Fant ingen</div>;
     }
@@ -44,46 +44,41 @@ export function CustomTabs<T extends IAdapter>({
             {tabInfo.map((tab, index) => (
                 <Tabs.Panel key={index} value={tab.value} className="w-full">
                     <Table size={'small'}>
-                        {/*<Table.Header>*/}
-                        {/*    <Table.Row>*/}
-                        {/*        {selectable && <Table.HeaderCell scope="col"></Table.HeaderCell>}*/}
-                        {/*        <Table.HeaderCell scope="col">Navn</Table.HeaderCell>*/}
-                        {/*        <Table.HeaderCell scope="col"></Table.HeaderCell>*/}
-                        {/*    </Table.Row>*/}
-                        {/*</Table.Header>*/}
                         <Table.Body>
                             {(index === 1
-                                ? items.filter((i) => i.managed)
-                                : items.filter((i) => !i.managed)
+                                ? items.filter((i) => isManaged(i))
+                                : items.filter((i) => !isManaged(i))
                             ).map((item, i) => (
                                 <Table.Row
-                                    key={i + item.name}
+                                    key={i + getItemName(item)}
                                     className="active:bg-[--a-surface-active] hover:cursor-pointer"
-                                    onClick={() => showDetails(item.name)}>
+                                    onClick={() => showDetails(getItemName(item))}>
                                     {selectable && (
                                         <Table.DataCell scope="row">
                                             <Switch
                                                 checked={
                                                     selectedItems &&
                                                     selectedItems.some(
-                                                        (selected) => selected === item.name
+                                                        (selected) => selected === getItemName(item)
                                                     )
                                                 }
                                                 onChange={(e) => {
                                                     const isChecked = e.target.checked;
                                                     toggleSwitch &&
-                                                        toggleSwitch(item.name, isChecked);
+                                                        toggleSwitch(getItemName(item), isChecked);
                                                 }}>
                                                 <Label>{''}</Label>
                                             </Switch>
                                         </Table.DataCell>
                                     )}
                                     <Table.DataCell>
-                                        <Heading size="small">{item.shortDescription}</Heading>
-                                        <BodyShort textColor="subtle">{item.name}</BodyShort>
+                                        <Heading size="small">{getItemDescription(item)}</Heading>
+                                        <BodyShort textColor="subtle">
+                                            {getItemName(item)}
+                                        </BodyShort>
                                     </Table.DataCell>
 
-                                    <Table.DataCell onClick={() => showDetails(item.name)}>
+                                    <Table.DataCell onClick={() => showDetails(getItemName(item))}>
                                         <ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />
                                     </Table.DataCell>
                                 </Table.Row>

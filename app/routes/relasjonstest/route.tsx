@@ -83,32 +83,6 @@ export default function Index() {
         fetcher.submit(formData, { method: 'post' });
     }
 
-    // function downloadLogAsCSV() {
-    //     const headers = ['Test ID', 'URL', 'Status', 'Client', 'Start Time', 'End Time'];
-    //     const rows = relationTests.map((test: any) => [
-    //         test.id,
-    //         test.url,
-    //         test.status,
-    //         test.client,
-    //         test.startTime,
-    //         test.endTime,
-    //     ]);
-    //
-    //     let csvContent = 'data:text/csv;charset=utf-8,';
-    //     csvContent += headers.join(',') + '\n';
-    //     rows.forEach(row => {
-    //         csvContent += row.join(',') + '\n';
-    //     });
-    //
-    //     const encodedUri = encodeURI(csvContent);
-    //     const link = document.createElement('a');
-    //     link.setAttribute('href', encodedUri);
-    //     link.setAttribute('download', 'relation_tests_log.csv');
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     document.body.removeChild(link);
-    // }
-
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />

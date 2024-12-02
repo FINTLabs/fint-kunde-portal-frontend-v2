@@ -10,9 +10,7 @@ import { IAdapter } from '~/types/Adapter';
 
 interface TabsComponentProps {
     asset: IAsset;
-    managedAdapters: IAdapter[];
     unmanagedAdapters: IAdapter[];
-    managedClients: IClient[];
     unmanagedClients: IClient[];
     onAdapterSwitchChange: (adapterName: string, isChecked: boolean) => void;
     onClientSwitchChange: (clientName: string, isChecked: boolean) => void;
@@ -20,56 +18,26 @@ interface TabsComponentProps {
 
 const TabsComponent: React.FC<TabsComponentProps> = ({
     asset,
-    managedAdapters,
     unmanagedAdapters,
-    managedClients,
     unmanagedClients,
     onAdapterSwitchChange,
     onClientSwitchChange,
 }) => {
     return (
-        <Tabs defaultValue="managed" fill>
+        <Tabs defaultValue="unmanaged" fill>
             <Tabs.List>
-                <Tabs.Tab
-                    value="managed"
-                    label="Automatisk opprettet adaptere"
-                    icon={<BriefcaseIcon aria-hidden />}
-                />
-                <Tabs.Tab
-                    value="unmanaged"
-                    label="Manuelt opprettet adaptere"
-                    icon={<BriefcaseIcon aria-hidden />}
-                />
-                <Tabs.Tab
-                    value="managedClients"
-                    label="Automatisk opprettet klienter"
-                    icon={<ComponentIcon aria-hidden />}
-                />
+                <Tabs.Tab value="unmanaged" label="Adaptere" icon={<BriefcaseIcon aria-hidden />} />
                 <Tabs.Tab
                     value="unmanagedClients"
-                    label="Manuelt opprettet klienter"
+                    label="Klienter"
                     icon={<ComponentIcon aria-hidden />}
                 />
             </Tabs.List>
-            <Tabs.Panel value="managed" className="w-full">
-                <DetailsTable
-                    data={managedAdapters}
-                    assetData={asset.adapters}
-                    onSwitchChange={onAdapterSwitchChange}
-                />
-            </Tabs.Panel>
             <Tabs.Panel value="unmanaged" className="w-full">
                 <DetailsTable
                     data={unmanagedAdapters}
                     assetData={asset.adapters}
                     onSwitchChange={onAdapterSwitchChange}
-                />
-            </Tabs.Panel>
-            <Tabs.Panel value="managedClients" className="w-full">
-                <DetailsTable
-                    data={managedClients}
-                    assetData={asset.clients}
-                    onSwitchChange={onClientSwitchChange}
                 />
             </Tabs.Panel>
             <Tabs.Panel value="unmanagedClients" className="w-full">

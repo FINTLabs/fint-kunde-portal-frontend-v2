@@ -22,7 +22,6 @@ import { Alert, Box, Heading, HGrid, VStack } from '@navikt/ds-react';
 import logger from '~/utils/logger';
 import AlertManager from '~/components/AlertManager';
 import { BackButton } from '~/components/shared/BackButton';
-import { GeneralDetailView } from '~/routes/adapter.$name/GeneralDetailView';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { AuthTable } from '~/components/shared/AuthTable';
 import ComponentList from '~/components/shared/ComponentList';
@@ -32,6 +31,8 @@ import { IComponent } from '~/types/Component';
 import useAlerts from '~/components/useAlerts';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { IAdapter } from '~/types/Adapter';
+import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
+import { getRequestParam } from '~/utils/requestUtils';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Adapter Detaljer' }, { name: 'description', content: 'Adapter Detaljer' }];
@@ -132,13 +133,13 @@ export default function Index() {
                 <HGrid gap="2" align={'start'}>
                     <BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />
                     <Box
+                        className="w-full relative bottom-12"
                         padding="6"
                         borderRadius="large"
-                        shadow="small"
-                        className="relative bottom-12">
+                        shadow="small">
                         <VStack gap="5">
                             <GeneralDetailView
-                                adapter={adapter}
+                                resource={adapter}
                                 onUpdate={handleUpdate}
                                 onDelete={handleDelete}
                             />
@@ -202,6 +203,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);
     const actionType = formData.get('actionType') as string;
+    const adapterName = getRequestParam(params.name, 'id');
 
     let response;
     let updateResponse;
@@ -229,7 +231,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         case 'UPDATE_ADAPTER':
             updateResponse = await AdapterAPI.updateAdapter(
                 {
-                    name: formData.get('adapterName') as string,
+                    name: adapterName,
                     shortDescription: formData.get('shortDescription') as string,
                     note: formData.get('note') as string,
                 },

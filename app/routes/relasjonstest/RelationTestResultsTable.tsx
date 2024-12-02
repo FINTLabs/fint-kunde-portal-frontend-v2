@@ -1,6 +1,11 @@
 import React from 'react';
 import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
-import { ArrowCirclepathIcon, CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import {
+    ArrowCirclepathIcon,
+    CheckmarkCircleIcon,
+    DownloadIcon,
+    XMarkOctagonIcon,
+} from '@navikt/aksel-icons';
 import { ILogResults } from '~/types/RelationTest';
 
 interface TestResultsTableProps {
@@ -22,6 +27,35 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
         return date;
     };
 
+    const handleDownload = async (id: string) => {
+        try {
+            const response = await fetch(`/relasjonstest/${id}`, {
+                method: 'GET',
+            });
+
+            if (!response.ok) {
+                // throw new Error('Failed to download the file');
+                throw new Response('Failed to download the file', {
+                    status: 500,
+                    statusText: 'Failed to download the file',
+                });
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `relasjonstest_${id}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error downloading file:', error);
+            alert('Failed to download the file');
+        }
+    };
+
     return (
         <>
             {logResults ? (
@@ -35,6 +69,7 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
                             <Table.HeaderCell scope="col">Gjenstående</Table.HeaderCell>
                             <Table.HeaderCell scope="col">Feil</Table.HeaderCell>
                             <Table.HeaderCell scope="col">Ok</Table.HeaderCell>
+                            <Table.HeaderCell scope={'col'} />
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -89,6 +124,20 @@ const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults 
                                     </Table.DataCell>
                                     <Table.DataCell align={'center'}>
                                         {result.healthyRelations}
+                                    </Table.DataCell>
+                                    <Table.DataCell>
+                                        <button
+                                            onClick={() => handleDownload(result.id)}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                            }}>
+                                            <DownloadIcon
+                                                title="Download Excel"
+                                                fontSize="1.5rem"
+                                            />
+                                        </button>
                                     </Table.DataCell>
                                 </Table.Row>
                             ))}

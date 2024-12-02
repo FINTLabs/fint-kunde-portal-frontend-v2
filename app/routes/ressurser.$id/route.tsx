@@ -1,24 +1,25 @@
-import { ArrowLeftIcon, LayersIcon } from '@navikt/aksel-icons';
-import { json, useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
+import { LayersIcon } from '@navikt/aksel-icons';
+import { json, useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
-import { GeneralDetailView } from './GeneralDetailView';
+import { Alert, Box, HGrid, VStack } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, redirect } from '@remix-run/node';
-import React, { useState } from 'react';
-import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
+import React from 'react';
 import { handleApiResponse } from '~/utils/handleApiResponse';
-import ActionButtons from '~/components/shared/ActionButtons';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
 import { IAdapter } from '~/types/Adapter';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
+import { DetailsView } from '~/routes/ressurser.$id/DetailsView';
+import { BackButton } from '~/components/shared/BackButton';
+import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
+import { getRequestParam } from '~/utils/requestUtils';
 
 type LoaderData = {
     adapters: IAdapter[];
@@ -48,12 +49,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
 export default function Index() {
     const { id } = useParams();
-    const navigate = useNavigate();
     const { adapters, asset, clients } = useLoaderData<LoaderData>();
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
-    const [isEditing, setIsEditing] = useState(false);
-    const [description, setDescription] = useState(asset.description);
     const { alerts } = useAlerts(actionData, fetcher.state);
 
     const breadcrumbs = [
@@ -61,21 +59,20 @@ export default function Index() {
         { name: `${id}`, link: `/ressurser/${id}` },
     ];
 
-    const managedAdapters = adapters.filter((adapter) => adapter.managed);
-    const unmanagedAdapters = adapters.filter((adapter) => !adapter.managed);
+    const unmanagedAdapters = adapters
+        .filter((adapter) => !adapter.managed)
+        .sort((a, b) => a.name.localeCompare(b.name));
 
-    const manangedClients = clients.filter((client) => client.managed);
-    const unmanangedClients = clients.filter((client) => !client.managed);
+    const unmanagedClients = clients
+        .filter((client) => !client.managed)
+        .sort((a, b) => a.name.localeCompare(b.name));
 
-    function onAssetUpdate() {
-        const formData = {
-            assetId: asset.assetId,
-            assetDescription: description,
-            assetName: asset.name,
-            actionType: 'UPDATE',
-        };
-        fetcher.submit(formData, { method: 'post', action: `/ressurser/${asset.name}` });
-        setIsEditing(false);
+    function handleUpdate(formData: FormData) {
+        formData.append('assetId', asset.assetId);
+        formData.append('actionType', 'UPDATE');
+        fetcher.submit(formData, {
+            method: 'post',
+        });
     }
 
     function onAdapterSwitchChange(adapterName: string, isChecked: boolean) {
@@ -98,13 +95,7 @@ export default function Index() {
         fetcher.submit(formData, { method: 'post', action: `/ressurser/${asset.name}` });
     }
 
-    const handleCancel = () => {
-        // Reset values if canceled
-        setDescription(asset.description);
-        setIsEditing(false);
-    };
-
-    const handleConfirmDelete = () => {
+    const handleDelete = () => {
         const formData = new FormData();
         formData.append('actionType', 'DELETE');
         formData.append('assetName', asset.name);
@@ -114,66 +105,48 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="assets" />
+            <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="ressurser" />
+
             <AlertManager alerts={alerts} />
 
-            <HGrid gap="2" align={'start'}>
-                <Box>
-                    <Button
-                        className="relative h-12 w-12 top-2 right-14"
-                        icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
-                        variant="tertiary"
-                        onClick={() => navigate(`/ressurser`)}
-                    />
-                </Box>
-
-                <Box
-                    className="w-full relative bottom-12"
-                    padding="6"
-                    borderRadius="large"
-                    shadow="small">
-                    <HGrid gap="2" align={'start'}>
-                        <HStack>
-                            <Heading size={'medium'}>Detaljer</Heading>
-                            <Spacer />
-                            <ActionButtons
-                                isEditing={isEditing}
-                                handleSave={onAssetUpdate}
-                                handleCancel={handleCancel}
-                                setIsEditing={setIsEditing}
-                                handleConfirmDelete={handleConfirmDelete}
-                                nameText={asset.name}
+            {!asset ? (
+                <Alert variant="warning">Det finnes ingen ressurser</Alert>
+            ) : (
+                <HGrid gap="2" align={'start'}>
+                    <BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />
+                    <Box
+                        className="w-full relative bottom-12"
+                        padding="6"
+                        borderRadius="large"
+                        shadow="small">
+                        <VStack gap="5">
+                            <DetailsView
+                                asset={asset}
+                                onUpdate={handleUpdate}
+                                onDelete={handleDelete}
                             />
-                        </HStack>
 
-                        <GeneralDetailView
-                            asset={asset}
-                            description={description}
-                            onChangeDescription={setDescription}
-                            isEditing={isEditing}
-                        />
-
-                        <TabsComponent
-                            asset={asset}
-                            managedAdapters={managedAdapters}
-                            unmanagedAdapters={unmanagedAdapters}
-                            managedClients={manangedClients}
-                            unmanagedClients={unmanangedClients}
-                            onAdapterSwitchChange={onAdapterSwitchChange}
-                            onClientSwitchChange={onClientSwitchChange}
-                        />
-                    </HGrid>
-                </Box>
-            </HGrid>
+                            <TabsComponent
+                                asset={asset}
+                                unmanagedAdapters={unmanagedAdapters}
+                                unmanagedClients={unmanagedClients}
+                                onAdapterSwitchChange={onAdapterSwitchChange}
+                                onClientSwitchChange={onClientSwitchChange}
+                            />
+                        </VStack>
+                    </Box>
+                </HGrid>
+            )}
         </>
     );
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
     const formData = await request.formData();
     const actionType = formData.get('actionType');
     const selectedOrg = await getSelectedOrganization(request);
     const orgName = await getSelectedOrganization(request);
+    const name = getRequestParam(params.id, 'id');
 
     let response;
     let updateResponse;
@@ -181,17 +154,17 @@ export async function action({ request }: ActionFunctionArgs) {
         case 'CREATE':
             updateResponse = await AssetApi.createAsset(
                 {
-                    name: formData.get('assetName') as string,
+                    name,
                     description: formData.get('assetDescription') as string,
                 },
                 selectedOrg
             );
-            response = handleApiResponse(updateResponse, 'Ressurser created');
+            response = handleApiResponse(updateResponse, 'Ressurser opprettet');
             break;
         case 'UPDATE':
             updateResponse = await AssetApi.updateAsset(
                 {
-                    name: formData.get('assetName') as string,
+                    name,
                     assetId: formData.get('assetId') as string,
                     description: formData.get('assetDescription') as string,
                 },

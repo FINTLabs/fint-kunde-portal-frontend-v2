@@ -39,6 +39,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     const legalContact = await OrganisationApi.getLegalContact(selectedOrg);
     const allContacts = await ContactApi.getAllContacts();
 
+    technicalContacts.sort((a: { firstName: string }, b: { firstName: any }) =>
+        a.firstName.localeCompare(b.firstName)
+    );
+
     return json({
         technicalContacts,
         rolesData,
