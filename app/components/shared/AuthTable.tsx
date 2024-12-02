@@ -112,7 +112,7 @@ export const AuthTable = ({
                     </Table.Row>
 
                     <Table.Row>
-                        <Table.HeaderCell scope="row">Klient id</Table.HeaderCell>
+                        <Table.HeaderCell scope="row">Klientid</Table.HeaderCell>
                         <Table.DataCell>{entity.clientId}</Table.DataCell>
                         <Table.DataCell />
                         <Table.DataCell>

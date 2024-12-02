@@ -48,7 +48,7 @@ export function DetailsView({ asset, onUpdate, onDelete }: DetailsViewProps) {
                 <BodyShort>{asset.name}</BodyShort>
             </VStack>
             <VStack>
-                <Label>Assetid</Label>
+                <Label>Ressursid</Label>
                 <BodyShort>{asset.assetId}</BodyShort>
             </VStack>
 

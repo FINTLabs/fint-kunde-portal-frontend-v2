@@ -27,7 +27,7 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
     return (
         <>
             {userSession.organizations.length === 1 && (
-                <div className="flex items-center">{orgName}</div>
+                <div className="flex items-center">{userSession.organizations[0].displayName}</div>
             )}
             {userSession.organizations.length > 1 && (
                 <Select

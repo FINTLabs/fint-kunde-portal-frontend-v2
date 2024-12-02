@@ -32,6 +32,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
     const assets = await AssetApi.getAllAssets(orgName);
 
+    assets.sort((a: { name: string }, b: { name: any }) => a.name.localeCompare(b.name));
+
     return json({ assets: assets, orgName: orgName });
 };
 
@@ -71,7 +73,7 @@ export default function Index() {
             />
 
             {!assets && (
-                <Box padding="8" background="surface-info-moderate">
+                <Box padding="8">
                     <BodyLong>Fant ingen ressurser</BodyLong>
                 </Box>
             )}

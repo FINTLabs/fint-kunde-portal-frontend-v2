@@ -126,7 +126,7 @@ const RelationTestAddForm: React.FC<TestAddFormProps> = ({
                     variant="primary"
                     onClick={onRunTest}
                     icon={<PlayIcon title="Rediger" />}>
-                    kjør test
+                    kjør
                 </Button>
             </Box>
         </HGrid>

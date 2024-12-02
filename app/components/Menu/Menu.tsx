@@ -12,7 +12,7 @@ export default function Menu({ userSession }: MenuType) {
     }
     return (
         <div className="flex justify-between">
-            <MenuLeft />
+            <MenuLeft userSession={userSession} />
             <MenuRight userSession={userSession} />
         </div>
     );
