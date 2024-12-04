@@ -25,7 +25,7 @@ const LogTable: React.FC<HealthStatusProps> = ({ logs }) => {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell scope="col"></Table.HeaderCell>
-                        <Table.HeaderCell scope="col">HendelsesId</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Hendelsesid</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Tid</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Hendelse</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>

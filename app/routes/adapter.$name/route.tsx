@@ -18,7 +18,7 @@ import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
 import { handleApiResponse } from '~/utils/handleApiResponse';
 import React from 'react';
-import { Alert, Box, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { Alert, Box, Heading, HGrid } from '@navikt/ds-react';
 import logger from '~/utils/logger';
 import AlertManager from '~/components/AlertManager';
 import { BackButton } from '~/components/shared/BackButton';
@@ -137,55 +137,53 @@ export default function Index() {
                         padding="6"
                         borderRadius="large"
                         shadow="small">
-                        <VStack gap="5">
-                            <GeneralDetailView
-                                resource={adapter}
-                                onUpdate={handleUpdate}
-                                onDelete={handleDelete}
-                            />
+                        {/*<VStack gap="5">*/}
+                        <GeneralDetailView
+                            resource={adapter}
+                            onUpdate={handleUpdate}
+                            onDelete={handleDelete}
+                        />
 
-                            {!adapter.managed && (
-                                <>
-                                    <Divider className="pt-3" />
-                                    <Heading size={'medium'}>Autentisering</Heading>
-                                    <AuthTable
-                                        entity={adapter}
-                                        entityType="adapter"
-                                        onUpdatePassword={handleUpdatePassword}
-                                        onUpdateAuthInfo={handleUpdateAuthoInfo}
-                                        {...(actionData?.clientSecret
-                                            ? { clientSecret: actionData.clientSecret }
-                                            : {})}
-                                    />
-                                </>
-                            )}
-                            <Divider className="pt-3" />
+                        {!adapter.managed && (
+                            <>
+                                <Divider className="pt-3" />
+                                <Heading size={'medium'}>Autentisering</Heading>
+                                <AuthTable
+                                    entity={adapter}
+                                    entityType="adapter"
+                                    onUpdatePassword={handleUpdatePassword}
+                                    onUpdateAuthInfo={handleUpdateAuthoInfo}
+                                    {...(actionData?.clientSecret
+                                        ? { clientSecret: actionData.clientSecret }
+                                        : {})}
+                                />
+                            </>
+                        )}
+                        <Divider className="pt-3" />
 
-                            {hasAccessControl ? (
-                                <>
-                                    <Heading size={'medium'}>
-                                        Tilgangsstyring for Komponenter
-                                    </Heading>
-                                    <ComponentList
-                                        accessList={access}
-                                        entity={adapter.name}
-                                        onToggle={handleToggle}
+                        {hasAccessControl ? (
+                            <>
+                                <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
+                                <ComponentList
+                                    accessList={access}
+                                    entity={adapter.name}
+                                    onToggle={handleToggle}
+                                />
+                            </>
+                        ) : (
+                            <Box padding="6">
+                                <HGrid gap="2">
+                                    <Heading size={'medium'}>Komponenter</Heading>
+                                    <ComponentsTable
+                                        items={components}
+                                        selectedItems={getComponentIds(adapter.components)}
+                                        toggle={handleToggle}
+                                        hideLink={true}
                                     />
-                                </>
-                            ) : (
-                                <Box padding="6">
-                                    <HGrid gap="2">
-                                        <Heading size={'medium'}>Komponenter</Heading>
-                                        <ComponentsTable
-                                            items={components}
-                                            selectedItems={getComponentIds(adapter.components)}
-                                            toggle={handleToggle}
-                                            hideLink={true}
-                                        />
-                                    </HGrid>
-                                </Box>
-                            )}
-                        </VStack>
+                                </HGrid>
+                            </Box>
+                        )}
+                        {/*</VStack>*/}
                     </Box>
                 </HGrid>
             )}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { json, useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import { ActionFunctionArgs, redirect } from '@remix-run/node';
@@ -61,9 +61,6 @@ export default function Index() {
         { name: `${id}`, link: `/klienter/${id}` },
     ];
 
-    const [isEditing, setIsEditing] = useState(false);
-    const [shortDescription, setShortDescription] = useState(client?.shortDescription || '');
-    const [note, setNote] = useState(client?.note || '');
     const fetcher = useFetcher();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
     const { alerts } = useAlerts(actionData, fetcher.state);
@@ -73,8 +70,6 @@ export default function Index() {
         fetcher.submit(formData, {
             method: 'post',
         });
-
-        setIsEditing(false);
     };
 
     function onComponentToggle() {
@@ -86,11 +81,6 @@ export default function Index() {
         formData.append('actionType', 'DELETE_CLIENT');
         formData.append('clientId', client.name);
         fetcher.submit(formData, { method: 'post' });
-    };
-    const handleCancel = () => {
-        setShortDescription(client.shortDescription);
-        setNote(client.note);
-        setIsEditing(false);
     };
 
     const handleUpdatePassword = (formData: FormData) => {
@@ -140,6 +130,7 @@ export default function Index() {
 
                         {!client.managed && (
                             <>
+                                <Divider className="pt-3" />
                                 <Heading size={'medium'}>Autentisering</Heading>
                                 <AuthTable
                                     entity={client}

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# kubectl config use-context aks-api-fint-2022-02-08
 
 services=(
   "fint-kunde-portal-backend"

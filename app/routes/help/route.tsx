@@ -27,7 +27,11 @@ export default function Index() {
                     {helpData.map((item: HelpDataItem) => (
                         <Accordion.Item key={item.id}>
                             <Accordion.Header>{item.title}</Accordion.Header>
-                            <Accordion.Content>{item.description}</Accordion.Content>
+                            <Accordion.Content>
+                                {item.description.split('LINE_BREAK_HERE').map((text, index) => (
+                                    <p key={index}>{text}</p>
+                                ))}
+                            </Accordion.Content>
                         </Accordion.Item>
                     ))}
                 </Accordion>

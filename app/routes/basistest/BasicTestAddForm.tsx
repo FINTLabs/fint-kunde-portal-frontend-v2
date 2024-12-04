@@ -74,7 +74,7 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
                         icon={<PlayIcon title="Start Test" />}
                         onClick={() => ref.current?.showModal()}
                         size={'small'}>
-                        Kjøre
+                        kjøre
                     </Button>
                 </Box>
             </HGrid>
@@ -88,7 +88,7 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
                                 Avbryt
                             </Button>
 
-                            <Button onClick={handleFormSubmit}>Kjør test</Button>
+                            <Button onClick={handleFormSubmit}>Kjøre</Button>
                         </HStack>
                     </VStack>
                 </Alert>
