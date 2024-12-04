@@ -37,7 +37,6 @@ interface IPageLoaderData {
 export default function Index() {
     const { clientData, orgName } = useLoaderData<IPageLoaderData>();
     const breadcrumbs = [{ name: 'Klienter', link: '/klienter' }];
-    const [isManaged, setIsManaged] = useState('false');
     const [filteredClients, setFilteredClients] = useState(clientData);
     const [searchParams] = useSearchParams();
     const deleteName = searchParams.get('deleted');
@@ -50,15 +49,6 @@ export default function Index() {
     useEffect(() => {
         setFilteredClients(clientData.filter((client) => !client.managed));
     }, [clientData]);
-
-    function handleTabClick(newValue: string) {
-        setIsManaged(newValue);
-        if (newValue === 'true') {
-            setFilteredClients(clientData.filter((client) => client.managed));
-        } else {
-            setFilteredClients(clientData.filter((client) => !client.managed));
-        }
-    }
 
     const handleCreate = () => {
         setIsCreating(true);

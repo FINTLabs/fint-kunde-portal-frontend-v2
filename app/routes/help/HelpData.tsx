@@ -8,7 +8,7 @@ export interface HelpDataItem {
 export const helpData: HelpDataItem[] = [
     {
         id: 'contacts',
-        title: 'Juridisk kontakt / Teknisk kontakter',
+        title: 'Juridisk kontakt / Tekniske kontakter',
         description:
             'Kontakter er personer med tilgang til kundeportalen. Juridisk kontakt har det overordnede, merkantile ansvaret, og tekniske kontakter fungerer som organisasjonens FINT-administratorer.',
     },
