@@ -74,7 +74,7 @@ export const helpData: HelpDataItem[] = [
     {
         id: 'hendelseslogg',
         title: 'Hendelseslogg',
-        description: 'This needs to be written!!!!',
+        description: '',
     },
     {
         id: 'samtykke',
