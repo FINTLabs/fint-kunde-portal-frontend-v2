@@ -148,7 +148,7 @@ export const AuthTable = ({
                     </Table.Row>
 
                     <Table.Row>
-                        <Table.HeaderCell scope="row">Ressursider</Table.HeaderCell>
+                        <Table.HeaderCell scope="row">Ressurs id</Table.HeaderCell>
                         <Table.DataCell>{assetIdsString}</Table.DataCell>
                         <Table.DataCell />
                         <Table.DataCell>

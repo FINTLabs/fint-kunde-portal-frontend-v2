@@ -16,13 +16,6 @@ export default function Footer() {
             </Heading>
             <div style={{ marginBottom: '1rem' }}>
                 <HStack gap="4">
-                    <Link to="http://support.novari.no">Opprett supportsak</Link>
-                    <p
-                        style={{
-                            color: 'var(--a-text-on-neutral)',
-                        }}>
-                        |
-                    </p>
                     <Link to="http://novari.no">Novari.no</Link>
                     <p
                         style={{
@@ -30,6 +23,21 @@ export default function Footer() {
                         }}>
                         |
                     </p>
+                    <Link to="https://novari.no/driftsmeldinger/">Driftsmeldinger</Link>
+                    <p
+                        style={{
+                            color: 'var(--a-text-on-neutral)',
+                        }}>
+                        |
+                    </p>
+                    <Link to="http://support.novari.no">Opprett supportsak</Link>
+                    <p
+                        style={{
+                            color: 'var(--a-text-on-neutral)',
+                        }}>
+                        |
+                    </p>
+
                     <Link to="http://fintlabs.no">Brukerhjelp</Link>
                     <p
                         style={{

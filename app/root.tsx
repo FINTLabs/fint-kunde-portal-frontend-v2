@@ -66,8 +66,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
         logger.debug(`Cookie value: ${cookieValue}`);
 
-        let selectedOrganization =
-            cookieValue && organisationsData.find((org) => org.name === cookieValue);
+        let selectedOrganization = organisationsData.find((org) => org.name === cookieValue);
+
+        if (!selectedOrganization) {
+            selectedOrganization = organisationsData[0];
+        }
 
         const userSession: IUserSession = {
             meData: meData,
@@ -77,15 +80,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             features: features,
         };
 
-        logger.info(
-            `List of organization names: ${organisationsData.map((org) => org.name).join(', ')}`
-        );
-
-        if (!selectedOrganization) {
-            selectedOrganization = organisationsData[0];
+        if (!cookieValue) {
             const newCookieHeader = await myCookie.serialize(selectedOrganization.name);
-            userSession.selectedOrganization = selectedOrganization;
-
             return json(
                 { userSession },
                 {
@@ -120,6 +116,7 @@ export async function action({ request }: ActionFunctionArgs) {
             actionName
         );
 
+        // Update cookie with only the organization name
         const newCookieHeader = await myCookie.serialize(selectedOrganization);
         return json(
             { revalidate: true },

@@ -6,7 +6,7 @@ import { IUserSession } from '~/types/Session';
 export const UserOrganization = ({ userSession }: { userSession: IUserSession }) => {
     const submit = useSubmit();
 
-    const [orgName, setOrgName] = useState(userSession.selectedOrganization?.displayName);
+    const [orgName, setOrgName] = useState(userSession.selectedOrganization?.name);
 
     const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setOrgName(event.target.value);
@@ -35,7 +35,7 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
                     label="Velg organisasjon"
                     hideLabel
                     onChange={handleOrgChange}
-                    defaultValue={orgName}>
+                    value={orgName}>
                     {userSession.organizations.map((org, index) => (
                         <option key={`key-${index}`} value={org.name}>
                             {org.displayName}
