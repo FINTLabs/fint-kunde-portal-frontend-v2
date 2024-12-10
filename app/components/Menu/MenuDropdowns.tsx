@@ -68,7 +68,10 @@ const RenderMenuItem = ({
                             key={`sub-item-${subIndex}`}
                             onClick={onOpenChange}
                             disabled={
-                                hasRole('ROLE_ADMIN') || !(!!subMenu.role && hasRole(subMenu.role))
+                                !(
+                                    hasRole('ROLE_ADMIN') ||
+                                    (!!subMenu.role && hasRole(subMenu.role))
+                                )
                             }>
                             <NavLinkView item={subMenu} />
                         </Dropdown.Menu.List.Item>
