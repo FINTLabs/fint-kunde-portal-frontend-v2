@@ -7,52 +7,35 @@ import {
     XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
 import { ILogResults } from '~/types/RelationTest';
+import { parseDate } from '~/utils/dateUtils';
 
 interface TestResultsTableProps {
     logResults: ILogResults[];
 }
 
 const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
-    const parseDate = (timeString: string) => {
-        const [datePart, timePart] = timeString.split(' ');
-        const [day, month] = datePart.split('/').map(Number);
-        const [hours, minutes] = timePart.split(':').map(Number);
-        const date = new Date();
-        date.setDate(day);
-        date.setMonth(month - 1);
-        date.setHours(hours);
-        date.setMinutes(minutes);
-        date.setSeconds(0);
-        date.setMilliseconds(0);
-        return date;
-    };
-
     const handleDownload = async (id: string) => {
         try {
             const response = await fetch(`/relasjonstest/${id}`, {
                 method: 'GET',
             });
 
-            if (!response.ok) {
-                // throw new Error('Failed to download the file');
-                throw new Response('Failed to download the file', {
-                    status: 500,
-                    statusText: 'Failed to download the file',
-                });
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `relasjonstest_${id}.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
             }
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `relasjonstest_${id}.xlsx`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
         } catch (error) {
-            console.error('Error downloading file:', error);
-            alert('Failed to download the file');
+            throw new Response('Failed to download the file', {
+                status: 500,
+                statusText: 'Failed to download the file',
+            });
         }
     };
 

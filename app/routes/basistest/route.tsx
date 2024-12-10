@@ -142,7 +142,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const endpoint = formData.get('endpoint') as string;
     const clientName = formData.get('clientName') as string;
     const orgName = await getSelectedOrganization(request);
-    const message = 'Run test with: ' + baseUrl + ' ' + endpoint + ' ' + clientName + ' ' + orgName;
+    const message = 'Testet med:: ' + baseUrl + ' ' + endpoint + ' ' + clientName + ' ' + orgName;
 
     const cacheData = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
     const healthData = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);

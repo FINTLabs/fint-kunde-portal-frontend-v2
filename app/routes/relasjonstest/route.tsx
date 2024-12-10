@@ -32,7 +32,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     // return json({ components, clients, relationTests, configs });
     return new Response(
         JSON.stringify({
-            components,
+            components: components.data,
             clients: clients.data,
             relationTests: relationTests.data,
             configs: configs.data,
