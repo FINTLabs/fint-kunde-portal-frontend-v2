@@ -1,20 +1,35 @@
-import { request } from '~/api/shared/api';
+import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
 import { IBasicTest } from '~/types/BasicTest';
-import logger from '~/utils/logger'; // Assuming this is your request helper function
+import logger from '~/utils/logger';
+
 const API_URL = process.env.TEST_RUNNER_API_URL;
 
 class BasicTestApi {
-    static async runTest(orgName: string, baseUrl: string, endpoint: string, clientName: string) {
+    static async runTest(
+        orgName: string,
+        baseUrl: string,
+        endpoint: string,
+        clientName: string
+    ): Promise<ApiResponse<any>> {
         const testBody: IBasicTest = {
             baseUrl,
             endpoint,
             clientName,
         };
 
-        const URL = `${API_URL}/test-runner/${orgName}/run`;
-        const functionName = 'runBasicTest';
+        const apiResults = await apiManager<any>({
+            method: 'POST',
+            url: `${API_URL}/test-runner/${orgName}/run`,
+            functionName: 'runBasicTest',
+            body: JSON.stringify(testBody),
+        });
 
-        return await request(URL, functionName, 'POST', 'json', testBody);
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke kjøre basistesten',
+            'Basistesten ble kjørt.',
+            'success'
+        );
     }
 
     static async runHealthTest(
@@ -22,18 +37,27 @@ class BasicTestApi {
         baseUrl: string,
         endpoint: string,
         clientName: string
-    ) {
+    ): Promise<ApiResponse<any>> {
         const testBody: IBasicTest = {
             baseUrl,
             endpoint,
             clientName,
         };
 
-        logger.debug('.........Running health test ', testBody.baseUrl);
-        const URL = `${API_URL}/test-runner/${orgName}/health`;
-        const functionName = 'runBasicTest';
+        logger.debug('Kjører helsesjekk', testBody.baseUrl);
+        const apiResults = await apiManager<any>({
+            method: 'POST',
+            url: `${API_URL}/test-runner/${orgName}/health`,
+            functionName: 'runHealthTest',
+            body: JSON.stringify(testBody),
+        });
 
-        return await request(URL, functionName, 'POST', 'json', testBody);
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke kjøre helsesjekken',
+            'Helsesjekken ble kjørt.',
+            'success'
+        );
     }
 }
 

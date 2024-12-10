@@ -3,7 +3,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
-import { json, useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 import React, { useEffect } from 'react';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
@@ -15,7 +15,6 @@ import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResults
 import useAlerts from '~/components/useAlerts';
 import AlertManager from '~/components/AlertManager';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
-import { handleApiResponse } from '~/utils/handleApiResponse';
 import logger from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
@@ -30,7 +29,18 @@ export const loader: LoaderFunction = async ({ request }) => {
     const configs = await ComponentConfigApi.getComponentConfigs();
     const relationTests = await LinkWalkerApi.getTests(orgName);
 
-    return json({ components, clients, relationTests, configs });
+    // return json({ components, clients, relationTests, configs });
+    return new Response(
+        JSON.stringify({
+            components,
+            clients: clients.data,
+            relationTests: relationTests.data,
+            configs: configs.data,
+        }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
 };
 
 export default function Index() {
@@ -64,17 +74,11 @@ export default function Index() {
     }, [relationTests, fetcher]);
 
     function runTest(testUrl: string, client: string) {
-        fetcher.submit(
-            {
-                testUrl: testUrl,
-                clientName: client,
-                actionType: 'ADD_TEST',
-            },
-            { method: 'post', action: `/relasjonstest/` }
-        );
-
-        // const updatedFormData = { ...formData, actionType: 'runTest' };
-        // fetcher.submit(updatedFormData, { method: 'post', action: '/relasjonstest' });
+        const formData = new FormData();
+        formData.append('testUrl', testUrl);
+        formData.append('clientName', client);
+        formData.append('actionType', 'ADD_TEST');
+        fetcher.submit(formData, { method: 'post' });
     }
 
     function removeAllTests() {
@@ -127,37 +131,30 @@ export async function action({ request }: ActionFunctionArgs) {
     const clientName = formData.get('clientName');
     const actionType = formData.get('actionType') as string;
 
-    logger.debug('ACTION TYPE', actionType);
-    let apiResponse;
+    logger.debug('ACTION TYPE relatonstest', actionType);
     let response;
 
     switch (actionType) {
         case 'ADD_TEST':
-            apiResponse = await LinkWalkerApi.addTest(
+            response = await LinkWalkerApi.addTest(
                 testUrl as string,
                 clientName as string,
                 orgName
             );
-            response = {
-                show: true,
-                message: `Ny test lagt til`,
-                variant: 'success',
-            };
             break;
 
         case 'CLEAR_TESTS':
-            apiResponse = await LinkWalkerApi.clearTests(orgName);
-            response = handleApiResponse(apiResponse, 'Alle tester fjernet');
+            response = await LinkWalkerApi.clearTests(orgName);
             break;
 
         default:
             response = {
-                show: true,
-                message: `Unknown action type '${actionType}'`,
+                success: false,
+                message: `Ukjent handlingstype: '${actionType}'`,
                 variant: 'error',
             };
             break;
     }
 
-    return json(response);
+    return response;
 }

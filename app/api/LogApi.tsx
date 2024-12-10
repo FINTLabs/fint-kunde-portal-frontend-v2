@@ -1,4 +1,4 @@
-import { request } from '~/api/shared/api';
+import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
 
 const API_URL = process.env.API_URL;
 
@@ -9,16 +9,25 @@ class LogApi {
         componentName: string,
         resource: string,
         type: string
-    ) {
-
+    ): Promise<ApiResponse<any>> {
         const functionName = 'getLogs';
         const formattedComponent = componentName.replace(/_/g, '-');
-        const formattedType = type + '_' + resource.toUpperCase();
+        const formattedType = `${type}_${resource.toUpperCase()}`;
 
-        // https://kunde-beta.felleskomponent.no/api/events/fintlabs_no/beta/utdanning-elev/GET_ALL_ELEVTILRETTELEGGING
         const URL = `${API_URL}/api/events/${organisation}/${environment}/${formattedComponent}/${formattedType}`;
 
-        return await request(URL, functionName);
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: URL,
+            functionName,
+        });
+
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke hente logger for spesifisert ressurs.',
+            'Logger for spesifisert ressurs ble hentet.',
+            'success'
+        );
     }
 }
 

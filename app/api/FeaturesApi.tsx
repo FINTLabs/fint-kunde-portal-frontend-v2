@@ -1,24 +1,21 @@
-import { request } from '~/api/shared/api';
-import { API_URL } from './constants';
+import { apiManager, ApiResponse, handleApiResponse } from '~/api/ApiManager';
+import { FeatureFlags } from '~/types/FeatureFlag';
+
+const API_URL = process.env.API_URL;
 
 class FeaturesApi {
-    static async fetchFeatures() {
-        const functionName = `fetchFeatures`;
-        const URL = `${API_URL}/api/api/feature`;
+    static async fetchFeatures(): Promise<ApiResponse<FeatureFlags>> {
+        const apiResults = await apiManager<FeatureFlags>({
+            method: 'GET',
+            url: `${API_URL}/api/api/feature`,
+            functionName: 'fetchFeatures',
+        });
 
-        // return {
-        //     'audit-log-new': true,
-        //     'samtykke-admin-new': true,
-        //     'access-packages-new': true,
-        //     'roles-new': true,
-        //     'roles-init-new': true,
-        //     'access-packages': false,
-        //     'samtykke-admin': false,
-        //     roles: false,
-        //     'audit-log': false,
-        //     'roles-init': false,
-        // };
-        return await request(URL, functionName);
+        return handleApiResponse<FeatureFlags>(
+            apiResults,
+            'Kunne ikke hente en liste over features',
+            'Features hentet vellykket'
+        );
     }
 }
 

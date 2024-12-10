@@ -1,5 +1,5 @@
 import { BodyLong, Box, HGrid, Label, Tag } from '@navikt/ds-react';
-import { json, useLoaderData } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import MeApi from '~/api/MeApi';
 import { PersonIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -14,13 +14,17 @@ type LoaderData = {
 };
 
 export let loader = async () => {
-    try {
-        const user = await MeApi.fetchMe();
-        const features = await FeaturesApi.fetchFeatures();
-        return json({ user: user, features: features });
-    } catch (error) {
-        throw new Response('Failed to load user data', { status: 500 });
-    }
+    const user = await MeApi.fetchMe();
+    const features = await FeaturesApi.fetchFeatures();
+    return new Response(
+        JSON.stringify({
+            user: user,
+            features: features.data,
+        }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
 };
 
 export default function Index() {

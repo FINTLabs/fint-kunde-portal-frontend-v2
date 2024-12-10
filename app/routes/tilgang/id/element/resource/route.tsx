@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import AccessApi from '~/api/AccessApi';
 import FieldList from '~/routes/tilgang/id/element/resource/FieldList';
@@ -8,7 +8,6 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import IconToggleButtons from '~/routes/tilgang/id/element/resource/IconToggleButtons';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { handleApiResponse } from '~/utils/handleApiResponse';
 import useAlerts from '~/components/useAlerts';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import AlertManager from '~/components/AlertManager';
@@ -20,12 +19,17 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
     const fieldList = await AccessApi.getFieldAccess(clientOrAdapter, element, resource);
 
-    return json({
-        clientOrAdapter,
-        element,
-        resource,
-        fieldList,
-    });
+    return new Response(
+        JSON.stringify({
+            clientOrAdapter,
+            element,
+            resource,
+            fieldList: fieldList.data,
+        }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
 };
 
 export default function Route() {
@@ -101,20 +105,33 @@ export async function action({ request }: ActionFunctionArgs) {
     let response;
     switch (actionType) {
         case 'SAVE_FIELDS':
-            apiResponse = new Response(null, { status: 200 });
-            response = handleApiResponse(apiResponse, `Fields SAVED! :)`);
+            response = {
+                success: true,
+                message: `Save fields clicked'`,
+                variant: 'warning',
+            };
             break;
         case 'CONFIRM_POSTING':
-            apiResponse = new Response(null, { status: 200 });
-            response = handleApiResponse(apiResponse, `Kun enkeltoppslag`);
+            response = {
+                success: true,
+                message: `Confirm posting clicked`,
+                variant: 'warning',
+            };
             break;
         case 'CONFIRM_ACCESS':
-            apiResponse = new Response(null, { status: 200 });
-            response = handleApiResponse(apiResponse, `Ingen skriverettighet `);
+            response = {
+                success: true,
+                message: `Confirm access clicked'`,
+                variant: 'warning',
+            };
             break;
         default:
-            return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
+            response = {
+                success: false,
+                message: `Ukjent handlingstype: '${actionType}'`,
+                variant: 'error',
+            };
     }
 
-    return json(response);
+    return response;
 }

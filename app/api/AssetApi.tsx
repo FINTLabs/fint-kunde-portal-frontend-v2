@@ -1,36 +1,84 @@
-import { API_URL } from './constants';
+import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
 import { IPartialAsset } from '~/types/Asset';
-import { request } from '~/api/shared/api';
+const API_URL = process.env.API_URL;
 
 class AssetApi {
-    static async getAllAssets(organisationName: string) {
-        const functionName = 'getAllAssets';
-        const URL = `${API_URL}/api/assets/${organisationName}/`;
-        return request(URL, functionName);
+    static async getAllAssets(organisationName: string): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: `${API_URL}/api/assets/${organisationName}/`,
+            functionName: 'getAllAssets',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke hente eiendeler for organisasjonen: ${organisationName}`
+        );
     }
 
-    static async createAsset(asset: IPartialAsset, organisationName: string) {
-        const functionName = 'createAsset';
-        const URL = `${API_URL}/api/assets/${organisationName}/`;
-        return await request(URL, functionName, 'POST', 'json', asset);
+    static async createAsset(
+        asset: IPartialAsset,
+        organisationName: string
+    ): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'POST',
+            url: `${API_URL}/api/assets/${organisationName}/`,
+            functionName: 'createAsset',
+            body: JSON.stringify(asset),
+        });
+
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke opprette eiendelen',
+            'Eiendelen ble opprettet vellykket'
+        );
     }
 
-    static async updateAsset(asset: IPartialAsset, organisationName: string) {
-        const functionName = 'updateAsset';
-        const URL = `${API_URL}/api/assets/${organisationName}/${asset.name}`;
-        return await request(URL, functionName, 'PUT', 'json', asset);
+    static async updateAsset(
+        asset: IPartialAsset,
+        organisationName: string
+    ): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'PUT',
+            url: `${API_URL}/api/assets/${organisationName}/${asset.name}`,
+            functionName: 'updateAsset',
+            body: JSON.stringify(asset),
+        });
+
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke oppdatere eiendelen',
+            'Eiendelen ble oppdatert vellykket'
+        );
     }
 
-    static async deleteAsset(name: string, organisationName: string) {
-        const functionName = 'deleteAsset';
-        const URL = `${API_URL}/api/assets/${organisationName}/${name}`;
-        return await request(URL, functionName, 'DELETE');
+    static async deleteAsset(name: string, organisationName: string): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'DELETE',
+            url: `${API_URL}/api/assets/${organisationName}/${name}`,
+            functionName: 'deleteAsset',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke slette eiendelen: ${name}`,
+            'Eiendelen ble slettet vellykket'
+        );
     }
 
-    static async getAssetById(orgName: string, assetId: string) {
-        const functionName = 'getAssetById';
-        const URL = `${API_URL}/api/assets/${orgName}/${assetId}`;
-        return request(URL, functionName);
+    static async getAssetById(orgName: string, assetId: string): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: `${API_URL}/api/assets/${orgName}/${assetId}`,
+            functionName: 'getAssetById',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke hente eiendelen med ID: ${assetId}`,
+            `Eiendelen med ID ${assetId} ble hentet.`,
+            'success'
+        );
     }
 
     static async updateAdapterInAsset(
@@ -38,23 +86,48 @@ class AssetApi {
         assetName: string,
         organisationName: string,
         updateType: string
-    ) {
-        const URL = `${API_URL}/api/assets/${organisationName}/${assetName}/adapters/${adapterName}`;
+    ): Promise<ApiResponse<any>> {
+        const url = `${API_URL}/api/assets/${organisationName}/${assetName}/adapters/${adapterName}`;
         if (updateType === 'add') {
-            return await AssetApi.addAdapterToAsset(URL, adapterName);
+            return await this.addAdapterToAsset(url, adapterName);
         } else {
-            return await AssetApi.removeAdapterFromAsset(URL, adapterName);
+            return await this.removeAdapterFromAsset(url, adapterName);
         }
     }
 
-    static async addAdapterToAsset(URL: string, adapterName: string) {
-        const functionName = 'addAdapterToAsset';
-        return await request(URL, functionName, 'PUT', 'json', { name: adapterName });
+    static async addAdapterToAsset(url: string, adapterName: string): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'PUT',
+            url,
+            functionName: 'addAdapterToAsset',
+            body: JSON.stringify({ name: adapterName }),
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke legge til adapteren: ${adapterName}`,
+            `Adapteren ${adapterName} ble lagt til.`,
+            'success'
+        );
     }
 
-    static async removeAdapterFromAsset(URL: string, adapterName: string) {
-        const functionName = 'removeAdapterFromAsset';
-        return await request(URL, functionName, 'DELETE', 'json', { name: adapterName });
+    static async removeAdapterFromAsset(
+        url: string,
+        adapterName: string
+    ): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'DELETE',
+            url,
+            functionName: 'removeAdapterFromAsset',
+            body: JSON.stringify({ name: adapterName }),
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke fjerne adapteren: ${adapterName}`,
+            `Adapteren ${adapterName} ble fjernet.`,
+            'success'
+        );
     }
 
     static async updateClientInAsset(
@@ -62,23 +135,45 @@ class AssetApi {
         assetName: string,
         organisationName: string,
         updateType: string
-    ) {
-        const URL = `${API_URL}/api/assets/${organisationName}/${assetName}/clients/${clientName}`;
+    ): Promise<ApiResponse<any>> {
+        const url = `${API_URL}/api/assets/${organisationName}/${assetName}/clients/${clientName}`;
         if (updateType === 'add') {
-            return await AssetApi.addClientToAsset(URL, clientName);
+            return await this.addClientToAsset(url, clientName);
         } else {
-            return await AssetApi.removeClientFromAsset(URL, clientName);
+            return await this.removeClientFromAsset(url, clientName);
         }
     }
 
-    static async addClientToAsset(URL: string, clientName: string) {
-        const functionName = 'addClientToAsset';
-        return await request(URL, functionName, 'PUT', 'json', { name: clientName });
+    static async addClientToAsset(url: string, clientName: string): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'PUT',
+            url,
+            functionName: 'addClientToAsset',
+            body: JSON.stringify({ name: clientName }),
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke legge til klienten: ${clientName}`,
+            `Klienten ${clientName} ble lagt til.`,
+            'success'
+        );
     }
 
-    static async removeClientFromAsset(URL: string, clientName: string) {
-        const functionName = 'removeClientFromAsset';
-        return await request(URL, functionName, 'DELETE', 'json', { name: clientName });
+    static async removeClientFromAsset(url: string, clientName: string): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'DELETE',
+            url,
+            functionName: 'removeClientFromAsset',
+            body: JSON.stringify({ name: clientName }),
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke fjerne klienten: ${clientName}`,
+            `Klienten ${clientName} ble fjernet.`,
+            'success'
+        );
     }
 }
 

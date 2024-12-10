@@ -1,27 +1,54 @@
-import { request } from '~/api/shared/api';
-import { API_URL } from '~/api/constants';
+import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
+
+const API_URL = process.env.API_URL;
 
 export default class RoleApi {
-    static async getRoles() {
-        const functionName = 'getRoles';
-        const URL = `${API_URL}/api/role`;
-        return request(URL, functionName);
+    static async getRoles(): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: `${API_URL}/api/role`,
+            functionName: 'getRoles',
+        });
+
+        return handleApiResponse(apiResults, 'Kunne ikke hente roller', 'Roller hentet vellykket');
     }
 
-    static async addRole(orgName: string, contactNin: string, roleId: string) {
-        const functionName = 'addRole';
-        const URL = `${API_URL}/api/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`;
+    static async addRole(
+        orgName: string,
+        contactNin: string,
+        roleId: string,
+        roleName: string
+    ): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'PUT',
+            url: `${API_URL}/api/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`,
+            functionName: 'addRole',
+        });
 
-        return request(URL, functionName, 'PUT', 'json');
-        // if (response.status == 202)
-        //     return { message: `Kontaktroller oppdatert: ${roleId}`, variant: 'success' };
-        // else return { message: `Error oppdatering av kontaktrolle: ${roleId}`, variant: 'error' };
+        return handleApiResponse(
+            apiResults,
+            `Feil ved oppdatering av kontaktrolle: ${roleName}`,
+            `Kontaktroller oppdatert: ${roleName}`
+        );
     }
 
-    static async removeRole(organisationName: string, contactNin: string, roleId: string) {
-        const functionName = 'removeRole';
-        const URL = `${API_URL}/api/organisations/${organisationName}/contacts/roles/${contactNin}/${roleId}`;
+    static async removeRole(
+        orgName: string,
+        contactNin: string,
+        roleId: string,
+        roleName: string
+    ): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'DELETE',
+            url: `${API_URL}/api/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`,
+            functionName: 'removeRole',
+        });
 
-        return request(URL, functionName, 'DELETE', 'json');
+        return handleApiResponse(
+            apiResults,
+            `Feil ved fjerning av kontaktrolle: ${roleName}`,
+            `Kontaktrolle fjernet: ${roleName}`,
+            'warning'
+        );
     }
 }

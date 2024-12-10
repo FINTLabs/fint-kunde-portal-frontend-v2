@@ -1,82 +1,87 @@
-import { request } from '~/api/shared/api';
+import { apiManager, handleApiResponse } from '~/api/ApiManager';
+import { IBehandling } from '~/types/Consent';
 
 const API_URL = process.env.CONSENT_API_URL;
 
-interface FetchOptions extends RequestInit {
-    headers?: HeadersInit;
-}
-
-async function fetchWithAuth(url: string, options: FetchOptions = {}) {
-    const headers = {
-        Accept: 'application/json',
-        ...(process.env.NODE_ENV === 'development' && {
-            Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
-        }),
-        ...options.headers,
-    };
-
-    const response = await fetch(url, {
-        ...options,
-        credentials: 'same-origin',
-        headers,
-    });
-
-    if (response.ok) {
-        return await response.json();
-    } else {
-        const errorMsg = `Error fetching, status: ${response.status}`;
-        console.error(errorMsg);
-        throw new Error(errorMsg);
-    }
-}
-
 class ConsentApi {
     static async getBehandlings(orgName: string) {
-        const url = `${API_URL}/consent-admin/behandling/${orgName}`;
-        console.debug('url', url);
-        // return await fetchWithAuth(url, { method: 'GET' });
-        const functionName = 'getBehandlings';
-        return await request(url, functionName, 'GET');
+        const apiResults = await apiManager<IBehandling>({
+            method: 'GET',
+            url: `${API_URL}/consent-admin/behandling/${orgName}`,
+            functionName: 'getBehandlings',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke hente behandlinger for organisasjonen: ${orgName}.`,
+            `Behandlinger for organisasjonen ${orgName} ble hentet.`,
+            'success'
+        );
     }
 
     static async getTjenste(orgName: string) {
-        const url = `${API_URL}/consent-admin/tjeneste/${orgName}`;
-        console.debug('url', url);
-        return await fetchWithAuth(url, { method: 'GET' });
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: `${API_URL}/consent-admin/tjeneste/${orgName}`,
+            functionName: 'getTjenste',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke hente tjenester for organisasjonen: ${orgName}.`,
+            `Tjenester for organisasjonen ${orgName} ble hentet.`,
+            'success'
+        );
     }
 
     static async getPersonopplysning() {
-        const url = `${API_URL}/consent-admin/personopplysning`;
-        console.debug('url', url);
-        const functionName = 'getPersonopplysning';
-        return await request(url, functionName, 'GET');
-        // return await fetchWithAuth(url, { method: 'GET' });
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: `${API_URL}/consent-admin/personopplysning`,
+            functionName: 'getPersonopplysning',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke hente personopplysninger.',
+            'Personopplysninger ble hentet.',
+            'success'
+        );
     }
 
     static async getBehandlingsgrunnlag() {
-        const url = `${API_URL}/consent-admin/behandlingsgrunnlag`;
-        console.debug('url', url);
-        return await fetchWithAuth(url, { method: 'GET' });
-    }
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: `${API_URL}/consent-admin/behandlingsgrunnlag`,
+            functionName: 'getBehandlingsgrunnlag',
+        });
 
-    private static buildHeaders(contentType: string = 'application/json') {
-        return {
-            'Content-Type': contentType,
-            Accept: 'application/json',
-            ...(process.env.NODE_ENV === 'development' && {
-                Authorization: 'Bearer ' + process.env.BEARER_TOKEN,
-            }),
-        };
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke hente behandlingsgrunnlag.',
+            'Behandlingsgrunnlag ble hentet.',
+            'success'
+        );
     }
 
     static async setActive(orgName: string, behandlingId: string, isActive: string) {
-        const url = `${API_URL}/consent-admin/behandling/${orgName}/${behandlingId}/${isActive}`;
-        console.debug('url', url);
-        return await fetch(url, {
+        const apiResults = await apiManager<any>({
             method: 'PUT',
-            credentials: 'same-origin',
-            headers: this.buildHeaders(),
+            url: `${API_URL}/consent-admin/behandling/${orgName}/${behandlingId}/${isActive}`,
+            functionName: 'setActive',
         });
+
+        const successMessage =
+            isActive === 'true'
+                ? `Behandlingen ${behandlingId} i organisasjonen ${orgName} er nå aktiv.`
+                : `Behandlingen ${behandlingId} i organisasjonen ${orgName} er nå inaktiv.`;
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke oppdatere aktiv-status for behandling ${behandlingId} i organisasjonen: ${orgName}.`,
+            successMessage,
+            isActive === 'true' ? 'success' : 'warning'
+        );
     }
 
     static async createPolicy(
@@ -86,11 +91,10 @@ class ConsentApi {
         description: string,
         orgName: string
     ) {
-        const url = `${API_URL}/consent-admin/behandling/${orgName}`;
-        console.debug('url', url);
-        return await fetch(url, {
+        const apiResults = await apiManager<any>({
             method: 'POST',
-            headers: this.buildHeaders(),
+            url: `${API_URL}/consent-admin/behandling/${orgName}`,
+            functionName: 'createPolicy',
             body: JSON.stringify({
                 aktiv: true,
                 formal: description,
@@ -99,16 +103,29 @@ class ConsentApi {
                 personopplysningIds: [personalDataId],
             }),
         });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke opprette policy for organisasjonen: ${orgName}.`,
+            `Policy for organisasjonen ${orgName} ble opprettet.`,
+            'success'
+        );
     }
 
     static async createService(serviceName: string, orgName: string) {
-        const url = `${API_URL}/consent-admin/tjeneste/${orgName}`;
-        console.debug('url', url);
-        return await fetch(url, {
+        const apiResults = await apiManager<any>({
             method: 'POST',
-            headers: this.buildHeaders(),
+            url: `${API_URL}/consent-admin/tjeneste/${orgName}`,
+            functionName: 'createService',
             body: JSON.stringify({ navn: serviceName }),
         });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke opprette tjeneste med navn ${serviceName} for organisasjonen: ${orgName}.`,
+            `Tjenesten ${serviceName} for organisasjonen ${orgName} ble opprettet.`,
+            'success'
+        );
     }
 }
 

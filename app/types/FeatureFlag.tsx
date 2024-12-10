@@ -11,3 +11,16 @@ export interface FeatureFlags {
     'roles-init': boolean;
     'access-controll-new': boolean;
 }
+export const defaultFeatures: FeatureFlags = {
+    'audit-log-new': false,
+    'samtykke-admin-new': false,
+    'access-packages-new': false,
+    'roles-new': false,
+    'roles-init-new': false,
+    'access-packages': false,
+    'samtykke-admin': false,
+    roles: false,
+    'audit-log': false,
+    'roles-init': false,
+    'access-controll-new': false,
+};
