@@ -43,6 +43,7 @@ export const MENU_ITEMS_LEFT: MenuItemsLeft = {
                     title: 'Klienter',
                     path: '/klienter',
                     icon: MigrationIcon,
+                    role: 'ROLE_CLIENT',
                 },
                 {
                     title: 'Ressurser',

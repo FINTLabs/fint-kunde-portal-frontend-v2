@@ -3,7 +3,15 @@ import { useState } from 'react';
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { NavLinkView } from './NavLinkView';
 
-export const MenuDropdowns = ({ renderItems }: { renderItems: MenuDropDown[] }) => {
+export const MenuDropdowns = ({
+    renderItems,
+    selectedOrganization,
+    meDataRoles,
+}: {
+    renderItems: MenuDropDown[];
+    selectedOrganization: string;
+    meDataRoles: any;
+}) => {
     const [openMenuIndex, setOpenMenuIndex] = useState<number | null>(null);
 
     const handleOpenChange = (index: number) => {
@@ -17,6 +25,8 @@ export const MenuDropdowns = ({ renderItems }: { renderItems: MenuDropDown[] }) 
             index={index}
             isOpen={openMenuIndex === index}
             onOpenChange={() => handleOpenChange(index)}
+            selectedOrganization={selectedOrganization}
+            meDataRoles={meDataRoles}
         />
     ));
 };
@@ -26,12 +36,21 @@ const RenderMenuItem = ({
     index,
     isOpen,
     onOpenChange,
+    selectedOrganization,
+    meDataRoles,
 }: {
     item: MenuDropDown;
     index: number;
     isOpen: boolean;
     onOpenChange: () => void;
+    selectedOrganization: string;
+    meDataRoles: any;
 }) => {
+    const hasRole = (roleId: string): boolean => {
+        console.debug('checking for a role: ', selectedOrganization, roleId);
+        return meDataRoles.includes(roleId + '@' + selectedOrganization) ?? false;
+    };
+
     return (
         <Dropdown
             key={`key-${index}`}
@@ -47,7 +66,8 @@ const RenderMenuItem = ({
                         <Dropdown.Menu.List.Item
                             className="!p-0"
                             key={`sub-item-${subIndex}`}
-                            onClick={onOpenChange}>
+                            onClick={onOpenChange}
+                            disabled={!hasRole(subMenu.role || 'ROLE_ADMIN')}>
                             <NavLinkView item={subMenu} />
                         </Dropdown.Menu.List.Item>
                     ))}

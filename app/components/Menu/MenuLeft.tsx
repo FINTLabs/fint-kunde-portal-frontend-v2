@@ -15,7 +15,11 @@ export const MenuLeft = ({ userSession }: MenuLeftType) => {
     return (
         <HStack gap="2">
             <Logo />
-            <MenuDropdowns renderItems={MENU_ITEMS_LEFT.dropdowns} />
+            <MenuDropdowns
+                renderItems={MENU_ITEMS_LEFT.dropdowns}
+                selectedOrganization={userSession.selectedOrganization.name}
+                meDataRoles={userSession.meData.roles}
+            />
             {/*<MenuComponent />*/}
             {userSession.features['samtykke-admin-new' as keyof typeof userSession.features] && (
                 <Link to="/samtykke" className="!uppercase !hover:bg-transparent">
