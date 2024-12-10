@@ -48,7 +48,7 @@ const RenderMenuItem = ({
 }) => {
     const hasRole = (roleId: string): boolean => {
         console.debug('checking for a role: ', selectedOrganization, roleId);
-        return meDataRoles.includes(roleId + '@' + selectedOrganization) ?? false;
+        return meDataRoles.includes(roleId + '@' + selectedOrganization);
     };
 
     return (
@@ -67,7 +67,9 @@ const RenderMenuItem = ({
                             className="!p-0"
                             key={`sub-item-${subIndex}`}
                             onClick={onOpenChange}
-                            disabled={!hasRole(subMenu.role || 'ROLE_ADMIN')}>
+                            disabled={
+                                hasRole('ROLE_ADMIN') || !(!!subMenu.role && hasRole(subMenu.role))
+                            }>
                             <NavLinkView item={subMenu} />
                         </Dropdown.Menu.List.Item>
                     ))}

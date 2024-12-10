@@ -11,7 +11,6 @@ type MenuLeftType = {
 };
 
 export const MenuLeft = ({ userSession }: MenuLeftType) => {
-    //TODO: beta menu goes here
     return (
         <HStack gap="2">
             <Logo />
