@@ -65,7 +65,7 @@ export async function apiManager<T>({
                     data = await response.json();
                 } else if (contentType?.includes('text/plain')) {
                     const text = await response.text();
-                    data = text as unknown as T; // Explicitly cast since T can be string
+                    data = text as unknown as T;
                 } else {
                     logger.warn(`Unexpected Content-Type: ${contentType}`);
                 }

@@ -20,6 +20,13 @@ class MeApi {
                 status: 406,
                 statusText: 'Du har ikke opprettet bruker.',
             });
+        } else {
+            logger.debug(`Error in ME  ${apiResults.message}`);
+
+            throw new Response('Ingen tilkobling til server', {
+                status: 500,
+                statusText: 'Ingen brukerdata funnet',
+            });
         }
     }
 
