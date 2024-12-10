@@ -16,7 +16,8 @@ export default class RoleApi {
     static async addRole(
         orgName: string,
         contactNin: string,
-        roleId: string
+        roleId: string,
+        roleName: string
     ): Promise<ApiResponse<any>> {
         const apiResults = await apiManager<any>({
             method: 'PUT',
@@ -26,15 +27,16 @@ export default class RoleApi {
 
         return handleApiResponse(
             apiResults,
-            `Feil ved oppdatering av kontaktrolle: ${roleId}`,
-            `Kontaktroller oppdatert: ${roleId}`
+            `Feil ved oppdatering av kontaktrolle: ${roleName}`,
+            `Kontaktroller oppdatert: ${roleName}`
         );
     }
 
     static async removeRole(
         orgName: string,
         contactNin: string,
-        roleId: string
+        roleId: string,
+        roleName: string
     ): Promise<ApiResponse<any>> {
         const apiResults = await apiManager<any>({
             method: 'DELETE',
@@ -44,8 +46,8 @@ export default class RoleApi {
 
         return handleApiResponse(
             apiResults,
-            `Feil ved fjerning av kontaktrolle: ${roleId}`,
-            `Kontaktrolle fjernet: ${roleId}`,
+            `Feil ved fjerning av kontaktrolle: ${roleName}`,
+            `Kontaktrolle fjernet: ${roleName}`,
             'warning'
         );
     }

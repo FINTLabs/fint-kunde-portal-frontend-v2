@@ -5,12 +5,9 @@ const API_URL = process.env.API_URL;
 
 class MeApi {
     static async fetchMe() {
-        const functionName = 'fetchMe';
-        const URL = `${API_URL}/api/me`;
-
         const apiResults = await apiManager<any>({
             method: 'GET',
-            url: URL,
+            url: `${API_URL}/api/me`,
             functionName: 'fetchMe',
         });
 
@@ -27,11 +24,9 @@ class MeApi {
     }
 
     static async fetchOrganisations() {
-        const URL = `${API_URL}/api/contacts/organisations`;
-
         const apiResults = await apiManager<any>({
             method: 'GET',
-            url: URL,
+            url: `${API_URL}/api/contacts/organisations`,
             functionName: 'fetchOrganisations',
         });
 

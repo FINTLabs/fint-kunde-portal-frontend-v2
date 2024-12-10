@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ActionFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
-import { BodyLong, BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
@@ -118,11 +118,6 @@ export default function Index() {
                 )}
             </Box>
 
-            {technicalContacts && typeof technicalContacts === 'string' && (
-                <Box padding="8" background="surface-info-moderate">
-                    <BodyLong>{technicalContacts}</BodyLong>
-                </Box>
-            )}
             {technicalContacts && typeof technicalContacts !== 'string' && (
                 <ContactTable
                     contactsData={technicalContacts}
@@ -146,6 +141,8 @@ export const action: ActionFunction = async ({ request }) => {
     const actionType = formData.get('actionType') as string;
     const contactNin = formData.get('contactNin') as string;
     const roleId = formData.get('roleId') as string;
+    const roleName = formData.get('roleName') as string;
+
     const selectedOrg = await getSelectedOrganization(request);
     let response;
 
@@ -160,10 +157,10 @@ export const action: ActionFunction = async ({ request }) => {
             response = await ContactApi.setLegalContact(contactNin, selectedOrg);
             break;
         case 'ADD_ROLE':
-            response = await RoleApi.addRole(selectedOrg, contactNin, roleId);
+            response = await RoleApi.addRole(selectedOrg, contactNin, roleId, roleName);
             break;
         case 'DELETE_ROLE':
-            response = await RoleApi.removeRole(selectedOrg, contactNin, roleId);
+            response = await RoleApi.removeRole(selectedOrg, contactNin, roleId, roleName);
             break;
         default:
             response = {
