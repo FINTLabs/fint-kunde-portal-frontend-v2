@@ -69,8 +69,8 @@ export default function Index() {
             <InternalPageHeader title={'Basistest'} icon={TerminalIcon} helpText="basistest" />
             <VStack gap={'6'}>
                 <Alert variant="warning">
-                    Advarsel - Passordet på klienten du kjører test på kommer til å bli nullstilt
-                    når du kjører en test. Bruk av en dedikert klient for testing anbefales.
+                    Advarsel: Passordet til klienten du kjører testen på, vil bli nullstilt under
+                    testkjøringen. Det anbefales derfor å bruke en dedikert klient for testing.
                 </Alert>
                 <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                     <BasicTestAddForm

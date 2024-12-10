@@ -15,8 +15,8 @@ const HealthTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults })
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Status</Table.HeaderCell>
-                            <Table.HeaderCell>Component</Table.HeaderCell>
-                            <Table.HeaderCell>Time</Table.HeaderCell>
+                            <Table.HeaderCell>Komponent</Table.HeaderCell>
+                            <Table.HeaderCell>Tid</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
