@@ -1,60 +1,50 @@
-import { request } from '~/api/shared/api';
-import { API_URL } from './constants';
-import { HeaderProperties } from '~/utils/headerProperties';
 import logger from '~/utils/logger';
+import { apiManager } from '~/api/ApiManager';
+
+const API_URL = process.env.API_URL;
 
 class MeApi {
     static async fetchMe() {
         const functionName = 'fetchMe';
         const URL = `${API_URL}/api/me`;
 
-        const requestOptions: RequestInit = {
+        const apiResults = await apiManager<any>({
             method: 'GET',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-nin': HeaderProperties.getXnin(),
-                Cookie: HeaderProperties.getCookie(),
-            },
-        };
+            url: URL,
+            functionName: 'fetchMe',
+        });
 
-        try {
-            const response = await fetch(URL, requestOptions);
-            if (response.ok) {
-                return await response.json();
-            } else if (response.status === 404) {
-                logger.debug(`ME 404 RESPONSE ${response.body}`);
+        if (apiResults.success) {
+            return await apiResults.data;
+        } else if (apiResults.status === 404) {
+            logger.debug(`ME 404 RESPONSE ${apiResults.message}`);
 
-                throw {
-                    status: 999,
-                    body: 'Du har ikke opprettet bruker.',
-                };
-            }
-        } catch (err) {
-            if (err && typeof err === 'object' && 'status' in err && 'body' in err) {
-                const errorStatus = err.status as number;
-                const errorBody = err.body as string;
-                logger.error(`----> Error in MeAPI: ${errorStatus}`);
-
-                throw new Response(errorBody, {
-                    status: errorStatus,
-                    statusText: errorBody,
-                });
-            }
-            const errorMessage = `Internal Server Error - ${functionName} failed`;
-            logger.error(`Error in MeAPI-->: ${errorMessage}`);
-            throw new Response(errorMessage, {
-                status: 500,
-                statusText: 'Beklager, noe gikk galt.',
+            throw new Response('Du har ikke opprettet bruker.', {
+                status: 406,
+                statusText: 'Du har ikke opprettet bruker.',
             });
         }
     }
 
     static async fetchOrganisations() {
-        const functionName = 'fetchOrganisations';
         const URL = `${API_URL}/api/contacts/organisations`;
 
-        return request(URL, functionName);
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: URL,
+            functionName: 'fetchOrganisations',
+        });
+
+        if (apiResults.success) {
+            return await apiResults.data;
+        } else {
+            logger.debug(`No organisations found for user`);
+
+            throw new Response('Du er ikke tilknyttet en organisasjon', {
+                status: 401,
+                statusText: 'Du er ikke tilknyttet en organisasjon',
+            });
+        }
     }
 }
 

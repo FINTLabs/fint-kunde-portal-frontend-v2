@@ -1,14 +1,21 @@
-import { API_URL } from '~/api/constants';
-import { request } from '~/api/shared/api';
+import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
+const API_URL = process.env.API_URL;
 
 class ComponentConfigApi {
+    static async getComponentConfigs(): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: `${API_URL}/api/components/configurations`,
+            functionName: 'getComponentConfigs',
+        });
 
-    static async getComponentConfigs() {
-        const functionName = 'getComponentConfigs';
-        const URL = `${API_URL}/api/components/configurations`;
-        return await request(URL, functionName);
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke hente komponentkonfigurasjoner',
+            'Komponentkonfigurasjoner ble hentet.',
+            'success'
+        );
     }
-
 }
 
 export default ComponentConfigApi;

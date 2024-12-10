@@ -1,12 +1,10 @@
 import {
     type ActionFunction,
-    json,
     type LoaderFunction,
     type MetaFunction,
     redirect,
 } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { Alert, Search } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
@@ -19,27 +17,27 @@ import AlertManager from '~/components/AlertManager';
 import { IAdapter, IPartialAdapter } from '~/types/Adapter';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import useAlerts from '~/components/useAlerts';
+import Breadcrumbs from '~/components/shared/breadcrumbs';
 
+export const meta: MetaFunction = () => {
+    return [{ title: 'Adaptere' }, { name: 'description', content: 'Liste over adaptere' }];
+};
 interface IPageLoaderData {
     adapters?: IAdapter[];
     orgName: string;
 }
 
-export const meta: MetaFunction = () => {
-    return [{ title: 'Adapter' }, { name: 'description', content: 'Liste over adapter' }];
-};
-
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
-    const adapters = await AdapterAPI.getAdapters(orgName);
+    const adaptersResponse = await AdapterAPI.getAdapters(orgName);
 
-    adapters.sort((a: { shortDescription: string }, b: { shortDescription: any }) =>
+    const adapters = adaptersResponse.data || [];
+    adapters.sort((a: { shortDescription: string }, b: { shortDescription: string }) =>
         a.shortDescription.localeCompare(b.shortDescription)
     );
 
-    return json({
-        adapters: adapters,
-        orgName,
+    return new Response(JSON.stringify({ adapters, orgName }), {
+        headers: { 'Content-Type': 'application/json' },
     });
 };
 
@@ -59,16 +57,11 @@ export default function Index() {
         setFilteredAdapter(adapters);
     }, [adapters]);
 
-    const handleCreate = () => {
-        setIsCreating(true);
-    };
+    const handleCreate = () => setIsCreating(true);
 
-    const handleCancelCreate = () => {
-        setIsCreating(false);
-    };
+    const handleCancelCreate = () => setIsCreating(false);
 
     const handleSave = (formData: FormData) => {
-        console.log(formData.get('name'));
         fetcher.submit(formData, { method: 'post', action: '/adaptere' });
     };
 
@@ -80,17 +73,12 @@ export default function Index() {
                 adapter.shortDescription.toLowerCase().includes(query)
         );
 
-        // Sort filtered adapters alphabetically by name
         filtered?.sort((a, b) => a.shortDescription.localeCompare(b.shortDescription));
-
         setFilteredAdapter(filtered);
     };
 
-    const showDetails = (id: string) => {
-        navigate(`/adapter/${id}`);
-    };
+    const showDetails = (id: string) => navigate(`/adapter/${id}`);
 
-    //TODO: clear search on org change
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -102,15 +90,12 @@ export default function Index() {
                 />
             ) : (
                 <>
-                    {/*<HStack align={'center'} justify={'space-between'}>*/}
                     <InternalPageHeader
                         title={'Adaptere'}
                         icon={MigrationIcon}
                         helpText="adaptere"
                         onAddClick={handleCreate}
                     />
-
-                    {/*</HStack>*/}
                     <AlertManager alerts={alerts} />
 
                     <Search
@@ -151,11 +136,16 @@ export const action: ActionFunction = async ({ request }) => {
 
     const orgName = await getSelectedOrganization(request);
     const newAdapter: IPartialAdapter = {
-        name: name,
+        name,
         shortDescription: description,
         note: detailedInfo,
     };
 
     const response = await AdapterAPI.createAdapter(newAdapter, orgName);
-    return redirect(`/adapter/${response.name}`);
+
+    if (!response.success) {
+        throw new Response('Kunne ikke opprette ny adapter.');
+    }
+
+    return redirect(`/adapter/${response.data?.name}`);
 };

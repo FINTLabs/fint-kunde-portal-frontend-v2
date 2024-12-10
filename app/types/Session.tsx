@@ -12,5 +12,5 @@ export interface IUserSession {
     organizationCount: number;
     selectedOrganization: IOrganisation;
     organizations: IOrganisation[];
-    features: FeatureFlags[];
+    features: FeatureFlags;
 }

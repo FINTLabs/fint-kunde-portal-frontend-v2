@@ -25,7 +25,6 @@ import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
 import { IOrganisation } from '~/types/Organisation';
 import { CustomErrorLayout } from '~/components/errors/CustomErrorLayout';
-import { getFormData } from './utils/requestUtils';
 import { HeaderProperties } from './utils/headerProperties';
 import logger from '~/utils/logger';
 import CustomError from '~/components/errors/CustomError';
@@ -37,6 +36,7 @@ import { IUserSession } from '~/types/Session';
 import CustomErrorNoUser from '~/components/errors/CustomErrorNoUser';
 import CustomErrorNoOrg from '~/components/errors/CustomErrorNoOrg';
 import CustomErrorNoAccess from '~/components/errors/CustomErrorNoAccess';
+import { defaultFeatures } from '~/types/FeatureFlag';
 
 export const meta: MetaFunction = () => {
     return [
@@ -57,64 +57,47 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     HeaderProperties.setProperties(request);
 
     const meData: IMeData = await MeApi.fetchMe();
+    const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
+    const featuresResponse = await FeaturesApi.fetchFeatures();
+    const cookieHeader = request.headers.get('Cookie');
+    const cookieValue = await myCookie.parse(cookieHeader);
 
-    if (meData.nin && meData.technical.length > 0) {
-        const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
-        const features = await FeaturesApi.fetchFeatures();
-        const cookieHeader = request.headers.get('Cookie');
-        const cookieValue = await myCookie.parse(cookieHeader);
+    logger.debug(`Cookie value: ${cookieValue}`);
+    logger.debug(`features: ${JSON.stringify(featuresResponse.data, null, 2)}`);
 
-        logger.debug(`Cookie value: ${cookieValue}`);
+    let selectedOrganization =
+        organisationsData.find((org) => org.name === cookieValue) || organisationsData[0];
 
-        let selectedOrganization = organisationsData.find((org) => org.name === cookieValue);
+    const userSession: IUserSession = {
+        meData,
+        organizationCount: organisationsData.length,
+        selectedOrganization,
+        organizations: organisationsData,
+        features: featuresResponse?.data || defaultFeatures,
+    };
 
-        if (!selectedOrganization) {
-            selectedOrganization = organisationsData[0];
-        }
-
-        const userSession: IUserSession = {
-            meData: meData,
-            organizationCount: organisationsData.length,
-            selectedOrganization: selectedOrganization,
-            organizations: organisationsData,
-            features: features,
-        };
-
-        if (!cookieValue) {
-            const newCookieHeader = await myCookie.serialize(selectedOrganization.name);
-            return json(
-                { userSession },
-                {
-                    headers: {
-                        'Set-Cookie': newCookieHeader,
-                    },
-                }
-            );
-        } else {
-            logger.info(`USING COOKIE VALUE: ${selectedOrganization.name}`);
-            return json({ userSession });
-        }
-    } else {
-        const message =
-            'Du er ikke tilknyttet en organisasjon. Gå til FINT administratoren i organisasjonen din for å få tilgang.';
-        throw new Response('errorMessage', {
-            status: 401,
-            statusText: message,
-        });
+    if (!cookieValue) {
+        const newCookieHeader = await myCookie.serialize(selectedOrganization.name);
+        return json(
+            { userSession },
+            {
+                headers: {
+                    'Set-Cookie': newCookieHeader,
+                },
+            }
+        );
     }
+
+    logger.info(`USING COOKIE VALUE: ${selectedOrganization.name}`);
+    return json({ userSession });
 };
 
 export async function action({ request }: ActionFunctionArgs) {
-    const actionName = 'Action Update';
     const formData = await request.formData();
-    const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
+    const actionType = formData.get('actionType') as string;
 
     if (actionType === 'UPDATE_SELECTED_ORGANIZATION') {
-        const selectedOrganization = getFormData(
-            formData.get('selectedOrganization'),
-            'selectedOrganization',
-            actionName
-        );
+        const selectedOrganization = formData.get('selectedOrganization') as string;
 
         // Update cookie with only the organization name
         const newCookieHeader = await myCookie.serialize(selectedOrganization);
@@ -187,7 +170,7 @@ export function ErrorBoundary() {
 
     if (isRouteErrorResponse(error)) {
         // Handle a 404 from me - special case
-        if (error.status === 999) {
+        if (error.status === 406) {
             return (
                 <CustomErrorLayout>
                     <CustomErrorNoUser />

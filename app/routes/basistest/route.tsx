@@ -5,7 +5,7 @@ import { TerminalIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Loader, VStack } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ComponentApi from '~/api/ComponentApi';
-import { json, useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 import { IComponent } from '~/types/Component';
 import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
 import ClientApi from '~/api/ClientApi';
@@ -15,17 +15,16 @@ import BasicTestApi from '~/api/BasicTestApi';
 import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
 import logger from '~/utils/logger';
-
-interface ActionData {
-    message: string;
-    variant?: string;
-    healthTestData?: IHealthTestResult[];
-    cacheStatusData?: IBasicTestResult[];
-}
+import { IFetcherResponseData } from '~/types/FetcherResponseData';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Basis Test' }, { name: 'description', content: 'Run Basis Test' }];
 };
+
+interface IExtendedFetcherResponseData extends IFetcherResponseData {
+    healthTestData?: IHealthTestResult[];
+    cacheStatusData?: IBasicTestResult[];
+}
 
 export const loader: LoaderFunction = async ({ request }) => {
     const selectOrg = await getSelectedOrganization(request);
@@ -33,13 +32,21 @@ export const loader: LoaderFunction = async ({ request }) => {
     const components = await ComponentApi.getOrganisationComponents(selectOrg);
     const clients = await ClientApi.getClients(selectOrg);
 
-    return json({ components: components, clients: clients });
+    return new Response(
+        JSON.stringify({
+            components: components.data,
+            clients: clients.data,
+        }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
 };
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Basistest', link: '/basistest' }];
     const fetcher = useFetcher();
-    const actionData = fetcher.data as ActionData;
+    const actionData = fetcher.data as IExtendedFetcherResponseData;
 
     const { components, clients } = useLoaderData<{
         components: IComponent[];
@@ -135,8 +142,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const endpoint = formData.get('endpoint') as string;
     const clientName = formData.get('clientName') as string;
     const orgName = await getSelectedOrganization(request);
-    const message =
-        'Run testA with: ' + baseUrl + ' ' + endpoint + ' ' + clientName + ' ' + orgName;
+    const message = 'Run test with: ' + baseUrl + ' ' + endpoint + ' ' + clientName + ' ' + orgName;
 
     const cacheData = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
     const healthData = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
@@ -147,7 +153,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return {
         message: message,
         variant: 'info',
-        healthTestData: healthData.healthData,
-        cacheStatusData: cacheData.resourceResults,
+        healthTestData: healthData.data,
+        cacheStatusData: cacheData.data,
     };
 }

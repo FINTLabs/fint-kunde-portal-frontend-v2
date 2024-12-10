@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
-import { json, useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 import { BodyShort, Box, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -28,20 +28,27 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const components = await ComponentApi.getOrganisationComponents(selectOrg);
     const configs = await ComponentConfigApi.getComponentConfigs();
-    // const defaultLogs = await LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', '', 'GET_ALL');
-    return json({ components, configs });
+
+    return new Response(
+        JSON.stringify({
+            components: components.data,
+            configs: configs.data,
+        }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
 };
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Hendelseslogg', link: '/hendelseslogg' }];
     const fetcher = useFetcher();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
-    const { components, configs, defaultLogs } = useLoaderData<typeof loader>();
+    const { components, configs } = useLoaderData<typeof loader>();
     const logs = actionData?.data || [];
     const mappedLogs = mapLogs(logs);
     const [filterValue, setFilterValue] = useState('');
-    const { alerts, addAlert } = useAlerts(actionData, fetcher.state);
-    // const [defaultAlertAdded, setDefaultAlertAdded] = useState(false);
+    const { alerts } = useAlerts(actionData, fetcher.state);
 
     const filteredLogs = filterValue
         ? mappedLogs.filter((log: Log) => log.id === filterValue)
@@ -51,17 +58,6 @@ export default function Index() {
         console.log('handle for submit');
         fetcher.submit(formData, { method: 'post', action: '/hendelseslogg' });
     };
-
-    // useEffect(() => {
-    //     if (!actionData && !defaultAlertAdded) {
-    //         addAlert({
-    //             variant: 'info',
-    //             header: `Displaying default logs:`,
-    //             message: `LogApi.getLogs('beta', selectOrg, 'felles_kodeverk', 'GET_ALL');`,
-    //         });
-    //         setDefaultAlertAdded(true);
-    //     }
-    // }, [actionData, defaultAlertAdded, addAlert]);
 
     return (
         <>
@@ -137,16 +133,13 @@ export async function action({ request }: ActionFunctionArgs) {
     let response;
 
     response = await LogApi.getLogs(environment, orgName, componentName, resource, action);
-    if (Array.isArray(response) && response.length === 0) {
-        return json({
-            message: `Ingen logger funnet.'`,
+    if (!response.success || response.data.length === 0) {
+        response = {
+            success: false,
+            message: `Kunne ikke hente logger for spesifisert ressurs.`,
             variant: 'error',
-        });
-    } else {
-        return json({
-            message: `Logg(er) ble lagt til.'`,
-            variant: 'success',
-            data: response,
-        });
+        };
     }
+
+    return response;
 }

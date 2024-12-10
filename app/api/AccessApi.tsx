@@ -1,27 +1,60 @@
-import { request } from '~/api/shared/api';
+import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
+import logger from '~/utils/logger';
 
 const API_URL = process.env.ACCESS_URL;
+
 class AccessApi {
-    static async getClientorAdapterAccess(name: string) {
-        const functionName = 'getClientorAdapterAccess';
-        const URL = `${API_URL}/access/${name}`;
-        return await request(URL, functionName);
+    static async getClientorAdapterAccess(name: string): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: `${API_URL}/access/${name}`,
+            functionName: 'getClientorAdapterAccess',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke hente tilgang for: ${name}`,
+            `Tilgang for ${name} ble hentet.`,
+            'success'
+        );
     }
 
-    static async getComponentAccess(name: string, clientOrAdapter: string) {
-        const functionName = 'getComponentAccess';
-        const URL = `${API_URL}/access/${clientOrAdapter}/${name}`;
-        return await request(URL, functionName);
+    static async getComponentAccess(
+        name: string,
+        clientOrAdapter: string
+    ): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: `${API_URL}/access/${clientOrAdapter}/${name}`,
+            functionName: 'getComponentAccess',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke hente komponenttilgang for: ${name}`,
+            `Komponenttilgang for ${name} ble hentet.`,
+            'success'
+        );
     }
 
     static async getFieldAccess(
         clientOrAdapter: string,
         componentName: string,
         resourceName: string
-    ) {
-        const functionName = 'getFieldAccess';
-        const URL = `${API_URL}/access/${clientOrAdapter}/${componentName}/${resourceName}`;
-        return await request(URL, functionName);
+    ): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'GET',
+            url: `${API_URL}/access/${clientOrAdapter}/${componentName}/${resourceName}`,
+            functionName: 'getFieldAccess',
+        });
+
+        logger.info('Field list:', apiResults.data);
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke hente felttilgang for: ${resourceName}`,
+            `Felttilgang for ${resourceName} ble hentet.`,
+            'success'
+        );
     }
 }
 

@@ -1,6 +1,5 @@
 import {
     type ActionFunctionArgs,
-    json,
     type LoaderFunctionArgs,
     type MetaFunction,
     redirect,
@@ -11,15 +10,12 @@ import { MigrationIcon } from '@navikt/aksel-icons';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import ComponentApi from '~/api/ComponentApi';
 import AdapterApi from '~/api/AdapterApi';
-import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import FeaturesApi from '~/api/FeaturesApi';
 import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
-import { handleApiResponse } from '~/utils/handleApiResponse';
 import React from 'react';
 import { Alert, Box, Heading, HGrid } from '@navikt/ds-react';
-import logger from '~/utils/logger';
 import AlertManager from '~/components/AlertManager';
 import { BackButton } from '~/components/shared/BackButton';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
@@ -32,34 +28,42 @@ import useAlerts from '~/components/useAlerts';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { IAdapter } from '~/types/Adapter';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
-import { getRequestParam } from '~/utils/requestUtils';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Adapter Detaljer' }, { name: 'description', content: 'Adapter Detaljer' }];
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-    try {
-        const orgName = await getSelectedOrganization(request);
-        const adapterName = params.name;
+    const orgName = await getSelectedOrganization(request);
+    const adapterName = params.name;
 
-        const [adapters, components, features] = await Promise.all([
-            AdapterApi.getAdapters(orgName),
-            ComponentApi.getOrganisationComponents(orgName),
-            FeaturesApi.fetchFeatures(),
-        ]);
+    const [adaptersResponse, componentsResponse, featuresResponse] = await Promise.all([
+        AdapterApi.getAdapters(orgName),
+        ComponentApi.getOrganisationComponents(orgName),
+        FeaturesApi.fetchFeatures(),
+    ]);
 
-        let access;
-        if (adapterName && features['access-controll-new']) {
-            access = await AccessApi.getClientorAdapterAccess(adapterName);
+    const features = featuresResponse.data;
+    let access = null;
+    if (adapterName && features && features['access-controll-new']) {
+        const accessResponse = await AccessApi.getClientorAdapterAccess(adapterName);
+        if (accessResponse.success) {
+            access = accessResponse.data;
         }
-
-        return json({ adapters, components, features, access, orgName });
-    } catch (error) {
-        console.error('Error fetching data:', error);
-
-        throw new Response('Kunne ikke laste data. Vennligst prøv igjen senere.', { status: 500 });
     }
+
+    return new Response(
+        JSON.stringify({
+            adapters: adaptersResponse.data,
+            components: componentsResponse.data,
+            features: featuresResponse.data,
+            access,
+            orgName,
+        }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
 };
 
 interface IExtendedFetcherResponseData extends IFetcherResponseData {
@@ -192,77 +196,59 @@ export default function Index() {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-    const name = params.name;
-
-    if (!name) {
-        return json({ error: 'No adapter name in params' }, { status: 400 });
-    }
-
+    const name = params.name || '';
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);
     const actionType = formData.get('actionType') as string;
-    const adapterName = getRequestParam(params.name, 'id');
 
     let response;
-    let updateResponse;
     switch (actionType) {
         case 'UPDATE_PASSWORD':
-            updateResponse = await AdapterApi.setPassword(
+            response = await AdapterApi.setPassword(
                 formData.get('entityName') as string,
                 formData.get('password') as string,
                 orgName
             );
-            logger.debug('PASSWORD UPDATED');
-            response = handleApiResponse(updateResponse, 'Adapter password oppdatert');
             break;
         case 'GET_SECRET':
-            logger.debug('GET SECRET');
-            updateResponse = await AdapterApi.getOpenIdSecret(
+            response = await AdapterApi.getOpenIdSecret(
                 formData.get('entityName') as string,
                 orgName
             );
-            return json({
-                clientSecret: await updateResponse,
-                message: 'Adapter secret fetched successfully',
+            response = {
+                clientSecret: response.data,
+                message: 'Adapterhemmelighet ble hentet',
                 variant: 'success',
-            });
+            };
+            break;
         case 'UPDATE_ADAPTER':
-            updateResponse = await AdapterAPI.updateAdapter(
+            response = await AdapterApi.updateAdapter(
                 {
-                    name: adapterName,
+                    name,
                     shortDescription: formData.get('shortDescription') as string,
                     note: formData.get('note') as string,
                 },
                 orgName
             );
-            response = handleApiResponse(updateResponse, 'Adapter oppdatert');
             break;
         case 'UPDATE_COMPONENT_IN_ADAPTER':
-            const isChecked = formData.get('isChecked') as string;
-            updateResponse = await AdapterAPI.updateComponentInAdapter(
+            response = await AdapterApi.updateComponentInAdapter(
                 formData.get('componentName') as string,
                 formData.get('adapterName') as string,
                 orgName,
-                isChecked
+                formData.get('isChecked') as string
             );
-            if (isChecked === 'true')
-                response = handleApiResponse(updateResponse, 'Komponent lagt til adapteren');
-            else
-                response = handleApiResponse(
-                    updateResponse,
-                    'Komponenten fjernet fra adapteren',
-                    'warning'
-                );
             break;
         case 'DELETE_ADAPTER':
-            response = await AdapterAPI.deleteAdapter(name, orgName);
-            logger.debug('ADAPTER RESPONSE ON DELETE', response);
+            response = await AdapterApi.deleteAdapter(name, orgName);
             return redirect(`/adaptere?deleted=${name}`);
         default:
-            return json({
+            response = {
+                success: false,
                 message: `Ukjent handlingstype: '${actionType}'`,
                 variant: 'error',
-            });
+            };
     }
-    return json(response);
+
+    return response;
 }

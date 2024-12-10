@@ -12,7 +12,6 @@ import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from 
 import AddPolicyForm from '~/routes/samtykke/AddPolicyForm';
 import AddServiceForm from '~/routes/samtykke/AddServiceForm';
 import FeaturesApi from '~/api/FeaturesApi';
-import { handleApiResponse } from '~/utils/handleApiResponse';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
@@ -23,45 +22,41 @@ export const meta: MetaFunction = () => {
 
 export const loader = async ({ request }: { request: Request }) => {
     const orgName = await getSelectedOrganization(request);
+    const featuresResponse = await FeaturesApi.fetchFeatures();
+    const features = featuresResponse?.data;
 
-    try {
-        const features = await FeaturesApi.fetchFeatures();
-        console.debug('...........', features['samtykke-admin-new']);
-        if (features['samtykke-admin-new']) {
-            const policies = await ConsentApi.getBehandlings(orgName);
+    if (features && features['samtykke-admin-new']) {
+        const policies = await ConsentApi.getBehandlings(orgName);
+        const services = await ConsentApi.getTjenste(orgName);
+        const personalDataList = await ConsentApi.getPersonopplysning();
+        const foundations = await ConsentApi.getBehandlingsgrunnlag();
 
-            const services = await ConsentApi.getTjenste(orgName);
-            const personalDataList = await ConsentApi.getPersonopplysning();
-            const foundations = await ConsentApi.getBehandlingsgrunnlag();
-
-            return json({
-                policies: policies,
-                services: services,
-                personalDataList: personalDataList,
-                foundations: foundations,
-            });
-        } else {
-            return json(
-                { error: 'Det oppsto en feil ved henting av data: Tilgang nektet' },
-                { status: 200 }
-            );
-        }
-    } catch (error) {
-        console.error('Feil ved henting av data:', error);
-        // throw json({ error: 'Det oppsto en feil ved henting av data.' }, { status: 200 });
-        throw new Response('Det oppsto en feil ved henting av data.', { status: 500 });
+        return new Response(
+            JSON.stringify({
+                policies: policies.data,
+                services: services.data,
+                personalDataList: personalDataList.data,
+                foundations: foundations.data,
+            }),
+            {
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
     }
+
+    // TODO: display no access?
+    return json({});
 };
 
 export default function Index() {
     const [showAddPolicyForm, setShowAddPolicyForm] = useState(false);
     const [showAddServiceForm, setShowAddServiceForm] = useState(false);
+    const breadcrumbs = [{ name: 'Samtykke', link: '/samtykke' }];
+
     const fetcher = useFetcher<IFetcherResponseData>();
     const actionData = fetcher.data as IFetcherResponseData;
-
     const { alerts } = useAlerts(actionData, fetcher.state);
 
-    const breadcrumbs = [{ name: 'Samtykke', link: '/samtykke' }];
     const { policies, services, personalDataList, foundations, error } = useLoaderData<{
         policies: IBehandling[];
         services: ITjeneste[];
@@ -183,51 +178,35 @@ export async function action({ request }: ActionFunctionArgs) {
     const actionType = formData.get('actionType');
 
     let serviceName;
-    // const handleApiResponse = (apiResponse: Response, successMessage: string) => {
-    //     if (apiResponse.ok) {
-    //         return {
-    //             message: successMessage,
-    //             variant: 'success',
-    //             show: true,
-    //         };
-    //     } else {
-    //         return {
-    //             message: `Feil ved oppdatering. Mer info: Status: ${apiResponse.status}. StatusTekst: ${apiResponse.statusText}`,
-    //             variant: 'error',
-    //             show: true,
-    //         };
-    //     }
-    // };
-
     let response;
-    let updateResponse;
     switch (actionType) {
         case 'SET_ACTIVE':
-            updateResponse = await ConsentApi.setActive(
+            response = await ConsentApi.setActive(
                 orgName,
                 formData.get('policyId') as string,
                 formData.get('setIsActive') as string
             );
-            response = handleApiResponse(updateResponse, 'Aktiv status endret');
             break;
         case 'ADD_SERVICE':
             serviceName = formData.get('newServiceName') as string;
-            updateResponse = await ConsentApi.createService(serviceName, orgName);
-            response = handleApiResponse(updateResponse, `Ny tjeneste lagt til ${serviceName}`);
+            response = await ConsentApi.createService(serviceName, orgName);
             break;
         case 'ADD_POLICY':
-            updateResponse = await ConsentApi.createPolicy(
+            response = await ConsentApi.createPolicy(
                 formData.get('serviceId') as string,
                 formData.get('foundationId') as string,
                 formData.get('personalDataId') as string,
                 formData.get('description') as string,
                 orgName
             );
-            response = handleApiResponse(updateResponse, `Nytt samtykke lagt til`);
             break;
         default:
-            return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
+            response = {
+                success: false,
+                message: `Ukjent handlingstype: '${actionType}'`,
+                variant: 'error',
+            };
     }
 
-    return json(response);
+    return response;
 }

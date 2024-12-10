@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
 import AccessApi from '~/api/AccessApi';
 import ResourcesList from '~/routes/tilgang/id/element/ResourcesList';
@@ -10,7 +10,6 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import useAlerts from '~/components/useAlerts';
 import AlertManager from '~/components/AlertManager';
-import { handleApiResponse } from '~/utils/handleApiResponse';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const clientOrAdapter = params.id || '';
@@ -18,11 +17,16 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
     let resourceList = await AccessApi.getComponentAccess(element, clientOrAdapter);
 
-    return json({
-        clientOrAdapter,
-        resourceList,
-        element,
-    });
+    return new Response(
+        JSON.stringify({
+            clientOrAdapter,
+            resourceList: resourceList.data,
+            element,
+        }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
 };
 
 export default function Route() {
@@ -77,25 +81,30 @@ export async function action({ request }: ActionFunctionArgs) {
     const actionType = formData.get('actionType');
     const checkMarkValue = formData.get('checkMarkValue');
 
-    let apiResponse;
     let response;
     switch (actionType) {
         case 'TOGGLE_ELEMENT':
-            apiResponse = new Response(null, { status: 200 });
             const variant = checkMarkValue === 'on' ? 'success' : 'warning';
-            response = handleApiResponse(apiResponse, `Checkmark: ${checkMarkValue}`, variant);
+            response = {
+                success: true,
+                message: `Check mark clicked: '${checkMarkValue}'`,
+                variant: variant,
+            };
             break;
         case 'ADD_POLICY':
             response = {
-                message: `Checkmark unchecked`,
-                variant: 'warning',
-                show: true,
+                success: true,
+                message: `Add policy clicked'`,
+                variant: 'error',
             };
-            // response = handleApiResponse(updateResponse, `Nytt samtykke lagt til`);
             break;
         default:
-            return json({ show: true, message: 'Ukjent handlingstype', variant: 'error' });
+            response = {
+                success: false,
+                message: `Ukjent handlingstype: '${actionType}'`,
+                variant: 'error',
+            };
     }
 
-    return json(response);
+    return response;
 }

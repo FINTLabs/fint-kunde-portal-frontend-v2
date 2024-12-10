@@ -1,4 +1,4 @@
-import { json, useLoaderData, useNavigate } from '@remix-run/react';
+import { useLoaderData, useNavigate } from '@remix-run/react';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, ComponentIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -13,13 +13,12 @@ import SwaggerTable from '~/routes/komponenter.$id/SwaggerTable';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const id = params.id || '';
-    try {
-        const component = await ComponentApi.getComponentById(id);
-        return json(component);
-    } catch (err) {
-        console.error('Error fetching data:', err as Error);
-        throw new Response('Not Found', { status: 404 });
-    }
+
+    const component = await ComponentApi.getComponentById(id);
+
+    return new Response(JSON.stringify(component), {
+        headers: { 'Content-Type': 'application/json' },
+    });
 };
 
 export default function Index() {

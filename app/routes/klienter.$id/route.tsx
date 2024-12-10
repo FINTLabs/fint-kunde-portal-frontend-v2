@@ -1,5 +1,5 @@
 import React from 'react';
-import { json, useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import { ActionFunctionArgs, redirect } from '@remix-run/node';
 import ClientApi from '~/api/ClientApi';
@@ -11,40 +11,48 @@ import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { getFormData, getRequestParam } from '~/utils/requestUtils';
 import { getComponentIds } from '~/utils/helper';
 import ComponentList from '~/components/shared/ComponentList';
 import FeaturesApi from '~/api/FeaturesApi';
 import AccessApi from '~/api/AccessApi';
 import { IAccess } from '~/types/Access';
-import { AuthTable } from '~/components/shared/AuthTable';
-import { handleApiResponse } from '~/utils/handleApiResponse';
 import AlertManager from '~/components/AlertManager';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import useAlerts from '~/components/useAlerts';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
+import { AuthTable } from '~/components/shared/AuthTable';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const id = params.id || '';
-    const client = await ClientApi.getClientById(orgName, id);
-    const components = await ComponentApi.getOrganisationComponents(orgName);
-    const features = await FeaturesApi.fetchFeatures();
 
-    let access;
-    if (id && features['access-controll-new']) {
-        access = await AccessApi.getClientorAdapterAccess(id);
-    }
+    const clientResponse = await ClientApi.getClientById(orgName, id);
+    const componentsResponse = await ComponentApi.getOrganisationComponents(orgName);
+    const featuresResponse = await FeaturesApi.fetchFeatures();
+    const accessResponse =
+        id && featuresResponse.data?.['access-controll-new']
+            ? await AccessApi.getClientorAdapterAccess(id)
+            : null;
 
-    return json({ client, components, features, access });
+    return new Response(
+        JSON.stringify({
+            client: clientResponse,
+            components: componentsResponse.data,
+            features: featuresResponse.data,
+            access: accessResponse,
+        }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
 }
 
 interface IExtendedFetcherResponseData extends IFetcherResponseData {
     clientSecret?: string;
 }
 
-export default function Index() {
+export default function ClientDetails() {
     const { client, components, features, access } = useLoaderData<{
         client: IClient;
         components: IComponent[];
@@ -67,14 +75,8 @@ export default function Index() {
 
     const handleUpdate = (formData: FormData) => {
         formData.append('actionType', 'UPDATE_CLIENT');
-        fetcher.submit(formData, {
-            method: 'post',
-        });
+        fetcher.submit(formData, { method: 'post' });
     };
-
-    function onComponentToggle() {
-        console.info('------- handle component checkbox');
-    }
 
     const handleDelete = () => {
         const formData = new FormData();
@@ -152,9 +154,8 @@ export default function Index() {
                                 <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
                                 <ComponentList
                                     accessList={access}
-                                    // selectedItems={getComponentIds(client.components)}
                                     entity={client.name}
-                                    onToggle={onComponentToggle}
+                                    onToggle={handleToggle}
                                 />
                             </>
                         ) : (
@@ -176,72 +177,64 @@ export default function Index() {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-    const actionName = 'Action in klienter id';
-
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);
-    const clientName = getRequestParam(params.id, 'id');
-    const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
-    const updateType = formData.get('isChecked') as string;
-    const componentName = formData.get('componentName') as string;
-    let response = null;
+    const clientName = params.id || '';
+    const actionType = formData.get('actionType') as string;
+    let response;
 
-    let apiResponse;
-    let updateResponse;
     switch (actionType) {
         case 'UPDATE_CLIENT':
-            apiResponse = await ClientApi.updateClient(
+            response = await ClientApi.updateClient(
                 clientName,
                 formData.get('shortDescription') as string,
                 formData.get('note') as string,
                 orgName
             );
-            response = handleApiResponse(apiResponse, 'Klient oppdatert med suksess.');
             break;
+
         case 'DELETE_CLIENT':
-            const clientId = formData.get('clientId') as string;
-            apiResponse = await ClientApi.deleteClient(clientId, orgName);
-            return redirect(`/klienter?deleted=${clientId}`);
+            response = await ClientApi.deleteClient(clientName, orgName);
+            return redirect(`/klienter?deleted=${clientName}`);
+
         case 'UPDATE_COMPONENT_IN_CLIENT':
-            updateResponse = await ClientApi.updateComponentInClient(
+            const componentName = formData.get('componentName') as string;
+            const updateType = formData.get('isChecked') as string;
+            response = await ClientApi.updateComponentInClient(
                 componentName,
                 clientName,
                 orgName,
                 updateType
             );
-            if (updateType === 'true')
-                response = handleApiResponse(updateResponse, 'Komponent lagt til klienter');
-            else
-                response = handleApiResponse(
-                    updateResponse,
-                    'Komponenten fjernet fra klienter',
-                    'warning'
-                );
             break;
+
         case 'UPDATE_PASSWORD':
-            updateResponse = await ClientApi.setPassword(
+            response = await ClientApi.setPassword(
                 formData.get('entityName') as string,
                 formData.get('password') as string,
                 orgName
             );
-            response = handleApiResponse(updateResponse, 'Klienter password oppdatert');
             break;
+
         case 'GET_SECRET':
-            updateResponse = await ClientApi.getOpenIdSecret(
+            const secretResponse = await ClientApi.getOpenIdSecret(
                 formData.get('entityName') as string,
                 orgName
             );
-            return json({
-                clientSecret: updateResponse,
+
+            response = {
+                clientSecret: secretResponse.data,
                 message: 'Klienthemmeligheten ble hentet',
                 variant: 'success',
-            });
-
+            };
+            break;
         default:
-            return json({
+            response = {
+                success: false,
                 message: `Ukjent handlingstype: '${actionType}'`,
                 variant: 'error',
-            });
+            };
     }
+
     return response;
 }

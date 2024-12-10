@@ -5,7 +5,7 @@ import {
     redirect,
 } from '@remix-run/node';
 import { LayersIcon } from '@navikt/aksel-icons';
-import { json, useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
@@ -30,11 +30,24 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
-    const assets = await AssetApi.getAllAssets(orgName);
+    const assetsResponse = await AssetApi.getAllAssets(orgName);
 
-    assets.sort((a: { name: string }, b: { name: any }) => a.name.localeCompare(b.name));
+    if (!assetsResponse.success) {
+        throw new Error(`Kunne ikke hente ressurser for organisasjonen: ${orgName}`);
+    }
 
-    return json({ assets: assets, orgName: orgName });
+    const assets = assetsResponse.data || [];
+    assets.sort((a: IAsset, b: IAsset) => a.name.localeCompare(b.name));
+
+    return new Response(
+        JSON.stringify({
+            assets,
+            orgName,
+        }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
 };
 
 export default function Index() {
@@ -48,17 +61,11 @@ export default function Index() {
     const actionData = fetcher.data as IFetcherResponseData;
     const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
 
-    const handleClick = (id: string) => {
-        navigate(`/ressurser/${id}`);
-    };
+    const handleClick = (id: string) => navigate(`/ressurser/${id}`);
 
-    const handleCreate = () => {
-        setIsCreating(true);
-    };
+    const handleCreate = () => setIsCreating(true);
 
-    const handleCancel = () => {
-        setIsCreating(false);
-    };
+    const handleCancel = () => setIsCreating(false);
 
     return (
         <>
@@ -72,21 +79,20 @@ export default function Index() {
                 onAddClick={handleCreate}
             />
 
-            {!assets && (
+            {!assets || assets.length === 0 ? (
                 <Box padding="8">
                     <BodyLong>Fant ingen ressurser</BodyLong>
                 </Box>
-            )}
-            {isCreating ? (
+            ) : isCreating ? (
                 <CreateForm onCancel={handleCancel} orgName={orgName} />
             ) : (
-                assets && <AssetsTable assets={assets} onRowClick={handleClick} />
+                <AssetsTable assets={assets} onRowClick={handleClick} />
             )}
         </>
     );
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
 
     const name = formData.get('name') as string;
@@ -95,10 +101,23 @@ export async function action({ request }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const newAsset: IPartialAsset = {
         assetId: name,
-        name: name,
+        name,
         description,
     };
 
     const response = await AssetApi.createAsset(newAsset, orgName);
-    return redirect(`/ressurser/${response.name}`);
-}
+
+    if (!response.success) {
+        return new Response(
+            JSON.stringify({
+                message: response.message || 'Operasjon mislyktes',
+                variant: response.variant || 'error',
+            }),
+            {
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
+    } else {
+        return redirect(`/ressurser/${response.data?.name}`);
+    }
+};

@@ -7,6 +7,8 @@ interface CustomErrorPageProps {
     errorData?: string;
 }
 
+//TODO: add a link to driftsmelding in this text
+//TODO: the errorData comes back as a json sometimes, make this look better
 const CustomErrorPage: React.FC<CustomErrorPageProps> = ({
     statusCode = 500,
     statusTitle = 'Beklager, noe gikk galt.',

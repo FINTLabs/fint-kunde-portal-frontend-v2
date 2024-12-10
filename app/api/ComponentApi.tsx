@@ -1,35 +1,49 @@
-import { request } from '~/api/shared/api';
-import { API_URL } from './constants';
+import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
 import { IClient } from '~/types/Clients';
 
+const API_URL = process.env.API_URL;
+
 class ComponentApi {
-    static async getAllComponents() {
-        const functionName = 'getAllComponents';
-        const URL = `${API_URL}/api/components`;
-        return request(URL, functionName);
+    static async getAllComponents(): Promise<ApiResponse<IClient[]>> {
+        const apiResults = await apiManager<IClient[]>({
+            method: 'GET',
+            url: `${API_URL}/api/components`,
+            functionName: 'getAllComponents',
+        });
+
+        return handleApiResponse(apiResults, 'Kunne ikke hente alle komponenter.');
     }
 
-    static async getComponentById(componentName: string) {
-        return this.getAllComponents()
-            .then((clients: IClient[]) => {
-                const client = clients.find((item) => item.name === componentName);
-                if (client) {
-                    return client;
-                } else {
-                    console.error('Component not found, componentName:', componentName);
-                    return null;
-                }
-            })
-            .catch((err) => {
-                console.error('Error fetching components:', err);
-                return null;
-            });
+    static async getComponentById(componentName: string): Promise<IClient | null> {
+        const componentsResponse = await this.getAllComponents();
+
+        if (!componentsResponse.success) {
+            throw new Response('Kunne ikke hente komponenter.');
+        }
+
+        const component = componentsResponse.data?.find((item) => item.name === componentName);
+        if (component) {
+            return component;
+        } else {
+            throw new Response(`Komponent med navn ${componentName} ikke funnet.`);
+        }
     }
 
-    static async getOrganisationComponents(organisationName: string) {
-        const functionName = 'getOrganisationComponents';
-        const URL = `${API_URL}/api/components/organisation/${organisationName}`;
-        return request(URL, functionName);
+    static async getOrganisationComponents(
+        organisationName: string
+    ): Promise<ApiResponse<IClient[]>> {
+        const apiResults = await apiManager<IClient[]>({
+            method: 'GET',
+            url: `${API_URL}/api/components/organisation/${organisationName}`,
+            functionName: 'getOrganisationComponents',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke hente komponenter for organisasjonen: ${organisationName}.`,
+            `Komponenter for organisasjonen ${organisationName} ble hentet.`,
+            'success'
+        );
     }
 }
 

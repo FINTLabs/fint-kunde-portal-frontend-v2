@@ -1,66 +1,117 @@
-import { request } from '~/api/shared/api';
-import { API_URL } from '~/api/constants';
+import { apiManager, ApiResponse, handleApiResponse } from '~/api/ApiManager';
 import { IClient, IPartialClient } from '~/types/Clients';
-import { HeaderProperties } from '~/utils/headerProperties';
+import logger from '~/utils/logger';
+
+const API_URL = process.env.API_URL;
 
 class ClientApi {
-    static async getClients(organisationName: string) {
-        const functionName = 'getClients';
-        const URL = `${API_URL}/api/clients/${organisationName}`;
-        return request(URL, functionName);
+    static async getClients(organisationName: string): Promise<ApiResponse<IClient[]>> {
+        const apiResults = await apiManager<IClient[]>({
+            method: 'GET',
+            url: `${API_URL}/api/clients/${organisationName}`,
+            functionName: 'getClients',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke hente klienter for organisasjonen: ${organisationName}`
+        );
     }
 
-    static async getClientById(organisationName: string, clientId: string) {
-        return this.getClients(organisationName)
-            .then((clients: IClient[]) => {
-                const client = clients.find((client) => client.name === clientId);
-                if (client) {
-                    return client;
-                } else {
-                    console.error('Client not found, clientId:', clientId);
-                    return null;
-                }
-            })
-            .catch((err) => {
-                console.error('Error fetching client:', err);
-                return null;
-            });
-    }
-    static async createClient(client: IPartialClient, organisation: string) {
-        const functionName = 'createClient';
-        const URL = `${API_URL}/api/clients/${organisation}`;
-        return request(URL, functionName, 'POST', 'json', client);
+    static async getClientById(
+        organisationName: string,
+        clientId: string
+    ): Promise<IClient | null> {
+        const clientsResponse = await this.getClients(organisationName);
+
+        if (!clientsResponse.success) {
+            logger.error(`Failed to fetch clients for organisation: ${organisationName}`);
+            throw new Error(`Kunne ikke hente klienter for organisasjonen: ${organisationName}`);
+        }
+
+        const client = clientsResponse.data?.find((client) => client.name === clientId);
+        if (client) {
+            return client;
+        } else {
+            logger.error(`Client not found, clientId: ${clientId}`);
+            throw new Error(`Klient ikke funnet, klientId: ${clientId}`);
+        }
     }
 
-    static updateClient(
+    static async createClient(
+        client: IPartialClient,
+        organisation: string
+    ): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'POST',
+            url: `${API_URL}/api/clients/${organisation}`,
+            functionName: 'createClient',
+            body: JSON.stringify(client),
+        });
+
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke opprette klienten',
+            'Klienten ble opprettet vellykket'
+        );
+    }
+
+    static async updateClient(
         clientName: string,
         clientShortDescription: string,
         clientNote: string,
         organisation: string
-    ) {
+    ): Promise<ApiResponse<any>> {
         const partialClient: IPartialClient = {
-            name: clientName, // Assuming this is the current client name
+            name: clientName,
             shortDescription: clientShortDescription,
             note: clientNote,
         };
 
-        const functionName = 'updateClient';
-        const URL = `${API_URL}/api/clients/${organisation}/${clientName}`;
-        console.debug('adding:', URL, partialClient);
-        return request(URL, functionName, 'PUT', 'json', partialClient);
+        const apiResults = await apiManager<any>({
+            method: 'PUT',
+            url: `${API_URL}/api/clients/${organisation}/${clientName}`,
+            functionName: 'updateClient',
+            body: JSON.stringify(partialClient),
+        });
+
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke oppdatere klienten',
+            'Klienten ble oppdatert vellykket'
+        );
     }
 
-    static async deleteClient(clientName: string, organisation: string) {
-        const functionName = 'deleteClient';
-        const URL = `${API_URL}/api/clients/${organisation}/${clientName}`;
-        return request(URL, functionName, 'DELETE');
+    static async deleteClient(clientName: string, organisation: string): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'DELETE',
+            url: `${API_URL}/api/clients/${organisation}/${clientName}`,
+            functionName: 'deleteClient',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke slette klienten',
+            'Klienten ble slettet vellykket',
+            'warning'
+        );
     }
 
-    static async getOpenIdSecret(clientName: string, organisationName: string): Promise<string> {
-        const functionName = 'getOpenIdSecret';
-        const URL = `${API_URL}/api/clients/${organisationName}/${clientName}/secret`;
+    static async getOpenIdSecret(
+        clientName: string,
+        organisationName: string
+    ): Promise<ApiResponse<string>> {
+        const apiResults = await apiManager<string>({
+            method: 'GET',
+            url: `${API_URL}/api/clients/${organisationName}/${clientName}/secret`,
+            functionName: 'getOpenIdSecret',
+        });
 
-        return request(URL, functionName, 'GET', 'text');
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke hente OpenID Secret',
+            'Klienthemmeligheten ble hentet'
+        );
     }
 
     static async updateComponentInClient(
@@ -68,48 +119,67 @@ class ClientApi {
         clientName: string,
         organisationName: string,
         updateType: string
-    ) {
-        console.log('------------------ update', updateType);
-        const URL = `${API_URL}/api/components/organisation/${organisationName}/${componentName}/clients/${clientName}`;
+    ): Promise<ApiResponse<any>> {
+        const url = `${API_URL}/api/components/organisation/${organisationName}/${componentName}/clients/${clientName}`;
+
         if (updateType === 'true') {
-            return await ClientApi.addComponentToClient(URL, componentName);
+            return await this.addComponentToClient(url, componentName);
         } else {
-            return await ClientApi.removeComponentFromClient(URL, componentName);
+            return await this.removeComponentFromClient(url, componentName);
         }
     }
 
-    static async addComponentToClient(URL: string, clientName: string) {
-        const functionName = 'addComponentToClient';
-        return await request(URL, functionName, 'PUT', 'json', { name: clientName });
-    }
+    static async addComponentToClient(url: string, clientName: string): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'PUT',
+            url,
+            functionName: 'addComponentToClient',
+            body: JSON.stringify({ name: clientName }),
+        });
 
-    static async removeComponentFromClient(URL: string, clientName: string) {
-        const functionName = 'removeComponentFromClient';
-        return await request(URL, functionName, 'DELETE', 'json', { name: clientName });
-    }
-
-    static async setPassword(adapterName: string, password: string, organisationName: string) {
-        console.log('Create new password client: ', adapterName, password);
-        const request = new Request(
-            `${API_URL}/api/clients/${organisationName}/${adapterName}/password`,
-            {
-                method: 'PUT',
-                headers: {
-                    Accept: '*/*',
-                    'Content-Type': 'text/plain',
-                    'x-nin': HeaderProperties.getXnin(),
-                },
-                credentials: 'same-origin',
-                body: password,
-            }
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke legge til komponenten: ${clientName}`,
+            'Komponenten ble lagt til'
         );
-        return fetch(request)
-            .then((response) => {
-                return response;
-            })
-            .catch((error) => {
-                return error;
-            });
+    }
+
+    static async removeComponentFromClient(
+        url: string,
+        clientName: string
+    ): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'DELETE',
+            url,
+            functionName: 'removeComponentFromClient',
+            body: JSON.stringify({ name: clientName }),
+        });
+
+        return handleApiResponse(
+            apiResults,
+            `Kunne ikke fjerne komponenten: ${clientName}`,
+            'Komponenten ble fjernet'
+        );
+    }
+
+    static async setPassword(
+        adapterName: string,
+        password: string,
+        organisationName: string
+    ): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'PUT',
+            url: `${API_URL}/api/clients/${organisationName}/${adapterName}/password`,
+            functionName: 'setPassword',
+            body: password,
+            contentType: 'text/plain',
+        });
+
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke sette passordet',
+            'Passordet ble satt vellykket'
+        );
     }
 }
 

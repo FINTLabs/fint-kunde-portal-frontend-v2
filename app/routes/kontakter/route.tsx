@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
+import { ActionFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
 import { BodyLong, BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import { json, useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
 import OrganisationApi from '~/api/OrganisationApi';
@@ -11,8 +11,6 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ContactModal from '~/routes/kontakter/ContactModal';
 import { getSelectedOrganization as getSelectedOrganization } from '~/utils/selectedOrganization';
-import { getFormData } from '~/utils/requestUtils';
-import { handleApiResponse } from '~/utils/handleApiResponse';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
 import { IContact } from '~/types/Contact';
@@ -34,22 +32,32 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async ({ request }) => {
     const selectedOrg = await getSelectedOrganization(request);
 
-    const technicalContacts = await ContactApi.getTechnicalContacts(selectedOrg);
-    const rolesData = await RoleApi.getRoles();
-    const legalContact = await OrganisationApi.getLegalContact(selectedOrg);
-    const allContacts = await ContactApi.getAllContacts();
+    const technicalContactsResponse = await ContactApi.getTechnicalContacts(selectedOrg);
+    const technicalContacts = technicalContactsResponse.success
+        ? technicalContactsResponse.data
+        : [];
+    if (technicalContacts) {
+        technicalContacts.sort((a: { firstName: string }, b: { firstName: string }) =>
+            a.firstName.localeCompare(b.firstName)
+        );
+    }
 
-    technicalContacts.sort((a: { firstName: string }, b: { firstName: any }) =>
-        a.firstName.localeCompare(b.firstName)
+    const rolesDataResponse = await RoleApi.getRoles();
+    const legalContactResponse = await OrganisationApi.getLegalContact(selectedOrg);
+    const allContactsResponse = await ContactApi.getAllContacts();
+
+    return new Response(
+        JSON.stringify({
+            technicalContacts,
+            rolesData: rolesDataResponse.data,
+            legalContact: legalContactResponse.data,
+            allContacts: allContactsResponse.data,
+            selectedOrg,
+        }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+        }
     );
-
-    return json({
-        technicalContacts,
-        rolesData,
-        legalContact,
-        allContacts,
-        selectedOrg,
-    });
 };
 
 export default function Index() {
@@ -133,59 +141,37 @@ export default function Index() {
     );
 }
 
-export async function action({ request }: ActionFunctionArgs) {
-    const actionName = 'Action in kontakter/route.tsx';
+export const action: ActionFunction = async ({ request }) => {
     const formData = await request.formData();
-
-    const actionType = getFormData(formData.get('actionType'), 'actionType', actionName);
+    const actionType = formData.get('actionType') as string;
+    const contactNin = formData.get('contactNin') as string;
+    const roleId = formData.get('roleId') as string;
     const selectedOrg = await getSelectedOrganization(request);
-    const contactNin = getFormData(formData.get('contactNin'), 'contactNin', actionName);
-    const contactName = formData.get('contactName') as string;
-    const roleName = formData.get('roleName') as string;
-    const roleIdToAdd = formData.get('roleId') as string;
-    const roleIdToDelete = formData.get('roleId') as string;
-
     let response;
-    let apiResponse;
+
     switch (actionType) {
         case 'ADD_TECHNICAL_CONTACT':
-            apiResponse = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
-            response = handleApiResponse(
-                apiResponse,
-                'Kontakten er lagt til. Husk å tildele roller til kontakten.'
-            );
+            response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);
             break;
         case 'REMOVE_CONTACT':
-            apiResponse = await ContactApi.removeTechnicalContact(contactNin, selectedOrg);
-            response = handleApiResponse(
-                apiResponse,
-                'Kontakten er fjernet som teknisk kontakt',
-                'warning'
-            );
+            response = await ContactApi.removeTechnicalContact(contactNin, selectedOrg);
             break;
         case 'SET_LEGAL_CONTACT':
-            apiResponse = await ContactApi.setLegalContact(contactNin, selectedOrg);
-            response = handleApiResponse(apiResponse, 'Kontakten er satt som juridisk kontakt');
+            response = await ContactApi.setLegalContact(contactNin, selectedOrg);
             break;
         case 'ADD_ROLE':
-            apiResponse = await RoleApi.addRole(selectedOrg, contactNin, roleIdToAdd);
-            response = handleApiResponse(apiResponse, ` ${roleName} lagt til ${contactName}`);
+            response = await RoleApi.addRole(selectedOrg, contactNin, roleId);
             break;
         case 'DELETE_ROLE':
-            apiResponse = await RoleApi.removeRole(selectedOrg, contactNin, roleIdToDelete);
-            response = handleApiResponse(
-                apiResponse,
-                ` ${roleName} fjernet fra ${contactName}`,
-                'warning'
-            );
+            response = await RoleApi.removeRole(selectedOrg, contactNin, roleId);
             break;
         default:
-            return json({
-                message: `Unknown action type '${actionType}'`,
+            response = {
+                success: false,
+                message: `Ukjent handlingstype: '${actionType}'`,
                 variant: 'error',
-            });
+            };
     }
 
-    // return json({ show: true, message: response?.message, variant: response?.variant });
     return response;
-}
+};

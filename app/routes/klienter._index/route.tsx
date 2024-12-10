@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { json, useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import ClientApi from '~/api/ClientApi';
 import { IClient, IPartialClient } from '~/types/Clients';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -20,13 +20,16 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);
-    const clientData = await ClientApi.getClients(orgName);
+    const clientsResponse = await ClientApi.getClients(orgName);
 
-    clientData.sort((a: { shortDescription: string }, b: { shortDescription: any }) =>
+    const clientData = clientsResponse.data || [];
+    clientData.sort((a: { shortDescription: string }, b: { shortDescription: string }) =>
         a.shortDescription.localeCompare(b.shortDescription)
     );
 
-    return json({ clientData, orgName });
+    return new Response(JSON.stringify({ clientData, orgName }), {
+        headers: { 'Content-Type': 'application/json' },
+    });
 };
 
 interface IPageLoaderData {
@@ -137,5 +140,10 @@ export async function action({ request }: ActionFunctionArgs) {
     };
 
     const response = await ClientApi.createClient(newClient, orgName);
-    return redirect(`/klienter/${response.name}`);
+
+    if (!response.success) {
+        throw new Response('Kunne ikke opprette ny klient.');
+    }
+
+    return redirect(`/klienter/${response.data?.name}`);
 }
