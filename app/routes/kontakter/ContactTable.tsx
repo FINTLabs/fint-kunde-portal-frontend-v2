@@ -12,12 +12,12 @@ interface IContactTableProps {
     selectedOrg: string;
 }
 
-const ContactTable: React.FC<IContactTableProps> = ({
+const ContactTable = ({
     contactsData,
     rolesData,
     onButtonClick,
     selectedOrg,
-}) => {
+}: IContactTableProps) => {
     const hasRole = (currentContact: IContact, roleId: string): boolean => {
         return currentContact?.roles?.includes(roleId + '@' + selectedOrg) ?? false;
     };

@@ -1,13 +1,12 @@
-export interface IBasicTestResult {
-    status: string;
+export interface IResourceResult {
     resource: string;
-    component: string;
-    lastUpdated: string;
-    size: string;
+    lastUpdated: number;
+    size: number;
+    status: 'OK' | 'FAILED';
     message: string;
 }
 
-export interface IHealthTestResult {
+export interface IHealthData {
     component: string;
     status: string;
     timestamp: number;

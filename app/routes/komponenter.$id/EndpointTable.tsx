@@ -3,11 +3,11 @@ import React from 'react';
 import { Table } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 
-interface ComponentTableProps {
+interface EndpointTableProps {
     component: IComponent;
 }
 
-const EndpointTable: React.FC<ComponentTableProps> = ({ component }) => {
+const EndpointTable = ({ component }: EndpointTableProps) => {
     return (
         <Table>
             <Table.Body>

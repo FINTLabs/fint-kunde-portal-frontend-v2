@@ -10,12 +10,7 @@ interface ConfigClassTableProps {
     onToggle: (formData: FormData) => void;
 }
 
-const ResourcesList: React.FC<ConfigClassTableProps> = ({
-    accessComponent,
-    title,
-    onSelected,
-    onToggle,
-}) => {
+const ResourcesList = ({ accessComponent, title, onSelected, onToggle }: ConfigClassTableProps) => {
     function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
         const formData = new FormData();
         formData.append('resourceId', 'newServiceName');

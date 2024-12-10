@@ -15,7 +15,7 @@ interface ComponentListProps {
     entity: string;
 }
 
-const ComponentList: React.FC<ComponentListProps> = ({ accessList, onToggle, entity }) => {
+function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
     const navigate = useNavigate();
 
     const handleRowClick = (domain: string, packageName: string) => {
@@ -86,7 +86,7 @@ const ComponentList: React.FC<ComponentListProps> = ({ accessList, onToggle, ent
             </HGrid>
         </Box>
     );
-};
+}
 
 export default ComponentList;
 
