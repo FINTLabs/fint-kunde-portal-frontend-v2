@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
-import { BodyShort, Box, VStack } from '@navikt/ds-react';
+import { Box, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
@@ -79,13 +79,9 @@ export default function Index() {
                 </Box>
                 <AlertManager alerts={alerts} />
 
-                {filteredLogs.length > 0 ? (
+                {filteredLogs.length > 0 && (
                     <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                         <LogTable logs={filteredLogs} />
-                    </Box>
-                ) : (
-                    <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                        <BodyShort>Bruk skjemaet for å lage en rapport</BodyShort>
                     </Box>
                 )}
             </VStack>

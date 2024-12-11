@@ -106,21 +106,24 @@ export default function Index() {
                 />
             </Box>
 
-            <Box className="w-full" padding="6">
-                <HStack gap={'10'}>
-                    <Button
-                        size={'xsmall'}
-                        variant={'secondary'}
-                        icon={<EraserIcon aria-hidden />}
-                        onClick={removeAllTests}>
-                        Fjern alle tester
-                    </Button>
-                </HStack>
-            </Box>
-
-            <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                <RelationTestResultsTable logResults={relationTests} />
-            </Box>
+            {relationTests && (
+                <>
+                    <Box className="w-full" padding="6">
+                        <HStack gap={'10'}>
+                            <Button
+                                size={'xsmall'}
+                                variant={'secondary'}
+                                icon={<EraserIcon aria-hidden />}
+                                onClick={removeAllTests}>
+                                Fjern alle tester
+                            </Button>
+                        </HStack>
+                    </Box>
+                    <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+                        <RelationTestResultsTable logResults={relationTests} />
+                    </Box>
+                </>
+            )}
         </>
     );
 }

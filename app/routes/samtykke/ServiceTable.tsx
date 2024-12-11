@@ -75,12 +75,6 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                     <Table.Row>
                         <Table.HeaderCell />
                         <Table.ColumnHeader
-                            sortKey="formal"
-                            sortable
-                            onClick={() => handleSort('formal')}>
-                            Formal
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader
                             sortKey="tjenesteIds"
                             sortable
                             onClick={() => handleSort('tjenesteIds')}>
@@ -92,6 +86,13 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                             onClick={() => handleSort('personopplysningIds')}>
                             Personopplysning
                         </Table.ColumnHeader>
+                        <Table.ColumnHeader
+                            sortKey="formal"
+                            sortable
+                            onClick={() => handleSort('formal')}>
+                            Formal
+                        </Table.ColumnHeader>
+
                         <Table.ColumnHeader
                             sortKey="aktiv"
                             sortable
@@ -111,7 +112,7 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                                             (x) => x.id === personalDataId
                                         );
                                         return p ? (
-                                            <div key={p.id}>{p.id}</div>
+                                            <div key={p.id}>personopplysninger: {p.navn}</div>
                                         ) : (
                                             'Unknown personopplysninger'
                                         );
@@ -119,7 +120,7 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                                     {policy.behandlingsgrunnlagIds.map((foundationId) => {
                                         const b = foundations.find((x) => x.id === foundationId);
                                         return b ? (
-                                            <div key={b.id}>{b.navn}</div>
+                                            <div key={b.id}>behandlingsgrunnlag: {b.navn}</div>
                                         ) : (
                                             'Unknown behandlingsgrunnlag'
                                         );
@@ -136,26 +137,20 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                                                 ? `Denne handlingen vil sette statusen til inaktiv.`
                                                 : `Denne handlingen vil sette statusen til aktiv.`
                                         }
-                                        // additionalInputs={[
-                                        //     { name: 'policyId', value: policy.id },
-                                        //     {
-                                        //         name: 'isActive',
-                                        //         value: policy.aktiv ? 'false' : 'true',
-                                        //     },
-                                        // ]}
-                                        // actionType="SET_ACTIVE"
                                     />
                                 </div>
                             }>
-                            <Table.DataCell>{policy.formal}</Table.DataCell>
                             <Table.DataCell>
                                 {policy.tjenesteIds
                                     .map((serviceId) => {
                                         const tjeneste = services.find((t) => t.id === serviceId);
-                                        return tjeneste ? tjeneste.navn : 'Unknown tjeneste';
+                                        return tjeneste
+                                            ? `${tjeneste.navn} ${tjeneste.id}`
+                                            : 'Unknown tjeneste';
                                     })
                                     .join(', ')}
                             </Table.DataCell>
+
                             <Table.DataCell>
                                 {policy.personopplysningIds
                                     .map((personalDataIds) => {
@@ -168,6 +163,7 @@ const ServiceTable: React.FC<IServiceTableProps> = ({
                                     })
                                     .join(', ')}
                             </Table.DataCell>
+                            <Table.DataCell>{policy.formal}</Table.DataCell>
                             <Table.DataCell>
                                 {policy.aktiv ? (
                                     <CheckmarkCircleIcon

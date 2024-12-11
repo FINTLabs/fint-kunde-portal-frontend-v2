@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-ru
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Loader, VStack } from '@navikt/ds-react';
+import { Alert, Box, Loader, VStack } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ComponentApi from '~/api/ComponentApi';
 import { useFetcher, useLoaderData } from '@remix-run/react';
@@ -86,7 +86,7 @@ export default function Index() {
                 )}
                 {fetcher.state !== 'submitting' && (
                     <>
-                        {actionData ? (
+                        {actionData && (
                             <>
                                 {actionData.message && (
                                     <Box
@@ -124,10 +124,6 @@ export default function Index() {
                                         </Box>
                                     )}
                             </>
-                        ) : (
-                            <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                                <BodyShort>Bruk skjemaet for å lage en rapport</BodyShort>
-                            </Box>
                         )}
                     </>
                 )}

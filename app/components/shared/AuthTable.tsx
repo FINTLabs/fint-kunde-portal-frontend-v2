@@ -55,12 +55,15 @@ export const AuthTable = ({
             : (entity as IClient).assetId || '';
 
     const generateAuthInfo = () => {
+        const assetArray =
+            entityType === 'adapter' ? (entity as IAdapter).assetIds : (entity as IClient).assetId;
+
         const authInfo = {
             username: entity.name,
             password: password,
             clientId: entity.clientId,
             openIdSecret: clientSecret,
-            assetIds: assetIdsString,
+            assetIds: assetArray,
             scope: 'fint-client',
             idpUri: 'https://idp.felleskomponent.no/nidp/oauth/nam/token',
         };

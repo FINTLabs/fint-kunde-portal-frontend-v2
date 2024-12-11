@@ -18,7 +18,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'Mer Informasjon'} icon={InformationSquareIcon} />
+            <InternalPageHeader title={'Mer informasjon'} icon={InformationSquareIcon} />
             <Box
                 // background="surface-alt-4-moderate"
                 padding="8"

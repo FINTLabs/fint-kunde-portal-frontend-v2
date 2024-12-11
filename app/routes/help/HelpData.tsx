@@ -52,19 +52,21 @@ export const helpData: HelpDataItem[] = [
             'Alle adaptere og klienter må være tilknyttet en ressurs. Når et nytt adapter eller en ny klient opprettes,' +
             ' blir de automatisk koblet til primærressursen.',
     },
-    {
-        id: 'tilgangspakker',
-        title: 'Tilgangspakker',
-        description:
-            'En tilgangspakke benyttes for å sette opp riktige tilganger til klienter du oppretter i ' +
-            'kundeportalen. Du kan velge fra pakkeoversikten for å se innholdet i standardpakker eller lage ' +
-            'en egendefinert tilgangspakke.',
-    },
+    // {
+    //     id: 'tilgangspakker',
+    //     title: 'Tilgangspakker',
+    //     description:
+    //         'En tilgangspakke benyttes for å sette opp riktige tilganger til klienter du oppretter i ' +
+    //         'kundeportalen. Du kan velge fra pakkeoversikten for å se innholdet i standardpakker eller lage ' +
+    //         'en egendefinert tilgangspakke.',
+    // },
     {
         id: 'basistest',
         title: 'Basistest',
         description:
-            'En relasjonstest verifiserer at alle relasjoner i en komponent fungerer som forventet.',
+            'En basistest verifiserer at alle deler av FINT-komponenten fungerer som forventet. I tillegg sjekker den ' +
+            'at cachen inneholder data, og at disse nylig er oppdatert. Basistesten er nyttig ved feilsøking, og det er' +
+            ' påkrevd å sende med testresultatet når man kontakter support.',
     },
     {
         id: 'relasjonstest',
