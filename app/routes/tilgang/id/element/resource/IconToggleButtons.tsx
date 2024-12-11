@@ -8,11 +8,11 @@ interface IconToggleButtonsProps {
     onConfirmPosting: () => void;
     onConfirmAccess: () => void;
 }
-const IconToggleButtons: React.FC<IconToggleButtonsProps> = ({
+const IconToggleButtons = ({
     resourceName,
     onConfirmPosting,
     onConfirmAccess,
-}) => {
+}: IconToggleButtonsProps) => {
     const [isPencilIcon, setIsPencilIcon] = useState(true);
     const [isBookmarkIcon, setIsBookmarkIcon] = useState(true);
 

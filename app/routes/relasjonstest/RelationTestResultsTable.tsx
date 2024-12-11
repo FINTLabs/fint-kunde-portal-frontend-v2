@@ -13,7 +13,7 @@ interface TestResultsTableProps {
     logResults: ILogResults[];
 }
 
-const RelationTestResultsTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
+const RelationTestResultsTable = ({ logResults }: TestResultsTableProps) => {
     const handleDownload = async (id: string) => {
         try {
             const response = await fetch(`/relasjonstest/${id}`, {

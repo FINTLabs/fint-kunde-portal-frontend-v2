@@ -15,13 +15,13 @@ interface AddConsentFormProps {
     }) => void;
 }
 
-const AddPolicyForm: React.FC<AddConsentFormProps> = ({
+const AddPolicyForm = ({
     personalData,
     foundation,
     service,
     onCancel,
     onSave,
-}) => {
+}: AddConsentFormProps) => {
     const [selectedPersonalData, setSelectedPersonalData] = useState('');
     const [selectedFoundation, setSelectedFoundation] = useState('');
     const [selectedService, setSelectedService] = useState('');

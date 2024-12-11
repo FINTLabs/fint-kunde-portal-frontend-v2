@@ -10,21 +10,59 @@ interface TestAddFormProps {
     onSearchSubmit: (baseUrl: string, endpoint: string, clientName: string) => void;
 }
 
-const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onSearchSubmit }) => {
-    const ref = useRef<HTMLDialogElement>(null);
-
+function useFormState(clients: IClient[]) {
     const [selectedComponent, setSelectedComponent] = useState<string>('');
     const [selectedClient, setSelectedClient] = useState<string>('');
     const [selectedEnv, setSelectedEnv] = useState<string>('');
 
-    const filteredClients = clients.filter((client: IClient) => !client.managed);
-    const sortedClients = filteredClients.sort((a: IClient, b: IClient) =>
+    const filteredClients = clients.filter((client) => !client.managed);
+    const sortedClients = filteredClients.sort((a, b) =>
         a.shortDescription.localeCompare(b.shortDescription)
     );
+
+    return {
+        selectedComponent,
+        setSelectedComponent,
+        selectedClient,
+        setSelectedClient,
+        selectedEnv,
+        setSelectedEnv,
+        sortedClients,
+    };
+}
+
+export default function BasicTestAddForm({
+    components,
+    clients,
+    onSearchSubmit,
+}: TestAddFormProps) {
+    const ref = useRef<HTMLDialogElement>(null);
+    const {
+        selectedComponent,
+        setSelectedComponent,
+        selectedClient,
+        setSelectedClient,
+        selectedEnv,
+        setSelectedEnv,
+        sortedClients,
+    } = useFormState(clients);
 
     function handleFormSubmit() {
         ref.current?.close();
         onSearchSubmit(selectedEnv, selectedComponent, selectedClient);
+    }
+
+    function renderSelectOptions(
+        items: any[],
+        keyProp: string,
+        valueProp: string,
+        labelProp: string
+    ) {
+        return items.map((item, index) => (
+            <option value={item[valueProp]} key={item[keyProp] || index}>
+                {item[labelProp]}
+            </option>
+        ));
     }
 
     return (
@@ -33,7 +71,7 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
                 <Select
                     label="Miljø"
                     size="small"
-                    name={'environment'}
+                    name="environment"
                     onChange={(e) => setSelectedEnv(e.target.value)}>
                     <option value="https://play-with-fint.felleskomponent.no">
                         Play-With-FINT
@@ -45,16 +83,15 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
                 <Select
                     label="Komponent"
                     size="small"
-                    name={'component'}
+                    name="component"
                     onChange={(e) => setSelectedComponent(e.target.value)}>
                     <option value="">Velg</option>
-                    {components
-                        .sort((a, b) => a.description.localeCompare(b.description))
-                        .map((component, index) => (
-                            <option value={component.basePath} key={index}>
-                                {component.description}
-                            </option>
-                        ))}
+                    {renderSelectOptions(
+                        components.sort((a, b) => a.description.localeCompare(b.description)),
+                        'basePath',
+                        'basePath',
+                        'description'
+                    )}
                 </Select>
 
                 <Select
@@ -63,18 +100,15 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
                     name="client"
                     onChange={(e) => setSelectedClient(e.target.value)}>
                     <option value="">Velg</option>
-                    {sortedClients.map((client) => (
-                        <option value={client.name} key={client.dn}>
-                            {client.shortDescription}
-                        </option>
-                    ))}
+                    {renderSelectOptions(sortedClients, 'dn', 'name', 'shortDescription')}
                 </Select>
+
                 <Box className="flex items-end">
                     <Button
                         icon={<PlayIcon title="Start Test" />}
                         onClick={() => ref.current?.showModal()}
-                        size={'small'}>
-                        kjøre
+                        size="small">
+                        Kjøre
                     </Button>
                 </Box>
             </HGrid>
@@ -87,7 +121,6 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
                             <Button variant="secondary" onClick={() => ref.current?.close()}>
                                 Avbryt
                             </Button>
-
                             <Button onClick={handleFormSubmit}>Kjøre</Button>
                         </HStack>
                     </VStack>
@@ -95,6 +128,4 @@ const BasicTestAddForm: React.FC<TestAddFormProps> = ({ components, clients, onS
             </Modal>
         </>
     );
-};
-
-export default BasicTestAddForm;
+}

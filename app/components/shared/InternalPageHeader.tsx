@@ -11,12 +11,12 @@ interface LayoutHeaderProps {
     onAddClick?: () => void;
 }
 
-const InternalPageHeader: React.FC<LayoutHeaderProps> = ({
+const InternalPageHeader = ({
     icon: IconComponent,
     title,
     helpText,
     onAddClick,
-}) => {
+}: LayoutHeaderProps) => {
     const helpDescription = helpData.find(
         (item: HelpDataItem) => item.id === helpText
     )?.description;

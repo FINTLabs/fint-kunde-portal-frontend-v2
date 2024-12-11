@@ -11,12 +11,7 @@ interface LogSearchFormProps {
     onFilter: (searchValue: string) => void;
 }
 
-const LogSearchForm: React.FC<LogSearchFormProps> = ({
-    onSearchSubmit,
-    components,
-    configs,
-    onFilter,
-}) => {
+const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSearchFormProps) => {
     const [selectedComponent, setSelectedComponent] = useState<string>('');
     const [selectedConfig, setSelectedConfig] = useState<string>('');
     const [selectedAction, setSelectedAction] = useState<string>('');

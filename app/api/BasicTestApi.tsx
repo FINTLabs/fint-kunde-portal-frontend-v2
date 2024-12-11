@@ -1,6 +1,6 @@
-import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
-import { IBasicTest } from '~/types/BasicTest';
+import { apiManager, ApiResponse, handleApiResponse } from '~/api/ApiManager';
 import logger from '~/utils/logger';
+import { IBasicTest } from '~/types/BasicTest';
 
 const API_URL = process.env.TEST_RUNNER_API_URL;
 
@@ -24,7 +24,7 @@ class BasicTestApi {
             body: JSON.stringify(testBody),
         });
 
-        return handleApiResponse(
+        return handleApiResponse<any>(
             apiResults,
             'Kunne ikke kjøre basistesten',
             'Basistesten ble kjørt.',
@@ -44,7 +44,7 @@ class BasicTestApi {
             clientName,
         };
 
-        logger.debug('Kjører helsesjekk', testBody.baseUrl);
+        logger.debug('Running health test', testBody.baseUrl);
         const apiResults = await apiManager<any>({
             method: 'POST',
             url: `${API_URL}/test-runner/${orgName}/health`,
@@ -52,7 +52,7 @@ class BasicTestApi {
             body: JSON.stringify(testBody),
         });
 
-        return handleApiResponse(
+        return handleApiResponse<any>(
             apiResults,
             'Kunne ikke kjøre helsesjekken',
             'Helsesjekken ble kjørt.',

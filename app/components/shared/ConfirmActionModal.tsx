@@ -20,7 +20,7 @@ interface ConfirmActionProps {
     icon?: React.ReactNode;
 }
 
-const ConfirmAction: React.FC<ConfirmActionProps> = ({
+function ConfirmAction({
     buttonText = 'Delete',
     showButtonText = true,
     titleText,
@@ -29,7 +29,7 @@ const ConfirmAction: React.FC<ConfirmActionProps> = ({
     buttonSize,
     buttonVariant = 'tertiary',
     icon,
-}) => {
+}: ConfirmActionProps) {
     const [open, setOpen] = useState(false);
 
     const handleClose = (isConfirmed: boolean) => {
@@ -91,6 +91,6 @@ const ConfirmAction: React.FC<ConfirmActionProps> = ({
             </Modal>
         </>
     );
-};
+}
 
 export default ConfirmAction;

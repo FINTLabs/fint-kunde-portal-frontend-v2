@@ -13,7 +13,7 @@ interface AdapterTableProps {
     onSwitchChange: (adapterName: string, isChecked: boolean) => void;
 }
 
-const DetailsTable: React.FC<AdapterTableProps> = ({ data, assetData, onSwitchChange }) => {
+const DetailsTable = ({ data, assetData, onSwitchChange }: AdapterTableProps) => {
     const hasRole = (adapterDN: string) => {
         if (assetData) {
             return assetData.includes(String(adapterDN)) ?? false;

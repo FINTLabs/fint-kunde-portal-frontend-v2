@@ -10,7 +10,7 @@ interface IRolesChipsProps {
     updateRole: (formData: FormData) => void;
 }
 
-const RolesSwitch: React.FC<IRolesChipsProps> = ({ contact, rolesData, hasRole, updateRole }) => {
+const RolesSwitch = ({ contact, rolesData, hasRole, updateRole }: IRolesChipsProps) => {
     const isAdmin = hasRole(contact, 'ROLE_ADMIN');
 
     const handleSwitchChange = (roleId: string, isChecked: boolean, roleName: string) => {

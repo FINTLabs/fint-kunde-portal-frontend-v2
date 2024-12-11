@@ -6,7 +6,7 @@ interface AddTjenesteFormProps {
     onSave: (formData: { newServiceName: string }) => void;
 }
 
-const AddServiceForm: React.FC<AddTjenesteFormProps> = ({ onCancel, onSave }) => {
+const AddServiceForm = ({ onCancel, onSave }: AddTjenesteFormProps) => {
     const [newServiceName, setNewServiceName] = useState('');
     const [serviceNameError, setServiceNameError] = useState<string | undefined>();
 

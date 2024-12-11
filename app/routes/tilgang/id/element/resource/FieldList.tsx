@@ -22,13 +22,7 @@ interface FieldListProps {
     fieldList: Field[];
 }
 
-const FieldList: React.FC<FieldListProps> = ({
-    onSave,
-    selectedResource,
-    type,
-    title,
-    fieldList,
-}) => {
+const FieldList = ({ onSave, selectedResource, type, title, fieldList }: FieldListProps) => {
     const [isEditing, setIsEditing] = useState(false);
     const [data, setData] = useState<Field[]>(fieldList); // Use fieldList instead of mockData
 
