@@ -106,7 +106,7 @@ export default function Index() {
                 />
             </Box>
 
-            {relationTests && (
+            {relationTests && relationTests.length > 0 && (
                 <>
                     <Box className="w-full" padding="6">
                         <HStack gap={'10'}>
