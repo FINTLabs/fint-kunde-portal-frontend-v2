@@ -9,7 +9,7 @@ interface RoleTagsProps {
     getUserRolesForOrg: (contact: IContact) => string[];
 }
 
-const RoleTags: React.FC<RoleTagsProps> = ({ contact, hasRole, getUserRolesForOrg }) => {
+const RoleTags = ({ contact, hasRole, getUserRolesForOrg }: RoleTagsProps) => {
     return (
         <HStack gap="2">
             {hasRole(contact, 'ROLE_ADMIN') ? (

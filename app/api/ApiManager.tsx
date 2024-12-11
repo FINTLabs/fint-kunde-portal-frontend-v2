@@ -7,7 +7,6 @@ interface ApiCallOptions {
     method: HttpMethod;
     url: string;
     body?: string;
-    // headers?: Record<string, string>;
     contentType?: string;
     functionName?: string;
 }

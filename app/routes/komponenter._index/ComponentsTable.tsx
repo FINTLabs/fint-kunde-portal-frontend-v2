@@ -20,14 +20,14 @@ type ComponentType = {
     [type: string]: IComponent[];
 };
 
-const ComponentsTable: React.FC<ComponentsSectionProps> = ({
+const ComponentsTable = ({
     items,
     selectedItems,
     toggle,
     hideLink = false,
     adapterName,
     clientName,
-}) => {
+}: ComponentsSectionProps) => {
     const navigate = useNavigate();
 
     const sortedComponents = items.sort((a, b) => a.name.localeCompare(b.name));

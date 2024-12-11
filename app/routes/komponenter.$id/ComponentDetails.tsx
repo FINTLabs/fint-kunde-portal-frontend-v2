@@ -6,8 +6,7 @@ interface ComponentDetailProps {
     component: IComponent;
 }
 
-const ComponentDetails: React.FC<ComponentDetailProps> = ({ component }) => {
-    console.info(component);
+const ComponentDetails = ({ component }: ComponentDetailProps) => {
     const selectedValuesEnv = [];
     if (component.inProduction) selectedValuesEnv.push('api');
     if (component.inPlayWithFint) selectedValuesEnv.push('pwf');

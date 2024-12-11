@@ -4,7 +4,7 @@ import { Alert, BodyShort, VStack } from '@navikt/ds-react';
 interface AlertType {
     id: number;
     message: string;
-    header?: string; // Optional header for the alert
+    header?: string;
     variant: string;
 }
 
@@ -12,7 +12,7 @@ interface AlertStackProps {
     alerts: AlertType[];
 }
 
-const AlertManager: React.FC<AlertStackProps> = ({ alerts }) => {
+const AlertManager = ({ alerts }: AlertStackProps) => {
     const [displayAlerts, setDisplayAlerts] = useState<AlertType[]>([]);
 
     useEffect(() => {

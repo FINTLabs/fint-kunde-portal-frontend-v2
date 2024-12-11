@@ -9,13 +9,13 @@ interface CustomLinkPanelProps {
     userHasRole: boolean;
 }
 
-const CustomLinkPanel: React.FC<CustomLinkPanelProps> = ({
+const CustomLinkPanel = ({
     href,
     title,
     IconComponent,
     description,
     userHasRole,
-}) => {
+}: CustomLinkPanelProps) => {
     return (
         <LinkPanel
             href={userHasRole ? href : undefined}

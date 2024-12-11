@@ -18,13 +18,13 @@ interface IServiceTableProps {
     // onActiveToggle: () => void;
 }
 
-const ServiceTable: React.FC<IServiceTableProps> = ({
+const ServiceTable = ({
     policies,
     services,
     personalDataList,
     foundations,
     onActiveToggle,
-}) => {
+}: IServiceTableProps) => {
     const [sort, setSort] = useState<ScopedSortState | undefined>();
 
     const handleSort = (sortKey: keyof IBehandling) => {

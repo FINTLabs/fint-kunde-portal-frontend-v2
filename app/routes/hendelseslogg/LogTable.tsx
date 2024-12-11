@@ -17,7 +17,7 @@ function formattedDate(timestamp: number | Date | undefined): string {
     }).format(timestamp);
 }
 
-const LogTable: React.FC<HealthStatusProps> = ({ logs }) => {
+const LogTable = ({ logs }: HealthStatusProps) => {
     return (
         <>
             <Label>Helsestatus</Label>

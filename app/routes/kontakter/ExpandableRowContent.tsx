@@ -15,14 +15,14 @@ interface ExpandableRowContentProps {
     handleRemoveContact: (formData: FormData) => void;
 }
 
-const ExpandableRowContent: React.FC<ExpandableRowContentProps> = ({
+const ExpandableRowContent = ({
     contact,
     rolesData,
     hasRole,
     updateRole,
     handleUpdateLegalContact,
     handleRemoveContact,
-}) => {
+}: ExpandableRowContentProps) => {
     function onRemoveContact() {
         const formData = new FormData();
         formData.append('contactNin', contact.nin);

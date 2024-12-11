@@ -10,7 +10,6 @@ import { IComponent } from '~/types/Component';
 import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
-import { IBasicTestResult, IHealthTestResult } from '~/types/BasicTest';
 import BasicTestApi from '~/api/BasicTestApi';
 import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
@@ -20,11 +19,6 @@ import { IFetcherResponseData } from '~/types/FetcherResponseData';
 export const meta: MetaFunction = () => {
     return [{ title: 'Basis Test' }, { name: 'description', content: 'Run Basis Test' }];
 };
-
-interface IExtendedFetcherResponseData extends IFetcherResponseData {
-    healthTestData?: IHealthTestResult[];
-    cacheStatusData?: IBasicTestResult[];
-}
 
 export const loader: LoaderFunction = async ({ request }) => {
     const selectOrg = await getSelectedOrganization(request);
@@ -46,23 +40,21 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Index() {
     const breadcrumbs = [{ name: 'Basistest', link: '/basistest' }];
     const fetcher = useFetcher();
-    const actionData = fetcher.data as IExtendedFetcherResponseData;
+    const actionData = fetcher.data as IFetcherResponseData;
 
     const { components, clients } = useLoaderData<{
         components: IComponent[];
         clients: IClient[];
     }>();
 
-    const onSearchSubmit = (baseUrl: string, endpoint: string, clientName: string) => {
-        fetcher.submit(
-            {
-                baseUrl: baseUrl,
-                endpoint: endpoint,
-                clientName: clientName,
-            },
-            { method: 'post', action: `/basistest/` }
-        );
+    const handleSearchSubmit = (baseUrl: string, endpoint: string, clientName: string) => {
+        const formData = new FormData();
+        formData.append('baseUrl', baseUrl);
+        formData.append('endpoint', endpoint);
+        formData.append('clientName', clientName);
+        fetcher.submit(formData, { method: 'post' });
     };
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -76,7 +68,7 @@ export default function Index() {
                     <BasicTestAddForm
                         components={components}
                         clients={clients}
-                        onSearchSubmit={onSearchSubmit}
+                        onSearchSubmit={handleSearchSubmit}
                     />
                 </Box>
                 {fetcher.state === 'submitting' && (
@@ -98,31 +90,29 @@ export default function Index() {
                                     </Box>
                                 )}
 
-                                {actionData.healthTestData &&
-                                    actionData.healthTestData.length > 0 && (
-                                        <Box
-                                            className="w-full"
-                                            padding="6"
-                                            borderRadius="large"
-                                            shadow="small">
-                                            <HealthTestResultsTable
-                                                logResults={actionData.healthTestData}
-                                            />
-                                        </Box>
-                                    )}
+                                {actionData.data.healthData.healthData && (
+                                    <Box
+                                        className="w-full"
+                                        padding="6"
+                                        borderRadius="large"
+                                        shadow="small">
+                                        <HealthTestResultsTable
+                                            logResults={actionData.data.healthData.healthData}
+                                        />
+                                    </Box>
+                                )}
 
-                                {actionData.cacheStatusData &&
-                                    actionData.cacheStatusData.length > 0 && (
-                                        <Box
-                                            className="w-full"
-                                            padding="6"
-                                            borderRadius="large"
-                                            shadow="small">
-                                            <CacheStatusTable
-                                                logResults={actionData.cacheStatusData}
-                                            />
-                                        </Box>
-                                    )}
+                                {actionData.data.cacheData.resourceResults && (
+                                    <Box
+                                        className="w-full"
+                                        padding="6"
+                                        borderRadius="large"
+                                        shadow="small">
+                                        <CacheStatusTable
+                                            logResults={actionData.data.cacheData.resourceResults}
+                                        />
+                                    </Box>
+                                )}
                             </>
                         )}
                     </>
@@ -138,18 +128,23 @@ export async function action({ request }: ActionFunctionArgs) {
     const endpoint = formData.get('endpoint') as string;
     const clientName = formData.get('clientName') as string;
     const orgName = await getSelectedOrganization(request);
-    const message = 'Testet med:: ' + baseUrl + ' ' + endpoint + ' ' + clientName + ' ' + orgName;
+    const message = 'Testet med: ' + baseUrl + endpoint + ' ' + clientName + ' ' + orgName;
 
+    // Fetch cache and health test data
     const cacheData = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
     const healthData = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
 
+    // Log data
     logger.silly(`cache request data: ${JSON.stringify(cacheData)}`);
-    logger.silly(`health request data: ${JSON.stringify(healthData)}`);
+    logger.silly(`health request data: ${JSON.stringify(healthData.data)}`);
 
+    // Return structured data
     return {
         message: message,
         variant: 'info',
-        healthTestData: healthData.data,
-        cacheStatusData: cacheData.data,
+        data: {
+            healthData: healthData.data || [],
+            cacheData: cacheData.data || [],
+        },
     };
 }

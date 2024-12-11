@@ -7,7 +7,7 @@ interface EventTableProps {
     events: LogEvent[];
 }
 
-const EventTable: React.FC<EventTableProps> = ({ events }) => {
+const EventTable = ({ events }: EventTableProps) => {
     return (
         <Table size="small">
             <Table.Body>

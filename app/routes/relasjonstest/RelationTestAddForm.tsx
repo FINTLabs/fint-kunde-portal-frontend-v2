@@ -12,12 +12,7 @@ interface TestAddFormProps {
     runTest: (testUrl: string, clientName: string) => void;
 }
 
-const RelationTestAddForm: React.FC<TestAddFormProps> = ({
-    components,
-    clients,
-    configs,
-    runTest,
-}) => {
+const RelationTestAddForm = ({ components, clients, configs, runTest }: TestAddFormProps) => {
     const [selectedComponent, setSelectedComponent] = useState<string>('');
     const [selectedClient, setSelectedClient] = useState<string>('');
     const [selectedConfig, setSelectedConfig] = useState<string>('');

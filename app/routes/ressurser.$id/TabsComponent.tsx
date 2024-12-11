@@ -15,14 +15,13 @@ interface TabsComponentProps {
     onAdapterSwitchChange: (adapterName: string, isChecked: boolean) => void;
     onClientSwitchChange: (clientName: string, isChecked: boolean) => void;
 }
-
-const TabsComponent: React.FC<TabsComponentProps> = ({
+const TabsComponent = ({
     asset,
     unmanagedAdapters,
     unmanagedClients,
     onAdapterSwitchChange,
     onClientSwitchChange,
-}) => {
+}: TabsComponentProps) => {
     return (
         <Tabs defaultValue="unmanaged" fill>
             <Tabs.List>

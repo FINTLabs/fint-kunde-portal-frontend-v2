@@ -1,71 +1,71 @@
 import React from 'react';
-import { Table, BodyShort, Label, Tooltip } from '@navikt/ds-react';
-import { IBasicTestResult } from '~/types/BasicTest';
+import { BodyShort, Label, Table, Tooltip } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { formatDate } from '~/utils/dateUtils';
+import { IResourceResult } from '~/types/BasicTest';
 
 interface TestResultsTableProps {
-    logResults: IBasicTestResult[] | null;
+    logResults: IResourceResult[] | null;
 }
 
-const CacheStatusTable: React.FC<TestResultsTableProps> = ({ logResults }) => {
-    console.log(logResults);
+function CacheStatusTable({ logResults }: TestResultsTableProps) {
+    if (!logResults) {
+        return (
+            <div>
+                <BodyShort>NO RESOURCES FOUND</BodyShort>
+            </div>
+        );
+    }
+
     return (
         <>
-            {logResults ? (
-                <>
-                    <Label>Cache status</Label>
-                    <Table size="small">
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell scope="col">Status</Table.HeaderCell>
-                                <Table.HeaderCell scope="col">Ressurs</Table.HeaderCell>
-                                <Table.HeaderCell scope="col">Sist oppdatert</Table.HeaderCell>
-                                <Table.HeaderCell scope="col">Cache størrelse</Table.HeaderCell>
-                                <Table.HeaderCell scope="col">Melding</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {logResults.map((result, index) => (
-                                <Table.Row key={index}>
-                                    <Table.DataCell>
-                                        <Tooltip content={result.status}>
-                                            {result.status === 'OK' ? (
-                                                <CheckmarkCircleIcon
-                                                    title="ok"
-                                                    fontSize="1.5rem"
-                                                    className={'text-green-600'}
-                                                />
-                                            ) : (
-                                                <XMarkOctagonIcon
-                                                    title="error"
-                                                    fontSize="1.5rem"
-                                                    className={'navds-error-message'}
-                                                />
-                                            )}
-                                        </Tooltip>
-                                    </Table.DataCell>
-                                    <Table.DataCell>{result.resource}</Table.DataCell>
-                                    <Table.DataCell>
-                                        {Number(result.lastUpdated) === -1
-                                            ? '0'
-                                            : result.lastUpdated}
-                                    </Table.DataCell>
-                                    <Table.DataCell>
-                                        {Number(result.size) === -1 ? '0' : result.size}
-                                    </Table.DataCell>
-                                    <Table.DataCell>{result.message}</Table.DataCell>
-                                </Table.Row>
-                            ))}
-                        </Table.Body>
-                    </Table>
-                </>
-            ) : (
-                <div>
-                    <BodyShort>please use the form to create a report</BodyShort>
-                </div>
-            )}
+            <Label>Cache status</Label>
+            <Table size="small">
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell scope="col">Status</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Ressurs</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Sist oppdatert</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Cache størrelse</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Melding</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {logResults.map((result, index) => (
+                        <Table.Row key={index}>
+                            <Table.DataCell>
+                                <Tooltip content={result.status}>
+                                    {result.status === 'OK' ? (
+                                        <CheckmarkCircleIcon
+                                            title="OK"
+                                            fontSize="1.5rem"
+                                            className="text-green-600"
+                                        />
+                                    ) : (
+                                        <XMarkOctagonIcon
+                                            title="Error"
+                                            fontSize="1.5rem"
+                                            className="navds-error-message"
+                                        />
+                                    )}
+                                </Tooltip>
+                            </Table.DataCell>
+                            <Table.DataCell>{result.resource}</Table.DataCell>
+                            <Table.DataCell>
+                                {result.lastUpdated === 0
+                                    ? 'Aldri oppdatert'
+                                    : formatDate(result.lastUpdated)}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                {result.size === 0 ? 'Ingen data' : result.size}
+                            </Table.DataCell>
+                            <Table.DataCell>{result.message || 'Ingen melding'}</Table.DataCell>
+                        </Table.Row>
+                    ))}
+                </Table.Body>
+            </Table>
         </>
     );
-};
+}
 
 export default CacheStatusTable;

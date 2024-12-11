@@ -10,7 +10,7 @@ interface ContactModalProps {
     onAddContact: (formData: FormData) => void;
 }
 
-const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, contacts, onAddContact }) => {
+const ContactModal = ({ isOpen, onClose, contacts, onAddContact }: ContactModalProps) => {
     const [filter, setFilter] = useState<string>('');
     // const [selectedContactNin, setSelectedContactNin] = useState<string>('');
     // const fetcher = useFetcher();
