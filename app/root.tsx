@@ -8,13 +8,8 @@ import {
     useLoaderData,
     useRouteError,
 } from '@remix-run/react';
-import type {
-    ActionFunctionArgs,
-    LinksFunction,
-    LoaderFunctionArgs,
-    MetaFunction,
-} from '@remix-run/node';
-import { createCookie, json } from '@remix-run/node';
+import type { ActionFunctionArgs, LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
+import { createCookie, data } from '@remix-run/node'; // or cloudflare/deno
 import './tailwind.css';
 import '@navikt/ds-css';
 import './novari-theme.css';
@@ -37,13 +32,6 @@ import CustomErrorNoUser from '~/components/errors/CustomErrorNoUser';
 import CustomErrorNoOrg from '~/components/errors/CustomErrorNoOrg';
 import CustomErrorNoAccess from '~/components/errors/CustomErrorNoAccess';
 import { defaultFeatures } from '~/types/FeatureFlag';
-
-export const meta: MetaFunction = () => {
-    return [
-        { title: 'Novari Kundeportalen' },
-        { name: 'description', content: 'Velkommen til Novari kundeportalen!' },
-    ];
-};
 
 export const links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: 'https://www.cdnfonts.com/brockmann.font' }];
@@ -77,8 +65,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     };
 
     if (!cookieValue) {
+        logger.info(`Creating a new cookie: ${selectedOrganization.name}`);
         const newCookieHeader = await myCookie.serialize(selectedOrganization.name);
-        return json(
+        return data(
             { userSession },
             {
                 headers: {
@@ -88,8 +77,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         );
     }
 
-    logger.info(`USING COOKIE VALUE: ${selectedOrganization.name}`);
-    return json({ userSession });
+    logger.info(`Using an existing cookie: ${selectedOrganization.name}`);
+    return new Response(JSON.stringify({ userSession }), {
+        headers: { 'Content-Type': 'application/json' },
+    });
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -101,7 +92,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
         // Update cookie with only the organization name
         const newCookieHeader = await myCookie.serialize(selectedOrganization);
-        return json(
+        return data(
             { revalidate: true },
             {
                 headers: {
@@ -111,7 +102,9 @@ export async function action({ request }: ActionFunctionArgs) {
         );
     }
 
-    return json({ ok: true });
+    return new Response(JSON.stringify({ ok: true }), {
+        headers: { 'Content-Type': 'application/json' },
+    });
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
