@@ -7,7 +7,6 @@ import { MenuItem } from '~/types/MenuItem';
 import CustomLinkPanel from '~/routes/_index/CustomLinkPanelProps';
 import { ImageIcon, PassportIcon } from '@navikt/aksel-icons';
 import { IUserSession } from '~/types/Session';
-import logger from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [
@@ -20,7 +19,7 @@ export default function Index() {
     const userSession = useOutletContext<IUserSession>();
 
     const hasRole = (roleId: string): boolean => {
-        logger.silly('checking for a role: ', userSession.selectedOrganization?.name, roleId);
+        // logger.silly('checking for a role: ', userSession.selectedOrganization?.name, roleId);
         return (
             userSession.meData?.roles?.includes(
                 roleId + '@' + userSession.selectedOrganization?.name

@@ -2,7 +2,6 @@ import { Button, Dropdown } from '@navikt/ds-react';
 import { useState } from 'react';
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { NavLinkView } from './NavLinkView';
-import logger from '~/utils/logger';
 
 export const MenuDropdowns = ({
     renderItems,
@@ -48,7 +47,6 @@ const RenderMenuItem = ({
     meDataRoles: any;
 }) => {
     const hasRole = (roleId: string): boolean => {
-        logger.silly('checking for a role: ', selectedOrganization, roleId);
         return meDataRoles.includes(roleId + '@' + selectedOrganization);
     };
 
