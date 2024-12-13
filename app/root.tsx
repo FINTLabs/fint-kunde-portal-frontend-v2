@@ -57,11 +57,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     let selectedOrganization =
         organisationsData.find((org) => org.name === cookieValue) || organisationsData[0];
 
-    if (!selectedOrganization.name) {
-        throw new Response('Du er ikke tilknyttet en organisasjon', {
-            status: 401,
-            statusText: 'Du er ikke tilknyttet en organisasjon',
-        });
+    if (!selectedOrganization.name && organisationsData.length > 0) {
+        selectedOrganization = organisationsData[0];
     }
 
     const userSession: IUserSession = {
