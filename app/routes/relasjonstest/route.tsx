@@ -69,7 +69,6 @@ export default function Index() {
             }, 15000);
         }
 
-        console.log('refreshing page', fetcher);
         return () => clearInterval(interval);
     }, [relationTests, fetcher]);
 

@@ -16,10 +16,6 @@ import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
 import { Log, ReduntantLog } from '~/types/LogEvent';
 
-interface IExtendedFetcherResponseData extends IFetcherResponseData {
-    data?: never;
-}
-
 export const meta: MetaFunction = () => {
     return [{ title: 'Hendelseslogg' }, { name: 'description', content: 'Hendelseslogg' }];
 };
@@ -43,7 +39,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Index() {
     const breadcrumbs = [{ name: 'Hendelseslogg', link: '/hendelseslogg' }];
     const fetcher = useFetcher();
-    const actionData = fetcher.data as IExtendedFetcherResponseData;
+    const actionData = fetcher.data as IFetcherResponseData;
     const { components, configs } = useLoaderData<typeof loader>();
     const logs = actionData?.data || [];
     const mappedLogs = mapLogs(logs);
@@ -55,7 +51,6 @@ export default function Index() {
         : mappedLogs;
 
     const handleFormSubmit = (formData: FormData) => {
-        console.log('handle for submit');
         fetcher.submit(formData, { method: 'post', action: '/hendelseslogg' });
     };
 

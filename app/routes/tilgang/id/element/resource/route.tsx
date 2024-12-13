@@ -7,7 +7,7 @@ import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import IconToggleButtons from '~/routes/tilgang/id/element/resource/IconToggleButtons';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
+// import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import useAlerts from '~/components/useAlerts';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import AlertManager from '~/components/AlertManager';
@@ -49,7 +49,6 @@ export default function Route() {
     ];
 
     function handleSaveFields() {
-        console.log('inside toggle');
         const formData = new FormData();
         formData.append('actionType', 'SAVE_FIELDS');
         fetcher.submit(formData, { method: 'post' });
@@ -97,11 +96,10 @@ export default function Route() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    const orgName = await getSelectedOrganization(request);
+    // const orgName = await getSelectedOrganization(request);
     const formData = await request.formData();
     const actionType = formData.get('actionType');
 
-    let apiResponse;
     let response;
     switch (actionType) {
         case 'SAVE_FIELDS':

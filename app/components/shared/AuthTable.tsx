@@ -26,7 +26,6 @@ export const AuthTable = ({
     const [isPasswordGenerated, setIsPasswordGenerated] = useState(false);
     const [isCopyPasswordEnabled, setIsCopyPasswordEnabled] = useState(false);
 
-    console.log('TEST', entity);
     function generatePass() {
         let pass = '';
         const str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + 'abcdefghijklmnopqrstuvwxyz0123456789';

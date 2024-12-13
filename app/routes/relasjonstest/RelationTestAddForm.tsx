@@ -33,10 +33,7 @@ const RelationTestAddForm = ({ components, clients, configs, runTest }: TestAddF
         const matchedConfig = configs.find((config) => config.dn.includes(value));
 
         if (matchedConfig) {
-            console.log('Path:', matchedConfig.path);
             setSelectedConfig(matchedConfig.path);
-        } else {
-            console.log('No matching config found');
         }
 
         setMatchingConfigs(matchedConfig ? [matchedConfig] : []);

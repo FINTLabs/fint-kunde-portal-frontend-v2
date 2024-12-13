@@ -61,7 +61,6 @@ class ContactApi {
             functionName: 'setLegalContact',
         });
 
-        console.log(apiResults);
         return handleApiResponse<IContact[]>(
             apiResults,
             'Kunne ikke oppdatere den juridiske kontakten',

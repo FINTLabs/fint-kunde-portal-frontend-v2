@@ -6,7 +6,7 @@ import React from 'react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
+// import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import useAlerts from '~/components/useAlerts';
 import AlertManager from '~/components/AlertManager';
@@ -53,7 +53,6 @@ export default function Route() {
     ];
 
     function handleToggleResource(formData: FormData) {
-        console.log('inside toggle');
         formData.append('actionType', 'TOGGLE_ELEMENT');
         fetcher.submit(formData, { method: 'post' });
     }
@@ -76,7 +75,7 @@ export default function Route() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    const orgName = await getSelectedOrganization(request);
+    // const orgName = await getSelectedOrganization(request);
     const formData = await request.formData();
     const actionType = formData.get('actionType');
     const checkMarkValue = formData.get('checkMarkValue');
