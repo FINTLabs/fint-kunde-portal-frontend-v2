@@ -51,7 +51,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const cookieValue = await selectOrgCookie.parse(cookieHeader);
 
     logger.debug(`Cookie value: ${cookieValue}`);
-    logger.debug(`Organisations from me fetch orgs: ${organisationsData}`);
+    logger.debug(`count Organisations from me fetch orgs: ${organisationsData.length}`);
     logger.silly(`features: ${JSON.stringify(featuresResponse.data, null, 2)}`);
 
     let selectedOrganization =

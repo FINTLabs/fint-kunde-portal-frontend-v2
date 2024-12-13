@@ -38,15 +38,16 @@ class MeApi {
         });
 
         if (apiResults.success) {
-            return await apiResults.data;
-        } else {
-            logger.debug(`No organisations found for user`);
-
-            throw new Response('Du er ikke tilknyttet en organisasjon', {
-                status: 401,
-                statusText: 'Du er ikke tilknyttet en organisasjon',
-            });
+            if (apiResults.data.length > 1) {
+                return await apiResults.data;
+            }
         }
+        logger.debug(`No organisations found for user`);
+
+        throw new Response('Du er ikke tilknyttet en organisasjon', {
+            status: 401,
+            statusText: 'Du er ikke tilknyttet en organisasjon',
+        });
     }
 }
 
