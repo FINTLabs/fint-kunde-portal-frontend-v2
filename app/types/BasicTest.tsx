@@ -16,5 +16,5 @@ export interface IHealthData {
 export interface IBasicTest {
     baseUrl: string;
     endpoint: string;
-    clientName: string;
+    clientName?: string;
 }

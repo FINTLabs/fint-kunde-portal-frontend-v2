@@ -130,15 +130,13 @@ export async function action({ request }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const message = 'Testet med: ' + baseUrl + endpoint + ' ' + clientName + ' ' + orgName;
 
-    // Fetch cache and health test data
+    logger.debug(`BASIS TEST baseurl/endpoint clientName orgname: ${message}`);
     const cacheData = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
     const healthData = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
 
-    // Log data
     logger.silly(`cache request data: ${JSON.stringify(cacheData)}`);
     logger.silly(`health request data: ${JSON.stringify(healthData.data)}`);
 
-    // Return structured data
     return {
         message: message,
         variant: 'info',

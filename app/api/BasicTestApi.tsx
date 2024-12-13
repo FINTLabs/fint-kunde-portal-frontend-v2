@@ -14,7 +14,7 @@ class BasicTestApi {
         const testBody: IBasicTest = {
             baseUrl,
             endpoint,
-            clientName,
+            ...(clientName && { clientName }),
         };
 
         const apiResults = await apiManager<any>({
