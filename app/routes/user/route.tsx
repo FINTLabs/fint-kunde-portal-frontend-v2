@@ -5,7 +5,6 @@ import { PersonIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { BackButton } from '~/components/shared/BackButton';
-import FeaturesApi from '~/api/FeaturesApi';
 import { IMeData } from '~/types/Me';
 
 type LoaderData = {
@@ -15,11 +14,9 @@ type LoaderData = {
 
 export let loader = async () => {
     const user = await MeApi.fetchMe();
-    const features = await FeaturesApi.fetchFeatures();
     return new Response(
         JSON.stringify({
             user: user,
-            features: features.data,
         }),
         {
             headers: { 'Content-Type': 'application/json' },
@@ -28,9 +25,8 @@ export let loader = async () => {
 };
 
 export default function Index() {
-    const { user, features } = useLoaderData<LoaderData>();
+    const { user } = useLoaderData<LoaderData>();
     const breadcrumbs = [{ name: 'Profile', link: '/user' }];
-    const trueFeatures = Object.entries(features).filter(([_, value]) => value);
 
     return (
         <>
@@ -55,14 +51,7 @@ export default function Index() {
                             <Label>Mobile:</Label>
                             <BodyLong>{user.mobile}</BodyLong>
                         </div>
-                        <div style={{ marginBottom: '1rem' }}>
-                            <Label>Support ID:</Label>
-                            <BodyLong>{user.supportId}</BodyLong>
-                        </div>
-                        <div style={{ marginBottom: '1rem' }}>
-                            <Label>Technical Details:</Label>
-                            <BodyLong>{user.technical.join(', ')}</BodyLong>
-                        </div>
+
                         <div style={{ marginBottom: '1rem' }}>
                             <Label>Roles:</Label>
                             <BodyLong>
@@ -72,22 +61,6 @@ export default function Index() {
                                         style={{ marginRight: '0.5rem' }}
                                         variant={'info'}>
                                         {role}
-                                    </Tag>
-                                ))}
-                                {/*{features.map((f, index) => (*/}
-                                {/*    <div key={index}>{f[index][0]}</div>*/}
-                                {/*))}*/}
-                            </BodyLong>
-                        </div>
-                        <div style={{ marginBottom: '1rem' }}>
-                            <Label>Enabled Features:</Label>
-                            <BodyLong>
-                                {trueFeatures.map(([feature], index) => (
-                                    <Tag
-                                        key={index}
-                                        style={{ marginRight: '0.5rem' }}
-                                        variant={'success'}>
-                                        {feature}
                                     </Tag>
                                 ))}
                             </BodyLong>

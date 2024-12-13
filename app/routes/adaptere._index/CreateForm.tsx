@@ -76,7 +76,7 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
                     <FormSummary.Answer>
                         <Textarea
                             name="detailedInfo"
-                            label="Detaljert informasjon"
+                            label="Beskrivelse"
                             value={inputDetailedInfo}
                             onChange={(e) => setInputDetailedInfo(e.target.value)}
                             error={errors.detailedInfo}
