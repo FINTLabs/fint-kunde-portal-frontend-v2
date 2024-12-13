@@ -24,7 +24,7 @@ import { HeaderProperties } from './utils/headerProperties';
 import logger from '~/utils/logger';
 import CustomError from '~/components/errors/CustomError';
 import { IMeData } from '~/types/Me';
-import { myCookie } from '~/utils/cookie';
+import { selectOrgCookie } from '~/utils/cookie';
 import { MenuLeft } from '~/components/Menu/MenuLeft';
 import { MenuRight } from '~/components/Menu/MenuRight';
 import { IUserSession } from '~/types/Session';
@@ -48,10 +48,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
     const featuresResponse = await FeaturesApi.fetchFeatures();
     const cookieHeader = request.headers.get('Cookie');
-    const cookieValue = await myCookie.parse(cookieHeader);
+    const cookieValue = await selectOrgCookie.parse(cookieHeader);
 
     logger.debug(`Cookie value: ${cookieValue}`);
-    logger.debug(`features: ${JSON.stringify(featuresResponse.data, null, 2)}`);
+    logger.silly(`features: ${JSON.stringify(featuresResponse.data, null, 2)}`);
 
     let selectedOrganization =
         organisationsData.find((org) => org.name === cookieValue) || organisationsData[0];
@@ -65,8 +65,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     };
 
     if (!cookieValue) {
-        logger.info(`Creating a new cookie: ${selectedOrganization.name}`);
-        const newCookieHeader = await myCookie.serialize(selectedOrganization.name);
+        logger.debug(`Creating a new cookie: ${selectedOrganization.name}`);
+        const newCookieHeader = await selectOrgCookie.serialize(selectedOrganization.name);
         return data(
             { userSession },
             {
@@ -77,35 +77,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         );
     }
 
-    logger.info(`Using an existing cookie: ${selectedOrganization.name}`);
+    logger.debug(`Using an existing cookie: ${selectedOrganization.name}`);
     return new Response(JSON.stringify({ userSession }), {
         headers: { 'Content-Type': 'application/json' },
     });
 };
-
-export async function action({ request }: ActionFunctionArgs) {
-    const formData = await request.formData();
-    const actionType = formData.get('actionType') as string;
-
-    if (actionType === 'UPDATE_SELECTED_ORGANIZATION') {
-        const selectedOrganization = formData.get('selectedOrganization') as string;
-
-        // Update cookie with only the organization name
-        const newCookieHeader = await myCookie.serialize(selectedOrganization);
-        return data(
-            { revalidate: true },
-            {
-                headers: {
-                    'Set-Cookie': newCookieHeader,
-                },
-            }
-        );
-    }
-
-    return new Response(JSON.stringify({ ok: true }), {
-        headers: { 'Content-Type': 'application/json' },
-    });
-}
 
 export function Layout({ children }: { children: React.ReactNode }) {
     return (
@@ -198,4 +174,29 @@ export function ErrorBoundary() {
             </CustomErrorLayout>
         );
     }
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const actionType = formData.get('actionType') as string;
+
+    logger.debug('Inside action of root - setting a new org');
+    if (actionType === 'UPDATE_SELECTED_ORGANIZATION') {
+        const selectedOrganization = formData.get('selectedOrganization') as string;
+
+        const newCookieHeader = await selectOrgCookie.serialize(selectedOrganization);
+        logger.debug(`adding a new cookie with org: ${selectedOrganization}`);
+        return data(
+            { revalidate: true },
+            {
+                headers: {
+                    'Set-Cookie': newCookieHeader,
+                },
+            }
+        );
+    }
+
+    return new Response(JSON.stringify({ ok: true }), {
+        headers: { 'Content-Type': 'application/json' },
+    });
 }

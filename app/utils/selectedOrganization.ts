@@ -1,4 +1,4 @@
-import { myCookie } from '~/utils/cookie';
+import { selectOrgCookie } from '~/utils/cookie';
 
 //TODO: remove this file?
 export async function getSelectedOrganization(request: Request) {
@@ -9,7 +9,7 @@ export async function getSelectedOrganization(request: Request) {
     //
     // console.debug(`USER SESSION ORG: ${JSON.stringify(userSession.selectedOrganization)}`);
     const cookieHeader = request.headers.get('Cookie');
-    return await myCookie.parse(cookieHeader);
+    return await selectOrgCookie.parse(cookieHeader);
 }
 //
 // export async function getSessionFromCookie(request: Request) {
