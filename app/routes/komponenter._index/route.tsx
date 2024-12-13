@@ -49,6 +49,7 @@ export default function Index() {
                 items={components}
                 selectedItems={selectedComponents}
                 toggle={handleFormSubmit}
+                isManaged={false}
             />
         </>
     );

@@ -59,6 +59,8 @@ const ComponentsTable = ({
         const value = e.target.value; // The value of the checkbox
         const isChecked = e.target.checked; // Whether the checkbox is checked or unchecked
 
+        console.log('Toggled component:', value, 'Checked:', isChecked);
+
         if (toggle) {
             const formData = new FormData();
             formData.append('componentName', value);
@@ -83,7 +85,10 @@ const ComponentsTable = ({
                                         <KeyVerticalIcon title="key icon" fontSize="1.5rem" />
                                     )}
                                     <FormSummary.Heading level="2">
-                                        {capitalizeFirstLetter(groupName)}
+                                        {/* Hacky code.. quick fix that i personally hate... sorry to the next person! */}
+                                        {capitalizeFirstLetter(
+                                            groupName === 'okonomi' ? 'Økonomi' : groupName
+                                        )}
                                     </FormSummary.Heading>
                                 </HStack>
                             </FormSummary.Header>

@@ -7,7 +7,7 @@ interface EndpointTableProps {
     component: IComponent;
 }
 
-const EndpointTable = ({ component }: EndpointTableProps) => {
+const SwaggerTable = ({ component }: EndpointTableProps) => {
     return (
         <Table>
             <Table.Body>
@@ -38,4 +38,4 @@ const EndpointTable = ({ component }: EndpointTableProps) => {
     );
 };
 
-export default EndpointTable;
+export default SwaggerTable;
