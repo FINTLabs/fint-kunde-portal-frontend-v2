@@ -108,7 +108,7 @@ export default function BasicTestAddForm({
                         icon={<PlayIcon title="Start Test" />}
                         onClick={() => ref.current?.showModal()}
                         size="small">
-                        Kjøre
+                        Kjør
                     </Button>
                 </Box>
             </HGrid>
@@ -121,7 +121,7 @@ export default function BasicTestAddForm({
                             <Button variant="secondary" onClick={() => ref.current?.close()}>
                                 Avbryt
                             </Button>
-                            <Button onClick={handleFormSubmit}>Kjøre</Button>
+                            <Button onClick={handleFormSubmit}>Kjør</Button>
                         </HStack>
                     </VStack>
                 </Alert>

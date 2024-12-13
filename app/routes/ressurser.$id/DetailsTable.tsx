@@ -1,23 +1,26 @@
 import React from 'react';
 import { BodyShort, Heading, Switch, Table } from '@navikt/ds-react';
+import { IAsset } from '~/types/Asset';
 
-interface Adapter {
-    dn: string;
-    name: string;
-    shortDescription: string;
-}
-
-interface AdapterTableProps {
-    data: Adapter[];
-    assetData: string[];
+interface ResourceTableProps {
+    data: any[];
+    assetData: IAsset;
     onSwitchChange: (adapterName: string, isChecked: boolean) => void;
+    isClient: boolean;
 }
 
-const DetailsTable = ({ data, assetData, onSwitchChange }: AdapterTableProps) => {
-    const hasRole = (adapterDN: string) => {
-        if (assetData) {
-            return assetData.includes(String(adapterDN)) ?? false;
+const DetailsTable = ({ data, assetData, onSwitchChange, isClient }: ResourceTableProps) => {
+    const isConnected = (adapterDN: any) => {
+        // Check if asset matches directly
+        if (adapterDN.asset) {
+            return adapterDN.asset === assetData.dn;
         }
+
+        // Check if id matches any of the assets
+        if (adapterDN.assets) {
+            return adapterDN.assets.some((asset: string) => asset === assetData.dn);
+        }
+
         return false;
     };
 
@@ -35,24 +38,24 @@ const DetailsTable = ({ data, assetData, onSwitchChange }: AdapterTableProps) =>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {data.map((adapter) => (
-                    <Table.Row key={adapter.dn}>
+                {data.map((element) => (
+                    <Table.Row key={element.dn}>
                         <Table.DataCell>
                             <Switch
                                 size="small"
                                 hideLabel
-                                checked={hasRole(adapter.dn)}
-                                onChange={(e) =>
-                                    handleSwitchChange(adapter.name, e.target.checked)
+                                checked={isConnected(element)}
+                                onChange={(e) => handleSwitchChange(element.name, e.target.checked)}
+                                disabled={
+                                    isClient && assetData.primaryAsset && isConnected(element)
                                 }>
-                                {adapter.name}
-                                {/*{adapter.shortDescription}*/}
+                                {element.name}
                             </Switch>
                         </Table.DataCell>
                         {/*<Table.DataCell>{adapter.name}</Table.DataCell>*/}
                         <Table.DataCell>
-                            <Heading size="small">{adapter.name}</Heading>
-                            <BodyShort textColor="subtle">{adapter.shortDescription}</BodyShort>
+                            <Heading size="small">{element.shortDescription}</Heading>
+                            <BodyShort textColor="subtle">{element.name}</BodyShort>
                         </Table.DataCell>
                     </Table.Row>
                 ))}

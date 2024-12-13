@@ -23,27 +23,33 @@ const TabsComponent = ({
     onClientSwitchChange,
 }: TabsComponentProps) => {
     return (
-        <Tabs defaultValue="unmanaged" fill>
+        <Tabs defaultValue="unmanagedAdapters" fill>
             <Tabs.List>
-                <Tabs.Tab value="unmanaged" label="Adaptere" icon={<BriefcaseIcon aria-hidden />} />
+                <Tabs.Tab
+                    value="unmanagedAdapters"
+                    label="Adaptere"
+                    icon={<BriefcaseIcon aria-hidden />}
+                />
                 <Tabs.Tab
                     value="unmanagedClients"
                     label="Klienter"
                     icon={<ComponentIcon aria-hidden />}
                 />
             </Tabs.List>
-            <Tabs.Panel value="unmanaged" className="w-full">
+            <Tabs.Panel value="unmanagedAdapters" className="w-full">
                 <DetailsTable
                     data={unmanagedAdapters}
-                    assetData={asset.adapters}
+                    assetData={asset}
                     onSwitchChange={onAdapterSwitchChange}
+                    isClient={false}
                 />
             </Tabs.Panel>
             <Tabs.Panel value="unmanagedClients" className="w-full">
                 <DetailsTable
                     data={unmanagedClients}
-                    assetData={asset.clients}
+                    assetData={asset}
                     onSwitchChange={onClientSwitchChange}
+                    isClient={true}
                 />
             </Tabs.Panel>
         </Tabs>

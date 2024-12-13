@@ -27,6 +27,7 @@ type LoaderData = {
     adapters: IAdapter[];
     asset: IAsset;
     clients: IClient[];
+    assets: IAsset[];
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -36,12 +37,14 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const asset = await AssetApi.getAssetById(orgName, id);
     const adapters = await AdapterAPI.getAdapters(orgName);
     const clients = await ClientApi.getClients(orgName);
+    const assets = await AssetApi.getAllAssets(orgName);
 
     return new Response(
         JSON.stringify({
             asset: asset.data,
             adapters: adapters.data,
             clients: clients.data,
+            assets: assets.data,
         }),
         {
             headers: { 'Content-Type': 'application/json' },
@@ -51,7 +54,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
 export default function Index() {
     const { id } = useParams();
-    const { adapters, asset, clients } = useLoaderData<LoaderData>();
+    const { adapters, asset, clients, assets } = useLoaderData<LoaderData>();
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
     const { alerts } = useAlerts(actionData, fetcher.state);
@@ -77,6 +80,9 @@ export default function Index() {
         });
     }
 
+    const assetList = Array.isArray(assets) ? assets : [];
+    const primaryAsset = assetList.find((asset) => asset.primaryAsset) || { name: '' };
+
     function onAdapterSwitchChange(adapterName: string, isChecked: boolean) {
         const formData = {
             adapterName: adapterName,
@@ -93,6 +99,7 @@ export default function Index() {
             assetName: asset.name,
             updateType: isChecked ? 'add' : 'remove',
             actionType: 'UPDATE_CLIENT',
+            primaryAssetDN: primaryAsset.name,
         };
         fetcher.submit(formData, { method: 'post', action: `/ressurser/${asset.name}` });
     }
@@ -194,7 +201,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 formData.get('clientName') as string,
                 formData.get('assetName') as string,
                 selectedOrg,
-                updateTypeClient
+                updateTypeClient,
+                formData.get('primaryAssetDN') as string
             );
             break;
 

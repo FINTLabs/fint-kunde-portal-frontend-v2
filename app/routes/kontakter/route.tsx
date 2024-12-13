@@ -23,6 +23,7 @@ interface IPageLoaderData {
     allContacts?: IContact[];
     error?: string;
     selectedOrg: string;
+    legalContact?: IContact;
 }
 
 export const meta: MetaFunction = () => {
@@ -62,9 +63,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
-    const { legalContact, technicalContacts, allContacts, rolesData, selectedOrg } = useLoaderData<
-        IPageLoaderData & { legalContact?: IContact }
-    >();
+    const { legalContact, technicalContacts, allContacts, rolesData, selectedOrg } =
+        useLoaderData<IPageLoaderData>();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;

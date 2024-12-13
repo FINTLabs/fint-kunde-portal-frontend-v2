@@ -52,13 +52,9 @@ function CacheStatusTable({ logResults }: TestResultsTableProps) {
                             </Table.DataCell>
                             <Table.DataCell>{result.resource}</Table.DataCell>
                             <Table.DataCell>
-                                {result.lastUpdated === 0
-                                    ? 'Aldri oppdatert'
-                                    : formatDate(result.lastUpdated)}
+                                {result.lastUpdated <= 0 ? '' : formatDate(result.lastUpdated)}
                             </Table.DataCell>
-                            <Table.DataCell>
-                                {result.size === 0 ? 'Ingen data' : result.size}
-                            </Table.DataCell>
+                            <Table.DataCell>{result.size <= 0 ? '' : result.size}</Table.DataCell>
                             <Table.DataCell>{result.message || 'Ingen melding'}</Table.DataCell>
                         </Table.Row>
                     ))}

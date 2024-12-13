@@ -1,6 +1,6 @@
 // AssetsTable.tsx
-import { Table, Heading, BodyShort } from '@navikt/ds-react';
-import { ChevronRightIcon } from '@navikt/aksel-icons';
+import { BodyShort, Heading, Table } from '@navikt/ds-react';
+import { ChevronRightIcon, StarIcon } from '@navikt/aksel-icons';
 import { IAsset } from '~/types/Asset';
 
 interface AssetsTableProps {
@@ -17,6 +17,9 @@ export default function AssetsTable({ assets, onRowClick }: AssetsTableProps) {
                         key={i + item.dn}
                         className="active:bg-[--a-surface-active] hover:cursor-pointer"
                         onClick={() => onRowClick(item.name)}>
+                        <Table.DataCell width={'5em'}>
+                            {item.primaryAsset && <StarIcon title="a11y-title" fontSize="1.5rem" />}
+                        </Table.DataCell>
                         <Table.DataCell>
                             <Heading size={'small'}>{item.name}</Heading>
                             <BodyShort textColor="subtle">{item.description}</BodyShort>

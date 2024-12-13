@@ -1,5 +1,6 @@
-import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
+import { apiManager, ApiResponse, handleApiResponse } from '~/api/ApiManager';
 import { IPartialAsset } from '~/types/Asset';
+
 const API_URL = process.env.API_URL;
 
 class AssetApi {
@@ -134,14 +135,40 @@ class AssetApi {
         clientName: string,
         assetName: string,
         organisationName: string,
-        updateType: string
+        updateType: string,
+        primaryAssetName: string
     ): Promise<ApiResponse<any>> {
         const url = `${API_URL}/api/assets/${organisationName}/${assetName}/clients/${clientName}`;
+
         if (updateType === 'add') {
             return await this.addClientToAsset(url, clientName);
         } else {
-            return await this.removeClientFromAsset(url, clientName);
+            const removeResponse = await this.removeClientFromAsset(url, clientName);
+
+            if (removeResponse.success) {
+                const addUrl = `${API_URL}/api/assets/${organisationName}/${primaryAssetName}/clients/${clientName}`;
+                const addResponse = await this.addClientToAsset(addUrl, primaryAssetName);
+
+                if (addResponse.success) {
+                    return {
+                        success: true,
+                        message: `Fjernet klient '${clientName}' og satt til klient primærressurs '${primaryAssetName}'.`,
+                        variant: 'success',
+                    };
+                } else {
+                    return {
+                        success: false,
+                        message: `Klient '${clientName}' ble fjernet, men kunne ikke settes som primærressurs '${primaryAssetName}'.`,
+                        variant: 'error',
+                    };
+                }
+            }
         }
+        return {
+            success: false,
+            message: `Kunne ikke fjerne klient '${clientName}' og sette som primærressurs '${primaryAssetName}'.`,
+            variant: 'error',
+        };
     }
 
     static async addClientToAsset(url: string, clientName: string): Promise<ApiResponse<any>> {
