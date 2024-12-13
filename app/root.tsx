@@ -48,17 +48,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
     const featuresResponse = await FeaturesApi.fetchFeatures();
     const cookieHeader = request.headers.get('Cookie');
-    const cookieValue = await selectOrgCookie.parse(cookieHeader);
+    let cookieValue = await selectOrgCookie.parse(cookieHeader);
 
     logger.debug(`Cookie value: ${cookieValue}`);
     logger.debug(`count Organisations from me fetch orgs: ${organisationsData.length}`);
     logger.silly(`features: ${JSON.stringify(featuresResponse.data, null, 2)}`);
 
-    let selectedOrganization =
-        organisationsData.find((org) => org.name === cookieValue) || organisationsData[0];
-
-    if (!selectedOrganization.name && organisationsData.length > 0) {
+    let selectedOrganization = organisationsData.find((org) => org.name === cookieValue);
+    if (!selectedOrganization) {
+        logger.debug(
+            `Cookie value "${cookieValue}" did not match any organization. Using the first organization.`
+        );
         selectedOrganization = organisationsData[0];
+        cookieValue = null;
     }
 
     const userSession: IUserSession = {
@@ -82,7 +84,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         );
     }
 
-    logger.debug(`Using an existing cookie: ${selectedOrganization.name}`);
     return new Response(JSON.stringify({ userSession }), {
         headers: { 'Content-Type': 'application/json' },
     });
