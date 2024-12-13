@@ -183,6 +183,7 @@ export default function Index() {
                                         selectedItems={getComponentIds(adapter.components)}
                                         toggle={handleToggle}
                                         hideLink={true}
+                                        isManaged={adapter.managed}
                                     />
                                 </HGrid>
                             </Box>

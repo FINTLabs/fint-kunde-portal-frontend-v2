@@ -14,6 +14,7 @@ interface ComponentsSectionProps {
     hideLink?: boolean;
     adapterName?: string;
     clientName?: string;
+    isManaged: boolean;
 }
 
 type ComponentType = {
@@ -27,6 +28,7 @@ const ComponentsTable = ({
     hideLink = false,
     adapterName,
     clientName,
+    isManaged,
 }: ComponentsSectionProps) => {
     const navigate = useNavigate();
 
@@ -110,7 +112,8 @@ const ComponentsTable = ({
                                                             key={groupName + i}
                                                             onChange={(e) => {
                                                                 handleToggle(e);
-                                                            }}>
+                                                            }}
+                                                            disabled={isManaged}>
                                                             {splitted.length > 1
                                                                 ? splitted[1]
                                                                 : splitted[0]}

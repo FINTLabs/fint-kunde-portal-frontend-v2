@@ -166,6 +166,7 @@ export default function ClientDetails() {
                                     selectedItems={getComponentIds(client.components)}
                                     toggle={handleToggle}
                                     hideLink={true}
+                                    isManaged={client.managed}
                                 />
                             </>
                         )}
