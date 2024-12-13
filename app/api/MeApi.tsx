@@ -38,7 +38,7 @@ class MeApi {
         });
 
         if (apiResults.success) {
-            if (apiResults.data.length > 1) {
+            if (apiResults.data.length > 0) {
                 return await apiResults.data;
             }
         }
