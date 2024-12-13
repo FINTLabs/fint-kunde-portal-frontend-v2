@@ -70,7 +70,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                     }
                     size="small"
                     name="environment"
-                    error={errors.environment ? 'required' : undefined}
+                    error={errors.environment ? 'Påkrevd' : undefined}
                     onChange={(e) => {
                         setSelectedEnv(e.target.value);
                         setErrors((prev) => ({ ...prev, environment: false }));
@@ -92,7 +92,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                         handleChangeComponent(e.target.value);
                         setErrors((prev) => ({ ...prev, component: false }));
                     }}
-                    error={errors.component ? 'required' : undefined}>
+                    error={errors.component ? 'Påkrevd' : undefined}>
                     <option value="">Velg</option>
                     {components
                         .sort((a, b) => a.description.localeCompare(b.description))
@@ -116,7 +116,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                     }}
                     value={selectedConfig}
                     name="configClass"
-                    error={errors.configClass ? 'required' : undefined}>
+                    error={errors.configClass ? 'Påkrevd' : undefined}>
                     <option value="">Velg</option>
                     {matchingConfigs.flatMap((config) =>
                         config.classes.map((item, index) => (
@@ -139,7 +139,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                         setErrors((prev) => ({ ...prev, action: false }));
                     }}
                     name="action"
-                    error={errors.action ? 'required' : undefined}>
+                    error={errors.action ? 'Påkrevd' : undefined}>
                     <option value="">Velg</option>
                     <option value="GET_ALL">GET_ALL</option>
                     <option value="GET">GET</option>
@@ -147,10 +147,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                 </Select>
 
                 <Box className="flex items-end">
-                    <Button
-                        size="small"
-                        icon={<PlayIcon title="Start Test" />}
-                        onClick={handleFormSubmit}>
+                    <Button size="small" icon={<PlayIcon title="søk" />} onClick={handleFormSubmit}>
                         Søk
                     </Button>
                 </Box>
