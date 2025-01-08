@@ -79,9 +79,9 @@ export function GeneralDetailView({ resource, onUpdate, onDelete }: GeneralDetai
                         disabled={resource.managed}
                         icon={
                             isEditing ? (
-                                <FloppydiskIcon title="Lagre" />
+                                <FloppydiskIcon title="Lagre" data-cy="save-button" />
                             ) : (
-                                <PencilIcon title="Rediger" />
+                                <PencilIcon title="Rediger" data-cy="edit-button" />
                             )
                         }
                         variant="tertiary"

@@ -45,11 +45,11 @@ export function DetailsView({ asset, onUpdate, onDelete }: DetailsViewProps) {
             </HStack>
             <VStack>
                 <Label>Navn</Label>
-                <BodyShort>{asset.name}</BodyShort>
+                <BodyShort data-cy="details-Name">{asset.name}</BodyShort>
             </VStack>
             <VStack>
                 <Label>Ressursid</Label>
-                <BodyShort>{asset.assetId}</BodyShort>
+                <BodyShort data-cy="details-resourceId">{asset.assetId}</BodyShort>
             </VStack>
 
             <EditableTextField
@@ -64,9 +64,9 @@ export function DetailsView({ asset, onUpdate, onDelete }: DetailsViewProps) {
                     <Button
                         icon={
                             isEditing ? (
-                                <FloppydiskIcon title="Lagre" />
+                                <FloppydiskIcon title="Lagre" data-cy="save-button" />
                             ) : (
-                                <PencilIcon title="Rediger" />
+                                <PencilIcon title="Rediger" data-cy="edit-button" />
                             )
                         }
                         variant="tertiary"

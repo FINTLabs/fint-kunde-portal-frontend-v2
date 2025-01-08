@@ -9,7 +9,7 @@ import {
     useRouteError,
 } from '@remix-run/react';
 import type { ActionFunctionArgs, LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { createCookie, data } from '@remix-run/node'; // or cloudflare/deno
+import { data } from '@remix-run/node';
 import './tailwind.css';
 import '@navikt/ds-css';
 import './novari-theme.css';
@@ -37,9 +37,9 @@ export const links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: 'https://www.cdnfonts.com/brockmann.font' }];
 };
 
-export const remix_cookie = createCookie('remix_cookie', {
-    maxAge: 604_800, // one week
-});
+// export const remix_cookie = createCookie('remix_cookie', {
+//     maxAge: 604_800, // one week
+// });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     HeaderProperties.setProperties(request);
@@ -95,7 +95,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+                <link rel="icon" href="/favicon.ico" type="image/x-icon" />
                 <Meta />
                 <Links />
             </head>

@@ -1,6 +1,6 @@
 // CreateForm.tsx
-import { Form, useActionData } from '@remix-run/react';
-import { Button, FormSummary, HStack, TextField } from '@navikt/ds-react';
+import { useActionData } from '@remix-run/react';
+import { Box, Button, FormSummary, HStack, TextField } from '@navikt/ds-react';
 
 interface ActionData {
     errors?: {
@@ -19,7 +19,7 @@ export default function CreateForm({
     const actionData = useActionData<ActionData>();
 
     return (
-        <Form method="post">
+        <Box paddingBlock="10" paddingInline="20" data-cy="create-form">
             <FormSummary>
                 <FormSummary.Header>
                     <FormSummary.Heading level="2">Opprett ny ressurs</FormSummary.Heading>
@@ -31,6 +31,7 @@ export default function CreateForm({
                     <FormSummary.Answer>
                         <HStack className="flex !items-end" gap="2">
                             <TextField
+                                data-cy="input-name"
                                 name="name"
                                 label="Navn"
                                 type="text"
@@ -43,6 +44,7 @@ export default function CreateForm({
 
                     <FormSummary.Answer>
                         <TextField
+                            data-cy="input-description"
                             name="description"
                             label="Tittel"
                             type="text"
@@ -52,7 +54,7 @@ export default function CreateForm({
                     </FormSummary.Answer>
 
                     <HStack gap="2">
-                        <Button type="submit" title="Opprett">
+                        <Button type="submit" title="Opprett" data-cy="save-button">
                             Opprett
                         </Button>
                         <Button variant="secondary" onClick={onCancel}>
@@ -61,6 +63,6 @@ export default function CreateForm({
                     </HStack>
                 </FormSummary.Answers>
             </FormSummary>
-        </Form>
+        </Box>
     );
 }

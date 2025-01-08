@@ -39,7 +39,7 @@ export async function apiManager<T>({
         requestOptions.body = body;
     }
 
-    logger.info(`API URL: ${url}`);
+    logger.info(`${method} API URL: ${url}`);
 
     try {
         const response = await fetch(url, requestOptions);

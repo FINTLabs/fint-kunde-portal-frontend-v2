@@ -1,11 +1,6 @@
 import React from 'react';
-import { Table, Tooltip } from '@navikt/ds-react';
-import {
-    ArrowCirclepathIcon,
-    CheckmarkCircleIcon,
-    DownloadIcon,
-    XMarkOctagonIcon,
-} from '@navikt/aksel-icons';
+import { Loader, Table, Tooltip } from '@navikt/ds-react';
+import { CheckmarkCircleIcon, DownloadIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { ILogResults } from '~/types/RelationTest';
 import { parseDate } from '~/utils/dateUtils';
 
@@ -77,7 +72,8 @@ const RelationTestResultsTable = ({ logResults }: TestResultsTableProps) => {
                                     'CREATING_ENTRY_REPORTS',
                                     'PROCESSING_LINKS',
                                 ].includes(result.status) && (
-                                    <ArrowCirclepathIcon title={result.status} fontSize="1.5rem" />
+                                    // <ArrowCirclepathIcon title={result.status} fontSize="1.5rem" />
+                                    <Loader size="xsmall" title="Venter..." />
                                 )}
                             </Table.DataCell>
                             <Table.DataCell>{result.time}</Table.DataCell>

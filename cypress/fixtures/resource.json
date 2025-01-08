@@ -1,0 +1,13 @@
+
+  {
+    "dn": "ou=udehenrik_fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint",
+    "name": "udehenrik_fintlabs_no",
+    "description": "yes",
+    "organisation": "ou=fintlabs_no,ou=organisations,o=fint",
+    "clients": [
+      "cn=jennifer-test-test@client.fintlabs.no,ou=clients,ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "adapters": [],
+    "assetId": "udehenrik.fintlabs.no",
+    "primaryAsset": false
+  }

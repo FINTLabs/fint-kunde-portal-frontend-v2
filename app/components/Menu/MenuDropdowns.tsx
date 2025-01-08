@@ -56,13 +56,14 @@ const RenderMenuItem = ({
             defaultOpen={false}
             open={isOpen}
             onOpenChange={onOpenChange}>
-            <Button variant="tertiary-neutral" as={Dropdown.Toggle}>
+            <Button variant="tertiary-neutral" as={Dropdown.Toggle} data-cy={`dropdown-${index}`}>
                 {item.title}
             </Button>
             <Dropdown.Menu className="!border-0 !rounded-none !p-0" placement="bottom-start">
                 <Dropdown.Menu.List>
                     {item.subMenus.map((subMenu, subIndex) => (
                         <Dropdown.Menu.List.Item
+                            data-cy={`submenu-${index}-${subIndex}`}
                             className="!p-0"
                             key={`sub-item-${subIndex}`}
                             onClick={onOpenChange}

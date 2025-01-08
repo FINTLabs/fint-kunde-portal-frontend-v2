@@ -111,6 +111,7 @@ const ComponentsTable = ({
                                                     align={'center'}>
                                                     <HStack align={'center'} gap={'0'}>
                                                         <Checkbox
+                                                            data-cy={`component-toggle-${item.name}`}
                                                             value={item.name}
                                                             key={groupName + i}
                                                             onChange={(e) => {
