@@ -64,6 +64,7 @@ const ContactModal = ({ isOpen, onClose, contacts, onAddContact }: ContactModalP
                     placeholder="Skriv inn etternavn for å søke"
                     value={filter}
                     onChange={handleFilterChange}
+                    data-cy={'contact-text-filter'}
                 />
 
                 {/* Set a fixed height for the table wrapper */}

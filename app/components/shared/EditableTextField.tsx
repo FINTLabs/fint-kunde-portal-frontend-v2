@@ -18,6 +18,7 @@ export function EditableTextField({
             <VStack>
                 {isEditing ? (
                     <TextField
+                        data-cy={`details-edit-${label}`}
                         value={value}
                         type="text"
                         htmlSize={value.length + 10 < maxChars ? value.length + 10 : maxChars}
@@ -26,7 +27,7 @@ export function EditableTextField({
                 ) : (
                     <>
                         <Label>{label}</Label>
-                        <BodyShort>{value}</BodyShort>
+                        <BodyShort data-cy={`details-edit-${label}`}>{value}</BodyShort>
                     </>
                 )}
             </VStack>

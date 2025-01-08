@@ -42,6 +42,7 @@ const DetailsTable = ({ data, assetData, onSwitchChange, isClient }: ResourceTab
                     <Table.Row key={element.dn}>
                         <Table.DataCell>
                             <Switch
+                                data-cy={`component-toggle-${element.name}`}
                                 size="small"
                                 hideLabel
                                 checked={isConnected(element)}

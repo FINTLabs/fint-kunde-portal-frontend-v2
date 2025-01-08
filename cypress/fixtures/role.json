@@ -1,134 +1,50 @@
 [
   {
-    "id": 1,
-    "name": "Calvin",
-    "email": "calvin@example.com",
-    "phone": "+1-555-1234",
-    "role": {
-      "id": "ROLE_ADMIN",
-      "name": "Admin",
-      "description": "Full administrator",
-      "uri": null
-    }
+    "id": "ROLE_ADMIN",
+    "name": "Admin",
+    "description": "Full tilgang til alle funksjoner",
+    "uri": null
   },
   {
-    "id": 2,
-    "name": "Hobbes",
-    "email": "hobbes@example.com",
-    "phone": "+1-555-5678",
-    "role": {
-      "id": "ROLE_ADAPTER",
-      "name": "Adapter",
-      "description": "Kan håndtere adapter",
-      "uri": "/api/adapters/"
-    }
+    "id": "ROLE_ORGANISATION",
+    "name": "Organisasjon",
+    "description": "Kan administrere organisasjonsinformasjon, kontaktpersoner og deres roller",
+    "uri": "/api/organisations/"
   },
   {
-    "id": 3,
-    "name": "Susie Derkins",
-    "email": "susie.derkins@example.com",
-    "phone": "+1-555-9876",
-    "role": {
-      "id": "ROLE_CLIENT",
-      "name": "Klient",
-      "description": "Kan håndtere klienter",
-      "uri": "/api/clients/"
-    }
+    "id": "ROLE_COMPONENT",
+    "name": "Komponenter",
+    "description": "Kan administrere organisasjonens komponenter",
+    "uri": "/api/components/organisation/"
   },
   {
-    "id": 4,
-    "name": "Rosalyn",
-    "email": "rosalyn@example.com",
-    "phone": "+1-555-6543",
-    "role": {
-      "id": "ROLE_DASHBOARD",
-      "name": "Dashboard",
-      "description": "Gir tilgang til dashboardet",
-      "uri": "/dashboard"
-    }
+    "id": "ROLE_ADAPTER",
+    "name": "Adapter",
+    "description": "Kan administrere adaptere",
+    "uri": "/api/adapters/"
   },
   {
-    "id": 5,
-    "name": "Miss Wormwood",
-    "email": "miss.wormwood@example.com",
-    "phone": "+1-555-2345",
-    "role": {
-      "id": "ROLE_COMPONENT",
-      "name": "Komponenter",
-      "description": "Kan håndtere komponenter... Legge til og fjerne komponenter til en adapter eller klient",
-      "uri": "/api/components/organisation/"
-    }
+    "id": "ROLE_CLIENT",
+    "name": "Klient",
+    "description": "Kan administrere klienter",
+    "uri": "/api/clients/"
   },
   {
-    "id": 6,
-    "name": "Moe",
-    "email": "moe@example.com",
-    "phone": "+1-555-3456",
-    "role": {
-      "id": "ROLE_ACCESS_PACKAGE",
-      "name": "Tilgangspakker",
-      "description": "Kan håndtere tilgangspakker",
-      "uri": "/api/accesses/"
-    }
+    "id": "ROLE_ASSET",
+    "name": "Ressurser",
+    "description": "Kan administrere ressurser og knytte dem til adaptere og klienter",
+    "uri": "/api/assets/"
   },
   {
-    "id": 7,
-    "name": "Dad",
-    "email": "dad@example.com",
-    "phone": "+1-555-4567",
-    "role": {
-      "id": "ROLE_SUPPORT",
-      "name": "Brukerhjelp",
-      "description": "Kan sende inn supportsaker",
-      "uri": "/api/tickets/"
-    }
+    "id": "ROLE_TEST",
+    "name": "Tester",
+    "description": "Kan kjøre basistester og relasjonstester",
+    "uri": "/api/tests/"
   },
   {
-    "id": 8,
-    "name": "Mom",
-    "email": "mom@example.com",
-    "phone": "+1-555-5678",
-    "role": {
-      "id": "ROLE_TEST",
-      "name": "Test",
-      "description": "Kan kjøre tester",
-      "uri": "/api/tests/"
-    }
-  },
-  {
-    "id": 9,
-    "name": "Uncle Max",
-    "email": "uncle.max@example.com",
-    "phone": "+1-555-6789",
-    "role": {
-      "id": "ROLE_LOG",
-      "name": "Log",
-      "description": "Kan se logger",
-      "uri": "/api/events/"
-    }
-  },
-  {
-    "id": 10,
-    "name": "Mrs. Otis",
-    "email": "mrs.otis@example.com",
-    "phone": "+1-555-7890",
-    "role": {
-      "id": "ROLE_ASSET",
-      "name": "Assets",
-      "description": "Kan håndtere ressurser... Opprette og fjerne ressurser, knytte klienter og adaptere til ressurs",
-      "uri": "/api/assets/"
-    }
-  },
-  {
-    "id": 11,
-    "name": "Principal Spittle",
-    "email": "principal.spittle@example.com",
-    "phone": "+1-555-8901",
-    "role": {
-      "id": "ROLE_ORGANISATION",
-      "name": "Organisasjon",
-      "description": "Kan håndtere organisasjonen... - Endre informasjon om organisasjonen... - Endre kontaktpersoner, endre roller for kontaktpersoner... - Legge til og fjerne komponenter for organisasjonen",
-      "uri": "/api/organisations/"
-    }
+    "id": "ROLE_LOG",
+    "name": "Logg",
+    "description": "Kan se hendelsesloggen",
+    "uri": "/api/events/"
   }
 ]

@@ -39,7 +39,7 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
     };
 
     return (
-        <Box paddingBlock="10" paddingInline="20">
+        <Box paddingBlock="10" paddingInline="20" data-cy="create-form">
             <FormSummary>
                 <FormSummary.Header>
                     <FormSummary.Heading level="2">Opprett ny adapter</FormSummary.Heading>
@@ -49,6 +49,7 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
                     <FormSummary.Answer>
                         <HStack className="flex !items-end" gap="2">
                             <TextField
+                                data-cy="input-name"
                                 name="name"
                                 label="Navn"
                                 type="text"
@@ -63,6 +64,7 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
 
                     <FormSummary.Answer>
                         <TextField
+                            data-cy="input-description"
                             name="description"
                             label="Tittel"
                             type="text"
@@ -75,6 +77,7 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
 
                     <FormSummary.Answer>
                         <Textarea
+                            data-cy="input-detailedInfo"
                             name="detailedInfo"
                             label="Beskrivelse"
                             value={inputDetailedInfo}
@@ -83,7 +86,7 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
                         />
                     </FormSummary.Answer>
                     <HStack gap="4">
-                        <Button title="Opprett" onClick={handleSubmit}>
+                        <Button title="Opprett" onClick={handleSubmit} data-cy="save-button">
                             Opprett
                         </Button>
                         <Button variant="secondary" onClick={onCancel}>

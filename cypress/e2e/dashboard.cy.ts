@@ -30,7 +30,7 @@ describe('Dashboard', () => {
     });
 
     it('should load the root page and display the correct title', () => {
-        cy.title().should('eq', 'Kundeportalen V2'); // Check the title
+        cy.title().should('eq', 'Novari Kundeportalen'); // Check the title
     });
 
     it('should display the menu component', () => {

@@ -1,0 +1,14 @@
+[
+  {
+    "dn": "cn=jennifer-test-test@client.fintlabs.no,ou=clients,ou=fintlabs_no,ou=organisations,o=fint",
+    "name": "jennifer-test-test@client.fintlabs.no",
+    "shortDescription": "testing",
+    "assetId": "udehenrik.fintlabs.no",
+    "asset": "ou=udehenrik_fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint",
+    "note": "Used for testing",
+    "clientId": "a5fe8278-8a6e-41bf-85ac-247e2afaf136",
+    "components": [],
+    "accessPackages": [],
+    "managed": false
+  }
+  ]

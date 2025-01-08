@@ -31,11 +31,13 @@ export function CustomTabs<T>({
         <Tabs defaultValue={tabInfo[0].value} fill>
             <Tabs.List>
                 <Tabs.Tab
+                    data-cy={`tab-item-0`}
                     value={tabInfo[0].value}
                     label={tabInfo[0].label}
                     icon={<NotePencilDashIcon title={tabInfo[0].label} aria-hidden />}
                 />
                 <Tabs.Tab
+                    data-cy={`tab-item-1`}
                     value={tabInfo[1].value}
                     label={tabInfo[1].label}
                     icon={<CogRotationIcon title={tabInfo[1].label} aria-hidden />}
@@ -50,6 +52,7 @@ export function CustomTabs<T>({
                                 : items.filter((i) => !isManaged(i))
                             ).map((item, i) => (
                                 <Table.Row
+                                    data-cy="details-row"
                                     key={i + getItemName(item)}
                                     className="active:bg-[--a-surface-active] hover:cursor-pointer"
                                     onClick={() => showDetails(getItemName(item))}>

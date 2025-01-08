@@ -27,7 +27,7 @@ const InternalPageHeader = ({
                 <Hide below="md">
                     {IconComponent && <IconComponent title="Header Icon" fontSize="2.5rem" />}
                 </Hide>
-                <Heading className="" level="1" size="large">
+                <Heading className="" level="1" size="large" data-cy="page-title">
                     {title}
                 </Heading>
                 {helpText && helpDescription && (
@@ -36,6 +36,7 @@ const InternalPageHeader = ({
             </HStack>
             {onAddClick && (
                 <Button
+                    data-cy="add-button"
                     className="float-right"
                     onClick={onAddClick}
                     icon={<PlusIcon aria-hidden />}

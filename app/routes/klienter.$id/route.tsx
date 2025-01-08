@@ -113,6 +113,7 @@ export default function ClientDetails() {
                 <HGrid gap="2" align={'start'}>
                     <Box>
                         <Button
+                            data-cy="back-button"
                             className="relative h-12 w-12 top-2 right-14"
                             icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
                             variant="tertiary"

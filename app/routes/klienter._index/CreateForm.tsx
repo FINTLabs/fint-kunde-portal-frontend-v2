@@ -1,5 +1,4 @@
-import { Button, FormSummary, HStack, Textarea, TextField } from '@navikt/ds-react';
-import { Form } from '@remix-run/react';
+import { Box, Button, FormSummary, HStack, Textarea, TextField } from '@navikt/ds-react';
 import React, { useState } from 'react';
 
 interface AdapterCreateFormProps {
@@ -39,7 +38,8 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
     };
 
     return (
-        <Form method="post">
+        // <Form method="post">
+        <Box paddingBlock="10" paddingInline="20" data-cy="create-form">
             <FormSummary>
                 <FormSummary.Header>
                     <FormSummary.Heading level="2">Opprett ny klient</FormSummary.Heading>
@@ -50,6 +50,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
                     <FormSummary.Answer>
                         <HStack className="flex !items-end" gap="2">
                             <TextField
+                                data-cy="input-name"
                                 name="name"
                                 label="Navn"
                                 type="text"
@@ -63,6 +64,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
 
                     <FormSummary.Answer>
                         <TextField
+                            data-cy="input-title"
                             name="description"
                             label="Tittel"
                             type="text"
@@ -74,6 +76,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
 
                     <FormSummary.Answer>
                         <Textarea
+                            data-cy="input-note"
                             name="note"
                             label="Beskrivelse"
                             error={errors?.note}
@@ -81,7 +84,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
                         />
                     </FormSummary.Answer>
                     <HStack gap="4">
-                        <Button title="Opprett" onClick={handleSubmit}>
+                        <Button title="Opprett" onClick={handleSubmit} data-cy="save-button">
                             Opprett
                         </Button>
                         <Button variant="secondary" onClick={onCancel}>
@@ -90,6 +93,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
                     </HStack>
                 </FormSummary.Answers>
             </FormSummary>
-        </Form>
+        </Box>
+        // </Form>
     );
 }

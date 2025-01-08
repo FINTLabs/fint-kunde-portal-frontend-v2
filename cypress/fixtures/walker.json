@@ -1,0 +1,46 @@
+[
+  {
+    "id": "5c72865b-d258-4965-9661-37a91339d8da",
+    "url": "https://beta.felleskomponent.no/utdanning/elev/elev",
+    "env": "beta",
+    "uri": "/utdanning/elev/elev",
+    "client": "relasjon_test_klient@client.fintlabs.no",
+    "requests": 0,
+    "time": "02/01 12:53",
+    "relationErrors": 0,
+    "healthyRelations": 0,
+    "totalRequests": 0,
+    "status": "FAILED",
+    "org": "fintlabs_no",
+    "errorMessage": "Client is not authorized"
+  },
+  {
+    "id": "5c72865b-d258-4965-9661-37a91339d8da",
+    "url": "https://beta.felleskomponent.no/utdanning/elev/elev",
+    "env": "beta",
+    "uri": "/utdanning/elev/elev",
+    "client": "relasjon_test_klient@client.fintlabs.no",
+    "requests": 0,
+    "time": "02/01 12:53",
+    "relationErrors": 0,
+    "healthyRelations": 0,
+    "totalRequests": 0,
+    "status": "STARTED",
+    "org": "fintlabs_no",
+    "errorMessage": "Client is not authorized"
+  },
+  {
+    "id": "18e2b3b0-8757-47c5-a92b-8dd44298ce24",
+    "url": "https://beta.felleskomponent.no/utdanning/elev/elev",
+    "env": "beta",
+    "uri": "/utdanning/elev/elev",
+    "client": "basistest@client.fintlabs.no",
+    "requests": 0,
+    "time": "20/12 10:07",
+    "relationErrors": 3,
+    "healthyRelations": 62,
+    "totalRequests": 65,
+    "status": "COMPLETED",
+    "org": "fintlabs_no"
+  }
+]

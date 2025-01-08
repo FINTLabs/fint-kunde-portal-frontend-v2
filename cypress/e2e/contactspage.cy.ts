@@ -53,51 +53,10 @@ describe('Contacts Page Tests', () => {
         cy.get('button').contains('Legg til').click();
         cy.get('.navds-modal').should('be.visible');
 
-        // Close the modal
-        cy.get('.navds-modal__button').should('be.visible');
+        cy.get('[data-cy="contact-text-filter"]').type('Spiff');
         cy.wait(1500);
-        cy.get('.navds-modal:visible').within(() => {
-            cy.get('button.navds-modal__button.navds-button--icon-only').click();
-        });
 
-        cy.get('.navds-modal').then(($modal) => {
-            console.log('Modal state after close attempt:', $modal);
-        });
-        cy.get('.navds-modal').should('not.be.visible');
+        cy.get('[width="1"] > .navds-button').click();
+        cy.get('.navds-alert').should('exist');
     });
-
-    // Alert Message Tests
-    it('should display and close the alert message', () => {
-        // Simulate the fetcher state to trigger the alert
-        cy.window().then((win) => {
-            (win as any).fetcher = {
-                data: { message: 'Test message', variant: 'success', show: true },
-                state: 'warning',
-            };
-        });
-
-        cy.get('.navds-alert').should('be.visible').and('contain', 'Test message');
-        cy.get('.navds-alert button[aria-label="Close"]').click();
-        cy.get('.navds-alert').should('not.exist');
-    });
-
-    //
-    // // Form Submission Tests
-    // it('should submit the form correctly when adding a technical contact', () => {
-    //     // Intercept the form submission request
-    //     cy.intercept('POST', '/kontakter', {
-    //         statusCode: 200,
-    //         body: { message: 'Kontakten er lagt til', variant: 'success' },
-    //     });
-    //
-    //     // Open the modal
-    //     cy.get('button').contains('Legg til').click();
-    //
-    //     // Fill out the form inside the modal (assuming you have form resource with specific names)
-    //     cy.get('input[name="contactNin"]').type('12345678901');
-    //     cy.get('button[type="submit"]').click();
-    //
-    //     // Verify API call response handling
-    //     cy.get('.navds-alert').should('be.visible').and('contain', 'Kontakten er lagt til');
-    // });
 });

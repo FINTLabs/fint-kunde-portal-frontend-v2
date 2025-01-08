@@ -7,6 +7,7 @@ export function BackButton({ to, className }: { to: string; className?: string }
 
     return (
         <Button
+            data-cy="back-button"
             className={className}
             icon={<ArrowLeftIcon title="Gå tilbake" fontSize="1.5rem" />}
             variant="tertiary"

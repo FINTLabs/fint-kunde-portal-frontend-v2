@@ -26,11 +26,13 @@ const TabsComponent = ({
         <Tabs defaultValue="unmanagedAdapters" fill>
             <Tabs.List>
                 <Tabs.Tab
+                    data-cy={`tab-item-0`}
                     value="unmanagedAdapters"
                     label="Adaptere"
                     icon={<BriefcaseIcon aria-hidden />}
                 />
                 <Tabs.Tab
+                    data-cy={`tab-item-1`}
                     value="unmanagedClients"
                     label="Klienter"
                     icon={<ComponentIcon aria-hidden />}

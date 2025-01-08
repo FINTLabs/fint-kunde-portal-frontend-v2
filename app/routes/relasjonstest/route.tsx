@@ -36,6 +36,9 @@ export const loader: LoaderFunction = async ({ request }) => {
             clients: clients.data,
             relationTests: relationTests.data,
             configs: configs.data,
+            success: false,
+            message: `Oppdatering av testresultater`,
+            variant: 'success',
         }),
         {
             headers: { 'Content-Type': 'application/json' },

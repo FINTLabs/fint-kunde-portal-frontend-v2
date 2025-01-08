@@ -14,6 +14,7 @@ export default function AssetsTable({ assets, onRowClick }: AssetsTableProps) {
             <Table.Body>
                 {assets.map((item, i) => (
                     <Table.Row
+                        data-cy="details-row"
                         key={i + item.dn}
                         className="active:bg-[--a-surface-active] hover:cursor-pointer"
                         onClick={() => onRowClick(item.name)}>
