@@ -20,18 +20,18 @@ function HealthTestResultsTable({ logResults }: TestResultsTableProps) {
         <Table size="small">
             <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell>Status</Table.HeaderCell>
                     <Table.HeaderCell>Komponent</Table.HeaderCell>
+                    <Table.HeaderCell>Melding</Table.HeaderCell>
                     <Table.HeaderCell>Tid</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
                 {logResults?.map((result, index) => (
                     <Table.Row key={index}>
+                        <Table.DataCell>{result.component}</Table.DataCell>
                         <Table.DataCell>
                             {statusTranslations[result.status] || result.status}
                         </Table.DataCell>
-                        <Table.DataCell>{result.component}</Table.DataCell>
                         <Table.DataCell>{formatTimeOnly(result.timestamp)}</Table.DataCell>
                     </Table.Row>
                 ))}

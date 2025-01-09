@@ -23,9 +23,9 @@ function CacheStatusTable({ logResults }: TestResultsTableProps) {
                 <Table.Row>
                     <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Ressurs</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">Sist oppdatert</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">Cache størrelse</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Melding</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Cache størrelse</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Tid</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -49,11 +49,11 @@ function CacheStatusTable({ logResults }: TestResultsTableProps) {
                             </Tooltip>
                         </Table.DataCell>
                         <Table.DataCell>{result.resource}</Table.DataCell>
+                        <Table.DataCell>{result.message || 'Ingen melding'}</Table.DataCell>
+                        <Table.DataCell>{result.size <= 0 ? '' : result.size}</Table.DataCell>
                         <Table.DataCell>
                             {result.lastUpdated <= 0 ? '' : formatTimeOnly(result.lastUpdated)}
-                        </Table.DataCell>
-                        <Table.DataCell>{result.size <= 0 ? '' : result.size}</Table.DataCell>
-                        <Table.DataCell>{result.message || 'Ingen melding'}</Table.DataCell>
+                        </Table.DataCell>{' '}
                     </Table.Row>
                 ))}
             </Table.Body>
