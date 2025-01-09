@@ -27,10 +27,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     const components = await ComponentApi.getOrganisationComponents(selectOrg);
     const clients = await ClientApi.getClients(selectOrg);
 
+    const filteredClients = (clients?.data ?? []).filter((client: IClient) => !client.managed);
+
     return new Response(
         JSON.stringify({
             components: components.data,
-            clients: clients.data,
+            clients: filteredClients,
         }),
         {
             headers: { 'Content-Type': 'application/json' },

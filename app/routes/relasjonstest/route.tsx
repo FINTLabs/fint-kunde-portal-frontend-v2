@@ -16,6 +16,7 @@ import useAlerts from '~/components/useAlerts';
 import AlertManager from '~/components/AlertManager';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import logger from '~/utils/logger';
+import { IClient } from '~/types/Clients';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Relasjonstest' }, { name: 'description', content: 'Relasjonstest' }];
@@ -29,11 +30,13 @@ export const loader: LoaderFunction = async ({ request }) => {
     const configs = await ComponentConfigApi.getComponentConfigs();
     const relationTests = await LinkWalkerApi.getTests(orgName);
 
+    const filteredClients = (clients?.data ?? []).filter((client: IClient) => !client.managed);
+
     // return json({ components, clients, relationTests, configs });
     return new Response(
         JSON.stringify({
             components: components.data,
-            clients: clients.data,
+            clients: filteredClients,
             relationTests: relationTests.data,
             configs: configs.data,
             success: false,
