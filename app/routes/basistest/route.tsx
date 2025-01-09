@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-ru
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Loader, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Heading, Loader, VStack } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ComponentApi from '~/api/ComponentApi';
 import { useFetcher, useLoaderData } from '@remix-run/react';
@@ -15,6 +15,7 @@ import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
 import logger from '~/utils/logger';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
+import React from 'react';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Basis Test' }, { name: 'description', content: 'Run Basis Test' }];
@@ -37,10 +38,15 @@ export const loader: LoaderFunction = async ({ request }) => {
     );
 };
 
+type ExtendedFetcherResponseData = IFetcherResponseData & {
+    clientName: string;
+    testUrl: string;
+};
+
 export default function Index() {
     const breadcrumbs = [{ name: 'Basistest', link: '/basistest' }];
     const fetcher = useFetcher();
-    const actionData = fetcher.data as IFetcherResponseData;
+    const actionData = fetcher.data as ExtendedFetcherResponseData;
 
     const { components, clients } = useLoaderData<{
         components: IComponent[];
@@ -60,10 +66,13 @@ export default function Index() {
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Basistest'} icon={TerminalIcon} helpText="basistest" />
             <VStack gap={'6'}>
-                <Alert variant="warning">
-                    Advarsel: Passordet til klienten du kjører testen på, vil bli nullstilt under
-                    testkjøringen. Det anbefales derfor å bruke en dedikert klient for testing.
-                </Alert>
+                {fetcher.state !== 'submitting' && !actionData && (
+                    <Alert variant="warning">
+                        Advarsel: Passordet til klienten du kjører testen på, vil bli nullstilt
+                        under testkjøringen. Det anbefales derfor å bruke en dedikert klient for
+                        testing.
+                    </Alert>
+                )}
                 <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                     <BasicTestAddForm
                         components={components}
@@ -71,52 +80,49 @@ export default function Index() {
                         onSearchSubmit={handleSearchSubmit}
                     />
                 </Box>
-                {fetcher.state === 'submitting' && (
-                    <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                        <Loader size="large" title="Laster inn data..." />
-                    </Box>
-                )}
-                {fetcher.state !== 'submitting' && (
-                    <>
-                        {actionData && (
-                            <>
-                                {actionData.message && (
-                                    <Box
-                                        className="w-full"
-                                        padding="6"
-                                        borderRadius="large"
-                                        shadow="small">
-                                        <Alert variant="info">{actionData.message}</Alert>
-                                    </Box>
-                                )}
 
-                                {actionData.data.healthData.healthData && (
-                                    <Box
-                                        className="w-full"
-                                        padding="6"
-                                        borderRadius="large"
-                                        shadow="small">
+                <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+                    {fetcher.state === 'submitting' && (
+                        <Loader size="large" title="Laster inn data..." />
+                    )}
+
+                    {fetcher.state !== 'submitting' && (
+                        <>
+                            {actionData && (
+                                <>
+                                    {actionData.message && (
+                                        <Box className={'pb-10'}>
+                                            <Alert variant="info">
+                                                <BodyShort>
+                                                    {actionData.message}: {actionData.testUrl}
+                                                </BodyShort>
+                                                <BodyShort>
+                                                    Bruker: {actionData.clientName}
+                                                </BodyShort>
+                                            </Alert>
+                                        </Box>
+                                    )}
+
+                                    <Heading size={'medium'}>Resultat av helsetest: </Heading>
+                                    {actionData.data.healthData.healthData && (
                                         <HealthTestResultsTable
                                             logResults={actionData.data.healthData.healthData}
                                         />
-                                    </Box>
-                                )}
+                                    )}
 
-                                {actionData.data.cacheData.resourceResults && (
-                                    <Box
-                                        className="w-full"
-                                        padding="6"
-                                        borderRadius="large"
-                                        shadow="small">
+                                    <Heading size={'medium'} className={'pt-5'}>
+                                        Cache status:{' '}
+                                    </Heading>
+                                    {actionData.data.cacheData.resourceResults && (
                                         <CacheStatusTable
                                             logResults={actionData.data.cacheData.resourceResults}
                                         />
-                                    </Box>
-                                )}
-                            </>
-                        )}
-                    </>
-                )}
+                                    )}
+                                </>
+                            )}
+                        </>
+                    )}
+                </Box>
             </VStack>
         </>
     );
@@ -128,9 +134,13 @@ export async function action({ request }: ActionFunctionArgs) {
     const endpoint = formData.get('endpoint') as string;
     const clientName = formData.get('clientName') as string;
     const orgName = await getSelectedOrganization(request);
-    const message = 'Testet med: ' + baseUrl + endpoint + ' ' + clientName + ' ' + orgName;
 
-    logger.debug(`BASIS TEST baseurl/endpoint clientName orgname: ${message}`);
+    const message = 'Testet av: ';
+
+    //Test av: https://beta.felleskomponent.no/utdanning/elev
+    // Bruker: basistest@client.fintlabs.no
+
+    logger.debug(`BASIS TEST baseurl/endpoint clientName orgname: ${baseUrl}`);
     const cacheData = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
     const healthData = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
 
@@ -139,6 +149,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
     return {
         message: message,
+        clientName: clientName,
+        testUrl: baseUrl + endpoint,
         variant: 'info',
         data: {
             healthData: healthData.data || [],

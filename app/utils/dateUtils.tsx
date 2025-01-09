@@ -20,3 +20,9 @@ export const formatDate = (timestamp: number): string => {
     const time = date.toLocaleTimeString('no-NO');
     return `${d}.${m}.${y} ${time}`;
 };
+
+export const formatTimeOnly = (timestamp: number): string => {
+    const date = new Date(timestamp);
+    const time = date.toLocaleTimeString('no-NO');
+    return `${time}`;
+};

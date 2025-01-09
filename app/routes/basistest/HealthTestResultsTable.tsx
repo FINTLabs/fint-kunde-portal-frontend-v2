@@ -1,11 +1,19 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
-import { formatDate } from '~/utils/dateUtils';
+import { formatTimeOnly } from '~/utils/dateUtils';
 import { IHealthData } from '~/types/BasicTest';
 
 interface TestResultsTableProps {
     logResults: IHealthData[] | null;
 }
+
+// Translation mapping
+const statusTranslations: { [key: string]: string } = {
+    SENT_FROM_CONSUMER_TO_PROVIDER: 'Sendt fra konsumer til provider',
+    RECEIVED_IN_PROVIDER_FROM_CONSUMER: 'Mottatt i provider fra konsumer',
+    APPLICATION_HEALTHY: 'Adapter er ok',
+    RECEIVED_IN_CONSUMER_FROM_PROVIDER: 'Mottatt i consumer fra provider',
+};
 
 function HealthTestResultsTable({ logResults }: TestResultsTableProps) {
     return (
@@ -20,9 +28,11 @@ function HealthTestResultsTable({ logResults }: TestResultsTableProps) {
             <Table.Body>
                 {logResults?.map((result, index) => (
                     <Table.Row key={index}>
-                        <Table.DataCell>{result.status}</Table.DataCell>
+                        <Table.DataCell>
+                            {statusTranslations[result.status] || result.status}
+                        </Table.DataCell>
                         <Table.DataCell>{result.component}</Table.DataCell>
-                        <Table.DataCell>{formatDate(result.timestamp)}</Table.DataCell>
+                        <Table.DataCell>{formatTimeOnly(result.timestamp)}</Table.DataCell>
                     </Table.Row>
                 ))}
             </Table.Body>
