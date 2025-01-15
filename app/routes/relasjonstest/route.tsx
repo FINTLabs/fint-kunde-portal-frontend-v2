@@ -32,6 +32,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const filteredClients = (clients?.data ?? []).filter((client: IClient) => !client.managed);
 
+    console.log('Loading tests: ', relationTests.data);
+
     // return json({ components, clients, relationTests, configs });
     return new Response(
         JSON.stringify({
@@ -66,8 +68,6 @@ export default function Index() {
                     'FETCHING_RESOURCES',
                     'CREATING_ENTRY_REPORTS',
                     'PROCESSING_LINKS',
-                    'COMPLETED',
-                    'FAILED',
                     // STARTED,
                     // FETCHING_RESOURCES,
                     // CREATING_ENTRY_REPORTS,
