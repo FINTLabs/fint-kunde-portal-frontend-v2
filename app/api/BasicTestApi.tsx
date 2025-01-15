@@ -1,4 +1,4 @@
-import { apiManager, ApiResponse, handleApiResponse } from '~/api/ApiManager';
+import { apiManager, ApiResponse } from '~/api/ApiManager';
 import logger from '~/utils/logger';
 import { IBasicTest } from '~/types/BasicTest';
 
@@ -24,12 +24,27 @@ class BasicTestApi {
             body: JSON.stringify(testBody),
         });
 
-        return handleApiResponse<any>(
-            apiResults,
-            'Kunne ikke kjøre basistesten',
-            'Basistesten ble kjørt.',
-            'success'
-        );
+        // return handleApiResponse<any>(
+        //     apiResults,
+        //     'Kunne ikke kjøre basistesten',
+        //     'Basistesten ble kjørt.',
+        //     'success'
+        // );
+        if (!apiResults.success) {
+            logger.debug('returning error!');
+            return {
+                success: false,
+                message: 'Kunne ikke kjøre basistesten',
+                variant: 'error',
+            };
+        }
+
+        return {
+            success: true,
+            message: 'Helsesjekken ble kjørt.',
+            variant: 'success',
+            data: apiResults.data,
+        };
     }
 
     static async runHealthTest(
@@ -52,12 +67,27 @@ class BasicTestApi {
             body: JSON.stringify(testBody),
         });
 
-        return handleApiResponse<any>(
-            apiResults,
-            'Kunne ikke kjøre helsesjekken',
-            'Helsesjekken ble kjørt.',
-            'success'
-        );
+        // return handleApiResponse<any>(
+        //     apiResults,
+        //     'Kunne ikke kjøre helsesjekken',
+        //     'Helsesjekken ble kjørt.',
+        //     'success'
+        // );
+
+        if (!apiResults.success) {
+            return {
+                success: false,
+                message: 'Kunne ikke kjøre helsesjekken',
+                variant: 'error',
+            };
+        }
+
+        return {
+            success: true,
+            message: 'Helsesjekken ble kjørt.',
+            variant: 'success',
+            data: apiResults.data,
+        };
     }
 }
 

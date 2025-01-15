@@ -1,4 +1,5 @@
 import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
+import logger from '~/utils/logger';
 
 const API_URL = process.env.LINKWALKER_API_URL;
 
@@ -39,12 +40,27 @@ class LinkWalkerApi {
             body: JSON.stringify(data),
         });
 
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke legge til testen for organisasjonen: ${orgName}`,
-            `Testen for organisasjonen ${orgName} ble lagt til.`,
-            'success'
-        );
+        // return handleApiResponse(
+        //     apiResults,
+        //     `Kunne ikke legge til testen for organisasjonen: ${orgName}`,
+        //     `Testen for organisasjonen ${orgName} ble lagt til.`,
+        //     'success'
+        // );
+
+        if (!apiResults.success) {
+            logger.debug('returning error!');
+            return {
+                success: false,
+                message: `Kunne ikke legge til testen for organisasjonen: ${orgName}`,
+                variant: 'error',
+            };
+        }
+
+        return {
+            success: true,
+            message: `Testen for organisasjonen ${orgName} ble lagt til.`,
+            variant: 'success',
+        };
     }
 
     static async clearTests(orgName: string): Promise<ApiResponse<any>> {

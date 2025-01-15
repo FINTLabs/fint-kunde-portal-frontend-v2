@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, HGrid, Label, Search, Select, VStack } from '@navikt/ds-react';
+import { Box, Button, HGrid, Search, Select, VStack } from '@navikt/ds-react';
 import { PlayIcon } from '@navikt/aksel-icons';
 import { IComponent } from '~/types/Component';
 import { IComponentConfig } from '~/types/ComponentConfig';
@@ -63,11 +63,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
         <VStack gap="10">
             <HGrid gap="6" columns={5}>
                 <Select
-                    label={
-                        <Label>
-                            Miljø {errors.environment && <span style={{ color: 'red' }}>*</span>}
-                        </Label>
-                    }
+                    label={'Miljø'}
                     size="small"
                     name="environment"
                     error={errors.environment ? 'Påkrevd' : undefined}
@@ -82,11 +78,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                 </Select>
 
                 <Select
-                    label={
-                        <Label>
-                            Komponent {errors.component && <span style={{ color: 'red' }}>*</span>}
-                        </Label>
-                    }
+                    label={'Komponent'}
                     size="small"
                     onChange={(e) => {
                         handleChangeComponent(e.target.value);
@@ -104,11 +96,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                 </Select>
 
                 <Select
-                    label={
-                        <Label>
-                            Ressurs {errors.configClass && <span style={{ color: 'red' }}>*</span>}
-                        </Label>
-                    }
+                    label={'Ressurs'}
                     size="small"
                     onChange={(e) => {
                         setSelectedConfig(e.target.value);
@@ -128,11 +116,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                 </Select>
 
                 <Select
-                    label={
-                        <Label>
-                            Type {errors.action && <span style={{ color: 'red' }}>*</span>}
-                        </Label>
-                    }
+                    label={'Type'}
                     size="small"
                     onChange={(e) => {
                         setSelectedAction(e.target.value);
@@ -152,7 +136,6 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                     </Button>
                 </Box>
             </HGrid>
-
             <Search
                 label="Filtrer på id:"
                 variant="simple"

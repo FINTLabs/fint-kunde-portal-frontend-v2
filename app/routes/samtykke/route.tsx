@@ -5,7 +5,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ServiceTable from '~/routes/samtykke/ServiceTable';
 import { useFetcher, useLoaderData } from '@remix-run/react';
-import { ActionFunctionArgs, json, MetaFunction } from '@remix-run/node';
+import { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
 import ConsentApi from '~/api/ConsentApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
@@ -15,6 +15,7 @@ import FeaturesApi from '~/api/FeaturesApi';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
+import logger from '~/utils/logger';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Samtykke' }, { name: 'description', content: 'Samtykke' }];
@@ -24,6 +25,8 @@ export const loader = async ({ request }: { request: Request }) => {
     const orgName = await getSelectedOrganization(request);
     const featuresResponse = await FeaturesApi.fetchFeatures();
     const features = featuresResponse?.data;
+
+    logger.debug('RUNNING LOADER IN CONSENT');
 
     if (features && features['samtykke-admin-new']) {
         const policies = await ConsentApi.getBehandlings(orgName);
@@ -43,9 +46,6 @@ export const loader = async ({ request }: { request: Request }) => {
             }
         );
     }
-
-    // TODO: display no access?
-    return json({});
 };
 
 export default function Index() {

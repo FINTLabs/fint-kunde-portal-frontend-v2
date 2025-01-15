@@ -144,9 +144,7 @@ const ServiceTable = ({
                                 {policy.tjenesteIds
                                     .map((serviceId) => {
                                         const tjeneste = services.find((t) => t.id === serviceId);
-                                        return tjeneste
-                                            ? `${tjeneste.navn} ${tjeneste.id}`
-                                            : 'Unknown tjeneste';
+                                        return tjeneste ? `${tjeneste.navn}` : 'Unknown tjeneste';
                                     })
                                     .join(', ')}
                             </Table.DataCell>

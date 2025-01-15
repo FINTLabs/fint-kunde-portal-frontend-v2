@@ -63,6 +63,7 @@ export default function Index() {
         fetcher.submit(formData, { method: 'post' });
     };
 
+    console.log(fetcher.state);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -90,35 +91,51 @@ export default function Index() {
 
                     {fetcher.state !== 'submitting' && (
                         <>
-                            {actionData && (
+                            {actionData && actionData.variant && (
                                 <>
-                                    {actionData.message && (
-                                        <Box className={'pb-10'}>
-                                            <Alert variant="info">
-                                                <BodyShort>
-                                                    {actionData.message}: {actionData.testUrl}
-                                                </BodyShort>
-                                                <BodyShort>
-                                                    Bruker: {actionData.clientName}
-                                                </BodyShort>
-                                            </Alert>
-                                        </Box>
-                                    )}
+                                    {/*{actionData.variant === 'success' && (*/}
+                                    <Box className="pb-10">
+                                        <Alert variant={actionData.variant}>
+                                            <Heading size="small">
+                                                {actionData.variant === 'error'
+                                                    ? 'Error running test:'
+                                                    : 'Test completed:'}
+                                            </Heading>
+                                            <BodyShort>
+                                                {actionData.message}: {actionData.testUrl}
+                                            </BodyShort>
+                                            <BodyShort>
+                                                Klient:{' '}
+                                                {actionData.clientName
+                                                    ? actionData.clientName
+                                                    : ' ingen klient'}
+                                            </BodyShort>
+                                        </Alert>
+                                    </Box>
+                                    {/*)}*/}
 
-                                    <Heading size={'medium'}>Resultat av helsetest: </Heading>
                                     {actionData.data.healthData.healthData && (
-                                        <HealthTestResultsTable
-                                            logResults={actionData.data.healthData.healthData}
-                                        />
+                                        <>
+                                            <Heading size={'medium'}>
+                                                Resultat av helsetest:{' '}
+                                            </Heading>
+                                            <HealthTestResultsTable
+                                                logResults={actionData.data.healthData.healthData}
+                                            />
+                                        </>
                                     )}
 
-                                    <Heading size={'medium'} className={'pt-5'}>
-                                        Cache status:{' '}
-                                    </Heading>
                                     {actionData.data.cacheData.resourceResults && (
-                                        <CacheStatusTable
-                                            logResults={actionData.data.cacheData.resourceResults}
-                                        />
+                                        <>
+                                            <Heading size={'medium'} className={'pt-5'}>
+                                                Cache status:
+                                            </Heading>
+                                            <CacheStatusTable
+                                                logResults={
+                                                    actionData.data.cacheData.resourceResults
+                                                }
+                                            />
+                                        </>
                                     )}
                                 </>
                             )}
@@ -153,7 +170,7 @@ export async function action({ request }: ActionFunctionArgs) {
         message: message,
         clientName: clientName,
         testUrl: baseUrl + endpoint,
-        variant: 'info',
+        variant: cacheData.variant,
         data: {
             healthData: healthData.data || [],
             cacheData: cacheData.data || [],

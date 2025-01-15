@@ -20,6 +20,8 @@ const RelationTestAddForm = ({ components, clients, configs, runTest }: TestAddF
         'https://play-with-fint.felleskomponent.no'
     );
     const [selectedComponentError, setSelectedComponentError] = useState<string | undefined>();
+    const [selectedClientError, setSelectedClientError] = useState<string | undefined>();
+
     const [matchingConfigs, setMatchingConfigs] = useState<IComponentConfig[]>([]);
 
     const filteredClients = clients.filter((client: IClient) => !client.managed);
@@ -43,16 +45,24 @@ const RelationTestAddForm = ({ components, clients, configs, runTest }: TestAddF
     function onRunTest() {
         let isValid = true;
         if (selectedComponent === '') {
-            setSelectedComponentError('Komponent er påkrevd');
+            setSelectedComponentError('påkrevd');
             isValid = false;
         } else {
             setSelectedComponentError(undefined);
         }
 
+        if (
+            selectedBaseUrl != 'https://play-with-fint.felleskomponent.no' &&
+            selectedClient === ''
+        ) {
+            setSelectedClientError('påkrevd');
+            isValid = false;
+        }
+
         if (isValid) {
             // const component = components.find((comp) => comp.dn === selectedComponent);
             const fullUrl = `${selectedBaseUrl}${selectedConfig}`;
-            console.warn('FULL URL:', fullUrl);
+            console.debug('FULL URL:', fullUrl);
             runTest(fullUrl, selectedClient);
         }
     }
@@ -63,6 +73,7 @@ const RelationTestAddForm = ({ components, clients, configs, runTest }: TestAddF
                 label="Miljø"
                 size="small"
                 name={'baseUrl'}
+                error={selectedComponentError}
                 onChange={(e) => setSelectedBaseUrl(e.target.value)}>
                 <option value="https://play-with-fint.felleskomponent.no">Play-With-FINT</option>
                 <option value="https://beta.felleskomponent.no">BETA</option>
@@ -102,6 +113,7 @@ const RelationTestAddForm = ({ components, clients, configs, runTest }: TestAddF
             <Select
                 label="Klient"
                 size="small"
+                error={selectedClientError}
                 onChange={(e) => setSelectedClient(e.target.value)}
                 disabled={selectedBaseUrl == 'https://play-with-fint.felleskomponent.no'}>
                 <option value="">Velg</option>

@@ -47,9 +47,33 @@ export default function BasicTestAddForm({
         sortedClients,
     } = useFormState(clients);
 
+    const [errors, setErrors] = useState<string[]>([]);
+
     function handleFormSubmit() {
         ref.current?.close();
         onSearchSubmit(selectedEnv, selectedComponent, selectedClient);
+    }
+
+    function handleShowAlert() {
+        const newErrors: string[] = [];
+
+        if (!selectedEnv) {
+            newErrors.push('environment');
+        }
+
+        if (selectedEnv !== 'https://play-with-fint.felleskomponent.no' && !selectedClient) {
+            newErrors.push('client');
+        }
+
+        if (!selectedComponent) {
+            newErrors.push('component');
+        }
+
+        setErrors(newErrors);
+
+        if (newErrors.length === 0) {
+            handleFormSubmit();
+        }
     }
 
     function renderSelectOptions(
@@ -72,7 +96,9 @@ export default function BasicTestAddForm({
                     label="Miljø"
                     size="small"
                     name="environment"
+                    error={errors.includes('environment') ? 'Miljø er påkrevd' : undefined}
                     onChange={(e) => setSelectedEnv(e.target.value)}>
+                    <option value="">Velg</option>
                     <option value="https://play-with-fint.felleskomponent.no">
                         Play-With-FINT
                     </option>
@@ -84,6 +110,7 @@ export default function BasicTestAddForm({
                     label="Komponent"
                     size="small"
                     name="component"
+                    error={errors.includes('component') ? 'Komponent er påkrevd' : undefined}
                     onChange={(e) => setSelectedComponent(e.target.value)}>
                     <option value="">Velg</option>
                     {renderSelectOptions(
@@ -98,6 +125,7 @@ export default function BasicTestAddForm({
                     label="Klient"
                     size="small"
                     name="client"
+                    error={errors.includes('client') ? 'Klient er påkrevd' : undefined}
                     onChange={(e) => setSelectedClient(e.target.value)}>
                     <option value="">Velg</option>
                     {renderSelectOptions(sortedClients, 'dn', 'name', 'shortDescription')}
@@ -106,7 +134,7 @@ export default function BasicTestAddForm({
                 <Box className="flex items-end">
                     <Button
                         icon={<PlayIcon title="Start Test" />}
-                        onClick={() => ref.current?.showModal()}
+                        onClick={handleShowAlert}
                         size="small">
                         Kjør
                     </Button>
@@ -118,7 +146,7 @@ export default function BasicTestAddForm({
                     <VStack gap="6">
                         <p>Passordet på klienten kommer til å bli nullstilt.</p>
                         <HStack gap="8" justify="center">
-                            <Button variant="secondary" onClick={() => ref.current?.close()}>
+                            <Button variant="secondary" onClick={handleShowAlert}>
                                 Avbryt
                             </Button>
                             <Button onClick={handleFormSubmit}>Kjør</Button>

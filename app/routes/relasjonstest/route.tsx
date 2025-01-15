@@ -66,6 +66,14 @@ export default function Index() {
                     'FETCHING_RESOURCES',
                     'CREATING_ENTRY_REPORTS',
                     'PROCESSING_LINKS',
+                    'COMPLETED',
+                    'FAILED',
+                    // STARTED,
+                    // FETCHING_RESOURCES,
+                    // CREATING_ENTRY_REPORTS,
+                    // PROCESSING_LINKS,
+                    // COMPLETED,
+                    // FAILED
                 ].includes(test.status)
             )
         ) {
