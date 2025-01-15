@@ -12,40 +12,27 @@ export default function Footer() {
                 // textAlign: "center",
             }}>
             <Heading level="2" size="medium" spacing>
-                <Logo width={100} />
+                <Link to="http://novari.no" style={{ color: '#FFFFFF' }}>
+                    <Logo width={100} />{' '}
+                </Link>
             </Heading>
             <div style={{ marginBottom: '1rem' }}>
                 <HStack gap="4">
-                    <Link to="http://novari.no">Novari.no</Link>
-                    <p
-                        style={{
-                            color: 'var(--a-text-on-neutral)',
-                        }}>
-                        |
-                    </p>
-                    <Link to="https://novari.no/driftsmeldinger/">Driftsmeldinger</Link>
-                    <p
-                        style={{
-                            color: 'var(--a-text-on-neutral)',
-                        }}>
-                        |
-                    </p>
-                    <Link to="http://support.novari.no">Opprett supportsak</Link>
-                    <p
-                        style={{
-                            color: 'var(--a-text-on-neutral)',
-                        }}>
-                        |
-                    </p>
-
-                    <Link to="http://fintlabs.no">Brukerhjelp</Link>
-                    <p
-                        style={{
-                            color: 'var(--a-text-on-neutral)',
-                        }}>
-                        |
-                    </p>
-                    <Link to="/help">Ordliste</Link>
+                    <Link to="https://novari.no/driftsmeldinger/" style={{ color: '#FFFFFF' }}>
+                        Driftsmeldinger
+                    </Link>
+                    <p style={{ color: '#FFFFFF' }}>|</p>
+                    <Link to="http://support.novari.no" style={{ color: '#FFFFFF' }}>
+                        Opprett supportsak
+                    </Link>
+                    <p style={{ color: '#FFFFFF' }}>|</p>
+                    <Link to="http://fintlabs.no" style={{ color: '#FFFFFF' }}>
+                        Brukerhjelp
+                    </Link>
+                    <p style={{ color: '#FFFFFF' }}>|</p>
+                    <Link to="/help" style={{ color: '#FFFFFF' }}>
+                        Ordliste
+                    </Link>
                 </HStack>
             </div>
         </Box>
