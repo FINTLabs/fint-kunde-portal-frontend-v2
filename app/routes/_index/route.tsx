@@ -11,7 +11,11 @@ import { IUserSession } from '~/types/Session';
 export const meta: MetaFunction = () => {
     return [
         { title: 'Novari Kundeportalen' },
-        { name: 'description', content: 'Velkommen til Novari kundeportalen!' },
+        {
+            name: 'description',
+            content:
+                'FINT Kundeportal gir enkel styring av tilganger og kontroll over FINT, levert av Novari IKS.',
+        },
     ];
 };
 
