@@ -12,25 +12,25 @@ export default function Footer() {
                 // textAlign: "center",
             }}>
             <Heading level="2" size="medium" spacing>
-                <Link to="http://novari.no" style={{ color: '#FFFFFF' }}>
+                <Link to="http://novari.no" style={{ color: '#FCF5ED' }}>
                     <Logo width={100} />{' '}
                 </Link>
             </Heading>
             <div style={{ marginBottom: '1rem' }}>
                 <HStack gap="4">
-                    <Link to="https://novari.no/driftsmeldinger/" style={{ color: '#FFFFFF' }}>
+                    <Link to="https://novari.no/driftsmeldinger/" style={{ color: '#FCF5ED' }}>
                         Driftsmeldinger
                     </Link>
-                    <p style={{ color: '#FFFFFF' }}>|</p>
-                    <Link to="http://support.novari.no" style={{ color: '#FFFFFF' }}>
+                    <p style={{ color: '#FCF5ED' }}>|</p>
+                    <Link to="http://support.novari.no" style={{ color: '#FCF5ED' }}>
                         Opprett supportsak
                     </Link>
-                    <p style={{ color: '#FFFFFF' }}>|</p>
-                    <Link to="http://fintlabs.no" style={{ color: '#FFFFFF' }}>
+                    <p style={{ color: '#FCF5ED' }}>|</p>
+                    <Link to="http://fintlabs.no" style={{ color: '#FCF5ED' }}>
                         Brukerhjelp
                     </Link>
-                    <p style={{ color: '#FFFFFF' }}>|</p>
-                    <Link to="/help" style={{ color: '#FFFFFF' }}>
+                    <p style={{ color: '#FCF5ED' }}>|</p>
+                    <Link to="/help" style={{ color: '#FCF5ED' }}>
                         Ordliste
                     </Link>
                 </HStack>
