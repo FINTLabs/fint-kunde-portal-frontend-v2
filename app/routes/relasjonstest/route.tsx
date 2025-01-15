@@ -32,7 +32,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const filteredClients = (clients?.data ?? []).filter((client: IClient) => !client.managed);
 
-    // return json({ components, clients, relationTests, configs });
     return new Response(
         JSON.stringify({
             components: components.data,
@@ -78,6 +77,7 @@ export default function Index() {
             interval = setInterval(() => {
                 fetcher.formData?.set('message', 'test');
                 fetcher.load('/relasjonstest');
+                window.location.reload();
             }, 15000);
         }
 
