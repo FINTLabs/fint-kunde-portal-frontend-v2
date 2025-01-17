@@ -11,7 +11,8 @@
         "start": "remix-serve ./build/server/index.js",
         "typecheck": "tsc",
         "format": "prettier --write .",
-        "format:check": "prettier --check ."
+        "format:check": "prettier --check .",
+        "test": "cypress run"
     },
     "resolutions": {
         "cookie": "0.7.0"
