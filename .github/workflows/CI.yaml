@@ -21,9 +21,13 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Testing
+      - name: Start Server
         env:
+          NODE_ENV: test
           CYPRESS_TESTS: true
+        run: npx wait-on http://localhost:3000
+
+      - name: Run Tests
         run: npm run test
 
       - name: Build
