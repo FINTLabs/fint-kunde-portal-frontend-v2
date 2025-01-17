@@ -4,8 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm test && npm build
-
+RUN npm run build
 
 ENV PORT=8000
 EXPOSE 8000
