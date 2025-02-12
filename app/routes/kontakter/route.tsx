@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ActionFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
+import { ActionFunction, LoaderFunction, MetaFunction } from 'react-router';
 import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from 'react-router';
 import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
 import OrganisationApi from '~/api/OrganisationApi';

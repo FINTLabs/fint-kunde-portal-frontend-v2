@@ -1,4 +1,4 @@
-import { createCookieSessionStorage } from '@remix-run/node';
+import { createCookieSessionStorage } from 'react-router';
 
 //TODO: double check if this cookie is secure
 export const { getSession, commitSession, destroySession } = createCookieSessionStorage({

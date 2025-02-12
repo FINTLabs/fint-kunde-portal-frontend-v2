@@ -1,14 +1,9 @@
-import {
-    type ActionFunction,
-    type LoaderFunction,
-    type MetaFunction,
-    redirect,
-} from '@remix-run/node';
+import { type ActionFunction, type LoaderFunction, type MetaFunction, redirect } from 'react-router';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { Alert, Search } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
-import { useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate, useSearchParams } from 'react-router';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { CustomTabs } from '~/components/shared/CustomTabs';
 import React, { useEffect, useState } from 'react';

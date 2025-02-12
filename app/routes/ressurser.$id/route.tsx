@@ -1,5 +1,5 @@
 import { LayersIcon } from '@navikt/aksel-icons';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useParams } from 'react-router';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import AssetApi from '~/api/AssetApi';
@@ -9,7 +9,7 @@ import { Alert, Box, HGrid, VStack } from '@navikt/ds-react';
 import AdapterAPI from '~/api/AdapterApi';
 import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, redirect } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, redirect } from 'react-router';
 import React from 'react';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';

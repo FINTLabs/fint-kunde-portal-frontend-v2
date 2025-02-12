@@ -1,5 +1,5 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import { useFetcher, useLoaderData } from 'react-router';
 import AccessApi from '~/api/AccessApi';
 import FieldList from '~/routes/tilgang/id/element/resource/FieldList';
 import React from 'react';

@@ -1,5 +1,5 @@
 import { BodyLong, Box, HGrid, Label, Tag } from '@navikt/ds-react';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData } from 'react-router';
 import MeApi from '~/api/MeApi';
 import { PersonIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';

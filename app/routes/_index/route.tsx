@@ -1,6 +1,6 @@
 import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
-import { MetaFunction } from '@remix-run/node';
-import { useOutletContext } from '@remix-run/react';
+import { MetaFunction } from 'react-router';
+import { useOutletContext } from 'react-router';
 import { MENU_ITEMS_LEFT } from '~/components/Menu/constants';
 import { MenuDropDown } from '~/types/MenuDropDown';
 import { MenuItem } from '~/types/MenuItem';

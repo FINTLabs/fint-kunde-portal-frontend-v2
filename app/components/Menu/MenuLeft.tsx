@@ -2,7 +2,7 @@ import { Button, HStack } from '@navikt/ds-react';
 import { Logo } from './Logo';
 import { MENU_ITEMS_LEFT } from './constants';
 import { MenuDropdowns } from './MenuDropdowns';
-import { Link } from '@remix-run/react';
+import { Link } from 'react-router';
 import { IUserSession } from '~/types/Session';
 // import MenuComponent from '~/components/Menu/MenuComponent';
 

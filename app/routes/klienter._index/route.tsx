@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate, useSearchParams } from 'react-router';
 import ClientApi from '~/api/ClientApi';
 import { IClient, IPartialClient } from '~/types/Clients';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Search } from '@navikt/ds-react';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { type ActionFunctionArgs, LoaderFunction, MetaFunction, redirect } from '@remix-run/node';
+import { type ActionFunctionArgs, LoaderFunction, MetaFunction, redirect } from 'react-router';
 import ClientCreateForm from '~/routes/klienter._index/CreateForm';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';

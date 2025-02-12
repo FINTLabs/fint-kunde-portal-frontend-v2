@@ -3,11 +3,11 @@ import {
     type LoaderFunctionArgs,
     type MetaFunction,
     redirect,
-} from '@remix-run/node';
+} from 'react-router';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useParams } from 'react-router';
 import ComponentApi from '~/api/ComponentApi';
 import AdapterApi from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';

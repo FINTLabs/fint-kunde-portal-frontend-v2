@@ -1,6 +1,6 @@
-import { flatRoutes } from '@remix-run/fs-routes';
-import type { RouteConfig } from '@remix-run/route-config';
-import { route } from '@remix-run/route-config';
+import { flatRoutes } from '@react-router/fs-routes';
+import type { RouteConfig } from '@react-router/dev/routes';
+import { route } from '@react-router/dev/routes';
 // import { remixRoutesOptionAdapter } from '@remix-run/routes-option-adapter';
 
 export default [

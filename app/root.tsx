@@ -7,9 +7,9 @@ import {
     ScrollRestoration,
     useLoaderData,
     useRouteError,
-} from '@remix-run/react';
-import type { ActionFunctionArgs, LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { data } from '@remix-run/node';
+} from 'react-router';
+import type { ActionFunctionArgs, LinksFunction, LoaderFunctionArgs } from 'react-router';
+import { data } from 'react-router';
 import './tailwind.css';
 import '@navikt/ds-css';
 import './novari-theme.css';

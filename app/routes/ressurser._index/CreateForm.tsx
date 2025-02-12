@@ -1,5 +1,5 @@
 // CreateForm.tsx
-import { useActionData } from '@remix-run/react';
+import { useActionData } from 'react-router';
 import { Box, Button, FormSummary, HStack, TextField } from '@navikt/ds-react';
 
 interface ActionData {

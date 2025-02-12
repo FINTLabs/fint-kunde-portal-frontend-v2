@@ -1,6 +1,6 @@
 import { Select } from '@navikt/ds-react';
 import { ChangeEvent, useState } from 'react';
-import { useSubmit } from '@remix-run/react';
+import { useSubmit } from 'react-router';
 import { IUserSession } from '~/types/Session';
 
 export const UserOrganization = ({ userSession }: { userSession: IUserSession }) => {

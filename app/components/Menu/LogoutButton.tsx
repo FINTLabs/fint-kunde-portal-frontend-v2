@@ -1,6 +1,6 @@
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Modal } from '@navikt/ds-react';
-import { Link, useNavigate } from '@remix-run/react';
+import { Link, useNavigate } from 'react-router';
 import { useRef } from 'react';
 
 export function LogoutButton() {

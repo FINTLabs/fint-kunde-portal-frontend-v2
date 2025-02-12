@@ -1,4 +1,4 @@
-import { NavLink } from '@remix-run/react';
+import { NavLink } from 'react-router';
 
 interface LogoProps {
     width?: number; // Optional prop to set the logo width

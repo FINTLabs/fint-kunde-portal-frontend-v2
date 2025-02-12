@@ -1,5 +1,5 @@
-import { LoaderFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { LoaderFunction } from 'react-router';
+import { redirect } from 'react-router';
 // import { getSession, destroySession } from '~/utils/session';
 
 export const loader: LoaderFunction = async ({ request }) => {

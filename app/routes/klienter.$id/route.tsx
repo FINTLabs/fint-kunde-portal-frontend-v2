@@ -1,7 +1,7 @@
 import React from 'react';
-import { useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate, useParams } from 'react-router';
 import { IClient } from '~/types/Clients';
-import { ActionFunctionArgs, redirect } from '@remix-run/node';
+import { ActionFunctionArgs, redirect } from 'react-router';
 import ClientApi from '~/api/ClientApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
