@@ -47,19 +47,20 @@ const ComponentsTable = ({
     };
 
     const groupedByType = sortedComponents.reduce((acc: ComponentType, item: IComponent) => {
-        const componentType = item.basePath.split('/')[1];
+        const basePath = item.basePath ?? '';
+        const splitPath = basePath.split('/');
+        const componentType = splitPath[1] || 'other';
+
         if (!acc[componentType]) {
             acc[componentType] = [];
         }
         acc[componentType].push(item);
         return acc;
-    }, {});
+    }, {} as ComponentType);
 
     const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value; // The value of the checkbox
         const isChecked = e.target.checked; // Whether the checkbox is checked or unchecked
-
-        console.log('Toggled component:', value, 'Checked:', isChecked);
 
         if (toggle) {
             const formData = new FormData();
@@ -85,7 +86,7 @@ const ComponentsTable = ({
                                         <KeyVerticalIcon title="key icon" fontSize="1.5rem" />
                                     )}
                                     <FormSummary.Heading level="2">
-                                        {/* Hacky code.. quick fix that i personally hate... sorry to the next person! */}
+                                        {/* Hacky code.. quick fix that I personally hate... sorry to the next person! */}
                                         {capitalizeFirstLetter(
                                             groupName === 'okonomi' ? 'Økonomi' : groupName
                                         )}
@@ -102,7 +103,7 @@ const ComponentsTable = ({
                                         onChange={() => {}}
                                         size="small">
                                         {groupComponents.map((item, i) => {
-                                            const splitted = item.description.split(' ');
+                                            const split = item.description.split(' ');
 
                                             return (
                                                 <HStack
@@ -118,9 +119,7 @@ const ComponentsTable = ({
                                                                 handleToggle(e);
                                                             }}
                                                             disabled={isManaged}>
-                                                            {splitted.length > 1
-                                                                ? splitted[1]
-                                                                : splitted[0]}
+                                                            {split.length > 1 ? split[1] : split[0]}
                                                         </Checkbox>
                                                     </HStack>
                                                     <HStack align={'center'}>
