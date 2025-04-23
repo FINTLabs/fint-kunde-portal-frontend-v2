@@ -50,7 +50,7 @@ export default function Index() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setFilteredClients(clientData.filter((client) => !client.managed));
+        setFilteredClients(clientData);
     }, [clientData]);
 
     const handleCreate = () => {
