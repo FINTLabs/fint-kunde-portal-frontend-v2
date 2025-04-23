@@ -7,10 +7,12 @@ import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import IconToggleButtons from '~/routes/tilgang/id/element/resource/IconToggleButtons';
-// import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import useAlerts from '~/components/useAlerts';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import AlertManager from '~/components/AlertManager';
+import { handleFieldAccessAction } from '~/routes/tilgang/id/element/resource/actions';
+
+export const action = async (args: ActionFunctionArgs) => handleFieldAccessAction(args);
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const clientOrAdapter = params.id || '';
@@ -39,13 +41,20 @@ export default function Route() {
     const actionData = fetcher.data as IFetcherResponseData;
     const { alerts } = useAlerts(actionData, fetcher.state);
 
+    //TODO: ADD FOR ADAPTER! (for breadcrumbs)
+    const elementType = clientOrAdapter.split('@')[1]?.split('.')[0] === 'client' ? 'Klienter' : '';
+
     const breadcrumbs = [
-        { name: 'clientOrAdapter list', link: '/' },
-        { name: 'tilgang', link: '/' },
-        // {
-        //     name: element,
-        //     link: '/',
-        // },
+        { name: `${elementType}`, link: `/${elementType}` },
+        { name: clientOrAdapter, link: `/${elementType}/${clientOrAdapter}` },
+        {
+            name: element,
+            link: `/tilgang/${clientOrAdapter}/${element}`,
+        },
+        {
+            name: resource,
+            link: `/tilgang/${clientOrAdapter}/${element}/${resource}`,
+        },
     ];
 
     function handleSaveFields() {
@@ -81,7 +90,6 @@ export default function Route() {
             <FieldList
                 onSave={handleSaveFields}
                 selectedResource={'selectedResource'}
-                type={clientOrAdapter || ''}
                 title={fieldListTitle}
                 fieldList={fieldList || []}
             />
@@ -93,43 +101,4 @@ export default function Route() {
             />
         </div>
     );
-}
-
-export async function action({ request }: ActionFunctionArgs) {
-    // const orgName = await getSelectedOrganization(request);
-    const formData = await request.formData();
-    const actionType = formData.get('actionType');
-
-    let response;
-    switch (actionType) {
-        case 'SAVE_FIELDS':
-            response = {
-                success: true,
-                message: `Save fields clicked'`,
-                variant: 'warning',
-            };
-            break;
-        case 'CONFIRM_POSTING':
-            response = {
-                success: true,
-                message: `Confirm posting clicked`,
-                variant: 'warning',
-            };
-            break;
-        case 'CONFIRM_ACCESS':
-            response = {
-                success: true,
-                message: `Confirm access clicked'`,
-                variant: 'warning',
-            };
-            break;
-        default:
-            response = {
-                success: false,
-                message: `Ukjent handlingstype: '${actionType}'`,
-                variant: 'error',
-            };
-    }
-
-    return response;
 }

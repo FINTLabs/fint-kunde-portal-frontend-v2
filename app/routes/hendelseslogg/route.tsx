@@ -1,40 +1,26 @@
 import React, { useState } from 'react';
-import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
+import { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import { Box, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
 import LogSearchForm from '~/routes/hendelseslogg/LogSearchForm';
-import ComponentApi from '~/api/ComponentApi';
-import ComponentConfigApi from '~/api/ComponentConfigApi';
-import LogApi from '~/api/LogApi';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import LogTable from './LogTable';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
 import { Log, ReduntantLog } from '~/types/LogEvent';
+import { handleLogAction } from '~/routes/hendelseslogg/actions';
+import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Hendelseslogg' }, { name: 'description', content: 'Hendelseslogg' }];
 };
-export const loader: LoaderFunction = async ({ request }) => {
-    const selectOrg = await getSelectedOrganization(request);
 
-    const components = await ComponentApi.getOrganisationComponents(selectOrg);
-    const configs = await ComponentConfigApi.getComponentConfigs();
+export { loader };
 
-    return new Response(
-        JSON.stringify({
-            components: components.data,
-            configs: configs.data,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
-};
+export const action = async (args: ActionFunctionArgs) => handleLogAction(args);
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Hendelseslogg', link: '/hendelseslogg' }];
@@ -110,27 +96,4 @@ function mapLogs(logs: ReduntantLog[]) {
 
         return acc;
     }, []);
-}
-
-export async function action({ request }: ActionFunctionArgs) {
-    const formData = await request.formData();
-    const environment = formData.get('environment') as string;
-    const componentName = formData.get('component') as string;
-    const action = formData.get('action') as string;
-    const resource = formData.get('resource') as string;
-
-    const orgName = await getSelectedOrganization(request);
-
-    let response;
-
-    response = await LogApi.getLogs(environment, orgName, componentName, resource, action);
-    if (!response.success || response.data.length === 0) {
-        response = {
-            success: false,
-            message: `Kunne ikke hente logger for spesifisert ressurs.`,
-            variant: 'error',
-        };
-    }
-
-    return response;
 }

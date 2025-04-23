@@ -10,6 +10,9 @@ import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import useAlerts from '~/components/useAlerts';
 import AlertManager from '~/components/AlertManager';
+import { handleAccessElementAction } from '~/routes/tilgang/id/element/actions';
+
+export const action = async (args: ActionFunctionArgs) => handleAccessElementAction(args);
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const clientOrAdapter = params.id || '';
@@ -37,6 +40,12 @@ export default function Route() {
     const actionData = fetcher.data as IFetcherResponseData;
     const { alerts } = useAlerts(actionData, fetcher.state);
 
+    console.log('HELLO');
+    console.log('LIST', resourceList);
+    // const elementType = clientOrAdapter.split('@')[1]?.split('.')[0] || '';
+    //TODO: ADD FOR ADAPTER!
+    const elementType = clientOrAdapter.split('@')[1]?.split('.')[0] === 'client' ? 'klienter' : '';
+
     const handleSelectedResource = (resourceName: string) => {
         console.debug('...........', resourceName);
         // setSelectedResource(resourceName);
@@ -45,10 +54,11 @@ export default function Route() {
     };
 
     const breadcrumbs = [
-        { name: clientOrAdapter, link: '/abc' },
+        { name: `${elementType}`, link: `/${elementType}` },
+        { name: clientOrAdapter, link: `/${elementType}/${clientOrAdapter}` },
         {
             name: element,
-            link: '/',
+            link: `/tilgang/${clientOrAdapter}/${element}`,
         },
     ];
 
@@ -61,7 +71,11 @@ export default function Route() {
         <div>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
 
-            <InternalPageHeader title={'Tilgang'} icon={KeyVerticalIcon} helpText="NEED_THIS" />
+            <InternalPageHeader
+                title={`Tilgang - ${elementType}`}
+                icon={KeyVerticalIcon}
+                helpText="NEED_THIS"
+            />
 
             <AlertManager alerts={alerts} />
             <ResourcesList
@@ -72,38 +86,4 @@ export default function Route() {
             />
         </div>
     );
-}
-
-export async function action({ request }: ActionFunctionArgs) {
-    // const orgName = await getSelectedOrganization(request);
-    const formData = await request.formData();
-    const actionType = formData.get('actionType');
-    const checkMarkValue = formData.get('checkMarkValue');
-
-    let response;
-    switch (actionType) {
-        case 'TOGGLE_ELEMENT':
-            const variant = checkMarkValue === 'on' ? 'success' : 'warning';
-            response = {
-                success: true,
-                message: `Check mark clicked: '${checkMarkValue}'`,
-                variant: variant,
-            };
-            break;
-        case 'ADD_POLICY':
-            response = {
-                success: true,
-                message: `Add policy clicked'`,
-                variant: 'error',
-            };
-            break;
-        default:
-            response = {
-                success: false,
-                message: `Ukjent handlingstype: '${actionType}'`,
-                variant: 'error',
-            };
-    }
-
-    return response;
 }

@@ -17,14 +17,14 @@ interface Field {
 interface FieldListProps {
     onSave: (formData: { resourceId: string }) => void;
     selectedResource: string;
-    type: string;
     title: string;
     fieldList: Field[];
 }
 
-const FieldList = ({ onSave, selectedResource, type, title, fieldList }: FieldListProps) => {
+const FieldList = ({ onSave, selectedResource, title, fieldList }: FieldListProps) => {
     const [isEditing, setIsEditing] = useState(false);
     const [data, setData] = useState<Field[]>(fieldList); // Use fieldList instead of mockData
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
     useEffect(() => {
         setData(fieldList);
@@ -45,6 +45,7 @@ const FieldList = ({ onSave, selectedResource, type, title, fieldList }: FieldLi
         };
         onSave(formData);
         setIsEditing(false);
+        setHasUnsavedChanges(false);
     };
 
     const handleInputChange = (index: number, key: keyof Field, value: string | boolean) => {
@@ -53,6 +54,7 @@ const FieldList = ({ onSave, selectedResource, type, title, fieldList }: FieldLi
             updatedData[index] = { ...updatedData[index], [key]: value };
             return updatedData;
         });
+        setHasUnsavedChanges(true);
     };
 
     const toggleVisibility = (index: number) => {
@@ -90,6 +92,12 @@ const FieldList = ({ onSave, selectedResource, type, title, fieldList }: FieldLi
             </FormSummary.Header>
 
             <FormSummary.Answers>
+                {hasUnsavedChanges && (
+                    <FormSummary.Label className={'text-amber-400'}>
+                        Husk å lagre endringene dine!
+                    </FormSummary.Label>
+                )}
+
                 <FormSummary.Answer>
                     <Table size="small">
                         <Table.Header>

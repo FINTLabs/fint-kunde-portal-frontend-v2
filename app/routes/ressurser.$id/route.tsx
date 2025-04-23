@@ -2,14 +2,10 @@ import { LayersIcon } from '@navikt/aksel-icons';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { Alert, Box, HGrid, VStack } from '@navikt/ds-react';
-import AdapterAPI from '~/api/AdapterApi';
-import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, redirect } from '@remix-run/node';
+import { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
 import React from 'react';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
@@ -18,6 +14,8 @@ import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { DetailsView } from '~/routes/ressurser.$id/DetailsView';
 import { BackButton } from '~/components/shared/BackButton';
 import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
+import { handleAssetAction } from '~/routes/ressurser.$id/actions';
+import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Ressurser' }, { name: 'description', content: 'Liste over ressurser' }];
@@ -30,27 +28,9 @@ type LoaderData = {
     assets: IAsset[];
 };
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-    const id = params.id || '';
+export { loader };
 
-    const orgName = await getSelectedOrganization(request);
-    const asset = await AssetApi.getAssetById(orgName, id);
-    const adapters = await AdapterAPI.getAdapters(orgName);
-    const clients = await ClientApi.getClients(orgName);
-    const assets = await AssetApi.getAllAssets(orgName);
-
-    return new Response(
-        JSON.stringify({
-            asset: asset.data,
-            adapters: adapters.data,
-            clients: clients.data,
-            assets: assets.data,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
-};
+export const action = async (args: ActionFunctionArgs) => handleAssetAction(args);
 
 export default function Index() {
     const { id } = useParams();
@@ -148,71 +128,4 @@ export default function Index() {
             )}
         </>
     );
-}
-
-export async function action({ request, params }: ActionFunctionArgs) {
-    const formData = await request.formData();
-    const actionType = formData.get('actionType');
-    const selectedOrg = await getSelectedOrganization(request);
-    const orgName = await getSelectedOrganization(request);
-    const name = params.id || '';
-
-    let response;
-    switch (actionType) {
-        case 'CREATE':
-            response = await AssetApi.createAsset(
-                {
-                    name,
-                    description: formData.get('assetDescription') as string,
-                },
-                selectedOrg
-            );
-            break;
-        case 'UPDATE':
-            response = await AssetApi.updateAsset(
-                {
-                    name,
-                    assetId: formData.get('assetId') as string,
-                    description: formData.get('assetDescription') as string,
-                },
-                selectedOrg
-            );
-            break;
-        case 'DELETE':
-            const assetName = formData.get('assetName') as string;
-            response = await AssetApi.deleteAsset(assetName, orgName);
-            if (response.success) {
-                return redirect(`/ressurser?deleted=${assetName}`);
-            }
-            break;
-        case 'UPDATE_ADAPTER':
-            const updateType = formData.get('updateType') as string;
-            response = await AssetApi.updateAdapterInAsset(
-                formData.get('adapterName') as string,
-                formData.get('assetName') as string,
-                selectedOrg,
-                updateType
-            );
-            break;
-
-        case 'UPDATE_CLIENT':
-            const updateTypeClient = formData.get('updateType') as string;
-            response = await AssetApi.updateClientInAsset(
-                formData.get('clientName') as string,
-                formData.get('assetName') as string,
-                selectedOrg,
-                updateTypeClient,
-                formData.get('primaryAssetDN') as string
-            );
-            break;
-
-        default:
-            response = {
-                success: false,
-                message: `Ukjent handlingstype: '${actionType}'`,
-                variant: 'error',
-            };
-    }
-
-    return response;
 }

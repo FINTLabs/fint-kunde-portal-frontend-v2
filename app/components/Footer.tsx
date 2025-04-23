@@ -12,9 +12,7 @@ export default function Footer() {
                 // textAlign: "center",
             }}>
             <Heading level="2" size="medium" spacing>
-                <Link to="http://novari.no" style={{ color: '#FCF5ED' }}>
-                    <Logo width={100} />{' '}
-                </Link>
+                <Logo />
             </Heading>
             <div style={{ marginBottom: '1rem' }}>
                 <HStack gap="4">
@@ -30,8 +28,12 @@ export default function Footer() {
                         Brukerhjelp
                     </Link>
                     <p style={{ color: '#FCF5ED' }}>|</p>
-                    <Link to="/help" style={{ color: '#FCF5ED' }}>
+                    <Link to="/help/" style={{ color: '#FCF5ED' }}>
                         Ordliste
+                    </Link>
+                    <p style={{ color: '#FCF5ED' }}>|</p>
+                    <Link to="https://api.felleskomponent.no/" style={{ color: '#FCF5ED' }}>
+                        FINT Test Client
                     </Link>
                 </HStack>
             </div>

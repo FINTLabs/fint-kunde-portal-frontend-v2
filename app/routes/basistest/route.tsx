@@ -1,44 +1,26 @@
-import type { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
+import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Heading, Loader, VStack } from '@navikt/ds-react';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import ComponentApi from '~/api/ComponentApi';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import { IComponent } from '~/types/Component';
 import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
-import ClientApi from '~/api/ClientApi';
 import { IClient } from '~/types/Clients';
-import BasicTestApi from '~/api/BasicTestApi';
 import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
-import logger from '~/utils/logger';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import React from 'react';
+import { handleBasicTestAction } from '~/routes/basistest/actions';
+import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Basis Test' }, { name: 'description', content: 'Run Basis Test' }];
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
-    const selectOrg = await getSelectedOrganization(request);
+export { loader };
 
-    const components = await ComponentApi.getOrganisationComponents(selectOrg);
-    const clients = await ClientApi.getClients(selectOrg);
-
-    const filteredClients = (clients?.data ?? []).filter((client: IClient) => !client.managed);
-
-    return new Response(
-        JSON.stringify({
-            components: components.data,
-            clients: filteredClients,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
-};
+export const action = async (args: ActionFunctionArgs) => handleBasicTestAction(args);
 
 type ExtendedFetcherResponseData = IFetcherResponseData & {
     clientName: string;
@@ -63,7 +45,6 @@ export default function Index() {
         fetcher.submit(formData, { method: 'post' });
     };
 
-    console.log(fetcher.state);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -145,35 +126,4 @@ export default function Index() {
             </VStack>
         </>
     );
-}
-
-export async function action({ request }: ActionFunctionArgs) {
-    const formData = await request.formData();
-    const baseUrl = formData.get('baseUrl') as string;
-    const endpoint = formData.get('endpoint') as string;
-    const clientName = formData.get('clientName') as string;
-    const orgName = await getSelectedOrganization(request);
-
-    const message = 'Testet av: ';
-
-    //Test av: https://beta.felleskomponent.no/utdanning/elev
-    // Bruker: basistest@client.fintlabs.no
-
-    logger.debug(`BASIS TEST baseurl/endpoint clientName orgname: ${baseUrl}`);
-    const cacheData = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
-    const healthData = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
-
-    logger.silly(`cache request data: ${JSON.stringify(cacheData)}`);
-    logger.silly(`health request data: ${JSON.stringify(healthData.data)}`);
-
-    return {
-        message: message,
-        clientName: clientName,
-        testUrl: baseUrl + endpoint,
-        variant: cacheData.variant,
-        data: {
-            healthData: healthData.data || [],
-            cacheData: cacheData.data || [],
-        },
-    };
 }

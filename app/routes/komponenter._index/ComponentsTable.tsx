@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
-import { ChevronRightIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
+import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 
@@ -11,9 +11,6 @@ interface ComponentsSectionProps {
     columns?: number;
     selectable?: boolean;
     toggle?: (formData: FormData) => void;
-    hideLink?: boolean;
-    adapterName?: string;
-    clientName?: string;
     isManaged: boolean;
 }
 
@@ -21,29 +18,21 @@ type ComponentType = {
     [type: string]: IComponent[];
 };
 
-const ComponentsTable = ({
-    items,
-    selectedItems,
-    toggle,
-    hideLink = false,
-    adapterName,
-    clientName,
-    isManaged,
-}: ComponentsSectionProps) => {
+const ComponentsTable = ({ items, selectedItems, toggle, isManaged }: ComponentsSectionProps) => {
     const navigate = useNavigate();
 
     const sortedComponents = items.sort((a, b) => a.name.localeCompare(b.name));
 
     const handleRowClick = (component: IComponent) => {
-        if (hideLink) {
-            if (adapterName) {
-                navigate(`/accesscontrol/${component.name}?adapter=${adapterName}`);
-            } else if (clientName) {
-                navigate(`/accesscontrol/${component.name}?client=${clientName}`);
-            }
-        } else {
-            navigate(`/komponenter/${component.name}`);
-        }
+        // if (hideLink) {
+        //     if (adapterName) {
+        //         navigate(`/accesscontrol/${component.name}?adapter=${adapterName}`);
+        //     } else if (clientName) {
+        //         navigate(`/accesscontrol/${component.name}?client=${clientName}`);
+        //     }
+        // } else {
+        navigate(`/komponenter/${component.name}`);
+        // }
     };
 
     const groupedByType = sortedComponents.reduce((acc: ComponentType, item: IComponent) => {
@@ -59,8 +48,10 @@ const ComponentsTable = ({
     }, {} as ComponentType);
 
     const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value; // The value of the checkbox
-        const isChecked = e.target.checked; // Whether the checkbox is checked or unchecked
+        const value = e.target.value;
+        const isChecked = e.target.checked;
+
+        console.log('Toggled component:', value, 'Checked:', isChecked);
 
         if (toggle) {
             const formData = new FormData();
@@ -82,11 +73,11 @@ const ComponentsTable = ({
                         <FormSummary key={`${groupName}-${i}`}>
                             <FormSummary.Header>
                                 <HStack align={'center'} justify={'space-between'}>
-                                    {hideLink && (
-                                        <KeyVerticalIcon title="key icon" fontSize="1.5rem" />
-                                    )}
+                                    {/*{hideLink && (*/}
+                                    {/*    <KeyVerticalIcon title="key icon" fontSize="1.5rem" />*/}
+                                    {/*)}*/}
                                     <FormSummary.Heading level="2">
-                                        {/* Hacky code.. quick fix that I personally hate... sorry to the next person! */}
+                                        {/* Hacky code.. quick fix that i personally hate... sorry to the next person! */}
                                         {capitalizeFirstLetter(
                                             groupName === 'okonomi' ? 'Økonomi' : groupName
                                         )}
@@ -103,7 +94,7 @@ const ComponentsTable = ({
                                         onChange={() => {}}
                                         size="small">
                                         {groupComponents.map((item, i) => {
-                                            const split = item.description.split(' ');
+                                            const splitted = item.description.split(' ');
 
                                             return (
                                                 <HStack
@@ -119,22 +110,22 @@ const ComponentsTable = ({
                                                                 handleToggle(e);
                                                             }}
                                                             disabled={isManaged}>
-                                                            {split.length > 1 ? split[1] : split[0]}
+                                                            {splitted.length > 1
+                                                                ? splitted[1]
+                                                                : splitted[0]}
                                                         </Checkbox>
                                                     </HStack>
                                                     <HStack align={'center'}>
                                                         <Box
                                                             padding={'2'}
                                                             className="hover:bg-[--a-surface-active] hover:cursor-pointer">
-                                                            {!hideLink && (
-                                                                <ChevronRightIcon
-                                                                    title="ChevronRightIcon"
-                                                                    fontSize="1.5rem"
-                                                                    onClick={() =>
-                                                                        handleRowClick(item)
-                                                                    }
-                                                                />
-                                                            )}
+                                                            {/*{!hideLink && (*/}
+                                                            <ChevronRightIcon
+                                                                title="ChevronRightIcon"
+                                                                fontSize="1.5rem"
+                                                                onClick={() => handleRowClick(item)}
+                                                            />
+                                                            {/*)}*/}
                                                         </Box>
                                                     </HStack>
                                                 </HStack>

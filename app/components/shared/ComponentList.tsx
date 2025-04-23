@@ -2,15 +2,10 @@ import React from 'react';
 import { Box, Button, Checkbox, FormSummary, HGrid, HStack } from '@navikt/ds-react';
 import { ChevronRightCircleIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
-
-interface Access {
-    domain: string;
-    packageName: string;
-    status: string;
-}
+import { IPackageAccess } from '~/types/Access';
 
 interface ComponentListProps {
-    accessList: Access[];
+    accessList: IPackageAccess[];
     onToggle: (formData: FormData) => void;
     entity: string;
 }
@@ -22,14 +17,27 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
         navigate(`/tilgang/${entity}/${domain}_${packageName}`);
     };
 
-    // Group the accessList by domain
-    const groupedByDomain = accessList.reduce((acc: Record<string, Access[]>, item: Access) => {
-        if (!acc[item.domain]) {
-            acc[item.domain] = [];
+    const groupedByDomain = Array.isArray(accessList)
+        ? accessList.reduce((acc: Record<string, IPackageAccess[]>, item: IPackageAccess) => {
+              if (!acc[item.domain]) {
+                  acc[item.domain] = [];
+              }
+              acc[item.domain].push(item);
+              return acc;
+          }, {})
+        : {};
+
+    const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        const isChecked = e.target.checked;
+
+        if (onToggle) {
+            const formData = new FormData();
+            formData.append('componentName', value);
+            formData.append('isChecked', isChecked.toString());
+            onToggle(formData);
         }
-        acc[item.domain].push(item);
-        return acc;
-    }, {});
+    };
 
     return (
         <Box>
@@ -63,9 +71,12 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                                 //         item.status === 'ENABLED'
                                                 //     )
                                                 // }
+                                                onChange={(e) => {
+                                                    handleToggle(e);
+                                                }}
                                                 value={item.packageName}
                                                 size={'small'}
-                                                checked={item.status === 'ENABLED'}>
+                                                checked={item.accessLevel === 'ENABLED'}>
                                                 {item.packageName}
                                             </Checkbox>
                                             <Button

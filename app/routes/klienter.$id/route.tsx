@@ -1,63 +1,39 @@
 import React from 'react';
 import { useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
-import { ActionFunctionArgs, redirect } from '@remix-run/node';
-import ClientApi from '~/api/ClientApi';
+import { ActionFunctionArgs } from '@remix-run/node';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Heading, HGrid } from '@navikt/ds-react';
+import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import ComponentApi from '~/api/ComponentApi';
 import { IComponent } from '~/types/Component';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { getComponentIds } from '~/utils/helper';
 import ComponentList from '~/components/shared/ComponentList';
-import FeaturesApi from '~/api/FeaturesApi';
-import AccessApi from '~/api/AccessApi';
-import { IAccess } from '~/types/Access';
+import { IAccess, IPackageAccess } from '~/types/Access';
 import AlertManager from '~/components/AlertManager';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import useAlerts from '~/components/useAlerts';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 import { AuthTable } from '~/components/shared/AuthTable';
+import { handleClientAction } from '~/routes/klienter.$id/actions';
+import { loader } from './loaders';
+export { loader };
 
-export async function loader({ request, params }: ActionFunctionArgs) {
-    const orgName = await getSelectedOrganization(request);
-    const id = params.id || '';
-
-    const clientResponse = await ClientApi.getClientById(orgName, id);
-    const componentsResponse = await ComponentApi.getOrganisationComponents(orgName);
-    const featuresResponse = await FeaturesApi.fetchFeatures();
-    const accessResponse =
-        id && featuresResponse.data?.['access-controll-new']
-            ? await AccessApi.getClientorAdapterAccess(id)
-            : null;
-
-    return new Response(
-        JSON.stringify({
-            client: clientResponse,
-            components: componentsResponse.data,
-            features: featuresResponse.data,
-            access: accessResponse,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
-}
+export const action = async (args: ActionFunctionArgs) => handleClientAction(args);
 
 interface IExtendedFetcherResponseData extends IFetcherResponseData {
     clientSecret?: string;
 }
 
 export default function ClientDetails() {
-    const { client, components, features, access } = useLoaderData<{
+    const { client, components, features, access, accessComponentList } = useLoaderData<{
         client: IClient;
         components: IComponent[];
         features: Record<string, boolean>;
-        access: IAccess[];
+        access: IAccess;
+        accessComponentList: IPackageAccess[];
     }>();
 
     const navigate = useNavigate();
@@ -100,6 +76,13 @@ export default function ClientDetails() {
         formData.append('adapterName', client?.name as string);
         fetcher.submit(formData, { method: 'post' });
     };
+
+    function handleEnvChange(values: string[]) {
+        const formData = new FormData();
+        formData.append('actionType', 'UPDATE_ENVIRONMENT');
+        values.forEach((value) => formData.append('environments[]', value));
+        fetcher.submit(formData, { method: 'post' });
+    }
 
     return (
         <>
@@ -144,7 +127,6 @@ export default function ClientDetails() {
                                         ? { clientSecret: actionData.clientSecret }
                                         : {})}
                                 />
-                                <Divider className="pt-10" />
                             </>
                         )}
 
@@ -153,11 +135,27 @@ export default function ClientDetails() {
                         {hasAccessControl ? (
                             <>
                                 <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
-                                <ComponentList
-                                    accessList={access}
-                                    entity={client.name}
-                                    onToggle={handleToggle}
-                                />
+
+                                <Box padding={'6'}>
+                                    <CheckboxGroup
+                                        legend="Environment: "
+                                        onChange={(values) => handleEnvChange(values)}
+                                        defaultValue={access.allowedEnvironments}>
+                                        <HGrid gap="6" columns={3}>
+                                            <Checkbox value="api">API</Checkbox>
+                                            <Checkbox value="beta">Beta</Checkbox>
+                                            <Checkbox value="alpha">Alpha</Checkbox>
+                                        </HGrid>
+                                    </CheckboxGroup>
+                                </Box>
+
+                                {accessComponentList && accessComponentList.length > 0 && (
+                                    <ComponentList
+                                        accessList={accessComponentList}
+                                        entity={client.name}
+                                        onToggle={handleToggle}
+                                    />
+                                )}
                             </>
                         ) : (
                             <>
@@ -166,7 +164,6 @@ export default function ClientDetails() {
                                     items={components}
                                     selectedItems={getComponentIds(client.components)}
                                     toggle={handleToggle}
-                                    hideLink={true}
                                     isManaged={client.managed}
                                 />
                             </>
@@ -176,67 +173,4 @@ export default function ClientDetails() {
             )}
         </>
     );
-}
-
-export async function action({ request, params }: ActionFunctionArgs) {
-    const formData = await request.formData();
-    const orgName = await getSelectedOrganization(request);
-    const clientName = params.id || '';
-    const actionType = formData.get('actionType') as string;
-    let response;
-
-    switch (actionType) {
-        case 'UPDATE_CLIENT':
-            response = await ClientApi.updateClient(
-                clientName,
-                formData.get('shortDescription') as string,
-                formData.get('note') as string,
-                orgName
-            );
-            break;
-
-        case 'DELETE_CLIENT':
-            response = await ClientApi.deleteClient(clientName, orgName);
-            return redirect(`/klienter?deleted=${clientName}`);
-
-        case 'UPDATE_COMPONENT_IN_CLIENT':
-            const componentName = formData.get('componentName') as string;
-            const updateType = formData.get('isChecked') as string;
-            response = await ClientApi.updateComponentInClient(
-                componentName,
-                clientName,
-                orgName,
-                updateType
-            );
-            break;
-
-        case 'UPDATE_PASSWORD':
-            response = await ClientApi.setPassword(
-                formData.get('entityName') as string,
-                formData.get('password') as string,
-                orgName
-            );
-            break;
-
-        case 'GET_SECRET':
-            const secretResponse = await ClientApi.getOpenIdSecret(
-                formData.get('entityName') as string,
-                orgName
-            );
-
-            response = {
-                clientSecret: secretResponse.data,
-                message: 'Klienthemmeligheten ble hentet',
-                variant: 'success',
-            };
-            break;
-        default:
-            response = {
-                success: false,
-                message: `Ukjent handlingstype: '${actionType}'`,
-                variant: 'error',
-            };
-    }
-
-    return response;
 }

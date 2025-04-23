@@ -6,47 +6,22 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ServiceTable from '~/routes/samtykke/ServiceTable';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
-import ConsentApi from '~/api/ConsentApi';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
 import AddPolicyForm from '~/routes/samtykke/AddPolicyForm';
 import AddServiceForm from '~/routes/samtykke/AddServiceForm';
-import FeaturesApi from '~/api/FeaturesApi';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
-import logger from '~/utils/logger';
+import { handleConsentAction } from '~/routes/samtykke/actions';
+import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Samtykke' }, { name: 'description', content: 'Samtykke' }];
 };
 
-export const loader = async ({ request }: { request: Request }) => {
-    const orgName = await getSelectedOrganization(request);
-    const featuresResponse = await FeaturesApi.fetchFeatures();
-    const features = featuresResponse?.data;
+export { loader };
 
-    logger.debug('RUNNING LOADER IN CONSENT');
-
-    if (features && features['samtykke-admin-new']) {
-        const policies = await ConsentApi.getBehandlings(orgName);
-        const services = await ConsentApi.getTjenste(orgName);
-        const personalDataList = await ConsentApi.getPersonopplysning();
-        const foundations = await ConsentApi.getBehandlingsgrunnlag();
-
-        return new Response(
-            JSON.stringify({
-                policies: policies.data,
-                services: services.data,
-                personalDataList: personalDataList.data,
-                foundations: foundations.data,
-            }),
-            {
-                headers: { 'Content-Type': 'application/json' },
-            }
-        );
-    }
-};
+export const action = async (args: ActionFunctionArgs) => handleConsentAction(args);
 
 export default function Index() {
     const [showAddPolicyForm, setShowAddPolicyForm] = useState(false);
@@ -170,43 +145,4 @@ export default function Index() {
             </VStack>
         </>
     );
-}
-
-export async function action({ request }: ActionFunctionArgs) {
-    const orgName = await getSelectedOrganization(request);
-    const formData = await request.formData();
-    const actionType = formData.get('actionType');
-
-    let serviceName;
-    let response;
-    switch (actionType) {
-        case 'SET_ACTIVE':
-            response = await ConsentApi.setActive(
-                orgName,
-                formData.get('policyId') as string,
-                formData.get('setIsActive') as string
-            );
-            break;
-        case 'ADD_SERVICE':
-            serviceName = formData.get('newServiceName') as string;
-            response = await ConsentApi.createService(serviceName, orgName);
-            break;
-        case 'ADD_POLICY':
-            response = await ConsentApi.createPolicy(
-                formData.get('serviceId') as string,
-                formData.get('foundationId') as string,
-                formData.get('personalDataId') as string,
-                formData.get('description') as string,
-                orgName
-            );
-            break;
-        default:
-            response = {
-                success: false,
-                message: `Ukjent handlingstype: '${actionType}'`,
-                variant: 'error',
-            };
-    }
-
-    return response;
 }

@@ -1,7 +1,14 @@
 export interface IAccess {
+    username: string;
+    isAdapter: boolean;
+    allowedEnvironments: string[];
+    // packageAccesses: IPackageAccess[];
+}
+
+export interface IPackageAccess {
     domain: string;
     packageName: string;
-    status: string;
+    accessLevel: string;
 }
 
 export interface IField {

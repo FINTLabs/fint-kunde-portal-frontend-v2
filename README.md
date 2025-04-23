@@ -37,10 +37,16 @@ The `LOG_LEVEL` environment variable controls the verbosity of logging in the ap
 ### Start locally:
 1. **Start Port Forwarding**  
    Run the provided script:
-   ```bash
+   ```sh
    ./startUpForwards.sh
    ```
-1. **Start React**  
+2. **Header**  
+   add x-nin to the header
+```
+x-nin : YOUR_XNIN
+```
+
+3**Start React**  
    Run the provided script:
 ```sh
 npm run dev
