@@ -4,7 +4,7 @@ import { MigrationIcon } from '@navikt/aksel-icons';
 import { Alert, Search } from '@navikt/ds-react';
 import { useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import { CustomTabs } from '~/components/shared/CustomTabs';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AdapterCreateForm from '~/routes/adaptere._index/CreateForm';
 import AlertManager from '~/components/AlertManager';
 import { IAdapter } from '~/types/Adapter';
@@ -38,9 +38,9 @@ export default function Index() {
     const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        setFilteredAdapter(adapters);
-    }, [adapters]);
+    // useEffect(() => {
+    //     setFilteredAdapter(adapters);
+    // }, [adapters]);
 
     const handleCreate = () => setIsCreating(true);
 
