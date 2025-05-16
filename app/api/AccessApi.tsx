@@ -39,7 +39,7 @@ class AccessApi {
     ): Promise<ApiResponse<any>> {
         const apiResults = await apiManager<any>({
             method: 'GET',
-            url: `${API_URL}/access/${clientOrAdapter}/${name}`,
+            url: `${API_URL}/access/${clientOrAdapter}/component/${name}`,
             functionName: 'getComponentAccess',
         });
 
@@ -51,25 +51,25 @@ class AccessApi {
         );
     }
 
-    static async getFieldAccess(
-        clientOrAdapter: string,
-        componentName: string,
-        resourceName: string
-    ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
-            method: 'GET',
-            url: `${API_URL}/access/${clientOrAdapter}/${componentName}/${resourceName}`,
-            functionName: 'getFieldAccess',
-        });
-
-        logger.info('Field list:', apiResults.data);
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke hente felttilgang for: ${resourceName}`,
-            `Felttilgang for ${resourceName} ble hentet.`,
-            'success'
-        );
-    }
+    // static async getFieldAccess(
+    //     clientOrAdapter: string,
+    //     componentName: string,
+    //     resourceName: string
+    // ): Promise<ApiResponse<any>> {
+    //     const apiResults = await apiManager<any>({
+    //         method: 'GET',
+    //         url: `${API_URL}/access/${clientOrAdapter}/${componentName}/${resourceName}`,
+    //         functionName: 'getFieldAccess',
+    //     });
+    //
+    //     logger.info('Field list:', apiResults.data);
+    //     return handleApiResponse(
+    //         apiResults,
+    //         `Kunne ikke hente felttilgang for: ${resourceName}`,
+    //         `Felttilgang for ${resourceName} ble hentet.`,
+    //         'success'
+    //     );
+    // }
 
     static async updateEnvironments(
         username: string,

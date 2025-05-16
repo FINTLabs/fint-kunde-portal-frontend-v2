@@ -7,12 +7,14 @@ services=(
   "fint-link-walker"
   "fint-test-runner-kotlin"
   "fint-samtykke-admin-backend"
+  "fint-core-access-control"
 )
 ports=(
   "8080:8080"
   "8086:8080"
   "8088:8080"
   "8084:8080"
+  "8085:8080"
 )
 
 NAMESPACE="fintlabs-no"
