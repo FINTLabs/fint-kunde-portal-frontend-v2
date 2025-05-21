@@ -66,12 +66,7 @@ const RelationTestResultsTable = ({ logResults }: TestResultsTableProps) => {
                                 {result.status === 'COMPLETED' && (
                                     <CheckmarkCircleIcon title="COMPLETED" fontSize="1.5rem" />
                                 )}
-                                {[
-                                    'STARTED',
-                                    'FETCHING_RESOURCES',
-                                    'CREATING_ENTRY_REPORTS',
-                                    'PROCESSING_LINKS',
-                                ].includes(result.status) && (
+                                {result.status === 'IN_QUEUE' || result.status === 'PROCESSING' || (
                                     // <ArrowCirclepathIcon title={result.status} fontSize="1.5rem" />
                                     <Loader size="xsmall" title="Venter..." />
                                 )}
