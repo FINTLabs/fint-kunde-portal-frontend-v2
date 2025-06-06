@@ -124,7 +124,6 @@ export default function Route() {
 
             <FieldList
                 onSave={handleSaveFields}
-                selectedResource={'selectedResource'}
                 title={fieldListTitle}
                 fieldList={fieldList || []}
             />
