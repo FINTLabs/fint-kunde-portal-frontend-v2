@@ -10,8 +10,8 @@ export interface IComponent {
     core: boolean;
     openData: boolean;
     common: boolean;
-    dockerImage?: string | null; // Optional field
-    componentSizes?: any | null; // Optional field
+    dockerImage?: string | null; // Optional resource
+    componentSizes?: any | null; // Optional resource
     cacheDisabledFor: string[];
     inProduction: boolean;
     inBeta: boolean;

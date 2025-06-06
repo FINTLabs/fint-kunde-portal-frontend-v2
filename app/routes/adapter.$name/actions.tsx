@@ -1,6 +1,7 @@
 import { redirect } from '@remix-run/node';
 import AdapterApi from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import AccessApi from '~/api/AccessApi';
 
 export async function handleAdapterAction({ request, params }: { request: Request; params: any }) {
     const name = params.name || '';
@@ -9,6 +10,19 @@ export async function handleAdapterAction({ request, params }: { request: Reques
     const actionType = formData.get('actionType') as string;
 
     switch (actionType) {
+        case 'ADD_COMPONENT_ACCESS':
+            return await AccessApi.addComponentAccess(
+                name,
+                formData.get('componentName') as string,
+                formData.get('enabled') as string
+            );
+        case 'ADD_ACCESS':
+            return await AccessApi.addAccess(name);
+
+        case 'UPDATE_ENVIRONMENT': {
+            const environments = formData.getAll('environments[]') as string[];
+            return await AccessApi.updateEnvironments(name, environments);
+        }
         case 'UPDATE_PASSWORD':
             return await AdapterApi.setPassword(
                 formData.get('entityName') as string,

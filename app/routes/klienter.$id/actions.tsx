@@ -10,6 +10,9 @@ export async function handleClientAction({ request, params }: { request: Request
     const actionType = formData.get('actionType') as string;
 
     switch (actionType) {
+        case 'ADD_ACCESS':
+            return await AccessApi.addAccess(clientName);
+
         case 'UPDATE_ENVIRONMENT': {
             const environments = formData.getAll('environments[]') as string[];
             return await AccessApi.updateEnvironments(clientName, environments);
@@ -27,13 +30,18 @@ export async function handleClientAction({ request, params }: { request: Request
             await ClientApi.deleteClient(clientName, orgName);
             return redirect(`/klienter?deleted=${clientName}`);
 
-        case 'UPDATE_COMPONENT_IN_CLIENT':
-            return await ClientApi.updateComponentInClient(
-                formData.get('componentName') as string,
+        case 'ADD_COMPONENT_ACCESS':
+            return await AccessApi.addComponentAccess(
                 clientName,
-                orgName,
-                formData.get('isChecked') as string
+                formData.get('componentName') as string,
+                formData.get('enabled') as string
             );
+        // return await ClientApi.updateComponentInClient(
+        //     formData.get('componentName') as string,
+        //     clientName,
+        //     orgName,
+        //     formData.get('isChecked') as string
+        // );
 
         case 'UPDATE_PASSWORD':
             return await ClientApi.setPassword(

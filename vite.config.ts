@@ -15,10 +15,10 @@ export default defineConfig({
             },
             // routes(defineRoutes) {
             //     return defineRoutes((route) => {
-            //         route('tilgang/:id/:element', 'routes/tilgang/id/element/route.tsx');
+            //         route('tilgang/:id/:resource', 'routes/tilgang/id/resource/route.tsx');
             //         route(
-            //             'tilgang/:id/:element/:resource',
-            //             'routes/tilgang/id/element/resource/route.tsx'
+            //             'tilgang/:id/:resource/:resource',
+            //             'routes/tilgang/id/resource/resource/route.tsx'
             //         );
             //     });
             // },

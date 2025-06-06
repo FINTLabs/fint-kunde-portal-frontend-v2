@@ -15,7 +15,7 @@
 //
 //
 // -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
+// Cypress.Commands.add('drag', { prevSubject: 'resource'}, (subject, options) => { ... })
 //
 //
 // -- This is a dual command --

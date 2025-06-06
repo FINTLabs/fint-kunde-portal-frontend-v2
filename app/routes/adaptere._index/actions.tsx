@@ -2,6 +2,7 @@ import { redirect } from '@remix-run/node';
 import AdapterAPI from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IPartialAdapter } from '~/types/Adapter';
+import AccessApi from '~/api/AccessApi';
 
 export async function handleAdapterIndexAction({ request }: { request: Request }) {
     const formData = await request.formData();
@@ -18,6 +19,9 @@ export async function handleAdapterIndexAction({ request }: { request: Request }
     };
 
     const response = await AdapterAPI.createAdapter(newAdapter, orgName);
+    if (response.success) {
+        await AccessApi.addAccess(response.data?.name as string);
+    }
 
     if (!response.success) {
         throw new Response('Kunne ikke opprette ny adapter.', { status: 500 });

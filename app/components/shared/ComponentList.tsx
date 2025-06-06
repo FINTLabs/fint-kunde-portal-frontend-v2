@@ -2,10 +2,10 @@ import React from 'react';
 import { Box, Button, Checkbox, FormSummary, HGrid, HStack } from '@navikt/ds-react';
 import { ChevronRightCircleIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
-import { IPackageAccess } from '~/types/Access';
+import { IDomainPackages } from '~/types/Access';
 
 interface ComponentListProps {
-    accessList: IPackageAccess[];
+    accessList: IDomainPackages[];
     onToggle: (formData: FormData) => void;
     entity: string;
 }
@@ -14,36 +14,24 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
     const navigate = useNavigate();
 
     const handleRowClick = (domain: string, packageName: string) => {
-        navigate(`/tilgang/${entity}/${domain}_${packageName}`);
+        navigate(`/tilgang/${entity}/${domain}-${packageName}`);
     };
-
-    const groupedByDomain = Array.isArray(accessList)
-        ? accessList.reduce((acc: Record<string, IPackageAccess[]>, item: IPackageAccess) => {
-              if (!acc[item.domain]) {
-                  acc[item.domain] = [];
-              }
-              acc[item.domain].push(item);
-              return acc;
-          }, {})
-        : {};
 
     const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const isChecked = e.target.checked;
 
-        if (onToggle) {
-            const formData = new FormData();
-            formData.append('componentName', value);
-            formData.append('isChecked', isChecked.toString());
-            onToggle(formData);
-        }
+        const formData = new FormData();
+        formData.append('componentName', value);
+        formData.append('isChecked', isChecked.toString());
+        onToggle(formData);
     };
 
     return (
         <Box>
             <HGrid gap={'3'} columns={3}>
-                {Object.keys(groupedByDomain).map((domain, i) => {
-                    const domainAccess = groupedByDomain[domain];
+                {accessList.map((domain, i) => {
+                    // const domainAccess = groupedByDomain[domain];
 
                     return (
                         <FormSummary key={`${domain}-${i}`}>
@@ -51,14 +39,14 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                 <HStack align={'center'} justify={'space-between'}>
                                     <KeyVerticalIcon title="key icon" fontSize="1.5rem" />
                                     <FormSummary.Heading level="2">
-                                        {capitalizeFirstLetter(domain)}
+                                        {capitalizeFirstLetter(domain.domain)}
                                     </FormSummary.Heading>
                                 </HStack>
                             </FormSummary.Header>
 
                             <FormSummary.Answers>
                                 <FormSummary.Answer>
-                                    {domainAccess.map((item, i) => (
+                                    {domain.packages.map((item, i) => (
                                         <HStack
                                             key={`${domain}-${i}`}
                                             justify={'space-between'}
@@ -74,18 +62,19 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                                 onChange={(e) => {
                                                     handleToggle(e);
                                                 }}
-                                                value={item.packageName}
+                                                value={domain.domain + '-' + item.packageName}
                                                 size={'small'}
-                                                checked={item.accessLevel === 'ENABLED'}>
+                                                checked={item.access}>
                                                 {item.packageName}
                                             </Checkbox>
                                             <Button
                                                 icon={<ChevronRightCircleIcon title="Rediger" />}
                                                 onClick={() =>
-                                                    handleRowClick(item.domain, item.packageName)
+                                                    handleRowClick(domain.domain, item.packageName)
                                                 }
                                                 variant={'tertiary'}
                                                 size={'xsmall'}
+                                                disabled={!item.access}
                                             />
                                         </HStack>
                                     ))}

@@ -7,18 +7,16 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import { IComponent } from '~/types/Component';
-import { getComponentIds } from '~/utils/helper';
 import ComponentList from '~/components/shared/ComponentList';
-import { IAccess, IPackageAccess } from '~/types/Access';
+import { Environment, IAccess, IDomainPackages } from '~/types/Access';
 import AlertManager from '~/components/AlertManager';
-import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import useAlerts from '~/components/useAlerts';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 import { AuthTable } from '~/components/shared/AuthTable';
 import { handleClientAction } from '~/routes/klienter.$id/actions';
 import { loader } from './loaders';
+
 export { loader };
 
 export const action = async (args: ActionFunctionArgs) => handleClientAction(args);
@@ -28,12 +26,11 @@ interface IExtendedFetcherResponseData extends IFetcherResponseData {
 }
 
 export default function ClientDetails() {
-    const { client, components, features, access, accessComponentList } = useLoaderData<{
+    const { client, features, access, accessComponentList } = useLoaderData<{
         client: IClient;
-        components: IComponent[];
         features: Record<string, boolean>;
         access: IAccess;
-        accessComponentList: IPackageAccess[];
+        accessComponentList: IDomainPackages[];
     }>();
 
     const navigate = useNavigate();
@@ -48,6 +45,12 @@ export default function ClientDetails() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
     const { alerts } = useAlerts(actionData, fetcher.state);
+
+    let selectedEnvs: Environment[] = [];
+    if (access?.environments)
+        selectedEnvs = (Object.keys(access.environments) as Environment[]).filter(
+            (env) => access.environments[env]
+        );
 
     const handleUpdate = (formData: FormData) => {
         formData.append('actionType', 'UPDATE_CLIENT');
@@ -72,18 +75,29 @@ export default function ClientDetails() {
     };
 
     const handleToggle = (formData: FormData) => {
-        formData.append('actionType', 'UPDATE_COMPONENT_IN_CLIENT');
-        formData.append('adapterName', client?.name as string);
+        formData.append('actionType', 'ADD_COMPONENT_ACCESS');
+        formData.append('username', client?.name as string);
+        formData.append('componentName', formData.get('componentName') as string);
+        formData.append('enabled', formData.get('isChecked') as string);
         fetcher.submit(formData, { method: 'post' });
     };
 
-    function handleEnvChange(values: string[]) {
+    function handleEnvChange(values: Environment[]) {
         const formData = new FormData();
         formData.append('actionType', 'UPDATE_ENVIRONMENT');
-        values.forEach((value) => formData.append('environments[]', value));
+        // append only the checked ones
+        values.forEach((v) => formData.append('environments[]', v));
         fetcher.submit(formData, { method: 'post' });
     }
 
+    function addAccess() {
+        const formData = new FormData();
+        formData.append('actionType', 'ADD_ACCESS');
+        formData.append('username', client?.name as string);
+        fetcher.submit(formData, { method: 'post' });
+    }
+
+    //TODO: Button to enable all resources
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -132,41 +146,40 @@ export default function ClientDetails() {
 
                         <Divider className="pt-10" />
 
-                        {hasAccessControl ? (
+                        {hasAccessControl && access ? (
                             <>
                                 <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
 
                                 <Box padding={'6'}>
                                     <CheckboxGroup
-                                        legend="Environment: "
-                                        onChange={(values) => handleEnvChange(values)}
-                                        defaultValue={access.allowedEnvironments}>
-                                        <HGrid gap="6" columns={3}>
+                                        legend="Environment:"
+                                        onChange={(vals) => handleEnvChange(vals as Environment[])}
+                                        defaultValue={selectedEnvs}>
+                                        <HGrid gap="6" columns={4}>
                                             <Checkbox value="api">API</Checkbox>
                                             <Checkbox value="beta">Beta</Checkbox>
                                             <Checkbox value="alpha">Alpha</Checkbox>
+                                            <Checkbox value="pwf">PWF</Checkbox>
                                         </HGrid>
                                     </CheckboxGroup>
                                 </Box>
 
-                                {accessComponentList && accessComponentList.length > 0 && (
-                                    <ComponentList
-                                        accessList={accessComponentList}
-                                        entity={client.name}
-                                        onToggle={handleToggle}
-                                    />
-                                )}
-                            </>
-                        ) : (
-                            <>
-                                <Heading size={'medium'}>Komponenter</Heading>
-                                <ComponentsTable
-                                    items={components}
-                                    selectedItems={getComponentIds(client.components)}
-                                    toggle={handleToggle}
-                                    isManaged={client.managed}
+                                <ComponentList
+                                    accessList={accessComponentList}
+                                    entity={client.name}
+                                    onToggle={handleToggle}
                                 />
                             </>
+                        ) : (
+                            <Box padding="6">
+                                <Alert variant="warning">
+                                    Tilgangsstyring for komponenter er ikke aktivert
+                                </Alert>
+                                <Divider className="pt-3" />
+                                <Button onClick={addAccess} size={'small'}>
+                                    Sett opp tilgangsstyring
+                                </Button>
+                            </Box>
                         )}
                     </Box>
                 </HGrid>

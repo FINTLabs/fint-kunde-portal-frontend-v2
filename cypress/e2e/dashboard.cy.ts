@@ -34,7 +34,7 @@ describe('Dashboard', () => {
     });
 
     it('should display the menu component', () => {
-        cy.get('header.navds-box').should('exist'); // Assuming the Menu component is rendered inside a <nav> element
+        cy.get('header.navds-box').should('exist'); // Assuming the Menu component is rendered inside a <nav> resource
     });
 
     it('should display the footer', () => {

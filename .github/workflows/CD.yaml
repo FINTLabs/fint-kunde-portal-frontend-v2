@@ -99,7 +99,7 @@ jobs:
         uses: azure/aks-set-context@v3
         with:
           cluster-name: '${{ matrix.cluster }}'
-          resource-group: '${{ steps.resource-group.outputs.result }}'
+          resource-group: '${{ steps.component-group.outputs.result }}'
           admin: 'true'
           use-kubelogin: 'true'
 

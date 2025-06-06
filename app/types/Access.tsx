@@ -1,20 +1,34 @@
+export type Environment = 'api' | 'beta' | 'alpha' | 'pwf';
+
 export interface IAccess {
     username: string;
     isAdapter: boolean;
-    allowedEnvironments: string[];
-    // packageAccesses: IPackageAccess[];
+    environments: Record<Environment, boolean>;
 }
 
-export interface IPackageAccess {
-    domain: string;
+export interface IPackageItem {
     packageName: string;
-    accessLevel: string;
+    access: boolean;
+}
+
+export interface IDomainPackages {
+    domain: string;
+    packages: IPackageItem[];
+}
+
+// export type PackageAccessList = IDomainPackages[];
+
+export interface IResource {
+    name: string;
+    enabled: boolean;
+    writeable: boolean;
+    readingOption: 'MULTIPLE' | 'SINGULAR';
 }
 
 export interface IField {
     name: string;
-    shouldContain: string[];
-    isHidden: boolean;
+    enabled: boolean;
+    mustContain: string;
 }
 
 export interface IAccessComponent {

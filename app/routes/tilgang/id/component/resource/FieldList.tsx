@@ -6,59 +6,89 @@ import {
     PencilWritingIcon,
     XMarkIcon,
 } from '@navikt/aksel-icons';
-import React, { useEffect, useState } from 'react';
-
-interface Field {
-    name: string;
-    shouldContain: string[];
-    isHidden: boolean;
-}
+import React, { useState } from 'react';
+import { IField } from '~/types/Access';
 
 interface FieldListProps {
-    onSave: (formData: { resourceId: string }) => void;
-    selectedResource: string;
+    onSave: (updatedFields: IField[]) => void;
     title: string;
-    fieldList: Field[];
+    fieldList: IField[];
 }
 
-const FieldList = ({ onSave, selectedResource, title, fieldList }: FieldListProps) => {
+const FieldList = ({ onSave, title, fieldList }: FieldListProps) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [data, setData] = useState<Field[]>(fieldList); // Use fieldList instead of mockData
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+    const [data, setData] = useState(fieldList);
+    const CSV_REGEX = /^[A-Za-z0-9_-]+(?:,[A-Za-z0-9_-]+)*$/;
 
-    useEffect(() => {
-        setData(fieldList);
-    }, [fieldList]);
+    const [errorMessages, setErrorMessages] = useState<string[]>(fieldList.map(() => ''));
 
     const handleEditClick = () => {
         setIsEditing(true);
     };
 
     const handleCancelClick = () => {
+        setErrorMessages(fieldList.map(() => ''));
+        setData(fieldList);
+        setHasUnsavedChanges(false);
         setIsEditing(false);
     };
 
     const handleSaveClick = () => {
-        const formData = {
-            resourceId: selectedResource,
-            actionType: 'SAVE_FIELDS',
-        };
-        onSave(formData);
+        const hasError = errorMessages.some((msg) => msg.length > 0);
+        if (hasError) {
+            return;
+        }
+        onSave(data);
         setIsEditing(false);
         setHasUnsavedChanges(false);
     };
 
-    const handleInputChange = (index: number, key: keyof Field, value: string | boolean) => {
+    // const handleInputChange = (index: number, key: keyof IField, value: string | boolean) => {
+    //     setData((prevData) => {
+    //         const updatedData = [...prevData];
+    //         updatedData[index] = { ...updatedData[index], [key]: value };
+    //         return updatedData;
+    //     });
+    //     setHasUnsavedChanges(true);
+    // };
+    const handleInputChange = (index: number, key: keyof IField, value: string | boolean) => {
         setData((prevData) => {
             const updatedData = [...prevData];
             updatedData[index] = { ...updatedData[index], [key]: value };
             return updatedData;
         });
+
+        // If the changed field is “mustContain”, re-validate and set error message
+        if (key === 'mustContain') {
+            const str = value as string;
+            if (str.length === 0) {
+                // You could allow empty (meaning “no must-contain constraints”), or treat as valid
+                setErrorMessages((prev) => {
+                    const copy = [...prev];
+                    copy[index] = '';
+                    return copy;
+                });
+            } else if (!CSV_REGEX.test(str)) {
+                setErrorMessages((prev) => {
+                    const copy = [...prev];
+                    copy[index] = 'Må være komma-separert liste';
+                    return copy;
+                });
+            } else {
+                setErrorMessages((prev) => {
+                    const copy = [...prev];
+                    copy[index] = '';
+                    return copy;
+                });
+            }
+        }
+
         setHasUnsavedChanges(true);
     };
 
     const toggleVisibility = (index: number) => {
-        handleInputChange(index, 'isHidden', !data[index].isHidden);
+        handleInputChange(index, 'enabled', !data[index].enabled);
     };
 
     return (
@@ -108,15 +138,15 @@ const FieldList = ({ onSave, selectedResource, title, fieldList }: FieldListProp
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
-                            {data.map(({ name, isHidden, shouldContain }, i) => (
+                            {data.map(({ name, enabled, mustContain }, i) => (
                                 <Table.Row key={name}>
                                     <Table.HeaderCell scope="row">{name}</Table.HeaderCell>
                                     <Table.DataCell>
                                         {!isEditing ? (
-                                            isHidden ? (
-                                                <EyeSlashIcon title="Hidden" fontSize="1.5rem" />
+                                            enabled ? (
+                                                <EyeIcon title="Hidden" fontSize="1.5rem" />
                                             ) : (
-                                                <EyeIcon title="Visible" fontSize="1.5rem" />
+                                                <EyeSlashIcon title="Visible" fontSize="1.5rem" />
                                             )
                                         ) : (
                                             <Button
@@ -124,13 +154,10 @@ const FieldList = ({ onSave, selectedResource, title, fieldList }: FieldListProp
                                                 variant={'tertiary'}
                                                 size={'xsmall'}
                                                 icon={
-                                                    isHidden ? (
-                                                        <EyeSlashIcon
-                                                            title="Hidden"
-                                                            fontSize="1.5rem"
-                                                        />
+                                                    enabled ? (
+                                                        <EyeIcon title="Hidden" fontSize="1.5rem" />
                                                     ) : (
-                                                        <EyeIcon
+                                                        <EyeSlashIcon
                                                             title="Visible"
                                                             fontSize="1.5rem"
                                                         />
@@ -145,14 +172,11 @@ const FieldList = ({ onSave, selectedResource, title, fieldList }: FieldListProp
                                             size="small"
                                             hideLabel
                                             readOnly={!isEditing}
-                                            value={shouldContain.join(', ')}
-                                            // onChange={(e) =>
-                                            //     handleInputChange(
-                                            //         i,
-                                            //         'shouldContain',
-                                            //         e.target.value.split(',')
-                                            //     )
-                                            // }
+                                            value={mustContain}
+                                            onChange={(e) =>
+                                                handleInputChange(i, 'mustContain', e.target.value)
+                                            }
+                                            error={errorMessages[i] ? errorMessages[i] : undefined}
                                         />
                                     </Table.DataCell>
                                 </Table.Row>

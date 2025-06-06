@@ -8,7 +8,7 @@ export default [
 
     // ...(await remixRoutesOptionAdapter(/* ... */)),
 
-    route('tilgang/:id/:element', 'routes/tilgang/id/element/route.tsx'),
-    route('tilgang/:id/:element/:resource', 'routes/tilgang/id/element/resource/route.tsx'),
+    route('tilgang/:id/:component', 'routes/tilgang/id/component/route.tsx'),
+    route('tilgang/:id/:component/:resource', 'routes/tilgang/id/component/resource/route.tsx'),
     route('help', 'routes/help/route.tsx'),
 ] satisfies RouteConfig;

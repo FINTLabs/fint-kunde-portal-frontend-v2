@@ -1,7 +1,6 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import AdapterApi from '~/api/AdapterApi';
-import ComponentApi from '~/api/ComponentApi';
 import FeaturesApi from '~/api/FeaturesApi';
 import AccessApi from '~/api/AccessApi';
 
@@ -9,23 +8,26 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const orgName = await getSelectedOrganization(request);
     const adapterName = params.name;
 
-    const [adaptersResponse, componentsResponse, featuresResponse] = await Promise.all([
+    const [adaptersResponse, featuresResponse] = await Promise.all([
         AdapterApi.getAdapters(orgName),
-        ComponentApi.getOrganisationComponents(orgName),
         FeaturesApi.fetchFeatures(),
     ]);
 
-    const accessResponse =
-        adapterName && featuresResponse.data?.['access-controll-new']
-            ? await AccessApi.getClientorAdapterAccess(adapterName)
-            : null;
+    const hasAccessControl = adapterName && featuresResponse.data?.['access-controll-new'];
+
+    const [accessResponse, componentListResponse] = hasAccessControl
+        ? await Promise.all([
+              AccessApi.getClientorAdapterAccess(adapterName),
+              AccessApi.getClientorAdapterAccessComponents(adapterName),
+          ])
+        : [null, null];
 
     return new Response(
         JSON.stringify({
             adapters: adaptersResponse.data,
-            components: componentsResponse.data,
             features: featuresResponse.data,
             access: accessResponse?.data,
+            accessComponentList: componentListResponse?.data,
             orgName,
         }),
         {
