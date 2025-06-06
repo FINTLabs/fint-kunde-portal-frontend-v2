@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, LoaderFunction, MetaFunction } from '@remix-run/node';
+import { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
@@ -6,47 +6,20 @@ import { Box, Button, HStack } from '@navikt/ds-react';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import React, { useEffect } from 'react';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import ComponentApi from '~/api/ComponentApi';
-import ClientApi from '~/api/ClientApi';
-import ComponentConfigApi from '~/api/ComponentConfigApi';
-import LinkWalkerApi from '~/api/LinkWalkerApi';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
 import useAlerts from '~/components/useAlerts';
 import AlertManager from '~/components/AlertManager';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
-import logger from '~/utils/logger';
-import { IClient } from '~/types/Clients';
+import { handleRelationTestAction } from '~/routes/relasjonstest/actions';
+import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Relasjonstest' }, { name: 'description', content: 'Relasjonstest' }];
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
-    const orgName = await getSelectedOrganization(request);
+export { loader };
 
-    const components = await ComponentApi.getOrganisationComponents(orgName);
-    const clients = await ClientApi.getClients(orgName);
-    const configs = await ComponentConfigApi.getComponentConfigs();
-    const relationTests = await LinkWalkerApi.getTests(orgName);
-
-    const filteredClients = (clients?.data ?? []).filter((client: IClient) => !client.managed);
-
-    return new Response(
-        JSON.stringify({
-            components: components.data,
-            clients: filteredClients,
-            relationTests: relationTests.data,
-            configs: configs.data,
-            success: false,
-            message: `Oppdatering av testresultater`,
-            variant: 'success',
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
-};
+export const action = async (args: ActionFunctionArgs) => handleRelationTestAction(args);
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Relasjonstest', link: '/relasjonstest' }];
@@ -137,38 +110,4 @@ export default function Index() {
             )}
         </>
     );
-}
-export async function action({ request }: ActionFunctionArgs) {
-    const orgName = await getSelectedOrganization(request);
-    const formData = await request.formData();
-    const testUrl = formData.get('testUrl');
-    const clientName = formData.get('clientName');
-    const actionType = formData.get('actionType') as string;
-
-    logger.debug('ACTION TYPE relatonstest', actionType);
-    let response;
-
-    switch (actionType) {
-        case 'ADD_TEST':
-            response = await LinkWalkerApi.addTest(
-                testUrl as string,
-                clientName as string,
-                orgName
-            );
-            break;
-
-        case 'CLEAR_TESTS':
-            response = await LinkWalkerApi.clearTests(orgName);
-            break;
-
-        default:
-            response = {
-                success: false,
-                message: `Ukjent handlingstype: '${actionType}'`,
-                variant: 'error',
-            };
-            break;
-    }
-
-    return response;
 }

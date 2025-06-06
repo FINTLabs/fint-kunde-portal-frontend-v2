@@ -1,5 +1,6 @@
 import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
 import { IClient } from '~/types/Clients';
+import logger from '~/utils/logger';
 
 const API_URL = process.env.API_URL;
 
@@ -11,6 +12,9 @@ class ComponentApi {
             functionName: 'getAllComponents',
         });
 
+        logger.silly(
+            `FULL LIST OF COMPONENTS: ${JSON.stringify(apiResults.data?.map((c) => c.name) ?? [], null, 2)}`
+        );
         return handleApiResponse(apiResults, 'Kunne ikke hente alle komponenter.');
     }
 
@@ -37,6 +41,10 @@ class ComponentApi {
             url: `${API_URL}/api/components/organisation/${organisationName}`,
             functionName: 'getOrganisationComponents',
         });
+
+        logger.silly(
+            `LIST OF COMPONENTS FOR ORG: ${JSON.stringify(apiResults.data?.map((c) => c.name) ?? [], null, 2)}`
+        );
 
         return handleApiResponse(
             apiResults,

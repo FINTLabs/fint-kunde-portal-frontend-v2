@@ -1,70 +1,30 @@
-import {
-    type ActionFunctionArgs,
-    type LoaderFunctionArgs,
-    type MetaFunction,
-    redirect,
-} from '@remix-run/node';
+import { type ActionFunctionArgs, type MetaFunction } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
-import ComponentApi from '~/api/ComponentApi';
-import AdapterApi from '~/api/AdapterApi';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import FeaturesApi from '~/api/FeaturesApi';
-import AccessApi from '~/api/AccessApi';
-import { IAccess } from '~/types/Access';
+import { Environment, IAccess, IDomainPackages } from '~/types/Access';
 import React from 'react';
-import { Alert, Box, Heading, HGrid } from '@navikt/ds-react';
+import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid } from '@navikt/ds-react';
 import AlertManager from '~/components/AlertManager';
 import { BackButton } from '~/components/shared/BackButton';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { AuthTable } from '~/components/shared/AuthTable';
 import ComponentList from '~/components/shared/ComponentList';
-import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
-import { getComponentIds } from '~/utils/helper';
-import { IComponent } from '~/types/Component';
 import useAlerts from '~/components/useAlerts';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { IAdapter } from '~/types/Adapter';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
+import { handleAdapterAction } from '~/routes/adapter.$name/actions';
+import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Adapter Detaljer' }, { name: 'description', content: 'Adapter Detaljer' }];
 };
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-    const orgName = await getSelectedOrganization(request);
-    const adapterName = params.name;
+export { loader };
 
-    const [adaptersResponse, componentsResponse, featuresResponse] = await Promise.all([
-        AdapterApi.getAdapters(orgName),
-        ComponentApi.getOrganisationComponents(orgName),
-        FeaturesApi.fetchFeatures(),
-    ]);
-
-    const features = featuresResponse.data;
-    let access = null;
-    if (adapterName && features && features['access-controll-new']) {
-        const accessResponse = await AccessApi.getClientorAdapterAccess(adapterName);
-        if (accessResponse.success) {
-            access = accessResponse.data;
-        }
-    }
-
-    return new Response(
-        JSON.stringify({
-            adapters: adaptersResponse.data,
-            components: componentsResponse.data,
-            features: featuresResponse.data,
-            access,
-            orgName,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
-};
+export const action = async (args: ActionFunctionArgs) => handleAdapterAction(args);
 
 interface IExtendedFetcherResponseData extends IFetcherResponseData {
     clientSecret?: string;
@@ -72,11 +32,11 @@ interface IExtendedFetcherResponseData extends IFetcherResponseData {
 
 export default function Index() {
     // TODO: get adapter based on ID.
-    const { components, adapters, features, access } = useLoaderData<{
-        components: IComponent[];
+    const { adapters, features, access, accessComponentList } = useLoaderData<{
         adapters: IAdapter[];
         features: Record<string, boolean>;
-        access: IAccess[];
+        access: IAccess;
+        accessComponentList: IDomainPackages[];
     }>();
     const fetcher = useFetcher<IFetcherResponseData>();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
@@ -92,6 +52,12 @@ export default function Index() {
     const displayName = adapter?.name.split('@')[0] || '';
     const { alerts } = useAlerts(actionData, fetcher.state);
 
+    let selectedEnvs: Environment[] = [];
+    if (access?.environments)
+        selectedEnvs = (Object.keys(access.environments) as Environment[]).filter(
+            (env) => access.environments[env]
+        );
+
     const handleUpdate = (formData: FormData) => {
         formData.append('actionType', 'UPDATE_ADAPTER');
         fetcher.submit(formData, { method: 'post' });
@@ -103,8 +69,10 @@ export default function Index() {
     };
 
     const handleToggle = (formData: FormData) => {
-        formData.append('actionType', 'UPDATE_COMPONENT_IN_ADAPTER');
-        formData.append('adapterName', adapter?.name as string);
+        formData.append('actionType', 'ADD_COMPONENT_ACCESS');
+        formData.append('username', adapter?.name as string);
+        formData.append('componentName', formData.get('componentName') as string);
+        formData.append('enabled', formData.get('isChecked') as string);
         fetcher.submit(formData, { method: 'post' });
     };
 
@@ -117,6 +85,21 @@ export default function Index() {
         formData.append('actionType', 'GET_SECRET');
         fetcher.submit(formData, { method: 'post' });
     };
+
+    function handleEnvChange(values: Environment[]) {
+        const formData = new FormData();
+        formData.append('actionType', 'UPDATE_ENVIRONMENT');
+        // append only the checked ones
+        values.forEach((v) => formData.append('environments[]', v));
+        fetcher.submit(formData, { method: 'post' });
+    }
+
+    function addAccess() {
+        const formData = new FormData();
+        formData.append('actionType', 'ADD_ACCESS');
+        formData.append('username', adapter?.name as string);
+        fetcher.submit(formData, { method: 'post' });
+    }
 
     return (
         <>
@@ -141,7 +124,6 @@ export default function Index() {
                         padding="6"
                         borderRadius="large"
                         shadow="small">
-                        {/*<VStack gap="5">*/}
                         <GeneralDetailView
                             resource={adapter}
                             onUpdate={handleUpdate}
@@ -165,91 +147,44 @@ export default function Index() {
                         )}
                         <Divider className="pt-3" />
 
-                        {hasAccessControl ? (
+                        {hasAccessControl && access ? (
                             <>
                                 <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
+
+                                <Box padding={'6'}>
+                                    <CheckboxGroup
+                                        legend="Environment:"
+                                        onChange={(vals) => handleEnvChange(vals as Environment[])}
+                                        defaultValue={selectedEnvs}>
+                                        <HGrid gap="6" columns={4}>
+                                            <Checkbox value="api">API</Checkbox>
+                                            <Checkbox value="beta">Beta</Checkbox>
+                                            <Checkbox value="alpha">Alpha</Checkbox>
+                                            <Checkbox value="pwf">PWF</Checkbox>
+                                        </HGrid>
+                                    </CheckboxGroup>
+                                </Box>
+
                                 <ComponentList
-                                    accessList={access}
+                                    accessList={accessComponentList}
                                     entity={adapter.name}
                                     onToggle={handleToggle}
                                 />
                             </>
                         ) : (
                             <Box padding="6">
-                                <HGrid gap="2">
-                                    <Heading size={'medium'}>Komponenter</Heading>
-                                    <ComponentsTable
-                                        items={components}
-                                        selectedItems={getComponentIds(adapter.components)}
-                                        toggle={handleToggle}
-                                        hideLink={true}
-                                        isManaged={adapter.managed}
-                                    />
-                                </HGrid>
+                                <Alert variant="warning">
+                                    Tilgangsstyring for komponenter er ikke aktivert
+                                </Alert>
+                                <Divider className="pt-3" />
+                                <Button onClick={addAccess} size={'small'}>
+                                    Sett opp tilgangsstyring
+                                </Button>
                             </Box>
                         )}
-                        {/*</VStack>*/}
                     </Box>
                 </HGrid>
             )}
         </>
     );
-}
-
-export async function action({ request, params }: ActionFunctionArgs) {
-    const name = params.name || '';
-    const formData = await request.formData();
-    const orgName = await getSelectedOrganization(request);
-    const actionType = formData.get('actionType') as string;
-
-    let response;
-    switch (actionType) {
-        case 'UPDATE_PASSWORD':
-            response = await AdapterApi.setPassword(
-                formData.get('entityName') as string,
-                formData.get('password') as string,
-                orgName
-            );
-            break;
-        case 'GET_SECRET':
-            response = await AdapterApi.getOpenIdSecret(
-                formData.get('entityName') as string,
-                orgName
-            );
-            response = {
-                clientSecret: response.data,
-                message: 'Adapterhemmelighet ble hentet',
-                variant: 'success',
-            };
-            break;
-        case 'UPDATE_ADAPTER':
-            response = await AdapterApi.updateAdapter(
-                {
-                    name,
-                    shortDescription: formData.get('shortDescription') as string,
-                    note: formData.get('note') as string,
-                },
-                orgName
-            );
-            break;
-        case 'UPDATE_COMPONENT_IN_ADAPTER':
-            response = await AdapterApi.updateComponentInAdapter(
-                formData.get('componentName') as string,
-                formData.get('adapterName') as string,
-                orgName,
-                formData.get('isChecked') as string
-            );
-            break;
-        case 'DELETE_ADAPTER':
-            response = await AdapterApi.deleteAdapter(name, orgName);
-            return redirect(`/adaptere?deleted=${name}`);
-        default:
-            response = {
-                success: false,
-                message: `Ukjent handlingstype: '${actionType}'`,
-                variant: 'error',
-            };
-    }
-
-    return response;
 }

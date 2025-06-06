@@ -2,15 +2,10 @@ import React from 'react';
 import { Box, Button, Checkbox, FormSummary, HGrid, HStack } from '@navikt/ds-react';
 import { ChevronRightCircleIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
 import { useNavigate } from '@remix-run/react';
-
-interface Access {
-    domain: string;
-    packageName: string;
-    status: string;
-}
+import { IDomainPackages } from '~/types/Access';
 
 interface ComponentListProps {
-    accessList: Access[];
+    accessList: IDomainPackages[];
     onToggle: (formData: FormData) => void;
     entity: string;
 }
@@ -19,23 +14,24 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
     const navigate = useNavigate();
 
     const handleRowClick = (domain: string, packageName: string) => {
-        navigate(`/tilgang/${entity}/${domain}_${packageName}`);
+        navigate(`/tilgang/${entity}/${domain}-${packageName}`);
     };
 
-    // Group the accessList by domain
-    const groupedByDomain = accessList.reduce((acc: Record<string, Access[]>, item: Access) => {
-        if (!acc[item.domain]) {
-            acc[item.domain] = [];
-        }
-        acc[item.domain].push(item);
-        return acc;
-    }, {});
+    const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        const isChecked = e.target.checked;
+
+        const formData = new FormData();
+        formData.append('componentName', value);
+        formData.append('isChecked', isChecked.toString());
+        onToggle(formData);
+    };
 
     return (
         <Box>
             <HGrid gap={'3'} columns={3}>
-                {Object.keys(groupedByDomain).map((domain, i) => {
-                    const domainAccess = groupedByDomain[domain];
+                {accessList.map((domain, i) => {
+                    // const domainAccess = groupedByDomain[domain];
 
                     return (
                         <FormSummary key={`${domain}-${i}`}>
@@ -43,14 +39,14 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                 <HStack align={'center'} justify={'space-between'}>
                                     <KeyVerticalIcon title="key icon" fontSize="1.5rem" />
                                     <FormSummary.Heading level="2">
-                                        {capitalizeFirstLetter(domain)}
+                                        {capitalizeFirstLetter(domain.domain)}
                                     </FormSummary.Heading>
                                 </HStack>
                             </FormSummary.Header>
 
                             <FormSummary.Answers>
                                 <FormSummary.Answer>
-                                    {domainAccess.map((item, i) => (
+                                    {domain.packages.map((item, i) => (
                                         <HStack
                                             key={`${domain}-${i}`}
                                             justify={'space-between'}
@@ -63,18 +59,22 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                                 //         item.status === 'ENABLED'
                                                 //     )
                                                 // }
-                                                value={item.packageName}
+                                                onChange={(e) => {
+                                                    handleToggle(e);
+                                                }}
+                                                value={domain.domain + '-' + item.packageName}
                                                 size={'small'}
-                                                checked={item.status === 'ENABLED'}>
+                                                checked={item.access}>
                                                 {item.packageName}
                                             </Checkbox>
                                             <Button
                                                 icon={<ChevronRightCircleIcon title="Rediger" />}
                                                 onClick={() =>
-                                                    handleRowClick(item.domain, item.packageName)
+                                                    handleRowClick(domain.domain, item.packageName)
                                                 }
                                                 variant={'tertiary'}
                                                 size={'xsmall'}
+                                                disabled={!item.access}
                                             />
                                         </HStack>
                                     ))}

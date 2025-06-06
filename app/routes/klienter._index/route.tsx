@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
-import ClientApi from '~/api/ClientApi';
-import { IClient, IPartialClient } from '~/types/Clients';
+import { IClient } from '~/types/Clients';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Search } from '@navikt/ds-react';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { type ActionFunctionArgs, LoaderFunction, MetaFunction, redirect } from '@remix-run/node';
+import { type ActionFunctionArgs, MetaFunction } from '@remix-run/node';
 import ClientCreateForm from '~/routes/klienter._index/CreateForm';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';
@@ -13,24 +11,16 @@ import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TokenIcon } from '@navikt/aksel-icons';
 import { CustomTabs } from '~/components/shared/CustomTabs';
+import { handleClientIndexAction } from '~/routes/klienter._index/actions';
+import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Klienter' }, { name: 'description', content: 'klienter' }];
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
-    const orgName = await getSelectedOrganization(request);
-    const clientsResponse = await ClientApi.getClients(orgName);
+export { loader };
 
-    const clientData = clientsResponse.data || [];
-    clientData.sort((a: { shortDescription: string }, b: { shortDescription: string }) =>
-        a.shortDescription.localeCompare(b.shortDescription)
-    );
-
-    return new Response(JSON.stringify({ clientData, orgName }), {
-        headers: { 'Content-Type': 'application/json' },
-    });
-};
+export const action = async (args: ActionFunctionArgs) => handleClientIndexAction(args);
 
 interface IPageLoaderData {
     clientData: IClient[];
@@ -48,6 +38,7 @@ export default function Index() {
     const actionData = fetcher.data as IFetcherResponseData;
     const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
     const navigate = useNavigate();
+
 
     useEffect(() => {
         setFilteredClients(clientData);
@@ -123,27 +114,4 @@ export default function Index() {
             )}
         </>
     );
-}
-
-export async function action({ request }: ActionFunctionArgs) {
-    const formData = await request.formData();
-
-    const name = formData.get('name') as string;
-    const description = formData.get('description') as string;
-    const note = formData.get('note') as string;
-    const orgName = await getSelectedOrganization(request);
-
-    const newClient: IPartialClient = {
-        name: name,
-        note: note,
-        shortDescription: description,
-    };
-
-    const response = await ClientApi.createClient(newClient, orgName);
-
-    if (!response.success) {
-        throw new Response('Kunne ikke opprette ny klient.');
-    }
-
-    return redirect(`/klienter/${response.data?.name}`);
 }

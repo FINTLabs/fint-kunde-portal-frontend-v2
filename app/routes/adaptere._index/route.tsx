@@ -1,23 +1,18 @@
-import {
-    type ActionFunction,
-    type LoaderFunction,
-    type MetaFunction,
-    redirect,
-} from '@remix-run/node';
+import { ActionFunctionArgs, type MetaFunction } from '@remix-run/node';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { Alert, Search } from '@navikt/ds-react';
-import AdapterAPI from '~/api/AdapterApi';
 import { useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { CustomTabs } from '~/components/shared/CustomTabs';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AdapterCreateForm from '~/routes/adaptere._index/CreateForm';
 import AlertManager from '~/components/AlertManager';
-import { IAdapter, IPartialAdapter } from '~/types/Adapter';
+import { IAdapter } from '~/types/Adapter';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import useAlerts from '~/components/useAlerts';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
+import { handleAdapterIndexAction } from '~/routes/adaptere._index/actions';
+import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Adaptere' }, { name: 'description', content: 'Liste over adaptere' }];
@@ -27,19 +22,9 @@ interface IPageLoaderData {
     orgName: string;
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
-    const orgName = await getSelectedOrganization(request);
-    const adaptersResponse = await AdapterAPI.getAdapters(orgName);
+export { loader };
 
-    const adapters = adaptersResponse.data || [];
-    adapters.sort((a: { shortDescription: string }, b: { shortDescription: string }) =>
-        a.shortDescription.localeCompare(b.shortDescription)
-    );
-
-    return new Response(JSON.stringify({ adapters, orgName }), {
-        headers: { 'Content-Type': 'application/json' },
-    });
-};
+export const action = async (args: ActionFunctionArgs) => handleAdapterIndexAction(args);
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Adaptere', link: '/adaptere' }];
@@ -53,9 +38,9 @@ export default function Index() {
     const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        setFilteredAdapter(adapters);
-    }, [adapters]);
+    // useEffect(() => {
+    //     setFilteredAdapter(adapters);
+    // }, [adapters]);
 
     const handleCreate = () => setIsCreating(true);
 
@@ -126,26 +111,3 @@ export default function Index() {
         </>
     );
 }
-
-export const action: ActionFunction = async ({ request }) => {
-    const formData = await request.formData();
-
-    const name = formData.get('name') as string;
-    const description = formData.get('description') as string;
-    const detailedInfo = formData.get('detailedInfo') as string;
-
-    const orgName = await getSelectedOrganization(request);
-    const newAdapter: IPartialAdapter = {
-        name,
-        shortDescription: description,
-        note: detailedInfo,
-    };
-
-    const response = await AdapterAPI.createAdapter(newAdapter, orgName);
-
-    if (!response.success) {
-        throw new Response('Kunne ikke opprette ny adapter.');
-    }
-
-    return redirect(`/adapter/${response.data?.name}`);
-};

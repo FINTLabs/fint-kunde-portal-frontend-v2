@@ -12,9 +12,13 @@ interface ConfigClassTableProps {
 
 const ResourcesList = ({ accessComponent, title, onSelected, onToggle }: ConfigClassTableProps) => {
     function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
+        const value = e.target.value;
+        const isChecked = e.target.checked;
+
         const formData = new FormData();
-        formData.append('resourceId', 'newServiceName');
-        formData.append('checkMarkValue', e.target.value);
+
+        formData.append('resource', value);
+        formData.append('enabled', isChecked.toString());
         onToggle(formData);
     }
 
@@ -35,25 +39,22 @@ const ResourcesList = ({ accessComponent, title, onSelected, onToggle }: ConfigC
                                     {/*<HStack align={'center'} gap={'0'}>*/}
                                     <Checkbox
                                         onChange={(e) => handleCheckbox(e)}
-                                        // value={x.name}
+                                        value={x.name}
                                         key={x.name + i}
                                         readOnly={x.name === 'elev'}
-                                        // checked={x.name === 'elev'}
                                         description={
                                             x.name === 'elev' ? 'Tilpasset tilgangskontroll' : ''
-                                        }>
+                                        }
+                                        checked={x.enabled}>
                                         {x.name}
                                     </Checkbox>
-                                    {/*</HStack>*/}
-                                    {/*<HStack align={'center'}>*/}
-                                    {/*<Box*/}
-                                    {/*    padding={'2'}*/}
-                                    {/*    className="hover:bg-[--a-surface-active] hover:cursor-pointer">*/}
+
                                     <Button
                                         icon={<ChevronRightCircleIcon title="Rediger" />}
                                         onClick={() => onSelected(x.name)}
                                         variant={'tertiary'}
                                         size={'xsmall'}
+                                        disabled={!x.enabled}
                                     />
 
                                     {/*<ChevronRightCircleIcon*/}

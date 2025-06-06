@@ -25,13 +25,12 @@ import logger from '~/utils/logger';
 import CustomError from '~/components/errors/CustomError';
 import { IMeData } from '~/types/Me';
 import { selectOrgCookie } from '~/utils/cookie';
-import { MenuLeft } from '~/components/Menu/MenuLeft';
-import { MenuRight } from '~/components/Menu/MenuRight';
 import { IUserSession } from '~/types/Session';
 import CustomErrorNoUser from '~/components/errors/CustomErrorNoUser';
 import CustomErrorNoOrg from '~/components/errors/CustomErrorNoOrg';
 import CustomErrorNoAccess from '~/components/errors/CustomErrorNoAccess';
 import { defaultFeatures } from '~/types/FeatureFlag';
+import Menu from '~/components/Menu/Menu';
 
 export const links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: 'https://www.cdnfonts.com/brockmann.font' }];
@@ -124,10 +123,11 @@ export default function App() {
             }>
             <Box as="header" className={'novari-header'}>
                 <Page.Block gutters width="lg" className={'pt-2 pb-2'}>
-                    <div className="flex justify-between">
-                        <MenuLeft userSession={userSession} />
-                        <MenuRight userSession={userSession} />
-                    </div>
+                    {/*<div className="flex justify-between">*/}
+                    {/*    <MenuLeft userSession={userSession} />*/}
+                    {/*    <MenuRight userSession={userSession} />*/}
+                    {/*</div>*/}
+                    <Menu userSession={userSession} />
                 </Page.Block>
             </Box>
 

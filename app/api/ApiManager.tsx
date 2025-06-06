@@ -1,7 +1,7 @@
 import logger from '~/utils/logger';
 import { HeaderProperties } from '~/utils/headerProperties';
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
 interface ApiCallOptions {
     method: HttpMethod;
@@ -104,13 +104,22 @@ export function handleApiResponse<T>(
     apiResults: { success: boolean; data?: T; message?: string; status?: number },
     errorMessage: string,
     successMessage: string = '',
-    successVariant: 'success' | 'warning' = 'success'
+    successVariant: 'success' | 'warning' = 'success',
+    noErrorPage?: boolean
 ): ApiResponse<T> {
     if (!apiResults.success) {
-        throw new Response(apiResults.message, {
-            status: apiResults.status,
-            statusText: errorMessage,
-        });
+        if (noErrorPage) {
+            return {
+                success: false,
+                message: apiResults.message ?? errorMessage,
+                variant: 'error',
+            };
+        } else {
+            throw new Response(apiResults.message, {
+                status: apiResults.status,
+                statusText: errorMessage,
+            });
+        }
     }
 
     return {
