@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -38,7 +38,6 @@ export default function Index() {
     const actionData = fetcher.data as IFetcherResponseData;
     const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
     const navigate = useNavigate();
-
 
     useEffect(() => {
         setFilteredClients(clientData);
