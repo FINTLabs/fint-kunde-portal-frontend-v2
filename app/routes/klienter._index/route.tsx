@@ -39,9 +39,10 @@ export default function Index() {
     const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     setFilteredClients(clientData.filter((client) => !client.managed));
-    // }, [clientData]);
+
+    useEffect(() => {
+        setFilteredClients(clientData);
+    }, [clientData]);
 
     const handleCreate = () => {
         setIsCreating(true);
