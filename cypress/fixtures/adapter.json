@@ -1,9 +1,9 @@
-
+[
   {
     "dn": "cn=jennifer-another-test@adapter.fintlabs.no,ou=adapters,ou=fintlabs_no,ou=organisations,o=fint",
     "name": "jennifer-another-test@adapter.fintlabs.no",
     "shortDescription": "test",
-    "note": "test",
+    "note": "testAgain",
     "clientId": "ce23048c-c551-4cc9-aefd-aa73b4a62eff",
     "components": [],
     "assets": [
@@ -13,4 +13,4 @@
       "fintlabs.no"
     ],
     "managed": false
-  }
+  }]

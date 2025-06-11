@@ -1,0 +1,137 @@
+[
+  {
+    "domain": "administrasjon",
+    "packages": [
+      {
+        "packageName": "fullmakt",
+        "access": true
+      },
+      {
+        "packageName": "kodeverk",
+        "access": false
+      },
+      {
+        "packageName": "organisasjon",
+        "access": false
+      },
+      {
+        "packageName": "personal",
+        "access": false
+      }
+    ]
+  },
+  {
+    "domain": "arkiv",
+    "packages": [
+      {
+        "packageName": "kodeverk",
+        "access": false
+      },
+      {
+        "packageName": "kulturminnevern",
+        "access": false
+      },
+      {
+        "packageName": "noark",
+        "access": false
+      },
+      {
+        "packageName": "personal",
+        "access": false
+      },
+      {
+        "packageName": "samferdsel",
+        "access": false
+      }
+    ]
+  },
+  {
+    "domain": "felles",
+    "packages": [
+      {
+        "packageName": "kodeverk",
+        "access": false
+      }
+    ]
+  },
+  {
+    "domain": "okonomi",
+    "packages": [
+      {
+        "packageName": "faktura",
+        "access": false
+      },
+      {
+        "packageName": "kodeverk",
+        "access": false
+      },
+      {
+        "packageName": "regnskap",
+        "access": false
+      }
+    ]
+  },
+  {
+    "domain": "personvern",
+    "packages": [
+      {
+        "packageName": "kodeverk",
+        "access": false
+      },
+      {
+        "packageName": "samtykke",
+        "access": false
+      }
+    ]
+  },
+  {
+    "domain": "ressurs",
+    "packages": [
+      {
+        "packageName": "eiendel",
+        "access": false
+      },
+      {
+        "packageName": "kodeverk",
+        "access": false
+      },
+      {
+        "packageName": "tilgang",
+        "access": false
+      }
+    ]
+  },
+  {
+    "domain": "utdanning",
+    "packages": [
+      {
+        "packageName": "elev",
+        "access": false
+      },
+      {
+        "packageName": "kodeverk",
+        "access": false
+      },
+      {
+        "packageName": "larling",
+        "access": false
+      },
+      {
+        "packageName": "ot",
+        "access": false
+      },
+      {
+        "packageName": "timeplan",
+        "access": false
+      },
+      {
+        "packageName": "utdanningsprogram",
+        "access": false
+      },
+      {
+        "packageName": "vurdering",
+        "access": false
+      }
+    ]
+  }
+]

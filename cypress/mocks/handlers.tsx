@@ -13,15 +13,45 @@ import clients from '../fixtures/clients.json';
 import resources from '../fixtures/resources.json';
 import resource from '../fixtures/resource.json';
 import configurations from '../fixtures/configurations.json';
-
+import access from '../fixtures/access.json';
+import accessComponent from '../fixtures/accessComponent.json';
+import accessResource from '../fixtures/accessResource.json';
 import walker from '../fixtures/walker.json';
 
 const API_URL = process.env.API_URL;
 const LINKWALKER_API_URL = process.env.LINKWALKER_API_URL;
+const CONSENT_URL = process.env.ACCESS_URL;
 
 console.log(' api url', API_URL);
 
 export const handlers = [
+    http.get(`${CONSENT_URL}/access/jennifer-test-test@client.fintlabs.no`, () => {
+        return HttpResponse.json(access);
+    }),
+    http.get(`${CONSENT_URL}/access/jennifer-test-test@client.fintlabs.no/component`, () => {
+        return HttpResponse.json(accessComponent);
+    }),
+    http.get(
+        `${CONSENT_URL}/access/jennifer-test-test@client.fintlabs.no/component/administrasjon-fullmakt/resource`,
+        () => {
+            return HttpResponse.json(accessResource);
+        }
+    ),
+    http.patch(
+        `${CONSENT_URL}/access/jennifer-test-test@client.fintlabs.no/component/administrasjon-fullmakt`,
+        () => {
+            return HttpResponse.json(access);
+        }
+    ),
+    http.patch(
+        `${CONSENT_URL}/access/jennifer-test-test@client.fintlabs.no/component/administrasjon-fullmakt/resource/Fullmakt`,
+        () => {
+            return HttpResponse.json(access);
+        }
+    ),
+    http.get(`${CONSENT_URL}/access/jennifer-another-test@adapter.fintlabs.no/component`, () => {
+        return HttpResponse.json(accessComponent);
+    }),
     http.get(`${API_URL}/api/api/feature`, () => {
         return HttpResponse.json(feature);
     }),
@@ -61,13 +91,12 @@ export const handlers = [
 
     http.put(
         `${API_URL}/api/organisations/calvin_organizations/contacts/technical/f5e6d4c8b7a9f1e2d3b4c6a7e1f5b8d9`,
-        async ({ request }) => {
+        async () => {
             return HttpResponse.json('from handler in MSW', { status: 200 });
         }
     ),
 
-    http.post(`${API_URL}/api/adapters/calvin_organizations`, async ({ request }) => {
-        console.log('HERE-----');
+    http.post(`${API_URL}/api/adapters/calvin_organizations`, async () => {
         return HttpResponse.json(adapter);
     }),
 
@@ -76,6 +105,7 @@ export const handlers = [
     }),
 
     http.get(`${API_URL}/api/clients/calvin_organizations`, () => {
+        console.log('GET ALL CLIENTS');
         return HttpResponse.json(clients);
     }),
 

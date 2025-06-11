@@ -52,7 +52,8 @@ function ConfirmAction({
                 }
                 icon={icon}
                 size={buttonSize ? (buttonSize as 'xsmall' | 'small' | 'medium') : 'xsmall'}
-                onClick={() => setOpen(true)}>
+                onClick={() => setOpen(true)}
+                data-cy="confirm-button">
                 {showButtonText ? buttonText : ''}
             </Button>
 

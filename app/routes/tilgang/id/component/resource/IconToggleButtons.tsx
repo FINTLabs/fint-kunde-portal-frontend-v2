@@ -21,7 +21,7 @@ const IconToggleButtons = ({
                 titleText={resource.name}
                 onConfirm={onClickIsWriteable}
                 subTitleText={
-                    resource.writeable ? ' Fjern all skriverettighet?' : 'Gi full skriverettighet?'
+                    resource.writeable ? 'Fjern all skriverettighet?' : 'Gi full skriverettighet?'
                 }
                 icon={
                     resource.writeable ? (
@@ -42,7 +42,7 @@ const IconToggleButtons = ({
                 onConfirm={onClickReadingOptions}
                 subTitleText={
                     resource.readingOption === 'SINGULAR'
-                        ? ' Tillat flere oppslag?'
+                        ? 'Tillat flere oppslag?'
                         : 'Tillat kun enkeltoppslag?'
                 }
                 icon={

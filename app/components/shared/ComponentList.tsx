@@ -74,7 +74,7 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                                 }
                                                 variant={'tertiary'}
                                                 size={'xsmall'}
-                                                disabled={!item.access}
+                                                // disabled={!item.access}
                                             />
                                         </HStack>
                                     ))}

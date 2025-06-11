@@ -1,5 +1,5 @@
 {
-  "access-controll-new": false,
+  "access-controll-new": true,
   "audit-log-new": true,
   "access-packages": false,
   "samtykke-admin": false,

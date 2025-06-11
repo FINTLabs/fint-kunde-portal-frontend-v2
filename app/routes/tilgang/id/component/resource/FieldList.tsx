@@ -104,11 +104,13 @@ const FieldList = ({ onSave, title, fieldList }: FieldListProps) => {
                                 title="Save changes"
                                 fontSize="1.5rem"
                                 onClick={handleSaveClick}
+                                data-cy="save-button"
                             />
                             <XMarkIcon
                                 title="Cancel changes"
                                 fontSize="1.5rem"
                                 onClick={handleCancelClick}
+                                data-cy="cancel-button"
                             />
                         </>
                     ) : (
@@ -116,6 +118,7 @@ const FieldList = ({ onSave, title, fieldList }: FieldListProps) => {
                             title="Edit"
                             fontSize="1.5rem"
                             onClick={handleEditClick}
+                            data-cy="edit-button"
                         />
                     )}
                 </FormSummary.EditLink>

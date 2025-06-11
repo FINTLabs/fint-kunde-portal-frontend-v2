@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Fullmakt",
+    "enabled": false,
+    "writeable": false,
+    "readingOption": "MULTIPLE"
+  },
+  {
+    "name": "Rolle",
+    "enabled": false,
+    "writeable": false,
+    "readingOption": "MULTIPLE"
+  }
+]

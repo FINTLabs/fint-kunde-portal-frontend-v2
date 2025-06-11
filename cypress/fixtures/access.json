@@ -1,0 +1,10 @@
+{
+  "username": "jennifer-another-test@client.fintlabs.no",
+  "isAdapter": false,
+  "environments": {
+    "api": false,
+    "beta": true,
+    "alpha": false,
+    "pwf": false
+  }
+}
