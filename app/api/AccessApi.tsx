@@ -2,13 +2,13 @@ import { apiManager, ApiResponse, handleApiResponse } from '~/api/ApiManager';
 import logger from '~/utils/logger';
 import { IResource } from '~/types/Access';
 
-const API_URL = process.env.ACCESS_URL;
+const ACCESS_URL = process.env.ACCESS_URL;
 
 class AccessApi {
     static async getClientorAdapterAccess(name: string): Promise<ApiResponse<any>> {
         const apiResults = await apiManager<any>({
             method: 'GET',
-            url: `${API_URL}/access/${name}`,
+            url: `${ACCESS_URL}/access/${name}`,
             functionName: 'getClientorAdapterAccess',
         });
 
@@ -23,7 +23,7 @@ class AccessApi {
     static async getClientorAdapterAccessComponents(name: string): Promise<ApiResponse<any>> {
         const apiResults = await apiManager<any>({
             method: 'GET',
-            url: `${API_URL}/access/${name}/component`,
+            url: `${ACCESS_URL}/access/${name}/component`,
             functionName: 'getClientorAdapterAccess',
         });
 
@@ -42,7 +42,7 @@ class AccessApi {
     ): Promise<ApiResponse<any>> {
         const apiResults = await apiManager<any>({
             method: 'GET',
-            url: `${API_URL}/access/${clientOrAdapter}/component/${name}/resource`,
+            url: `${ACCESS_URL}/access/${clientOrAdapter}/component/${name}/resource`,
             functionName: 'getComponentAccess',
         });
 
@@ -61,7 +61,7 @@ class AccessApi {
     ): Promise<ApiResponse<any>> {
         const apiResults = await apiManager<any>({
             method: 'GET',
-            url: `${API_URL}/access/${clientOrAdapter}/component/${componentName}/resource/${resourceName}`,
+            url: `${ACCESS_URL}/access/${clientOrAdapter}/component/${componentName}/resource/${resourceName}`,
             functionName: 'getResourceAccess',
         });
 
@@ -80,7 +80,7 @@ class AccessApi {
     ): Promise<ApiResponse<any>> {
         const apiResults = await apiManager<any>({
             method: 'GET',
-            url: `${API_URL}/access/${clientOrAdapter}/component/${componentName}/resource/${resourceName}/field`,
+            url: `${ACCESS_URL}/access/${clientOrAdapter}/component/${componentName}/resource/${resourceName}/field`,
             functionName: 'getComponentAccess',
         });
 
@@ -95,8 +95,8 @@ class AccessApi {
     static async addAccess(username: string): Promise<ApiResponse<any>> {
         const apiResults = await apiManager<any>({
             method: 'POST',
-            url: `${API_URL}/access/${username}`,
-            functionName: 'createAdapter',
+            url: `${ACCESS_URL}/access/${username}`,
+            functionName: 'createAdapterAccess',
         });
 
         return handleApiResponse(
@@ -117,7 +117,7 @@ class AccessApi {
 
         const apiResults = await apiManager<any>({
             method: 'PATCH',
-            url: `${API_URL}/access/${username}`,
+            url: `${ACCESS_URL}/access/${username}`,
             functionName: 'updateEnvironments',
             body: JSON.stringify(bodyPayload),
         });
@@ -128,7 +128,7 @@ class AccessApi {
     static async addComponentAccess(username: string, componentName: string, enabled: string) {
         const apiResults = await apiManager<any>({
             method: 'PATCH',
-            url: `${API_URL}/access/${username}/component/${componentName}`,
+            url: `${ACCESS_URL}/access/${username}/component/${componentName}`,
             functionName: 'addComponentAccess',
             body: JSON.stringify({ enabled }),
         });
@@ -165,7 +165,7 @@ class AccessApi {
 
         const apiResults = await apiManager<any>({
             method: 'PATCH',
-            url: `${API_URL}/access/${username}/component/${component}/resource/${resource}`,
+            url: `${ACCESS_URL}/access/${username}/component/${component}/resource/${resource}`,
             functionName: 'updateResource',
             body: JSON.stringify(body),
         });
@@ -189,7 +189,7 @@ class AccessApi {
     ): Promise<ApiResponse<any>> {
         const apiResults = await apiManager<any>({
             method: 'PATCH',
-            url: `${API_URL}/access/${username}/component/${component}/resource/${resource}/field`,
+            url: `${ACCESS_URL}/access/${username}/component/${component}/resource/${resource}/field`,
             functionName: 'addFieldAccess',
             body: JSON.stringify(fields),
         });

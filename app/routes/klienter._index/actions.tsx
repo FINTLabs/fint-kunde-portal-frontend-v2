@@ -3,6 +3,7 @@ import ClientApi from '~/api/ClientApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IPartialClient } from '~/types/Clients';
 import AccessApi from '~/api/AccessApi';
+import logger from '~/utils/logger';
 
 export async function handleClientIndexAction({ request }: { request: Request }) {
     const formData = await request.formData();
@@ -19,7 +20,10 @@ export async function handleClientIndexAction({ request }: { request: Request })
     };
 
     const response = await ClientApi.createClient(newClient, orgName);
+    logger.debug('Creating client', response);
+
     if (response.success) {
+        logger.debug('Attempting to add access for client: ', response.data?.name);
         await AccessApi.addAccess(response.data?.name as string);
     }
 
