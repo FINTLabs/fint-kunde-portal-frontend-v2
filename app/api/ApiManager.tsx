@@ -47,6 +47,7 @@ export async function apiManager<T>({
 
         if (!response.ok) {
             const errorMessage = await response.text();
+            logger.error(`Request headers: ${JSON.stringify(requestOptions.headers)}`);
             logger.error(`Request body: ${body}`);
             logger.error(`Response from ${functionName}: ${errorMessage}`);
             return {

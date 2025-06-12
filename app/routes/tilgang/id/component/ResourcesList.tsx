@@ -54,7 +54,7 @@ const ResourcesList = ({ accessComponent, title, onSelected, onToggle }: ConfigC
                                         onClick={() => onSelected(x.name)}
                                         variant={'tertiary'}
                                         size={'xsmall'}
-                                        // disabled={!x.enabled}
+                                        disabled={!x.enabled}
                                     />
 
                                     {/*<ChevronRightCircleIcon*/}
