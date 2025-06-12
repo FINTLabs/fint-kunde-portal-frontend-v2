@@ -4,7 +4,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { Environment, IAccess, IDomainPackages } from '~/types/Access';
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid } from '@navikt/ds-react';
 import AlertManager from '~/components/AlertManager';
 import { BackButton } from '~/components/shared/BackButton';
@@ -51,6 +51,7 @@ export default function Index() {
     const adapter = filteredAdapters.length > 0 ? filteredAdapters[0] : null;
     const displayName = adapter?.name.split('@')[0] || '';
     const { alerts } = useAlerts(actionData, fetcher.state);
+    const [isLoading, setIsLoading] = useState(false);
 
     let selectedEnvs: Environment[] = [];
     if (access?.environments)
@@ -95,6 +96,7 @@ export default function Index() {
     }
 
     function addAccess() {
+        setIsLoading(true);
         const formData = new FormData();
         formData.append('actionType', 'ADD_ACCESS');
         formData.append('username', adapter?.name as string);
@@ -177,7 +179,7 @@ export default function Index() {
                                     Tilgangsstyring for komponenter er ikke aktivert
                                 </Alert>
                                 <Divider className="pt-3" />
-                                <Button onClick={addAccess} size={'small'}>
+                                <Button onClick={addAccess} size={'small'} loading={isLoading}>
                                     Sett opp tilgangsstyring
                                 </Button>
                             </Box>

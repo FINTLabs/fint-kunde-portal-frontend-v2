@@ -13,6 +13,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
     const [inputName, setInputName] = useState('');
     const [inputDescription, setInputDescription] = useState('');
     const [inputNote, setInputNote] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = () => {
         const newErrors: Errors = {};
@@ -29,6 +30,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
+            setIsLoading(true);
             const formData = new FormData();
             formData.append('name', inputName);
             formData.append('description', inputDescription);
@@ -84,7 +86,11 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
                         />
                     </FormSummary.Answer>
                     <HStack gap="4">
-                        <Button title="Opprett" onClick={handleSubmit} data-cy="save-button">
+                        <Button
+                            title="Opprett"
+                            onClick={handleSubmit}
+                            data-cy="save-button"
+                            loading={isLoading}>
                             Opprett
                         </Button>
                         <Button variant="secondary" onClick={onCancel}>

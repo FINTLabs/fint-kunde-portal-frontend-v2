@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import { IClient } from '~/types/Clients';
 import { ActionFunctionArgs } from '@remix-run/node';
@@ -45,6 +45,7 @@ export default function ClientDetails() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
     const { alerts } = useAlerts(actionData, fetcher.state);
+    const [isLoading, setIsLoading] = useState(false);
 
     let selectedEnvs: Environment[] = [];
     if (access?.environments)
@@ -91,6 +92,7 @@ export default function ClientDetails() {
     }
 
     function addAccess() {
+        setIsLoading(true);
         const formData = new FormData();
         formData.append('actionType', 'ADD_ACCESS');
         formData.append('username', client?.name as string);
@@ -176,7 +178,7 @@ export default function ClientDetails() {
                                     Tilgangsstyring for komponenter er ikke aktivert
                                 </Alert>
                                 <Divider className="pt-3" />
-                                <Button onClick={addAccess} size={'small'}>
+                                <Button onClick={addAccess} size={'small'} loading={isLoading}>
                                     Sett opp tilgangsstyring
                                 </Button>
                             </Box>
