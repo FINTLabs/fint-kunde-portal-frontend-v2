@@ -106,6 +106,16 @@ class AccessApi {
         );
     }
 
+    static async deleteAccess(username: string): Promise<ApiResponse<any>> {
+        const apiResults = await apiManager<any>({
+            method: 'DELETE',
+            url: `${ACCESS_URL}/access/${username}`,
+            functionName: 'deleteAccess',
+        });
+
+        return handleApiResponse(apiResults, 'Kunne ikke slette tilgang', 'Tilgang ble slettet');
+    }
+
     static async updateEnvironments(
         username: string,
         environments: string[]

@@ -28,6 +28,7 @@ export async function handleClientAction({ request, params }: { request: Request
 
         case 'DELETE_CLIENT':
             await ClientApi.deleteClient(clientName, orgName);
+            await AccessApi.deleteAccess(clientName);
             return redirect(`/klienter?deleted=${clientName}`);
 
         case 'ADD_COMPONENT_ACCESS':

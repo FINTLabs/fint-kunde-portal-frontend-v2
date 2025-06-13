@@ -62,6 +62,7 @@ export async function handleAdapterAction({ request, params }: { request: Reques
 
         case 'DELETE_ADAPTER':
             await AdapterApi.deleteAdapter(name, orgName);
+            await AccessApi.deleteAccess(name);
             return redirect(`/adaptere?deleted=${name}`);
 
         default:
