@@ -1,4 +1,4 @@
-import { BodyShort, Button, Heading, HStack, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, Label, Loader, VStack } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { EditableTextField } from '~/components/shared/EditableTextField';
 import { FloppydiskIcon, PencilIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
@@ -21,6 +21,7 @@ export function GeneralDetailView({ resource, onUpdate, onDelete }: GeneralDetai
     const [isEditing, setIsEditing] = useState(false);
     const [resourceShortDesc, setResourceShortDesc] = useState(resource.shortDescription);
     const [resourceNote, setResourceNote] = useState(resource.note);
+    const [loading, setLoading] = useState(false);
 
     const handleCancel = () => {
         setResourceShortDesc(resource.shortDescription);
@@ -29,6 +30,7 @@ export function GeneralDetailView({ resource, onUpdate, onDelete }: GeneralDetai
     };
 
     const handleConfirmDelete = () => {
+        setLoading(true);
         const formData = new FormData();
         //formData.append('resourceName', resource.name);
         onDelete(formData);
@@ -55,6 +57,7 @@ export function GeneralDetailView({ resource, onUpdate, onDelete }: GeneralDetai
                     Detaljer
                 </Heading>
             </HStack>
+            {loading && <Loader size="large" title="Venter..." />}
             <VStack>
                 <Label>Navn</Label>
                 <BodyShort>{resource.name}</BodyShort>
