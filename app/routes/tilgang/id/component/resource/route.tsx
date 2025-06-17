@@ -12,6 +12,7 @@ import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import AlertManager from '~/components/AlertManager';
 import { handleFieldAccessAction } from '~/routes/tilgang/id/component/resource/actions';
 import { IField, IResource } from '~/types/Access';
+import { FormSummary, HStack } from '@navikt/ds-react';
 
 export const action = async (args: ActionFunctionArgs) => handleFieldAccessAction(args);
 
@@ -69,14 +70,14 @@ export default function Route() {
         },
     ];
 
-    function handleSaveFields(updatedFields: IField[]) {
+    function handleToggleField(fieldName: string, enabled: boolean) {
         const formData = new FormData();
-
-        formData.append('actionType', 'SAVE_FIELDS');
+        formData.append('actionType', 'ENABLE_FIELD');
         formData.append('username', clientOrAdapter);
-        formData.append('componentName', componentName);
+        formData.append('component', componentName);
         formData.append('resourceName', resource.name);
-        formData.append('fields', JSON.stringify(updatedFields));
+        formData.append('fieldName', fieldName);
+        formData.append('enabled', enabled.toString());
         fetcher.submit(formData, { method: 'post' });
     }
 
@@ -122,17 +123,25 @@ export default function Route() {
 
             <AlertManager alerts={alerts} />
 
-            <FieldList
-                onSave={handleSaveFields}
-                title={fieldListTitle}
-                fieldList={fieldList || []}
-            />
+            <FormSummary key={`x`}>
+                <FormSummary.Header>
+                    <FormSummary.Heading level="2">
+                        <HStack gap={'3'}>{fieldListTitle}</HStack>
+                    </FormSummary.Heading>
+                </FormSummary.Header>
 
-            <IconToggleButtons
-                resource={resource}
-                onClickReadingOptions={handleReadingOptions}
-                onClickIsWriteable={handleWriteable}
-            />
+                <FormSummary.Answers>
+                    <FormSummary.Answer>
+                        <IconToggleButtons
+                            resource={resource}
+                            onClickReadingOptions={handleReadingOptions}
+                            onClickIsWriteable={handleWriteable}
+                        />
+
+                        <FieldList onToggleField={handleToggleField} fieldList={fieldList || []} />
+                    </FormSummary.Answer>
+                </FormSummary.Answers>
+            </FormSummary>
         </div>
     );
 }

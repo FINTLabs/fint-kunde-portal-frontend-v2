@@ -29,6 +29,7 @@ export interface IField {
     name: string;
     enabled: boolean;
     mustContain: string;
+    relation: boolean;
 }
 
 export interface IAccessComponent {

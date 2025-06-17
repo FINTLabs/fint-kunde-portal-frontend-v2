@@ -5,6 +5,15 @@ export async function handleFieldAccessAction({ request }: { request: Request })
     const actionType = formData.get('actionType');
 
     switch (actionType) {
+        case 'ENABLE_FIELD':
+            return await AccessApi.updateFieldAccess(
+                formData.get('username') as string,
+                formData.get('component') as string,
+                formData.get('resourceName') as string,
+                formData.get('fieldName') as string,
+                formData.get('enabled') as string
+            );
+
         case 'SAVE_FIELDS':
             return await AccessApi.addFieldAccess(
                 formData.get('username') as string,

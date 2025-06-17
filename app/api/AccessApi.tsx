@@ -187,6 +187,26 @@ class AccessApi {
         );
     }
 
+    static async updateFieldAccess(
+        username: string,
+        component: string,
+        resource: string,
+        field: string,
+        enabled: string
+    ) {
+        const apiResults = await apiManager<any>({
+            method: 'PATCH',
+            url: `${ACCESS_URL}/access/${username}/component/${component}/resource/${resource}/field/${field}`,
+            functionName: 'updateFieldAccess',
+            body: JSON.stringify({ enabled }),
+        });
+
+        return handleApiResponse(
+            apiResults,
+            'Kunne ikke oppdatere tilgang',
+            'Tilgang ble oppdatert'
+        );
+    }
     static async addFieldAccess(
         username: string,
         component: string,

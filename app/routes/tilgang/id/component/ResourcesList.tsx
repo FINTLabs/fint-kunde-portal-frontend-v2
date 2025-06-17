@@ -26,10 +26,7 @@ const ResourcesList = ({ accessComponent, title, onSelected, onToggle }: ConfigC
         <>
             <FormSummary>
                 <FormSummary.Header>
-                    {/*<HStack align={'center'} justify={'space-between'}>*/}
                     <FormSummary.Heading level="2">{title}</FormSummary.Heading>
-                    {/*</HStack>
-                    //TODO: make this a grid? to bring it closer */}
                 </FormSummary.Header>
                 <FormSummary.Answers>
                     <FormSummary.Answer>
@@ -41,10 +38,6 @@ const ResourcesList = ({ accessComponent, title, onSelected, onToggle }: ConfigC
                                         onChange={(e) => handleCheckbox(e)}
                                         value={x.name}
                                         key={x.name + i}
-                                        readOnly={x.name === 'elev'}
-                                        description={
-                                            x.name === 'elev' ? 'Tilpasset tilgangskontroll' : ''
-                                        }
                                         checked={x.enabled}>
                                         {x.name}
                                     </Checkbox>
