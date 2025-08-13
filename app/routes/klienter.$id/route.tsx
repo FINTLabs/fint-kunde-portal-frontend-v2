@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useFetcher, useLoaderData, useNavigate, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate, useParams } from 'react-router';
 import { IClient } from '~/types/Clients';
-import { ActionFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs } from 'react-router';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';

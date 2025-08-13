@@ -1,9 +1,9 @@
-import { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
+import { ActionFunctionArgs, MetaFunction } from 'react-router';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from 'react-router';
 import React, { useEffect } from 'react';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';

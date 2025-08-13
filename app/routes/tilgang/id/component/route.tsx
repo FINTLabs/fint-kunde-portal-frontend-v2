@@ -1,16 +1,17 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { useFetcher, useLoaderData, useNavigate } from '@remix-run/react';
+import { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import { useFetcher, useLoaderData, useNavigate } from 'react-router';
 import AccessApi from '~/api/AccessApi';
 import ResourcesList from '~/routes/tilgang/id/component/ResourcesList';
 import React from 'react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
-// import { getSelectedOrganization } from '~/utils/selectedOrganization';
+
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import useAlerts from '~/components/useAlerts';
 import AlertManager from '~/components/AlertManager';
 import { handleAccessElementAction } from '~/routes/tilgang/id/component/actions';
+// import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const action = async (args: ActionFunctionArgs) => handleAccessElementAction(args);
 
@@ -20,20 +21,19 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
     let resourceList = await AccessApi.getComponentAccess(component, clientOrAdapter);
 
-    return new Response(
-        JSON.stringify({
-            clientOrAdapter,
-            resourceList: resourceList.data,
-            component,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
+    return Response.json({
+        clientOrAdapter,
+        resourceList: resourceList.data,
+        component,
+    });
 };
 
 export default function Route() {
-    const { clientOrAdapter, resourceList, component } = useLoaderData<typeof loader>();
+    const { clientOrAdapter, resourceList, component } = useLoaderData<{
+        clientOrAdapter: string;
+        resourceList: any;
+        component: string;
+    }>();
     const navigate = useNavigate();
     const resourceTitle = `${clientOrAdapter}/${component}`;
     const fetcher = useFetcher<IFetcherResponseData>();

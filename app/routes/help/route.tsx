@@ -1,4 +1,4 @@
-import { MetaFunction } from '@remix-run/node';
+import { MetaFunction } from 'react-router';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Accordion, Box } from '@navikt/ds-react';
 import { helpData, HelpDataItem } from '~/routes/help/HelpData';

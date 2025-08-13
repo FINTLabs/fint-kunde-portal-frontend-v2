@@ -1,13 +1,16 @@
-import { LoaderFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { LoaderFunction } from 'react-router';
+
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import LinkWalkerApi from '~/api/LinkWalkerApi';
+
+//TODO: This needs to be testing in a live environment, made changes to error Response that i am not sure work correctly?
+//TODO: This can be done better i am sure
 
 export const loader: LoaderFunction = async ({ request, params }) => {
     const { id } = params;
 
     if (!id) {
-        throw json({ error: 'Missing id parameter' }, { status: 400 });
+        throw Response.json({ error: 'Missing id parameter' }, { status: 400 });
     }
 
     const orgName = await getSelectedOrganization(request);
@@ -17,14 +20,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         const downloadUrl = LinkWalkerApi.getLink(orgName, id);
 
         if (!downloadUrl) {
-            throw json({ error: 'Excel file not found' }, { status: 404 });
+            throw Response.json({ error: 'Excel file not found' }, { status: 404 });
         }
 
         // Fetch the Excel file from the download URL
         const response = await fetch(downloadUrl);
 
         if (!response.ok) {
-            throw json(
+            throw Response.json(
                 { error: 'Failed to download Excel file' },
                 { status: response.status, statusText: response.statusText }
             );
@@ -41,6 +44,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         });
     } catch (error) {
         console.error('Error fetching Excel file:', error);
-        throw json({ error: 'Failed to fetch Excel file' }, { status: 500 });
+        throw Response.json({ error: 'Failed to fetch Excel file' }, { status: 500 });
     }
 };

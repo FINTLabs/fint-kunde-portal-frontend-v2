@@ -1,4 +1,4 @@
-import type { LoaderFunction } from '@remix-run/node';
+import type { LoaderFunction } from 'react-router';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import AdapterAPI from '~/api/AdapterApi';
 
@@ -11,7 +11,5 @@ export const loader: LoaderFunction = async ({ request }) => {
         a.shortDescription.localeCompare(b.shortDescription)
     );
 
-    return new Response(JSON.stringify({ adapters, orgName }), {
-        headers: { 'Content-Type': 'application/json' },
-    });
+    return Response.json({ adapters, orgName });
 };

@@ -1,4 +1,4 @@
-import type { LoaderFunction } from '@remix-run/node';
+import type { LoaderFunction } from 'react-router';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
@@ -14,13 +14,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     const assets = assetsResponse.data || [];
     assets.sort((a: IAsset, b: IAsset) => a.name.localeCompare(b.name));
 
-    return new Response(
-        JSON.stringify({
-            assets,
-            orgName,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
+    return Response.json({
+        assets,
+        orgName,
+    });
 };

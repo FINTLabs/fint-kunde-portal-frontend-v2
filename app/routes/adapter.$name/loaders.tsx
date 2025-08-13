@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
+import type { LoaderFunctionArgs } from 'react-router';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import AdapterApi from '~/api/AdapterApi';
 import FeaturesApi from '~/api/FeaturesApi';
@@ -22,16 +22,11 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
           ])
         : [null, null];
 
-    return new Response(
-        JSON.stringify({
-            adapters: adaptersResponse.data,
-            features: featuresResponse.data,
-            access: accessResponse?.data,
-            accessComponentList: componentListResponse?.data,
-            orgName,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
+    return Response.json({
+        adapters: adaptersResponse.data,
+        features: featuresResponse.data,
+        access: accessResponse?.data,
+        accessComponentList: componentListResponse?.data,
+        orgName,
+    });
 };

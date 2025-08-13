@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node';
+import { redirect } from 'react-router';
 import ClientApi from '~/api/ClientApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IPartialClient } from '~/types/Clients';

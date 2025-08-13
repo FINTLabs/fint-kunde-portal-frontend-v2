@@ -1,8 +1,8 @@
-import { type ActionFunctionArgs, type MetaFunction } from '@remix-run/node';
+import { type ActionFunctionArgs, type MetaFunction } from 'react-router';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useParams } from 'react-router';
 import { Environment, IAccess, IDomainPackages } from '~/types/Access';
 import React, { useState } from 'react';
 import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid } from '@navikt/ds-react';

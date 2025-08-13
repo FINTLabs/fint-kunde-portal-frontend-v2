@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack } from '@navikt/ds-react';
 import { IComponent } from '~/types/Component';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
-import { useNavigate } from '@remix-run/react';
+import { useNavigate } from 'react-router';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 
 interface ComponentsSectionProps {

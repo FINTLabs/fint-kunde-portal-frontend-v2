@@ -16,16 +16,11 @@ export const loader = async ({ request }: { request: Request }) => {
         const personalDataList = await ConsentApi.getPersonopplysning();
         const foundations = await ConsentApi.getBehandlingsgrunnlag();
 
-        return new Response(
-            JSON.stringify({
-                policies: policies.data,
-                services: services.data,
-                personalDataList: personalDataList.data,
-                foundations: foundations.data,
-            }),
-            {
-                headers: { 'Content-Type': 'application/json' },
-            }
-        );
+        return Response.json({
+            policies: policies.data,
+            services: services.data,
+            personalDataList: personalDataList.data,
+            foundations: foundations.data,
+        });
     }
 };

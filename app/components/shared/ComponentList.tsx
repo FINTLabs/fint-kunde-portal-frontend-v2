@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, Checkbox, FormSummary, HGrid, HStack } from '@navikt/ds-react';
 import { ChevronRightCircleIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
-import { useNavigate } from '@remix-run/react';
+import { useNavigate } from 'react-router';
 import { IDomainPackages } from '~/types/Access';
 
 interface ComponentListProps {

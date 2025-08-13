@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs } from 'react-router';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import AssetApi from '~/api/AssetApi';
 import AdapterAPI from '~/api/AdapterApi';
@@ -13,15 +13,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const clients = await ClientApi.getClients(orgName);
     const assets = await AssetApi.getAllAssets(orgName);
 
-    return new Response(
-        JSON.stringify({
-            asset: asset.data,
-            adapters: adapters.data,
-            clients: clients.data,
-            assets: assets.data,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
+    return Response.json({
+        asset: asset.data,
+        adapters: adapters.data,
+        clients: clients.data,
+        assets: assets.data,
+    });
 };

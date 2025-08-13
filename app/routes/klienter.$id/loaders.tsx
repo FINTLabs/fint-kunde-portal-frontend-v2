@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs } from 'react-router';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ClientApi from '~/api/ClientApi';
 import FeaturesApi from '~/api/FeaturesApi';
@@ -19,15 +19,10 @@ export async function loader({ request, params }: ActionFunctionArgs) {
           ])
         : [null, null];
 
-    return new Response(
-        JSON.stringify({
-            client: clientResponse,
-            features: featuresResponse.data,
-            access: accessResponse?.data,
-            accessComponentList: componentListResponse?.data,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
+    return Response.json({
+        client: clientResponse,
+        features: featuresResponse.data,
+        access: accessResponse?.data,
+        accessComponentList: componentListResponse?.data,
+    });
 }

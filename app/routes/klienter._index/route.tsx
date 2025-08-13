@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate, useSearchParams } from 'react-router';
 import { IClient } from '~/types/Clients';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { Search } from '@navikt/ds-react';
-import { type ActionFunctionArgs, MetaFunction } from '@remix-run/node';
+import { type ActionFunctionArgs, MetaFunction } from 'react-router';
 import ClientCreateForm from '~/routes/klienter._index/CreateForm';
 import AlertManager from '~/components/AlertManager';
 import useAlerts from '~/components/useAlerts';

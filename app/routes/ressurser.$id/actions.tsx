@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node';
+import { redirect } from 'react-router';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import AssetApi from '~/api/AssetApi';
 

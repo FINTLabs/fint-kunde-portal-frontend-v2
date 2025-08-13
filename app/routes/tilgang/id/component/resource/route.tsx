@@ -1,5 +1,5 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import { useFetcher, useLoaderData } from 'react-router';
 import AccessApi from '~/api/AccessApi';
 import FieldList from '~/routes/tilgang/id/component/resource/FieldList';
 import React from 'react';
@@ -29,17 +29,12 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
     const fieldList = await AccessApi.getFieldAccess(clientOrAdapter, componentName, resourceName);
 
-    return new Response(
-        JSON.stringify({
-            clientOrAdapter,
-            componentName,
-            resource: resource.data,
-            fieldList: fieldList.data,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
+    return Response.json({
+        clientOrAdapter,
+        componentName,
+        resource: resource.data,
+        fieldList: fieldList.data,
+    });
 };
 
 export default function Route() {

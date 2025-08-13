@@ -1,4 +1,4 @@
-import { LoaderFunction } from '@remix-run/node';
+import { LoaderFunction } from 'react-router';
 import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
 import OrganisationApi from '~/api/OrganisationApi';
@@ -21,16 +21,11 @@ export const loader: LoaderFunction = async ({ request }) => {
     const legalContactResponse = await OrganisationApi.getLegalContact(selectedOrg);
     const allContactsResponse = await ContactApi.getAllContacts();
 
-    return new Response(
-        JSON.stringify({
-            technicalContacts,
-            rolesData: rolesDataResponse.data,
-            legalContact: legalContactResponse.data,
-            allContacts: allContactsResponse.data,
-            selectedOrg,
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
+    return Response.json({
+        technicalContacts,
+        rolesData: rolesDataResponse.data,
+        legalContact: legalContactResponse.data,
+        allContacts: allContactsResponse.data,
+        selectedOrg,
+    });
 };

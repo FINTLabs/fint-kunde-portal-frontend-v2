@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { ActionFunctionArgs, MetaFunction } from 'react-router';
+import { useFetcher, useLoaderData } from 'react-router';
 import { Box, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';

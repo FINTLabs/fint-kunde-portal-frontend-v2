@@ -1,4 +1,4 @@
-import { LoaderFunction } from '@remix-run/node';
+import { LoaderFunction } from 'react-router';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ComponentApi from '~/api/ComponentApi';
 import ClientApi from '~/api/ClientApi';
@@ -16,18 +16,13 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const filteredClients = (clients?.data ?? []).filter((client: IClient) => !client.managed);
 
-    return new Response(
-        JSON.stringify({
-            components: components.data,
-            clients: filteredClients,
-            relationTests: relationTests.data,
-            configs: configs.data,
-            success: false,
-            message: `Oppdatering av testresultater`,
-            variant: 'success',
-        }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
+    return Response.json({
+        components: components.data,
+        clients: filteredClients,
+        relationTests: relationTests.data,
+        configs: configs.data,
+        success: false,
+        message: `Oppdatering av testresultater`,
+        variant: 'success',
+    });
 };

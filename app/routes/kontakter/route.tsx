@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ActionFunction, MetaFunction } from '@remix-run/node';
+import { ActionFunction, MetaFunction } from 'react-router';
 import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from 'react-router';
 import ContactTable from '~/routes/kontakter/ContactTable';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';

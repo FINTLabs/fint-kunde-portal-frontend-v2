@@ -1,8 +1,8 @@
-import { ActionFunctionArgs, type MetaFunction } from '@remix-run/node';
+import { ActionFunctionArgs, type MetaFunction } from 'react-router';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { Alert, Search } from '@navikt/ds-react';
-import { useFetcher, useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useNavigate, useSearchParams } from 'react-router';
 import { CustomTabs } from '~/components/shared/CustomTabs';
 import React, { useState } from 'react';
 import AdapterCreateForm from '~/routes/adaptere._index/CreateForm';

@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate } from '@remix-run/react';
+import { useLoaderData, useNavigate } from 'react-router';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, ComponentIcon } from '@navikt/aksel-icons';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -7,7 +7,7 @@ import { IComponent } from '~/types/Component';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentApi from '~/api/ComponentApi';
 import ComponentDetails from '~/routes/komponenter.$id/ComponentDetails';
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs } from 'react-router';
 import EndpointTable from '~/routes/komponenter.$id/EndpointTable';
 import SwaggerTable from '~/routes/komponenter.$id/SwaggerTable';
 
@@ -16,9 +16,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
     const component = await ComponentApi.getComponentById(id);
 
-    return new Response(JSON.stringify(component), {
-        headers: { 'Content-Type': 'application/json' },
-    });
+    return Response.json(component);
 };
 
 export default function Index() {

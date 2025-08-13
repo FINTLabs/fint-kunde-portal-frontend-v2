@@ -1,6 +1,6 @@
-import { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
+import { ActionFunctionArgs, MetaFunction } from 'react-router';
 import { ComponentIcon } from '@navikt/aksel-icons';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from 'react-router';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
