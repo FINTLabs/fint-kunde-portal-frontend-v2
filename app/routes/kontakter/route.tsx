@@ -81,7 +81,7 @@ export default function Index() {
                 <Heading size="xsmall">Juridisk kontakt</Heading>
                 {legalContact ? (
                     <HStack gap="4" align="center" className="px-4">
-                        <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full border-4" />
+                        <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full " />
                         <BodyShort size="medium">
                             {legalContact.firstName} {legalContact.lastName}
                         </BodyShort>
