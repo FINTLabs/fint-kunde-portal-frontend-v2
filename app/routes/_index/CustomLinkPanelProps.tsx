@@ -1,41 +1,42 @@
 import React from 'react';
-import { LinkPanel, BodyLong } from '@navikt/ds-react';
+import { Box, LinkCard } from '@navikt/ds-react';
 
 interface CustomLinkPanelProps {
     href: string;
     title: string;
     IconComponent: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-    description?: string;
-    userHasRole: boolean;
 }
 
-const CustomLinkPanel = ({
-    href,
-    title,
-    IconComponent,
-    description,
-    userHasRole,
-}: CustomLinkPanelProps) => {
+const CustomLinkPanel: React.FC<CustomLinkPanelProps> = ({ href, title, IconComponent }) => {
     return (
-        <LinkPanel
-            href={userHasRole ? href : undefined}
-            border
-            className={userHasRole ? 'my-custom-panel' : 'my-custom-panel-disabled'}>
-            <LinkPanel.Title
-                className={`panel-title ${!userHasRole ? 'panel-title-disabled' : ''}`}>
-                <IconComponent
-                    aria-hidden
-                    className={`panel-icon ${!userHasRole ? 'panel-icon-disabled' : ''}`}
-                />
-                {title}
-            </LinkPanel.Title>
-            {description && (
-                <BodyLong
-                    className={`panel-description ${!userHasRole ? 'panel-description-disabled' : ''}`}>
-                    {description}
-                </BodyLong>
-            )}
-        </LinkPanel>
+        <LinkCard>
+            <Box
+                asChild
+                borderRadius="12"
+                padding="space-8"
+                style={{ backgroundColor: 'var(--ax-bg-moderateA)' }}>
+                <LinkCard.Icon>
+                    <IconComponent aria-hidden className={`panel-icon`} />
+                </LinkCard.Icon>
+            </Box>
+            <LinkCard.Title>
+                <LinkCard.Anchor href={href} data-cy={`${title}-link-panel`}>
+                    {title}
+                </LinkCard.Anchor>
+            </LinkCard.Title>
+        </LinkCard>
+        // <LinkPanel
+        //     key={title}
+        //     border
+        //     className={'my-custom-panel'}
+        //     href={href}
+        //     data-cy={`${title}-link-panel`}>
+        //     <LinkPanel.Title className={`panel-title`}>
+        //         <IconComponent aria-hidden className={`panel-icon`} />
+        //         {title}
+        //     </LinkPanel.Title>
+        //     {description && <BodyLong className={`panel-description`}>{description}</BodyLong>}
+        // </LinkPanel>
     );
 };
 

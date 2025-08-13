@@ -107,25 +107,25 @@
     }
 
     /* Hover effect */
-    .my-custom-panel:hover {
-        background-color: #f8ebdb; /* Darker gray background on hover */
+    /*.my-custom-panel:hover {*/
+    /*    background-color: #f8ebdb; !* Darker gray background on hover *!*/
+    /*}*/
+
+    .navds-link-card:hover .panel-icon {
+        transform: scale(1.3); /* Enlarge the icon on hover */
     }
 
-    .my-custom-panel:hover .panel-icon {
-        transform: scale(1.7); /* Enlarge the icon on hover */
-    }
+    /*!* Disable hover effect on the title and icon when the panel is disabled *!*/
+    /*.my-custom-panel-disabled:hover {*/
+    /*    background-color: #e0e0e0; !* Maintain the disabled background color *!*/
+    /*}*/
 
-    /* Disable hover effect on the title and icon when the panel is disabled */
-    .my-custom-panel-disabled:hover {
-        background-color: #e0e0e0; /* Maintain the disabled background color */
-    }
+    /*.my-custom-panel-disabled:hover .panel-icon-disabled {*/
+    /*    transform: none; !* Prevent icon scaling on hover *!*/
+    /*}*/
 
-    .my-custom-panel-disabled:hover .panel-icon-disabled {
-        transform: none; /* Prevent icon scaling on hover */
-    }
-
-    .my-custom-panel-disabled:hover .panel-title-disabled {
-        text-decoration: none; /* Prevent any hover effect on the title */
-        cursor: default; /* Indicate that the title is not clickable */
-    }
+    /*.my-custom-panel-disabled:hover .panel-title-disabled {*/
+    /*    text-decoration: none; !* Prevent any hover effect on the title *!*/
+    /*    cursor: default; !* Indicate that the title is not clickable *!*/
+    /*}*/
 }
