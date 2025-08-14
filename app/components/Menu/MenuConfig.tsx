@@ -21,7 +21,7 @@ export const footerLinks = [
 
 export const menuConfig: MenuGroup[] = [
     {
-        label: 'TILGANGER',
+        label: 'Tilganger',
         items: [
             {
                 label: 'Kontakter',
@@ -61,7 +61,7 @@ export const menuConfig: MenuGroup[] = [
         ],
     },
     {
-        label: 'HELSE',
+        label: 'Helse',
         items: [
             {
                 label: 'Hendelseslogg',
