@@ -1,4 +1,6 @@
+import type { ActionFunctionArgs, LinksFunction, LoaderFunctionArgs } from 'react-router';
 import {
+    data,
     isRouteErrorResponse,
     Links,
     Meta,
@@ -6,17 +8,15 @@ import {
     Scripts,
     ScrollRestoration,
     useLoaderData,
+    useNavigate,
     useRouteError,
 } from 'react-router';
-import type { ActionFunctionArgs, LinksFunction, LoaderFunctionArgs } from 'react-router';
-import { data } from 'react-router';
 import './tailwind.css';
 import '@navikt/ds-css';
 import './novari-theme.css';
 import { Alert, Box, Page } from '@navikt/ds-react';
 import React from 'react';
 import MeApi from '~/api/MeApi';
-import Footer from '~/components/Footer';
 import FeaturesApi from './api/FeaturesApi';
 import { IOrganisation } from '~/types/Organisation';
 import { CustomErrorLayout } from '~/components/errors/CustomErrorLayout';
@@ -30,7 +30,9 @@ import CustomErrorNoUser from '~/components/errors/CustomErrorNoUser';
 import CustomErrorNoOrg from '~/components/errors/CustomErrorNoOrg';
 import CustomErrorNoAccess from '~/components/errors/CustomErrorNoAccess';
 import { defaultFeatures } from '~/types/FeatureFlag';
-import Menu from '~/components/Menu/Menu';
+import { UserOrganization } from '~/components/Menu/UserOrganization';
+import { NovariFooter, NovariHeader } from 'novari-frontend-components';
+import { menuConfig, footerLinks } from '~/components/Menu/MenuConfig';
 
 export const links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: 'https://www.cdnfonts.com/brockmann.font' }];
@@ -40,6 +42,25 @@ export const links: LinksFunction = () => {
 //     maxAge: 604_800, // one week
 // });
 
+// Initialize MSW based on environment
+let server: any;
+
+// For client-side mocking for tests
+if (import.meta.env.DEV && import.meta.env.VITE_MOCK_CYPRESS === 'true') {
+    console.log('RUNNING WITH MOCK ENVIRONMENT');
+    if (typeof window !== 'undefined') {
+        console.log('RUNNING WITH MOCK ENVIRONMENT IN BROWSER');
+        // Browser environment
+        const { worker } = await import('../cypress/mocks/browser');
+        await worker.start();
+    } else {
+        console.log('RUNNING WITH MOCK ENVIRONMENT IN NODE');
+        // Node.js environment (server-side)
+        const { server: nodeServer } = await import('../cypress/mocks/node');
+        server = nodeServer;
+        server.listen();
+    }
+}
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     HeaderProperties.setProperties(request);
 
@@ -112,23 +133,30 @@ export default function App() {
         userSession: IUserSession;
     }>();
 
+    const navigate = useNavigate();
+
     return (
         <Page
             footer={
                 <Box padding="1" as="footer" className={'novari-footer'}>
                     <Page.Block gutters width="lg">
-                        <Footer />
+                        <NovariFooter links={footerLinks} />
                     </Page.Block>
                 </Box>
             }>
-            <Box as="header" className={'novari-header'}>
-                <Page.Block gutters width="lg" className={'pt-2 pb-2'}>
-                    {/*<div className="flex justify-between">*/}
-                    {/*    <MenuLeft userSession={userSession} />*/}
-                    {/*    <MenuRight userSession={userSession} />*/}
-                    {/*</div>*/}
-                    <Menu userSession={userSession} />
-                </Page.Block>
+            <Box background={'bg-default'} as="nav">
+                <NovariHeader
+                    isLoggedIn={true}
+                    // appName={'FINT Kunde Portal'}
+                    menu={menuConfig}
+                    showLogoWithTitle={true}
+                    displayName={userSession.meData.firstName || 'Logged In'}
+                    onLogout={() =>
+                        (window.location.href = 'https://idp.felleskomponent.no/nidp/app/logout')
+                    }
+                    onMenuClick={(action) => navigate(action)}>
+                    <UserOrganization userSession={userSession} />
+                </NovariHeader>
             </Box>
 
             <Box padding="8" paddingBlock="2" as="main">

@@ -1,8 +1,15 @@
-import React from 'react';
+// src/types/Menu.ts
+import type { ReactNode } from 'react';
 
-export type MenuItem = {
-    title: string;
-    path: string;
-    icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-    role?: string;
-};
+export interface MenuItem {
+    label: string;
+    action: string;
+    icon?: ReactNode;
+    description?: string;
+    role: string;
+}
+
+export interface MenuGroup {
+    label: string;
+    items: MenuItem[];
+}

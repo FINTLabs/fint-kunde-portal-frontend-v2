@@ -16,5 +16,11 @@
 // Import commands.js using ES2015 syntax:
 import './commands';
 
+// Set up MSW for server-side requests
+if (Cypress.env('VITE_MOCK_CYPRESS')) {
+    // This will be available to the Node.js environment
+    process.env.VITE_MOCK_CYPRESS = 'true';
+}
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

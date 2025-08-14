@@ -15,6 +15,6 @@
   "supportId": "1234567890",
   "roles": [
     "ROLE_ADMIN@calvin_organizations",
-    "ROLE_ADMIN@hobbes_enterprises"
+    "ROLE_LOG@hobbes_enterprises"
   ]
 }

@@ -95,9 +95,9 @@
     }
 
     /* Description styles */
-    .panel-description {
+    .navds-link-card__description {
         margin-top: 4px;
-        font-size: 16px;
+        font-size: 14px;
         color: #3e3832;
     }
 

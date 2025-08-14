@@ -1,12 +1,7 @@
-import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
-import { MetaFunction } from 'react-router';
-import { useOutletContext } from 'react-router';
-import { MENU_ITEMS_LEFT } from '~/components/Menu/constants';
-import { MenuDropDown } from '~/types/MenuDropDown';
-import { MenuItem } from '~/types/MenuItem';
-import CustomLinkPanel from '~/routes/_index/CustomLinkPanelProps';
-import { ImageIcon, PassportIcon } from '@navikt/aksel-icons';
+import { Box, Heading, HGrid, LinkCard, VStack } from '@navikt/ds-react';
+import { MetaFunction, useOutletContext } from 'react-router';
 import { IUserSession } from '~/types/Session';
+import { menuConfig } from '~/components/Menu/MenuConfig';
 
 export const meta: MetaFunction = () => {
     return [
@@ -23,12 +18,14 @@ export default function Index() {
     const userSession = useOutletContext<IUserSession>();
 
     const hasRole = (roleId: string): boolean => {
-        // logger.silly('checking for a role: ', userSession.selectedOrganization?.name, roleId);
-        return (
-            userSession.meData?.roles?.includes(
-                roleId + '@' + userSession.selectedOrganization?.name
-            ) ?? false
-        );
+        const orgName = userSession.selectedOrganization?.name;
+        const roles = userSession.meData?.roles ?? [];
+
+        if (roles.includes(`ROLE_ADMIN@${orgName}`)) {
+            return true;
+        }
+
+        return roles.includes(`${roleId}@${orgName}`);
     };
 
     return (
@@ -38,36 +35,34 @@ export default function Index() {
                     Velkommen til kundeportalen, {userSession.meData.firstName}.
                 </Heading>
 
-                <HGrid className="pt-4" gap="3" columns={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 3 }}>
-                    {MENU_ITEMS_LEFT.dropdowns
-                        .reduce(
-                            (acc: MenuItem[], curr: MenuDropDown) => [...acc, ...curr.subMenus],
-                            []
-                        )
-                        .map((item, index) => {
-                            const IconComponent = item.icon || ImageIcon;
-                            const userHasRole =
-                                hasRole('ROLE_ADMIN') || (!!item.role && hasRole(item.role));
-
-                            return (
-                                <CustomLinkPanel
-                                    key={index}
-                                    href={item.path}
-                                    title={item.title}
-                                    IconComponent={IconComponent}
-                                    userHasRole={userHasRole}
-                                />
-                            );
-                        })}
-                    {userSession.features[
-                        'samtykke-admin-new' as keyof typeof userSession.features
-                    ] && (
-                        <CustomLinkPanel
-                            href={'/samtykke'}
-                            title={'Samtykke'}
-                            IconComponent={PassportIcon}
-                            userHasRole={true}
-                        />
+                <HGrid className="pt-4" gap="3" columns={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }}>
+                    {menuConfig.flatMap((group) =>
+                        group.items.map((item) => (
+                            <LinkCard key={item.action} size="medium">
+                                {item.icon && (
+                                    <LinkCard.Icon
+                                        className={
+                                            hasRole(item.role)
+                                                ? 'panel-icon'
+                                                : 'panel-icon panel-icon-disabled'
+                                        }>
+                                        {item.icon}
+                                    </LinkCard.Icon>
+                                )}
+                                <LinkCard.Title
+                                    as="h3"
+                                    className={
+                                        hasRole(item.role) ? '' : 'panel-description-disabled'
+                                    }>
+                                    <LinkCard.Anchor href={hasRole(item.role) ? item.action : ''}>
+                                        {item.label}
+                                    </LinkCard.Anchor>
+                                </LinkCard.Title>
+                                {item.description && (
+                                    <LinkCard.Description>{item.description}</LinkCard.Description>
+                                )}
+                            </LinkCard>
+                        ))
                     )}
                 </HGrid>
             </VStack>

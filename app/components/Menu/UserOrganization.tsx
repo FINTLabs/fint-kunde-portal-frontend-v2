@@ -25,7 +25,7 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
     };
 
     return (
-        <>
+        <div>
             {userSession.organizations.length === 1 && (
                 <div className="flex items-center">{userSession.organizations[0].displayName}</div>
             )}
@@ -35,7 +35,8 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
                     label="Velg organisasjon"
                     hideLabel
                     onChange={handleOrgChange}
-                    value={orgName}>
+                    value={orgName}
+                    className={'p-2'}>
                     {userSession.organizations.map((org, index) => (
                         <option key={`key-${index}`} value={org.name}>
                             {org.displayName}
@@ -43,6 +44,6 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
                     ))}
                 </Select>
             )}
-        </>
+        </div>
     );
 };
