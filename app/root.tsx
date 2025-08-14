@@ -148,7 +148,7 @@ export default function App() {
                 <NovariHeader
                     isLoggedIn={true}
                     // appName={'FINT Kunde Portal'}
-                    menu={menuConfig}
+                    menu={[['Dashboard', '/'], ...menuConfig]}
                     showLogoWithTitle={true}
                     displayName={userSession.meData.firstName || 'Logged In'}
                     onLogout={() =>

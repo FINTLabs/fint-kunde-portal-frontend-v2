@@ -1,6 +1,5 @@
 import {
     ArrowsSquarepathIcon,
-    BriefcaseIcon,
     ComponentIcon,
     LayersIcon,
     MigrationIcon,
