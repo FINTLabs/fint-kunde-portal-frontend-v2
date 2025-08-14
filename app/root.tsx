@@ -14,7 +14,7 @@ import {
 import './tailwind.css';
 import '@navikt/ds-css';
 import './novari-theme.css';
-import { Alert, Box, Page } from '@navikt/ds-react';
+import { Alert, Box, Link, Page } from '@navikt/ds-react';
 import React from 'react';
 import MeApi from '~/api/MeApi';
 import FeaturesApi from './api/FeaturesApi';
@@ -154,7 +154,8 @@ export default function App() {
                     onLogout={() =>
                         (window.location.href = 'https://idp.felleskomponent.no/nidp/app/logout')
                     }
-                    onMenuClick={(action) => navigate(action)}>
+                    onMenuClick={(action) => navigate(action)}
+                    userInfoUrl="/user">
                     <UserOrganization userSession={userSession} />
                 </NovariHeader>
             </Box>
