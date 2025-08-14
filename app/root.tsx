@@ -148,14 +148,13 @@ export default function App() {
                 <NovariHeader
                     isLoggedIn={true}
                     // appName={'FINT Kunde Portal'}
-                    menu={[['Dashboard', '/'], ...menuConfig]}
+                    menu={[['Dashboard', '/'], ...menuConfig, ['Min profil', '/user']]}
                     showLogoWithTitle={true}
                     displayName={userSession.meData.firstName || 'Logged In'}
                     onLogout={() =>
                         (window.location.href = 'https://idp.felleskomponent.no/nidp/app/logout')
                     }
-                    onMenuClick={(action) => navigate(action)}
-                    userInfoUrl="/user">
+                    onMenuClick={(action) => navigate(action)}>
                     <UserOrganization userSession={userSession} />
                 </NovariHeader>
             </Box>
