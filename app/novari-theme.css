@@ -105,6 +105,9 @@
     .panel-description-disabled {
         color: #a0a0a0; /* Dimmed color for disabled description text */
     }
+    .panel-description {
+        line-height: 1.5;
+    }
 
     /* Hover effect */
     /*.my-custom-panel:hover {*/

@@ -169,6 +169,7 @@ export default function App() {
     );
 }
 
+//TODO: Are errors handled different in router 7??
 export function ErrorBoundary() {
     const error = useRouteError();
 

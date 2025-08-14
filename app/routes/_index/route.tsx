@@ -59,7 +59,9 @@ export default function Index() {
                                     </LinkCard.Anchor>
                                 </LinkCard.Title>
                                 {item.description && (
-                                    <LinkCard.Description>{item.description}</LinkCard.Description>
+                                    <LinkCard.Description className="panel-description">
+                                        {item.description}
+                                    </LinkCard.Description>
                                 )}
                             </LinkCard>
                         ))
