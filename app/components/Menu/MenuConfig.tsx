@@ -5,7 +5,9 @@ import {
     LayersIcon,
     MigrationIcon,
     PersonGroupIcon,
+    TasklistSendIcon,
     TerminalIcon,
+    TokenIcon,
 } from '@navikt/aksel-icons';
 import { MenuGroup } from '~/types/MenuItem';
 import { helpData } from '~/routes/help/HelpData';
@@ -39,14 +41,14 @@ export const menuConfig: MenuGroup[] = [
             {
                 label: 'Adaptere',
                 action: '/adaptere',
-                icon: <BriefcaseIcon title={'Adaptere'} fontSize="1.5rem" />,
+                icon: <MigrationIcon title={'Adaptere'} fontSize="1.5rem" />,
                 description: helpData.find((i) => i.id === 'adapter')?.shortDescription,
                 role: 'ROLE_ADAPTER',
             },
             {
                 label: 'Klienter',
                 action: '/klienter',
-                icon: <MigrationIcon title={'Klienter'} fontSize="1.5rem" />,
+                icon: <TokenIcon title={'Klienter'} fontSize="1.5rem" />,
                 description: helpData.find((i) => i.id === 'klienter')?.shortDescription,
                 role: 'ROLE_CLIENT',
             },
@@ -65,7 +67,7 @@ export const menuConfig: MenuGroup[] = [
             {
                 label: 'Hendelseslogg',
                 action: '/hendelseslogg',
-                icon: <TerminalIcon title={'Hendelseslogg'} fontSize="1.5rem" />,
+                icon: <TasklistSendIcon title={'Hendelseslogg'} fontSize="1.5rem" />,
                 description: helpData.find((i) => i.id === 'hendelseslogg')?.shortDescription,
                 role: 'ROLE_LOG',
             },

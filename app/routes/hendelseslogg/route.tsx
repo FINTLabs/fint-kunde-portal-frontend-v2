@@ -4,7 +4,7 @@ import { useFetcher, useLoaderData } from 'react-router';
 import { Box, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { TerminalIcon } from '@navikt/aksel-icons';
+import { TasklistSendIcon } from '@navikt/aksel-icons';
 import LogSearchForm from '~/routes/hendelseslogg/LogSearchForm';
 import LogTable from './LogTable';
 import { IFetcherResponseData } from '~/types/FetcherResponseData';
@@ -13,6 +13,7 @@ import useAlerts from '~/components/useAlerts';
 import { Log, ReduntantLog } from '~/types/LogEvent';
 import { handleLogAction } from '~/routes/hendelseslogg/actions';
 import { loader } from './loaders';
+import { IComponent } from '~/types/Component';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Hendelseslogg' }, { name: 'description', content: 'Hendelseslogg' }];
@@ -22,11 +23,16 @@ export { loader };
 
 export const action = async (args: ActionFunctionArgs) => handleLogAction(args);
 
+class IPageLoaderData {
+    components: IComponent[] = [];
+    configs: any;
+}
+
 export default function Index() {
     const breadcrumbs = [{ name: 'Hendelseslogg', link: '/hendelseslogg' }];
     const fetcher = useFetcher();
     const actionData = fetcher.data as IFetcherResponseData;
-    const { components, configs } = useLoaderData<typeof loader>();
+    const { components, configs } = useLoaderData<IPageLoaderData>();
     const logs = actionData?.data || [];
     const mappedLogs = mapLogs(logs);
     const [filterValue, setFilterValue] = useState('');
@@ -45,7 +51,7 @@ export default function Index() {
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader
                 title={'Hendelseslogg'}
-                icon={TerminalIcon}
+                icon={TasklistSendIcon}
                 helpText="hendelseslogg"
             />
 
