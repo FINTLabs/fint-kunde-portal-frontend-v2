@@ -1,5 +1,5 @@
 import { type ActionFunctionArgs, type MetaFunction } from 'react-router';
-import { LayersIcon } from '@navikt/aksel-icons';
+import { MigrationIcon } from '@navikt/aksel-icons';
 import { useFetcher, useLoaderData, useNavigate, useSearchParams } from 'react-router';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -51,7 +51,7 @@ export default function Index() {
 
             <InternalPageHeader
                 title={'Ressurser'}
-                icon={LayersIcon}
+                icon={MigrationIcon}
                 helpText="assets"
                 onAddClick={handleCreate}
             />

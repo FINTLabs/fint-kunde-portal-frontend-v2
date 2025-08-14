@@ -40,7 +40,7 @@ export const menuConfig: MenuGroup[] = [
             {
                 label: 'Adaptere',
                 action: '/adaptere',
-                icon: <MigrationIcon title={'Adaptere'} fontSize="1.5rem" />,
+                icon: <LayersIcon title={'Adaptere'} fontSize="1.5rem" />,
                 description: helpData.find((i) => i.id === 'adapter')?.shortDescription,
                 role: 'ROLE_ADAPTER',
             },
@@ -54,7 +54,7 @@ export const menuConfig: MenuGroup[] = [
             {
                 label: 'Ressurser',
                 action: '/ressurser',
-                icon: <LayersIcon title={'Ressurser'} fontSize="1.5rem" />,
+                icon: <MigrationIcon title={'Ressurser'} fontSize="1.5rem" />,
                 description: helpData.find((i) => i.id === 'assets')?.shortDescription,
                 role: 'ROLE_ASSET',
             },

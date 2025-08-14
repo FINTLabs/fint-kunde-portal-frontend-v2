@@ -1,4 +1,4 @@
-import { LayersIcon } from '@navikt/aksel-icons';
+import { MigrationIcon } from '@navikt/aksel-icons';
 import { useFetcher, useLoaderData, useParams } from 'react-router';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -94,7 +94,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'Ressurser'} icon={LayersIcon} helpText="ressurser" />
+            <InternalPageHeader title={'Ressurser'} icon={MigrationIcon} helpText="ressurser" />
 
             <AlertManager alerts={alerts} />
 

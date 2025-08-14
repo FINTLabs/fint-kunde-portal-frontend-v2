@@ -1,6 +1,6 @@
 import { ActionFunctionArgs, type MetaFunction } from 'react-router';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { MigrationIcon } from '@navikt/aksel-icons';
+import { LayersIcon } from '@navikt/aksel-icons';
 import { Alert, Search } from '@navikt/ds-react';
 import { useFetcher, useLoaderData, useNavigate, useSearchParams } from 'react-router';
 import { CustomTabs } from '~/components/shared/CustomTabs';
@@ -77,7 +77,7 @@ export default function Index() {
                 <>
                     <InternalPageHeader
                         title={'Adaptere'}
-                        icon={MigrationIcon}
+                        icon={LayersIcon}
                         helpText="adaptere"
                         onAddClick={handleCreate}
                     />

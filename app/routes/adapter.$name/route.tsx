@@ -1,7 +1,7 @@
 import { type ActionFunctionArgs, type MetaFunction } from 'react-router';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { MigrationIcon } from '@navikt/aksel-icons';
+import { LayersIcon } from '@navikt/aksel-icons';
 import { useFetcher, useLoaderData, useParams } from 'react-router';
 import { Environment, IAccess, IDomainPackages } from '~/types/Access';
 import React, { useState } from 'react';
@@ -108,7 +108,7 @@ export default function Index() {
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader
                 title={displayName ? displayName : 'Error'}
-                icon={MigrationIcon}
+                icon={LayersIcon}
                 helpText="adapter detaljer"
             />
 
