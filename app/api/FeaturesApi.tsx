@@ -1,21 +1,18 @@
-import { apiManager, ApiResponse, handleApiResponse } from '~/api/ApiManager';
-import { FeatureFlags } from '~/types/FeatureFlag';
+import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
+import type { FeatureFlags } from '~/types/FeatureFlag';
 
-const API_URL = process.env.API_URL;
+const API_URL = process.env.API_URL || '';
+const featuresManager = new NovariApiManager({ baseUrl: API_URL });
 
 class FeaturesApi {
     static async fetchFeatures(): Promise<ApiResponse<FeatureFlags>> {
-        const apiResults = await apiManager<FeatureFlags>({
+        return await featuresManager.call<FeatureFlags>({
             method: 'GET',
-            url: `${API_URL}/api/api/feature`,
+            endpoint: '/api/api/feature', // NOTE: if this is a typo, change to '/api/feature'
             functionName: 'fetchFeatures',
+            customErrorMessage: 'Kunne ikke hente en liste over features',
+            customSuccessMessage: 'Features hentet vellykket',
         });
-
-        return handleApiResponse<FeatureFlags>(
-            apiResults,
-            'Kunne ikke hente en liste over features',
-            'Features hentet vellykket'
-        );
     }
 }
 

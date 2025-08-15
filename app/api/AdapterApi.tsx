@@ -1,56 +1,46 @@
-import { apiManager, ApiResponse, handleApiResponse } from '~/api/ApiManager';
+import { NovariApiManager, ApiResponse } from 'novari-frontend-components';
 import { IPartialAdapter } from '~/types/Adapter';
 
-const API_URL = process.env.API_URL;
+const API_URL = process.env.API_URL || '';
+const adapterManager = new NovariApiManager({ baseUrl: API_URL });
 
-class AdapterAPI {
+class AdapterApi {
     static async getAdapters(organisationName: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await adapterManager.call<any>({
             method: 'GET',
-            url: `${API_URL}/api/adapters/${organisationName}`,
+            endpoint: `/api/adapters/${organisationName}`,
             functionName: 'getAdapters',
+            customErrorMessage: `Kunne ikke hente adaptere for organisasjonen: ${organisationName}`,
+            customSuccessMessage: 'Adaptere hentet',
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke hente adaptere for organisasjonen: ${organisationName}`
-        );
     }
 
     static async createAdapter(
         adapter: IPartialAdapter,
         organisationName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await adapterManager.call<any>({
             method: 'POST',
-            url: `${API_URL}/api/adapters/${organisationName}`,
+            endpoint: `/api/adapters/${organisationName}`,
             functionName: 'createAdapter',
             body: JSON.stringify(adapter),
+            customErrorMessage: 'Kunne ikke opprette adapteren',
+            customSuccessMessage: 'Adapteren ble opprettet vellykket',
         });
-
-        return handleApiResponse(
-            apiResults,
-            'Kunne ikke opprette adapteren',
-            'Adapteren ble opprettet vellykket'
-        );
     }
 
     static async updateAdapter(
         adapter: IPartialAdapter,
         organisationName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await adapterManager.call<any>({
             method: 'PUT',
-            url: `${API_URL}/api/adapters/${organisationName}/${adapter.name}`,
+            endpoint: `/api/adapters/${organisationName}/${adapter.name}`,
             functionName: 'updateAdapter',
             body: JSON.stringify(adapter),
+            customErrorMessage: 'Kunne ikke oppdatere adapteren',
+            customSuccessMessage: 'Adapteren ble oppdatert vellykket',
         });
-
-        return handleApiResponse(
-            apiResults,
-            'Kunne ikke oppdatere adapteren',
-            'Adapteren ble oppdatert vellykket'
-        );
     }
 
     static async updateComponentInAdapter(
@@ -59,80 +49,64 @@ class AdapterAPI {
         organisationName: string,
         updateType: string
     ): Promise<ApiResponse<any>> {
-        const url = `${API_URL}/api/components/organisation/${organisationName}/${componentName}/adapters/${adapterName}`;
+        const endpoint = `/api/components/organisation/${organisationName}/${componentName}/adapters/${adapterName}`;
         if (updateType === 'true') {
-            return await this.addComponentToAdapter(url, adapterName);
+            return this.addComponentToAdapter(endpoint, adapterName);
         } else {
-            return await this.removeComponentFromAdapter(url, adapterName);
+            return this.removeComponentFromAdapter(endpoint, adapterName);
         }
     }
 
-    static async addComponentToAdapter(
-        url: string,
+    private static async addComponentToAdapter(
+        endpoint: string,
         adapterName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await adapterManager.call<any>({
             method: 'PUT',
-            url,
+            endpoint,
             functionName: 'addComponentToAdapter',
             body: JSON.stringify({ name: adapterName }),
+            customErrorMessage: `Kunne ikke legge til komponenten i adapteren: ${adapterName}`,
+            customSuccessMessage: 'Komponenten ble lagt til',
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke legge til komponenten i adapteren: ${adapterName}`,
-            'Komponenten ble lagt til'
-        );
     }
 
-    static async removeComponentFromAdapter(
-        url: string,
+    private static async removeComponentFromAdapter(
+        endpoint: string,
         adapterName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await adapterManager.call<any>({
             method: 'DELETE',
-            url,
+            endpoint,
             functionName: 'removeComponentFromAdapter',
             body: JSON.stringify({ name: adapterName }),
+            customErrorMessage: `Kunne ikke fjerne komponenten fra adapteren: ${adapterName}`,
+            customSuccessMessage: 'Komponenten ble fjernet',
+            // customSuccessVariant: 'warning', // only if your manager supports variants
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke fjerne komponenten fra adapteren: ${adapterName}`,
-            'Komponenten ble fjernet',
-            'warning'
-        );
     }
 
     static async deleteAdapter(name: string, organisationName: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await adapterManager.call<any>({
             method: 'DELETE',
-            url: `${API_URL}/api/adapters/${organisationName}/${name}`,
+            endpoint: `/api/adapters/${organisationName}/${name}`,
             functionName: 'deleteAdapter',
+            customErrorMessage: `Kunne ikke slette adapteren: ${name}`,
+            customSuccessMessage: 'Adapteren ble slettet vellykket',
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke slette adapteren: ${name}`,
-            'Adapteren ble slettet vellykket'
-        );
     }
 
     static async getOpenIdSecret(
         adapterName: string,
         organisationName: string
     ): Promise<ApiResponse<string>> {
-        const apiResults = await apiManager<string>({
+        return await adapterManager.call<string>({
             method: 'GET',
-            url: `${API_URL}/api/adapters/${organisationName}/${adapterName}/secret`,
+            endpoint: `/api/adapters/${organisationName}/${adapterName}/secret`,
             functionName: 'getOpenIdSecret',
+            customErrorMessage: 'Kunne ikke hente OpenID Secret',
+            customSuccessMessage: 'OpenID Secret hentet',
         });
-
-        return handleApiResponse(
-            apiResults,
-            'Kunne ikke hente OpenID Secret',
-            'OpenID secret hente'
-        );
     }
 
     static async setPassword(
@@ -140,20 +114,16 @@ class AdapterAPI {
         password: string,
         organisationName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await adapterManager.call<any>({
             method: 'PUT',
-            url: `${API_URL}/api/adapters/${organisationName}/${adapterName}/password`,
+            endpoint: `/api/adapters/${organisationName}/${adapterName}/password`,
             functionName: 'setPassword',
             body: password,
             contentType: 'text/plain',
+            customErrorMessage: 'Kunne ikke sette passordet',
+            customSuccessMessage: 'Passordet ble satt vellykket',
         });
-
-        return handleApiResponse(
-            apiResults,
-            'Kunne ikke sette passordet',
-            'Passordet ble satt vellykket'
-        );
     }
 }
 
-export default AdapterAPI;
+export default AdapterApi;

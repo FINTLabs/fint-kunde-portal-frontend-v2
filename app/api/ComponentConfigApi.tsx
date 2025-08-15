@@ -1,20 +1,17 @@
-import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
-const API_URL = process.env.API_URL;
+import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
+
+const API_URL = process.env.API_URL || '';
+const componentConfigManager = new NovariApiManager({ baseUrl: API_URL });
 
 class ComponentConfigApi {
     static async getComponentConfigs(): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await componentConfigManager.call<any>({
             method: 'GET',
-            url: `${API_URL}/api/components/configurations`,
+            endpoint: '/api/components/configurations',
             functionName: 'getComponentConfigs',
+            customErrorMessage: 'Kunne ikke hente komponentkonfigurasjoner',
+            customSuccessMessage: 'Komponentkonfigurasjoner ble hentet.',
         });
-
-        return handleApiResponse(
-            apiResults,
-            'Kunne ikke hente komponentkonfigurasjoner',
-            'Komponentkonfigurasjoner ble hentet.',
-            'success'
-        );
     }
 }
 

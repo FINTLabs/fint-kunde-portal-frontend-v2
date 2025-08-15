@@ -1,85 +1,66 @@
-import { apiManager, ApiResponse, handleApiResponse } from '~/api/ApiManager';
+import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 import { IPartialAsset } from '~/types/Asset';
 
-const API_URL = process.env.API_URL;
+const API_URL = process.env.API_URL || '';
+const assetManager = new NovariApiManager({ baseUrl: API_URL });
 
 class AssetApi {
     static async getAllAssets(organisationName: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await assetManager.call<any>({
             method: 'GET',
-            url: `${API_URL}/api/assets/${organisationName}/`,
+            endpoint: `/api/assets/${organisationName}/`,
             functionName: 'getAllAssets',
+            customErrorMessage: `Kunne ikke hente eiendeler for organisasjonen: ${organisationName}`,
+            customSuccessMessage: 'Eiendeler hentet',
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke hente eiendeler for organisasjonen: ${organisationName}`
-        );
     }
 
     static async createAsset(
         asset: IPartialAsset,
         organisationName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await assetManager.call<any>({
             method: 'POST',
-            url: `${API_URL}/api/assets/${organisationName}/`,
+            endpoint: `/api/assets/${organisationName}/`,
             functionName: 'createAsset',
             body: JSON.stringify(asset),
+            customErrorMessage: 'Kunne ikke opprette eiendelen',
+            customSuccessMessage: 'Eiendelen ble opprettet vellykket',
         });
-
-        return handleApiResponse(
-            apiResults,
-            'Kunne ikke opprette eiendelen',
-            'Eiendelen ble opprettet vellykket'
-        );
     }
 
     static async updateAsset(
         asset: IPartialAsset,
         organisationName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await assetManager.call<any>({
             method: 'PUT',
-            url: `${API_URL}/api/assets/${organisationName}/${asset.name}`,
+            endpoint: `/api/assets/${organisationName}/${asset.name}`,
             functionName: 'updateAsset',
             body: JSON.stringify(asset),
+            customErrorMessage: 'Kunne ikke oppdatere eiendelen',
+            customSuccessMessage: 'Eiendelen ble oppdatert vellykket',
         });
-
-        return handleApiResponse(
-            apiResults,
-            'Kunne ikke oppdatere eiendelen',
-            'Eiendelen ble oppdatert vellykket'
-        );
     }
 
     static async deleteAsset(name: string, organisationName: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await assetManager.call<any>({
             method: 'DELETE',
-            url: `${API_URL}/api/assets/${organisationName}/${name}`,
+            endpoint: `/api/assets/${organisationName}/${name}`,
             functionName: 'deleteAsset',
+            customErrorMessage: `Kunne ikke slette eiendelen: ${name}`,
+            customSuccessMessage: 'Eiendelen ble slettet vellykket',
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke slette eiendelen: ${name}`,
-            'Eiendelen ble slettet vellykket'
-        );
     }
 
     static async getAssetById(orgName: string, assetId: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await assetManager.call<any>({
             method: 'GET',
-            url: `${API_URL}/api/assets/${orgName}/${assetId}`,
+            endpoint: `/api/assets/${orgName}/${assetId}`,
             functionName: 'getAssetById',
+            customErrorMessage: `Kunne ikke hente eiendelen med ID: ${assetId}`,
+            customSuccessMessage: `Eiendelen med ID ${assetId} ble hentet.`,
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke hente eiendelen med ID: ${assetId}`,
-            `Eiendelen med ID ${assetId} ble hentet.`,
-            'success'
-        );
     }
 
     static async updateAdapterInAsset(
@@ -88,47 +69,38 @@ class AssetApi {
         organisationName: string,
         updateType: string
     ): Promise<ApiResponse<any>> {
-        const url = `${API_URL}/api/assets/${organisationName}/${assetName}/adapters/${adapterName}`;
-        if (updateType === 'add') {
-            return await this.addAdapterToAsset(url, adapterName);
-        } else {
-            return await this.removeAdapterFromAsset(url, adapterName);
-        }
+        const endpoint = `/api/assets/${organisationName}/${assetName}/adapters/${adapterName}`;
+        return updateType === 'add'
+            ? this.addAdapterToAsset(endpoint, adapterName)
+            : this.removeAdapterFromAsset(endpoint, adapterName);
     }
 
-    static async addAdapterToAsset(url: string, adapterName: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
-            method: 'PUT',
-            url,
-            functionName: 'addAdapterToAsset',
-            body: JSON.stringify({ name: adapterName }),
-        });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke legge til adapteren: ${adapterName}`,
-            `Adapteren ${adapterName} ble lagt til.`,
-            'success'
-        );
-    }
-
-    static async removeAdapterFromAsset(
-        url: string,
+    private static async addAdapterToAsset(
+        endpoint: string,
         adapterName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await assetManager.call<any>({
+            method: 'PUT',
+            endpoint,
+            functionName: 'addAdapterToAsset',
+            body: JSON.stringify({ name: adapterName }),
+            customErrorMessage: `Kunne ikke legge til adapteren: ${adapterName}`,
+            customSuccessMessage: `Adapteren ${adapterName} ble lagt til.`,
+        });
+    }
+
+    private static async removeAdapterFromAsset(
+        endpoint: string,
+        adapterName: string
+    ): Promise<ApiResponse<any>> {
+        return await assetManager.call<any>({
             method: 'DELETE',
-            url,
+            endpoint,
             functionName: 'removeAdapterFromAsset',
             body: JSON.stringify({ name: adapterName }),
+            customErrorMessage: `Kunne ikke fjerne adapteren: ${adapterName}`,
+            customSuccessMessage: `Adapteren ${adapterName} ble fjernet.`,
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke fjerne adapteren: ${adapterName}`,
-            `Adapteren ${adapterName} ble fjernet.`,
-            'success'
-        );
     }
 
     static async updateClientInAsset(
@@ -138,69 +110,77 @@ class AssetApi {
         updateType: string,
         primaryAssetName: string
     ): Promise<ApiResponse<any>> {
-        const url = `${API_URL}/api/assets/${organisationName}/${assetName}/clients/${clientName}`;
+        const baseEndpoint = `/api/assets/${organisationName}`;
 
         if (updateType === 'add') {
-            return await this.addClientToAsset(url, clientName);
-        } else {
-            const removeResponse = await this.removeClientFromAsset(url, clientName);
-
-            if (removeResponse.success) {
-                const addUrl = `${API_URL}/api/assets/${organisationName}/${primaryAssetName}/clients/${clientName}`;
-                const addResponse = await this.addClientToAsset(addUrl, primaryAssetName);
-
-                if (addResponse.success) {
-                    return {
-                        success: true,
-                        message: `Fjernet klient '${clientName}' og satt til klient primærressurs '${primaryAssetName}'.`,
-                        variant: 'success',
-                    };
-                } else {
-                    return {
-                        success: false,
-                        message: `Klient '${clientName}' ble fjernet, men kunne ikke settes som primærressurs '${primaryAssetName}'.`,
-                        variant: 'error',
-                    };
-                }
-            }
+            // add client to asset
+            return await assetManager.call<any>({
+                method: 'PUT',
+                endpoint: `${baseEndpoint}/${assetName}/clients/${clientName}`,
+                functionName: 'addClientToAsset',
+                body: JSON.stringify({ name: clientName }),
+                customErrorMessage: `Kunne ikke legge til klienten: ${clientName}`,
+                customSuccessMessage: `Klienten ${clientName} ble lagt til.`,
+            });
         }
+
+        // remove then add to primary
+        const removeResponse = await assetManager.call<any>({
+            method: 'DELETE',
+            endpoint: `${baseEndpoint}/${assetName}/clients/${clientName}`,
+            functionName: 'removeClientFromAsset',
+            body: JSON.stringify({ name: clientName }),
+            customErrorMessage: `Kunne ikke fjerne klienten: ${clientName}`,
+            customSuccessMessage: `Klienten ${clientName} ble fjernet.`,
+        });
+
+        if (!removeResponse.success) {
+            return removeResponse;
+        }
+
+        const addPrimaryResponse = await assetManager.call<any>({
+            method: 'PUT',
+            endpoint: `${baseEndpoint}/${primaryAssetName}/clients/${clientName}`,
+            functionName: 'addClientToPrimaryAsset',
+            body: JSON.stringify({ name: clientName }),
+            customErrorMessage: `Kunne ikke sette klient '${clientName}' som primærressurs '${primaryAssetName}'.`,
+            customSuccessMessage: `Fjernet klient '${clientName}' og satt til klient primærressurs '${primaryAssetName}'.`,
+        });
+
+        if (addPrimaryResponse.success) {
+            return addPrimaryResponse;
+        }
+
+        // Compose a failure response mirroring your previous behavior
         return {
             success: false,
-            message: `Kunne ikke fjerne klient '${clientName}' og sette som primærressurs '${primaryAssetName}'.`,
+            message: `Klient '${clientName}' ble fjernet, men kunne ikke settes som primærressurs '${primaryAssetName}'.`,
             variant: 'error',
         };
     }
 
     static async addClientToAsset(url: string, clientName: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        // Kept for backward compatibility if you still call it elsewhere.
+        return await assetManager.call<any>({
             method: 'PUT',
-            url,
+            endpoint: url.replace(API_URL || '', ''), // convert to relative if old callers pass full URL
             functionName: 'addClientToAsset',
             body: JSON.stringify({ name: clientName }),
+            customErrorMessage: `Kunne ikke legge til klienten: ${clientName}`,
+            customSuccessMessage: `Klienten ${clientName} ble lagt til.`,
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke legge til klienten: ${clientName}`,
-            `Klienten ${clientName} ble lagt til.`,
-            'success'
-        );
     }
 
     static async removeClientFromAsset(url: string, clientName: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        // Kept for backward compatibility if you still call it elsewhere.
+        return await assetManager.call<any>({
             method: 'DELETE',
-            url,
+            endpoint: url.replace(API_URL || '', ''), // convert to relative
             functionName: 'removeClientFromAsset',
             body: JSON.stringify({ name: clientName }),
+            customErrorMessage: `Kunne ikke fjerne klienten: ${clientName}`,
+            customSuccessMessage: `Klienten ${clientName} ble fjernet.`,
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke fjerne klienten: ${clientName}`,
-            `Klienten ${clientName} ble fjernet.`,
-            'success'
-        );
     }
 }
 

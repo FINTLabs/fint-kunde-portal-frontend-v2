@@ -1,6 +1,7 @@
-import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
+import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 
-const API_URL = process.env.API_URL;
+const API_URL = process.env.API_URL || '';
+const logManager = new NovariApiManager({ baseUrl: API_URL });
 
 class LogApi {
     static async getLogs(
@@ -14,20 +15,13 @@ class LogApi {
         const formattedComponent = componentName.replace(/_/g, '-');
         const formattedType = `${type}_${resource.toUpperCase()}`;
 
-        const URL = `${API_URL}/api/events/${organisation}/${environment}/${formattedComponent}/${formattedType}`;
-
-        const apiResults = await apiManager<any>({
+        return await logManager.call<any>({
             method: 'GET',
-            url: URL,
+            endpoint: `/api/events/${organisation}/${environment}/${formattedComponent}/${formattedType}`,
             functionName,
+            customErrorMessage: 'Kunne ikke hente logger for spesifisert ressurs.',
+            customSuccessMessage: 'Logger for spesifisert ressurs ble hentet.',
         });
-
-        return handleApiResponse(
-            apiResults,
-            'Kunne ikke hente logger for spesifisert ressurs.',
-            'Logger for spesifisert ressurs ble hentet.',
-            'success'
-        );
     }
 }
 

@@ -1,106 +1,85 @@
-import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
+import { ApiResponse, NovariApiManager } from 'novari-frontend-components';
 import { IContact } from '~/types/Contact';
 
-const API_URL = process.env.API_URL;
+const API_URL = process.env.API_URL || '';
+const apiManager = new NovariApiManager({ baseUrl: API_URL });
 
 class ContactApi {
     static async getAllContacts(): Promise<ApiResponse<IContact[]>> {
-        const apiResults = await apiManager<IContact[]>({
+        return await apiManager.call<IContact[]>({
             method: 'GET',
-            url: `${API_URL}/api/contacts`,
+            endpoint: '/api/contacts',
             functionName: 'getAllContacts',
+            customErrorMessage: 'Kunne ikke hente en liste over kontakter',
+            customSuccessMessage: 'Kontakter hentet vellykket',
         });
-
-        return handleApiResponse<IContact[]>(
-            apiResults,
-            'Kunne ikke hente en liste over kontakter',
-            'Kontakter hentet vellykket'
-        );
     }
 
     static async getTechnicalContacts(orgName: string): Promise<ApiResponse<IContact[]>> {
-        const apiResults = await apiManager<IContact[]>({
+        return await apiManager.call<IContact[]>({
             method: 'GET',
-            url: `${API_URL}/api/organisations/${orgName}/contacts/technical`,
+            endpoint: `/api/organisations/${orgName}/contacts/technical`,
             functionName: 'getTechnicalContacts',
+            customErrorMessage: 'Kunne ikke hente en liste over tekniske kontakter',
+            customSuccessMessage: 'Tekniske kontakter hentet vellykket',
         });
-
-        return handleApiResponse<IContact[]>(
-            apiResults,
-            'Kunne ikke hente en liste over tekniske kontakter',
-            'Tekniske kontakter hentet vellykket'
-        );
     }
 
     static async unsetLegalContact(
         contactNin: string,
         orgName: string
     ): Promise<ApiResponse<IContact[]>> {
-        const apiResults = await apiManager<IContact[]>({
+        return await apiManager.call<IContact[]>({
             method: 'DELETE',
-            url: `${API_URL}/api/organisations/${orgName}/contacts/legal/${contactNin}`,
+            endpoint: `/api/organisations/${orgName}/contacts/legal/${contactNin}`,
             functionName: 'unsetLegalContact',
+            customErrorMessage: 'Kunne ikke fjerne den juridiske kontakten',
+            customSuccessMessage: 'Juridisk kontakt fjernet',
+            // customSuccessVariant: 'warning', // <- use this if your apiManager supports variants
         });
-
-        return handleApiResponse<IContact[]>(
-            apiResults,
-            'Kunne ikke fjerne den juridiske kontakten',
-            'Juridisk kontakt fjernet'
-        );
     }
 
     static async setLegalContact(
         contactNin: string,
         organisation: string
     ): Promise<ApiResponse<IContact[]>> {
+        // keep your existing flow: ensure only one legal contact
         await this.unsetLegalContact(contactNin, organisation);
 
-        const apiResults = await apiManager<IContact[]>({
+        return await apiManager.call<IContact[]>({
             method: 'PUT',
-            url: `${API_URL}/api/organisations/${organisation}/contacts/legal/${contactNin}`,
+            endpoint: `/api/organisations/${organisation}/contacts/legal/${contactNin}`,
             functionName: 'setLegalContact',
+            customErrorMessage: 'Kunne ikke oppdatere den juridiske kontakten',
+            customSuccessMessage: 'Juridisk kontakt oppdatert',
         });
-
-        return handleApiResponse<IContact[]>(
-            apiResults,
-            'Kunne ikke oppdatere den juridiske kontakten',
-            'Juridisk kontakt oppdatert'
-        );
     }
 
     static async addTechnicalContact(
         contactNin: string,
         organisation: string
     ): Promise<ApiResponse<IContact[]>> {
-        const apiResults = await apiManager<IContact[]>({
+        return await apiManager.call<IContact[]>({
             method: 'PUT',
-            url: `${API_URL}/api/organisations/${organisation}/contacts/technical/${contactNin}`,
+            endpoint: `/api/organisations/${organisation}/contacts/technical/${contactNin}`,
             functionName: 'addTechnicalContact',
+            customErrorMessage: 'Kunne ikke legge til teknisk kontakt',
+            customSuccessMessage: 'Teknisk kontakt lagt til',
         });
-
-        return handleApiResponse<IContact[]>(
-            apiResults,
-            'Kunne ikke legge til teknisk kontakt',
-            'Teknisk kontakt lagt til'
-        );
     }
 
     static async removeTechnicalContact(
         contactNin: string,
         orgName: string
     ): Promise<ApiResponse<IContact[]>> {
-        const apiResults = await apiManager<IContact[]>({
+        return await apiManager.call<IContact[]>({
             method: 'DELETE',
-            url: `${API_URL}/api/organisations/${orgName}/contacts/technical/${contactNin}`,
+            endpoint: `/api/organisations/${orgName}/contacts/technical/${contactNin}`,
             functionName: 'removeTechnicalContact',
+            customErrorMessage: 'Kunne ikke fjerne den tekniske kontakten',
+            customSuccessMessage: 'Teknisk kontakt fjernet',
+            customSuccessVariant: 'warning',
         });
-
-        return handleApiResponse<IContact[]>(
-            apiResults,
-            'Kunne ikke fjerne den tekniske kontakten',
-            'Teknisk kontakt fjernet',
-            'warning'
-        );
     }
 }
 

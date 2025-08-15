@@ -1,22 +1,18 @@
-import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
+import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 import logger from '~/utils/logger';
 
-const API_URL = process.env.LINKWALKER_API_URL;
+const API_URL = process.env.LINKWALKER_API_URL || '';
+const linkWalkerManager = new NovariApiManager({ baseUrl: API_URL });
 
 class LinkWalkerApi {
     static async getTests(orgName: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await linkWalkerManager.call<any>({
             method: 'GET',
-            url: `${API_URL}/link-walker/tasks/${orgName}`,
+            endpoint: `/link-walker/tasks/${orgName}`,
             functionName: 'getTests',
+            customErrorMessage: `Kunne ikke hente tester for organisasjonen: ${orgName}`,
+            customSuccessMessage: `Tester for organisasjonen ${orgName} ble hentet.`,
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke hente tester for organisasjonen: ${orgName}`,
-            `Tester for organisasjonen ${orgName} ble hentet.`,
-            'success'
-        );
     }
 
     static getLink(orgName: string, resultId: string): string {
@@ -28,25 +24,18 @@ class LinkWalkerApi {
         clientName: string,
         orgName: string
     ): Promise<ApiResponse<any>> {
-        const data = {
-            url: testUrl,
-            client: clientName,
-        };
+        const data = { url: testUrl, client: clientName };
 
-        const apiResults = await apiManager<any>({
+        const apiResults = await linkWalkerManager.call<any>({
             method: 'POST',
-            url: `${API_URL}/link-walker/tasks/${orgName}`,
+            endpoint: `/link-walker/tasks/${orgName}`,
             functionName: 'addTest',
             body: JSON.stringify(data),
+            customErrorMessage: `Kunne ikke legge til testen for organisasjonen: ${orgName}`,
+            customSuccessMessage: `Testen for organisasjonen ${orgName} ble lagt til.`,
         });
 
-        // return handleApiResponse(
-        //     apiResults,
-        //     `Kunne ikke legge til testen for organisasjonen: ${orgName}`,
-        //     `Testen for organisasjonen ${orgName} ble lagt til.`,
-        //     'success'
-        // );
-
+        // Keeping your original manual check in case you want extra control
         if (!apiResults.success) {
             logger.debug('returning error!');
             return {
@@ -64,18 +53,13 @@ class LinkWalkerApi {
     }
 
     static async clearTests(orgName: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await linkWalkerManager.call<any>({
             method: 'PUT',
-            url: `${API_URL}/link-walker/tasks/${orgName}`,
+            endpoint: `/link-walker/tasks/${orgName}`,
             functionName: 'clearTests',
+            customErrorMessage: `Kunne ikke tømme testene for organisasjonen: ${orgName}`,
+            customSuccessMessage: `Testene for organisasjonen ${orgName} ble tømt.`,
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke tømme testene for organisasjonen: ${orgName}`,
-            `Testene for organisasjonen ${orgName} ble tømt.`,
-            'success'
-        );
     }
 }
 

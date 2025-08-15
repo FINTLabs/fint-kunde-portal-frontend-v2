@@ -1,34 +1,27 @@
-import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
+import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 
-const API_URL = process.env.API_URL;
+const API_URL = process.env.API_URL || '';
+const orgManager = new NovariApiManager({ baseUrl: API_URL });
 
 class OrganisationApi {
     static async getTechnicalContacts(organisationName: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await orgManager.call<any>({
             method: 'GET',
-            url: `${API_URL}/api/organisations/${organisationName}/contacts/technical`,
+            endpoint: `/api/organisations/${organisationName}/contacts/technical`,
             functionName: 'getTechnicalContacts',
+            customErrorMessage: `Kunne ikke hente tekniske kontakter for organisasjonen: ${organisationName}`,
+            customSuccessMessage: 'Tekniske kontakter hentet vellykket',
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke hente tekniske kontakter for organisasjonen: ${organisationName}`,
-            'Tekniske kontakter hentet vellykket'
-        );
     }
 
     static async getLegalContact(organisationName: string): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await orgManager.call<any>({
             method: 'GET',
-            url: `${API_URL}/api/organisations/${organisationName}/contacts/legal`,
+            endpoint: `/api/organisations/${organisationName}/contacts/legal`,
             functionName: 'getLegalContact',
+            customErrorMessage: `Kunne ikke hente juridisk kontakt for organisasjonen: ${organisationName}`,
+            customSuccessMessage: 'Juridisk kontakt hentet vellykket',
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke hente juridisk kontakt for organisasjonen: ${organisationName}`,
-            'Juridisk kontakt hentet vellykket'
-        );
     }
 
     static async updateComponent(
@@ -36,50 +29,39 @@ class OrganisationApi {
         organisationName: string,
         isChecked: boolean
     ): Promise<ApiResponse<any>> {
-        const url = `${API_URL}/api/organisations/${organisationName}/components/${componentName}`;
-
-        if (isChecked) {
-            return await OrganisationApi.addComponentToOrganisation(url, componentName);
-        } else {
-            return await OrganisationApi.removeComponentFromOrganisation(url, componentName);
-        }
+        const endpoint = `/api/organisations/${organisationName}/components/${componentName}`;
+        return isChecked
+            ? this.addComponentToOrganisation(endpoint, componentName)
+            : this.removeComponentFromOrganisation(endpoint, componentName);
     }
 
-    static async addComponentToOrganisation(
-        url: string,
+    private static async addComponentToOrganisation(
+        endpoint: string,
         componentName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await orgManager.call<any>({
             method: 'PUT',
-            url,
+            endpoint,
             functionName: 'addComponentToOrganisation',
             body: JSON.stringify({ name: componentName }),
+            customErrorMessage: `Kunne ikke legge til komponenten: ${componentName}`,
+            customSuccessMessage: `Komponenten ${componentName} ble lagt til`,
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke legge til komponenten: ${componentName}`,
-            `Komponenten ${componentName} ble lagt til`
-        );
     }
 
-    static async removeComponentFromOrganisation(
-        url: string,
+    private static async removeComponentFromOrganisation(
+        endpoint: string,
         componentName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await orgManager.call<any>({
             method: 'DELETE',
-            url,
+            endpoint,
             functionName: 'removeComponentFromOrganisation',
             body: JSON.stringify({ name: componentName }),
+            customErrorMessage: `Kunne ikke fjerne komponenten: ${componentName}`,
+            customSuccessMessage: `Komponenten ${componentName} ble fjernet`,
+            // customSuccessVariant: 'warning', // uncomment if your manager supports variants
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Kunne ikke fjerne komponenten: ${componentName}`,
-            `Komponenten ${componentName} ble fjernet`,
-            'warning'
-        );
     }
 }
 

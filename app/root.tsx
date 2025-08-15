@@ -118,6 +118,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <link rel="icon" href="/favicon.ico" type="image/x-icon" />
                 <Meta />
                 <Links />
+                <title>FINT Kundeportal</title>
             </head>
             <body data-theme="novari">
                 {children}

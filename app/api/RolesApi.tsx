@@ -1,16 +1,17 @@
-import { apiManager, handleApiResponse, ApiResponse } from '~/api/ApiManager';
+import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 
-const API_URL = process.env.API_URL;
+const API_URL = process.env.API_URL || '';
+const roleManager = new NovariApiManager({ baseUrl: API_URL });
 
 export default class RoleApi {
     static async getRoles(): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await roleManager.call<any>({
             method: 'GET',
-            url: `${API_URL}/api/role`,
+            endpoint: '/api/role',
             functionName: 'getRoles',
+            customErrorMessage: 'Kunne ikke hente roller',
+            customSuccessMessage: 'Roller hentet vellykket',
         });
-
-        return handleApiResponse(apiResults, 'Kunne ikke hente roller', 'Roller hentet vellykket');
     }
 
     static async addRole(
@@ -19,17 +20,13 @@ export default class RoleApi {
         roleId: string,
         roleName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await roleManager.call<any>({
             method: 'PUT',
-            url: `${API_URL}/api/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`,
+            endpoint: `/api/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`,
             functionName: 'addRole',
+            customErrorMessage: `Feil ved oppdatering av kontaktrolle: ${roleName}`,
+            customSuccessMessage: `Kontaktroller oppdatert: ${roleName}`,
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Feil ved oppdatering av kontaktrolle: ${roleName}`,
-            `Kontaktroller oppdatert: ${roleName}`
-        );
     }
 
     static async removeRole(
@@ -38,17 +35,13 @@ export default class RoleApi {
         roleId: string,
         roleName: string
     ): Promise<ApiResponse<any>> {
-        const apiResults = await apiManager<any>({
+        return await roleManager.call<any>({
             method: 'DELETE',
-            url: `${API_URL}/api/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`,
+            endpoint: `/api/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`,
             functionName: 'removeRole',
+            customErrorMessage: `Feil ved fjerning av kontaktrolle: ${roleName}`,
+            customSuccessMessage: `Kontaktrolle fjernet: ${roleName}`,
+            // customSuccessVariant: 'warning', // uncomment if your manager supports variants
         });
-
-        return handleApiResponse(
-            apiResults,
-            `Feil ved fjerning av kontaktrolle: ${roleName}`,
-            `Kontaktrolle fjernet: ${roleName}`,
-            'warning'
-        );
     }
 }
