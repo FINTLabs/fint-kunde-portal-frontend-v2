@@ -12,6 +12,7 @@ export async function handleContactsAction(request: Request) {
     const selectedOrg = await getSelectedOrganization(request);
     let response;
 
+    console.log('actionType', actionType);
     switch (actionType) {
         case 'ADD_TECHNICAL_CONTACT':
             response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);

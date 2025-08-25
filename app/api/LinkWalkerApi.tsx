@@ -1,8 +1,14 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 import logger from '~/utils/logger';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.LINKWALKER_API_URL || '';
-const linkWalkerManager = new NovariApiManager({ baseUrl: API_URL });
+const linkWalkerManager = new NovariApiManager({
+    baseUrl: API_URL,
+    defaultHeaders: {
+        'x-nin': HeaderProperties.getXnin(),
+    },
+});
 
 class LinkWalkerApi {
     static async getTests(orgName: string): Promise<ApiResponse<any>> {

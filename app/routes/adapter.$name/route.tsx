@@ -6,16 +6,14 @@ import { useFetcher, useLoaderData, useParams } from 'react-router';
 import { Environment, IAccess, IDomainPackages } from '~/types/Access';
 import React, { useState } from 'react';
 import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid } from '@navikt/ds-react';
-import AlertManager from '~/components/AlertManager';
 import { BackButton } from '~/components/shared/BackButton';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import { AuthTable } from '~/components/shared/AuthTable';
 import ComponentList from '~/components/shared/ComponentList';
-import useAlerts from '~/components/useAlerts';
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { IAdapter } from '~/types/Adapter';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 import { handleAdapterAction } from '~/routes/adapter.$name/actions';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
@@ -26,7 +24,7 @@ export { loader };
 
 export const action = async (args: ActionFunctionArgs) => handleAdapterAction(args);
 
-interface IExtendedFetcherResponseData extends IFetcherResponseData {
+interface IExtendedFetcherResponseData extends ApiResponse<IAdapter> {
     clientSecret?: string;
 }
 
@@ -38,7 +36,7 @@ export default function Index() {
         access: IAccess;
         accessComponentList: IDomainPackages[];
     }>();
-    const fetcher = useFetcher<IFetcherResponseData>();
+    const fetcher = useFetcher<ApiResponse<IAdapter>>();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
     const { name } = useParams();
     const hasAccessControl = features['access-controll-new'];
@@ -50,7 +48,8 @@ export default function Index() {
     const filteredAdapters = adapters.filter((a) => a.name === name);
     const adapter = filteredAdapters.length > 0 ? filteredAdapters[0] : null;
     const displayName = adapter?.name.split('@')[0] || '';
-    const { alerts } = useAlerts(actionData, fetcher.state);
+    const { alertState, handleCloseItem } = useAlerts<IAdapter>([], actionData, fetcher.state);
+
     const [isLoading, setIsLoading] = useState(false);
 
     let selectedEnvs: Environment[] = [];
@@ -112,7 +111,11 @@ export default function Index() {
                 helpText="adapter detaljer"
             />
 
-            <AlertManager alerts={alerts} />
+            <NovariSnackbar
+                items={alertState}
+                position={'top-right'}
+                onCloseItem={handleCloseItem}
+            />
 
             {!adapter ? (
                 <Alert variant="warning">

@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
-import { ActionFunction, MetaFunction } from 'react-router';
+import { ActionFunction, MetaFunction, useFetcher, useLoaderData } from 'react-router';
 import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import { useFetcher, useLoaderData } from 'react-router';
 import ContactTable from '~/routes/kontakter/ContactTable';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ContactModal from '~/routes/kontakter/ContactModal';
-import AlertManager from '~/components/AlertManager';
-import useAlerts from '~/components/useAlerts';
 import { IContact } from '~/types/Contact';
 import { IRole } from '~/types/Role';
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { handleContactsAction } from '~/routes/kontakter/actions';
 import { loader } from './loaders';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 
 interface IPageLoaderData {
     technicalContacts?: IContact[] | string;
@@ -40,9 +37,10 @@ export default function Index() {
         useLoaderData<IPageLoaderData>();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const fetcher = useFetcher();
-    const actionData = fetcher.data as IFetcherResponseData;
-    const { alerts } = useAlerts(actionData, fetcher.state);
+    const actionData = fetcher.data as ApiResponse<IContact>;
 
+    const { alertState, handleCloseItem } = useAlerts<IContact>([], actionData, fetcher.state);
+    console.log('actionData', alertState);
     const handleFormSubmit = (formData: FormData) => {
         fetcher.submit(formData, { method: 'post', action: '/kontakter' });
     };
@@ -75,7 +73,12 @@ export default function Index() {
                 </VStack>
             </HStack>
 
-            <AlertManager alerts={alerts} />
+            {/*<AlertManager alerts={alerts} />*/}
+            <NovariSnackbar
+                items={alertState}
+                position={'top-right'}
+                onCloseItem={handleCloseItem}
+            />
 
             <Box className="m-10">
                 <Heading size="xsmall">Juridisk kontakt</Heading>

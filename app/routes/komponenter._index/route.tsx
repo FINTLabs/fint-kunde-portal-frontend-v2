@@ -6,11 +6,9 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import { IComponent } from '~/types/Component';
 import React from 'react';
-import AlertManager from '~/components/AlertManager';
-import useAlerts from '~/components/useAlerts';
-import { ApiResponse } from '~/api/ApiManager';
 import { handleComponentIndexAction } from '~/routes/komponenter._index/actions';
 import { loader } from './loaders';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Komponenter' }, { name: 'description', content: 'Liste over komponenter' }];
@@ -23,8 +21,9 @@ export const action = async (args: ActionFunctionArgs) => handleComponentIndexAc
 export default function Index() {
     const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter' }];
     const { components, orgName } = useLoaderData<{ components: IComponent[]; orgName: string }>();
-    const fetcher = useFetcher<ApiResponse<any>>();
-    const { alerts } = useAlerts(fetcher.data, fetcher.state);
+    const fetcher = useFetcher<ApiResponse<IComponent>>();
+    const actionData = fetcher.data as ApiResponse<IComponent>;
+    const { alertState, handleCloseItem } = useAlerts<IComponent>([], actionData, fetcher.state);
     const selectedComponents = components
         .filter((component) => component.organisations.some((org) => org.includes(orgName)))
         .map((component) => component.name);
@@ -37,7 +36,11 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Komponenter'} icon={ComponentIcon} helpText="components" />
-            <AlertManager alerts={alerts} />
+            <NovariSnackbar
+                items={alertState}
+                position={'top-right'}
+                onCloseItem={handleCloseItem}
+            />
 
             <ComponentsTable
                 items={components}

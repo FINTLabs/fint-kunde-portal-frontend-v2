@@ -1,6 +1,12 @@
-import { type ActionFunctionArgs, type MetaFunction } from 'react-router';
+import {
+    type ActionFunctionArgs,
+    type MetaFunction,
+    useFetcher,
+    useLoaderData,
+    useNavigate,
+    useSearchParams,
+} from 'react-router';
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { useFetcher, useLoaderData, useNavigate, useSearchParams } from 'react-router';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { IAsset } from '~/types/Asset';
@@ -8,11 +14,10 @@ import { BodyLong, Box } from '@navikt/ds-react';
 import CreateForm from '~/routes/ressurser._index/CreateForm';
 import AssetsTable from '~/routes/ressurser._index/ResourcesTable';
 import React, { useState } from 'react';
-import useAlerts from '~/components/useAlerts';
-import AlertManager from '~/components/AlertManager';
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { handleAssetIndexAction } from '~/routes/ressurser._index/actions';
 import { loader } from './loaders';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { IResource } from '~/types/Access';
 
 interface IPageLoaderData {
     assets: IAsset[];
@@ -34,9 +39,9 @@ export default function Index() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const deleteName = searchParams.get('deleted');
-    const fetcher = useFetcher<IFetcherResponseData>();
-    const actionData = fetcher.data as IFetcherResponseData;
-    const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
+    const fetcher = useFetcher();
+    const actionData = fetcher.data as ApiResponse<IResource>;
+    const { alertState, handleCloseItem } = useAlerts<IResource>([], actionData);
 
     const handleClick = (id: string) => navigate(`/ressurser/${id}`);
 
@@ -47,7 +52,11 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <AlertManager alerts={alerts} />
+            <NovariSnackbar
+                items={alertState}
+                position={'top-right'}
+                onCloseItem={handleCloseItem}
+            />
 
             <InternalPageHeader
                 title={'Ressurser'}

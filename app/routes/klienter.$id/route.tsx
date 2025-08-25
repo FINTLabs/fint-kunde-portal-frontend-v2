@@ -9,19 +9,19 @@ import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid } from '@na
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import ComponentList from '~/components/shared/ComponentList';
 import { Environment, IAccess, IDomainPackages } from '~/types/Access';
-import AlertManager from '~/components/AlertManager';
-import useAlerts from '~/components/useAlerts';
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
+
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 import { AuthTable } from '~/components/shared/AuthTable';
 import { handleClientAction } from '~/routes/klienter.$id/actions';
 import { loader } from './loaders';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { IAdapter } from '~/types/Adapter';
 
 export { loader };
 
 export const action = async (args: ActionFunctionArgs) => handleClientAction(args);
 
-interface IExtendedFetcherResponseData extends IFetcherResponseData {
+interface IExtendedFetcherResponseData extends ApiResponse<IClient> {
     clientSecret?: string;
 }
 
@@ -42,9 +42,9 @@ export default function ClientDetails() {
         { name: `${id}`, link: `/klienter/${id}` },
     ];
 
-    const fetcher = useFetcher();
+    const fetcher = useFetcher<ApiResponse<IAdapter>>();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
-    const { alerts } = useAlerts(actionData, fetcher.state);
+    const { alertState, handleCloseItem } = useAlerts<IClient>([], actionData, fetcher.state);
     const [isLoading, setIsLoading] = useState(false);
 
     let selectedEnvs: Environment[] = [];
@@ -104,7 +104,12 @@ export default function ClientDetails() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={client?.shortDescription || ''} icon={TokenIcon} />
-            <AlertManager alerts={alerts} />
+
+            <NovariSnackbar
+                items={alertState}
+                position={'top-right'}
+                onCloseItem={handleCloseItem}
+            />
 
             {!client ? (
                 <Alert variant="warning">Det finnes ingen klienter ved navn {id} i listen</Alert>

@@ -7,13 +7,11 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TasklistSendIcon } from '@navikt/aksel-icons';
 import LogSearchForm from '~/routes/hendelseslogg/LogSearchForm';
 import LogTable from './LogTable';
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
-import AlertManager from '~/components/AlertManager';
-import useAlerts from '~/components/useAlerts';
 import { Log, ReduntantLog } from '~/types/LogEvent';
 import { handleLogAction } from '~/routes/hendelseslogg/actions';
 import { loader } from './loaders';
 import { IComponent } from '~/types/Component';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Hendelseslogg' }, { name: 'description', content: 'Hendelseslogg' }];
@@ -31,12 +29,12 @@ class IPageLoaderData {
 export default function Index() {
     const breadcrumbs = [{ name: 'Hendelseslogg', link: '/hendelseslogg' }];
     const fetcher = useFetcher();
-    const actionData = fetcher.data as IFetcherResponseData;
+    const actionData = fetcher.data as ApiResponse<any>;
     const { components, configs } = useLoaderData<IPageLoaderData>();
     const logs = actionData?.data || [];
     const mappedLogs = mapLogs(logs);
     const [filterValue, setFilterValue] = useState('');
-    const { alerts } = useAlerts(actionData, fetcher.state);
+    const { alertState, handleCloseItem } = useAlerts<any>([], actionData, fetcher.state);
 
     const filteredLogs = filterValue
         ? mappedLogs.filter((log: Log) => log.id === filterValue)
@@ -64,7 +62,11 @@ export default function Index() {
                         onFilter={(value: string) => setFilterValue(value)}
                     />
                 </Box>
-                <AlertManager alerts={alerts} />
+                <NovariSnackbar
+                    items={alertState}
+                    position={'top-right'}
+                    onCloseItem={handleCloseItem}
+                />
 
                 {filteredLogs.length > 0 && (
                     <Box className="w-full" padding="6" borderRadius="large" shadow="small">

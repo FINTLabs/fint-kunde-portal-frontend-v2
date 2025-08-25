@@ -1,18 +1,22 @@
-import { ActionFunctionArgs, type MetaFunction } from 'react-router';
+import {
+    ActionFunctionArgs,
+    type MetaFunction,
+    useFetcher,
+    useLoaderData,
+    useNavigate,
+} from 'react-router';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { LayersIcon } from '@navikt/aksel-icons';
 import { Alert, Search } from '@navikt/ds-react';
-import { useFetcher, useLoaderData, useNavigate, useSearchParams } from 'react-router';
 import { CustomTabs } from '~/components/shared/CustomTabs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdapterCreateForm from '~/routes/adaptere._index/CreateForm';
-import AlertManager from '~/components/AlertManager';
 import { IAdapter } from '~/types/Adapter';
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
-import useAlerts from '~/components/useAlerts';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { handleAdapterIndexAction } from '~/routes/adaptere._index/actions';
 import { loader } from './loaders';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { useDeletedSearchParamAlert } from '~/hooks/useDeletedSearchParamAlert';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Adaptere' }, { name: 'description', content: 'Liste over adaptere' }];
@@ -29,18 +33,25 @@ export const action = async (args: ActionFunctionArgs) => handleAdapterIndexActi
 export default function Index() {
     const breadcrumbs = [{ name: 'Adaptere', link: '/adaptere' }];
     const { adapters, orgName } = useLoaderData<IPageLoaderData>();
-    const [searchParams] = useSearchParams();
-    const deleteName = searchParams.get('deleted');
-    const fetcher = useFetcher<IFetcherResponseData>();
-    const actionData = fetcher.data as IFetcherResponseData;
+    const fetcher = useFetcher();
+    const actionData = fetcher.data as ApiResponse<IAdapter>;
     const [isCreating, setIsCreating] = useState(false);
     const [filteredAdapter, setFilteredAdapter] = useState(adapters);
-    const { alerts } = useAlerts(actionData, fetcher.state, deleteName);
+    //
+    // const [searchParams, setSearchParams] = useSearchParams();
+    // const deleteName = searchParams.get('deleted');
+    const { alertState, setAlertState, handleCloseItem } = useAlerts<IAdapter>([], actionData);
+
+    useDeletedSearchParamAlert({
+        label: 'Adapter',
+        setAlertState,
+    });
+
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     setFilteredAdapter(adapters);
-    // }, [adapters]);
+    useEffect(() => {
+        setFilteredAdapter(adapters);
+    }, [adapters]);
 
     const handleCreate = () => setIsCreating(true);
 
@@ -81,7 +92,12 @@ export default function Index() {
                         helpText="adaptere"
                         onAddClick={handleCreate}
                     />
-                    <AlertManager alerts={alerts} />
+
+                    <NovariSnackbar
+                        items={alertState}
+                        position={'top-right'}
+                        onCloseItem={handleCloseItem}
+                    />
 
                     <Search
                         label="Søk etter adaptere"

@@ -1,8 +1,14 @@
 import { NovariApiManager, ApiResponse } from 'novari-frontend-components';
 import { IPartialAdapter } from '~/types/Adapter';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
-const adapterManager = new NovariApiManager({ baseUrl: API_URL });
+const adapterManager = new NovariApiManager({
+    baseUrl: API_URL,
+    defaultHeaders: {
+        'x-nin': HeaderProperties.getXnin(),
+    },
+});
 
 class AdapterApi {
     static async getAdapters(organisationName: string): Promise<ApiResponse<any>> {

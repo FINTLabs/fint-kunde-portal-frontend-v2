@@ -7,12 +7,10 @@ import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import IconToggleButtons from '~/routes/tilgang/id/component/resource/IconToggleButtons';
-import useAlerts from '~/components/useAlerts';
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
-import AlertManager from '~/components/AlertManager';
 import { handleFieldAccessAction } from '~/routes/tilgang/id/component/resource/actions';
 import { IField, IResource } from '~/types/Access';
 import { FormSummary, HStack } from '@navikt/ds-react';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 
 export const action = async (args: ActionFunctionArgs) => handleFieldAccessAction(args);
 
@@ -45,9 +43,9 @@ export default function Route() {
         fieldList: IField[];
     }>();
     const fieldListTitle = `${componentName}/${resource.name}`;
-    const fetcher = useFetcher<IFetcherResponseData>();
-    const actionData = fetcher.data as IFetcherResponseData;
-    const { alerts } = useAlerts(actionData, fetcher.state);
+    const fetcher = useFetcher();
+    const actionData = fetcher.data as ApiResponse<IField>;
+    const { alertState, handleCloseItem } = useAlerts<IField>([], actionData, fetcher.state);
 
     const elementType =
         clientOrAdapter.split('@')[1]?.split('.')[0] === 'client' ? 'klienter' : 'adaptere';
@@ -116,7 +114,11 @@ export default function Route() {
                 helpText="NEED_THIS"
             />
 
-            <AlertManager alerts={alerts} />
+            <NovariSnackbar
+                items={alertState}
+                position={'top-right'}
+                onCloseItem={handleCloseItem}
+            />
 
             <FormSummary key={`x`}>
                 <FormSummary.Header>

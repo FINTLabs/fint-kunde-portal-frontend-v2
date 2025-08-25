@@ -1,9 +1,15 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 import logger from '~/utils/logger';
 import type { IBasicTest } from '~/types/BasicTest';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 const TEST_RUNNER_API_URL = process.env.TEST_RUNNER_API_URL || '';
-const testManager = new NovariApiManager({ baseUrl: TEST_RUNNER_API_URL });
+const testManager = new NovariApiManager({
+    baseUrl: TEST_RUNNER_API_URL,
+    defaultHeaders: {
+        'x-nin': HeaderProperties.getXnin(),
+    },
+});
 
 class BasicTestApi {
     private static async postTest<T>(

@@ -7,11 +7,11 @@ import { useFetcher, useLoaderData } from 'react-router';
 import React, { useEffect } from 'react';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
-import useAlerts from '~/components/useAlerts';
-import AlertManager from '~/components/AlertManager';
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { handleRelationTestAction } from '~/routes/relasjonstest/actions';
 import { loader } from './loaders';
+import { IComponent } from '~/types/Component';
+import { IClient } from '~/types/Clients';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Relasjonstest' }, { name: 'description', content: 'Relasjonstest' }];
@@ -21,12 +21,20 @@ export { loader };
 
 export const action = async (args: ActionFunctionArgs) => handleRelationTestAction(args);
 
+class IPageLoaderData {
+    components: IComponent[] = [];
+    clients: IClient[] = [];
+    relationTests: any;
+    configs: any;
+}
+
 export default function Index() {
     const breadcrumbs = [{ name: 'Relasjonstest', link: '/relasjonstest' }];
+    const { components, clients, relationTests, configs } = useLoaderData<IPageLoaderData>();
+
     const fetcher = useFetcher();
-    const actionData = fetcher.data as IFetcherResponseData;
-    const { components, clients, relationTests, configs } = useLoaderData<typeof loader>();
-    const { alerts } = useAlerts(actionData, fetcher.state);
+    const actionData = fetcher.data as ApiResponse<any>;
+    const { alertState, handleCloseItem } = useAlerts<any>([], actionData);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -79,7 +87,11 @@ export default function Index() {
                 icon={ArrowsSquarepathIcon}
                 helpText="relasjonstest"
             />
-            <AlertManager alerts={alerts} />
+            <NovariSnackbar
+                items={alertState}
+                position={'top-right'}
+                onCloseItem={handleCloseItem}
+            />
 
             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                 <RelationTestAddForm

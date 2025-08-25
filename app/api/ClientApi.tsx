@@ -1,9 +1,15 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 import type { IClient, IPartialClient } from '~/types/Clients';
 import logger from '~/utils/logger';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
-const clientManager = new NovariApiManager({ baseUrl: API_URL });
+const clientManager = new NovariApiManager({
+    baseUrl: API_URL,
+    defaultHeaders: {
+        'x-nin': HeaderProperties.getXnin(),
+    },
+});
 
 class ClientApi {
     static async getClients(organisationName: string): Promise<ApiResponse<IClient[]>> {

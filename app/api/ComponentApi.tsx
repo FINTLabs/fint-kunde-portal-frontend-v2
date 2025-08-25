@@ -1,9 +1,15 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 import type { IClient } from '~/types/Clients'; // If you have a specific Component type, swap this.
 import logger from '~/utils/logger';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
-const componentManager = new NovariApiManager({ baseUrl: API_URL });
+const componentManager = new NovariApiManager({
+    baseUrl: API_URL,
+    defaultHeaders: {
+        'x-nin': HeaderProperties.getXnin(),
+    },
+});
 
 class ComponentApi {
     static async getAllComponents(): Promise<ApiResponse<IClient[]>> {

@@ -6,12 +6,9 @@ import React from 'react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
-
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
-import useAlerts from '~/components/useAlerts';
-import AlertManager from '~/components/AlertManager';
 import { handleAccessElementAction } from '~/routes/tilgang/id/component/actions';
-// import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { IComponent } from '~/types/Component';
 
 export const action = async (args: ActionFunctionArgs) => handleAccessElementAction(args);
 
@@ -36,9 +33,9 @@ export default function Route() {
     }>();
     const navigate = useNavigate();
     const resourceTitle = `${clientOrAdapter}/${component}`;
-    const fetcher = useFetcher<IFetcherResponseData>();
-    const actionData = fetcher.data as IFetcherResponseData;
-    const { alerts } = useAlerts(actionData, fetcher.state);
+    const fetcher = useFetcher<ApiResponse<IComponent>>();
+    const actionData = fetcher.data as ApiResponse<IComponent>;
+    const { alertState, handleCloseItem } = useAlerts<IComponent>([], actionData, fetcher.state);
 
     const elementType =
         clientOrAdapter.split('@')[1]?.split('.')[0] === 'client' ? 'klienter' : 'adaptere';
@@ -73,7 +70,12 @@ export default function Route() {
                 helpText="NEED_THIS"
             />
 
-            <AlertManager alerts={alerts} />
+            <NovariSnackbar
+                items={alertState}
+                position={'top-right'}
+                onCloseItem={handleCloseItem}
+            />
+
             <ResourcesList
                 accessComponent={resourceList}
                 title={resourceTitle || ''}

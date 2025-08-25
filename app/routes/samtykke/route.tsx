@@ -4,16 +4,13 @@ import { Alert, Box, Button, HStack, VStack } from '@navikt/ds-react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import ServiceTable from '~/routes/samtykke/ServiceTable';
-import { useFetcher, useLoaderData } from 'react-router';
-import { ActionFunctionArgs, MetaFunction } from 'react-router';
+import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
 import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
 import AddPolicyForm from '~/routes/samtykke/AddPolicyForm';
 import AddServiceForm from '~/routes/samtykke/AddServiceForm';
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
-import AlertManager from '~/components/AlertManager';
-import useAlerts from '~/components/useAlerts';
 import { handleConsentAction } from '~/routes/samtykke/actions';
 import { loader } from './loaders';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Samtykke' }, { name: 'description', content: 'Samtykke' }];
@@ -28,9 +25,9 @@ export default function Index() {
     const [showAddServiceForm, setShowAddServiceForm] = useState(false);
     const breadcrumbs = [{ name: 'Samtykke', link: '/samtykke' }];
 
-    const fetcher = useFetcher<IFetcherResponseData>();
-    const actionData = fetcher.data as IFetcherResponseData;
-    const { alerts } = useAlerts(actionData, fetcher.state);
+    const fetcher = useFetcher<ApiResponse<any>>();
+    const actionData = fetcher.data as ApiResponse<any>;
+    const { alertState, handleCloseItem } = useAlerts<any>([], actionData, fetcher.state);
 
     const { policies, services, personalDataList, foundations, error } = useLoaderData<{
         policies: IBehandling[];
@@ -87,7 +84,11 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <AlertManager alerts={alerts} />
+            <NovariSnackbar
+                items={alertState}
+                position={'top-right'}
+                onCloseItem={handleCloseItem}
+            />
 
             <HStack align={'center'} justify={'space-between'}>
                 <VStack>

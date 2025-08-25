@@ -9,10 +9,10 @@ import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
 import { IClient } from '~/types/Clients';
 import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import React from 'react';
 import { handleBasicTestAction } from '~/routes/basistest/actions';
 import { loader } from './loaders';
+import { ApiResponse } from 'novari-frontend-components';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Basis Test' }, { name: 'description', content: 'Run Basis Test' }];
@@ -22,7 +22,7 @@ export { loader };
 
 export const action = async (args: ActionFunctionArgs) => handleBasicTestAction(args);
 
-type ExtendedFetcherResponseData = IFetcherResponseData & {
+type ExtendedFetcherResponseData = ApiResponse<any> & {
     clientName: string;
     testUrl: string;
 };

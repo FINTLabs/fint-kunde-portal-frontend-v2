@@ -1,7 +1,13 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
-const roleManager = new NovariApiManager({ baseUrl: API_URL });
+const roleManager = new NovariApiManager({
+    baseUrl: API_URL,
+    defaultHeaders: {
+        'x-nin': HeaderProperties.getXnin(),
+    },
+});
 
 export default class RoleApi {
     static async getRoles(): Promise<ApiResponse<any>> {

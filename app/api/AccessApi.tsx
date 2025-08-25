@@ -2,9 +2,15 @@ import logger from '~/utils/logger';
 import type { ApiResponse } from 'novari-frontend-components';
 import { NovariApiManager } from 'novari-frontend-components';
 import type { IResource } from '~/types/Access';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 const ACCESS_URL = process.env.ACCESS_URL || '';
-const accessManager = new NovariApiManager({ baseUrl: ACCESS_URL });
+const accessManager = new NovariApiManager({
+    baseUrl: ACCESS_URL,
+    defaultHeaders: {
+        'x-nin': HeaderProperties.getXnin(),
+    },
+});
 
 class AccessApi {
     static async getClientorAdapterAccess(name: string): Promise<ApiResponse<any>> {

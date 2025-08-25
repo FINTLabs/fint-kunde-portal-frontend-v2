@@ -1,8 +1,14 @@
 import { ApiResponse, NovariApiManager } from 'novari-frontend-components';
 import { IContact } from '~/types/Contact';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
-const apiManager = new NovariApiManager({ baseUrl: API_URL });
+const apiManager = new NovariApiManager({
+    baseUrl: API_URL,
+    defaultHeaders: {
+        'x-nin': HeaderProperties.getXnin(),
+    },
+});
 
 class ContactApi {
     static async getAllContacts(): Promise<ApiResponse<IContact[]>> {

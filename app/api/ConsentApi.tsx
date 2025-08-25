@@ -1,8 +1,14 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 import type { IBehandling } from '~/types/Consent';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 const CONSENT_API_URL = process.env.CONSENT_API_URL || '';
-const consentManager = new NovariApiManager({ baseUrl: CONSENT_API_URL });
+const consentManager = new NovariApiManager({
+    baseUrl: CONSENT_API_URL,
+    defaultHeaders: {
+        'x-nin': HeaderProperties.getXnin(),
+    },
+});
 
 class ConsentApi {
     static async getBehandlings(orgName: string): Promise<ApiResponse<IBehandling[]>> {

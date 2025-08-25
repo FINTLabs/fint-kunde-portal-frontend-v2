@@ -7,15 +7,14 @@ import { Alert, Box, HGrid, VStack } from '@navikt/ds-react';
 import { IClient } from '~/types/Clients';
 import { ActionFunctionArgs, MetaFunction } from 'react-router';
 import React from 'react';
-import AlertManager from '~/components/AlertManager';
-import useAlerts from '~/components/useAlerts';
 import { IAdapter } from '~/types/Adapter';
-import { IFetcherResponseData } from '~/types/FetcherResponseData';
 import { DetailsView } from '~/routes/ressurser.$id/DetailsView';
 import { BackButton } from '~/components/shared/BackButton';
 import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
 import { handleAssetAction } from '~/routes/ressurser.$id/actions';
 import { loader } from './loaders';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { IResource } from '~/types/Access';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Ressurser' }, { name: 'description', content: 'Liste over ressurser' }];
@@ -36,8 +35,8 @@ export default function Index() {
     const { id } = useParams();
     const { adapters, asset, clients, assets } = useLoaderData<LoaderData>();
     const fetcher = useFetcher();
-    const actionData = fetcher.data as IFetcherResponseData;
-    const { alerts } = useAlerts(actionData, fetcher.state);
+    const actionData = fetcher.data as ApiResponse<IResource>;
+    const { alertState, handleCloseItem } = useAlerts<IResource>([], actionData, fetcher.state);
 
     const breadcrumbs = [
         { name: 'Ressurser', link: '/ressurser' },
@@ -96,7 +95,11 @@ export default function Index() {
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Ressurser'} icon={MigrationIcon} helpText="ressurser" />
 
-            <AlertManager alerts={alerts} />
+            <NovariSnackbar
+                items={alertState}
+                position={'top-right'}
+                onCloseItem={handleCloseItem}
+            />
 
             {!asset ? (
                 <Alert variant="warning">Det finnes ingen ressurser</Alert>

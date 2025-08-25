@@ -19,7 +19,6 @@ export let loader = async () => {
     });
 };
 
-//TODO: add link in header to user information
 export default function Index() {
     const { user } = useLoaderData<LoaderData>();
     const breadcrumbs = [{ name: 'Profile', link: '/user' }];

@@ -64,6 +64,7 @@ if (import.meta.env.DEV && import.meta.env.VITE_MOCK_CYPRESS === 'true') {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     HeaderProperties.setProperties(request);
 
+    console.log('Header: ');
     const meData: IMeData = await MeApi.fetchMe();
     const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
     const featuresResponse = await FeaturesApi.fetchFeatures();

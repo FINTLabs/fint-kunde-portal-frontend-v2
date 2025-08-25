@@ -8,7 +8,6 @@ import contactsLegal from '../fixtures/contactsLegal.json';
 import contacts from '../fixtures/contacts.json';
 import components from '../fixtures/components.json';
 import adapters from '../fixtures/adapters.json';
-import adapter from '../fixtures/adapter.json';
 import clients from '../fixtures/clients.json';
 import resources from '../fixtures/resources.json';
 import resource from '../fixtures/resource.json';
@@ -22,9 +21,13 @@ const API_URL = process.env.API_URL;
 const LINKWALKER_API_URL = process.env.LINKWALKER_API_URL;
 const CONSENT_URL = process.env.ACCESS_URL;
 
-console.log(' api url', API_URL);
+console.log('msw api url', API_URL);
 
 export const handlers = [
+    http.get('/', () => {
+        return HttpResponse.json('from handler in MSW', { status: 200 });
+    }),
+
     http.get(`${CONSENT_URL}/access/jennifer-test-test@client.fintlabs.no`, () => {
         return HttpResponse.json(access);
     }),
@@ -97,7 +100,7 @@ export const handlers = [
     ),
 
     http.post(`${API_URL}/api/adapters/calvin_organizations`, async () => {
-        return HttpResponse.json(adapter);
+        return HttpResponse.json(adapters);
     }),
 
     http.get(`${API_URL}/api/components/organisation/calvin_organizations`, () => {

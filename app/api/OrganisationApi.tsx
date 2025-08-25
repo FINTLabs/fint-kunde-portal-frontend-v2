@@ -1,7 +1,13 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
-const orgManager = new NovariApiManager({ baseUrl: API_URL });
+const orgManager = new NovariApiManager({
+    baseUrl: API_URL,
+    defaultHeaders: {
+        'x-nin': HeaderProperties.getXnin(),
+    },
+});
 
 class OrganisationApi {
     static async getTechnicalContacts(organisationName: string): Promise<ApiResponse<any>> {

@@ -1,8 +1,14 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 import type { FeatureFlags } from '~/types/FeatureFlag';
+import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
-const featuresManager = new NovariApiManager({ baseUrl: API_URL });
+const featuresManager = new NovariApiManager({
+    baseUrl: API_URL,
+    defaultHeaders: {
+        'x-nin': HeaderProperties.getXnin(),
+    },
+});
 
 class FeaturesApi {
     static async fetchFeatures(): Promise<ApiResponse<FeatureFlags>> {
