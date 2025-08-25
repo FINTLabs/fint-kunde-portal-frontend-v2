@@ -5,9 +5,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const API_URL = process.env.API_URL || '';
 const assetManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class AssetApi {
@@ -18,6 +15,9 @@ class AssetApi {
             functionName: 'getAllAssets',
             customErrorMessage: `Kunne ikke hente eiendeler for organisasjonen: ${organisationName}`,
             customSuccessMessage: 'Eiendeler hentet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -32,6 +32,9 @@ class AssetApi {
             body: JSON.stringify(asset),
             customErrorMessage: 'Kunne ikke opprette eiendelen',
             customSuccessMessage: 'Eiendelen ble opprettet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -46,6 +49,9 @@ class AssetApi {
             body: JSON.stringify(asset),
             customErrorMessage: 'Kunne ikke oppdatere eiendelen',
             customSuccessMessage: 'Eiendelen ble oppdatert vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -56,6 +62,9 @@ class AssetApi {
             functionName: 'deleteAsset',
             customErrorMessage: `Kunne ikke slette eiendelen: ${name}`,
             customSuccessMessage: 'Eiendelen ble slettet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -66,6 +75,9 @@ class AssetApi {
             functionName: 'getAssetById',
             customErrorMessage: `Kunne ikke hente eiendelen med ID: ${assetId}`,
             customSuccessMessage: `Eiendelen med ID ${assetId} ble hentet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -92,6 +104,9 @@ class AssetApi {
             body: JSON.stringify({ name: adapterName }),
             customErrorMessage: `Kunne ikke legge til adapteren: ${adapterName}`,
             customSuccessMessage: `Adapteren ${adapterName} ble lagt til.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -106,6 +121,9 @@ class AssetApi {
             body: JSON.stringify({ name: adapterName }),
             customErrorMessage: `Kunne ikke fjerne adapteren: ${adapterName}`,
             customSuccessMessage: `Adapteren ${adapterName} ble fjernet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -127,6 +145,9 @@ class AssetApi {
                 body: JSON.stringify({ name: clientName }),
                 customErrorMessage: `Kunne ikke legge til klienten: ${clientName}`,
                 customSuccessMessage: `Klienten ${clientName} ble lagt til.`,
+                additionalHeaders: {
+                    'x-nin': HeaderProperties.getXnin(),
+                },
             });
         }
 
@@ -151,6 +172,9 @@ class AssetApi {
             body: JSON.stringify({ name: clientName }),
             customErrorMessage: `Kunne ikke sette klient '${clientName}' som primærressurs '${primaryAssetName}'.`,
             customSuccessMessage: `Fjernet klient '${clientName}' og satt til klient primærressurs '${primaryAssetName}'.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
 
         if (addPrimaryResponse.success) {
@@ -174,6 +198,9 @@ class AssetApi {
             body: JSON.stringify({ name: clientName }),
             customErrorMessage: `Kunne ikke legge til klienten: ${clientName}`,
             customSuccessMessage: `Klienten ${clientName} ble lagt til.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -186,6 +213,9 @@ class AssetApi {
             body: JSON.stringify({ name: clientName }),
             customErrorMessage: `Kunne ikke fjerne klienten: ${clientName}`,
             customSuccessMessage: `Klienten ${clientName} ble fjernet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 }

@@ -6,9 +6,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const API_URL = process.env.API_URL || '';
 const componentManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class ComponentApi {
@@ -19,6 +16,9 @@ class ComponentApi {
             functionName: 'getAllComponents',
             customErrorMessage: 'Kunne ikke hente alle komponenter.',
             customSuccessMessage: 'Komponenter hentet.',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
 
         logger.silly(
@@ -50,6 +50,9 @@ class ComponentApi {
             functionName: 'getOrganisationComponents',
             customErrorMessage: `Kunne ikke hente komponenter for organisasjonen: ${organisationName}.`,
             customSuccessMessage: `Komponenter for organisasjonen ${organisationName} ble hentet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
 
         logger.silly(

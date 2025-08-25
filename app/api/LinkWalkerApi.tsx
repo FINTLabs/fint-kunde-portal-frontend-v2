@@ -5,9 +5,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const API_URL = process.env.LINKWALKER_API_URL || '';
 const linkWalkerManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class LinkWalkerApi {
@@ -18,6 +15,9 @@ class LinkWalkerApi {
             functionName: 'getTests',
             customErrorMessage: `Kunne ikke hente tester for organisasjonen: ${orgName}`,
             customSuccessMessage: `Tester for organisasjonen ${orgName} ble hentet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -39,6 +39,9 @@ class LinkWalkerApi {
             body: JSON.stringify(data),
             customErrorMessage: `Kunne ikke legge til testen for organisasjonen: ${orgName}`,
             customSuccessMessage: `Testen for organisasjonen ${orgName} ble lagt til.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
 
         // Keeping your original manual check in case you want extra control
@@ -65,6 +68,9 @@ class LinkWalkerApi {
             functionName: 'clearTests',
             customErrorMessage: `Kunne ikke tømme testene for organisasjonen: ${orgName}`,
             customSuccessMessage: `Testene for organisasjonen ${orgName} ble tømt.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 }

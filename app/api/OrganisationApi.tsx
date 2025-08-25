@@ -4,9 +4,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const API_URL = process.env.API_URL || '';
 const orgManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class OrganisationApi {
@@ -17,6 +14,9 @@ class OrganisationApi {
             functionName: 'getTechnicalContacts',
             customErrorMessage: `Kunne ikke hente tekniske kontakter for organisasjonen: ${organisationName}`,
             customSuccessMessage: 'Tekniske kontakter hentet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -27,6 +27,9 @@ class OrganisationApi {
             functionName: 'getLegalContact',
             customErrorMessage: `Kunne ikke hente juridisk kontakt for organisasjonen: ${organisationName}`,
             customSuccessMessage: 'Juridisk kontakt hentet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -52,6 +55,9 @@ class OrganisationApi {
             body: JSON.stringify({ name: componentName }),
             customErrorMessage: `Kunne ikke legge til komponenten: ${componentName}`,
             customSuccessMessage: `Komponenten ${componentName} ble lagt til`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -66,6 +72,9 @@ class OrganisationApi {
             body: JSON.stringify({ name: componentName }),
             customErrorMessage: `Kunne ikke fjerne komponenten: ${componentName}`,
             customSuccessMessage: `Komponenten ${componentName} ble fjernet`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
             // customSuccessVariant: 'warning', // uncomment if your manager supports variants
         });
     }

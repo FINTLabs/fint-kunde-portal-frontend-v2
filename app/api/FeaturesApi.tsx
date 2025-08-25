@@ -5,9 +5,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const API_URL = process.env.API_URL || '';
 const featuresManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class FeaturesApi {
@@ -18,6 +15,9 @@ class FeaturesApi {
             functionName: 'fetchFeatures',
             customErrorMessage: 'Kunne ikke hente en liste over features',
             customSuccessMessage: 'Features hentet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 }

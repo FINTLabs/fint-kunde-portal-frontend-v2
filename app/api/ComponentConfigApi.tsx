@@ -4,9 +4,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const API_URL = process.env.API_URL || '';
 const componentConfigManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class ComponentConfigApi {
@@ -17,6 +14,9 @@ class ComponentConfigApi {
             functionName: 'getComponentConfigs',
             customErrorMessage: 'Kunne ikke hente komponentkonfigurasjoner',
             customSuccessMessage: 'Komponentkonfigurasjoner ble hentet.',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 }

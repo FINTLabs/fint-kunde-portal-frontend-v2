@@ -5,9 +5,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const API_URL = process.env.API_URL || '';
 const apiManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class ContactApi {
@@ -18,6 +15,9 @@ class ContactApi {
             functionName: 'getAllContacts',
             customErrorMessage: 'Kunne ikke hente en liste over kontakter',
             customSuccessMessage: 'Kontakter hentet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -28,6 +28,9 @@ class ContactApi {
             functionName: 'getTechnicalContacts',
             customErrorMessage: 'Kunne ikke hente en liste over tekniske kontakter',
             customSuccessMessage: 'Tekniske kontakter hentet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -41,6 +44,9 @@ class ContactApi {
             functionName: 'unsetLegalContact',
             customErrorMessage: 'Kunne ikke fjerne den juridiske kontakten',
             customSuccessMessage: 'Juridisk kontakt fjernet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
             // customSuccessVariant: 'warning', // <- use this if your apiManager supports variants
         });
     }
@@ -58,6 +64,9 @@ class ContactApi {
             functionName: 'setLegalContact',
             customErrorMessage: 'Kunne ikke oppdatere den juridiske kontakten',
             customSuccessMessage: 'Juridisk kontakt oppdatert',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -71,6 +80,9 @@ class ContactApi {
             functionName: 'addTechnicalContact',
             customErrorMessage: 'Kunne ikke legge til teknisk kontakt',
             customSuccessMessage: 'Teknisk kontakt lagt til',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -84,6 +96,9 @@ class ContactApi {
             functionName: 'removeTechnicalContact',
             customErrorMessage: 'Kunne ikke fjerne den tekniske kontakten',
             customSuccessMessage: 'Teknisk kontakt fjernet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
             customSuccessVariant: 'warning',
         });
     }

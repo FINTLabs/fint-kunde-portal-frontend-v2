@@ -4,9 +4,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const API_URL = process.env.API_URL || '';
 const logManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class LogApi {
@@ -27,6 +24,9 @@ class LogApi {
             functionName,
             customErrorMessage: 'Kunne ikke hente logger for spesifisert ressurs.',
             customSuccessMessage: 'Logger for spesifisert ressurs ble hentet.',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 }

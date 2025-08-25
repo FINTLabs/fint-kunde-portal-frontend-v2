@@ -6,9 +6,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const TEST_RUNNER_API_URL = process.env.TEST_RUNNER_API_URL || '';
 const testManager = new NovariApiManager({
     baseUrl: TEST_RUNNER_API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class BasicTestApi {
@@ -29,6 +26,9 @@ class BasicTestApi {
             body: JSON.stringify(body),
             customErrorMessage: errorMsg,
             customSuccessMessage: successMsg,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 

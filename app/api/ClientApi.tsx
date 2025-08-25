@@ -6,9 +6,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const API_URL = process.env.API_URL || '';
 const clientManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class ClientApi {
@@ -19,6 +16,9 @@ class ClientApi {
             functionName: 'getClients',
             customErrorMessage: `Kunne ikke hente klienter for organisasjonen: ${organisationName}`,
             customSuccessMessage: 'Klienter hentet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -51,6 +51,9 @@ class ClientApi {
             body: JSON.stringify(client),
             customErrorMessage: 'Kunne ikke opprette klienten',
             customSuccessMessage: 'Klienten ble opprettet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -73,6 +76,9 @@ class ClientApi {
             body: JSON.stringify(partialClient),
             customErrorMessage: 'Kunne ikke oppdatere klienten',
             customSuccessMessage: 'Klienten ble oppdatert vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -83,6 +89,9 @@ class ClientApi {
             functionName: 'deleteClient',
             customErrorMessage: 'Kunne ikke slette klienten',
             customSuccessMessage: 'Klienten ble slettet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
             // customSuccessVariant: 'warning', // uncomment if your manager supports variants
         });
     }
@@ -97,6 +106,9 @@ class ClientApi {
             functionName: 'getOpenIdSecret',
             customErrorMessage: 'Kunne ikke hente OpenID Secret',
             customSuccessMessage: 'Klienthemmeligheten ble hentet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -123,6 +135,9 @@ class ClientApi {
             body: JSON.stringify({ name: componentName }),
             customErrorMessage: `Kunne ikke legge til komponenten: ${componentName}`,
             customSuccessMessage: 'Komponenten ble lagt til',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -137,6 +152,9 @@ class ClientApi {
             body: JSON.stringify({ name: componentName }),
             customErrorMessage: `Kunne ikke fjerne komponenten: ${componentName}`,
             customSuccessMessage: 'Komponenten ble fjernet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -153,6 +171,9 @@ class ClientApi {
             contentType: 'text/plain',
             customErrorMessage: 'Kunne ikke sette passordet',
             customSuccessMessage: 'Passordet ble satt vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 }

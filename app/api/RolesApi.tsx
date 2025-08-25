@@ -4,9 +4,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const API_URL = process.env.API_URL || '';
 const roleManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 export default class RoleApi {
@@ -17,6 +14,9 @@ export default class RoleApi {
             functionName: 'getRoles',
             customErrorMessage: 'Kunne ikke hente roller',
             customSuccessMessage: 'Roller hentet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -32,6 +32,9 @@ export default class RoleApi {
             functionName: 'addRole',
             customErrorMessage: `Feil ved oppdatering av kontaktrolle: ${roleName}`,
             customSuccessMessage: `Kontaktroller oppdatert: ${roleName}`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -47,6 +50,9 @@ export default class RoleApi {
             functionName: 'removeRole',
             customErrorMessage: `Feil ved fjerning av kontaktrolle: ${roleName}`,
             customSuccessMessage: `Kontaktrolle fjernet: ${roleName}`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
             // customSuccessVariant: 'warning', // uncomment if your manager supports variants
         });
     }

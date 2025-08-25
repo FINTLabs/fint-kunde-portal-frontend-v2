@@ -8,19 +8,20 @@ const API_URL = process.env.API_URL || '';
 
 const apiManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class MeApi {
     static async fetchMe(): Promise<IMeData> {
+        console.log('HEADERS', HeaderProperties.getXnin());
         const res = await apiManager.call<IMeData>({
             method: 'GET',
             endpoint: '/api/me',
             functionName: 'fetchMe',
             customErrorMessage: 'Kunne ikke hente brukerdata',
             customSuccessMessage: 'Brukerdata hentet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
 
         if (res.success && res.data) {
@@ -50,6 +51,9 @@ class MeApi {
             functionName: 'fetchOrganisations',
             customErrorMessage: 'Kunne ikke hente organisasjoner',
             customSuccessMessage: 'Organisasjoner hentet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
 
         if (res.success && Array.isArray(res.data) && res.data.length > 0) {

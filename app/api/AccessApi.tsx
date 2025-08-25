@@ -5,12 +5,7 @@ import type { IResource } from '~/types/Access';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const ACCESS_URL = process.env.ACCESS_URL || '';
-const accessManager = new NovariApiManager({
-    baseUrl: ACCESS_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
-});
+const accessManager = new NovariApiManager({ baseUrl: ACCESS_URL });
 
 class AccessApi {
     static async getClientorAdapterAccess(name: string): Promise<ApiResponse<any>> {
@@ -20,6 +15,9 @@ class AccessApi {
             functionName: 'getClientorAdapterAccess',
             customErrorMessage: `Kunne ikke hente tilgang for: ${name}`,
             customSuccessMessage: `Tilgang for ${name} ble hentet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -30,6 +28,9 @@ class AccessApi {
             functionName: 'getClientorAdapterAccessComponents',
             customErrorMessage: `Kunne ikke hente tilgang for: ${name}`,
             customSuccessMessage: `Tilgang for ${name} ble hentet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -43,6 +44,9 @@ class AccessApi {
             functionName: 'getComponentAccess',
             customErrorMessage: `Kunne ikke hente komponenttilgang for: ${name}`,
             customSuccessMessage: `Komponenttilgang for ${name} ble hentet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -57,6 +61,9 @@ class AccessApi {
             functionName: 'getResourceAccess',
             customErrorMessage: `Kunne ikke hente ressurstilgang for: ${resourceName}`,
             customSuccessMessage: `Ressurstilgang for ${resourceName} ble hentet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -71,6 +78,9 @@ class AccessApi {
             functionName: 'getFieldAccess',
             customErrorMessage: `Kunne ikke hente komponenttilgang`,
             customSuccessMessage: `Komponenttilgang ble hentet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -81,6 +91,9 @@ class AccessApi {
             functionName: 'addAccess',
             customErrorMessage: 'Kunne ikke sette opp tilgang',
             customSuccessMessage: 'Tilgang ble opprettet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -91,6 +104,9 @@ class AccessApi {
             functionName: 'deleteAccess',
             customErrorMessage: 'Kunne ikke slette tilgang',
             customSuccessMessage: 'Tilgang ble slettet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -107,6 +123,9 @@ class AccessApi {
             body: JSON.stringify({ environments }),
             customErrorMessage: 'Kunne ikke endre miljøer',
             customSuccessMessage: 'Miljøer ble oppdatert',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -122,6 +141,9 @@ class AccessApi {
             body: JSON.stringify({ enabled }),
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
             customSuccessMessage: 'Tilgang ble oppdatert',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -147,6 +169,9 @@ class AccessApi {
             body: JSON.stringify(body),
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
             customSuccessMessage: 'Tilgang ble oppdatert',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -164,6 +189,9 @@ class AccessApi {
             body: JSON.stringify({ enabled }),
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
             customSuccessMessage: 'Tilgang ble oppdatert',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -180,6 +208,9 @@ class AccessApi {
             body: JSON.stringify(fields),
             customErrorMessage: 'Kunne ikke oppdatere felttilganger',
             customSuccessMessage: 'Felttilganger ble oppdatert',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 }

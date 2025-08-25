@@ -5,9 +5,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const API_URL = process.env.API_URL || '';
 const adapterManager = new NovariApiManager({
     baseUrl: API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class AdapterApi {
@@ -18,6 +15,9 @@ class AdapterApi {
             functionName: 'getAdapters',
             customErrorMessage: `Kunne ikke hente adaptere for organisasjonen: ${organisationName}`,
             customSuccessMessage: 'Adaptere hentet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -32,6 +32,9 @@ class AdapterApi {
             body: JSON.stringify(adapter),
             customErrorMessage: 'Kunne ikke opprette adapteren',
             customSuccessMessage: 'Adapteren ble opprettet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -46,6 +49,9 @@ class AdapterApi {
             body: JSON.stringify(adapter),
             customErrorMessage: 'Kunne ikke oppdatere adapteren',
             customSuccessMessage: 'Adapteren ble oppdatert vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -74,6 +80,9 @@ class AdapterApi {
             body: JSON.stringify({ name: adapterName }),
             customErrorMessage: `Kunne ikke legge til komponenten i adapteren: ${adapterName}`,
             customSuccessMessage: 'Komponenten ble lagt til',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -88,6 +97,9 @@ class AdapterApi {
             body: JSON.stringify({ name: adapterName }),
             customErrorMessage: `Kunne ikke fjerne komponenten fra adapteren: ${adapterName}`,
             customSuccessMessage: 'Komponenten ble fjernet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
             // customSuccessVariant: 'warning', // only if your manager supports variants
         });
     }
@@ -99,6 +111,9 @@ class AdapterApi {
             functionName: 'deleteAdapter',
             customErrorMessage: `Kunne ikke slette adapteren: ${name}`,
             customSuccessMessage: 'Adapteren ble slettet vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -112,6 +127,9 @@ class AdapterApi {
             functionName: 'getOpenIdSecret',
             customErrorMessage: 'Kunne ikke hente OpenID Secret',
             customSuccessMessage: 'OpenID Secret hentet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -128,6 +146,9 @@ class AdapterApi {
             contentType: 'text/plain',
             customErrorMessage: 'Kunne ikke sette passordet',
             customSuccessMessage: 'Passordet ble satt vellykket',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 }

@@ -5,9 +5,6 @@ import { HeaderProperties } from '~/utils/headerProperties';
 const CONSENT_API_URL = process.env.CONSENT_API_URL || '';
 const consentManager = new NovariApiManager({
     baseUrl: CONSENT_API_URL,
-    defaultHeaders: {
-        'x-nin': HeaderProperties.getXnin(),
-    },
 });
 
 class ConsentApi {
@@ -18,6 +15,9 @@ class ConsentApi {
             functionName: 'getBehandlings',
             customErrorMessage: `Kunne ikke hente behandlinger for organisasjonen: ${orgName}.`,
             customSuccessMessage: `Behandlinger for organisasjonen ${orgName} ble hentet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -28,6 +28,9 @@ class ConsentApi {
             functionName: 'getTjenste',
             customErrorMessage: `Kunne ikke hente tjenester for organisasjonen: ${orgName}.`,
             customSuccessMessage: `Tjenester for organisasjonen ${orgName} ble hentet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -38,6 +41,9 @@ class ConsentApi {
             functionName: 'getPersonopplysning',
             customErrorMessage: 'Kunne ikke hente personopplysninger.',
             customSuccessMessage: 'Personopplysninger ble hentet.',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -48,6 +54,9 @@ class ConsentApi {
             functionName: 'getBehandlingsgrunnlag',
             customErrorMessage: 'Kunne ikke hente behandlingsgrunnlag.',
             customSuccessMessage: 'Behandlingsgrunnlag ble hentet.',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -67,6 +76,9 @@ class ConsentApi {
             functionName: 'setActive',
             customErrorMessage: `Kunne ikke oppdatere aktiv-status for behandling ${behandlingId} i organisasjonen: ${orgName}.`,
             customSuccessMessage: successMessage,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
             // customSuccessVariant: isActive === 'true' ? 'success' : 'warning', // uncomment if supported
         });
     }
@@ -91,6 +103,9 @@ class ConsentApi {
             }),
             customErrorMessage: `Kunne ikke opprette policy for organisasjonen: ${orgName}.`,
             customSuccessMessage: `Policy for organisasjonen ${orgName} ble opprettet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 
@@ -102,6 +117,9 @@ class ConsentApi {
             body: JSON.stringify({ navn: serviceName }),
             customErrorMessage: `Kunne ikke opprette tjeneste med navn ${serviceName} for organisasjonen: ${orgName}.`,
             customSuccessMessage: `Tjenesten ${serviceName} for organisasjonen ${orgName} ble opprettet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
     }
 }
