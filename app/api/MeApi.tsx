@@ -12,7 +12,6 @@ const apiManager = new NovariApiManager({
 
 class MeApi {
     static async fetchMe(): Promise<IMeData> {
-        console.log('HEADERS', HeaderProperties.getXnin());
         const res = await apiManager.call<IMeData>({
             method: 'GET',
             endpoint: '/api/me',
