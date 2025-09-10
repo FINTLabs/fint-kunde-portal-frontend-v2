@@ -1,0 +1,16 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: FLAISSso
+metadata:
+  name: fint-kunde-to-status-forward-sso
+  labels:
+    app.kubernetes.io/name: fint-kunde-to-status-forward-sso
+    app.kubernetes.io/instance: fint-kunde-to-status-forward-sso
+    app.kubernetes.io/version: latest
+    app.kubernetes.io/component: sso
+    app.kubernetes.io/part-of: fint-core
+    fintlabs.no/team: core
+    fintlabs.no/org-id: fintlabs.no
+spec:
+  basePath: /status
+  hostname: kunde.felleskomponent.no
+  loggingLevel: debug

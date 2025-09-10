@@ -22,3 +22,5 @@ spec:
     basePath: /
   ingress:
     enabled: true
+    middleware:
+      - fint-kunde-to-status-forward-sso
