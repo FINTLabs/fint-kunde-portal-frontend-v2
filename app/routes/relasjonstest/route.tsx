@@ -1,9 +1,8 @@
-import { ActionFunctionArgs, MetaFunction } from 'react-router';
+import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack } from '@navikt/ds-react';
-import { useFetcher, useLoaderData } from 'react-router';
+import { Alert, Box, Button, HStack } from '@navikt/ds-react';
 import React, { useEffect } from 'react';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
@@ -92,7 +91,12 @@ export default function Index() {
                 position={'top-right'}
                 onCloseItem={handleCloseItem}
             />
-
+            {fetcher.state !== 'submitting' && !actionData && (
+                <Alert variant="warning">
+                    Advarsel: Passordet til klienten du kjører testen på, vil bli nullstilt under
+                    testkjøringen. Det anbefales derfor å bruke en dedikert klient for testing.
+                </Alert>
+            )}
             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
                 <RelationTestAddForm
                     components={components}
