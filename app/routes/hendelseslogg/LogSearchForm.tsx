@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Box, Button, HGrid, Search, Select, VStack } from '@navikt/ds-react';
 import { PlayIcon } from '@navikt/aksel-icons';
+import { Box, Button, HGrid, Search, Select, VStack } from '@navikt/ds-react';
+import React, { useState } from 'react';
+
 import { IComponent } from '~/types/Component';
 import { IComponentConfig } from '~/types/ComponentConfig';
 
@@ -60,9 +61,10 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
     }
 
     return (
-        <VStack gap="10">
+        <VStack gap="10" data-cy="log-search-form">
             <HGrid gap="6" columns={5}>
                 <Select
+                    data-cy="log-search-environment"
                     label={'Miljø'}
                     size="small"
                     name="environment"
@@ -78,6 +80,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                 </Select>
 
                 <Select
+                    data-cy="log-search-component"
                     label={'Komponent'}
                     size="small"
                     onChange={(e) => {
@@ -142,6 +145,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                 size="small"
                 hideLabel={false}
                 onChange={(value: string) => onFilter(value)}
+                data-cy="log-search-button"
             />
         </VStack>
     );

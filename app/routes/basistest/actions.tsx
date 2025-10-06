@@ -1,6 +1,9 @@
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import log4js from 'log4js';
+
 import BasicTestApi from '~/api/BasicTestApi';
-import logger from '~/utils/logger';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
+// import logger from '~/utils/logger';
+const logger = log4js.getLogger();
 
 export async function handleBasicTestAction({ request }: { request: Request }) {
     const formData = await request.formData();
@@ -16,8 +19,8 @@ export async function handleBasicTestAction({ request }: { request: Request }) {
     const cacheData = await BasicTestApi.runTest(orgName, baseUrl, endpoint, clientName);
     const healthData = await BasicTestApi.runHealthTest(orgName, baseUrl, endpoint, clientName);
 
-    logger.silly(`cache request data: ${JSON.stringify(cacheData)}`);
-    logger.silly(`health request data: ${JSON.stringify(healthData.data)}`);
+    logger.debug(`cache request data: ${JSON.stringify(cacheData)}`);
+    logger.debug(`health request data: ${JSON.stringify(healthData.data)}`);
 
     return {
         message,

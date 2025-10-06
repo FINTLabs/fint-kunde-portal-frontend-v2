@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { ActionFunctionArgs, MetaFunction } from 'react-router';
-import { useFetcher, useLoaderData } from 'react-router';
+import { TasklistSendIcon } from '@navikt/aksel-icons';
 import { Box, VStack } from '@navikt/ds-react';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import React, { useState } from 'react';
+import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
+
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { TasklistSendIcon } from '@navikt/aksel-icons';
-import LogSearchForm from '~/routes/hendelseslogg/LogSearchForm';
-import LogTable from './LogTable';
-import { Log, ReduntantLog } from '~/types/LogEvent';
 import { handleLogAction } from '~/routes/hendelseslogg/actions';
-import { loader } from './loaders';
+import LogSearchForm from '~/routes/hendelseslogg/LogSearchForm';
 import { IComponent } from '~/types/Component';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { Log, ReduntantLog } from '~/types/LogEvent';
+
+import { loader } from './loaders';
+import LogTable from './LogTable';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Hendelseslogg' }, { name: 'description', content: 'Hendelseslogg' }];
@@ -34,7 +35,7 @@ export default function Index() {
     const logs = actionData?.data || [];
     const mappedLogs = mapLogs(logs);
     const [filterValue, setFilterValue] = useState('');
-    const { alertState, handleCloseItem } = useAlerts<any>([], actionData, fetcher.state);
+    const { alertState } = useAlerts<any>([], actionData, fetcher.state);
 
     const filteredLogs = filterValue
         ? mappedLogs.filter((log: Log) => log.id === filterValue)
@@ -65,7 +66,7 @@ export default function Index() {
                 <NovariSnackbar
                     items={alertState}
                     position={'top-right'}
-                    onCloseItem={handleCloseItem}
+                    // onCloseItem={handleCloseItem}
                 />
 
                 {filteredLogs.length > 0 && (
