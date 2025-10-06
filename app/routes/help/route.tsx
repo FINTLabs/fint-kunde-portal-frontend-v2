@@ -1,9 +1,10 @@
-import { MetaFunction } from 'react-router';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Accordion, Box } from '@navikt/ds-react';
-import { helpData, HelpDataItem } from '~/routes/help/HelpData';
+import { MetaFunction } from 'react-router';
+
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { helpData, HelpDataItem } from '~/routes/help/HelpData';
 
 export const meta: MetaFunction = () => {
     return [

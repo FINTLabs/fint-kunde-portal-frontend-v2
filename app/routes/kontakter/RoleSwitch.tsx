@@ -1,5 +1,6 @@
-import React from 'react';
 import { BodyShort, Fieldset, Switch } from '@navikt/ds-react';
+import React from 'react';
+
 import { IContact } from '~/types/Contact';
 import { IRole } from '~/types/Role';
 

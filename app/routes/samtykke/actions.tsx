@@ -1,5 +1,5 @@
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ConsentApi from '~/api/ConsentApi';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export async function handleConsentAction({ request }: { request: Request }) {
     const orgName = await getSelectedOrganization(request);

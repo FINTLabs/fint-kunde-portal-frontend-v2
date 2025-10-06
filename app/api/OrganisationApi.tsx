@@ -1,4 +1,6 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
+
+import { IComponent, IContact } from '~/types';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
@@ -7,8 +9,8 @@ const orgManager = new NovariApiManager({
 });
 
 class OrganisationApi {
-    static async getTechnicalContacts(organisationName: string): Promise<ApiResponse<any>> {
-        return await orgManager.call<any>({
+    static async getTechnicalContacts(organisationName: string): Promise<ApiResponse<IContact[]>> {
+        return await orgManager.call<IContact[]>({
             method: 'GET',
             endpoint: `/api/organisations/${organisationName}/contacts/technical`,
             functionName: 'getTechnicalContacts',
@@ -20,8 +22,8 @@ class OrganisationApi {
         });
     }
 
-    static async getLegalContact(organisationName: string): Promise<ApiResponse<any>> {
-        return await orgManager.call<any>({
+    static async getLegalContact(organisationName: string): Promise<ApiResponse<IContact>> {
+        return await orgManager.call<IContact>({
             method: 'GET',
             endpoint: `/api/organisations/${organisationName}/contacts/legal`,
             functionName: 'getLegalContact',
@@ -37,7 +39,7 @@ class OrganisationApi {
         componentName: string,
         organisationName: string,
         isChecked: boolean
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<IComponent>> {
         const endpoint = `/api/organisations/${organisationName}/components/${componentName}`;
         return isChecked
             ? this.addComponentToOrganisation(endpoint, componentName)
@@ -47,8 +49,8 @@ class OrganisationApi {
     private static async addComponentToOrganisation(
         endpoint: string,
         componentName: string
-    ): Promise<ApiResponse<any>> {
-        return await orgManager.call<any>({
+    ): Promise<ApiResponse<IComponent>> {
+        return await orgManager.call<IComponent>({
             method: 'PUT',
             endpoint,
             functionName: 'addComponentToOrganisation',
@@ -64,8 +66,8 @@ class OrganisationApi {
     private static async removeComponentFromOrganisation(
         endpoint: string,
         componentName: string
-    ): Promise<ApiResponse<any>> {
-        return await orgManager.call<any>({
+        ): Promise<ApiResponse<IComponent>> {
+        return await orgManager.call<IComponent>({
             method: 'DELETE',
             endpoint,
             functionName: 'removeComponentFromOrganisation',

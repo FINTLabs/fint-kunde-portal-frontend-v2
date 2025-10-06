@@ -1,7 +1,8 @@
-import { redirect } from 'react-router';
+import { data, redirect } from 'react-router';
+
 import AssetApi from '~/api/AssetApi';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import { IPartialAsset } from '~/types/Asset';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export async function handleAssetIndexAction({ request }: { request: Request }) {
     const formData = await request.formData();
@@ -19,15 +20,7 @@ export async function handleAssetIndexAction({ request }: { request: Request }) 
     const response = await AssetApi.createAsset(newAsset, orgName);
 
     if (!response.success) {
-        return new Response(
-            JSON.stringify({
-                message: response.message || 'Operasjon mislyktes',
-                variant: response.variant || 'error',
-            }),
-            {
-                headers: { 'Content-Type': 'application/json' },
-            }
-        );
+        throw data('Record Not Found', { status: 404 });
     }
 
     return redirect(`/ressurser/${response.data?.name}`);

@@ -1,9 +1,10 @@
-import React from 'react';
-import { Box, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack } from '@navikt/ds-react';
-import { IComponent } from '~/types/Component';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
-import { useNavigate } from 'react-router';
+import { Box, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
+import React from 'react';
+import { useNavigate } from 'react-router';
+
+import { IComponent } from '~/types/Component';
 
 interface ComponentsSectionProps {
     items: IComponent[];
@@ -50,8 +51,6 @@ const ComponentsTable = ({ items, selectedItems, toggle, isManaged }: Components
     const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const isChecked = e.target.checked;
-
-        console.log('Toggled component:', value, 'Checked:', isChecked);
 
         if (toggle) {
             const formData = new FormData();

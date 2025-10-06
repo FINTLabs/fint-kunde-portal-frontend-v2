@@ -1,5 +1,6 @@
-import React from 'react';
 import { BodyShort, Checkbox, CheckboxGroup, HStack, Label, VStack } from '@navikt/ds-react';
+import React from 'react';
+
 import { IComponent } from '~/types/Component';
 
 interface ComponentDetailProps {

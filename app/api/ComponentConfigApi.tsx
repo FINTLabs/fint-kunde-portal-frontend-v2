@@ -1,4 +1,6 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
+
+import { IComponentConfig } from '~/types';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
@@ -7,8 +9,8 @@ const componentConfigManager = new NovariApiManager({
 });
 
 class ComponentConfigApi {
-    static async getComponentConfigs(): Promise<ApiResponse<any>> {
-        return await componentConfigManager.call<any>({
+    static async getComponentConfigs(): Promise<ApiResponse<IComponentConfig[]>> {
+        return await componentConfigManager.call<IComponentConfig[]>({
             method: 'GET',
             endpoint: '/api/components/configurations',
             functionName: 'getComponentConfigs',

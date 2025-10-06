@@ -1,13 +1,19 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { useFetcher, useLoaderData, useNavigate } from 'react-router';
+import { KeyVerticalIcon } from '@navikt/aksel-icons';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import {
+    ActionFunctionArgs,
+    LoaderFunctionArgs,
+    useFetcher,
+    useLoaderData,
+    useNavigate,
+} from 'react-router';
+
 import AccessApi from '~/api/AccessApi';
-import ResourcesList from '~/routes/tilgang/id/component/ResourcesList';
-import React from 'react';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import { handleAccessElementAction } from '~/routes/tilgang/id/component/actions';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import ResourcesList from '~/routes/tilgang/id/component/ResourcesList';
+import { IAccessComponent } from '~/types/Access';
 import { IComponent } from '~/types/Component';
 
 export const action = async (args: ActionFunctionArgs) => handleAccessElementAction(args);
@@ -16,7 +22,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     const clientOrAdapter = params.id || '';
     const component = params.component || '';
 
-    let resourceList = await AccessApi.getComponentAccess(component, clientOrAdapter);
+    const resourceList = await AccessApi.getComponentAccess(component, clientOrAdapter);
 
     return Response.json({
         clientOrAdapter,
@@ -28,17 +34,17 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export default function Route() {
     const { clientOrAdapter, resourceList, component } = useLoaderData<{
         clientOrAdapter: string;
-        resourceList: any;
+        resourceList: IAccessComponent[];
         component: string;
     }>();
     const navigate = useNavigate();
     const resourceTitle = `${clientOrAdapter}/${component}`;
     const fetcher = useFetcher<ApiResponse<IComponent>>();
     const actionData = fetcher.data as ApiResponse<IComponent>;
-    const { alertState, handleCloseItem } = useAlerts<IComponent>([], actionData, fetcher.state);
+    const { alertState } = useAlerts<IComponent>([], actionData, fetcher.state);
 
     const elementType =
-        clientOrAdapter.split('@')[1]?.split('.')[0] === 'client' ? 'klienter' : 'adaptere';
+        clientOrAdapter.split('@')[1]?.split('.')[0] === 'client' ? 'klienter' : 'adapter';
 
     const handleSelectedResource = (resourceName: string) => {
         navigate(`/tilgang/${clientOrAdapter}/${component}/${resourceName}`);
@@ -73,11 +79,11 @@ export default function Route() {
             <NovariSnackbar
                 items={alertState}
                 position={'top-right'}
-                onCloseItem={handleCloseItem}
+                // onCloseItem={handleCloseItem}
             />
 
             <ResourcesList
-                accessComponent={resourceList}
+                accessComponent={resourceList as IAccessComponent[]}
                 title={resourceTitle || ''}
                 onSelected={handleSelectedResource}
                 onToggle={handleToggleResource}

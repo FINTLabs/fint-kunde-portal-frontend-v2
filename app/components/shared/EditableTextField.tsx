@@ -27,7 +27,7 @@ export function EditableTextField({
                 ) : (
                     <>
                         <Label>{label}</Label>
-                        <BodyShort data-cy={`details-edit-${label}`}>{value}</BodyShort>
+                        <BodyShort data-cy={`details-${label}`}>{value}</BodyShort>
                     </>
                 )}
             </VStack>

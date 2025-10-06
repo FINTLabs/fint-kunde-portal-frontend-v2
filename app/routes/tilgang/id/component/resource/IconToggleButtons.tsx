@@ -1,6 +1,7 @@
-import React from 'react';
-import { HStack } from '@navikt/ds-react';
 import { CodeIcon, EthernetIcon, NotePencilDashIcon, NotePencilIcon } from '@navikt/aksel-icons';
+import { HStack } from '@navikt/ds-react';
+import React from 'react';
+
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
 import { IResource } from '~/types/Access';
 

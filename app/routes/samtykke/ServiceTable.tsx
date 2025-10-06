@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { Table } from '@navikt/ds-react';
-import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { Table } from '@navikt/ds-react';
+import React, { useState } from 'react';
+
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
+import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
+
+
 
 interface ScopedSortState {
     orderBy: keyof IBehandling;

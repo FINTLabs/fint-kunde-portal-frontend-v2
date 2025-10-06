@@ -1,8 +1,9 @@
 import { redirect } from 'react-router';
-import AdapterAPI from '~/api/AdapterApi';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { IPartialAdapter } from '~/types/Adapter';
+
 import AccessApi from '~/api/AccessApi';
+import AdapterAPI from '~/api/AdapterApi';
+import { IPartialAdapter } from '~/types/Adapter';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export async function handleAdapterIndexAction({ request }: { request: Request }) {
     const formData = await request.formData();

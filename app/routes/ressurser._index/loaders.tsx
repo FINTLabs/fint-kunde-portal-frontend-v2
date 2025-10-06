@@ -1,7 +1,8 @@
 import type { LoaderFunction } from 'react-router';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
+
 import AssetApi from '~/api/AssetApi';
 import { IAsset } from '~/types/Asset';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);

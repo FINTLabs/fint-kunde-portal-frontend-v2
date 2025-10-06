@@ -1,23 +1,24 @@
+import { MigrationIcon } from '@navikt/aksel-icons';
+import { BodyLong, Box } from '@navikt/ds-react';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { useState } from 'react';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
     useFetcher,
     useLoaderData,
     useNavigate,
-    useSearchParams,
 } from 'react-router';
-import { MigrationIcon } from '@navikt/aksel-icons';
+
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { IAsset } from '~/types/Asset';
-import { BodyLong, Box } from '@navikt/ds-react';
+import { handleAssetIndexAction } from '~/routes/ressurser._index/actions';
 import CreateForm from '~/routes/ressurser._index/CreateForm';
 import AssetsTable from '~/routes/ressurser._index/ResourcesTable';
-import React, { useState } from 'react';
-import { handleAssetIndexAction } from '~/routes/ressurser._index/actions';
-import { loader } from './loaders';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { IResource } from '~/types/Access';
+import { IAsset } from '~/types/Asset';
+
+import { loader } from './loaders';
 
 interface IPageLoaderData {
     assets: IAsset[];
@@ -37,11 +38,11 @@ export default function Index() {
     const { assets, orgName } = useLoaderData<IPageLoaderData>();
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const deleteName = searchParams.get('deleted');
+    // const [searchParams] = useSearchParams();
+    // const deleteName = searchParams.get('deleted');
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<IResource>;
-    const { alertState, handleCloseItem } = useAlerts<IResource>([], actionData);
+    const { alertState } = useAlerts<IResource>([], actionData);
 
     const handleClick = (id: string) => navigate(`/ressurser/${id}`);
 
@@ -49,13 +50,18 @@ export default function Index() {
 
     const handleCancel = () => setIsCreating(false);
 
+    const handleSave = (formData: FormData) => {
+        formData.append('actionType', 'CREATE');
+        fetcher.submit(formData, { method: 'post', action: '/ressurser' });
+    };
+
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <NovariSnackbar
                 items={alertState}
                 position={'top-right'}
-                onCloseItem={handleCloseItem}
+                // onCloseItem={handleCloseItem}
             />
 
             <InternalPageHeader
@@ -70,7 +76,7 @@ export default function Index() {
                     <BodyLong>Fant ingen ressurser</BodyLong>
                 </Box>
             ) : isCreating ? (
-                <CreateForm onCancel={handleCancel} orgName={orgName} />
+                <CreateForm onCancel={handleCancel} orgName={orgName} onCreate={handleSave} />
             ) : (
                 <AssetsTable assets={assets} onRowClick={handleClick} />
             )}

@@ -1,7 +1,8 @@
 import { redirect } from 'react-router';
+
+import AccessApi from '~/api/AccessApi';
 import AdapterApi from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import AccessApi from '~/api/AccessApi';
 
 export async function handleAdapterAction({ request, params }: { request: Request; params: any }) {
     const name = params.name || '';

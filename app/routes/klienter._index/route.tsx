@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { TokenIcon } from '@navikt/aksel-icons';
+import { Search } from '@navikt/ds-react';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { useEffect, useState } from 'react';
 import {
     type ActionFunctionArgs,
     MetaFunction,
@@ -6,17 +9,16 @@ import {
     useLoaderData,
     useNavigate,
 } from 'react-router';
-import { IClient } from '~/types/Clients';
+
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { Search } from '@navikt/ds-react';
-import ClientCreateForm from '~/routes/klienter._index/CreateForm';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { TokenIcon } from '@navikt/aksel-icons';
 import { CustomTabs } from '~/components/shared/CustomTabs';
-import { handleClientIndexAction } from '~/routes/klienter._index/actions';
-import { loader } from './loaders';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { useDeletedSearchParamAlert } from '~/hooks/useDeletedSearchParamAlert';
+import { handleClientIndexAction } from '~/routes/klienter._index/actions';
+import ClientCreateForm from '~/routes/klienter._index/CreateForm';
+import { IClient } from '~/types/Clients';
+
+import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Klienter' }, { name: 'description', content: 'klienter' }];
@@ -40,7 +42,7 @@ export default function Index() {
 
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<IClient>;
-    const { alertState, setAlertState, handleCloseItem } = useAlerts<IClient>([], actionData);
+    const { alertState, setAlertState } = useAlerts<IClient>([], actionData);
 
     useDeletedSearchParamAlert({
         label: 'Klient',
@@ -85,7 +87,7 @@ export default function Index() {
             <NovariSnackbar
                 items={alertState}
                 position={'top-right'}
-                onCloseItem={handleCloseItem}
+                // onCloseItem={handleCloseItem}
             />
             {isCreating ? (
                 <ClientCreateForm
@@ -110,6 +112,7 @@ export default function Index() {
                         onChange={(value: string) => handleSearch(value)}
                         placeholder="Søk etter navn eller beskrivelse"
                         className="pb-6"
+                        data-cy="search-input"
                     />
 
                     {filteredClients && (

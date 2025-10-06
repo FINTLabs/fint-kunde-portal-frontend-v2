@@ -10,6 +10,6 @@ export interface IClient extends IPartialClient {
     asset: string;
     clientId: string;
     components: string[];
-    accessPackages: any[]; // Adjust the type if you have more specific details
+    accessPackages: string[];
     managed: boolean;
 }

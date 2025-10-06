@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
-import { useFetcher, useLoaderData, useNavigate, useParams } from 'react-router';
-import { IClient } from '~/types/Clients';
-import { ActionFunctionArgs } from 'react-router';
-import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid } from '@navikt/ds-react';
-import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import ComponentList from '~/components/shared/ComponentList';
-import { Environment, IAccess, IDomainPackages } from '~/types/Access';
-
-import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
-import { AuthTable } from '~/components/shared/AuthTable';
-import { handleClientAction } from '~/routes/klienter.$id/actions';
-import { loader } from './loaders';
 import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { useState } from 'react';
+import {
+    ActionFunctionArgs,
+    useFetcher,
+    useLoaderData,
+    useNavigate,
+    useParams,
+} from 'react-router';
+
+import { AuthTable } from '~/components/shared/AuthTable';
+import Breadcrumbs from '~/components/shared/breadcrumbs';
+import ComponentList from '~/components/shared/ComponentList';
+import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { handleClientAction } from '~/routes/klienter.$id/actions';
+import { Environment, IAccess, IDomainPackages } from '~/types/Access';
 import { IAdapter } from '~/types/Adapter';
+import { IClient } from '~/types/Clients';
+
+import { loader } from './loaders';
 
 export { loader };
 
@@ -44,7 +49,7 @@ export default function ClientDetails() {
 
     const fetcher = useFetcher<ApiResponse<IAdapter>>();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
-    const { alertState, handleCloseItem } = useAlerts<IClient>([], actionData, fetcher.state);
+    const { alertState } = useAlerts<IClient>([], actionData, fetcher.state);
     const [isLoading, setIsLoading] = useState(false);
 
     let selectedEnvs: Environment[] = [];
@@ -108,7 +113,7 @@ export default function ClientDetails() {
             <NovariSnackbar
                 items={alertState}
                 position={'top-right'}
-                onCloseItem={handleCloseItem}
+                // onCloseItem={handleCloseItem}
             />
 
             {!client ? (
@@ -137,7 +142,6 @@ export default function ClientDetails() {
 
                         {!client.managed && (
                             <>
-                                <Divider className="pt-3" />
                                 <Heading size={'medium'}>Autentisering</Heading>
                                 <AuthTable
                                     entity={client}
@@ -151,8 +155,6 @@ export default function ClientDetails() {
                             </>
                         )}
 
-                        <Divider className="pt-10" />
-
                         {hasAccessControl && access ? (
                             <>
                                 <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
@@ -161,7 +163,8 @@ export default function ClientDetails() {
                                     <CheckboxGroup
                                         legend="Environment:"
                                         onChange={(vals) => handleEnvChange(vals as Environment[])}
-                                        defaultValue={selectedEnvs}>
+                                        defaultValue={selectedEnvs}
+                                        data-cy={'env-checkbox-group'}>
                                         <HGrid gap="6" columns={4}>
                                             <Checkbox value="api">API</Checkbox>
                                             <Checkbox value="beta">Beta</Checkbox>
@@ -182,7 +185,7 @@ export default function ClientDetails() {
                                 <Alert variant="warning">
                                     Tilgangsstyring for komponenter er ikke aktivert
                                 </Alert>
-                                <Divider className="pt-3" />
+
                                 <Button onClick={addAccess} size={'small'} loading={isLoading}>
                                     Sett opp tilgangsstyring
                                 </Button>

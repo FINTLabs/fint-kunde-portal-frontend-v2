@@ -1,4 +1,4 @@
-export interface FeatureFlags {
+export interface IFeatureFlag {
     'audit-log-new': boolean;
     'samtykke-admin-new': boolean;
     'access-packages-new': boolean;
@@ -11,7 +11,7 @@ export interface FeatureFlags {
     'roles-init': boolean;
     'access-controll-new': boolean;
 }
-export const defaultFeatures: FeatureFlags = {
+export const defaultFeatures: IFeatureFlag = {
     'audit-log-new': false,
     'samtykke-admin-new': false,
     'access-packages-new': false,

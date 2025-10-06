@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Button, Modal, Pagination, Table, TextField } from '@navikt/ds-react';
 import { PersonPlusIcon } from '@navikt/aksel-icons';
+import { Button, Modal, Pagination, Table, TextField } from '@navikt/ds-react';
+import React, { useState } from 'react';
+
 import { IContact } from '~/types/Contact';
 
 interface ContactModalProps {
@@ -85,6 +86,7 @@ const ContactModal = ({ isOpen, onClose, contacts, onAddContact }: ContactModalP
                                         </Table.DataCell>
                                         <Table.DataCell width={'1'}>
                                             <Button
+                                                data-cy="add-contact-button"
                                                 icon={<PersonPlusIcon title="Rediger" />}
                                                 size="xsmall"
                                                 onClick={() => {
@@ -103,6 +105,7 @@ const ContactModal = ({ isOpen, onClose, contacts, onAddContact }: ContactModalP
                 </div>
                 {filteredContacts.length > 0 && (
                     <Pagination
+                        data-cy="pagination"
                         page={page}
                         onPageChange={setPage}
                         count={Math.ceil(filteredContacts.length / rowsPerPage)}

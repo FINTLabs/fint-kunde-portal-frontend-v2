@@ -1,8 +1,14 @@
-import type { ActionFunctionArgs, LinksFunction, LoaderFunctionArgs } from 'react-router';
+import akselHref from '@navikt/ds-css?url';
+import { Alert, Box, Page } from '@navikt/ds-react';
+import { NovariFooter, NovariHeader } from 'novari-frontend-components';
+import React from 'react';
 import {
+    type ActionFunctionArgs,
     data,
     isRouteErrorResponse,
     Links,
+    type LinksFunction,
+    type LoaderFunctionArgs,
     Meta,
     Outlet,
     Scripts,
@@ -11,75 +17,74 @@ import {
     useNavigate,
     useRouteError,
 } from 'react-router';
-import './tailwind.css';
-import '@navikt/ds-css';
-import './novari-theme.css';
-import { Alert, Box, Page } from '@navikt/ds-react';
-import React from 'react';
+
 import MeApi from '~/api/MeApi';
-import FeaturesApi from './api/FeaturesApi';
-import { IOrganisation } from '~/types/Organisation';
-import { CustomErrorLayout } from '~/components/errors/CustomErrorLayout';
-import { HeaderProperties } from './utils/headerProperties';
-import logger from '~/utils/logger';
 import CustomError from '~/components/errors/CustomError';
-import { IMeData } from '~/types/Me';
-import { selectOrgCookie } from '~/utils/cookie';
-import { IUserSession } from '~/types/Session';
-import CustomErrorNoUser from '~/components/errors/CustomErrorNoUser';
-import CustomErrorNoOrg from '~/components/errors/CustomErrorNoOrg';
+import { CustomErrorLayout } from '~/components/errors/CustomErrorLayout';
 import CustomErrorNoAccess from '~/components/errors/CustomErrorNoAccess';
-import { defaultFeatures } from '~/types/FeatureFlag';
+import CustomErrorNoOrg from '~/components/errors/CustomErrorNoOrg';
+import CustomErrorNoUser from '~/components/errors/CustomErrorNoUser';
+import { footerLinks, novariMenu } from '~/components/Menu/MenuConfig';
 import { UserOrganization } from '~/components/Menu/UserOrganization';
-import { NovariFooter, NovariHeader } from 'novari-frontend-components';
-import { menuConfig, footerLinks } from '~/components/Menu/MenuConfig';
+import { defaultFeatures } from '~/types/FeatureFlag';
+import { IMeData } from '~/types/Me';
+import { IOrganisation } from '~/types/Organisation';
+import { IUserSession } from '~/types/Session';
+import { selectOrgCookie } from '~/utils/cookie';
 
-export const links: LinksFunction = () => {
-    return [{ rel: 'stylesheet', href: 'https://www.cdnfonts.com/brockmann.font' }];
-};
+import FeaturesApi from './api/FeaturesApi';
+import themeHref from './styles/novari-theme.css?url';
+import tailwindHref from './styles/tailwind.css?url';
+import { HeaderProperties } from './utils/headerProperties';
 
+export const links: LinksFunction = () => [
+    { rel: 'stylesheet', href: akselHref }, // Aksel first
+    { rel: 'stylesheet', href: tailwindHref }, // Tailwind next
+    { rel: 'stylesheet', href: themeHref }, // Your overrides last
+    // // (optional — check your real font URL)
+    // { rel: 'preconnect', href: 'https://fonts.cdnfonts.com' },
+    // { rel: 'stylesheet', href: 'https://fonts.cdnfonts.com/css/brockmann' },
+];
 // export const remix_cookie = createCookie('remix_cookie', {
 //     maxAge: 604_800, // one week
 // });
 
 // Initialize MSW based on environment
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let server: any;
 
-// For client-side mocking for tests
-if (import.meta.env.DEV && import.meta.env.VITE_MOCK_CYPRESS === 'true') {
-    console.log('RUNNING WITH MOCK ENVIRONMENT');
-    if (typeof window !== 'undefined') {
-        console.log('RUNNING WITH MOCK ENVIRONMENT IN BROWSER');
-        // Browser environment
-        const { worker } = await import('../cypress/mocks/browser');
-        await worker.start();
+async function initializeMSW() {
+    if (import.meta.env.DEV && import.meta.env.VITE_MOCK_CYPRESS === 'true') {
+        if (typeof window !== 'undefined') {
+            const { worker } = await import('../cypress/mocks/browser');
+            await worker.start({ onUnhandledRequest: 'bypass' });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (window as any).__mswReady = true;
+        } else {
+            const { server: nodeServer } = await import('../cypress/mocks/node');
+            server = nodeServer;
+            server.listen({ onUnhandledRequest: 'bypass' });
+        }
     } else {
-        console.log('RUNNING WITH MOCK ENVIRONMENT IN NODE');
-        // Node.js environment (server-side)
-        const { server: nodeServer } = await import('../cypress/mocks/node');
-        server = nodeServer;
-        server.listen();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if (typeof window !== 'undefined') (window as any).__mswReady = true;
     }
 }
+
+// Initialize MSW
+initializeMSW();
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     HeaderProperties.setProperties(request);
 
-    console.log('Header: ');
     const meData: IMeData = await MeApi.fetchMe();
     const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
     const featuresResponse = await FeaturesApi.fetchFeatures();
     const cookieHeader = request.headers.get('Cookie');
     let cookieValue = await selectOrgCookie.parse(cookieHeader);
 
-    logger.debug(`Cookie value: ${cookieValue}`);
-    logger.debug(`count Organisations from me fetch orgs: ${organisationsData.length}`);
-    logger.silly(`features: ${JSON.stringify(featuresResponse.data, null, 2)}`);
-
     let selectedOrganization = organisationsData.find((org) => org.name === cookieValue);
     if (!selectedOrganization) {
-        logger.debug(
-            `Cookie value "${cookieValue}" did not match any organization. Using the first organization.`
-        );
         selectedOrganization = organisationsData[0];
         cookieValue = null;
     }
@@ -90,10 +95,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         selectedOrganization,
         organizations: organisationsData,
         features: featuresResponse?.data || defaultFeatures,
+        selectedEnv: 'beta',
     };
 
     if (!cookieValue) {
-        logger.debug(`Creating a new cookie: ${selectedOrganization.name}`);
         const newCookieHeader = await selectOrgCookie.serialize(selectedOrganization.name);
         return data(
             { userSession },
@@ -137,6 +142,10 @@ export default function App() {
 
     const navigate = useNavigate();
 
+    function onLogin(): void {
+        throw new Error('Function not implemented.');
+    }
+
     return (
         <Page
             footer={
@@ -146,17 +155,19 @@ export default function App() {
                     </Page.Block>
                 </Box>
             }>
-            <Box background={'bg-default'} as="nav">
+            <Box background={'bg-default'} as="nav" data-cy="novari-header">
                 <NovariHeader
                     isLoggedIn={true}
                     // appName={'FINT Kunde Portal'}
-                    menu={[['Dashboard', '/'], ...menuConfig, ['Min profil', '/user']]}
+                    menu={novariMenu}
                     showLogoWithTitle={true}
                     displayName={userSession.meData.firstName || 'Logged In'}
                     onLogout={() =>
                         (window.location.href = 'https://idp.felleskomponent.no/nidp/app/logout')
                     }
-                    onMenuClick={(action) => navigate(action)}>
+                    onMenuClick={(action) => navigate(action)}
+                    appName={'FINT Kundeportal'}
+                    onLogin={onLogin}>
                     <UserOrganization userSession={userSession} />
                 </NovariHeader>
             </Box>
@@ -216,12 +227,10 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const actionType = formData.get('actionType') as string;
 
-    logger.debug('Inside action of root - setting a new org');
     if (actionType === 'UPDATE_SELECTED_ORGANIZATION') {
         const selectedOrganization = formData.get('selectedOrganization') as string;
 
         const newCookieHeader = await selectOrgCookie.serialize(selectedOrganization);
-        logger.debug(`adding a new cookie with org: ${selectedOrganization}`);
         return data(
             { revalidate: true },
             {

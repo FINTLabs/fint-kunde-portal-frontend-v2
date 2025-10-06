@@ -1,8 +1,10 @@
 // app/components/InternalPageHeader.tsx
-import React from 'react';
-import { Button, Heading, HelpText, Hide, HStack } from '@navikt/ds-react';
-import { helpData, HelpDataItem } from '~/routes/help/HelpData';
 import { PlusIcon } from '@navikt/aksel-icons';
+import { Button, Heading, HelpText, Hide, HStack } from '@navikt/ds-react';
+import React from 'react';
+
+import { helpData, HelpDataItem } from '~/routes/help/HelpData';
+
 
 interface LayoutHeaderProps {
     icon?: React.ElementType;
@@ -22,7 +24,7 @@ const InternalPageHeader = ({
     )?.description;
 
     return (
-        <HStack align={'center'} justify={'space-between'}>
+        <HStack align={'center'} justify={'space-between'} data-cy="internal-page-header">
             <HStack align="start" gap="2" className={'my-4 '}>
                 <Hide below="md">
                     {IconComponent && <IconComponent title="Header Icon" fontSize="2.5rem" />}

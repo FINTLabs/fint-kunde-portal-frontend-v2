@@ -15,10 +15,20 @@ Cypress.on('uncaught:exception', (err) => {
 
 describe('Resource Details Page Tests', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/', { failOnStatusCode: false });
-        cy.visit('http://localhost:3000/ressurser/udehenrik_fintlabs_no', {
-            failOnStatusCode: false,
-        });
+        // cy.visit('/ressurser/udehenrik_fintlabs_no', { failOnStatusCode: false }).then(() => {
+        //     cy.waitForAppReady();
+        // });
+        cy.visit('/ressurser/udehenrik_fintlabs_no', { failOnStatusCode: false });
+        // cy.reload();
+        cy.waitForAppReady();
+    });
+
+    // Cleanup after each test - log test results
+    afterEach(function () {
+        if (this.currentTest && this.currentTest.state === 'failed') {
+            console.log('Test failed:', this.currentTest.title);
+            return;
+        }
     });
 
     it('should display the correct name', () => {
@@ -34,7 +44,7 @@ describe('Resource Details Page Tests', () => {
         // cy.get('[data-cy="detail-name"]').should('contain', 'jennifer-another-test');
         cy.get('[data-cy="details-Name"]').should('contain', 'udehenrik_fintlabs_no');
         cy.get('[data-cy="details-resourceId"]').should('contain', 'udehenrik.fintlabs.no');
-        cy.get('[data-cy="details-edit-Beskrivelse"]').should('contain', 'yes');
+        cy.get('[data-cy="details-Beskrivelse"]').should('contain', 'yes');
     });
 
     it('should display the two tabs', () => {
@@ -48,7 +58,6 @@ describe('Resource Details Page Tests', () => {
         cy.get('[data-cy="details-edit-Beskrivelse"]').type('testing new description');
         cy.get('[data-cy="save-button"]').click();
 
-        cy.wait(3000);
         cy.get('.navds-alert').should('exist');
     });
 });

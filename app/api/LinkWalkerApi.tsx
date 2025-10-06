@@ -1,6 +1,8 @@
+import log4js from 'log4js';
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
-import logger from '~/utils/logger';
+
 import { HeaderProperties } from '~/utils/headerProperties';
+const logger = log4js.getLogger();
 
 const API_URL = process.env.LINKWALKER_API_URL || '';
 const linkWalkerManager = new NovariApiManager({

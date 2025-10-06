@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { Box, Button, HStack, VStack, TextField } from '@navikt/ds-react';
+import { useState } from 'react';
 
 interface AddTjenesteFormProps {
     onCancel: () => void;

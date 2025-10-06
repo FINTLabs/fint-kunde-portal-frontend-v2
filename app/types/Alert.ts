@@ -1,10 +1,10 @@
-interface IAlertType {
+export interface IAlertType {
     id: number;
     message: string;
     header?: string;
     variant: string;
 }
 
-interface AlertStackProps {
+export interface IAlertStackProps {
     alerts: IAlertType[];
 }

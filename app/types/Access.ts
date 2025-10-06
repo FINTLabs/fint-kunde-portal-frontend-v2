@@ -39,3 +39,13 @@ export interface IAccessComponent {
     enabled: boolean;
     isWriteable: boolean;
 }
+
+export interface IComponentAccess {
+    enabled: boolean;
+}
+
+export interface IUpdateResource {
+    enabled: boolean;
+    isWriteable: boolean;
+    readingOption: string;
+}

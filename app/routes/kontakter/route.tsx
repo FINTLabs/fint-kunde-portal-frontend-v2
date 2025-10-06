@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { ActionFunction, MetaFunction, useFetcher, useLoaderData } from 'react-router';
 import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import ContactTable from '~/routes/kontakter/ContactTable';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { useState } from 'react';
+import { ActionFunction, MetaFunction, useFetcher, useLoaderData } from 'react-router';
+
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { handleContactsAction } from '~/routes/kontakter/actions';
 import ContactModal from '~/routes/kontakter/ContactModal';
+import ContactTable from '~/routes/kontakter/ContactTable';
 import { IContact } from '~/types/Contact';
 import { IRole } from '~/types/Role';
-import { handleContactsAction } from '~/routes/kontakter/actions';
+
 import { loader } from './loaders';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 
 interface IPageLoaderData {
     technicalContacts?: IContact[] | string;
@@ -39,8 +41,7 @@ export default function Index() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<IContact>;
 
-    const { alertState, handleCloseItem } = useAlerts<IContact>([], actionData, fetcher.state);
-    console.log('actionData', alertState);
+    const { alertState } = useAlerts<IContact>([], actionData, fetcher.state);
     const handleFormSubmit = (formData: FormData) => {
         fetcher.submit(formData, { method: 'post', action: '/kontakter' });
     };
@@ -55,7 +56,8 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <HStack align={'center'} justify={'space-between'}>
+
+            <HStack align="center" justify="space-between">
                 <VStack>
                     <InternalPageHeader
                         title={'Kontakter'}
@@ -65,6 +67,7 @@ export default function Index() {
                 </VStack>
                 <VStack>
                     <Button
+                        data-cy="add-contact-button"
                         size="small"
                         onClick={() => setIsModalOpen(true)}
                         icon={<PlusIcon aria-hidden />}>
@@ -77,7 +80,7 @@ export default function Index() {
             <NovariSnackbar
                 items={alertState}
                 position={'top-right'}
-                onCloseItem={handleCloseItem}
+                // onCloseItem={handleCloseItem}
             />
 
             <Box className="m-10">
@@ -103,6 +106,7 @@ export default function Index() {
                 />
             )}
             <ContactModal
+                data-cy="contact-modal"
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 contacts={allContacts || []}

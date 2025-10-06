@@ -1,6 +1,6 @@
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export async function handleContactsAction(request: Request) {
     const formData = await request.formData();
@@ -12,7 +12,6 @@ export async function handleContactsAction(request: Request) {
     const selectedOrg = await getSelectedOrganization(request);
     let response;
 
-    console.log('actionType', actionType);
     switch (actionType) {
         case 'ADD_TECHNICAL_CONTACT':
             response = await ContactApi.addTechnicalContact(contactNin, selectedOrg);

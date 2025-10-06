@@ -101,4 +101,29 @@ export const helpData: HelpDataItem[] = [
             'over behandlinger eller legge til en ny behandling. For å legge til en ny tjeneste eller ' +
             'behandlingsgrunnlag, klikker du på plussikonet.',
     },
+    {
+        id: 'status',
+        title: 'Status Dashboard',
+        shortDescription: 'Oversikt over status for alle FINT-komponenter og tjenester.',
+        description:
+            'Status Dashboard gir deg en oversikt over status for alle FINT-komponenter og tjenester. ' +
+            'Her kan du se hvilke komponenter som fungerer normalt, og hvilke som kan ha problemer. ' +
+            'Dashboardet viser også informasjon om siste aktivitet og tilgjengelighet for hver komponent.',
+    },
+    {
+        id: 'statusKontrakter',
+        title: 'Status Kontrakter',
+        shortDescription: 'Detaljert oversikt over adaptere og deres status.',
+        description:
+            'Status Kontrakter viser en detaljert oversikt over alle adaptere og deres nåværende status. ' +
+            'Her kan du se heartbeat-status, synkronisering og siste overføring for hver kontrakt.',
+    },
+    {
+        id: 'statusHendelser',
+        title: 'Status Hendelser',
+        shortDescription: 'Oversikt over hendelser og deres status i FINT-systemet.',
+        description:
+            'Status Hendelser gir deg en oversikt over alle hendelser som har skjedd i FINT-systemet. ' +
+            'Her kan du se operasjoner, ressurser, status og når hendelsene ble overført.',
+    },
 ];

@@ -1,20 +1,28 @@
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { useFetcher, useLoaderData, useParams } from 'react-router';
+import { Alert, Box, HGrid, VStack } from '@navikt/ds-react';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import {
+    ActionFunctionArgs,
+    MetaFunction,
+    useFetcher,
+    useLoaderData,
+    useParams,
+} from 'react-router';
+
+import { BackButton } from '~/components/shared/BackButton';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { IAsset } from '~/types/Asset';
-import { Alert, Box, HGrid, VStack } from '@navikt/ds-react';
-import { IClient } from '~/types/Clients';
-import { ActionFunctionArgs, MetaFunction } from 'react-router';
-import React from 'react';
-import { IAdapter } from '~/types/Adapter';
-import { DetailsView } from '~/routes/ressurser.$id/DetailsView';
-import { BackButton } from '~/components/shared/BackButton';
-import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
 import { handleAssetAction } from '~/routes/ressurser.$id/actions';
-import { loader } from './loaders';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { DetailsView } from '~/routes/ressurser.$id/DetailsView';
+import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
 import { IResource } from '~/types/Access';
+import { IAdapter } from '~/types/Adapter';
+import { IAsset } from '~/types/Asset';
+import { IClient } from '~/types/Clients';
+
+import { loader } from './loaders';
+
+
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Ressurser' }, { name: 'description', content: 'Liste over ressurser' }];
@@ -36,7 +44,7 @@ export default function Index() {
     const { adapters, asset, clients, assets } = useLoaderData<LoaderData>();
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<IResource>;
-    const { alertState, handleCloseItem } = useAlerts<IResource>([], actionData, fetcher.state);
+    const { alertState } = useAlerts<IResource>([], actionData, fetcher.state);
 
     const breadcrumbs = [
         { name: 'Ressurser', link: '/ressurser' },
@@ -98,7 +106,7 @@ export default function Index() {
             <NovariSnackbar
                 items={alertState}
                 position={'top-right'}
-                onCloseItem={handleCloseItem}
+                // onCloseItem={handleCloseItem}
             />
 
             {!asset ? (

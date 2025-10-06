@@ -1,8 +1,9 @@
 import { LoaderFunctionArgs } from 'react-router';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import AssetApi from '~/api/AssetApi';
+
 import AdapterAPI from '~/api/AdapterApi';
+import AssetApi from '~/api/AssetApi';
 import ClientApi from '~/api/ClientApi';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const id = params.id || '';

@@ -1,7 +1,6 @@
 import { Checkbox, Heading, HStack } from '@navikt/ds-react';
-import React from 'react';
+
 import { IField } from '~/types/Access';
-import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 
 interface FieldListProps {
     onToggleField: (fieldName: string, enabled: boolean) => void;
@@ -30,8 +29,6 @@ const FieldList = ({ onToggleField, fieldList }: FieldListProps) => {
                         </Checkbox>
                     </HStack>
                 ))}
-
-            <Divider />
 
             <Heading size="medium">Relasjoner</Heading>
             {fieldList

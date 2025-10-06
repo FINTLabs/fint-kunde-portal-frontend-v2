@@ -15,10 +15,9 @@ Cypress.on('uncaught:exception', (err) => {
 
 describe('hendelseslogg Details Page Tests', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/', { failOnStatusCode: false });
-        cy.visit('http://localhost:3000/hendelseslogg', {
-            failOnStatusCode: false,
-        });
+        cy.visit('/hendelseslogg', { failOnStatusCode: false });
+        // cy.reload();
+        cy.waitForAppReady();
     });
 
     it('should display the correct name', () => {

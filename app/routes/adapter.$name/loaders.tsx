@@ -1,8 +1,9 @@
 import type { LoaderFunctionArgs } from 'react-router';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
+
+import AccessApi from '~/api/AccessApi';
 import AdapterApi from '~/api/AdapterApi';
 import FeaturesApi from '~/api/FeaturesApi';
-import AccessApi from '~/api/AccessApi';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const orgName = await getSelectedOrganization(request);
@@ -17,10 +18,11 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
     const [accessResponse, componentListResponse] = hasAccessControl
         ? await Promise.all([
-              AccessApi.getClientorAdapterAccess(adapterName),
-              AccessApi.getClientorAdapterAccessComponents(adapterName),
+              AccessApi.getClientOrAdapterAccess(adapterName),
+              AccessApi.getClientOrAdapterAccessComponents(adapterName),
           ])
         : [null, null];
+    console.log('accessResponse', accessResponse);
 
     return Response.json({
         adapters: adaptersResponse.data,

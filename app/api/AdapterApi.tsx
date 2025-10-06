@@ -1,5 +1,6 @@
 import { NovariApiManager, ApiResponse } from 'novari-frontend-components';
-import { IPartialAdapter } from '~/types/Adapter';
+
+import { IAdapter, IPartialAdapter } from '~/types/Adapter';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
@@ -8,8 +9,8 @@ const adapterManager = new NovariApiManager({
 });
 
 class AdapterApi {
-    static async getAdapters(organisationName: string): Promise<ApiResponse<any>> {
-        return await adapterManager.call<any>({
+    static async getAdapters(organisationName: string): Promise<ApiResponse<IAdapter[]>> {
+        return await adapterManager.call<IAdapter[]>({
             method: 'GET',
             endpoint: `/api/adapters/${organisationName}`,
             functionName: 'getAdapters',
@@ -24,8 +25,8 @@ class AdapterApi {
     static async createAdapter(
         adapter: IPartialAdapter,
         organisationName: string
-    ): Promise<ApiResponse<any>> {
-        return await adapterManager.call<any>({
+    ): Promise<ApiResponse<IAdapter>> {
+        return await adapterManager.call<IAdapter>({
             method: 'POST',
             endpoint: `/api/adapters/${organisationName}`,
             functionName: 'createAdapter',
@@ -41,8 +42,8 @@ class AdapterApi {
     static async updateAdapter(
         adapter: IPartialAdapter,
         organisationName: string
-    ): Promise<ApiResponse<any>> {
-        return await adapterManager.call<any>({
+    ): Promise<ApiResponse<IAdapter>> {
+        return await adapterManager.call<IAdapter>({
             method: 'PUT',
             endpoint: `/api/adapters/${organisationName}/${adapter.name}`,
             functionName: 'updateAdapter',
@@ -60,7 +61,7 @@ class AdapterApi {
         adapterName: string,
         organisationName: string,
         updateType: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<IAdapter>> {
         const endpoint = `/api/components/organisation/${organisationName}/${componentName}/adapters/${adapterName}`;
         if (updateType === 'true') {
             return this.addComponentToAdapter(endpoint, adapterName);
@@ -72,8 +73,8 @@ class AdapterApi {
     private static async addComponentToAdapter(
         endpoint: string,
         adapterName: string
-    ): Promise<ApiResponse<any>> {
-        return await adapterManager.call<any>({
+    ): Promise<ApiResponse<IAdapter>> {
+        return await adapterManager.call<IAdapter>({
             method: 'PUT',
             endpoint,
             functionName: 'addComponentToAdapter',
@@ -89,8 +90,8 @@ class AdapterApi {
     private static async removeComponentFromAdapter(
         endpoint: string,
         adapterName: string
-    ): Promise<ApiResponse<any>> {
-        return await adapterManager.call<any>({
+    ): Promise<ApiResponse<IAdapter>> {
+        return await adapterManager.call<IAdapter>({
             method: 'DELETE',
             endpoint,
             functionName: 'removeComponentFromAdapter',
@@ -104,8 +105,11 @@ class AdapterApi {
         });
     }
 
-    static async deleteAdapter(name: string, organisationName: string): Promise<ApiResponse<any>> {
-        return await adapterManager.call<any>({
+    static async deleteAdapter(
+        name: string,
+        organisationName: string
+    ): Promise<ApiResponse<IAdapter>> {
+        return await adapterManager.call<IAdapter>({
             method: 'DELETE',
             endpoint: `/api/adapters/${organisationName}/${name}`,
             functionName: 'deleteAdapter',
@@ -137,8 +141,8 @@ class AdapterApi {
         adapterName: string,
         password: string,
         organisationName: string
-    ): Promise<ApiResponse<any>> {
-        return await adapterManager.call<any>({
+    ): Promise<ApiResponse<IAdapter>> {
+        return await adapterManager.call<IAdapter>({
             method: 'PUT',
             endpoint: `/api/adapters/${organisationName}/${adapterName}/password`,
             functionName: 'setPassword',

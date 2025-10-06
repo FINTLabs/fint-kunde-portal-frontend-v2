@@ -1,10 +1,10 @@
-import React from 'react';
 import { Box, Page } from '@navikt/ds-react';
+import { NovariFooter } from 'novari-frontend-components';
+import React from 'react';
 
 import '@navikt/ds-css';
 
 import { Logo } from '~/components/Menu/Logo';
-import { NovariFooter } from 'novari-frontend-components';
 import { footerLinks } from '~/components/Menu/MenuConfig';
 
 export function CustomErrorLayout({ children }: { children: React.ReactNode }) {

@@ -1,5 +1,5 @@
-import React from 'react';
 import { BodyShort, Box, Button, Heading, HGrid, Link, List, VStack } from '@navikt/ds-react';
+import React from 'react';
 
 interface CustomErrorPageProps {
     statusCode?: number;

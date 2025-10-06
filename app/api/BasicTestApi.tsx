@@ -1,9 +1,9 @@
-import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
-import logger from '~/utils/logger';
+import { NovariApiManager, ApiResponse } from 'novari-frontend-components';
+
 import type { IBasicTest } from '~/types/BasicTest';
 import { HeaderProperties } from '~/utils/headerProperties';
 
-const TEST_RUNNER_API_URL = process.env.TEST_RUNNER_API_URL || '';
+const TEST_RUNNER_API_URL = import.meta.env.VITE_TEST_RUNNER_API_URL || '';
 const testManager = new NovariApiManager({
     baseUrl: TEST_RUNNER_API_URL,
 });
@@ -17,7 +17,6 @@ class BasicTestApi {
         successMsg: string,
         errorMsg: string
     ): Promise<ApiResponse<T>> {
-        logger.debug(`Running ${path} test`, body.baseUrl);
 
         return await testManager.call<T>({
             method: 'POST',
@@ -37,14 +36,14 @@ class BasicTestApi {
         baseUrl: string,
         endpoint: string,
         clientName: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<IBasicTest>> {
         const testBody: IBasicTest = {
             baseUrl,
             endpoint,
             ...(clientName && { clientName }),
         };
 
-        return this.postTest<any>(
+        return this.postTest<IBasicTest>(
             orgName,
             'run',
             'runBasicTest',
@@ -59,14 +58,14 @@ class BasicTestApi {
         baseUrl: string,
         endpoint: string,
         clientName: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<IBasicTest>> {
         const testBody: IBasicTest = {
             baseUrl,
             endpoint,
             ...(clientName && { clientName }),
         };
 
-        return this.postTest<any>(
+        return this.postTest<IBasicTest>(
             orgName,
             'health',
             'runHealthTest',

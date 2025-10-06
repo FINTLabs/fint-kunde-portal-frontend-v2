@@ -1,0 +1,8 @@
+[
+  {
+    "name": "string",
+    "enabled": true,
+    "writeable": true,
+    "readingOption": "SINGULAR"
+  }
+]

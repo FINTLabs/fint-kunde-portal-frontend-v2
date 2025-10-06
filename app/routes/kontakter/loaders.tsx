@@ -1,7 +1,8 @@
 import { LoaderFunction } from 'react-router';
+
 import ContactApi from '~/api/ContactApi';
-import RoleApi from '~/api/RolesApi';
 import OrganisationApi from '~/api/OrganisationApi';
+import RoleApi from '~/api/RolesApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -21,11 +22,11 @@ export const loader: LoaderFunction = async ({ request }) => {
     const legalContactResponse = await OrganisationApi.getLegalContact(selectedOrg);
     const allContactsResponse = await ContactApi.getAllContacts();
 
-    return Response.json({
+    return {
         technicalContacts,
         rolesData: rolesDataResponse.data,
         legalContact: legalContactResponse.data,
         allContacts: allContactsResponse.data,
         selectedOrg,
-    });
+    };
 };

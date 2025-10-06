@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Name of field",
+    "enabled": true,
+    "mustContain": "string",
+    "relation": true
+  }
+]

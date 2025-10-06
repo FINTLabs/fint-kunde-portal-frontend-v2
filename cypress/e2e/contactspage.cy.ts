@@ -14,8 +14,12 @@ Cypress.on('uncaught:exception', (err) => {
 });
 describe('Contacts Page Tests', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/', { failOnStatusCode: false });
-        cy.visit('http://localhost:3000/kontakter', { failOnStatusCode: false });
+        // cy.visit('/kontakter', { failOnStatusCode: false }).then(() => {
+        //     cy.waitForAppReady();
+        // });
+        cy.visit('/kontakter', { failOnStatusCode: false });
+        // cy.reload();
+        cy.waitForAppReady();
     });
 
     // Breadcrumbs Tests
@@ -44,7 +48,6 @@ describe('Contacts Page Tests', () => {
         cy.get(
             ':nth-child(1) > .navds-table__toggle-expand-cell > .navds-table__toggle-expand-button'
         ).click();
-        cy.wait(1500);
     });
 
     // Modal Interaction Tests
@@ -54,7 +57,6 @@ describe('Contacts Page Tests', () => {
         cy.get('.navds-modal').should('be.visible');
 
         cy.get('[data-cy="contact-text-filter"]').type('Spiff');
-        cy.wait(1500);
 
         cy.get('[width="1"] > .navds-button').click();
         cy.get('.navds-alert').should('exist');

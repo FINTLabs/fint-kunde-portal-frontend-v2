@@ -2,11 +2,12 @@
 
 import { BriefcaseIcon, ComponentIcon } from '@navikt/aksel-icons';
 import { Tabs } from '@navikt/ds-react';
-import DetailsTable from '~/routes/ressurser.$id/DetailsTable';
 import React from 'react';
+
+import DetailsTable from '~/routes/ressurser.$id/DetailsTable';
+import { IAdapter } from '~/types/Adapter';
 import { IAsset } from '~/types/Asset';
 import { IClient } from '~/types/Clients';
-import { IAdapter } from '~/types/Adapter';
 
 interface TabsComponentProps {
     asset: IAsset;
