@@ -7,3 +7,4 @@ node_modules
 .react-router/
 cypress/videos
 cypress/screenshots
+.vscode
