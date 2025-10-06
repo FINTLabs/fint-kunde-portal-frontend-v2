@@ -3,7 +3,7 @@ import { NovariApiManager, ApiResponse } from 'novari-frontend-components';
 import type { IBasicTest } from '~/types/BasicTest';
 import { HeaderProperties } from '~/utils/headerProperties';
 
-const TEST_RUNNER_API_URL = import.meta.env.VITE_TEST_RUNNER_API_URL || '';
+const TEST_RUNNER_API_URL = process.env.TEST_RUNNER_API_URL || '';
 const testManager = new NovariApiManager({
     baseUrl: TEST_RUNNER_API_URL,
 });
@@ -17,7 +17,6 @@ class BasicTestApi {
         successMsg: string,
         errorMsg: string
     ): Promise<ApiResponse<T>> {
-
         return await testManager.call<T>({
             method: 'POST',
             endpoint: `/test-runner/${orgName}/${path}`,

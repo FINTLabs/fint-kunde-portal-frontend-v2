@@ -4,26 +4,6 @@ import { ApiResponse, NovariApiManager } from 'novari-frontend-components';
 import { IAccess, IComponentAccess, IDomainPackages, IField, IResource } from '~/types/Access';
 import { HeaderProperties } from '~/utils/headerProperties';
 
-// Configure Log4js
-const logLevel = import.meta.env.VITE_LOG_LEVEL || 'debug';
-log4js.configure({
-    appenders: {
-        console: {
-            type: 'console',
-            layout: {
-                type: 'pattern',
-                pattern: '[%d{yyyy-MM-dd hh:mm:ss}] [%p] %m',
-            },
-        },
-    },
-    categories: {
-        default: {
-            appenders: ['console'],
-            level: logLevel,
-        },
-    },
-});
-
 const logger = log4js.getLogger();
 
 const ACCESS_URL = process.env.ACCESS_URL || '';
