@@ -12,17 +12,29 @@ const apiManager = new NovariApiManager({
 
 class MeApi {
     static async fetchMe(): Promise<IMeData> {
-        console.log('Fetching me data:', HeaderProperties.getXnin());
+        const xninValue = HeaderProperties.getXnin();
+        console.log('=== fetchMe DEBUG START ===');
+        console.log('x-nin value from HeaderProperties:', xninValue);
+        console.log('x-nin value type:', typeof xninValue);
+        console.log('x-nin value length:', xninValue?.length);
+        console.log('x-nin is empty?:', !xninValue);
+        
+        const headers = {
+            'x-nin': xninValue,
+        };
+        console.log('Headers object being passed:', JSON.stringify(headers));
+        
         const res = await apiManager.call<IMeData>({
             method: 'GET',
             endpoint: '/api/me',
             functionName: 'fetchMe',
             customErrorMessage: 'Kunne ikke hente brukerdata',
             customSuccessMessage: 'Brukerdata hentet',
-            additionalHeaders: {
-                'x-nin': HeaderProperties.getXnin(),
-            },
+            additionalHeaders: headers,
         });
+
+        console.log('Response received:', res);
+        console.log('=== fetchMe DEBUG END ===');
 
         if (res.success && res.data) {
             return res.data;
