@@ -13,10 +13,6 @@ export default defineConfig({
             port: 3000,
         },
     },
-    define: {
-        'process.env.PUBLIC_API_URL': JSON.stringify(process.env.API_URL),
-        'process.env.API_URL': JSON.stringify(process.env.API_URL || 'http://localhost:8080'),
-        'process.env.ACCESS_URL': JSON.stringify(process.env.CONSENT_API_URL || 'http://localhost:8081'),
-        'process.env.LINKWALKER_API_URL': JSON.stringify(process.env.LINKWALKER_API_URL || 'http://localhost:8082'),
-    },
+    // Removed 'define' - we'll access environment variables directly at runtime
+    // This allows the Kubernetes env vars to work correctly
 });
