@@ -15,8 +15,9 @@ Cypress.on('uncaught:exception', (err) => {
 
 describe('Components Page Tests', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/', { failOnStatusCode: false });
-        cy.visit('http://localhost:3000/komponenter', { failOnStatusCode: false });
+        cy.visit('/komponenter', { failOnStatusCode: false });
+        // cy.reload();
+        cy.waitForAppReady();
     });
 
     // Header Tests

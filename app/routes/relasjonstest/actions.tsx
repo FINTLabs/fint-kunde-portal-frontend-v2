@@ -1,6 +1,10 @@
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import log4js from 'log4js';
+
 import LinkWalkerApi from '~/api/LinkWalkerApi';
-import logger from '~/utils/logger';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
+
+// import logger from '~/utils/logger';
+const logger = log4js.getLogger();
 
 export async function handleRelationTestAction({ request }: { request: Request }) {
     const orgName = await getSelectedOrganization(request);

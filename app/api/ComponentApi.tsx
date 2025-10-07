@@ -1,6 +1,6 @@
-import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
-import type { IClient } from '~/types/Clients'; // If you have a specific Component type, swap this.
-import logger from '~/utils/logger';
+import { type ApiResponse, NovariApiManager } from 'novari-frontend-components';
+
+import { IComponent } from '~/types';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
@@ -9,8 +9,8 @@ const componentManager = new NovariApiManager({
 });
 
 class ComponentApi {
-    static async getAllComponents(): Promise<ApiResponse<IClient[]>> {
-        const res = await componentManager.call<IClient[]>({
+    static async getAllComponents(): Promise<ApiResponse<IComponent[]>> {
+        return await componentManager.call<IComponent[]>({
             method: 'GET',
             endpoint: '/api/components',
             functionName: 'getAllComponents',
@@ -20,14 +20,9 @@ class ComponentApi {
                 'x-nin': HeaderProperties.getXnin(),
             },
         });
-
-        logger.silly(
-            `FULL LIST OF COMPONENTS: ${JSON.stringify(res.data?.map((c) => c.name) ?? [], null, 2)}`
-        );
-        return res;
     }
 
-    static async getComponentById(componentName: string): Promise<IClient | null> {
+    static async getComponentById(componentName: string): Promise<IComponent | null> {
         const componentsResponse = await this.getAllComponents();
 
         if (!componentsResponse.success) {
@@ -43,8 +38,8 @@ class ComponentApi {
 
     static async getOrganisationComponents(
         organisationName: string
-    ): Promise<ApiResponse<IClient[]>> {
-        const res = await componentManager.call<IClient[]>({
+    ): Promise<ApiResponse<IComponent[]>> {
+        return await componentManager.call<IComponent[]>({
             method: 'GET',
             endpoint: `/api/components/organisation/${organisationName}`,
             functionName: 'getOrganisationComponents',
@@ -54,11 +49,6 @@ class ComponentApi {
                 'x-nin': HeaderProperties.getXnin(),
             },
         });
-
-        logger.silly(
-            `LIST OF COMPONENTS FOR ORG: ${JSON.stringify(res.data?.map((c) => c.name) ?? [], null, 2)}`
-        );
-        return res;
     }
 }
 

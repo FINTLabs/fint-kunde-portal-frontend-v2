@@ -1,6 +1,6 @@
-import { FeatureFlags } from '~/types/FeatureFlag';
-import { IOrganisation } from '~/types/Organisation';
+import { IFeatureFlag } from '~/types/FeatureFlag';
 import { IMeData } from '~/types/Me';
+import { IOrganisation } from '~/types/Organisation';
 //
 // export interface SessionOrganisation {
 //     name: string;
@@ -12,5 +12,6 @@ export interface IUserSession {
     organizationCount: number;
     selectedOrganization: IOrganisation;
     organizations: IOrganisation[];
-    features: FeatureFlags;
+    features: IFeatureFlag;
+    selectedEnv: 'beta' | 'api' | 'alpha';
 }

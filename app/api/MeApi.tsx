@@ -1,5 +1,5 @@
-import logger from '~/utils/logger';
 import { NovariApiManager } from 'novari-frontend-components';
+
 import type { IMeData } from '~/types/Me';
 import type { IOrganisation } from '~/types/Organisation';
 import { HeaderProperties } from '~/utils/headerProperties';
@@ -28,7 +28,6 @@ class MeApi {
         }
 
         if (res.status === 404) {
-            logger.debug(`ME 404 RESPONSE ${res.message}`);
             // translate 404 -> 406 for the app
             throw new Response('Du har ikke opprettet bruker.', {
                 status: 406,
@@ -36,7 +35,6 @@ class MeApi {
             });
         }
 
-        logger.debug(`Error in ME ${res.message}`);
         throw new Response('Ingen tilkobling til server', {
             status: 500,
             statusText: 'Ingen brukerdata funnet',
@@ -59,7 +57,6 @@ class MeApi {
             return res.data;
         }
 
-        logger.debug('No organisations found for user');
         throw new Response('Du er ikke tilknyttet en organisasjon', {
             status: 401,
             statusText: 'Du er ikke tilknyttet en organisasjon',

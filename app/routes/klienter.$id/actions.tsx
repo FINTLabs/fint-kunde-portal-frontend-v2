@@ -1,13 +1,15 @@
 import { redirect } from 'react-router';
+
+import AccessApi from '~/api/AccessApi';
 import ClientApi from '~/api/ClientApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import AccessApi from '~/api/AccessApi';
 
-export async function handleClientAction({ request, params }: { request: Request; params: any }) {
+export async function handleClientAction({ request }: { request: Request }) {
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);
-    const clientName = params.id || '';
+    const clientName = formData.get('clientId') as string;
     const actionType = formData.get('actionType') as string;
+    let secretResponse = null;
 
     switch (actionType) {
         case 'ADD_ACCESS':
@@ -52,7 +54,7 @@ export async function handleClientAction({ request, params }: { request: Request
             );
 
         case 'GET_SECRET':
-            const secretResponse = await ClientApi.getOpenIdSecret(
+            secretResponse = await ClientApi.getOpenIdSecret(
                 formData.get('entityName') as string,
                 orgName
             );

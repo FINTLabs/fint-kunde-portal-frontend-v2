@@ -11,7 +11,7 @@ export interface IComponent {
     openData: boolean;
     common: boolean;
     dockerImage?: string | null; // Optional resource
-    componentSizes?: any | null; // Optional resource
+    componentSizes?: string | null; // Optional resource
     cacheDisabledFor: string[];
     inProduction: boolean;
     inBeta: boolean;

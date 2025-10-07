@@ -1,6 +1,6 @@
+import { Checkbox, FormSummary, HStack } from '@navikt/ds-react';
 import React from 'react';
-import { Button, Checkbox, FormSummary, HStack } from '@navikt/ds-react';
-import { ChevronRightCircleIcon } from '@navikt/aksel-icons';
+
 import { IAccessComponent } from '~/types/Access';
 
 interface ConfigClassTableProps {
@@ -10,7 +10,7 @@ interface ConfigClassTableProps {
     onToggle: (formData: FormData) => void;
 }
 
-const ResourcesList = ({ accessComponent, title, onSelected, onToggle }: ConfigClassTableProps) => {
+const ResourcesList = ({ accessComponent, title, onToggle }: ConfigClassTableProps) => {
     function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value;
         const isChecked = e.target.checked;
@@ -38,17 +38,19 @@ const ResourcesList = ({ accessComponent, title, onSelected, onToggle }: ConfigC
                                         onChange={(e) => handleCheckbox(e)}
                                         value={x.name}
                                         key={x.name + i}
-                                        checked={x.enabled}>
+                                        checked={x.enabled}
+                                        data-cy={`resource-toggle-${x.name}`}>
                                         {x.name}
                                     </Checkbox>
 
-                                    <Button
-                                        icon={<ChevronRightCircleIcon title="Rediger" />}
-                                        onClick={() => onSelected(x.name)}
-                                        variant={'tertiary'}
-                                        size={'xsmall'}
-                                        disabled={!x.enabled}
-                                    />
+                                    {/*<Button*/}
+                                    {/*    icon={<ChevronRightCircleIcon title="Rediger" />}*/}
+                                    {/*    onClick={() => onSelected(x.name)}*/}
+                                    {/*    variant={'tertiary'}*/}
+                                    {/*    size={'xsmall'}*/}
+                                    {/*    disabled={!x.enabled}*/}
+                                    {/*    data-cy={`resource-details-${x.name}`}*/}
+                                    {/*/>*/}
 
                                     {/*<ChevronRightCircleIcon*/}
                                     {/*    title="Vis detaljer"*/}

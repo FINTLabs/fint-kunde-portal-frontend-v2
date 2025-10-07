@@ -1,5 +1,5 @@
-import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
-import logger from '~/utils/logger';
+import { NovariApiManager, ApiResponse } from 'novari-frontend-components';
+
 import type { IBasicTest } from '~/types/BasicTest';
 import { HeaderProperties } from '~/utils/headerProperties';
 
@@ -17,8 +17,6 @@ class BasicTestApi {
         successMsg: string,
         errorMsg: string
     ): Promise<ApiResponse<T>> {
-        logger.debug(`Running ${path} test`, body.baseUrl);
-
         return await testManager.call<T>({
             method: 'POST',
             endpoint: `/test-runner/${orgName}/${path}`,
@@ -37,14 +35,14 @@ class BasicTestApi {
         baseUrl: string,
         endpoint: string,
         clientName: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<IBasicTest>> {
         const testBody: IBasicTest = {
             baseUrl,
             endpoint,
             ...(clientName && { clientName }),
         };
 
-        return this.postTest<any>(
+        return this.postTest<IBasicTest>(
             orgName,
             'run',
             'runBasicTest',
@@ -59,14 +57,14 @@ class BasicTestApi {
         baseUrl: string,
         endpoint: string,
         clientName: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<IBasicTest>> {
         const testBody: IBasicTest = {
             baseUrl,
             endpoint,
             ...(clientName && { clientName }),
         };
 
-        return this.postTest<any>(
+        return this.postTest<IBasicTest>(
             orgName,
             'health',
             'runHealthTest',

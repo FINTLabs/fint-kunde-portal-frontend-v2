@@ -1,4 +1,6 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
+
+import { IRole } from '~/types';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
@@ -7,8 +9,8 @@ const roleManager = new NovariApiManager({
 });
 
 export default class RoleApi {
-    static async getRoles(): Promise<ApiResponse<any>> {
-        return await roleManager.call<any>({
+    static async getRoles(): Promise<ApiResponse<IRole[]>> {
+        return await roleManager.call<IRole[]>({
             method: 'GET',
             endpoint: '/api/role',
             functionName: 'getRoles',
@@ -25,8 +27,8 @@ export default class RoleApi {
         contactNin: string,
         roleId: string,
         roleName: string
-    ): Promise<ApiResponse<any>> {
-        return await roleManager.call<any>({
+    ): Promise<ApiResponse<IRole>> {
+        return await roleManager.call<IRole>({
             method: 'PUT',
             endpoint: `/api/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`,
             functionName: 'addRole',
@@ -43,8 +45,8 @@ export default class RoleApi {
         contactNin: string,
         roleId: string,
         roleName: string
-    ): Promise<ApiResponse<any>> {
-        return await roleManager.call<any>({
+    ): Promise<ApiResponse<IRole>> {
+        return await roleManager.call<IRole>({
             method: 'DELETE',
             endpoint: `/api/organisations/${orgName}/contacts/roles/${contactNin}/${roleId}`,
             functionName: 'removeRole',

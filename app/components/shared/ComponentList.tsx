@@ -1,7 +1,8 @@
-import React from 'react';
-import { Box, Button, Checkbox, FormSummary, HGrid, HStack } from '@navikt/ds-react';
 import { ChevronRightCircleIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
+import { Box, Button, Checkbox, FormSummary, HGrid, HStack } from '@navikt/ds-react';
+import React from 'react';
 import { useNavigate } from 'react-router';
+
 import { IDomainPackages } from '~/types/Access';
 
 interface ComponentListProps {
@@ -50,7 +51,8 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                         <HStack
                                             key={`${domain}-${i}`}
                                             justify={'space-between'}
-                                            align={'center'}>
+                                            align={'center'}
+                                            data-cy={`component-toggle-${item.packageName}`}>
                                             <Checkbox
                                                 // onClick={() =>
                                                 //     onToggle(
@@ -75,6 +77,7 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                                 variant={'tertiary'}
                                                 size={'xsmall'}
                                                 disabled={!item.access}
+                                                data-cy={`component-details-${item.packageName}`}
                                             />
                                         </HStack>
                                     ))}

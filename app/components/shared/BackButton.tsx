@@ -1,6 +1,6 @@
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export function BackButton({ to, className }: { to: string; className?: string }) {
     const navigate = useNavigate();

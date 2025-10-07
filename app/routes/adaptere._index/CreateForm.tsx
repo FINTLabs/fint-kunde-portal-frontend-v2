@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { Box, Button, HStack, Textarea, TextField, FormSummary } from '@navikt/ds-react';
+import React, { useState } from 'react';
 
 type Errors = { name?: string; description?: string; detailedInfo?: string };
 

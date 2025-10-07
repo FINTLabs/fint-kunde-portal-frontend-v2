@@ -1,18 +1,19 @@
-import type { ActionFunctionArgs, MetaFunction } from 'react-router';
-import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { TerminalIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Heading, Loader, VStack } from '@navikt/ds-react';
-import { useFetcher, useLoaderData } from 'react-router';
-import { IComponent } from '~/types/Component';
-import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
-import { IClient } from '~/types/Clients';
-import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
-import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
-import React from 'react';
-import { handleBasicTestAction } from '~/routes/basistest/actions';
-import { loader } from './loaders';
 import { ApiResponse } from 'novari-frontend-components';
+import React from 'react';
+import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
+
+import Breadcrumbs from '~/components/shared/breadcrumbs';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { handleBasicTestAction } from '~/routes/basistest/actions';
+import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
+import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
+import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
+import { IClient } from '~/types/Clients';
+import { IComponent } from '~/types/Component';
+
+import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Basis Test' }, { name: 'description', content: 'Run Basis Test' }];

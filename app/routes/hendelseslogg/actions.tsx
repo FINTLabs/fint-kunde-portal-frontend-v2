@@ -1,5 +1,5 @@
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import LogApi from '~/api/LogApi';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export async function handleLogAction({ request }: { request: Request }) {
     const formData = await request.formData();
@@ -10,7 +10,7 @@ export async function handleLogAction({ request }: { request: Request }) {
 
     const orgName = await getSelectedOrganization(request);
 
-    let response = await LogApi.getLogs(environment, orgName, componentName, resource, action);
+    const response = await LogApi.getLogs(environment, orgName, componentName, resource, action);
 
     if (!response.success || response.data.length === 0) {
         return {

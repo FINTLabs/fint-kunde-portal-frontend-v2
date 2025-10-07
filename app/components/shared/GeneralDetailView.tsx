@@ -1,8 +1,9 @@
-import { BodyShort, Button, Heading, HStack, Label, Loader, VStack } from '@navikt/ds-react';
-import React, { useState } from 'react';
-import { EditableTextField } from '~/components/shared/EditableTextField';
 import { FloppydiskIcon, PencilIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Heading, HStack, Label, Loader, VStack } from '@navikt/ds-react';
+import { useState } from 'react';
+
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
+import { EditableTextField } from '~/components/shared/EditableTextField';
 
 interface IGeneralResource {
     name: string;
@@ -76,15 +77,20 @@ export function GeneralDetailView({ resource, onUpdate, onDelete }: GeneralDetai
                     isEditing={isEditing}
                     setValue={setResourceNote}
                 />
-                <HStack className="w-full" align={'end'} justify={'end'} gap="2">
+                <HStack
+                    className="w-full"
+                    align={'end'}
+                    justify={'end'}
+                    gap="2"
+                    data-cy="edit-button">
                     {/* Save Button */}
                     <Button
                         disabled={resource.managed}
                         icon={
                             isEditing ? (
-                                <FloppydiskIcon title="Lagre" data-cy="save-button" />
+                                <FloppydiskIcon title="Lagre" />
                             ) : (
-                                <PencilIcon title="Rediger" data-cy="edit-button" />
+                                <PencilIcon title="Rediger" />
                             )
                         }
                         variant="tertiary"

@@ -1,5 +1,6 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
-import { IPartialAsset } from '~/types/Asset';
+
+import { IAsset, IPartialAsset } from '~/types/Asset';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
@@ -8,8 +9,8 @@ const assetManager = new NovariApiManager({
 });
 
 class AssetApi {
-    static async getAllAssets(organisationName: string): Promise<ApiResponse<any>> {
-        return await assetManager.call<any>({
+    static async getAllAssets(organisationName: string): Promise<ApiResponse<IAsset[]>> {
+        return await assetManager.call<IAsset[]>({
             method: 'GET',
             endpoint: `/api/assets/${organisationName}/`,
             functionName: 'getAllAssets',
@@ -24,8 +25,8 @@ class AssetApi {
     static async createAsset(
         asset: IPartialAsset,
         organisationName: string
-    ): Promise<ApiResponse<any>> {
-        return await assetManager.call<any>({
+    ): Promise<ApiResponse<IAsset>> {
+        return await assetManager.call<IAsset>({
             method: 'POST',
             endpoint: `/api/assets/${organisationName}/`,
             functionName: 'createAsset',
@@ -41,8 +42,8 @@ class AssetApi {
     static async updateAsset(
         asset: IPartialAsset,
         organisationName: string
-    ): Promise<ApiResponse<any>> {
-        return await assetManager.call<any>({
+    ): Promise<ApiResponse<IAsset>> {
+        return await assetManager.call<IAsset>({
             method: 'PUT',
             endpoint: `/api/assets/${organisationName}/${asset.name}`,
             functionName: 'updateAsset',
@@ -55,8 +56,8 @@ class AssetApi {
         });
     }
 
-    static async deleteAsset(name: string, organisationName: string): Promise<ApiResponse<any>> {
-        return await assetManager.call<any>({
+    static async deleteAsset(name: string, organisationName: string): Promise<ApiResponse<void>> {
+        return await assetManager.call<void>({
             method: 'DELETE',
             endpoint: `/api/assets/${organisationName}/${name}`,
             functionName: 'deleteAsset',
@@ -68,8 +69,8 @@ class AssetApi {
         });
     }
 
-    static async getAssetById(orgName: string, assetId: string): Promise<ApiResponse<any>> {
-        return await assetManager.call<any>({
+    static async getAssetById(orgName: string, assetId: string): Promise<ApiResponse<IAsset>> {
+        return await assetManager.call<IAsset>({
             method: 'GET',
             endpoint: `/api/assets/${orgName}/${assetId}`,
             functionName: 'getAssetById',
@@ -86,7 +87,7 @@ class AssetApi {
         assetName: string,
         organisationName: string,
         updateType: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<void>> {
         const endpoint = `/api/assets/${organisationName}/${assetName}/adapters/${adapterName}`;
         return updateType === 'add'
             ? this.addAdapterToAsset(endpoint, adapterName)
@@ -96,8 +97,8 @@ class AssetApi {
     private static async addAdapterToAsset(
         endpoint: string,
         adapterName: string
-    ): Promise<ApiResponse<any>> {
-        return await assetManager.call<any>({
+    ): Promise<ApiResponse<void>> {
+        return await assetManager.call<void>({
             method: 'PUT',
             endpoint,
             functionName: 'addAdapterToAsset',
@@ -113,8 +114,8 @@ class AssetApi {
     private static async removeAdapterFromAsset(
         endpoint: string,
         adapterName: string
-    ): Promise<ApiResponse<any>> {
-        return await assetManager.call<any>({
+    ): Promise<ApiResponse<void>> {
+        return await assetManager.call<void>({
             method: 'DELETE',
             endpoint,
             functionName: 'removeAdapterFromAsset',
@@ -133,12 +134,11 @@ class AssetApi {
         organisationName: string,
         updateType: string,
         primaryAssetName: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<void>> {
         const baseEndpoint = `/api/assets/${organisationName}`;
 
         if (updateType === 'add') {
-            // add client to asset
-            return await assetManager.call<any>({
+            return await assetManager.call<void>({
                 method: 'PUT',
                 endpoint: `${baseEndpoint}/${assetName}/clients/${clientName}`,
                 functionName: 'addClientToAsset',
@@ -151,8 +151,7 @@ class AssetApi {
             });
         }
 
-        // remove then add to primary
-        const removeResponse = await assetManager.call<any>({
+        const removeResponse = await assetManager.call<void>({
             method: 'DELETE',
             endpoint: `${baseEndpoint}/${assetName}/clients/${clientName}`,
             functionName: 'removeClientFromAsset',
@@ -165,7 +164,7 @@ class AssetApi {
             return removeResponse;
         }
 
-        const addPrimaryResponse = await assetManager.call<any>({
+        const addPrimaryResponse = await assetManager.call<void>({
             method: 'PUT',
             endpoint: `${baseEndpoint}/${primaryAssetName}/clients/${clientName}`,
             functionName: 'addClientToPrimaryAsset',
@@ -181,7 +180,6 @@ class AssetApi {
             return addPrimaryResponse;
         }
 
-        // Compose a failure response mirroring your previous behavior
         return {
             success: false,
             message: `Klient '${clientName}' ble fjernet, men kunne ikke settes som primærressurs '${primaryAssetName}'.`,
@@ -189,9 +187,8 @@ class AssetApi {
         };
     }
 
-    static async addClientToAsset(url: string, clientName: string): Promise<ApiResponse<any>> {
-        // Kept for backward compatibility if you still call it elsewhere.
-        return await assetManager.call<any>({
+    static async addClientToAsset(url: string, clientName: string): Promise<ApiResponse<void>> {
+        return await assetManager.call<void>({
             method: 'PUT',
             endpoint: url.replace(API_URL || '', ''), // convert to relative if old callers pass full URL
             functionName: 'addClientToAsset',
@@ -204,9 +201,11 @@ class AssetApi {
         });
     }
 
-    static async removeClientFromAsset(url: string, clientName: string): Promise<ApiResponse<any>> {
-        // Kept for backward compatibility if you still call it elsewhere.
-        return await assetManager.call<any>({
+    static async removeClientFromAsset(
+        url: string,
+        clientName: string
+    ): Promise<ApiResponse<void>> {
+        return await assetManager.call<void>({
             method: 'DELETE',
             endpoint: url.replace(API_URL || '', ''), // convert to relative
             functionName: 'removeClientFromAsset',

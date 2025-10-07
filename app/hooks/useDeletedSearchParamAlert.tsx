@@ -1,6 +1,6 @@
+import { NovariSnackbarItem } from 'novari-frontend-components';
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router';
-import { NovariSnackbarItem } from 'novari-frontend-components';
 
 export function useDeletedSearchParamAlert({
     label,
@@ -28,5 +28,5 @@ export function useDeletedSearchParamAlert({
             searchParams.delete('deleted');
             setSearchParams(searchParams, { replace: true });
         }
-    }, [deleteName]);
+    }, [deleteName, label, searchParams, setAlertState, setSearchParams]);
 }

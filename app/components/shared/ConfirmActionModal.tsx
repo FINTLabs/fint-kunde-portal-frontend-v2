@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Modal, Heading } from '@navikt/ds-react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { Button, Modal, Heading } from '@navikt/ds-react';
+import React, { useState } from 'react';
 
 interface ConfirmActionProps {
     buttonText?: string;
@@ -74,6 +74,7 @@ function ConfirmAction({
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
+                        data-cy="confirm-button"
                         type="submit"
                         variant="danger"
                         onClick={() => handleClose(true)}

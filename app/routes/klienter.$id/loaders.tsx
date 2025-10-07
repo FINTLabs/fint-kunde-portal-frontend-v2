@@ -1,8 +1,9 @@
 import { ActionFunctionArgs } from 'react-router';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
+
+import AccessApi from '~/api/AccessApi';
 import ClientApi from '~/api/ClientApi';
 import FeaturesApi from '~/api/FeaturesApi';
-import AccessApi from '~/api/AccessApi';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
@@ -14,8 +15,8 @@ export async function loader({ request, params }: ActionFunctionArgs) {
 
     const [accessResponse, componentListResponse] = hasAccessControl
         ? await Promise.all([
-              AccessApi.getClientorAdapterAccess(id),
-              AccessApi.getClientorAdapterAccessComponents(id),
+              AccessApi.getClientOrAdapterAccess(id),
+              AccessApi.getClientOrAdapterAccessComponents(id),
           ])
         : [null, null];
 

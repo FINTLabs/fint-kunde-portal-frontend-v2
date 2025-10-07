@@ -1,7 +1,7 @@
 import { LoaderFunction } from 'react-router';
 
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import LinkWalkerApi from '~/api/LinkWalkerApi';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 //TODO: This needs to be testing in a live environment, made changes to error Response that i am not sure work correctly?
 //TODO: This can be done better i am sure
@@ -43,7 +43,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
             },
         });
     } catch (error) {
-        console.error('Error fetching Excel file:', error);
+        // console.error('Error fetching Excel file:', error);
         throw Response.json({ error: 'Failed to fetch Excel file' }, { status: 500 });
     }
 };

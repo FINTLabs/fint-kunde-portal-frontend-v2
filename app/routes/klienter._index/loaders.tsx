@@ -1,6 +1,7 @@
 import { LoaderFunction } from 'react-router';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
+
 import ClientApi from '~/api/ClientApi';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const orgName = await getSelectedOrganization(request);

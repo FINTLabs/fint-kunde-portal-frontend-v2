@@ -1,6 +1,7 @@
 // components/EndpointTable.tsx
-import React from 'react';
 import { Table } from '@navikt/ds-react';
+import React from 'react';
+
 import { IComponent } from '~/types/Component';
 
 interface EndpointTableProps {

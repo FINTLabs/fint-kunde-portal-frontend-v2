@@ -15,10 +15,9 @@ Cypress.on('uncaught:exception', (err) => {
 
 describe('relasjonstest Details Page Tests', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/', { failOnStatusCode: false });
-        cy.visit('http://localhost:3000/relasjonstest', {
-            failOnStatusCode: false,
-        });
+        cy.visit('/relasjonstest', { failOnStatusCode: false });
+        // cy.reload();
+        cy.waitForAppReady();
     });
 
     it('should display the correct name', () => {

@@ -1,5 +1,6 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
-import type { IBehandling } from '~/types/Consent';
+
+import type { IBehandling, ITjeneste, IPersonopplysning, IBehandlingsgrunnlag } from '~/types/Consent';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const CONSENT_API_URL = process.env.CONSENT_API_URL || '';
@@ -21,8 +22,8 @@ class ConsentApi {
         });
     }
 
-    static async getTjenste(orgName: string): Promise<ApiResponse<any>> {
-        return await consentManager.call<any>({
+    static async getTjenste(orgName: string): Promise<ApiResponse<ITjeneste>> {
+        return await consentManager.call<ITjeneste>({
             method: 'GET',
             endpoint: `/consent-admin/tjeneste/${orgName}`,
             functionName: 'getTjenste',
@@ -34,8 +35,8 @@ class ConsentApi {
         });
     }
 
-    static async getPersonopplysning(): Promise<ApiResponse<any>> {
-        return await consentManager.call<any>({
+    static async getPersonopplysning(): Promise<ApiResponse<IPersonopplysning>> {
+        return await consentManager.call<IPersonopplysning>({
             method: 'GET',
             endpoint: `/consent-admin/personopplysning`,
             functionName: 'getPersonopplysning',
@@ -47,8 +48,8 @@ class ConsentApi {
         });
     }
 
-    static async getBehandlingsgrunnlag(): Promise<ApiResponse<any>> {
-        return await consentManager.call<any>({
+    static async getBehandlingsgrunnlag(): Promise<ApiResponse<IBehandlingsgrunnlag>> {
+        return await consentManager.call<IBehandlingsgrunnlag>({
             method: 'GET',
             endpoint: `/consent-admin/behandlingsgrunnlag`,
             functionName: 'getBehandlingsgrunnlag',
@@ -64,13 +65,13 @@ class ConsentApi {
         orgName: string,
         behandlingId: string,
         isActive: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<IBehandling>> {
         const successMessage =
             isActive === 'true'
                 ? `Behandlingen ${behandlingId} i organisasjonen ${orgName} er nå aktiv.`
                 : `Behandlingen ${behandlingId} i organisasjonen ${orgName} er nå inaktiv.`;
 
-        return await consentManager.call<any>({
+        return await consentManager.call<IBehandling>({
             method: 'PUT',
             endpoint: `/consent-admin/behandling/${orgName}/${behandlingId}/${isActive}`,
             functionName: 'setActive',
@@ -89,8 +90,8 @@ class ConsentApi {
         personalDataId: string,
         description: string,
         orgName: string
-    ): Promise<ApiResponse<any>> {
-        return await consentManager.call<any>({
+    ): Promise<ApiResponse<IBehandling>> {
+        return await consentManager.call<IBehandling>({
             method: 'POST',
             endpoint: `/consent-admin/behandling/${orgName}`,
             functionName: 'createPolicy',
@@ -109,8 +110,8 @@ class ConsentApi {
         });
     }
 
-    static async createService(serviceName: string, orgName: string): Promise<ApiResponse<any>> {
-        return await consentManager.call<any>({
+    static async createService(serviceName: string, orgName: string): Promise<ApiResponse<ITjeneste>> {
+        return await consentManager.call<ITjeneste>({
             method: 'POST',
             endpoint: `/consent-admin/tjeneste/${orgName}`,
             functionName: 'createService',

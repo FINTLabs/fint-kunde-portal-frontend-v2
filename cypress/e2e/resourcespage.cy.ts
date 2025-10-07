@@ -15,8 +15,12 @@ Cypress.on('uncaught:exception', (err) => {
 
 describe('Resources Page Tests', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/', { failOnStatusCode: false });
-        cy.visit('http://localhost:3000/ressurser', { failOnStatusCode: false });
+        // cy.visit('/ressurser', { failOnStatusCode: false }).then(() => {
+        //     cy.waitForAppReady();
+        // });
+        cy.visit('/ressurser', { failOnStatusCode: false });
+        // cy.reload();
+        cy.waitForAppReady();
     });
 
     // Header Tests
@@ -28,8 +32,8 @@ describe('Resources Page Tests', () => {
     it('should allow creating a new ', () => {
         cy.get('[data-cy="add-button"]').click();
         cy.get('[data-cy="create-form"]').should('be.visible');
-        cy.get('[data-cy="input-name"]').type('New Adapter');
-        cy.get('[data-cy="input-description"]').type('This is a test adapter.');
+        cy.get('[data-cy="input-name"]').type('New Resource');
+        cy.get('[data-cy="input-description"]').type('This is a test resource.');
         cy.get('[data-cy="save-button"]').click();
 
         //cy.url().should('include', '/adapter/New Adapter');

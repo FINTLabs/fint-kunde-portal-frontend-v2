@@ -1,26 +1,10 @@
-import { LoaderFunction } from 'react-router';
-import { redirect } from 'react-router';
-// import { getSession, destroySession } from '~/utils/session';
+import { LoaderFunction, redirect } from 'react-router';
 
-export const loader: LoaderFunction = async ({ request }) => {
-    // const session = await getSession(request.headers.get('Cookie'));
-    // const userSession = session.get('user-session') || session.get('user_session');
-    //
-    // console.log('LOGOUT ORG TO SAVE:', userSession.persistentOrg);
+export const loader: LoaderFunction = async () => {
 
-    // Save the selected organization in a persistent cookie before destroying the session
-    // let selectedOrganizationCookie = '';
-    // if (session && session.selectedOrganization) {
-    //     selectedOrganizationCookie = `selectedOrganization=${userSession.selectedOrganization.orgNumber}; Path=/; HttpOnly; Max-Age=31536000`; // 1 year expiration
-    // }
-
-    // const cookieHeader = await destroySession(session);
 
     return redirect('https://idp.felleskomponent.no/nidp/app/logout', {
-        // headers: {
-        //     // 'Set-Cookie': `${cookieHeader}, ${selectedOrganizationCookie}`,
-        //     'Set-Cookie': `${cookieHeader}`,
-        // },
+
     });
 };
 

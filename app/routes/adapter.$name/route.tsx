@@ -1,19 +1,25 @@
-import { type ActionFunctionArgs, type MetaFunction } from 'react-router';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { LayersIcon } from '@navikt/aksel-icons';
-import { useFetcher, useLoaderData, useParams } from 'react-router';
-import { Environment, IAccess, IDomainPackages } from '~/types/Access';
-import React, { useState } from 'react';
 import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid } from '@navikt/ds-react';
-import { BackButton } from '~/components/shared/BackButton';
-import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import { AuthTable } from '~/components/shared/AuthTable';
-import ComponentList from '~/components/shared/ComponentList';
-import { IAdapter } from '~/types/Adapter';
-import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
-import { handleAdapterAction } from '~/routes/adapter.$name/actions';
 import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { useState } from 'react';
+import {
+    type ActionFunctionArgs,
+    type MetaFunction,
+    useFetcher,
+    useLoaderData,
+    useParams,
+} from 'react-router';
+
+import { AuthTable } from '~/components/shared/AuthTable';
+import { BackButton } from '~/components/shared/BackButton';
+import Breadcrumbs from '~/components/shared/breadcrumbs';
+import ComponentList from '~/components/shared/ComponentList';
+import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { handleAdapterAction } from '~/routes/adapter.$name/actions';
+import { Environment, IAccess, IDomainPackages } from '~/types/Access';
+import { IAdapter } from '~/types/Adapter';
+
 import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
@@ -48,7 +54,7 @@ export default function Index() {
     const filteredAdapters = adapters.filter((a) => a.name === name);
     const adapter = filteredAdapters.length > 0 ? filteredAdapters[0] : null;
     const displayName = adapter?.name.split('@')[0] || '';
-    const { alertState, handleCloseItem } = useAlerts<IAdapter>([], actionData, fetcher.state);
+    const { alertState } = useAlerts<IAdapter>([], actionData, fetcher.state);
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -101,7 +107,7 @@ export default function Index() {
         formData.append('username', adapter?.name as string);
         fetcher.submit(formData, { method: 'post' });
     }
-
+    // console.log('access', access);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -112,15 +118,14 @@ export default function Index() {
             />
 
             <NovariSnackbar
+                data-cy="snackbar"
                 items={alertState}
                 position={'top-right'}
-                onCloseItem={handleCloseItem}
+                // onCloseItem={handleCloseItem}
             />
 
             {!adapter ? (
-                <Alert variant="warning">
-                    Det finnes ingen adapter ved navn ${name} i listen over adaptere
-                </Alert>
+                <Alert variant="warning">Adapter finnes ikke</Alert>
             ) : (
                 <HGrid gap="2" align={'start'}>
                     <BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />
@@ -136,8 +141,8 @@ export default function Index() {
                         />
 
                         {!adapter.managed && (
-                            <>
-                                <Divider className="pt-3" />
+                            // <Box className={'border-b-1 border-gray-200 pb-5'}>
+                            <Box>
                                 <Heading size={'medium'}>Autentisering</Heading>
                                 <AuthTable
                                     entity={adapter}
@@ -148,9 +153,8 @@ export default function Index() {
                                         ? { clientSecret: actionData.clientSecret }
                                         : {})}
                                 />
-                            </>
+                            </Box>
                         )}
-                        <Divider className="pt-3" />
 
                         {hasAccessControl && access ? (
                             <>
@@ -160,7 +164,8 @@ export default function Index() {
                                     <CheckboxGroup
                                         legend="Environment:"
                                         onChange={(vals) => handleEnvChange(vals as Environment[])}
-                                        defaultValue={selectedEnvs}>
+                                        defaultValue={selectedEnvs}
+                                        data-cy={'env-checkbox-group'}>
                                         <HGrid gap="6" columns={4}>
                                             <Checkbox value="api">API</Checkbox>
                                             <Checkbox value="beta">Beta</Checkbox>
@@ -181,10 +186,11 @@ export default function Index() {
                                 <Alert variant="warning">
                                     Tilgangsstyring for komponenter er ikke aktivert
                                 </Alert>
-                                <Divider className="pt-3" />
-                                <Button onClick={addAccess} size={'small'} loading={isLoading}>
-                                    Sett opp tilgangsstyring
-                                </Button>
+                                <Box className={'pt-5'}>
+                                    <Button onClick={addAccess} size={'small'} loading={isLoading}>
+                                        Sett opp tilgangsstyring
+                                    </Button>
+                                </Box>
                             </Box>
                         )}
                     </Box>

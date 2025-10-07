@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { Button, CopyButton, Table } from '@navikt/ds-react';
 import { ArrowsSquarepathIcon, BagdeIcon, DownloadIcon, ThumbUpIcon } from '@navikt/aksel-icons';
-import { IClient } from '~/types/Clients';
+import { Button, CopyButton, Table } from '@navikt/ds-react';
+import { useState } from 'react';
+
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
 import { IAdapter } from '~/types/Adapter';
+import { IClient } from '~/types/Clients';
 
 type AuthEntity = IAdapter | IClient;
 

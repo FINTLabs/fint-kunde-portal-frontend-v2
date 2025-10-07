@@ -1,16 +1,18 @@
-import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
-import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, HStack } from '@navikt/ds-react';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import React, { useEffect } from 'react';
+import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
+
+import Breadcrumbs from '~/components/shared/breadcrumbs';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { handleRelationTestAction } from '~/routes/relasjonstest/actions';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
-import { handleRelationTestAction } from '~/routes/relasjonstest/actions';
-import { loader } from './loaders';
-import { IComponent } from '~/types/Component';
 import { IClient } from '~/types/Clients';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { IComponent } from '~/types/Component';
+
+import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Relasjonstest' }, { name: 'description', content: 'Relasjonstest' }];
@@ -33,7 +35,7 @@ export default function Index() {
 
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<any>;
-    const { alertState, handleCloseItem } = useAlerts<any>([], actionData);
+    const { alertState } = useAlerts<any>([], actionData);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -89,7 +91,7 @@ export default function Index() {
             <NovariSnackbar
                 items={alertState}
                 position={'top-right'}
-                onCloseItem={handleCloseItem}
+                // onCloseItem={handleCloseItem}
             />
             {fetcher.state !== 'submitting' && !actionData && (
                 <Alert variant="warning">

@@ -1,10 +1,11 @@
+import { PersonIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box, HGrid, Label, Tag } from '@navikt/ds-react';
 import { useLoaderData } from 'react-router';
+
 import MeApi from '~/api/MeApi';
-import { PersonIcon } from '@navikt/aksel-icons';
+import { BackButton } from '~/components/shared/BackButton';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { BackButton } from '~/components/shared/BackButton';
 import { IMeData } from '~/types/Me';
 
 type LoaderData = {
@@ -12,7 +13,7 @@ type LoaderData = {
     features: Record<string, boolean>;
 };
 
-export let loader = async () => {
+export const loader = async () => {
     const user = await MeApi.fetchMe();
     return Response.json({
         user: user,
@@ -30,7 +31,12 @@ export default function Index() {
 
             <HGrid gap="2" align={'start'}>
                 <BackButton to={`/`} className="relative h-12 w-12 top-2 right-14" />
-                <Box padding="6" borderRadius="large" shadow="small" className="relative bottom-12">
+                <Box
+                    padding="6"
+                    borderRadius="large"
+                    shadow="small"
+                    className="relative bottom-12"
+                    background-color="var(--a-surface-default)">
                     <div>
                         {/* <Breadcrumbs breadcrumbs={breadcrumbs} /> */}
                         {/*<InternalPageHeader title={'User Information'} icon={PersonIcon} />*/}

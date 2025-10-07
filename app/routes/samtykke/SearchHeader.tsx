@@ -1,5 +1,4 @@
 import { InternalHeader, Search, Spacer, Switch } from '@navikt/ds-react';
-import React from 'react';
 
 const SearchHeader = () => {
     return (
@@ -14,6 +13,7 @@ const SearchHeader = () => {
                     size="small"
                     variant="simple"
                     placeholder="Filtrer på tjenste"
+                    data-cy="search-input"
                 />
             </form>
             <Spacer />

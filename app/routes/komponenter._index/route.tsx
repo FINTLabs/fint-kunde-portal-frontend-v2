@@ -1,14 +1,15 @@
-import { ActionFunctionArgs, MetaFunction } from 'react-router';
 import { ComponentIcon } from '@navikt/aksel-icons';
-import { useFetcher, useLoaderData } from 'react-router';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
+
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { handleComponentIndexAction } from '~/routes/komponenter._index/actions';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import { IComponent } from '~/types/Component';
-import React from 'react';
-import { handleComponentIndexAction } from '~/routes/komponenter._index/actions';
+
 import { loader } from './loaders';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Komponenter' }, { name: 'description', content: 'Liste over komponenter' }];
@@ -23,7 +24,7 @@ export default function Index() {
     const { components, orgName } = useLoaderData<{ components: IComponent[]; orgName: string }>();
     const fetcher = useFetcher<ApiResponse<IComponent>>();
     const actionData = fetcher.data as ApiResponse<IComponent>;
-    const { alertState, handleCloseItem } = useAlerts<IComponent>([], actionData, fetcher.state);
+    const { alertState } = useAlerts<IComponent>([], actionData, fetcher.state);
     const selectedComponents = components
         .filter((component) => component.organisations.some((org) => org.includes(orgName)))
         .map((component) => component.name);
@@ -39,7 +40,7 @@ export default function Index() {
             <NovariSnackbar
                 items={alertState}
                 position={'top-right'}
-                onCloseItem={handleCloseItem}
+                // onCloseItem={handleCloseItem}
             />
 
             <ComponentsTable

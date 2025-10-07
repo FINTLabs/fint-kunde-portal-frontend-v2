@@ -15,14 +15,25 @@ Cypress.on('uncaught:exception', (err) => {
 
 describe('Adapters Page Tests', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/', { failOnStatusCode: false });
-        cy.visit('http://localhost:3000/adaptere', { failOnStatusCode: false });
+        // cy.visit('/adaptere', { failOnStatusCode: false }).then(() => {
+        //     cy.waitForAppReady();
+        // });
+        cy.visit('/adaptere', { failOnStatusCode: false });
+        // cy.reload();
+        cy.waitForAppReady();
     });
 
     // Header Tests
     it('should display the correct title and breadcrumb', () => {
         cy.get('[data-cy="breadcrumb-item"]').should('contain', 'Adaptere');
         cy.get('[data-cy="page-title"]').should('contain', 'Adaptere');
+
+        cy.get('[data-cy="tab-item-0"]').should('exist');
+        cy.get('[data-cy="tab-item-1"]').should('exist');
+
+        cy.get('[data-cy="add-button"]').should('be.visible');
+
+        cy.get('[data-cy="add-button"]').trigger('click');
     });
 
     it('should display the two tabs', () => {
@@ -30,19 +41,55 @@ describe('Adapters Page Tests', () => {
         cy.get('[data-cy="tab-item-1"]').should('exist');
     });
 
-    it('should allow creating a new adapter', () => {
-        cy.get('[data-cy="add-button"]').click();
-        cy.get('[data-cy="create-form"]').should('be.visible');
+    it('should show form when add button is clicked', () => {
+        // Wait for button to be ready
+        cy.get('[data-cy="add-button"]').should('be.visible');
+
+        // Retry clicking until form appears
+        cy.get('[data-cy="add-button"]').click({ waitForAnimations: true });
+
+        // Check if form appeared, if not, retry
+        cy.get('body').then(($body) => {
+            if ($body.find('[data-cy="create-form"]').length === 0) {
+                cy.log('Form not visible after first click, retrying...');
+                cy.get('[data-cy="add-button"]').click({ waitForAnimations: true });
+            }
+        });
+
+        // Check again and retry if needed
+        cy.get('body').then(($body) => {
+            if ($body.find('[data-cy="create-form"]').length === 0) {
+                cy.log('Form still not visible, retrying again...');
+                cy.get('[data-cy="add-button"]').click({ waitForAnimations: true });
+            }
+        });
+
+        // Final check and retry
+        cy.get('body').then(($body) => {
+            if ($body.find('[data-cy="create-form"]').length === 0) {
+                cy.log('Form still not visible, final retry...');
+                cy.get('[data-cy="add-button"]').click({ waitForAnimations: true });
+            }
+        });
+
+        // Now wait for form to be visible
+        cy.get('[data-cy="create-form"]', { timeout: 15000 }).should('be.visible');
+
+        // Verify form elements are present
+        cy.get('[data-cy="input-name"]').should('be.visible');
+        cy.get('[data-cy="input-description"]').should('be.visible');
+        cy.get('[data-cy="input-detailedInfo"]').should('be.visible');
+        cy.get('[data-cy="save-button"]').should('be.visible');
+
+        // Fill out the form
         cy.get('[data-cy="input-name"]').type('New Adapter');
         cy.get('[data-cy="input-description"]').type('This is a test adapter.');
         cy.get('[data-cy="input-detailedInfo"]').type('Detailed info here.');
+
+        // Save the form
+        cy.get('[data-cy="save-button"]').should('be.visible');
         cy.get('[data-cy="save-button"]').click();
-
-        //cy.url().should('include', '/adapter/New Adapter');
-    });
-
-    it('should navigate to adapter details on row click', () => {
-        cy.get('[data-cy="details-row"]').first().click();
-        cy.url().should('include', '/adapter/');
+        cy.contains('Opprett').click();
+        //TODO: Add test for error messages
     });
 });

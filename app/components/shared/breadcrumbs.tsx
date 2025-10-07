@@ -1,5 +1,5 @@
-import { Link, useLocation } from 'react-router';
 import { ChevronRightIcon, HouseIcon } from '@navikt/aksel-icons';
+import { Link, useLocation } from 'react-router';
 
 interface BreadcrumbItem {
     name: string;
@@ -31,7 +31,7 @@ export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
     ));
 
     return (
-        <div className="flex items-center align-center p-3">
+        <div className="flex items-center align-center p-3" data-cy="breadcrumbs">
             <Link to={homeLink} style={linkStyle} className="!flex !items-start">
                 <HouseIcon title="dashboard" className="mt-[1.5px] " />
                 <span className="">{'Dashboard'}</span>

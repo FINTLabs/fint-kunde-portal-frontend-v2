@@ -1,5 +1,5 @@
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import OrganisationApi from '~/api/OrganisationApi';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export async function handleComponentIndexAction({ request }: { request: Request }) {
     const formData = await request.formData();

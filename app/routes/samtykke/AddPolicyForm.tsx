@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
 import { Box, Button, HStack, VStack, TextField, Select } from '@navikt/ds-react';
+import { useState } from 'react';
+
 import { IPersonopplysning, IBehandlingsgrunnlag, ITjeneste } from '~/types/Consent';
 
 interface AddConsentFormProps {

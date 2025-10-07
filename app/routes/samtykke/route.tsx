@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
 import { PassportIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, HStack, VStack } from '@navikt/ds-react';
+import { ApiResponse } from 'novari-frontend-components';
+import { useEffect, useState } from 'react';
+import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
+
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import ServiceTable from '~/routes/samtykke/ServiceTable';
-import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
-import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
+import { handleConsentAction } from '~/routes/samtykke/actions';
 import AddPolicyForm from '~/routes/samtykke/AddPolicyForm';
 import AddServiceForm from '~/routes/samtykke/AddServiceForm';
-import { handleConsentAction } from '~/routes/samtykke/actions';
+import ServiceTable from '~/routes/samtykke/ServiceTable';
+import { IBehandling, IBehandlingsgrunnlag, IPersonopplysning, ITjeneste } from '~/types/Consent';
+
 import { loader } from './loaders';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Samtykke' }, { name: 'description', content: 'Samtykke' }];
@@ -25,9 +28,9 @@ export default function Index() {
     const [showAddServiceForm, setShowAddServiceForm] = useState(false);
     const breadcrumbs = [{ name: 'Samtykke', link: '/samtykke' }];
 
-    const fetcher = useFetcher<ApiResponse<any>>();
-    const actionData = fetcher.data as ApiResponse<any>;
-    const { alertState, handleCloseItem } = useAlerts<any>([], actionData, fetcher.state);
+    const fetcher = useFetcher<ApiResponse<never>>();
+    // const actionData = fetcher.data as ApiResponse<any>;
+    // const { alertState } = useAlerts<never>([], actionData, fetcher.state);
 
     const { policies, services, personalDataList, foundations, error } = useLoaderData<{
         policies: IBehandling[];
@@ -84,11 +87,11 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <NovariSnackbar
-                items={alertState}
-                position={'top-right'}
-                onCloseItem={handleCloseItem}
-            />
+            {/*<NovariSnackbar*/}
+            {/*    items={alertState}*/}
+            {/*    position={'top-right'}*/}
+            {/*    // onCloseItem={handleCloseItem}*/}
+            {/*/>*/}
 
             <HStack align={'center'} justify={'space-between'}>
                 <VStack>

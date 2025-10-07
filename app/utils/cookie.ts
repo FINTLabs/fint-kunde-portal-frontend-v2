@@ -1,4 +1,3 @@
-// utils/cookies.js
 import { createCookie } from 'react-router'; // or "@remix-run/cloudflare"
 
 export const selectOrgCookie = createCookie('organisation', {

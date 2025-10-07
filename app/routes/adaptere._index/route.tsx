@@ -1,3 +1,7 @@
+import { LayersIcon } from '@navikt/aksel-icons';
+import { Alert, Search } from '@navikt/ds-react';
+import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { useEffect, useState } from 'react';
 import {
     ActionFunctionArgs,
     type MetaFunction,
@@ -5,18 +9,16 @@ import {
     useLoaderData,
     useNavigate,
 } from 'react-router';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
-import { LayersIcon } from '@navikt/aksel-icons';
-import { Alert, Search } from '@navikt/ds-react';
+
+import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { CustomTabs } from '~/components/shared/CustomTabs';
-import React, { useEffect, useState } from 'react';
+import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { useDeletedSearchParamAlert } from '~/hooks/useDeletedSearchParamAlert';
+import { handleAdapterIndexAction } from '~/routes/adaptere._index/actions';
 import AdapterCreateForm from '~/routes/adaptere._index/CreateForm';
 import { IAdapter } from '~/types/Adapter';
-import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { handleAdapterIndexAction } from '~/routes/adaptere._index/actions';
+
 import { loader } from './loaders';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
-import { useDeletedSearchParamAlert } from '~/hooks/useDeletedSearchParamAlert';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Adaptere' }, { name: 'description', content: 'Liste over adaptere' }];
@@ -40,7 +42,7 @@ export default function Index() {
     //
     // const [searchParams, setSearchParams] = useSearchParams();
     // const deleteName = searchParams.get('deleted');
-    const { alertState, setAlertState, handleCloseItem } = useAlerts<IAdapter>([], actionData);
+    const { alertState, setAlertState } = useAlerts<IAdapter>([], actionData);
 
     useDeletedSearchParamAlert({
         label: 'Adapter',
@@ -96,7 +98,7 @@ export default function Index() {
                     <NovariSnackbar
                         items={alertState}
                         position={'top-right'}
-                        onCloseItem={handleCloseItem}
+                        // onCloseItem={handleCloseItem}
                     />
 
                     <Search
@@ -107,13 +109,14 @@ export default function Index() {
                         onChange={(value: string) => handleSearch(value)}
                         placeholder="Søk etter navn eller beskrivelse"
                         className={'pb-6'}
+                        data-cy="search-input"
                     />
 
                     {adapters && adapters.length === 0 && (
                         <Alert variant="warning">Ingen adaptere</Alert>
                     )}
 
-                    {filteredAdapter && (
+                    {filteredAdapter && filteredAdapter.length > 0 && (
                         <CustomTabs
                             items={filteredAdapter}
                             showDetails={showDetails}

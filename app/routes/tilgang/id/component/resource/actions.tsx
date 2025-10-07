@@ -3,6 +3,8 @@ import AccessApi from '~/api/AccessApi';
 export async function handleFieldAccessAction({ request }: { request: Request }) {
     const formData = await request.formData();
     const actionType = formData.get('actionType');
+    const isWriteable = formData.get('isWriteable') === 'true';
+    const readingOption = formData.get('readingOption') as string;
 
     switch (actionType) {
         case 'ENABLE_FIELD':
@@ -23,8 +25,6 @@ export async function handleFieldAccessAction({ request }: { request: Request })
             );
 
         case 'SET_IS_WRITEABLE':
-            const isWriteable = formData.get('isWriteable') === 'true';
-
             return await AccessApi.updateResource(
                 formData.get('username') as string,
                 formData.get('componentName') as string,
@@ -32,8 +32,6 @@ export async function handleFieldAccessAction({ request }: { request: Request })
                 { isWriteable: isWriteable }
             );
         case 'SET_READING_OPTION':
-            const readingOption = formData.get('readingOption') as string;
-
             return await AccessApi.updateResource(
                 formData.get('username') as string,
                 formData.get('componentName') as string,

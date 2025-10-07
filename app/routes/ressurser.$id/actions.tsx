@@ -1,18 +1,21 @@
 import { redirect } from 'react-router';
-import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import AssetApi from '~/api/AssetApi';
 
-export async function handleAssetAction({ request, params }: { request: Request; params: any }) {
+import AssetApi from '~/api/AssetApi';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
+
+export async function handleAssetAction({ request }: { request: Request }) {
     const formData = await request.formData();
     const actionType = formData.get('actionType');
+    const assetName = formData.get('assetName') as string;
+    const assetId = formData.get('assetId') as string;
     const orgName = await getSelectedOrganization(request);
-    const name = params.id || '';
+    let deleteResponse = null;
 
     switch (actionType) {
         case 'CREATE':
             return await AssetApi.createAsset(
                 {
-                    name,
+                    name: assetId,
                     description: formData.get('assetDescription') as string,
                 },
                 orgName
@@ -21,7 +24,7 @@ export async function handleAssetAction({ request, params }: { request: Request;
         case 'UPDATE':
             return await AssetApi.updateAsset(
                 {
-                    name,
+                    name: assetId,
                     assetId: formData.get('assetId') as string,
                     description: formData.get('assetDescription') as string,
                 },
@@ -29,8 +32,7 @@ export async function handleAssetAction({ request, params }: { request: Request;
             );
 
         case 'DELETE':
-            const assetName = formData.get('assetName') as string;
-            const deleteResponse = await AssetApi.deleteAsset(assetName, orgName);
+            deleteResponse = await AssetApi.deleteAsset(assetName, orgName);
             if (deleteResponse.success) {
                 return redirect(`/ressurser?deleted=${assetName}`);
             }

@@ -1,5 +1,6 @@
-import { BodyShort, Heading, Label, Switch, Table, Tabs } from '@navikt/ds-react';
 import { ChevronRightIcon, CogRotationIcon, NotePencilDashIcon } from '@navikt/aksel-icons';
+import { BodyShort, Heading, Label, Switch, Table, Tabs } from '@navikt/ds-react';
+
 import { tabInfo } from '~/routes/adaptere._index/constants';
 
 interface CustomTabsProps<T> {

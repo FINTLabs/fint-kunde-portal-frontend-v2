@@ -1,6 +1,7 @@
 // AssetsTable.tsx
-import { BodyShort, Heading, Table } from '@navikt/ds-react';
 import { ChevronRightIcon, StarIcon } from '@navikt/aksel-icons';
+import { BodyShort, Heading, Table } from '@navikt/ds-react';
+
 import { IAsset } from '~/types/Asset';
 
 interface AssetsTableProps {

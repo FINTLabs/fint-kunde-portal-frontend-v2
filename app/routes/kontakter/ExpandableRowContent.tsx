@@ -1,8 +1,9 @@
-import React from 'react';
-import { HGrid } from '@navikt/ds-react';
 import { GavelSoundBlockIcon, LinkBrokenIcon } from '@navikt/aksel-icons';
-import RolesSwitch from '~/routes/kontakter/RoleSwitch';
+import { HGrid } from '@navikt/ds-react';
+import React from 'react';
+
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
+import RolesSwitch from '~/routes/kontakter/RoleSwitch';
 import { IContact } from '~/types/Contact';
 import { IRole } from '~/types/Role';
 

@@ -1,6 +1,6 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
+
 import type { IClient, IPartialClient } from '~/types/Clients';
-import logger from '~/utils/logger';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
@@ -29,22 +29,20 @@ class ClientApi {
         const clientsResponse = await this.getClients(organisationName);
 
         if (!clientsResponse.success) {
-            logger.error(`Failed to fetch clients for organisation: ${organisationName}`);
             throw new Error(`Kunne ikke hente klienter for organisasjonen: ${organisationName}`);
         }
 
         const client = clientsResponse.data?.find((c) => c.name === clientId);
         if (client) return client;
 
-        logger.error(`Client not found, clientId: ${clientId}`);
         throw new Error(`Klient ikke funnet, klientId: ${clientId}`);
     }
 
     static async createClient(
         client: IPartialClient,
         organisation: string
-    ): Promise<ApiResponse<any>> {
-        return await clientManager.call<any>({
+    ): Promise<ApiResponse<IClient>> {
+        return await clientManager.call<IClient>({
             method: 'POST',
             endpoint: `/api/clients/${organisation}`,
             functionName: 'createClient',
@@ -62,14 +60,14 @@ class ClientApi {
         clientShortDescription: string,
         clientNote: string,
         organisation: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<IClient>> {
         const partialClient: IPartialClient = {
             name: clientName,
             shortDescription: clientShortDescription,
             note: clientNote,
         };
 
-        return await clientManager.call<any>({
+        return await clientManager.call<IClient>({
             method: 'PUT',
             endpoint: `/api/clients/${organisation}/${clientName}`,
             functionName: 'updateClient',
@@ -82,8 +80,8 @@ class ClientApi {
         });
     }
 
-    static async deleteClient(clientName: string, organisation: string): Promise<ApiResponse<any>> {
-        return await clientManager.call<any>({
+    static async deleteClient(clientName: string, organisation: string): Promise<ApiResponse<IClient>> {
+        return await clientManager.call<IClient>({
             method: 'DELETE',
             endpoint: `/api/clients/${organisation}/${clientName}`,
             functionName: 'deleteClient',
@@ -117,7 +115,7 @@ class ClientApi {
         clientName: string,
         organisationName: string,
         updateType: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<IClient>> {
         const endpoint = `/api/components/organisation/${organisationName}/${componentName}/clients/${clientName}`;
         return updateType === 'true'
             ? this.addComponentToClient(endpoint, componentName)
@@ -127,8 +125,8 @@ class ClientApi {
     private static async addComponentToClient(
         endpoint: string,
         componentName: string
-    ): Promise<ApiResponse<any>> {
-        return await clientManager.call<any>({
+    ): Promise<ApiResponse<IClient>> {
+        return await clientManager.call<IClient>({
             method: 'PUT',
             endpoint,
             functionName: 'addComponentToClient',
@@ -144,8 +142,8 @@ class ClientApi {
     private static async removeComponentFromClient(
         endpoint: string,
         componentName: string
-    ): Promise<ApiResponse<any>> {
-        return await clientManager.call<any>({
+    ): Promise<ApiResponse<IClient>> {
+        return await clientManager.call<IClient>({
             method: 'DELETE',
             endpoint,
             functionName: 'removeComponentFromClient',
@@ -162,8 +160,8 @@ class ClientApi {
         adapterName: string,
         password: string,
         organisationName: string
-    ): Promise<ApiResponse<any>> {
-        return await clientManager.call<any>({
+    ): Promise<ApiResponse<IClient>> {
+        return await clientManager.call<IClient>({
             method: 'PUT',
             endpoint: `/api/clients/${organisationName}/${adapterName}/password`,
             functionName: 'setPassword',

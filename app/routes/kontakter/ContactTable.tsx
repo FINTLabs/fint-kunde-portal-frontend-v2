@@ -1,9 +1,11 @@
-import React from 'react';
 import { Table } from '@navikt/ds-react';
-import RoleTags from './RoleTags';
-import ExpandableRowContent from './ExpandableRowContent';
+import React from 'react';
+
 import { IContact } from '~/types/Contact';
 import { IRole } from '~/types/Role';
+
+import ExpandableRowContent from './ExpandableRowContent';
+import RoleTags from './RoleTags';
 
 interface IContactTableProps {
     contactsData?: IContact[];

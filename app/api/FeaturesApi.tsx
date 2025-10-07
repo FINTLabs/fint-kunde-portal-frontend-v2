@@ -1,5 +1,6 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
-import type { FeatureFlags } from '~/types/FeatureFlag';
+
+import type { IFeatureFlag } from '~/types/FeatureFlag';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
@@ -8,8 +9,8 @@ const featuresManager = new NovariApiManager({
 });
 
 class FeaturesApi {
-    static async fetchFeatures(): Promise<ApiResponse<FeatureFlags>> {
-        return await featuresManager.call<FeatureFlags>({
+    static async fetchFeatures(): Promise<ApiResponse<IFeatureFlag>> {
+        return await featuresManager.call<IFeatureFlag>({
             method: 'GET',
             endpoint: '/api/api/feature', // NOTE: if this is a typo, change to '/api/feature'
             functionName: 'fetchFeatures',

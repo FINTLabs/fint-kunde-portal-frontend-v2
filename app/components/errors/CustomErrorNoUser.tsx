@@ -1,5 +1,5 @@
-import React from 'react';
 import { Box, Button, Heading, HGrid, Link, VStack } from '@navikt/ds-react';
+import React from 'react';
 
 const CustomErrorNoUser = () => {
     return (

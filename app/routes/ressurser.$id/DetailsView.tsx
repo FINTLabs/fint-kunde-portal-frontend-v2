@@ -1,8 +1,9 @@
+import { FloppydiskIcon, PencilIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading, HStack, Label, VStack } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { EditableTextField } from '~/components/shared/EditableTextField';
-import { FloppydiskIcon, PencilIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
+
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
+import { EditableTextField } from '~/components/shared/EditableTextField';
 import { IAsset } from '~/types/Asset';
 
 type DetailsViewProps = {

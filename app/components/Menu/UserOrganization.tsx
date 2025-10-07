@@ -1,6 +1,7 @@
 import { Select } from '@navikt/ds-react';
 import { ChangeEvent, useState } from 'react';
 import { useSubmit } from 'react-router';
+
 import { IUserSession } from '~/types/Session';
 
 export const UserOrganization = ({ userSession }: { userSession: IUserSession }) => {
@@ -10,7 +11,6 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
 
     const handleOrgChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setOrgName(event.target.value);
-        console.info(`Change org to ${event.target.value}`);
 
         submit(
             {

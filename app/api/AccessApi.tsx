@@ -1,18 +1,23 @@
-import logger from '~/utils/logger';
-import type { ApiResponse } from 'novari-frontend-components';
-import { NovariApiManager } from 'novari-frontend-components';
-import type { IResource } from '~/types/Access';
+import log4js from 'log4js';
+import { ApiResponse, NovariApiManager } from 'novari-frontend-components';
+
+import { IAccess, IComponentAccess, IDomainPackages, IField, IResource } from '~/types/Access';
 import { HeaderProperties } from '~/utils/headerProperties';
 
+const logger = log4js.getLogger();
+
 const ACCESS_URL = process.env.ACCESS_URL || '';
+
 const accessManager = new NovariApiManager({ baseUrl: ACCESS_URL });
 
 class AccessApi {
-    static async getClientorAdapterAccess(name: string): Promise<ApiResponse<any>> {
-        return await accessManager.call<any>({
+    //***** /access/{username}
+    static async getClientOrAdapterAccess(name: string): Promise<ApiResponse<IAccess>> {
+        logger.debug(`Fetching access for: ${name}`);
+        return await accessManager.call<IAccess>({
             method: 'GET',
             endpoint: `/access/${name}`,
-            functionName: 'getClientorAdapterAccess',
+            functionName: 'getClientOrAdapterAccess',
             customErrorMessage: `Kunne ikke hente tilgang for: ${name}`,
             customSuccessMessage: `Tilgang for ${name} ble hentet.`,
             additionalHeaders: {
@@ -21,8 +26,11 @@ class AccessApi {
         });
     }
 
-    static async getClientorAdapterAccessComponents(name: string): Promise<ApiResponse<any>> {
-        return await accessManager.call<any>({
+    // ***** /access/{username}/component
+    static async getClientOrAdapterAccessComponents(
+        name: string
+    ): Promise<ApiResponse<IDomainPackages>> {
+        return await accessManager.call<IDomainPackages>({
             method: 'GET',
             endpoint: `/access/${name}/component`,
             functionName: 'getClientorAdapterAccessComponents',
@@ -34,11 +42,12 @@ class AccessApi {
         });
     }
 
+    // ***** /access/{username}/component/{component}/resource
     static async getComponentAccess(
         name: string,
         clientOrAdapter: string
-    ): Promise<ApiResponse<any>> {
-        return await accessManager.call<any>({
+    ): Promise<ApiResponse<IResource>> {
+        return await accessManager.call<IResource>({
             method: 'GET',
             endpoint: `/access/${clientOrAdapter}/component/${name}/resource`,
             functionName: 'getComponentAccess',
@@ -50,6 +59,7 @@ class AccessApi {
         });
     }
 
+    //***** /access/{username}/component/{component}/resource/{resource}
     static async getResourceAccess(
         clientOrAdapter: string,
         componentName: string,
@@ -67,12 +77,13 @@ class AccessApi {
         });
     }
 
+    // ***** /access/{username}/component/{component}/resource/{resource}/field
     static async getFieldAccess(
         clientOrAdapter: string,
         componentName: string,
         resourceName: string
-    ): Promise<ApiResponse<any>> {
-        return await accessManager.call<any>({
+    ): Promise<ApiResponse<IField>> {
+        return await accessManager.call<IField>({
             method: 'GET',
             endpoint: `/access/${clientOrAdapter}/component/${componentName}/resource/${resourceName}/field`,
             functionName: 'getFieldAccess',
@@ -84,8 +95,9 @@ class AccessApi {
         });
     }
 
-    static async addAccess(username: string): Promise<ApiResponse<any>> {
-        return await accessManager.call<any>({
+    static async addAccess(username: string): Promise<ApiResponse<IAccess>> {
+        logger.info(`Creating access for user: ${username}`);
+        return await accessManager.call<IAccess>({
             method: 'POST',
             endpoint: `/access/${username}`,
             functionName: 'addAccess',
@@ -97,8 +109,9 @@ class AccessApi {
         });
     }
 
-    static async deleteAccess(username: string): Promise<ApiResponse<any>> {
-        return await accessManager.call<any>({
+    static async deleteAccess(username: string): Promise<ApiResponse<IAccess>> {
+        logger.warn(`Deleting access for user: ${username}`);
+        return await accessManager.call<IAccess>({
             method: 'DELETE',
             endpoint: `/access/${username}`,
             functionName: 'deleteAccess',
@@ -113,10 +126,9 @@ class AccessApi {
     static async updateEnvironments(
         username: string,
         environments: string[]
-    ): Promise<ApiResponse<any>> {
-        logger.silly(`Envs → ${JSON.stringify(environments, null, 2)}`);
-
-        return await accessManager.call<any>({
+    ): Promise<ApiResponse<IAccess>> {
+        logger.info(`Updating environments for user: ${username}`, { environments });
+        return await accessManager.call<IAccess>({
             method: 'PATCH',
             endpoint: `/access/${username}`,
             functionName: 'updateEnvironments',
@@ -133,8 +145,8 @@ class AccessApi {
         username: string,
         componentName: string,
         enabled: string
-    ): Promise<ApiResponse<any>> {
-        return await accessManager.call<any>({
+    ): Promise<ApiResponse<IComponentAccess>> {
+        return await accessManager.call<IComponentAccess>({
             method: 'PATCH',
             endpoint: `/access/${username}/component/${componentName}`,
             functionName: 'addComponentAccess',
@@ -156,13 +168,13 @@ class AccessApi {
             isWriteable?: boolean;
             readingOption?: 'SINGULAR' | 'MULTI' | string;
         }
-    ): Promise<ApiResponse<any>> {
-        const body: Record<string, any> = {};
+    ): Promise<ApiResponse<IResource>> {
+        const body: Record<string, unknown> = {};
         if (options.enabled !== undefined) body.enabled = options.enabled;
         if (options.isWriteable !== undefined) body.isWriteable = options.isWriteable;
         if (options.readingOption !== undefined) body.readingOption = options.readingOption;
 
-        return await accessManager.call<any>({
+        return await accessManager.call<IResource>({
             method: 'PATCH',
             endpoint: `/access/${username}/component/${component}/resource/${resource}`,
             functionName: 'updateResource',
@@ -181,8 +193,8 @@ class AccessApi {
         resource: string,
         field: string,
         enabled: string
-    ): Promise<ApiResponse<any>> {
-        return await accessManager.call<any>({
+    ): Promise<ApiResponse<IField>> {
+        return await accessManager.call<IField>({
             method: 'PATCH',
             endpoint: `/access/${username}/component/${component}/resource/${resource}/field/${field}`,
             functionName: 'updateFieldAccess',
@@ -200,8 +212,8 @@ class AccessApi {
         component: string,
         resource: string,
         fields: Array<{ name: string; enabled: boolean; mustContain: string }>
-    ): Promise<ApiResponse<any>> {
-        return await accessManager.call<any>({
+    ): Promise<ApiResponse<IField>> {
+        return await accessManager.call<IField>({
             method: 'PATCH',
             endpoint: `/access/${username}/component/${component}/resource/${resource}/field`,
             functionName: 'addFieldAccess',
