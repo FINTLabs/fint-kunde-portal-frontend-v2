@@ -6,10 +6,15 @@ import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
 
+console.log('=== MeApi INITIALIZATION ===');
+console.log('API_URL:', API_URL);
+
 const apiManager = new NovariApiManager({
     baseUrl: API_URL,
-    logLevel: 'debug', // Enable debug logging to see headers being sent
+    logLevel: 'debug',
 });
+
+console.log('NovariApiManager created');
 
 class MeApi {
     static async fetchMe(): Promise<IMeData> {
@@ -20,48 +25,53 @@ class MeApi {
         console.log('x-nin value length:', xninValue?.length);
         console.log('x-nin is empty?:', !xninValue);
         
-        const headers = {
+        // DIRECT FETCH TEST - bypassing NovariApiManager
+        console.log('=== TESTING DIRECT FETCH (bypassing NovariApiManager) ===');
+        const testUrl = `${API_URL}/api/me`;
+        const testHeaders = {
             'x-nin': xninValue,
+            'Content-Type': 'application/json',
         };
-        console.log('Headers object being passed:', JSON.stringify(headers));
         
-        // TEST: Direct fetch to see if backend receives the header
-        console.log('=== DIRECT FETCH TEST START ===');
+        console.log('Test URL:', testUrl);
+        console.log('Test Headers:', JSON.stringify(testHeaders, null, 2));
+        
         try {
-            const directUrl = `${API_URL}/api/me`;
-            console.log('Direct fetch URL:', directUrl);
-            console.log('Direct fetch headers:', headers);
-            
-            const directResponse = await fetch(directUrl, {
+            console.log('Calling fetch...');
+            const response = await fetch(testUrl, {
                 method: 'GET',
-                headers: {
-                    'x-nin': xninValue,
-                    'Content-Type': 'application/json',
-                },
+                headers: testHeaders,
             });
             
-            console.log('Direct fetch status:', directResponse.status);
-            console.log('Direct fetch statusText:', directResponse.statusText);
-            console.log('Direct fetch headers sent:', {
-                'x-nin': xninValue,
-                'Content-Type': 'application/json',
-            });
+            console.log('Fetch completed!');
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
             
-            if (directResponse.ok) {
-                const directData = await directResponse.json();
-                console.log('Direct fetch SUCCESS! Data:', directData);
-                console.log('=== DIRECT FETCH TEST END - SUCCESS ===');
-                return directData;
+            if (response.ok) {
+                const data = await response.json();
+                console.log('SUCCESS! Direct fetch worked. Data:', data);
+                console.log('=== fetchMe DEBUG END - SUCCESS ===');
+                return data;
             } else {
-                const errorText = await directResponse.text();
-                console.log('Direct fetch FAILED. Error:', errorText);
+                const errorText = await response.text();
+                console.log('Response not ok. Status:', response.status);
+                console.log('Error text:', errorText);
             }
-        } catch (directError) {
-            console.log('Direct fetch ERROR:', directError);
+        } catch (error) {
+            console.log('FETCH ERROR:', error);
+            console.log('Error type:', error instanceof Error ? error.constructor.name : typeof error);
+            console.log('Error message:', error instanceof Error ? error.message : String(error));
+            if (error instanceof Error && 'cause' in error) {
+                console.log('Error cause:', error.cause);
+            }
         }
         console.log('=== DIRECT FETCH TEST END ===');
         
         // Original apiManager call
+        console.log('=== NOW TRYING apiManager.call ===');
+        const headers = {
+            'x-nin': xninValue,
+        };
         const res = await apiManager.call<IMeData>({
             method: 'GET',
             endpoint: '/api/me',
@@ -71,7 +81,7 @@ class MeApi {
             additionalHeaders: headers,
         });
 
-        console.log('Response received:', res);
+        console.log('apiManager response:', res);
         console.log('=== fetchMe DEBUG END ===');
 
         if (res.success && res.data) {
