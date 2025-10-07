@@ -8,6 +8,7 @@ const API_URL = process.env.API_URL || '';
 
 const apiManager = new NovariApiManager({
     baseUrl: API_URL,
+    logLevel: 'debug', // Enable debug logging to see headers being sent
 });
 
 class MeApi {
@@ -24,6 +25,43 @@ class MeApi {
         };
         console.log('Headers object being passed:', JSON.stringify(headers));
         
+        // TEST: Direct fetch to see if backend receives the header
+        console.log('=== DIRECT FETCH TEST START ===');
+        try {
+            const directUrl = `${API_URL}/api/me`;
+            console.log('Direct fetch URL:', directUrl);
+            console.log('Direct fetch headers:', headers);
+            
+            const directResponse = await fetch(directUrl, {
+                method: 'GET',
+                headers: {
+                    'x-nin': xninValue,
+                    'Content-Type': 'application/json',
+                },
+            });
+            
+            console.log('Direct fetch status:', directResponse.status);
+            console.log('Direct fetch statusText:', directResponse.statusText);
+            console.log('Direct fetch headers sent:', {
+                'x-nin': xninValue,
+                'Content-Type': 'application/json',
+            });
+            
+            if (directResponse.ok) {
+                const directData = await directResponse.json();
+                console.log('Direct fetch SUCCESS! Data:', directData);
+                console.log('=== DIRECT FETCH TEST END - SUCCESS ===');
+                return directData;
+            } else {
+                const errorText = await directResponse.text();
+                console.log('Direct fetch FAILED. Error:', errorText);
+            }
+        } catch (directError) {
+            console.log('Direct fetch ERROR:', directError);
+        }
+        console.log('=== DIRECT FETCH TEST END ===');
+        
+        // Original apiManager call
         const res = await apiManager.call<IMeData>({
             method: 'GET',
             endpoint: '/api/me',
