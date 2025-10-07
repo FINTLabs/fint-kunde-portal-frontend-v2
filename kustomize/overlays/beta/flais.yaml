@@ -15,7 +15,7 @@ spec:
     - name: CONSENT_API_URL
       value: http://fint-samtykke-admin-backend:8080
     - name: TEST_RUNNER_API_URL
-      value: http://fint-test-runner-kotlin:8080
+      value: http://fint-test-runner:8080
     - name: ACCESS_URL
       value: http://fint-core-access-control.fint-core.svc.cluster.local:8080
   url:
