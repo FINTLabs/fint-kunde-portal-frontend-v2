@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, ComponentIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import { LoaderFunctionArgs, useLoaderData, useNavigate } from 'react-router';
+import { type LoaderFunctionArgs, useLoaderData, useNavigate } from 'react-router';
 
 import ComponentApi from '~/api/ComponentApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';

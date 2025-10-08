@@ -1,4 +1,4 @@
-import { LoaderFunction } from 'react-router';
+import { type LoaderFunction } from 'react-router';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ComponentApi from '~/api/ComponentApi';
 import ComponentConfigApi from '~/api/ComponentConfigApi';

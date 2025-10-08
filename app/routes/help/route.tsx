@@ -1,6 +1,6 @@
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Accordion, Box } from '@navikt/ds-react';
-import { MetaFunction } from 'react-router';
+import { type MetaFunction } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';

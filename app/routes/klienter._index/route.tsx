@@ -1,10 +1,10 @@
 import { TokenIcon } from '@navikt/aksel-icons';
 import { Search } from '@navikt/ds-react';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { useEffect, useState } from 'react';
 import {
     type ActionFunctionArgs,
-    MetaFunction,
+    type MetaFunction,
     useFetcher,
     useLoaderData,
     useNavigate,

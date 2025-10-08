@@ -1,9 +1,9 @@
 import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid } from '@navikt/ds-react';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
 import {
-    ActionFunctionArgs,
+    type ActionFunctionArgs,
     useFetcher,
     useLoaderData,
     useNavigate,

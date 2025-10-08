@@ -1,6 +1,6 @@
 import { ComponentIcon } from '@navikt/aksel-icons';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
-import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
+import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ActionFunctionArgs, type MetaFunction, useFetcher, useLoaderData } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';

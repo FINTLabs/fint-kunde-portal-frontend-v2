@@ -1,4 +1,4 @@
-import { LoaderFunction } from 'react-router';
+import { type LoaderFunction } from 'react-router';
 
 import LinkWalkerApi from '~/api/LinkWalkerApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';

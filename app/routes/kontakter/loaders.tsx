@@ -1,4 +1,4 @@
-import { LoaderFunction } from 'react-router';
+import { type LoaderFunction } from 'react-router';
 
 import ContactApi from '~/api/ContactApi';
 import OrganisationApi from '~/api/OrganisationApi';

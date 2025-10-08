@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from 'react-router';
+import { type LoaderFunctionArgs } from 'react-router';
 
 import AdapterAPI from '~/api/AdapterApi';
 import AssetApi from '~/api/AssetApi';

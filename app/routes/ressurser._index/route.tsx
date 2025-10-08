@@ -1,6 +1,6 @@
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box } from '@navikt/ds-react';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
 import {
     type ActionFunctionArgs,

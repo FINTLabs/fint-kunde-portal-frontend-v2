@@ -1,4 +1,4 @@
-import { NovariSnackbarItem } from 'novari-frontend-components';
+import { type NovariSnackbarItem } from 'novari-frontend-components';
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router';
 

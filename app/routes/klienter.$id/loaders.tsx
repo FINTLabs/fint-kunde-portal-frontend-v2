@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from 'react-router';
+import { type ActionFunctionArgs } from 'react-router';
 
 import AccessApi from '~/api/AccessApi';
 import ClientApi from '~/api/ClientApi';

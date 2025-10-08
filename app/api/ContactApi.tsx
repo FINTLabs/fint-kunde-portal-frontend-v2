@@ -1,4 +1,4 @@
-import { ApiResponse, NovariApiManager } from 'novari-frontend-components';
+import { type ApiResponse, NovariApiManager } from 'novari-frontend-components';
 
 import { IContact } from '~/types/Contact';
 import { HeaderProperties } from '~/utils/headerProperties';

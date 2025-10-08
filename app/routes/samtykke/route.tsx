@@ -1,8 +1,8 @@
 import { PassportIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, HStack, VStack } from '@navikt/ds-react';
-import { ApiResponse } from 'novari-frontend-components';
+import { type ApiResponse } from 'novari-frontend-components';
 import { useEffect, useState } from 'react';
-import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
+import { type ActionFunctionArgs, type MetaFunction, useFetcher, useLoaderData } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';

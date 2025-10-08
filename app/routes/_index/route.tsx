@@ -1,5 +1,5 @@
 import { Box, Heading, HGrid, LinkCard, VStack } from '@navikt/ds-react';
-import { MetaFunction, useOutletContext } from 'react-router';
+import { type MetaFunction, useOutletContext } from 'react-router';
 
 import { novariMenu } from '~/components/Menu/MenuConfig';
 import { IUserSession } from '~/types/Session';

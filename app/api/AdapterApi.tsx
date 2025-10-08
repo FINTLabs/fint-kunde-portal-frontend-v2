@@ -1,4 +1,4 @@
-import { NovariApiManager, ApiResponse } from 'novari-frontend-components';
+import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 
 import { IAdapter, IPartialAdapter } from '~/types/Adapter';
 import { HeaderProperties } from '~/utils/headerProperties';

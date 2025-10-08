@@ -1,9 +1,9 @@
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import { Alert } from '@navikt/ds-react';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import {
-    ActionFunctionArgs,
-    LoaderFunctionArgs,
+    type ActionFunctionArgs,
+    type LoaderFunctionArgs,
     useFetcher,
     useLoaderData,
     useNavigate,

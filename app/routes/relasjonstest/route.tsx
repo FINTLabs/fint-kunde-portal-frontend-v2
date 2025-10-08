@@ -1,8 +1,8 @@
 import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, HStack } from '@navikt/ds-react';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import React, { useEffect } from 'react';
-import { ActionFunctionArgs, MetaFunction, useFetcher, useLoaderData } from 'react-router';
+import { type ActionFunctionArgs, type MetaFunction, useFetcher, useLoaderData } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';

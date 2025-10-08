@@ -1,5 +1,5 @@
 import log4js from 'log4js';
-import { ApiResponse, NovariApiManager } from 'novari-frontend-components';
+import { type ApiResponse, NovariApiManager } from 'novari-frontend-components';
 
 import { IAccess, IComponentAccess, IDomainPackages, IField, IResource } from '~/types/Access';
 import { HeaderProperties } from '~/utils/headerProperties';

@@ -1,7 +1,7 @@
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import { Alert, FormSummary, HStack } from '@navikt/ds-react';
-import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
-import { ActionFunctionArgs, LoaderFunctionArgs, useFetcher, useLoaderData } from 'react-router';
+import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import {type ActionFunctionArgs, type LoaderFunctionArgs, useFetcher, useLoaderData } from 'react-router';
 
 import AccessApi from '~/api/AccessApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
