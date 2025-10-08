@@ -1,4 +1,5 @@
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
+import { Alert } from '@navikt/ds-react';
 import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import {
     ActionFunctionArgs,
@@ -75,6 +76,10 @@ export default function Route() {
                 icon={KeyVerticalIcon}
                 helpText="NEED_THIS"
             />
+
+            <Alert variant="info" style={{ marginBottom: '1rem' }}>
+                Velg tilgang ved å krysse av for de riktige feltene nedenfor.
+            </Alert>
 
             <NovariSnackbar
                 items={alertState}

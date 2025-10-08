@@ -28,11 +28,32 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
         onToggle(formData);
     };
 
+
+//     const isIntermediate = (access: boolean, packages: IPackageItem[]) => {
+//         console.log('packages', packages);
+//         console.log('access', access);
+//         // if (!access) {
+//         //     return false;
+//         // }
+//         // let intermediate = true;
+//         // packages.forEach((pkg) => {
+//         //     if (!pkg.access) {
+//         //         intermediate = true;
+//         //     }
+//         // });
+//         // return intermediate;
+// return true;    };
+
+    console.log('accessList', accessList);
+
     return (
         <Box>
             <HGrid gap={'3'} columns={3}>
                 {accessList.map((domain, i) => {
                     // const domainAccess = groupedByDomain[domain];
+                    //indeterminate={
+                    //             selectedRows.length > 0 && selectedRows.length !== data.length
+                    //           }
 
                     return (
                         <FormSummary key={`${domain}-${i}`}>
@@ -48,6 +69,7 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                             <FormSummary.Answers>
                                 <FormSummary.Answer>
                                     {domain.packages.map((item, i) => (
+                                        
                                         <HStack
                                             key={`${domain}-${i}`}
                                             justify={'space-between'}
@@ -61,6 +83,7 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                                 //         item.status === 'ENABLED'
                                                 //     )
                                                 // }
+                                                // indeterminate={isIntermediate(item.access, domain.packages)}
                                                 onChange={(e) => {
                                                     handleToggle(e);
                                                 }}

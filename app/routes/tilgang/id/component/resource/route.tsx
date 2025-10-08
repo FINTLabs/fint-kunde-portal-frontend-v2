@@ -1,5 +1,5 @@
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
-import { FormSummary, HStack } from '@navikt/ds-react';
+import { Alert, FormSummary, HStack } from '@navikt/ds-react';
 import { ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { ActionFunctionArgs, LoaderFunctionArgs, useFetcher, useLoaderData } from 'react-router';
 
@@ -52,7 +52,7 @@ export default function Route() {
 
     const breadcrumbs = [
         { name: `${elementType}`, link: `/${elementType}` },
-        { name: clientOrAdapter, link: `/tilgang/${elementType}/${clientOrAdapter}` },
+        { name: clientOrAdapter, link: `/${elementType}/${clientOrAdapter}` },
         {
             name: componentName,
             link: `/tilgang/${clientOrAdapter}/${componentName}`,
@@ -113,6 +113,10 @@ export default function Route() {
                 icon={KeyVerticalIcon}
                 helpText="NEED_THIS"
             />
+
+            <Alert variant="info" style={{ marginBottom: '1rem' }}>
+                Velg tilgang ved å krysse av for de riktige feltene nedenfor.
+            </Alert>
 
             <NovariSnackbar
                 items={alertState}

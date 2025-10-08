@@ -91,6 +91,7 @@ export default function ClientDetails() {
     function handleEnvChange(values: Environment[]) {
         const formData = new FormData();
         formData.append('actionType', 'UPDATE_ENVIRONMENT');
+        formData.append('username', client?.name as string);
         // append only the checked ones
         values.forEach((v) => formData.append('environments[]', v));
         fetcher.submit(formData, { method: 'post' });

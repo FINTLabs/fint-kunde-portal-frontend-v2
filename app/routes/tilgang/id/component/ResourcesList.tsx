@@ -1,7 +1,8 @@
-import { Checkbox, FormSummary, HStack } from '@navikt/ds-react';
+import { Button, Checkbox, FormSummary, HStack } from '@navikt/ds-react';
 import React from 'react';
 
 import { IAccessComponent } from '~/types/Access';
+import { ChevronRightCircleIcon } from '@navikt/aksel-icons';
 
 interface ConfigClassTableProps {
     accessComponent: IAccessComponent[];
@@ -10,7 +11,7 @@ interface ConfigClassTableProps {
     onToggle: (formData: FormData) => void;
 }
 
-const ResourcesList = ({ accessComponent, title, onToggle }: ConfigClassTableProps) => {
+const ResourcesList = ({ accessComponent, title, onToggle, onSelected }: ConfigClassTableProps) => {
     function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value;
         const isChecked = e.target.checked;
@@ -21,6 +22,7 @@ const ResourcesList = ({ accessComponent, title, onToggle }: ConfigClassTablePro
         formData.append('enabled', isChecked.toString());
         onToggle(formData);
     }
+
 
     return (
         <>
@@ -43,21 +45,21 @@ const ResourcesList = ({ accessComponent, title, onToggle }: ConfigClassTablePro
                                         {x.name}
                                     </Checkbox>
 
-                                    {/*<Button*/}
-                                    {/*    icon={<ChevronRightCircleIcon title="Rediger" />}*/}
-                                    {/*    onClick={() => onSelected(x.name)}*/}
-                                    {/*    variant={'tertiary'}*/}
-                                    {/*    size={'xsmall'}*/}
-                                    {/*    disabled={!x.enabled}*/}
-                                    {/*    data-cy={`resource-details-${x.name}`}*/}
-                                    {/*/>*/}
+                                    <Button
+                                        icon={<ChevronRightCircleIcon title="Rediger" />}
+                                        onClick={() => onSelected(x.name)}
+                                        variant={'tertiary'}
+                                        size={'xsmall'}
+                                        disabled={!x.enabled}
+                                        data-cy={`resource-details-${x.name}`}
+                                    />
 
                                     {/*<ChevronRightCircleIcon*/}
                                     {/*    title="Vis detaljer"*/}
                                     {/*    onClick={() => onSelected(x.name)}*/}
                                     {/*/>*/}
-                                    {/*</Box>*/}
-                                    {/*</HStack>*/}
+                                {/*    </Box>*/}
+                                {/*    </HStack>*/}
                                 </HStack>
                             );
                         })}

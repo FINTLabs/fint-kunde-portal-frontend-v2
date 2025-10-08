@@ -16,8 +16,9 @@ export async function handleClientAction({ request }: { request: Request }) {
             return await AccessApi.addAccess(clientName);
 
         case 'UPDATE_ENVIRONMENT': {
+            const username = formData.get('username') as string;
             const environments = formData.getAll('environments[]') as string[];
-            return await AccessApi.updateEnvironments(clientName, environments);
+            return await AccessApi.updateEnvironments(username, environments);
         }
 
         case 'UPDATE_CLIENT':
@@ -33,12 +34,19 @@ export async function handleClientAction({ request }: { request: Request }) {
             await AccessApi.deleteAccess(clientName);
             return redirect(`/klienter?deleted=${clientName}`);
 
-        case 'ADD_COMPONENT_ACCESS':
-            return await AccessApi.addComponentAccess(
-                clientName,
-                formData.get('componentName') as string,
-                formData.get('enabled') as string
-            );
+        case 'ADD_COMPONENT_ACCESS': {
+            const username = formData.get('username') as string;
+            const componentName = formData.get('componentName') as string;
+            const enabled = formData.get('enabled') as string;
+            
+            const response = await AccessApi.addComponentAccess(username, componentName, enabled);
+            
+            if (enabled === 'true') {
+                return redirect(`/tilgang/${username}/${componentName}`);
+            }
+            
+            return response;
+        }
         // return await ClientApi.updateComponentInClient(
         //     formData.get('componentName') as string,
         //     clientName,
