@@ -1,8 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 import adapters from '../../fixtures/adapters.json';
-
-const API_URL = process.env.API_URL;
+import { API_URL } from '../mockConfig';
 
 export const adaptersHandlers = [
     http.get(`${API_URL}/api/adapters/calvin_organizations`, () => {

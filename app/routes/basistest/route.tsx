@@ -10,6 +10,7 @@ import { handleBasicTestAction } from '~/routes/basistest/actions';
 import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
 import HealthTestResultsTable from '~/routes/basistest/HealthTestResultsTable';
+import type { IBasicTestResponse } from '~/types';
 import { IClient } from '~/types/Clients';
 import { IComponent } from '~/types/Component';
 
@@ -23,7 +24,7 @@ export { loader };
 
 export const action = async (args: ActionFunctionArgs) => handleBasicTestAction(args);
 
-type ExtendedFetcherResponseData = ApiResponse<any> & {
+type ExtendedFetcherResponseData = ApiResponse<IBasicTestResponse> & {
     clientName: string;
     testUrl: string;
 };

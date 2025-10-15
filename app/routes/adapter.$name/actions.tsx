@@ -1,10 +1,10 @@
-import { redirect } from 'react-router';
+import { redirect, type Params } from 'react-router';
 
 import AccessApi from '~/api/AccessApi';
 import AdapterApi from '~/api/AdapterApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
-export async function handleAdapterAction({ request, params }: { request: Request; params: any }) {
+export async function handleAdapterAction({ request, params }: { request: Request; params: Params }) {
     const name = params.name || '';
     const formData = await request.formData();
     const orgName = await getSelectedOrganization(request);

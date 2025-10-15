@@ -46,22 +46,7 @@ describe('Clients Details Page Tests', () => {
         cy.get('[data-cy="edit-button"]').find('button').first().should('be.visible');
         cy.get('[data-cy="edit-button"]').find('button').first().should('not.be.disabled');
         cy.get('[data-cy="edit-button"]').find('button').first().click({ waitForAnimations: true });
-        // cy.get('[data-cy="edit-form-client"]').should('be.visible');
-        // Check again and retry if needed
-        // cy.get('body').then(($body) => {
-        //     if ($body.find('[data-cy="create-form"]').length === 0) {
-        //         cy.log('Form still not visible, retrying again...');
-        //         cy.get('[data-cy="edit-button"]').click({ waitForAnimations: true });
-        //     }
-        // });
-        //
-        // // Final check and retry
-        // cy.get('body').then(($body) => {
-        //     if ($body.find('[data-cy="create-form"]').length === 0) {
-        //         cy.log('Form still not visible, final retry...');
-        //         cy.get('[data-cy="edit-button"]').click({ waitForAnimations: true });
-        //     }
-        // });
+        cy.wait(1000);
 
         cy.get('input[type="text"]').should('have.length.greaterThan', 0);
         cy.log('Edit mode activated successfully');

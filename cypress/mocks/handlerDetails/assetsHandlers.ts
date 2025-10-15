@@ -2,8 +2,7 @@ import { http, HttpResponse } from 'msw';
 
 import resource from '../../fixtures/resource.json';
 import resources from '../../fixtures/resources.json';
-
-const API_URL = process.env.API_URL;
+import { API_URL } from '../mockConfig';
 
 export const assetsHandlers = [
     http.get(`${API_URL}/api/assets/calvin_organizations/`, () => {

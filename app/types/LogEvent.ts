@@ -1,4 +1,4 @@
-interface ReduntantLogEvent {
+export interface ReduntantLogEvent {
     corrId: string;
     action: string;
     status: string;
@@ -20,6 +20,9 @@ export interface ReduntantLog {
     event: ReduntantLogEvent;
     clearData: boolean;
 }
+
+// Type alias for the backend AuditEvent (same as ReduntantLog)
+export type AuditEvent = ReduntantLog;
 
 export interface LogEvent {
     timestamp: number;

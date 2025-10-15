@@ -76,17 +76,19 @@ export default function BasicTestAddForm({
         }
     }
 
-    function renderSelectOptions(
-        items: any[],
-        keyProp: string,
-        valueProp: string,
-        labelProp: string
+    function renderSelectOptions<T extends IComponent | IClient>(
+        items: T[],
+        keyProp: keyof T,
+        valueProp: keyof T,
+        labelProp: keyof T
     ) {
-        return items.map((item, index) => (
-            <option value={item[valueProp]} key={item[keyProp] || index}>
-                {item[labelProp]}
-            </option>
-        ));
+        return items.map((item, index) => {
+            return (
+                <option value={String(item[valueProp])} key={String(item[keyProp]) || index}>
+                    {String(item[labelProp])}
+                </option>
+            );
+        });
     }
 
     return (
