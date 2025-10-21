@@ -4,8 +4,7 @@ import contacts from '../../fixtures/contacts.json';
 import contactsLegal from '../../fixtures/contactsLegal.json';
 import contactsTechnical from '../../fixtures/contactsTechnical.json';
 import organisations from '../../fixtures/organisations.json';
-
-const API_URL = process.env.API_URL;
+import { API_URL } from '../mockConfig';
 
 export const contactsHandlers = [
     http.get(`${API_URL}/api/contacts`, () => {

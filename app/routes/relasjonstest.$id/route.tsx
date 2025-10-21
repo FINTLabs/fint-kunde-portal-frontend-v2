@@ -42,8 +42,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
                 'Content-Disposition': `attachment; filename="relasjonstest_${id}.xlsx"`,
             },
         });
-    } catch (error) {
-        // console.error('Error fetching Excel file:', error);
+    } catch {
         throw Response.json({ error: 'Failed to fetch Excel file' }, { status: 500 });
     }
 };

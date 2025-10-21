@@ -2,8 +2,7 @@ import { http, HttpResponse } from 'msw';
 
 import components from '../../fixtures/components.json';
 import configurations from '../../fixtures/configurations.json';
-
-const API_URL = process.env.API_URL;
+import { API_URL } from '../mockConfig';
 
 export const componentsHandlers = [
     http.get(`${API_URL}/api/components`, () => {

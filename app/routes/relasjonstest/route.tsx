@@ -9,6 +9,7 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { handleRelationTestAction } from '~/routes/relasjonstest/actions';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
+import type { IComponentConfig, ILinkWalkerTest } from '~/types';
 import { IClient } from '~/types/Clients';
 import { IComponent } from '~/types/Component';
 
@@ -22,11 +23,11 @@ export { loader };
 
 export const action = async (args: ActionFunctionArgs) => handleRelationTestAction(args);
 
-class IPageLoaderData {
-    components: IComponent[] = [];
-    clients: IClient[] = [];
-    relationTests: any;
-    configs: any;
+interface IPageLoaderData {
+    components: IComponent[];
+    clients: IClient[];
+    relationTests: ILinkWalkerTest[];
+    configs: IComponentConfig[];
 }
 
 export default function Index() {
@@ -34,8 +35,8 @@ export default function Index() {
     const { components, clients, relationTests, configs } = useLoaderData<IPageLoaderData>();
 
     const fetcher = useFetcher();
-    const actionData = fetcher.data as ApiResponse<any>;
-    const { alertState } = useAlerts<any>([], actionData);
+    const actionData = fetcher.data as ApiResponse<ILinkWalkerTest>;
+    const { alertState } = useAlerts<ILinkWalkerTest>([], actionData);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -122,7 +123,14 @@ export default function Index() {
                         </HStack>
                     </Box>
                     <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                        <RelationTestResultsTable logResults={relationTests} />
+                        <RelationTestResultsTable logResults={
+                            // Ensure logResults is of type ILogResults[]
+                            // Convert 'relationTests' to correct type if necessary (coerce 'errorMessage')
+                            relationTests.map((test) => ({
+                                ...test,
+                                errorMessage: test.errorMessage ?? ""
+                            }))
+                        } />
                     </Box>
                 </>
             )}

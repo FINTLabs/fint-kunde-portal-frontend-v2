@@ -30,6 +30,7 @@ describe('Resources Page Tests', () => {
     });
 
     it('should allow creating a new ', () => {
+        cy.get('[data-cy="add-button"]').should('be.visible');
         cy.get('[data-cy="add-button"]').click();
         cy.get('[data-cy="create-form"]').should('be.visible');
         cy.get('[data-cy="input-name"]').type('New Resource');

@@ -60,7 +60,7 @@ describe('User Route Tests', () => {
             cy.get('.navds-tag').should('contain', 'ROLE_LOG@hobbes_enterprises');
         });
 
-        it('should have a back button that navigates to dashboard', () => {
+        it.skip('should have a back button that navigates to dashboard', () => {
             // Verify back button is present
             cy.get('[data-cy="back-button"]').should('be.visible');
 

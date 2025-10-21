@@ -1,8 +1,7 @@
-import log4js from 'log4js';
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 
+import type { ILinkWalkerTest } from '~/types';
 import { HeaderProperties } from '~/utils/headerProperties';
-const logger = log4js.getLogger();
 
 const API_URL = process.env.LINKWALKER_API_URL || '';
 const linkWalkerManager = new NovariApiManager({
@@ -10,8 +9,8 @@ const linkWalkerManager = new NovariApiManager({
 });
 
 class LinkWalkerApi {
-    static async getTests(orgName: string): Promise<ApiResponse<any>> {
-        return await linkWalkerManager.call<any>({
+    static async getTests(orgName: string): Promise<ApiResponse<ILinkWalkerTest[]>> {
+        return await linkWalkerManager.call<ILinkWalkerTest[]>({
             method: 'GET',
             endpoint: `/link-walker/tasks/${orgName}`,
             functionName: 'getTests',
@@ -31,10 +30,10 @@ class LinkWalkerApi {
         testUrl: string,
         clientName: string,
         orgName: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<void>> {
         const data = { url: testUrl, client: clientName };
 
-        const apiResults = await linkWalkerManager.call<any>({
+        return await linkWalkerManager.call<void>({
             method: 'POST',
             endpoint: `/link-walker/tasks/${orgName}`,
             functionName: 'addTest',
@@ -45,26 +44,10 @@ class LinkWalkerApi {
                 'x-nin': HeaderProperties.getXnin(),
             },
         });
-
-        // Keeping your original manual check in case you want extra control
-        if (!apiResults.success) {
-            logger.debug('returning error!');
-            return {
-                success: false,
-                message: `Kunne ikke legge til testen for organisasjonen: ${orgName}`,
-                variant: 'error',
-            };
-        }
-
-        return {
-            success: true,
-            message: `Testen for organisasjonen ${orgName} ble lagt til.`,
-            variant: 'success',
-        };
     }
 
-    static async clearTests(orgName: string): Promise<ApiResponse<any>> {
-        return await linkWalkerManager.call<any>({
+    static async clearTests(orgName: string): Promise<ApiResponse<void>> {
+        return await linkWalkerManager.call<void>({
             method: 'PUT',
             endpoint: `/link-walker/tasks/${orgName}`,
             functionName: 'clearTests',
