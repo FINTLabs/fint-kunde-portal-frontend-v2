@@ -1,4 +1,6 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
+
+import type { AuditEvent } from '~/types';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
@@ -13,12 +15,12 @@ class LogApi {
         componentName: string,
         resource: string,
         type: string
-    ): Promise<ApiResponse<any>> {
+    ): Promise<ApiResponse<AuditEvent[]>> {
         const functionName = 'getLogs';
         const formattedComponent = componentName.replace(/_/g, '-');
         const formattedType = `${type}_${resource.toUpperCase()}`;
 
-        return await logManager.call<any>({
+        return await logManager.call<AuditEvent[]>({
             method: 'GET',
             endpoint: `/api/events/${organisation}/${environment}/${formattedComponent}/${formattedType}`,
             functionName,

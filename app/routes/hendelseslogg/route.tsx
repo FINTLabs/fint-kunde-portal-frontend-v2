@@ -8,6 +8,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { handleLogAction } from '~/routes/hendelseslogg/actions';
 import LogSearchForm from '~/routes/hendelseslogg/LogSearchForm';
+import type { AuditEvent, IComponentConfig } from '~/types';
 import { IComponent } from '~/types/Component';
 import { Log, ReduntantLog } from '~/types/LogEvent';
 
@@ -22,20 +23,20 @@ export { loader };
 
 export const action = async (args: ActionFunctionArgs) => handleLogAction(args);
 
-class IPageLoaderData {
-    components: IComponent[] = [];
-    configs: any;
+interface IPageLoaderData {
+    components: IComponent[];
+    configs: IComponentConfig[];
 }
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Hendelseslogg', link: '/hendelseslogg' }];
     const fetcher = useFetcher();
-    const actionData = fetcher.data as ApiResponse<any>;
+    const actionData = fetcher.data as ApiResponse<AuditEvent[]>;
     const { components, configs } = useLoaderData<IPageLoaderData>();
     const logs = actionData?.data || [];
     const mappedLogs = mapLogs(logs);
     const [filterValue, setFilterValue] = useState('');
-    const { alertState } = useAlerts<any>([], actionData, fetcher.state);
+    const { alertState } = useAlerts<AuditEvent[]>([], actionData, fetcher.state);
 
     const filteredLogs = filterValue
         ? mappedLogs.filter((log: Log) => log.id === filterValue)

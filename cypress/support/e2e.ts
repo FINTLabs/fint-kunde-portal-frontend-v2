@@ -18,13 +18,29 @@
 // Import commands.js using ES2015 syntax:
 import './commands';
 
-// Set up MSW for server-side requests
-if (Cypress.env('VITE_MOCK_CYPRESS')) {
-    // This will be available to the Node.js environment
-    process.env.VITE_MOCK_CYPRESS = 'true';
-}
+// Start MSW in Cypress
+import { setupWorker } from 'msw/browser';
+import { handlers } from '../mocks/handlers';
+
+const worker = setupWorker(...handlers);
+
+before(() => {
+    worker.start({
+        onUnhandledRequest: 'bypass',
+    });
+});
+
+after(() => {
+    worker.stop();
+});
+
+// Reset handlers between tests
+beforeEach(() => {
+    worker.resetHandlers();
+});
 
 declare global {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace Cypress {
         interface Chainable {
             waitForAppReady(): Chainable<void>;

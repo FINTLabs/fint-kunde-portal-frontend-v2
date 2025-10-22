@@ -3,8 +3,7 @@ import { http, HttpResponse } from 'msw';
 import feature from '../../fixtures/features.json';
 import me from '../../fixtures/me.json';
 import role from '../../fixtures/role.json';
-
-const API_URL = process.env.API_URL;
+import { API_URL } from '../mockConfig';
 
 export const userHandlers = [
     http.get(`${API_URL}/api/api/feature`, () => {

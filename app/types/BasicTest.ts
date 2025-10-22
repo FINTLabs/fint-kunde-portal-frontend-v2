@@ -18,3 +18,12 @@ export interface IBasicTest {
     endpoint: string;
     clientName?: string;
 }
+
+export interface IBasicTestResponse {
+    healthData: {
+        healthData: IHealthData[];
+    };
+    cacheData: {
+        resourceResults: IResourceResult[];
+    };
+}

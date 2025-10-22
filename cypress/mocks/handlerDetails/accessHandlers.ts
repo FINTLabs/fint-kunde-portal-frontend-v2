@@ -5,8 +5,9 @@ import accessComponent from '../../fixtures/accessComponent.json';
 import accessResourceDetails from '../../fixtures/accessResourceDetails.json';
 import fieldAccess from '../../fixtures/fieldAccess.json';
 import resourceAccess from '../../fixtures/resourceAccess.json';
+import { ACCESS_URL } from '../mockConfig';
 
-const API_URL = process.env.ACCESS_URL;
+const API_URL = ACCESS_URL;
 
 export const accessHandlers = [
     //***** /access/{username}

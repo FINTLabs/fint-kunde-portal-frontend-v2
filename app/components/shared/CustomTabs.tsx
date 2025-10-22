@@ -68,8 +68,7 @@ export function CustomTabs<T>({
                                                 }
                                                 onChange={(e) => {
                                                     const isChecked = e.target.checked;
-                                                    toggleSwitch &&
-                                                        toggleSwitch(getItemName(item), isChecked);
+                                                    toggleSwitch?.(getItemName(item), isChecked);
                                                 }}>
                                                 <Label>{''}</Label>
                                             </Switch>
