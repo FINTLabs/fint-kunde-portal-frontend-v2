@@ -59,7 +59,7 @@ export default function Index() {
             interval = setInterval(() => {
                 fetcher.formData?.set('message', 'test');
                 fetcher.load('/relasjonstest');
-                window.location.reload();
+                //window.location.reload();
             }, 15000);
         }
 

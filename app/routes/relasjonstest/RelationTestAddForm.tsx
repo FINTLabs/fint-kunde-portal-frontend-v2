@@ -100,7 +100,7 @@ const RelationTestAddForm = ({ components, clients, configs, runTest }: TestAddF
                 onChange={(e) => setSelectedConfig(e.target.value)}
                 value={selectedConfig}
                 name={'configClass'}>
-                {/*<option value="">Velg</option>*/}
+                <option value="">Velg</option>
                 {matchingConfigs.flatMap((config) =>
                     config.classes.map((item, index) => (
                         <option value={item.path} key={index}>
