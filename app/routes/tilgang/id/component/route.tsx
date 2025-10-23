@@ -67,6 +67,15 @@ export default function Route() {
         fetcher.submit(formData, { method: 'post' });
     }
 
+    function handleBulkToggle(formData: FormData) {
+        const isDisable = formData.get('disable') === 'true';
+        formData.delete('disable');
+        formData.append('actionType', isDisable ? 'DISABLE_ALL_RESOURCES' : 'ENABLE_ALL_RESOURCES');
+        formData.append('username', clientOrAdapter);
+        formData.append('component', component);
+        fetcher.submit(formData, { method: 'post' });
+    }
+
     return (
         <div>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -92,6 +101,8 @@ export default function Route() {
                 title={resourceTitle || ''}
                 onSelected={handleSelectedResource}
                 onToggle={handleToggleResource}
+                onBulkToggle={handleBulkToggle}
+                isSubmitting={fetcher.state === 'submitting' || fetcher.state === 'loading'}
             />
         </div>
     );

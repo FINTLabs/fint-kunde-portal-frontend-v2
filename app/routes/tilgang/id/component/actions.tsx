@@ -27,6 +27,22 @@ export async function handleAccessElementAction({ request }: { request: Request 
             return response;
         }
 
+        case 'ENABLE_ALL_RESOURCES':
+        case 'DISABLE_ALL_RESOURCES': {
+            // TODO: Implement when backend endpoint is ready
+            // const enabledFlag = actionType === 'ENABLE_ALL_RESOURCES';
+            // const username = formData.get('username') as string;
+            // const component = formData.get('component') as string;
+            // const response = await AccessApi.updateAllResources(username, component, enabledFlag);
+            // return response;
+            
+            return {
+                success: false,
+                message: 'Endpoint ikke implementert ennå',
+                variant: 'warning',
+            };
+        }
+
         default:
             return {
                 success: false,

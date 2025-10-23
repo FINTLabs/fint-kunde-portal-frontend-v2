@@ -225,6 +225,24 @@ class AccessApi {
             },
         });
     }
+
+    static async updateAllResources(
+        username: string,
+        component: string,
+        enabled: boolean
+    ): Promise<ApiResponse<IResource>> {
+        return await accessManager.call<IResource>({
+            method: 'PATCH',
+            endpoint: `/access/${username}/component/${component}/resource`,
+            functionName: 'updateAllResources',
+            body: JSON.stringify({ enabled }),
+            customErrorMessage: 'Kunne ikke oppdatere tilgang',
+            customSuccessMessage: 'Tilgang ble oppdatert',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
+        });
+    }
 }
 
 export default AccessApi;

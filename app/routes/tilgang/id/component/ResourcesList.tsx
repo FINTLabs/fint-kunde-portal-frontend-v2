@@ -9,9 +9,11 @@ interface ConfigClassTableProps {
     title: string;
     onSelected: (fieldName: string) => void;
     onToggle: (formData: FormData) => void;
+    onBulkToggle?: (formData: FormData) => void;
+    isSubmitting?: boolean;
 }
 
-const ResourcesList = ({ accessComponent, title, onToggle, onSelected }: ConfigClassTableProps) => {
+const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkToggle, isSubmitting }: ConfigClassTableProps) => {
     function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value;
         const isChecked = e.target.checked;
@@ -24,25 +26,18 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected }: ConfigC
     }
 
     function handleSelectAll() {
-        accessComponent.forEach((resource) => {
-            if (!resource.enabled) {
-                const formData = new FormData();
-                formData.append('resource', resource.name);
-                formData.append('enabled', 'true');
-                onToggle(formData);
-            }
-        });
+        if (onBulkToggle) {
+            const formData = new FormData();
+            onBulkToggle(formData);
+        }
     }
 
     function handleDeselectAll() {
-        accessComponent.forEach((resource) => {
-            if (resource.enabled) {
-                const formData = new FormData();
-                formData.append('resource', resource.name);
-                formData.append('enabled', 'false');
-                onToggle(formData);
-            }
-        });
+        if (onBulkToggle) {
+            const formData = new FormData();
+            formData.append('disable', 'true');
+            onBulkToggle(formData);
+        }
     }
 
     return (
@@ -55,6 +50,8 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected }: ConfigC
                             onClick={handleSelectAll}
                             variant="secondary"
                             size="small"
+                            disabled={isSubmitting}
+                            loading={isSubmitting}
                             data-cy="select-all-resources">
                             Velg alle
                         </Button>
@@ -62,6 +59,8 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected }: ConfigC
                             onClick={handleDeselectAll}
                             variant="secondary"
                             size="small"
+                            disabled={isSubmitting}
+                            loading={isSubmitting}
                             data-cy="deselect-all-resources">
                             Fjern alle
                         </Button>
