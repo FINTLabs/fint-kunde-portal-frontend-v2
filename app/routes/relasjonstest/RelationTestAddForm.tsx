@@ -62,7 +62,7 @@ const RelationTestAddForm = ({ components, clients, configs, runTest }: TestAddF
         if (isValid) {
             // const component = components.find((comp) => comp.dn === selectedComponent);
             const fullUrl = `${selectedBaseUrl}${selectedConfig}`;
-            console.debug('FULL URL:', fullUrl);
+            // console.debug('FULL URL:', fullUrl);
             runTest(fullUrl, selectedClient);
         }
     }

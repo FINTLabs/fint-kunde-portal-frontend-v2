@@ -13,13 +13,14 @@ interface ComponentsSectionProps {
     selectable?: boolean;
     toggle?: (formData: FormData) => void;
     isManaged: boolean;
+    fromAdapter?: string;
 }
 
 type ComponentType = {
     [type: string]: IComponent[];
 };
 
-const ComponentsTable = ({ items, selectedItems, toggle, isManaged }: ComponentsSectionProps) => {
+const ComponentsTable = ({ items, selectedItems, toggle, isManaged, fromAdapter }: ComponentsSectionProps) => {
     const navigate = useNavigate();
 
     const sortedComponents = items.sort((a, b) => a.name.localeCompare(b.name));
@@ -32,7 +33,11 @@ const ComponentsTable = ({ items, selectedItems, toggle, isManaged }: Components
         //         navigate(`/accesscontrol/${component.name}?client=${clientName}`);
         //     }
         // } else {
-        navigate(`/komponenter/${component.name}`);
+        if (fromAdapter) {
+            navigate(`/komponenter/${component.name}?fromAdapter=${fromAdapter}`);
+        } else {
+            navigate(`/komponenter/${component.name}`);
+        }
         // }
     };
 

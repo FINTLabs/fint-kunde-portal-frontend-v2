@@ -12,7 +12,7 @@ import {
 
 import { AuthTable } from '~/components/shared/AuthTable';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import ComponentList from '~/components/shared/ComponentList';
+import ComponentList from '~/routes/klienter.$id/ComponentList';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { handleClientAction } from '~/routes/klienter.$id/actions';

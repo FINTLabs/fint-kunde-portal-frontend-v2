@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, ComponentIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import { type LoaderFunctionArgs, useLoaderData, useNavigate } from 'react-router';
+import { type LoaderFunctionArgs, useLoaderData, useNavigate, useSearchParams } from 'react-router';
 
 import ComponentApi from '~/api/ComponentApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -21,11 +21,21 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
 export default function Index() {
     const component = useLoaderData<IComponent>();
+    const [searchParams] = useSearchParams();
+    const fromAdapter = searchParams.get('fromAdapter');
     const breadcrumbs = [
         { name: 'Komponenter', link: '/komponenter' },
         { name: component.name, link: `/komponenter/${component.name}` },
     ];
     const navigate = useNavigate();
+
+    const handleBack = () => {
+        if (fromAdapter) {
+            navigate(`/adapter/${fromAdapter}`);
+        } else {
+            navigate(`/komponenter`);
+        }
+    };
 
     return (
         <>
@@ -38,7 +48,7 @@ export default function Index() {
                         className="relative h-12 w-12 top-2 right-14"
                         icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
                         variant="tertiary"
-                        onClick={() => navigate(`/komponenter`)}></Button>
+                        onClick={handleBack}></Button>
                 </Box>
 
                 <Box

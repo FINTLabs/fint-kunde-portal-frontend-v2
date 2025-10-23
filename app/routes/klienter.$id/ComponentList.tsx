@@ -44,7 +44,7 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
 //         // return intermediate;
 // return true;    };
 
-    console.log('accessList', accessList);
+    // console.log('accessList', accessList);
 
     return (
         <Box>

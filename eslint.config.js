@@ -52,6 +52,7 @@ export default tseslint.config(
             ...reactHooks.configs.recommended.rules,
             ...jsxA11y.configs.recommended.rules,
             ...importPlugin.configs.recommended.rules,
+            "no-console": "warn",
         },
     },
 
@@ -91,6 +92,7 @@ export default tseslint.config(
             ...reactHooks.configs.recommended.rules,
             ...jsxA11y.configs.recommended.rules,
             ...importPlugin.configs.recommended.rules,
+            "no-console": "warn",
             // Place any TS-only rule tweaks here if you want
         },
     },
