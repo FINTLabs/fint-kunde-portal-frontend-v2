@@ -23,12 +23,49 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected }: ConfigC
         onToggle(formData);
     }
 
+    function handleSelectAll() {
+        accessComponent.forEach((resource) => {
+            if (!resource.enabled) {
+                const formData = new FormData();
+                formData.append('resource', resource.name);
+                formData.append('enabled', 'true');
+                onToggle(formData);
+            }
+        });
+    }
+
+    function handleDeselectAll() {
+        accessComponent.forEach((resource) => {
+            if (resource.enabled) {
+                const formData = new FormData();
+                formData.append('resource', resource.name);
+                formData.append('enabled', 'false');
+                onToggle(formData);
+            }
+        });
+    }
 
     return (
         <>
             <FormSummary>
                 <FormSummary.Header>
                     <FormSummary.Heading level="2">{title}</FormSummary.Heading>
+                    <HStack gap="2" style={{ marginTop: '1rem' }}>
+                        <Button
+                            onClick={handleSelectAll}
+                            variant="secondary"
+                            size="small"
+                            data-cy="select-all-resources">
+                            Velg alle
+                        </Button>
+                        <Button
+                            onClick={handleDeselectAll}
+                            variant="secondary"
+                            size="small"
+                            data-cy="deselect-all-resources">
+                            Fjern alle
+                        </Button>
+                    </HStack>
                 </FormSummary.Header>
                 <FormSummary.Answers>
                     <FormSummary.Answer>

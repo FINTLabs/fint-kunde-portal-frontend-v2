@@ -1,6 +1,30 @@
 [
   {
-    "name": "string",
+    "name": "Aktivitet",
+    "enabled": true,
+    "writeable": true,
+    "readingOption": "SINGULAR"
+  },
+  {
+    "name": "Anlegg",
+    "enabled": true,
+    "writeable": true,
+    "readingOption": "SINGULAR"
+  },
+  {
+    "name": "Ansvar",
+    "enabled": true,
+    "writeable": true,
+    "readingOption": "SINGULAR"
+  },
+  {
+    "name": "Arbeidsforholdstype",
+    "enabled": true,
+    "writeable": true,
+    "readingOption": "SINGULAR"
+  },
+  {
+    "name": "Art",
     "enabled": true,
     "writeable": true,
     "readingOption": "SINGULAR"
