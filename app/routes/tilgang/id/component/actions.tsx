@@ -13,32 +13,37 @@ export async function handleAccessElementAction({ request }: { request: Request 
             const component = formData.get('component') as string;
             const resource = formData.get('resource') as string;
 
-            const response = await AccessApi.updateResource(
-                username,
-                component,
-                resource,
-                { enabled: enabledFlag }
-            );
-            
+            const resourceData = {
+                component: component,
+                resource: resource,
+                enabled: enabledFlag,
+                isWriteable: false,
+                readingOption: null,
+            };
+
+            const response = await AccessApi.updateResources(username, component, [resourceData]);
+
             if (enabledFlag) {
                 return redirect(`/tilgang/${username}/${component}/${resource}`);
             }
-            
+
             return response;
         }
 
         case 'ENABLE_ALL_RESOURCES':
         case 'DISABLE_ALL_RESOURCES': {
-            // TODO: Implement when backend endpoint is ready
-            // const enabledFlag = actionType === 'ENABLE_ALL_RESOURCES';
-            // const username = formData.get('username') as string;
-            // const component = formData.get('component') as string;
-            // const response = await AccessApi.updateAllResources(username, component, enabledFlag);
-            // return response;
-            
+            const username = formData.get('username') as string;
+            const component = formData.get('component') as string;
+            const resourcesJson = formData.get('resources') as string;
+
+            if (resourcesJson) {
+                const resources = JSON.parse(resourcesJson);
+                return await AccessApi.updateResources(username, component, resources);
+            }
+
             return {
                 success: false,
-                message: 'Endpoint ikke implementert ennå',
+                message: 'Ingen ressurser å oppdatere',
                 variant: 'warning',
             };
         }

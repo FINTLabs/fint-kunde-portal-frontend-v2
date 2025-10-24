@@ -38,9 +38,9 @@ import tailwindHref from './styles/tailwind.css?url';
 import { HeaderProperties } from './utils/headerProperties';
 
 export const links: LinksFunction = () => [
-    { rel: 'stylesheet', href: akselHref }, // Aksel first
-    { rel: 'stylesheet', href: tailwindHref }, // Tailwind next
-    { rel: 'stylesheet', href: themeHref }, // Your overrides last
+    { rel: 'stylesheet', href: akselHref, as: 'style' }, // Aksel first
+    { rel: 'stylesheet', href: tailwindHref, as: 'style' }, // Tailwind next
+    { rel: 'stylesheet', href: themeHref, as: 'style' }, // Your overrides last
     // // (optional — check your real font URL)
     // { rel: 'preconnect', href: 'https://fonts.cdnfonts.com' },
     // { rel: 'stylesheet', href: 'https://fonts.cdnfonts.com/css/brockmann' },

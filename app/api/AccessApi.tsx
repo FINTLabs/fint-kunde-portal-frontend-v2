@@ -159,26 +159,22 @@ class AccessApi {
         });
     }
 
-    static async updateResource(
+    static async updateResources(
         username: string,
         component: string,
-        resource: string,
-        options: {
-            enabled?: boolean;
-            isWriteable?: boolean;
-            readingOption?: 'SINGULAR' | 'MULTI' | string;
-        }
+        resources: Array<{
+            component: string;
+            resource: string;
+            enabled: boolean;
+            isWriteable: boolean;
+            readingOption: string | null;
+        }>
     ): Promise<ApiResponse<IResource>> {
-        const body: Record<string, unknown> = {};
-        if (options.enabled !== undefined) body.enabled = options.enabled;
-        if (options.isWriteable !== undefined) body.isWriteable = options.isWriteable;
-        if (options.readingOption !== undefined) body.readingOption = options.readingOption;
-
         return await accessManager.call<IResource>({
             method: 'PATCH',
-            endpoint: `/access/${username}/component/${component}/resource/${resource}`,
-            functionName: 'updateResource',
-            body: JSON.stringify(body),
+            endpoint: `/access/${username}/component/${component}/resource`,
+            functionName: 'updateResources',
+            body: JSON.stringify(resources),
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
             customSuccessMessage: 'Tilgang ble oppdatert',
             additionalHeaders: {
@@ -220,24 +216,6 @@ class AccessApi {
             body: JSON.stringify(fields),
             customErrorMessage: 'Kunne ikke oppdatere felttilganger',
             customSuccessMessage: 'Felttilganger ble oppdatert',
-            additionalHeaders: {
-                'x-nin': HeaderProperties.getXnin(),
-            },
-        });
-    }
-
-    static async updateAllResources(
-        username: string,
-        component: string,
-        enabled: boolean
-    ): Promise<ApiResponse<IResource>> {
-        return await accessManager.call<IResource>({
-            method: 'PATCH',
-            endpoint: `/access/${username}/component/${component}/resource`,
-            functionName: 'updateAllResources',
-            body: JSON.stringify({ enabled }),
-            customErrorMessage: 'Kunne ikke oppdatere tilgang',
-            customSuccessMessage: 'Tilgang ble oppdatert',
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },

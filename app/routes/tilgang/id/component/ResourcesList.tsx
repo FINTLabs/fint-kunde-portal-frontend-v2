@@ -27,14 +27,36 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
 
     function handleSelectAll() {
         if (onBulkToggle) {
+            const resourcesToEnable = accessComponent
+                .filter((resource) => !resource.enabled)
+                .map((resource) => ({
+                    component: resource.name,
+                    resource: resource.name,
+                    enabled: true,
+                    isWriteable: resource.isWriteable,
+                    readingOption: resource.readingOption
+                }));
+
             const formData = new FormData();
+            formData.append('resources', JSON.stringify(resourcesToEnable));
             onBulkToggle(formData);
         }
     }
 
     function handleDeselectAll() {
         if (onBulkToggle) {
+            const resourcesToDisable = accessComponent
+                .filter((resource) => resource.enabled)
+                .map((resource) => ({
+                    component: resource.name,
+                    resource: resource.name,
+                    enabled: false,
+                    isWriteable: resource.isWriteable,
+                    readingOption: resource.readingOption
+                }));
+
             const formData = new FormData();
+            formData.append('resources', JSON.stringify(resourcesToDisable));
             formData.append('disable', 'true');
             onBulkToggle(formData);
         }
@@ -71,7 +93,6 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
                         {accessComponent.map((x, i) => {
                             return (
                                 <HStack key={x.name} justify={'space-between'} align={'center'}>
-                                    {/*<HStack align={'center'} gap={'0'}>*/}
                                     <Checkbox
                                         onChange={(e) => handleCheckbox(e)}
                                         value={x.name}
@@ -90,12 +111,6 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
                                         data-cy={`resource-details-${x.name}`}
                                     />
 
-                                    {/*<ChevronRightCircleIcon*/}
-                                    {/*    title="Vis detaljer"*/}
-                                    {/*    onClick={() => onSelected(x.name)}*/}
-                                    {/*/>*/}
-                                {/*    </Box>*/}
-                                {/*    </HStack>*/}
                                 </HStack>
                             );
                         })}
@@ -106,6 +121,4 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
     );
 };
 
-// checked={x.name == 'elevforhold' || x.name == 'elev' ? true : false}
-// disabled={x.name == 'elev' ? true : false}
 export default ResourcesList;
