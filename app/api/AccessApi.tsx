@@ -19,7 +19,7 @@ class AccessApi {
             endpoint: `/access/${name}`,
             functionName: 'getClientOrAdapterAccess',
             customErrorMessage: `Kunne ikke hente tilgang for: ${name}`,
-            customSuccessMessage: `Tilgang for ${name} ble hentet.`,
+            customSuccessMessage: `Tilgang for ${name} ble hentet`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -88,7 +88,7 @@ class AccessApi {
             endpoint: `/access/${clientOrAdapter}/component/${componentName}/resource/${resourceName}/field`,
             functionName: 'getFieldAccess',
             customErrorMessage: `Kunne ikke hente komponenttilgang`,
-            customSuccessMessage: `Komponenttilgang ble hentet.`,
+            customSuccessMessage: `Komponenttilgang ble hentet: ${componentName}`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -102,7 +102,7 @@ class AccessApi {
             endpoint: `/access/${username}`,
             functionName: 'addAccess',
             customErrorMessage: 'Kunne ikke sette opp tilgang',
-            customSuccessMessage: 'Tilgang ble opprettet',
+            customSuccessMessage: `Tilgang ble opprettet: ${username}`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -116,7 +116,7 @@ class AccessApi {
             endpoint: `/access/${username}`,
             functionName: 'deleteAccess',
             customErrorMessage: 'Kunne ikke slette tilgang',
-            customSuccessMessage: 'Tilgang ble slettet',
+            customSuccessMessage: `Tilgang ble slettet: ${username}`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -134,7 +134,7 @@ class AccessApi {
             functionName: 'updateEnvironments',
             body: JSON.stringify({ environments }),
             customErrorMessage: 'Kunne ikke endre miljøer',
-            customSuccessMessage: 'Miljøer ble oppdatert',
+            customSuccessMessage: `Miljøer ble oppdatert: ${environments.length} miljøer`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -152,7 +152,10 @@ class AccessApi {
             functionName: 'addComponentAccess',
             body: JSON.stringify({ enabled }),
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
-            customSuccessMessage: 'Tilgang ble oppdatert',
+            customSuccessMessage:
+                enabled === 'true'
+                    ? `Tilgang ble oppdatert: ${componentName} komponent`
+                    : `Tilgang ble fjernet: ${componentName} komponent`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -166,7 +169,7 @@ class AccessApi {
             component: string;
             resource: string;
             enabled: boolean;
-            isWriteable: boolean;
+            writeable: boolean;
             readingOption: string | null;
         }>
     ): Promise<ApiResponse<IResource>> {
@@ -199,7 +202,7 @@ class AccessApi {
             functionName: 'updateFieldAccess',
             body: JSON.stringify({ enabled }),
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
-            customSuccessMessage: 'Tilgang ble oppdatert',
+            customSuccessMessage: `Tilgang ble oppdatert: ${field} felt`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -218,7 +221,7 @@ class AccessApi {
             functionName: 'addFieldAccess',
             body: JSON.stringify(fields),
             customErrorMessage: 'Kunne ikke oppdatere felttilganger',
-            customSuccessMessage: 'Felttilganger ble oppdatert',
+            customSuccessMessage: `Felttilganger ble oppdatert: ${fields.length} felter`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },

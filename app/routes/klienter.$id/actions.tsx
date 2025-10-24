@@ -41,8 +41,8 @@ export async function handleClientAction({ request }: { request: Request }) {
             
             const response = await AccessApi.addComponentAccess(username, componentName, enabled);
             
-            if (enabled === 'true') {
-                return redirect(`/tilgang/${username}/${componentName}`);
+            if (enabled === 'true' && response.success) {
+                return redirect(`/tilgang/${username}/${componentName}?addedNew=true`);
             }
             
             return response;

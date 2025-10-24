@@ -17,14 +17,14 @@ export async function handleAccessElementAction({ request }: { request: Request 
                 component: component,
                 resource: resource,
                 enabled: enabledFlag,
-                isWriteable: false,
+                writeable: false,
                 readingOption: null,
             };
 
             const response = await AccessApi.updateResources(username, component, [resourceData]);
 
-            if (enabledFlag) {
-                return redirect(`/tilgang/${username}/${component}/${resource}`);
+            if (enabledFlag && response.success) {
+                return redirect(`/tilgang/${username}/${component}/${resource}?addedNew=true`);
             }
 
             return response;

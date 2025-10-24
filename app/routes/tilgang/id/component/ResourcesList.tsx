@@ -33,7 +33,7 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
                     component: resource.name,
                     resource: resource.name,
                     enabled: true,
-                    isWriteable: resource.isWriteable,
+                    writeable: resource.writeable,
                     readingOption: resource.readingOption
                 }));
 
@@ -51,7 +51,7 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
                     component: resource.name,
                     resource: resource.name,
                     enabled: false,
-                    isWriteable: resource.isWriteable,
+                    writeable: resource.writeable,
                     readingOption: resource.readingOption
                 }));
 

@@ -17,6 +17,7 @@ const IconToggleButtons = ({
 }: IconToggleButtonsProps) => {
     return (
         <HStack gap={'10'} className={'pb-5 justify-end'}>
+            <div>{resource.writeable}</div>
             <ConfirmAction
                 buttonText={resource.writeable ? 'Skriverettighet' : 'Ingen skriverettighet'}
                 titleText={resource.name}

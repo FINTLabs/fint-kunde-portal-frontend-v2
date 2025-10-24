@@ -37,15 +37,15 @@ export interface IAccessComponent {
     fields: IField[];
     readingOption: 'MULTIPLE' | 'SINGLE';
     enabled: boolean;
-    isWriteable: boolean;
+    writeable: boolean;
 }
 
 export interface IComponentAccess {
     enabled: boolean;
 }
 
-export interface IUpdateResource {
-    enabled: boolean;
-    isWriteable: boolean;
-    readingOption: string;
-}
+// export interface IUpdateResource {
+//     enabled: boolean;
+//     isWriteable: boolean;
+//     readingOption: string;
+// }

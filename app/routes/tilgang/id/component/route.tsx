@@ -7,6 +7,7 @@ import {
     useFetcher,
     useLoaderData,
     useNavigate,
+    useSearchParams,
 } from 'react-router';
 
 import AccessApi from '~/api/AccessApi';
@@ -43,6 +44,15 @@ export default function Route() {
     const fetcher = useFetcher<ApiResponse<IComponent>>();
     const actionData = fetcher.data as ApiResponse<IComponent>;
     const { alertState } = useAlerts<IComponent>([], actionData, fetcher.state);
+    const [searchParams] = useSearchParams();
+    const addedNew = searchParams.get('addedNew');
+    if (addedNew === 'true') {
+        alertState.push({
+            id: 'addedNew',
+            message: `Tilgang ble oppdatert for ressurse: ${component}`,
+            variant: 'success',
+        });
+    }
 
     const elementType =
         clientOrAdapter.split('@')[1]?.split('.')[0] === 'client' ? 'klienter' : 'adapter';

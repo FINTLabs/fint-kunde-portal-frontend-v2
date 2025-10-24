@@ -1,7 +1,13 @@
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import { Alert, FormSummary, HStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
-import {type ActionFunctionArgs, type LoaderFunctionArgs, useFetcher, useLoaderData } from 'react-router';
+import {
+    type ActionFunctionArgs,
+    type LoaderFunctionArgs,
+    useFetcher,
+    useLoaderData,
+    useSearchParams,
+} from 'react-router';
 
 import AccessApi from '~/api/AccessApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -47,6 +53,16 @@ export default function Route() {
     const actionData = fetcher.data as ApiResponse<IField>;
     const { alertState } = useAlerts<IField>([], actionData, fetcher.state);
 
+    const [searchParams] = useSearchParams();
+    const addedNew = searchParams.get('addedNew');
+    if (addedNew === 'true') {
+        alertState.push({
+            id: 'addedNew',
+            message: `Tilgang ble oppdatert for ressurse: ${resource.name}`,
+            variant: 'success',
+        });
+    }
+
     const elementType =
         clientOrAdapter.split('@')[1]?.split('.')[0] === 'client' ? 'klienter' : 'adaptere';
 
@@ -76,10 +92,11 @@ export default function Route() {
 
     function handleReadingOptions() {
         const formData = new FormData();
-        formData.append('actionType', 'SET_READING_OPTION');
+        formData.append('actionType', 'UPDATE_RESOURCE');
         formData.append('username', clientOrAdapter);
         formData.append('componentName', componentName);
         formData.append('resourceName', resource.name);
+        formData.append('writeable', resource.writeable.toString());
         if (resource.readingOption === 'MULTIPLE') {
             formData.append('readingOption', 'SINGULAR');
         } else {
@@ -90,15 +107,17 @@ export default function Route() {
     }
 
     function handleWriteable() {
+
         const formData = new FormData();
-        formData.append('actionType', 'SET_IS_WRITEABLE');
+        formData.append('actionType', 'UPDATE_RESOURCE');
         formData.append('username', clientOrAdapter);
         formData.append('componentName', componentName);
         formData.append('resourceName', resource.name);
+        formData.append('readingOption', resource.readingOption);
         if (resource.writeable) {
-            formData.append('isWriteable', 'false');
+            formData.append('writeable', 'false');
         } else {
-            formData.append('isWriteable', 'true');
+            formData.append('writeable', 'true');
         }
 
         fetcher.submit(formData, { method: 'post' });
@@ -133,10 +152,12 @@ export default function Route() {
 
                 <FormSummary.Answers>
                     <FormSummary.Answer>
+                        {resource.writeable ? 'true' : 'false'}
+                        {resource.readingOption === 'SINGULAR' ? 'true' : 'false'}
                         <IconToggleButtons
                             resource={resource}
-                            onClickReadingOptions={handleReadingOptions}
-                            onClickIsWriteable={handleWriteable}
+                            onClickReadingOptions={() => handleReadingOptions()}
+                            onClickIsWriteable={() => handleWriteable()}
                         />
 
                         <FieldList onToggleField={handleToggleField} fieldList={fieldList || []} />
