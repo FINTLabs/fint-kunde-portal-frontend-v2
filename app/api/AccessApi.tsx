@@ -176,7 +176,10 @@ class AccessApi {
             functionName: 'updateResources',
             body: JSON.stringify(resources),
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
-            customSuccessMessage: 'Tilgang ble oppdatert',
+            customSuccessMessage:
+                resources.length === 1
+                    ? `Tilgang ble oppdatert: ${resources[0].resource} ressurser`
+                    : `Tilgang ble oppdatert: ${resources.length} `,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
