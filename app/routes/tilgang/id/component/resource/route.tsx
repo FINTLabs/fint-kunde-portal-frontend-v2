@@ -152,8 +152,6 @@ export default function Route() {
 
                 <FormSummary.Answers>
                     <FormSummary.Answer>
-                        {resource.writeable ? 'true' : 'false'}
-                        {resource.readingOption === 'SINGULAR' ? 'true' : 'false'}
                         <IconToggleButtons
                             resource={resource}
                             onClickReadingOptions={() => handleReadingOptions()}
