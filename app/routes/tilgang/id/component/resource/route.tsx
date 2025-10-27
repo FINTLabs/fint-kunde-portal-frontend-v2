@@ -1,5 +1,5 @@
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
-import { Alert, FormSummary, HStack } from '@navikt/ds-react';
+import { Alert, BodyShort, FormSummary, HStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
@@ -147,6 +147,8 @@ export default function Route() {
                 <FormSummary.Header>
                     <FormSummary.Heading level="2">
                         <HStack gap={'3'}>{fieldListTitle}</HStack>
+                        <BodyShort>Skriverettighet: {resource.writeable ? 'true' : 'false'}</BodyShort>
+                        <BodyShort>Lesseinstillinger: {resource.readingOption }</BodyShort>
                     </FormSummary.Heading>
                 </FormSummary.Header>
 
