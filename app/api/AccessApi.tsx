@@ -134,7 +134,7 @@ class AccessApi {
             functionName: 'updateEnvironments',
             body: JSON.stringify({ environments }),
             customErrorMessage: 'Kunne ikke endre miljøer',
-            customSuccessMessage: `Miljøer ble oppdatert: ${environments.length} miljøer`,
+            customSuccessMessage: `Miljøer ble oppdatert`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -153,9 +153,7 @@ class AccessApi {
             body: JSON.stringify({ enabled }),
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
             customSuccessMessage:
-                enabled === 'true'
-                    ? `Tilgang ble lagt til`
-                    : `Tilgang ble fjernet til alle ressurser`,
+                enabled === 'true' ? `Tilgang ble lagt til` : `Tilgang ble fjernet `,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -182,9 +180,7 @@ class AccessApi {
             body: JSON.stringify(resources),
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
             customSuccessMessage:
-                resources.length === 1
-                    ? `Tilgang ble oppdatert`
-                    : `Tilgang ble oppdatert alle`,
+                resources.length === 1 ? `Tilgang ble oppdatert` : `Tilgang ble oppdatert alle`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -204,7 +200,7 @@ class AccessApi {
             functionName: 'updateFieldAccess',
             body: JSON.stringify({ enabled }),
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
-            customSuccessMessage: `Tilgang ble oppdatert: ${field} felt`,
+            customSuccessMessage: `Tilgang ble oppdatert`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -223,7 +219,7 @@ class AccessApi {
             functionName: 'addFieldAccess',
             body: JSON.stringify(fields),
             customErrorMessage: 'Kunne ikke oppdatere felttilganger',
-            customSuccessMessage: `Felttilganger ble oppdatert: ${fields.length} felter`,
+            customSuccessMessage: `Felttilganger ble oppdatert`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
