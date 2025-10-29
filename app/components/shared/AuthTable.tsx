@@ -79,7 +79,7 @@ export const AuthTable = ({
 
     return (
         <>
-            <Table>
+            <Table size="small">
                 <Table.Body>
                     <Table.Row>
                         <Table.HeaderCell scope="row">Brukernavn</Table.HeaderCell>
