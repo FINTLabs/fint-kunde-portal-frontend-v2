@@ -52,6 +52,7 @@ export default function ClientDetails() {
     const { alertState } = useAlerts<IClient>([], actionData, fetcher.state);
     const [isLoading, setIsLoading] = useState(false);
 
+
     let selectedEnvs: Environment[] = [];
     if (access?.environments)
         selectedEnvs = (Object.keys(access.environments) as Environment[]).filter(
@@ -160,6 +161,7 @@ export default function ClientDetails() {
                             <>
                                 <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
 
+                                
                                 <Box padding={'6'}>
                                     <CheckboxGroup
                                         legend="Environment:"

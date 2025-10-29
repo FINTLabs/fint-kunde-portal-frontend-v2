@@ -38,14 +38,12 @@ export async function handleClientAction({ request }: { request: Request }) {
             const username = formData.get('username') as string;
             const componentName = formData.get('componentName') as string;
             const enabled = formData.get('enabled') as string;
-            
-            const response = await AccessApi.addComponentAccess(username, componentName, enabled);
-            
-            if (enabled === 'true' && response.success) {
-                return redirect(`/tilgang/${username}/${componentName}?addedNew=true`);
-            }
-            
-            return response;
+
+            // if (enabled === 'true' && response.success) {
+            //     return redirect(`/tilgang/${username}/${componentName}?addedNew=true`);
+            // }
+
+            return await AccessApi.addComponentAccess(username, componentName, enabled);
         }
         // return await ClientApi.updateComponentInClient(
         //     formData.get('componentName') as string,

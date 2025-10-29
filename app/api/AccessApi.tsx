@@ -146,7 +146,7 @@ class AccessApi {
         componentName: string,
         enabled: string
     ): Promise<ApiResponse<IComponentAccess>> {
-        return await accessManager.call<IComponentAccess>({
+        const response = await accessManager.call<IComponentAccess>({
             method: 'PATCH',
             endpoint: `/access/${username}/component/${componentName}`,
             functionName: 'addComponentAccess',
@@ -154,12 +154,14 @@ class AccessApi {
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
             customSuccessMessage:
                 enabled === 'true'
-                    ? `Tilgang ble oppdatert: ${componentName} komponent`
-                    : `Tilgang ble fjernet: ${componentName} komponent`,
+                    ? `Tilgang ble lagt til`
+                    : `Tilgang ble fjernet til alle ressurser`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
         });
+        response.body.componentName = componentName;
+        return response;
     }
 
     static async updateResources(
@@ -181,8 +183,8 @@ class AccessApi {
             customErrorMessage: 'Kunne ikke oppdatere tilgang',
             customSuccessMessage:
                 resources.length === 1
-                    ? `Tilgang ble oppdatert: ${resources[0].resource} ressurser`
-                    : `Tilgang ble oppdatert: ${resources.length} `,
+                    ? `Tilgang ble oppdatert`
+                    : `Tilgang ble oppdatert alle`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },

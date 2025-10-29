@@ -1,5 +1,18 @@
-import { ChevronRightCircleIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
-import { Box, Button, Checkbox, FormSummary, HGrid, HStack } from '@navikt/ds-react';
+import {
+    ChevronRightCircleIcon,
+    ExclamationmarkTriangleIcon,
+    KeyVerticalIcon,
+} from '@navikt/aksel-icons';
+import {
+    Box,
+    Button,
+    Checkbox,
+    FormSummary,
+    HGrid,
+    HStack,
+    Spacer,
+    Tooltip,
+} from '@navikt/ds-react';
 import React from 'react';
 import { useNavigate } from 'react-router';
 
@@ -28,24 +41,6 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
         onToggle(formData);
     };
 
-
-//     const isIntermediate = (access: boolean, packages: IPackageItem[]) => {
-//         console.log('packages', packages);
-//         console.log('access', access);
-//         // if (!access) {
-//         //     return false;
-//         // }
-//         // let intermediate = true;
-//         // packages.forEach((pkg) => {
-//         //     if (!pkg.access) {
-//         //         intermediate = true;
-//         //     }
-//         // });
-//         // return intermediate;
-// return true;    };
-
-    // console.log('accessList', accessList);
-
     return (
         <Box>
             <HGrid gap={'3'} columns={3}>
@@ -69,7 +64,6 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                             <FormSummary.Answers>
                                 <FormSummary.Answer>
                                     {domain.packages.map((item, i) => (
-                                        
                                         <HStack
                                             key={`${domain}-${i}`}
                                             justify={'space-between'}
@@ -89,9 +83,37 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                                 }}
                                                 value={domain.domain + '-' + item.packageName}
                                                 size={'small'}
-                                                checked={item.access}>
+                                                checked={item.access}
+                                                // only add description if item is partialaccess or fullaccess
+                                                // description={
+                                                //     item.access &&
+                                                //     item.hasResourceAccess === 'PARTIALACCESS'
+                                                //         ? 'Delvis tilgang'
+                                                //         : item.access &&
+                                                //             item.hasResourceAccess === 'FULLACCESS'
+                                                //           ? 'Full tilgang'
+
+                                                //             : ''
+                                                // }
+                                            >
                                                 {item.packageName}
                                             </Checkbox>
+                                            <Spacer />
+                                            {item.access &&
+                                                item.hasResourceAccess === 'NOACCESS' && (
+                                                    <>
+                                                        <Tooltip
+                                                            content="Tilgang mangler"
+                                                            placement="left">
+                                                            <ExclamationmarkTriangleIcon
+                                                                aria-label="Tilgang mangler"
+                                                                fontSize="1.5rem"
+                                                                color="var(--a-icon-warning)"
+                                                            />
+                                                        </Tooltip>
+                                                    </>
+                                                )}
+
                                             <Button
                                                 icon={<ChevronRightCircleIcon title="Rediger" />}
                                                 onClick={() =>

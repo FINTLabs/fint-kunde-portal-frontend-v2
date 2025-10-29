@@ -6,14 +6,18 @@ export interface IAccess {
     environments: Record<Environment, boolean>;
 }
 
+export type ResourceAccess = 'NOACCESS' | 'FULLACCESS' | 'PARTIALACCESS';
+
 export interface IPackageItem {
     packageName: string;
     access: boolean;
+    hasResourceAccess: ResourceAccess;
 }
 
 export interface IDomainPackages {
     domain: string;
     packages: IPackageItem[];
+    
 }
 
 // export type PackageAccessList = IDomainPackages[];

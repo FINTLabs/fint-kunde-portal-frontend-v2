@@ -1,5 +1,3 @@
-import { redirect } from 'react-router';
-
 import AccessApi from '~/api/AccessApi';
 
 export async function handleAccessElementAction({ request }: { request: Request }) {
@@ -21,13 +19,11 @@ export async function handleAccessElementAction({ request }: { request: Request 
                 readingOption: null,
             };
 
-            const response = await AccessApi.updateResources(username, component, [resourceData]);
+            // if (enabledFlag && response.success) {
+            //     return redirect(`/tilgang/${username}/${component}/${resource}?addedNew=true`);
+            // }
 
-            if (enabledFlag && response.success) {
-                return redirect(`/tilgang/${username}/${component}/${resource}?addedNew=true`);
-            }
-
-            return response;
+            return await AccessApi.updateResources(username, component, [resourceData]);
         }
 
         case 'ENABLE_ALL_RESOURCES':
