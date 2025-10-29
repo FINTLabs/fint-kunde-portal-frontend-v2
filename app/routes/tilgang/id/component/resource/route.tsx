@@ -1,5 +1,5 @@
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, FormSummary, HStack } from '@navikt/ds-react';
+import { BodyShort, FormSummary, HStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
@@ -16,7 +16,6 @@ import { handleFieldAccessAction } from '~/routes/tilgang/id/component/resource/
 import FieldList from '~/routes/tilgang/id/component/resource/FieldList';
 import IconToggleButtons from '~/routes/tilgang/id/component/resource/IconToggleButtons';
 import { IField, IResource } from '~/types/Access';
-
 
 export const action = async (args: ActionFunctionArgs) => handleFieldAccessAction(args);
 
@@ -107,7 +106,6 @@ export default function Route() {
     }
 
     function handleWriteable() {
-
         const formData = new FormData();
         formData.append('actionType', 'UPDATE_RESOURCE');
         formData.append('username', clientOrAdapter);
@@ -133,10 +131,6 @@ export default function Route() {
                 helpText="NEED_THIS"
             />
 
-            <Alert variant="info" style={{ marginBottom: '1rem' }}>
-                Velg tilgang ved å krysse av for de riktige feltene nedenfor.
-            </Alert>
-
             <NovariSnackbar
                 items={alertState}
                 position={'top-right'}
@@ -147,8 +141,10 @@ export default function Route() {
                 <FormSummary.Header>
                     <FormSummary.Heading level="2">
                         <HStack gap={'3'}>{fieldListTitle}</HStack>
-                        <BodyShort>Skriverettighet: {resource.writeable ? 'true' : 'false'}</BodyShort>
-                        <BodyShort>Lesseinstillinger: {resource.readingOption }</BodyShort>
+                        <BodyShort>
+                            Skriverettighet: {resource.writeable ? 'true' : 'false'}
+                        </BodyShort>
+                        <BodyShort>Lesseinstillinger: {resource.readingOption}</BodyShort>
                     </FormSummary.Heading>
                 </FormSummary.Header>
 
