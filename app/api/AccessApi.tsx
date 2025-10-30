@@ -1,7 +1,14 @@
 import log4js from 'log4js';
 import { type ApiResponse, NovariApiManager } from 'novari-frontend-components';
 
-import { IAccess, IComponentAccess, IDomainPackages, IField, IResource } from '~/types/Access';
+import {
+    IAccess,
+    IAccessAudit,
+    IComponentAccess,
+    IDomainPackages,
+    IField,
+    IResource,
+} from '~/types/Access';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const logger = log4js.getLogger();
@@ -22,6 +29,7 @@ class AccessApi {
             customSuccessMessage: `Tilgang for ${name} ble hentet`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
             },
         });
     }
@@ -38,6 +46,7 @@ class AccessApi {
             customSuccessMessage: `Tilgang for ${name} ble hentet.`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
             },
         });
     }
@@ -55,6 +64,7 @@ class AccessApi {
             customSuccessMessage: `Komponenttilgang for ${name} ble hentet.`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
             },
         });
     }
@@ -73,6 +83,7 @@ class AccessApi {
             customSuccessMessage: `Ressurstilgang for ${resourceName} ble hentet.`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
             },
         });
     }
@@ -91,6 +102,7 @@ class AccessApi {
             customSuccessMessage: `Komponenttilgang ble hentet: ${componentName}`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
             },
         });
     }
@@ -119,6 +131,7 @@ class AccessApi {
             customSuccessMessage: `Tilgang ble slettet: ${username}`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
             },
         });
     }
@@ -137,6 +150,7 @@ class AccessApi {
             customSuccessMessage: `Miljøer ble oppdatert`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
             },
         });
     }
@@ -156,6 +170,7 @@ class AccessApi {
                 enabled === 'true' ? `Tilgang ble lagt til` : `Tilgang ble fjernet `,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
             },
         });
         response.body.componentName = componentName;
@@ -183,6 +198,7 @@ class AccessApi {
                 resources.length === 1 ? `Tilgang ble oppdatert` : `Tilgang ble oppdatert alle`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
             },
         });
     }
@@ -203,6 +219,7 @@ class AccessApi {
             customSuccessMessage: `Tilgang ble oppdatert`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
             },
         });
     }
@@ -222,6 +239,22 @@ class AccessApi {
             customSuccessMessage: `Felttilganger ble oppdatert`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
+            },
+        });
+    }
+
+    // ***** /access/{username}/audit
+    static async getAccessAudit(username: string): Promise<ApiResponse<IAccessAudit[]>> {
+        return await accessManager.call<IAccessAudit[]>({
+            method: 'GET',
+            endpoint: `/access/${username}/audit`,
+            functionName: 'getAccessAudit',
+            customErrorMessage: `Kunne ikke hente endringslogg`,
+            customSuccessMessage: `Endringslogg hentet`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+                'x-username': HeaderProperties.getUsername(),
             },
         });
     }

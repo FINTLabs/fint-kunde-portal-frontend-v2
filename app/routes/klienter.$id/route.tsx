@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid } from '@navikt/ds-react';
+import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid, Modal } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
 import {
@@ -13,10 +13,11 @@ import {
 import { AuthTable } from '~/components/shared/AuthTable';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import ComponentList from '~/routes/klienter.$id/ComponentList';
+import ComponentAccessAudit from '~/routes/klienter.$id/ComponentAccessAudit';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { handleClientAction } from '~/routes/klienter.$id/actions';
-import { Environment, IAccess, IDomainPackages } from '~/types/Access';
+import { Environment, IAccess, IAccessAudit, IDomainPackages } from '~/types/Access';
 import { IAdapter } from '~/types/Adapter';
 import { IClient } from '~/types/Clients';
 
@@ -31,12 +32,14 @@ interface IExtendedFetcherResponseData extends ApiResponse<IClient> {
 }
 
 export default function ClientDetails() {
-    const { client, features, access, accessComponentList } = useLoaderData<{
+    const { client, features, access, accessComponentList, accessAudit } = useLoaderData<{
         client: IClient;
         features: Record<string, boolean>;
         access: IAccess;
         accessComponentList: IDomainPackages[];
+        accessAudit: IAccessAudit[];
     }>();
+    const [isAuditOpen, setIsAuditOpen] = useState(false);
 
     const navigate = useNavigate();
     const hasAccessControl = features['access-controll-new'];
@@ -174,11 +177,21 @@ export default function ClientDetails() {
                                     </CheckboxGroup>
                                 </Box>
 
+                                <Box className="w-full" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <Button size="xsmall" variant="tertiary" onClick={() => setIsAuditOpen(true)}>
+                                        Endringslogg
+                                    </Button>
+                                </Box>
                                 <ComponentList
                                     accessList={accessComponentList}
                                     entity={client.name}
                                     onToggle={handleToggle}
                                 />
+                                <Modal open={isAuditOpen} onClose={() => setIsAuditOpen(false)} header={{ heading: 'Endringslogg' }}>
+                                    <Modal.Body>
+                                        <ComponentAccessAudit audit={accessAudit || []} />
+                                    </Modal.Body>
+                                </Modal>
                             </>
                         ) : (
                             <Box padding="6">

@@ -48,6 +48,12 @@ export interface IComponentAccess {
     enabled: boolean;
 }
 
+export interface IAccessAudit {
+    changesByUser: string;
+    clientUsername: string;
+    timeStamp: number;
+}
+
 // export interface IUpdateResource {
 //     enabled: boolean;
 //     isWriteable: boolean;

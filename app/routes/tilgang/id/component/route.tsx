@@ -1,4 +1,6 @@
-import { KeyVerticalIcon } from '@navikt/aksel-icons';
+import { ArrowLeftIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
+import React from 'react';
+import { Box, Button, HGrid, Modal } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
@@ -14,7 +16,8 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { handleAccessElementAction } from '~/routes/tilgang/id/component/actions';
 import ResourcesList from '~/routes/tilgang/id/component/ResourcesList';
-import { IAccessComponent } from '~/types/Access';
+import { IAccessAudit, IAccessComponent } from '~/types/Access';
+import AccessAudit from '~/routes/tilgang/id/component/AccessAudit';
 import { IComponent } from '~/types/Component';
 
 export const action = async (args: ActionFunctionArgs) => handleAccessElementAction(args);
@@ -24,20 +27,24 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     const component = params.component || '';
 
     const resourceList = await AccessApi.getComponentAccess(component, clientOrAdapter);
+    const auditLog = await AccessApi.getAccessAudit(clientOrAdapter);
 
     return Response.json({
         clientOrAdapter,
         resourceList: resourceList.data,
         component,
+        auditLog: auditLog.data || [],
     });
 };
 
 export default function Route() {
-    const { clientOrAdapter, resourceList, component } = useLoaderData<{
+    const { clientOrAdapter, resourceList, component, auditLog } = useLoaderData<{
         clientOrAdapter: string;
         resourceList: IAccessComponent[];
         component: string;
+        auditLog: IAccessAudit[];
     }>();
+    const [isAuditOpen, setIsAuditOpen] = React.useState(false);
     const navigate = useNavigate();
     const resourceTitle = `${clientOrAdapter}/${component}`;
     const fetcher = useFetcher<ApiResponse<IComponent>>();
@@ -86,14 +93,33 @@ export default function Route() {
     }
 
     return (
-        <div>
-            <Breadcrumbs breadcrumbs={breadcrumbs} />
+        <HGrid gap="2" align={'start'}>
+                        <Breadcrumbs breadcrumbs={breadcrumbs} />
 
-            <InternalPageHeader
-                title={`Tilgang - ${elementType}`}
-                icon={KeyVerticalIcon}
-                helpText="NEED_THIS"
-            />
+<InternalPageHeader
+    title={`Tilgang - ${elementType}`}
+    icon={KeyVerticalIcon}
+    helpText="NEED_THIS"
+/>
+        <Box>
+            <Button
+                data-cy="back-button"
+                className="relative h-12 w-12 top-2 right-14"
+                icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
+                variant="tertiary"
+                onClick={() => navigate(`/${elementType}/${clientOrAdapter}`)}></Button>
+        </Box>
+
+        <Box
+            className="w-full relative bottom-12"
+            padding="6"
+            borderRadius="large"
+            shadow="small">
+            <Box className="w-full" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button size="xsmall" variant="tertiary" onClick={() => setIsAuditOpen(true)}>
+                    Endringslogg
+                </Button>
+            </Box>
 
             <NovariSnackbar
                 items={alertState}
@@ -109,6 +135,12 @@ export default function Route() {
                 onBulkToggle={handleBulkToggle}
                 isSubmitting={fetcher.state === 'submitting' || fetcher.state === 'loading'}
             />
-        </div>
+            <Modal open={isAuditOpen} onClose={() => setIsAuditOpen(false)} header={{ heading: 'Endringslogg' }}>
+                <Modal.Body>
+                    <AccessAudit audit={auditLog || []} />
+                </Modal.Body>
+            </Modal>
+        </Box>
+        </HGrid>
     );
 }

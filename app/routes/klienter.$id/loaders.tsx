@@ -13,17 +13,19 @@ export async function loader({ request, params }: ActionFunctionArgs) {
     const featuresResponse = await FeaturesApi.fetchFeatures();
     const hasAccessControl = id && featuresResponse.data?.['access-controll-new'];
 
-    const [accessResponse, componentListResponse] = hasAccessControl
+    const [accessResponse, componentListResponse, auditResponse] = hasAccessControl
         ? await Promise.all([
               AccessApi.getClientOrAdapterAccess(id),
               AccessApi.getClientOrAdapterAccessComponents(id),
+              AccessApi.getAccessAudit(id),
           ])
-        : [null, null];
+        : [null, null, null];
 
     return Response.json({
         client: clientResponse,
         features: featuresResponse.data,
         access: accessResponse?.data,
         accessComponentList: componentListResponse?.data,
+        accessAudit: auditResponse?.data || [],
     });
 }

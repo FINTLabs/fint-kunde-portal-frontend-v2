@@ -67,7 +67,11 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
             <FormSummary>
                 <FormSummary.Header>
                     <FormSummary.Heading level="2">{title}</FormSummary.Heading>
-                    <HStack gap="2" style={{ marginTop: '1rem' }}>
+                    
+                </FormSummary.Header>
+                <FormSummary.Answers>
+                    <FormSummary.Answer>
+                    <HStack gap="2" style={{ margin: '1rem' }}>
                         <Button
                             onClick={handleSelectAll}
                             variant="secondary"
@@ -87,9 +91,6 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
                             Fjern alle
                         </Button>
                     </HStack>
-                </FormSummary.Header>
-                <FormSummary.Answers>
-                    <FormSummary.Answer>
                         {accessComponent.map((x, i) => {
                             return (
                                 <HStack key={x.name} justify={'space-between'} align={'center'}>

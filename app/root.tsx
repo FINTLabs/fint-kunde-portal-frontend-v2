@@ -78,6 +78,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     HeaderProperties.setProperties(request);
 
     const meData: IMeData = await MeApi.fetchMe();
+    // Ensure x-username header is propagated with full name for downstream API calls
+    HeaderProperties.setUsername(`${meData.firstName} ${meData.lastName}`.trim());
     const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
     const featuresResponse = await FeaturesApi.fetchFeatures();
     const cookieHeader = request.headers.get('Cookie');
