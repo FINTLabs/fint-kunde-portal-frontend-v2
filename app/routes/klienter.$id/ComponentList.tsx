@@ -103,10 +103,10 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                                 item.hasResourceAccess === 'NOACCESS' && (
                                                     <>
                                                         <Tooltip
-                                                            content="Tilgang mangler på ressurser"
+                                                            content="Resursertilgang mangler"
                                                             placement="left">
                                                             <ExclamationmarkTriangleIcon
-                                                                aria-label="Tilgang mangler"
+                                                                aria-label="Resursertilgang mangler"
                                                                 fontSize="1.5rem"
                                                                 color="var(--a-icon-warning)"
                                                             />
