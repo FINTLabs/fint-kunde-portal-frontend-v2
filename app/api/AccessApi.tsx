@@ -29,7 +29,7 @@ class AccessApi {
             customSuccessMessage: `Tilgang for ${name} ble hentet`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }
@@ -64,7 +64,7 @@ class AccessApi {
             customSuccessMessage: `Komponenttilgang for ${name} ble hentet.`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }
@@ -83,7 +83,7 @@ class AccessApi {
             customSuccessMessage: `Ressurstilgang for ${resourceName} ble hentet.`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }
@@ -102,7 +102,7 @@ class AccessApi {
             customSuccessMessage: `Komponenttilgang ble hentet: ${componentName}`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }
@@ -131,7 +131,7 @@ class AccessApi {
             customSuccessMessage: `Tilgang ble slettet: ${username}`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }
@@ -170,7 +170,7 @@ class AccessApi {
                 enabled === 'true' ? `Tilgang ble lagt til` : `Tilgang ble fjernet `,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
         response.body.componentName = componentName;
@@ -198,7 +198,7 @@ class AccessApi {
                 resources.length === 1 ? `Tilgang ble oppdatert` : `Tilgang ble oppdatert alle`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }
@@ -219,7 +219,7 @@ class AccessApi {
             customSuccessMessage: `Tilgang ble oppdatert`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }
@@ -239,7 +239,7 @@ class AccessApi {
             customSuccessMessage: `Felttilganger ble oppdatert`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }
@@ -254,7 +254,7 @@ class AccessApi {
             customSuccessMessage: `Endringslogg hentet`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }
