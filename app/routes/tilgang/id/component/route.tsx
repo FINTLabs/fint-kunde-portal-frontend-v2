@@ -17,8 +17,8 @@ import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { handleAccessElementAction } from '~/routes/tilgang/id/component/actions';
 import ResourcesList from '~/routes/tilgang/id/component/ResourcesList';
 import { IAccessAudit, IAccessComponent } from '~/types/Access';
-import AccessAudit from '~/routes/tilgang/id/component/AccessAudit';
 import { IComponent } from '~/types/Component';
+import ComponentAccessAudit from '~/routes/klienter.$id/ComponentAccessAudit';
 
 export const action = async (args: ActionFunctionArgs) => handleAccessElementAction(args);
 
@@ -94,53 +94,56 @@ export default function Route() {
 
     return (
         <HGrid gap="2" align={'start'}>
-                        <Breadcrumbs breadcrumbs={breadcrumbs} />
+            <Breadcrumbs breadcrumbs={breadcrumbs} />
 
-<InternalPageHeader
-    title={`Tilgang - ${elementType}`}
-    icon={KeyVerticalIcon}
-    helpText="NEED_THIS"
-/>
-        <Box>
-            <Button
-                data-cy="back-button"
-                className="relative h-12 w-12 top-2 right-14"
-                icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
-                variant="tertiary"
-                onClick={() => navigate(`/${elementType}/${clientOrAdapter}`)}></Button>
-        </Box>
-
-        <Box
-            className="w-full relative bottom-12"
-            padding="6"
-            borderRadius="large"
-            shadow="small">
-            <Box className="w-full" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Button size="xsmall" variant="tertiary" onClick={() => setIsAuditOpen(true)}>
-                    Endringslogg
-                </Button>
+            <InternalPageHeader
+                title={`Tilgang - ${elementType}`}
+                icon={KeyVerticalIcon}
+                helpText="NEED_THIS"
+            />
+            <Box>
+                <Button
+                    data-cy="back-button"
+                    className="relative h-12 w-12 top-2 right-14"
+                    icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
+                    variant="tertiary"
+                    onClick={() => navigate(`/${elementType}/${clientOrAdapter}`)}></Button>
             </Box>
 
-            <NovariSnackbar
-                items={alertState}
-                position={'top-right'}
-                // onCloseItem={handleCloseItem}
-            />
+            <Box
+                className="w-full relative bottom-12"
+                padding="6"
+                borderRadius="large"
+                shadow="small">
+                <Box className="w-full" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button size="xsmall" variant="tertiary" onClick={() => setIsAuditOpen(true)}>
+                        Endringslogg
+                    </Button>
+                </Box>
 
-            <ResourcesList
-                accessComponent={resourceList as IAccessComponent[]}
-                title={resourceTitle || ''}
-                onSelected={handleSelectedResource}
-                onToggle={handleToggleResource}
-                onBulkToggle={handleBulkToggle}
-                isSubmitting={fetcher.state === 'submitting' || fetcher.state === 'loading'}
-            />
-            <Modal open={isAuditOpen} onClose={() => setIsAuditOpen(false)} header={{ heading: 'Endringslogg' }}>
-                <Modal.Body>
-                    <AccessAudit audit={auditLog || []} />
-                </Modal.Body>
-            </Modal>
-        </Box>
+                <NovariSnackbar
+                    items={alertState}
+                    position={'top-right'}
+                    // onCloseItem={handleCloseItem}
+                />
+
+                <ResourcesList
+                    accessComponent={resourceList as IAccessComponent[]}
+                    title={resourceTitle || ''}
+                    onSelected={handleSelectedResource}
+                    onToggle={handleToggleResource}
+                    onBulkToggle={handleBulkToggle}
+                    isSubmitting={fetcher.state === 'submitting' || fetcher.state === 'loading'}
+                />
+                <Modal
+                    open={isAuditOpen}
+                    onClose={() => setIsAuditOpen(false)}
+                    header={{ heading: 'Endringslogg' }}>
+                    <Modal.Body>
+                        <ComponentAccessAudit audit={auditLog || []} />
+                    </Modal.Body>
+                </Modal>
+            </Box>
         </HGrid>
     );
 }
