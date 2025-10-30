@@ -164,7 +164,7 @@ export default function ClientDetails() {
 
                                 <Box padding={'6'}>
                                     <CheckboxGroup
-                                        legend="Environment:"
+                                        legend="Miljø:"
                                         onChange={(vals) => handleEnvChange(vals as Environment[])}
                                         defaultValue={selectedEnvs}
                                         data-cy={'env-checkbox-group'}>
