@@ -80,6 +80,14 @@ const ComponentsTable = ({
         formData.append('componentName', value);
         formData.append('isChecked', isChecked.toString());
 
+        // Skip modal if coming from client or adapter
+        if (fromAdapter || fromClient) {
+            if (toggle) {
+                toggle(formData);
+            }
+            return;
+        }
+
         setPendingChange({
             formData,
             componentName: value,

@@ -161,7 +161,8 @@ class AccessApi {
         componentName: string,
         enabled: string
     ): Promise<ApiResponse<IComponentAccess>> {
-        const response = await accessManager.call<IComponentAccess>({
+        // response.body.componentName = componentName || '';
+        return await accessManager.call<IComponentAccess>({
             method: 'PATCH',
             endpoint: `/access/${username}/component/${componentName}`,
             functionName: 'addComponentAccess',
@@ -174,8 +175,6 @@ class AccessApi {
                 'x-portaluser': HeaderProperties.getUsername(),
             },
         });
-        response.body.componentName = componentName;
-        return response;
     }
 
     static async updateResources(
