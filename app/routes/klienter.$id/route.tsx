@@ -106,8 +106,8 @@ export default function ClientDetails() {
     };
 
     const handleToggle = (formData: FormData) => {
-        formData.append('actionType', 'ADD_COMPONENT_ACCESS');
-        formData.append('username', client?.name as string);
+        formData.append('actionType', 'ADD_COMPONENT_ACCESS_OLD');
+        formData.append('clientId', client?.name as string);
         formData.append('componentName', formData.get('componentName') as string);
         formData.append('enabled', formData.get('isChecked') as string);
         fetcher.submit(formData, { method: 'post' });

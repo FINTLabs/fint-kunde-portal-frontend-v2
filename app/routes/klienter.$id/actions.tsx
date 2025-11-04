@@ -34,6 +34,13 @@ export async function handleClientAction({ request }: { request: Request }) {
             await AccessApi.deleteAccess(clientName);
             return redirect(`/klienter?deleted=${clientName}`);
 
+        case 'ADD_COMPONENT_ACCESS_OLD':
+            return await ClientApi.updateComponentInClient(
+                formData.get('componentName') as string,
+                clientName,
+                orgName,
+                formData.get('isChecked') as string
+            );
         case 'ADD_COMPONENT_ACCESS': {
             const username = formData.get('username') as string;
             const componentName = formData.get('componentName') as string;
