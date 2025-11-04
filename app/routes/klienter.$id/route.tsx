@@ -1,5 +1,14 @@
 import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HGrid, Modal } from '@navikt/ds-react';
+import {
+    Alert,
+    Box,
+    Button,
+    Checkbox,
+    CheckboxGroup,
+    Heading,
+    HGrid,
+    Modal,
+} from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
 import {
@@ -22,6 +31,8 @@ import { IAdapter } from '~/types/Adapter';
 import { IClient } from '~/types/Clients';
 
 import { loader } from './loaders';
+import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
+import { IComponent } from '~/types';
 
 export { loader };
 
@@ -32,17 +43,28 @@ interface IExtendedFetcherResponseData extends ApiResponse<IClient> {
 }
 
 export default function ClientDetails() {
-    const { client, features, access, accessComponentList, accessAudit } = useLoaderData<{
+    const { client, access, accessComponentList, accessAudit, components } = useLoaderData<{
         client: IClient;
-        features: Record<string, boolean>;
         access: IAccess;
         accessComponentList: IDomainPackages[];
         accessAudit: IAccessAudit[];
+        //TODO: Remove this when access control is fully implemented
+        components: IComponent[];
     }>();
+
+    //TODO: Remove this when access control is fully implemented
+    const selectedComponents =
+        client?.components
+            .map((component) => {
+                const matchedComponent = components.find((c) => c.dn === component);
+                return matchedComponent?.name;
+            })
+            .filter((name): name is string => name !== undefined) || [];
+
     const [isAuditOpen, setIsAuditOpen] = useState(false);
 
     const navigate = useNavigate();
-    const hasAccessControl = features['access-controll-new'];
+    const hasAccessControl = false;
 
     const { id } = useParams();
     const breadcrumbs = [
@@ -142,7 +164,6 @@ export default function ClientDetails() {
                             onUpdate={handleUpdate}
                             onDelete={handleDelete}
                         />
-
                         {!client.managed && (
                             <>
                                 <Heading size={'medium'}>Autentisering</Heading>
@@ -157,6 +178,7 @@ export default function ClientDetails() {
                                 />
                             </>
                         )}
+                        <Box className={'border-b-1 border-gray-200 pb-5'} />
 
                         {hasAccessControl && access ? (
                             <>
@@ -177,8 +199,13 @@ export default function ClientDetails() {
                                     </CheckboxGroup>
                                 </Box>
 
-                                <Box className="w-full" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <Button size="xsmall" variant="tertiary" onClick={() => setIsAuditOpen(true)}>
+                                <Box
+                                    className="w-full"
+                                    style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <Button
+                                        size="xsmall"
+                                        variant="tertiary"
+                                        onClick={() => setIsAuditOpen(true)}>
                                         Endringslogg
                                     </Button>
                                 </Box>
@@ -187,12 +214,25 @@ export default function ClientDetails() {
                                     entity={client.name}
                                     onToggle={handleToggle}
                                 />
-                                <Modal open={isAuditOpen} onClose={() => setIsAuditOpen(false)} header={{ heading: 'Endringslogg' }}>
+                                <Modal
+                                    open={isAuditOpen}
+                                    onClose={() => setIsAuditOpen(false)}
+                                    header={{ heading: 'Endringslogg' }}>
                                     <Modal.Body>
                                         <ComponentAccessAudit audit={accessAudit || []} />
                                     </Modal.Body>
                                 </Modal>
                             </>
+                        ) : !hasAccessControl ? (
+                            <Box padding="6">
+                                <ComponentsTable
+                                    items={components}
+                                    selectedItems={selectedComponents}
+                                    toggle={handleToggle}
+                                    isManaged={client.managed}
+                                    fromClient={client.name}
+                                />
+                            </Box>
                         ) : (
                             <Box padding="6">
                                 <Alert variant="warning">

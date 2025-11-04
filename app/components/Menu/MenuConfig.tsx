@@ -19,6 +19,12 @@ export const footerLinks = [
     { label: 'FINT Test Client', href: 'https://api.felleskomponent.no/' },
 ];
 
+export const footerLinksNotLoggedIn = [
+    { label: 'Driftsmeldinger', href: 'https://novari.no/driftsmeldinger/' },
+    { label: 'Opprett supportsak', href: 'http://support.novari.no' },
+    { label: 'Brukerhjelp', href: 'http://fintlabs.no' },
+    { label: 'FINT Test Client', href: 'https://api.felleskomponent.no/' },
+];
 export const novariMenu = [
     {
         action: '/',

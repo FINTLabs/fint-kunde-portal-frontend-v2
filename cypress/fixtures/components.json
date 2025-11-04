@@ -4,7 +4,7 @@
     "name": "felles_kodeverk",
     "description": "Felles Kodeverk",
     "organisations": [
-      "ou=fintlabs_no,ou=organisations,o=fint"
+      "ou=calvin_organizations,ou=organisations,o=mock"
     ],
     "clients": [
       "cn=link-walker-test@client.fintlabs.no,ou=clients,ou=fintlabs_no,ou=organisations,o=fint"

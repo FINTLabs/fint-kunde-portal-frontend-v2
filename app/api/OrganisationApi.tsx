@@ -66,7 +66,7 @@ class OrganisationApi {
     private static async removeComponentFromOrganisation(
         endpoint: string,
         componentName: string
-        ): Promise<ApiResponse<IComponent>> {
+    ): Promise<ApiResponse<IComponent>> {
         return await orgManager.call<IComponent>({
             method: 'DELETE',
             endpoint,
@@ -77,7 +77,6 @@ class OrganisationApi {
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
-            // customSuccessVariant: 'warning', // uncomment if your manager supports variants
         });
     }
 }

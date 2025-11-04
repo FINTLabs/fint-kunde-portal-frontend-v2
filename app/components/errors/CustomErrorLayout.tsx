@@ -5,7 +5,7 @@ import React from 'react';
 import '@navikt/ds-css';
 
 import { Logo } from '~/components/Menu/Logo';
-import { footerLinks } from '~/components/Menu/MenuConfig';
+import { footerLinksNotLoggedIn } from '~/components/Menu/MenuConfig';
 
 export function CustomErrorLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -13,7 +13,7 @@ export function CustomErrorLayout({ children }: { children: React.ReactNode }) {
             footer={
                 <Box padding="1" as="footer" className={'novari-footer'}>
                     <Page.Block gutters width="lg">
-                        <NovariFooter links={footerLinks} />
+                        <NovariFooter links={footerLinksNotLoggedIn} />
                     </Page.Block>
                 </Box>
             }>

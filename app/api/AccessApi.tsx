@@ -46,7 +46,7 @@ class AccessApi {
             customSuccessMessage: `Tilgang for ${name} ble hentet.`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }
@@ -117,6 +117,7 @@ class AccessApi {
             customSuccessMessage: `Tilgang ble opprettet: ${username}`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }
@@ -150,7 +151,7 @@ class AccessApi {
             customSuccessMessage: `Miljøer ble oppdatert`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
-                'x-username': HeaderProperties.getUsername(),
+                'x-portaluser': HeaderProperties.getUsername(),
             },
         });
     }

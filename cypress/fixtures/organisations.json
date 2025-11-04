@@ -5,7 +5,7 @@
     "orgNumber": "111111111",
     "displayName": "Calvin's Enterprises",
     "components": [
-      "ou=spaceman_spiff_adventures,ou=components,o=mock",
+      "ou=felles_kodeverk,ou=components,o=fint",
       "ou=grossology,ou=components,o=mock",
       "ou=time_machine,ou=components,o=mock",
       "ou=transmogrifier,ou=components,o=mock",

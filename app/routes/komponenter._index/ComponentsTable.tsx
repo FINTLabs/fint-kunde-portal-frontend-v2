@@ -1,10 +1,12 @@
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { Box, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack } from '@navikt/ds-react';
 import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { IComponent } from '~/types/Component';
+
+import ComponentToggleModal from './ComponentToggleModal';
 
 interface ComponentsSectionProps {
     items: IComponent[];
@@ -14,14 +16,28 @@ interface ComponentsSectionProps {
     toggle?: (formData: FormData) => void;
     isManaged: boolean;
     fromAdapter?: string;
+    fromClient?: string;
 }
 
 type ComponentType = {
     [type: string]: IComponent[];
 };
 
-const ComponentsTable = ({ items, selectedItems, toggle, isManaged, fromAdapter }: ComponentsSectionProps) => {
+const ComponentsTable = ({
+    items,
+    selectedItems,
+    toggle,
+    isManaged,
+    fromAdapter,
+    fromClient,
+}: ComponentsSectionProps) => {
     const navigate = useNavigate();
+    const [modalOpen, setModalOpen] = useState(false);
+    const [pendingChange, setPendingChange] = useState<{
+        formData: FormData;
+        componentName: string;
+        isChecked: boolean;
+    } | null>(null);
 
     const sortedComponents = items.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -35,6 +51,8 @@ const ComponentsTable = ({ items, selectedItems, toggle, isManaged, fromAdapter 
         // } else {
         if (fromAdapter) {
             navigate(`/komponenter/${component.name}?fromAdapter=${fromAdapter}`);
+        } else if (fromClient) {
+            navigate(`/komponenter/${component.name}?fromClient=${fromClient}`);
         } else {
             navigate(`/komponenter/${component.name}`);
         }
@@ -54,15 +72,33 @@ const ComponentsTable = ({ items, selectedItems, toggle, isManaged, fromAdapter 
     }, {} as ComponentType);
 
     const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
         const value = e.target.value;
         const isChecked = e.target.checked;
 
-        if (toggle) {
-            const formData = new FormData();
-            formData.append('componentName', value);
-            formData.append('isChecked', isChecked.toString());
-            toggle(formData);
+        const formData = new FormData();
+        formData.append('componentName', value);
+        formData.append('isChecked', isChecked.toString());
+
+        setPendingChange({
+            formData,
+            componentName: value,
+            isChecked,
+        });
+        setModalOpen(true);
+    };
+
+    const handleConfirm = () => {
+        if (pendingChange && toggle) {
+            toggle(pendingChange.formData);
         }
+        setModalOpen(false);
+        setPendingChange(null);
+    };
+
+    const handleCancel = () => {
+        setModalOpen(false);
+        setPendingChange(null);
     };
 
     return (
@@ -142,6 +178,14 @@ const ComponentsTable = ({ items, selectedItems, toggle, isManaged, fromAdapter 
                     );
                 })}
             </HGrid>
+
+            <ComponentToggleModal
+                isOpen={modalOpen}
+                componentName={pendingChange?.componentName ?? ''}
+                isChecked={pendingChange?.isChecked ?? false}
+                onConfirm={handleConfirm}
+                onCancel={handleCancel}
+            />
 
             <Divider />
         </Box>
