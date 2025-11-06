@@ -1,6 +1,5 @@
 import { selectOrgCookie } from '~/utils/cookie';
 
-//TODO: remove this file?
 export async function getSelectedOrganization(request: Request) {
     // const userSession: IUserSession | undefined = await getUserSession(request);
     // if (!userSession) throw new Response('Unauthorized', { status: 401 });

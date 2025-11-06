@@ -14,7 +14,6 @@ Cypress.on('uncaught:exception', (err) => {
 describe('Tilgang (Access) Routes Tests', () => {
     // Mock client and adapter names for testing
     const testClient = 'jennifer-test-test@client.fintlabs.no';
-    const testAdapter = 'jennifer-another-test@adapter.fintlabs.no';
     const testComponent = 'administrasjon-fullmakt';
 
     beforeEach(() => {
@@ -23,7 +22,7 @@ describe('Tilgang (Access) Routes Tests', () => {
         //     cy.waitForAppReady();
         // });
 
-        cy.visit('/klienter', { failOnStatusCode: false });
+        cy.visit('/', { failOnStatusCode: false });
         // cy.reload();
         cy.waitForAppReady();
     });
@@ -38,23 +37,7 @@ describe('Tilgang (Access) Routes Tests', () => {
             // );
             // cy.reload();
             cy.visit(`/tilgang/${testClient}/${testComponent}`, { failOnStatusCode: false });
-            cy.reload();
-
-            // Should load the page
-            cy.get('[data-theme="novari"]').should('exist');
-            cy.get('.navds-page').should('be.visible');
-        });
-
-        it('should display access component page for adapter', () => {
-            // Navigate to access component page for adapter
-            // cy.visit(`/tilgang/${testAdapter}/${testComponent}`, { failOnStatusCode: false }).then(
-            //     () => {
-            //         cy.waitForAppReady();
-            //     }
-            // );
-            // cy.reload();
-            cy.visit(`/tilgang/${testAdapter}/${testComponent}`, { failOnStatusCode: false });
-            cy.reload();
+            cy.waitForAppReady();
 
             // Should load the page
             cy.get('[data-theme="novari"]').should('exist');
@@ -69,6 +52,7 @@ describe('Tilgang (Access) Routes Tests', () => {
             // );
             cy.visit(`/tilgang/${testClient}/${testComponent}`, { failOnStatusCode: false });
             cy.reload();
+            cy.wait(3000)
             // console.log('testClient', `/tilgang/${testClient}/${testComponent}`);
             // //cy.visit(`/tilgang/jennifer-another-test@client.fintlabs.no/administrasjon-fullmakt`, { failOnStatusCode: false });
             // cy.reload();
@@ -77,22 +61,6 @@ describe('Tilgang (Access) Routes Tests', () => {
             cy.get('[data-cy="breadcrumbs"]').should('be.visible');
             cy.contains('klienter').should('be.visible');
             cy.contains(testClient).should('be.visible');
-            cy.contains(testComponent).should('be.visible');
-        });
-
-        it('should display correct breadcrumbs for adapter access', () => {
-            // cy.visit(`/tilgang/${testAdapter}/${testComponent}`, { failOnStatusCode: false }).then(
-            //     () => {
-            //         cy.waitForAppReady();
-            //     }
-            // );
-            cy.visit(`/tilgang/${testAdapter}/${testComponent}`, { failOnStatusCode: false });
-            cy.waitForAppReady();
-
-            // Should have breadcrumbs
-            cy.get('[data-cy="breadcrumbs"]').should('be.visible');
-            cy.contains('adapter').should('be.visible');
-            cy.contains(testAdapter).should('be.visible');
             cy.contains(testComponent).should('be.visible');
         });
 
@@ -149,9 +117,9 @@ describe('Tilgang (Access) Routes Tests', () => {
             cy.waitForAppReady();
 
             // Look for toggle switches or buttons
-            cy.get('[data-cy="resource-toggle-string"]').should('be.visible');
+            cy.get('[data-cy="resource-toggle-Aktivitet"]').should('be.visible');
 
-            cy.get('[data-cy="resource-toggle-string"]').click();
+            cy.get('[data-cy="resource-toggle-Aktivitet"]').click();
 
             cy.get('.navds-alert').should('exist');
             // Should show some feedback

@@ -38,6 +38,7 @@ export default function Index() {
     const breadcrumbs = [{ name: 'Klienter', link: '/klienter' }];
     const [filteredClients, setFilteredClients] = useState(clientData);
     const [isCreating, setIsCreating] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
 
     const fetcher = useFetcher();
@@ -53,11 +54,18 @@ export default function Index() {
         setFilteredClients(clientData);
     }, [clientData]);
 
+    // Clear search when organization changes
+    useEffect(() => {
+        setSearchValue('');
+        setFilteredClients(clientData);
+    }, [orgName, clientData]);
+
     const handleCreate = () => {
         setIsCreating(true);
     };
 
     const handleSearch = (value: string) => {
+        setSearchValue(value);
         const query = value.toLowerCase();
         setFilteredClients(
             clientData.filter(
@@ -80,7 +88,6 @@ export default function Index() {
         navigate(`/klienter/${id}`);
     };
 
-    //TODO: clear search on org change
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -109,6 +116,7 @@ export default function Index() {
                         hideLabel
                         variant="secondary"
                         size="small"
+                        value={searchValue}
                         onChange={(value: string) => handleSearch(value)}
                         placeholder="Søk etter navn eller beskrivelse"
                         className="pb-6"

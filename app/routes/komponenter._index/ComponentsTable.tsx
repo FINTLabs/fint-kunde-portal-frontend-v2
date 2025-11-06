@@ -41,14 +41,19 @@ const ComponentsTable = ({
 
     const sortedComponents = items.sort((a, b) => a.name.localeCompare(b.name));
 
+    // Mapping for norwegian letter
+    const SPECIAL_CAPITALIZATIONS: Record<string, string> = {
+        okonomi: 'Økonomi',
+    };
+
+    function capitalizeFirstLetter(string: string) {
+        if (SPECIAL_CAPITALIZATIONS[string.toLowerCase()]) {
+            return SPECIAL_CAPITALIZATIONS[string.toLowerCase()];
+        }
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     const handleRowClick = (component: IComponent) => {
-        // if (hideLink) {
-        //     if (adapterName) {
-        //         navigate(`/accesscontrol/${component.name}?adapter=${adapterName}`);
-        //     } else if (clientName) {
-        //         navigate(`/accesscontrol/${component.name}?client=${clientName}`);
-        //     }
-        // } else {
         if (fromAdapter) {
             navigate(`/komponenter/${component.name}?fromAdapter=${fromAdapter}`);
         } else if (fromClient) {
@@ -125,10 +130,7 @@ const ComponentsTable = ({
                                     {/*    <KeyVerticalIcon title="key icon" fontSize="1.5rem" />*/}
                                     {/*)}*/}
                                     <FormSummary.Heading level="2">
-                                        {/* Hacky code.. quick fix that i personally hate... sorry to the next person! */}
-                                        {capitalizeFirstLetter(
-                                            groupName === 'okonomi' ? 'Økonomi' : groupName
-                                        )}
+                                        {capitalizeFirstLetter(groupName)}
                                     </FormSummary.Heading>
                                 </HStack>
                             </FormSummary.Header>
@@ -201,7 +203,3 @@ const ComponentsTable = ({
 };
 
 export default ComponentsTable;
-
-function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}

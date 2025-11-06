@@ -4,16 +4,16 @@ import AccessApi from '~/api/AccessApi';
 import ClientApi from '~/api/ClientApi';
 // import FeaturesApi from '~/api/FeaturesApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import ComponentApi from '~/api/ComponentApi';
+import FeaturesApi from '~/api/FeaturesApi';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
     const orgName = await getSelectedOrganization(request);
     const id = params.id || '';
 
     const clientResponse = await ClientApi.getClientById(orgName, id);
-    // const featuresResponse = await FeaturesApi.fetchFeatures();
-    // const hasAccessControl = id && featuresResponse.data?.['access-controll-new'];
-    const hasAccessControl = false;
+    const featuresResponse = await FeaturesApi.fetchFeatures();
+    const hasAccessControl = id && featuresResponse.data?.['access-controll-new'];
+    // const hasAccessControl = false;
 
     const [accessResponse, componentListResponse, auditResponse] = hasAccessControl
         ? await Promise.all([
@@ -23,15 +23,11 @@ export async function loader({ request, params }: ActionFunctionArgs) {
           ])
         : [null, null, null];
 
-    //TODO: Remove this when access control is fully implemented
-    const componentsResponse = await ComponentApi.getAllComponents();
-
     return Response.json({
         client: clientResponse,
         access: accessResponse?.data,
         accessComponentList: componentListResponse?.data,
-        accessAudit: auditResponse?.data || [],
-        //TODO: Remove this when access control is fully implemented
-        components: componentsResponse.data,
+        accessAuditLogs: auditResponse?.data || [],
+        hasAccessControl,
     });
 }

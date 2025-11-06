@@ -31,8 +31,6 @@ import { IAdapter } from '~/types/Adapter';
 import { IClient } from '~/types/Clients';
 
 import { loader } from './loaders';
-import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
-import { IComponent } from '~/types';
 
 export { loader };
 
@@ -43,28 +41,18 @@ interface IExtendedFetcherResponseData extends ApiResponse<IClient> {
 }
 
 export default function ClientDetails() {
-    const { client, access, accessComponentList, accessAudit, components } = useLoaderData<{
-        client: IClient;
-        access: IAccess;
-        accessComponentList: IDomainPackages[];
-        accessAudit: IAccessAudit[];
-        //TODO: Remove this when access control is fully implemented
-        components: IComponent[];
-    }>();
-
-    //TODO: Remove this when access control is fully implemented
-    const selectedComponents =
-        client?.components
-            .map((component) => {
-                const matchedComponent = components.find((c) => c.dn === component);
-                return matchedComponent?.name;
-            })
-            .filter((name): name is string => name !== undefined) || [];
+    const { client, access, accessComponentList, accessAuditLogs, hasAccessControl } =
+        useLoaderData<{
+            client: IClient;
+            access: IAccess;
+            accessComponentList: IDomainPackages[];
+            accessAuditLogs: IAccessAudit[];
+            hasAccessControl: boolean;
+        }>();
 
     const [isAuditOpen, setIsAuditOpen] = useState(false);
 
     const navigate = useNavigate();
-    const hasAccessControl = false;
 
     const { id } = useParams();
     const breadcrumbs = [
@@ -106,8 +94,8 @@ export default function ClientDetails() {
     };
 
     const handleToggle = (formData: FormData) => {
-        formData.append('actionType', 'ADD_COMPONENT_ACCESS_OLD');
-        formData.append('clientId', client?.name as string);
+        formData.append('actionType', 'ADD_COMPONENT_ACCESS');
+        formData.append('username', client?.name as string);
         formData.append('componentName', formData.get('componentName') as string);
         formData.append('enabled', formData.get('isChecked') as string);
         fetcher.submit(formData, { method: 'post' });
@@ -219,20 +207,10 @@ export default function ClientDetails() {
                                     onClose={() => setIsAuditOpen(false)}
                                     header={{ heading: 'Endringslogg' }}>
                                     <Modal.Body>
-                                        <ComponentAccessAudit audit={accessAudit || []} />
+                                        <ComponentAccessAudit audit={accessAuditLogs || []} />
                                     </Modal.Body>
                                 </Modal>
                             </>
-                        ) : !hasAccessControl ? (
-                            <Box padding="6">
-                                <ComponentsTable
-                                    items={components}
-                                    selectedItems={selectedComponents}
-                                    toggle={handleToggle}
-                                    isManaged={client.managed}
-                                    fromClient={client.name}
-                                />
-                            </Box>
                         ) : (
                             <Box padding="6">
                                 <Alert variant="warning">

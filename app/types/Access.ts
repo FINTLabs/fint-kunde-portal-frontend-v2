@@ -48,10 +48,21 @@ export interface IComponentAccess {
     enabled: boolean;
 }
 
-export interface IAccessAudit {
-    changesByUser: string;
-    clientUsername: string;
+export interface IAccessAuditChange {
+    changed: string;
+    name: string;
+    value: boolean | string;
+}
+
+export interface IAccessAuditRecord {
+    portalUser: string;
     timeStamp: number;
+    changes: IAccessAuditChange;
+}
+
+export interface IAccessAudit {
+    userName: string;
+    auditRecord: IAccessAuditRecord[];
 }
 
 // export interface IUpdateResource {

@@ -1,5 +1,5 @@
 import akselHref from '@navikt/ds-css?url';
-import { Alert, Box, Page } from '@navikt/ds-react';
+import { Box, Page } from '@navikt/ds-react';
 import { NovariFooter, NovariHeader } from 'novari-frontend-components';
 import React from 'react';
 import {
@@ -82,6 +82,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     HeaderProperties.setUsername(`${meData.firstName} ${meData.lastName}`.trim());
     const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
     const featuresResponse = await FeaturesApi.fetchFeatures();
+
     const cookieHeader = request.headers.get('Cookie');
     let cookieValue = await selectOrgCookie.parse(cookieHeader);
 
@@ -217,9 +218,16 @@ export function ErrorBoundary() {
             </CustomErrorLayout>
         );
     } else {
+        // Handle unexpected errors (like API fetch failures)
+        const errorMessage = error instanceof Error ? error.message : 'Ukjent feil';
+        
         return (
             <CustomErrorLayout>
-                <Alert variant="error">500: Ukjent feil </Alert>
+                <CustomError
+                    statusCode={500}
+                    errorData={errorMessage}
+                    statusTitle="Noe gikk galt"
+                />
             </CustomErrorLayout>
         );
     }

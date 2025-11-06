@@ -90,6 +90,24 @@ describe('Adapters Page Tests', () => {
         cy.get('[data-cy="save-button"]').should('be.visible');
         cy.get('[data-cy="save-button"]').click();
         cy.contains('Opprett').click();
-        //TODO: Add test for error messages
+
+        // Check that no error messages are displayed after successful submission
+        cy.get('body').should('not.contain', 'Feil');
+    });
+
+    it('should show validation errors for invalid form submission', () => {
+        // Open the create form
+        cy.get('[data-cy="add-button"]').should('be.visible');
+        cy.get('[data-cy="add-button"]').click({ waitForAnimations: true });
+        
+        // Wait for form to be visible
+        cy.get('[data-cy="create-form"]', { timeout: 15000 }).should('be.visible');
+
+        // Try to save without filling required fields
+        cy.get('[data-cy="save-button"]').should('be.visible');
+        cy.get('[data-cy="save-button"]').click();
+
+        // Verify form is still visible (validation prevented submission)
+        cy.get('[data-cy="create-form"]').should('exist');
     });
 });

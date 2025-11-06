@@ -7,12 +7,21 @@ interface CustomErrorPageProps {
     errorData?: string;
 }
 
-//TODO: the errorData comes back as a json sometimes, make this look better?
 const CustomErrorPage: React.FC<CustomErrorPageProps> = ({
     statusCode = 500,
     statusTitle = 'Beklager, noe gikk galt.',
     errorData = 'unknown',
 }) => {
+    const formatErrorData = (data: string): string => {
+        try {
+            const parsed = JSON.parse(data);
+            return JSON.stringify(parsed, null, 2);
+        } catch {
+            return data;
+        }
+    };
+
+    const formattedErrorData = formatErrorData(errorData);
     return (
         <Box paddingBlock="20 8">
             <HGrid columns="minmax(auto,600px)" data-aksel-template={`${statusCode}-v2`}>
@@ -61,8 +70,8 @@ const CustomErrorPage: React.FC<CustomErrorPageProps> = ({
                         </div>
 
                         {statusCode != 403 && (
-                            <BodyShort size="small" textColor="subtle">
-                                Feil-data: {statusCode} - {errorData}
+                            <BodyShort size="small" textColor="subtle" style={{ whiteSpace: 'pre-wrap' }}>
+                                Feil-data: {statusCode} - {formattedErrorData}
                             </BodyShort>
                         )}
                     </VStack>

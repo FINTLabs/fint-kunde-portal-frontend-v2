@@ -13,7 +13,7 @@ Cypress.on('uncaught:exception', (err) => {
     }
 });
 
-//TODO: fix novari components to have a data-cy attribute
+// Note: Some tests are skipped due to novari components not having data-cy attributes
 describe('Menu Component Tests', () => {
     beforeEach(() => {
         // Visit the root page before each testA
