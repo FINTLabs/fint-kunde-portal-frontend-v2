@@ -7,6 +7,7 @@ import {
     CheckboxGroup,
     Heading,
     HGrid,
+    HStack,
     Modal,
 } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
@@ -170,8 +171,18 @@ export default function ClientDetails() {
 
                         {hasAccessControl && access ? (
                             <>
-                                <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
-
+                            <HStack><Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
+                                <Box
+                                    className="w-full flex-1"
+                                    style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <Button
+                                        size="xsmall"
+                                        variant="tertiary"
+                                        onClick={() => setIsAuditOpen(true)}>
+                                        Endringslogg
+                                    </Button>
+                                </Box></HStack>
+                                
                                 <Box padding={'6'}>
                                     <CheckboxGroup
                                         legend="Miljø:"
@@ -187,16 +198,7 @@ export default function ClientDetails() {
                                     </CheckboxGroup>
                                 </Box>
 
-                                <Box
-                                    className="w-full"
-                                    style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <Button
-                                        size="xsmall"
-                                        variant="tertiary"
-                                        onClick={() => setIsAuditOpen(true)}>
-                                        Endringslogg
-                                    </Button>
-                                </Box>
+                                
                                 <ComponentList
                                     accessList={accessComponentList}
                                     entity={client.name}
