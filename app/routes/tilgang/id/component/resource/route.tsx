@@ -83,7 +83,7 @@ export default function Route() {
         const formData = new FormData();
         formData.append('actionType', 'ENABLE_FIELD');
         formData.append('username', clientOrAdapter);
-        formData.append('component', componentName);
+        formData.append('componentName', componentName);
         formData.append('resourceName', resource.name);
         formData.append('fieldName', fieldName);
         formData.append('enabled', enabled.toString());
