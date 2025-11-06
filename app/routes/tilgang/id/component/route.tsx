@@ -115,12 +115,6 @@ export default function Route() {
                 padding="6"
                 borderRadius="large"
                 shadow="small">
-                <Box className="w-full" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button size="xsmall" variant="tertiary" onClick={() => setIsAuditOpen(true)}>
-                        Endringslogg
-                    </Button>
-                </Box>
-
                 <NovariSnackbar
                     items={alertState}
                     position={'top-right'}
