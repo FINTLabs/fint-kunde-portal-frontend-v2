@@ -164,7 +164,7 @@ export default function Route() {
                                 Skriverettighet: {resource.writeable ? 'Ja' : 'Nei'}
                             </BodyShort>
                             <BodyShort>
-                                Lesseinstillinger:{' '}
+                                Leseinstillinger:{' '}
                                 {resource.readingOption === 'MULTIPLE' ? 'Alt' : 'En og en'}
                             </BodyShort>
                         </FormSummary.Heading>
