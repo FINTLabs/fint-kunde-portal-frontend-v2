@@ -46,7 +46,7 @@ export default function ClientDetails() {
             client: IClient;
             access: IAccess;
             accessComponentList: IDomainPackages[];
-            accessAuditLogs: IAccessAudit[];
+            accessAuditLogs: IAccessAudit | null;
             hasAccessControl: boolean;
         }>();
 
@@ -207,7 +207,7 @@ export default function ClientDetails() {
                                     onClose={() => setIsAuditOpen(false)}
                                     header={{ heading: 'Endringslogg' }}>
                                     <Modal.Body>
-                                        <ComponentAccessAudit audit={accessAuditLogs || []} />
+                                        <ComponentAccessAudit audit={accessAuditLogs} />
                                     </Modal.Body>
                                 </Modal>
                             </>

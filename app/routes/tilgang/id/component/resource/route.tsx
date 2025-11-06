@@ -96,6 +96,7 @@ export default function Route() {
         formData.append('username', clientOrAdapter);
         formData.append('componentName', componentName);
         formData.append('resourceName', resource.name);
+        formData.append('enabled', resource.enabled.toString());
         formData.append('writeable', resource.writeable.toString());
         if (resource.readingOption === 'MULTIPLE') {
             formData.append('readingOption', 'SINGULAR');
@@ -112,7 +113,8 @@ export default function Route() {
         formData.append('username', clientOrAdapter);
         formData.append('componentName', componentName);
         formData.append('resourceName', resource.name);
-        formData.append('readingOption', resource.readingOption);
+        formData.append('enabled', resource.enabled.toString());
+        formData.append('readingOption', resource.readingOption || 'SINGULAR');
         if (resource.writeable) {
             formData.append('writeable', 'false');
         } else {
@@ -132,50 +134,58 @@ export default function Route() {
                 helpText="NEED_THIS"
             />
 
-<Box>
-            <Button
-                data-cy="back-button"
-                className="relative h-12 w-12 top-2 right-14"
-                icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
-                variant="tertiary"
-                onClick={() => navigate(`/tilgang/${clientOrAdapter}/${componentName}`)}></Button>
-        </Box>
+            <Box>
+                <Button
+                    data-cy="back-button"
+                    className="relative h-12 w-12 top-2 right-14"
+                    icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
+                    variant="tertiary"
+                    onClick={() =>
+                        navigate(`/tilgang/${clientOrAdapter}/${componentName}`)
+                    }></Button>
+            </Box>
 
-        <Box
-            className="w-full relative bottom-12"
-            padding="6"
-            borderRadius="large"
-            shadow="small">
-            <NovariSnackbar
-                items={alertState}
-                position={'top-right'}
-                // onCloseItem={handleCloseItem}
-            />
+            <Box
+                className="w-full relative bottom-12"
+                padding="6"
+                borderRadius="large"
+                shadow="small">
+                <NovariSnackbar
+                    items={alertState}
+                    position={'top-right'}
+                    // onCloseItem={handleCloseItem}
+                />
 
-            <FormSummary key={`x`}>
-                <FormSummary.Header>
-                    <FormSummary.Heading level="2">
-                        <HStack gap={'3'}>{fieldListTitle}</HStack>
-                        <BodyShort>
-                            Skriverettighet: {resource.writeable ? 'true' : 'false'}
-                        </BodyShort>
-                        <BodyShort>Lesseinstillinger: {resource.readingOption}</BodyShort>
-                    </FormSummary.Heading>
-                </FormSummary.Header>
+                <FormSummary key={`x`}>
+                    <FormSummary.Header>
+                        <FormSummary.Heading level="2">
+                            <HStack gap={'3'}>{fieldListTitle}</HStack>
+                            <BodyShort>
+                                Skriverettighet: {resource.writeable ? 'Ja' : 'Nei'}
+                            </BodyShort>
+                            <BodyShort>
+                                Lesseinstillinger:{' '}
+                                {resource.readingOption === 'MULTIPLE' ? 'Alt' : 'En og en'}
+                            </BodyShort>
+                        </FormSummary.Heading>
+                    </FormSummary.Header>
 
-                <FormSummary.Answers>
-                    <FormSummary.Answer>
-                        <IconToggleButtons
-                            resource={resource}
-                            onClickReadingOptions={() => handleReadingOptions()}
-                            onClickIsWriteable={() => handleWriteable()}
-                        />
+                    <FormSummary.Answers>
+                        <FormSummary.Answer>
+                            <IconToggleButtons
+                                resource={resource}
+                                onClickReadingOptions={() => handleReadingOptions()}
+                                onClickIsWriteable={() => handleWriteable()}
+                            />
 
-                        <FieldList onToggleField={handleToggleField} fieldList={fieldList || []} />
-                    </FormSummary.Answer>
-                </FormSummary.Answers>
-            </FormSummary>
-        </Box>
+                            <FieldList
+                                onToggleField={handleToggleField}
+                                fieldList={fieldList || []}
+                            />
+                        </FormSummary.Answer>
+                    </FormSummary.Answers>
+                </FormSummary>
+            </Box>
         </HGrid>
     );
 }

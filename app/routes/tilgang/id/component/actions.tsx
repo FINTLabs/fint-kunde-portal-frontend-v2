@@ -16,7 +16,7 @@ export async function handleAccessElementAction({ request }: { request: Request 
                 resource: resource,
                 enabled: enabledFlag,
                 writeable: false,
-                readingOption: null,
+                readingOption: "MULTIPLE",
             };
 
             // if (enabledFlag && response.success) {

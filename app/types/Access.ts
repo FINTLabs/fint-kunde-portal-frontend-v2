@@ -51,7 +51,7 @@ export interface IComponentAccess {
 export interface IAccessAuditChange {
     changed: string;
     name: string;
-    value: boolean | string;
+    setTo: boolean | string;
 }
 
 export interface IAccessAuditRecord {

@@ -23,11 +23,12 @@ export async function loader({ request, params }: ActionFunctionArgs) {
           ])
         : [null, null, null];
 
+        
     return Response.json({
         client: clientResponse,
         access: accessResponse?.data,
         accessComponentList: componentListResponse?.data,
-        accessAuditLogs: auditResponse?.data || [],
+        accessAuditLogs: auditResponse?.data || null,
         hasAccessControl,
     });
 }

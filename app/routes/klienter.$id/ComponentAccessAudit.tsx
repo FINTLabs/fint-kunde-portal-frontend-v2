@@ -1,60 +1,111 @@
-import { BodyShort, Box, Heading } from '@navikt/ds-react';
+import { BodyShort, Box, Table } from '@navikt/ds-react';
 import React from 'react';
 
 import { IAccessAudit } from '~/types/Access';
 import { formatDate } from '~/utils/dateUtils';
 
 interface ComponentAccessAuditProps {
-    audit: IAccessAudit[];
+    audit: IAccessAudit | null;
 }
 
 export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProps) {
-    const formatChangeMessage = (
-        changed: string,
-        name: string,
-        value: boolean | string
-    ): string => {
-        const changeType = changed.toLowerCase();
-        const valueStr = typeof value === 'boolean' ? (value ? 'aktivert' : 'deaktivert') : value;
-
+    const formatChangeType = (changed: string): string => {
         switch (changed) {
             case 'COMPONENT':
-                return `${changeType}: ${name} ble ${valueStr}`;
+                return 'Komponent';
             case 'RESOURCE':
-                return `${changeType}: ${name} ble ${valueStr}`;
+                return 'Ressurs';
             case 'FIELD':
-                return `${changeType}: ${name} ble ${valueStr}`;
+                return 'Felt';
             default:
-                return `${changed}: ${name} = ${valueStr}`;
+                return changed;
         }
     };
 
+    const formatChangeValue = (setTo: boolean | string): string => {
+        if (typeof setTo === 'boolean') {
+            return setTo ? 'Aktivert' : 'Deaktivert';
+        }
+        return String(setTo);
+    };
 
+    const getStatusColorClass = (setTo: boolean | string): string => {
+        if (typeof setTo === 'boolean') {
+            return setTo ? 'text-green-600' : 'text-red-600';
+        }
+        return '';
+    };
+
+    if (!audit || !audit.auditRecord || audit.auditRecord.length === 0) {
+        return (
+            <Box padding="4">
+                <BodyShort>Ingen endringer registrert</BodyShort>
+            </Box>
+        );
+    }
+
+    const recordCount = audit.auditRecord.length;
+    const isMaxRecords = recordCount === 10;
 
     return (
         <Box>
-            <Heading size={'small'}>Endringslogg -- {audit.length}</Heading>
+            <Box paddingBlock="2 4">
+                {isMaxRecords ? (
+                    <>
+                        <BodyShort size="small" textColor="subtle">
+                            Endringslogg for {audit.userName}
+                        </BodyShort>
+                        <BodyShort size="small" textColor="subtle" className="mt-2">
+                            Viser de siste 10 endringene
+                        </BodyShort>
+                    </>
+                ) : (
+                    <BodyShort size="small" textColor="subtle">
+                        Endringslogg for {audit.userName} ({recordCount} endringer)
+                    </BodyShort>
+                )}
+            </Box>
 
-            {audit?.length || audit?.length > 0 && (
-                <Box as="ul" paddingBlock="2">
-                    {audit?.map((auditEntry) =>
-                        auditEntry.auditRecord?.map((record, idx) => (
-                            <li key={`${record.timeStamp}-${idx}`}>
+            <Table>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Tidspunkt</Table.HeaderCell>
+                        <Table.HeaderCell>Bruker</Table.HeaderCell>
+                        <Table.HeaderCell>Type</Table.HeaderCell>
+                        <Table.HeaderCell>Navn</Table.HeaderCell>
+                        <Table.HeaderCell>Status</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {audit.auditRecord.map((record, idx) => (
+                        <Table.Row key={`${record.timeStamp}-${idx}`}>
+                            <Table.DataCell>
                                 <BodyShort size="small">
-                                    <strong>{formatDate(record.timeStamp)}</strong> — {record.portalUser}
+                                    {formatDate(record.timeStamp)}
                                 </BodyShort>
-                                <BodyShort size="small" className="ml-4">
-                                    {formatChangeMessage(
-                                        record.changes.changed,
-                                        record.changes.name,
-                                        record.changes.value
-                                    )}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                <BodyShort size="small">{record.portalUser}</BodyShort>
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                <BodyShort size="small">
+                                    {formatChangeType(record.changes.changed)}
                                 </BodyShort>
-                            </li>
-                        ))
-                    )  }
-                </Box>
-            )}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                <BodyShort size="small">{record.changes.name}</BodyShort>
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                <BodyShort
+                                    size="small"
+                                    className={getStatusColorClass(record.changes.setTo)}>
+                                    {formatChangeValue(record.changes.setTo)}
+                                </BodyShort>
+                            </Table.DataCell>
+                        </Table.Row>
+                    ))}
+                </Table.Body>
+            </Table>
         </Box>
     );
 }

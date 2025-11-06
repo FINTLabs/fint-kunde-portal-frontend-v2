@@ -14,7 +14,7 @@ const FieldList = ({ onToggleField, fieldList }: FieldListProps) => {
 
     return (
         <>
-            <Heading size="medium">Felt Navn</Heading>
+            <Heading size="medium">Feltnavn</Heading>
 
             {fieldList
                 .filter((field) => !field.relation)
