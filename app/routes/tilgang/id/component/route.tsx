@@ -1,6 +1,6 @@
 import { ArrowLeftIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
 import React from 'react';
-import { Box, Button, HGrid, Modal } from '@navikt/ds-react';
+import { Box, Button, HGrid } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
@@ -16,9 +16,8 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { handleAccessElementAction } from '~/routes/tilgang/id/component/actions';
 import ResourcesList from '~/routes/tilgang/id/component/ResourcesList';
-import { IAccessAudit, IAccessComponent } from '~/types/Access';
+import { IAccessComponent } from '~/types/Access';
 import { IComponent } from '~/types/Component';
-import ComponentAccessAudit from '~/routes/klienter.$id/ComponentAccessAudit';
 
 export const action = async (args: ActionFunctionArgs) => handleAccessElementAction(args);
 
@@ -27,24 +26,20 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     const component = params.component || '';
 
     const resourceList = await AccessApi.getComponentAccess(component, clientOrAdapter);
-    const auditLog = await AccessApi.getAccessAudit(clientOrAdapter);
 
     return Response.json({
         clientOrAdapter,
         resourceList: resourceList.data,
         component,
-        auditLog: auditLog.data || [],
     });
 };
 
 export default function Route() {
-    const { clientOrAdapter, resourceList, component, auditLog } = useLoaderData<{
+    const { clientOrAdapter, resourceList, component } = useLoaderData<{
         clientOrAdapter: string;
         resourceList: IAccessComponent[];
         component: string;
-        auditLog: IAccessAudit[];
     }>();
-    const [isAuditOpen, setIsAuditOpen] = React.useState(false);
     const navigate = useNavigate();
     const resourceTitle = `${clientOrAdapter}/${component}`;
     const fetcher = useFetcher<ApiResponse<IComponent>>();
@@ -129,14 +124,6 @@ export default function Route() {
                     onBulkToggle={handleBulkToggle}
                     isSubmitting={fetcher.state === 'submitting' || fetcher.state === 'loading'}
                 />
-                <Modal
-                    open={isAuditOpen}
-                    onClose={() => setIsAuditOpen(false)}
-                    header={{ heading: 'Endringslogg' }}>
-                    <Modal.Body>
-                        <ComponentAccessAudit audit={auditLog || []} />
-                    </Modal.Body>
-                </Modal>
             </Box>
         </HGrid>
     );

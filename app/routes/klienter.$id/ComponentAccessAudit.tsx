@@ -46,6 +46,7 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
 
     const recordCount = audit.auditRecord.length;
     const isMaxRecords = recordCount === 10;
+    const firstTenRecords = audit?.auditRecord?.slice(0, 10) || [];
 
     return (
         <Box>
@@ -77,7 +78,7 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {audit.auditRecord.map((record, idx) => (
+                    {firstTenRecords.map((record, idx) => (
                         <Table.Row key={`${record.timeStamp}-${idx}`}>
                             <Table.DataCell>
                                 <BodyShort size="small">

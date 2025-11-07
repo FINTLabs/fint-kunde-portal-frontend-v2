@@ -3,6 +3,7 @@ import { http, HttpResponse } from 'msw';
 import access from '../../fixtures/access.json';
 import accessComponent from '../../fixtures/accessComponent.json';
 import accessResourceDetails from '../../fixtures/accessResourceDetails.json';
+import accessAudit from '../../fixtures/accessAudit.json';
 import fieldAccess from '../../fixtures/fieldAccess.json';
 import resourceAccess from '../../fixtures/resourceAccess.json';
 import { ACCESS_URL } from '../mockConfig';
@@ -151,4 +152,29 @@ export const accessHandlers = [
             return HttpResponse.json(fieldAccess);
         }
     ),
+
+    // ***** /access/{username}/audit
+
+    /*
+        {
+          "userName": "string",
+          "auditRecord": [
+            {
+              "portalUser": "string",
+              "timeStamp": 0,
+              "changes": {
+                "changed": "RESOURCE",
+                "name": "string",
+                "setTo": true
+              }
+            }
+          ]
+        }
+     */
+
+    http.get(`${API_URL}/access/jennifer-test-test@client.fintlabs.no/audit`, () => {
+        // eslint-disable-next-line no-console
+        console.log('GET AUDIT LOG');
+        return HttpResponse.json(accessAudit);
+    }),
 ];

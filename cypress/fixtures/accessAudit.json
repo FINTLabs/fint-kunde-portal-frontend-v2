@@ -1,0 +1,96 @@
+{
+  "userName": "jennifer-test-test@client.fintlabs.no",
+  "auditRecord": [
+    {
+      "portalUser": "Jennifer Strand",
+      "timeStamp": 1762423880794,
+      "changes": {
+        "changed": "RESOURCE",
+        "name": "Fullmakt",
+        "setTo": true
+      }
+    },
+    {
+      "portalUser": "Jennifer Strand",
+      "timeStamp": 1762423399466,
+      "changes": {
+        "changed": "RESOURCE",
+        "name": "Fullmakt",
+        "setTo": false
+      }
+    },
+    {
+      "portalUser": "Jennifer Strand",
+      "timeStamp": 1762423111039,
+      "changes": {
+        "changed": "RESOURCE",
+        "name": "Fullmakt",
+        "setTo": false
+      }
+    },
+    {
+      "portalUser": "Test User",
+      "timeStamp": 1762422000000,
+      "changes": {
+        "changed": "COMPONENT",
+        "name": "administrasjon-fullmakt",
+        "setTo": true
+      }
+    },
+    {
+      "portalUser": "Test User",
+      "timeStamp": 1762421000000,
+      "changes": {
+        "changed": "FIELD",
+        "name": "gyldighetsperiode",
+        "setTo": true
+      }
+    },
+    {
+      "portalUser": "Test User",
+      "timeStamp": 1762420000000,
+      "changes": {
+        "changed": "FIELD",
+        "name": "gyldighetsperiode",
+        "setTo": false
+      }
+    },
+    {
+      "portalUser": "Jennifer Strand",
+      "timeStamp": 1762419000000,
+      "changes": {
+        "changed": "RESOURCE",
+        "name": "Aktivitet",
+        "setTo": true
+      }
+    },
+    {
+      "portalUser": "Jennifer Strand",
+      "timeStamp": 1762418000000,
+      "changes": {
+        "changed": "COMPONENT",
+        "name": "administrasjon-person",
+        "setTo": false
+      }
+    },
+    {
+      "portalUser": "Test User",
+      "timeStamp": 1762417000000,
+      "changes": {
+        "changed": "FIELD",
+        "name": "navn",
+        "setTo": true
+      }
+    },
+    {
+      "portalUser": "Test User",
+      "timeStamp": 1762416000000,
+      "changes": {
+        "changed": "RESOURCE",
+        "name": "Person",
+        "setTo": true
+      }
+    }
+  ]
+}
+
