@@ -1,5 +1,5 @@
-import { BodyShort, Box, Table } from '@navikt/ds-react';
-import React from 'react';
+import { BodyShort, Box, Button, Table } from '@navikt/ds-react';
+import React, { useState } from 'react';
 
 import { IAccessAudit } from '~/types/Access';
 import { formatDate } from '~/utils/dateUtils';
@@ -9,6 +9,8 @@ interface ComponentAccessAuditProps {
 }
 
 export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProps) {
+    const [showAllRecords, setShowAllRecords] = useState(false);
+
     const formatChangeType = (changed: string): string => {
         switch (changed) {
             case 'COMPONENT':
@@ -45,13 +47,15 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
     }
 
     const recordCount = audit.auditRecord.length;
-    const isMaxRecords = recordCount === 10;
-    const firstTenRecords = audit?.auditRecord?.slice(0, 10) || [];
+    const hasMoreThanTenRecords = recordCount > 10;
+    const recordsToShow = showAllRecords 
+        ? audit.auditRecord 
+        : (audit?.auditRecord?.slice(0, 10) || []);
 
     return (
         <Box>
             <Box paddingBlock="2 4">
-                {isMaxRecords ? (
+                {hasMoreThanTenRecords && !showAllRecords ? (
                     <>
                         <BodyShort size="small" textColor="subtle">
                             Endringslogg for {audit.userName}
@@ -78,7 +82,7 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {firstTenRecords.map((record, idx) => (
+                    {recordsToShow.map((record, idx) => (
                         <Table.Row key={`${record.timeStamp}-${idx}`}>
                             <Table.DataCell>
                                 <BodyShort size="small">
@@ -107,6 +111,16 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
                     ))}
                 </Table.Body>
             </Table>
+            {hasMoreThanTenRecords && !showAllRecords && (
+                <Box paddingBlock="4 0">
+                    <Button
+                        variant="secondary"
+                        size="small"
+                        onClick={() => setShowAllRecords(true)}>
+                        Vis full logg
+                    </Button>
+                </Box>
+            )}
         </Box>
     );
 }
