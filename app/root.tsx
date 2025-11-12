@@ -36,6 +36,8 @@ import FeaturesApi from './api/FeaturesApi';
 import themeHref from './styles/novari-theme.css?url';
 import tailwindHref from './styles/tailwind.css?url';
 import { HeaderProperties } from './utils/headerProperties';
+import { pageVisits } from '~/routes/metrics';
+import { normalizePathname } from '~/utils/metricsPath';
 
 export const links: LinksFunction = () => [
     { rel: 'stylesheet', href: akselHref, as: 'style' }, // Aksel first
@@ -75,6 +77,12 @@ async function initializeMSW() {
 initializeMSW();
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+    const { pathname } = new URL(request.url);
+
+    // Normalize to a stable pattern for Prometheus labels
+    const normalized = normalizePathname(pathname);
+    pageVisits.inc({ path: normalized });
+
     HeaderProperties.setProperties(request);
 
     const meData: IMeData = await MeApi.fetchMe();
@@ -220,7 +228,7 @@ export function ErrorBoundary() {
     } else {
         // Handle unexpected errors (like API fetch failures)
         const errorMessage = error instanceof Error ? error.message : 'Ukjent feil';
-        
+
         return (
             <CustomErrorLayout>
                 <CustomError
