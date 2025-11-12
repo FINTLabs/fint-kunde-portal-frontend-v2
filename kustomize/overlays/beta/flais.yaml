@@ -25,5 +25,5 @@ spec:
     enabled: true
   prometheus:
     enabled: true
-    port: 8000
+    port: "8000"
     path: /metrics
