@@ -23,7 +23,7 @@ spec:
     basePath: /
   ingress:
     enabled: true
-  prometheus:
+  metrics:
     enabled: true
     port: "8000"
     path: /metrics
