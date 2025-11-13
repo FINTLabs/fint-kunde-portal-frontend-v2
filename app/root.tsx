@@ -79,17 +79,14 @@ initializeMSW();
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const { pathname } = new URL(request.url);
 
-    // Normalize to a stable pattern for Prometheus labels
+    // Normalize  for Prometheus labels
     const normalized = normalizePathname(pathname);
     pageVisits.inc({ path: normalized });
-    console.log('Normalized path: ', normalized);
-    console.log('Original path: ', pathname);
-    console.log('----------------------------------------');
 
     HeaderProperties.setProperties(request);
 
     const meData: IMeData = await MeApi.fetchMe();
-    // Ensure x-username header is propagated with full name for downstream API calls
+
     HeaderProperties.setUsername(`${meData.firstName} ${meData.lastName}`.trim());
     const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
     const featuresResponse = await FeaturesApi.fetchFeatures();
