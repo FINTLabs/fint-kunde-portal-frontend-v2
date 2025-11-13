@@ -37,8 +37,5 @@ export function normalizePathname(rawPathname: string): string {
         }
     }
 
-    return pathname
-        .replace(/\/\d+(?=\/|$)/g, '/:id')
-        .replace(/\/[0-9a-fA-F-]{36}(?=\/|$)/g, '/:uuid')
-        .replace(/\/[0-9a-fA-F]{24}(?=\/|$)/g, '/:oid');
+    return pathname;
 }
