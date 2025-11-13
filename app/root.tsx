@@ -82,6 +82,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // Normalize to a stable pattern for Prometheus labels
     const normalized = normalizePathname(pathname);
     pageVisits.inc({ path: normalized });
+    console.log('Normalized path: ', normalized);
+    console.log('Original path: ', pathname);
+    console.log('----------------------------------------');
 
     HeaderProperties.setProperties(request);
 
