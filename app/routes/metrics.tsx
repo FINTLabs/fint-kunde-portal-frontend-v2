@@ -6,7 +6,7 @@ collectDefaultMetrics({ register });
 export const pageVisits = new Counter({
     name: 'app_page_visits_total',
     help: 'Total number of page visits per route',
-    labelNames: ['path'], // <- label
+    labelNames: ['path'],
 });
 register.registerMetric(pageVisits);
 
