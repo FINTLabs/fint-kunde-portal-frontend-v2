@@ -1,7 +1,7 @@
 import React from 'react';
 import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { formatTimeOnly } from '~/utils/dateUtils';
+import { formatDate, formatTimeOnly } from '~/utils/dateUtils';
 import { IResourceResult } from '~/types/BasicTest';
 
 interface TestResultsTableProps {
@@ -52,7 +52,7 @@ function CacheStatusTable({ logResults }: TestResultsTableProps) {
                         <Table.DataCell>{result.message || 'Ingen melding'}</Table.DataCell>
                         <Table.DataCell>{result.size <= 0 ? '' : result.size}</Table.DataCell>
                         <Table.DataCell>
-                            {result.lastUpdated <= 0 ? '' : formatTimeOnly(result.lastUpdated)}
+                            {result.lastUpdated <= 0 ? '' : formatDate(result.lastUpdated)}
                         </Table.DataCell>{' '}
                     </Table.Row>
                 ))}
