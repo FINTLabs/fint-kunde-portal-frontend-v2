@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
-import { formatTimeOnly } from '~/utils/dateUtils';
+import { formatDate, formatTimeOnly } from '~/utils/dateUtils';
 import { IHealthData } from '~/types/BasicTest';
 
 interface TestResultsTableProps {
@@ -32,7 +32,7 @@ function HealthTestResultsTable({ logResults }: TestResultsTableProps) {
                         <Table.DataCell>
                             {statusTranslations[result.status] || result.status}
                         </Table.DataCell>
-                        <Table.DataCell>{formatTimeOnly(result.timestamp)}</Table.DataCell>
+                        <Table.DataCell>{formatDate(result.timestamp)}</Table.DataCell>
                     </Table.Row>
                 ))}
             </Table.Body>

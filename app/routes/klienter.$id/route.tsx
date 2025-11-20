@@ -32,6 +32,8 @@ import { IAdapter } from '~/types/Adapter';
 import { IClient } from '~/types/Clients';
 
 import { loader } from './loaders';
+import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
+import { IComponent } from '~/types';
 
 export { loader };
 
@@ -42,14 +44,24 @@ interface IExtendedFetcherResponseData extends ApiResponse<IClient> {
 }
 
 export default function ClientDetails() {
-    const { client, access, accessComponentList, accessAuditLogs, hasAccessControl } =
+    const { client, access, accessComponentList, accessAuditLogs, hasAccessControl, components } =
         useLoaderData<{
             client: IClient;
             access: IAccess;
             accessComponentList: IDomainPackages[];
             accessAuditLogs: IAccessAudit | null;
             hasAccessControl: boolean;
+            components: IComponent[];
         }>();
+
+    //TODO: Remove this when access control is fully implemented
+    const selectedComponents =
+        client?.components
+            .map((component) => {
+                const matchedComponent = components.find((c) => c.dn === component);
+                return matchedComponent?.name;
+            })
+            .filter((name): name is string => name !== undefined) || [];
 
     const [isAuditOpen, setIsAuditOpen] = useState(false);
 
@@ -171,18 +183,22 @@ export default function ClientDetails() {
 
                         {hasAccessControl && access ? (
                             <>
-                            <HStack><Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>
-                                <Box
-                                    className="w-full flex-1"
-                                    style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <Button
-                                        size="xsmall"
-                                        variant="tertiary"
-                                        onClick={() => setIsAuditOpen(true)}>
-                                        Endringslogg
-                                    </Button>
-                                </Box></HStack>
-                                
+                                <HStack>
+                                    <Heading size={'medium'}>
+                                        Tilgangsstyring for Komponenter
+                                    </Heading>
+                                    <Box
+                                        className="w-full flex-1"
+                                        style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                        <Button
+                                            size="xsmall"
+                                            variant="tertiary"
+                                            onClick={() => setIsAuditOpen(true)}>
+                                            Endringslogg
+                                        </Button>
+                                    </Box>
+                                </HStack>
+
                                 <Box padding={'6'}>
                                     <CheckboxGroup
                                         legend="Miljø:"
@@ -198,7 +214,6 @@ export default function ClientDetails() {
                                     </CheckboxGroup>
                                 </Box>
 
-                                
                                 <ComponentList
                                     accessList={accessComponentList}
                                     entity={client.name}
@@ -213,6 +228,16 @@ export default function ClientDetails() {
                                     </Modal.Body>
                                 </Modal>
                             </>
+                        ) : !hasAccessControl ? (
+                            <Box padding="6">
+                                <ComponentsTable
+                                    items={components}
+                                    selectedItems={selectedComponents}
+                                    toggle={handleToggle}
+                                    isManaged={client.managed}
+                                    fromClient={client.name}
+                                />
+                            </Box>
                         ) : (
                             <Box padding="6">
                                 <Alert variant="warning">
