@@ -1,6 +1,7 @@
 import { route, type RouteConfig } from '@react-router/dev/routes';
 import { flatRoutes } from '@react-router/fs-routes';
 // import { remixRoutesOptionAdapter } from '@remix-run/routes-option-adapter';
+// **** REMEMBER: if you add a new route, add this to metricsPaths.ts also :)
 
 export default [
     ...(await flatRoutes({ rootDirectory: 'routes' })),

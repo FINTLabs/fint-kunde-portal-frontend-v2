@@ -1,5 +1,3 @@
-// ~/components/shared/TabsComponent.tsx
-
 import { BriefcaseIcon, ComponentIcon } from '@navikt/aksel-icons';
 import { Tabs } from '@navikt/ds-react';
 import React from 'react';

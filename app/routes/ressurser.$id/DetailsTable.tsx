@@ -1,28 +1,24 @@
 import { BodyShort, Heading, Switch, Table } from '@navikt/ds-react';
 import React from 'react';
 
+import { IAdapter } from '~/types/Adapter';
 import { IAsset } from '~/types/Asset';
+import { IClient } from '~/types/Clients';
 
 interface ResourceTableProps {
-    data: IAsset[];
+    data: IAdapter[] | IClient[];
     assetData: IAsset;
     onSwitchChange: (adapterName: string, isChecked: boolean) => void;
     isClient: boolean;
 }
 
 const DetailsTable = ({ data, assetData, onSwitchChange, isClient }: ResourceTableProps) => {
-    const isConnected = (adapterDN: IAsset) => {
-        // Check if asset matches directly
-        if (adapterDN.assetId) {
-            return adapterDN.assetId === assetData.dn;
+    const isConnected = (item: IAdapter | IClient) => {
+        if (isClient) {
+            return assetData.clients.includes(item.dn);
+        } else {
+            return assetData.adapters.includes(item.dn);
         }
-
-        // Check if assetId is an array and matches any of the assets
-        if (Array.isArray(adapterDN.assetId)) {
-            return adapterDN.assetId.some((asset: string) => asset === assetData.dn);
-        }
-
-        return false;
     };
 
     const handleSwitchChange = (adapterName: string, isChecked: boolean) => {
@@ -56,7 +52,7 @@ const DetailsTable = ({ data, assetData, onSwitchChange, isClient }: ResourceTab
                         </Table.DataCell>
                         {/*<Table.DataCell>{adapter.name}</Table.DataCell>*/}
                         <Table.DataCell>
-                            <Heading size="small">{element.description}</Heading>
+                            <Heading size="small">{element.shortDescription}</Heading>
                             <BodyShort textColor="subtle">{element.name}</BodyShort>
                         </Table.DataCell>
                     </Table.Row>
