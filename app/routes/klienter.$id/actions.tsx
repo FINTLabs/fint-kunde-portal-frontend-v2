@@ -9,6 +9,7 @@ export async function handleClientAction({ request }: { request: Request }) {
     const orgName = await getSelectedOrganization(request);
     const clientName = formData.get('clientId') as string;
     const actionType = formData.get('actionType') as string;
+    const username = formData.get('username') as string;
     let secretResponse = null;
 
     switch (actionType) {
@@ -37,7 +38,7 @@ export async function handleClientAction({ request }: { request: Request }) {
         case 'ADD_COMPONENT_ACCESS':
             return await ClientApi.updateComponentInClient(
                 formData.get('componentName') as string,
-                clientName,
+                username,
                 orgName,
                 formData.get('enabled') as string
             );
