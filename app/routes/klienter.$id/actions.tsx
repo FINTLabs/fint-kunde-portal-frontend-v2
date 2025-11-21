@@ -39,7 +39,7 @@ export async function handleClientAction({ request }: { request: Request }) {
                 formData.get('componentName') as string,
                 clientName,
                 orgName,
-                formData.get('isChecked') as string
+                formData.get('enabled') as string
             );
         case 'ADD_COMPONENT_ACCESS_NEW': {
             const username = formData.get('username') as string;
