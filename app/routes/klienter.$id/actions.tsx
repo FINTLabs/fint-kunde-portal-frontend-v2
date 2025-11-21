@@ -31,17 +31,17 @@ export async function handleClientAction({ request }: { request: Request }) {
 
         case 'DELETE_CLIENT':
             await ClientApi.deleteClient(clientName, orgName);
-            await AccessApi.deleteAccess(clientName);
+            // await AccessApi.deleteAccess(clientName);
             return redirect(`/klienter?deleted=${clientName}`);
-
-        case 'ADD_COMPONENT_ACCESS_OLD':
+        //TODO: this needs to be fixed when access control is fully implemented
+        case 'ADD_COMPONENT_ACCESS':
             return await ClientApi.updateComponentInClient(
                 formData.get('componentName') as string,
                 clientName,
                 orgName,
                 formData.get('isChecked') as string
             );
-        case 'ADD_COMPONENT_ACCESS': {
+        case 'ADD_COMPONENT_ACCESS_NEW': {
             const username = formData.get('username') as string;
             const componentName = formData.get('componentName') as string;
             const enabled = formData.get('enabled') as string;
