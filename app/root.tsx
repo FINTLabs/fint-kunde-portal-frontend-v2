@@ -36,7 +36,7 @@ import FeaturesApi from './api/FeaturesApi';
 import themeHref from './styles/novari-theme.css?url';
 import tailwindHref from './styles/tailwind.css?url';
 import { HeaderProperties } from './utils/headerProperties';
-import { pageVisits } from '~/routes/metrics';
+import { pageVisits, dailyPageVisits, getCurrentDate } from '~/routes/metrics';
 import { normalizePathname } from '~/utils/metricsPath';
 
 export const links: LinksFunction = () => [
@@ -81,7 +81,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     // Normalize  for Prometheus labels
     const normalized = normalizePathname(pathname);
+    const currentDate = getCurrentDate();
+    
+    // Track total visits (cumulative)
     pageVisits.inc({ path: normalized });
+    
+    // Track daily visits (resets each day via date label)
+    dailyPageVisits.inc({ path: normalized, date: currentDate });
 
     HeaderProperties.setProperties(request);
 

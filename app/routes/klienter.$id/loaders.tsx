@@ -15,8 +15,8 @@ export async function loader({ request, params }: ActionFunctionArgs) {
 
     //TODO: FIX this when access control is fully implemented
     const featuresResponse = await FeaturesApi.fetchFeatures();
-    let hasAccessControl = id && featuresResponse.data?.['access-controll-new'];
-    hasAccessControl = false;
+    const hasAccessControl = id && featuresResponse.data?.['access-controll-new'];
+    // hasAccessControl = false;
 
     const [accessResponse, componentListResponse, auditResponse] = hasAccessControl
         ? await Promise.all([
