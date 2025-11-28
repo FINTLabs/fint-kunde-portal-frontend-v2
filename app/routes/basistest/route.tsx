@@ -1,8 +1,13 @@
 import { TerminalIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Heading, Loader, VStack } from '@navikt/ds-react';
-import {type  ApiResponse } from 'novari-frontend-components';
+import { type ApiResponse } from 'novari-frontend-components';
 import React from 'react';
-import { type ActionFunctionArgs, type MetaFunction, useFetcher, useLoaderData } from 'react-router';
+import {
+    type ActionFunctionArgs,
+    type MetaFunction,
+    useFetcher,
+    useLoaderData,
+} from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -97,7 +102,7 @@ export default function Index() {
                                     </Box>
                                     {/*)}*/}
 
-                                    {actionData.data.healthData.healthData && (
+                                    {actionData?.data?.healthData.healthData && (
                                         <>
                                             <Heading size={'medium'}>
                                                 Resultat av helsetest:{' '}
@@ -108,7 +113,7 @@ export default function Index() {
                                         </>
                                     )}
 
-                                    {actionData.data.cacheData.resourceResults && (
+                                    {actionData?.data?.cacheData.resourceResults && (
                                         <>
                                             <Heading size={'medium'} className={'pt-5'}>
                                                 Cache status:

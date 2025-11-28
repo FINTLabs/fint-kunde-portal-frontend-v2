@@ -33,6 +33,8 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
     const fieldList = await AccessApi.getFieldAccess(clientOrAdapter, componentName, resourceName);
 
+    console.log('resource', resource);
+    console.log('fieldList', fieldList);
     return Response.json({
         clientOrAdapter,
         componentName,
@@ -54,7 +56,7 @@ export default function Route() {
     const { alertState } = useAlerts<IField>([], actionData, fetcher.state);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const addedNew = searchParams.get('addedNew');
+    const addedNew = searchParams.get('addedNew') || 'false';
     if (addedNew === 'true') {
         alertState.push({
             id: 'addedNew',

@@ -148,11 +148,18 @@ export const accessHandlers = [
         `${API_URL}/access/jennifer-test-test@client.fintlabs.no/component/administrasjon-fullmakt/resource/Aktivitet/field`,
         () => {
             // eslint-disable-next-line no-console
-            console.log('GET FIELD  DETAILS');
+            console.log('GET FIELD  DETAILS handler');
             return HttpResponse.json(fieldAccess);
         }
     ),
-
+    http.get(
+        `${API_URL}/access/jennifer-test-test@client.fintlabs.no/component/administrasjon-fullmakt/resource/Aktivitet`,
+        () => {
+            // eslint-disable-next-line no-console
+            console.log('GET resource  DETAILS handler');
+            return HttpResponse.json(resourceAccess);
+        }
+    ),
     // ***** /access/{username}/audit
 
     /*
