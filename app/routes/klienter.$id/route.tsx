@@ -123,11 +123,13 @@ export default function ClientDetails() {
         fetcher.submit(formData, { method: 'post' });
     }
 
+    //TODO: clean up in username & clientId
     function addAccess() {
         setIsLoading(true);
         const formData = new FormData();
         formData.append('actionType', 'ADD_ACCESS');
         formData.append('username', client?.name as string);
+        formData.append('clientId', client?.name as string);
         fetcher.submit(formData, { method: 'post' });
     }
 
