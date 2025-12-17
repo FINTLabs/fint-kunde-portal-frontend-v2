@@ -24,8 +24,6 @@
     "@react-router/node": "^7.0.0",
     "@react-router/serve": "^7.0.0",
     "@tailwindcss/vite": "^4.1.11",
-    "depcheck": "^1.4.7",
-    "express": "^5.1.0",
     "isbot": "^5.1.17",
     "log-update": "^6.1.0",
     "log4js": "^6.9.1",

@@ -65,6 +65,19 @@ export interface IAccessAudit {
     auditRecord: IAccessAuditRecord[];
 }
 
+export interface IAccessLogEntry {
+    domain: string;
+    pkg: string;
+    resource: string;
+    timestamp: number;
+    hadAccess: boolean;
+}
+
+export interface IComponentAccessLog {
+    username: string;
+    accessLogs: IAccessLogEntry[];
+}
+
 // export interface IUpdateResource {
 //     enabled: boolean;
 //     isWriteable: boolean;

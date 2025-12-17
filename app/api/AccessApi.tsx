@@ -5,6 +5,7 @@ import {
     IAccess,
     IAccessAudit,
     IComponentAccess,
+    IComponentAccessLog,
     IDomainPackages,
     IField,
     IResource,
@@ -253,6 +254,20 @@ class AccessApi {
             functionName: 'getAccessAudit',
             customErrorMessage: `Kunne ikke hente endringslogg`,
             customSuccessMessage: `Endringslogg hentet`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+                'x-portalUser': HeaderProperties.getUsername(),
+            },
+        });
+    }
+
+    static async getAccessLogs(username: string): Promise<ApiResponse<IComponentAccessLog[]>> {
+        return await accessManager.call<IComponentAccessLog[]>({
+            method: 'GET',
+            endpoint: `/access-log/${username}`,
+            functionName: 'getAccessLogs',
+            customErrorMessage: `Kunne ikke hente tilgangslogg`,
+            customSuccessMessage: `Tilgangslogg hentet`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
                 'x-portalUser': HeaderProperties.getUsername(),

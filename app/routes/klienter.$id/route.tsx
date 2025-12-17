@@ -1,4 +1,9 @@
-import { ArrowLeftIcon, TokenIcon } from '@navikt/aksel-icons';
+import {
+    ArrowLeftIcon,
+    TokenIcon,
+    TasklistSendIcon,
+    ShieldCheckmarkIcon,
+} from '@navikt/aksel-icons';
 import {
     Alert,
     Box,
@@ -27,13 +32,20 @@ import ComponentAccessAudit from '~/routes/klienter.$id/ComponentAccessAudit';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { handleClientAction } from '~/routes/klienter.$id/actions';
-import { Environment, IAccess, IAccessAudit, IDomainPackages } from '~/types/Access';
+import {
+    Environment,
+    IAccess,
+    IAccessAudit,
+    IComponentAccessLog,
+    IDomainPackages,
+} from '~/types/Access';
 import { IAdapter } from '~/types/Adapter';
 import { IClient } from '~/types/Clients';
 
 import { loader } from './loaders';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import { IComponent } from '~/types';
+import ComponentAccessLog from '~/routes/klienter.$id/ComponentAccessLog';
 
 export { loader };
 
@@ -44,15 +56,23 @@ interface IExtendedFetcherResponseData extends ApiResponse<IClient> {
 }
 
 export default function ClientDetails() {
-    const { client, access, accessComponentList, accessAuditLogs, hasAccessControl, components } =
-        useLoaderData<{
-            client: IClient;
-            access: IAccess;
-            accessComponentList: IDomainPackages[];
-            accessAuditLogs: IAccessAudit | null;
-            hasAccessControl: boolean;
-            components: IComponent[];
-        }>();
+    const {
+        client,
+        access,
+        accessComponentList,
+        accessAuditLogs,
+        accessLog,
+        hasAccessControl,
+        components,
+    } = useLoaderData<{
+        client: IClient;
+        access: IAccess;
+        accessComponentList: IDomainPackages[];
+        accessAuditLogs: IAccessAudit | null;
+        accessLog: IComponentAccessLog | null;
+        hasAccessControl: boolean;
+        components: IComponent[];
+    }>();
 
     //TODO: Remove this when access control is fully implemented
     const selectedComponents =
@@ -64,6 +84,7 @@ export default function ClientDetails() {
             .filter((name): name is string => name !== undefined) || [];
 
     const [isAuditOpen, setIsAuditOpen] = useState(false);
+    const [isLogOpen, setIsLogOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -195,8 +216,16 @@ export default function ClientDetails() {
                                         <Button
                                             size="xsmall"
                                             variant="tertiary"
+                                            icon={<TasklistSendIcon />}
                                             onClick={() => setIsAuditOpen(true)}>
                                             Endringslogg
+                                        </Button>
+                                        <Button
+                                            size="xsmall"
+                                            variant="tertiary"
+                                            icon={<ShieldCheckmarkIcon />}
+                                            onClick={() => setIsLogOpen(true)}>
+                                            Tilgangslogg
                                         </Button>
                                     </Box>
                                 </HStack>
@@ -227,6 +256,15 @@ export default function ClientDetails() {
                                     header={{ heading: 'Endringslogg' }}>
                                     <Modal.Body>
                                         <ComponentAccessAudit audit={accessAuditLogs} />
+                                    </Modal.Body>
+                                </Modal>
+
+                                <Modal
+                                    open={isLogOpen}
+                                    onClose={() => setIsLogOpen(false)}
+                                    header={{ heading: 'Access Log' }}>
+                                    <Modal.Body>
+                                        <ComponentAccessLog accessLog={accessLog} />
                                     </Modal.Body>
                                 </Modal>
                             </>

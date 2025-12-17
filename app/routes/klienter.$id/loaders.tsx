@@ -18,13 +18,15 @@ export async function loader({ request, params }: ActionFunctionArgs) {
     const hasAccessControl = id && featuresResponse.data?.['access-controll-new'];
     // hasAccessControl = false;
 
-    const [accessResponse, componentListResponse, auditResponse] = hasAccessControl
-        ? await Promise.all([
-              AccessApi.getClientOrAdapterAccess(id),
-              AccessApi.getClientOrAdapterAccessComponents(id),
-              AccessApi.getAccessAudit(id),
-          ])
-        : [null, null, null];
+    const [accessResponse, componentListResponse, auditResponse, accessLogResponse] =
+        hasAccessControl
+            ? await Promise.all([
+                  AccessApi.getClientOrAdapterAccess(id),
+                  AccessApi.getClientOrAdapterAccessComponents(id),
+                  AccessApi.getAccessAudit(id),
+                  AccessApi.getAccessLogs(id),
+              ])
+            : [null, null, null, null];
 
     //TODO: Remove this when access control is fully implemented
     const componentsResponse = await ComponentApi.getAllComponents();
@@ -34,6 +36,7 @@ export async function loader({ request, params }: ActionFunctionArgs) {
         access: accessResponse?.data,
         accessComponentList: componentListResponse?.data,
         accessAuditLogs: auditResponse?.data || null,
+        accessLog: accessLogResponse?.data || null,
         hasAccessControl,
         components: componentsResponse.data,
     });

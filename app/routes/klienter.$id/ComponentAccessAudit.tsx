@@ -48,9 +48,9 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
 
     const recordCount = audit.auditRecord.length;
     const hasMoreThanTenRecords = recordCount > 10;
-    const recordsToShow = showAllRecords 
-        ? audit.auditRecord 
-        : (audit?.auditRecord?.slice(0, 10) || []);
+    const recordsToShow = showAllRecords
+        ? audit.auditRecord
+        : audit?.auditRecord?.slice(0, 10) || [];
 
     return (
         <Box>
@@ -71,7 +71,7 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
                 )}
             </Box>
 
-            <Table>
+            <Table size="small">
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Tidspunkt</Table.HeaderCell>
@@ -85,9 +85,7 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
                     {recordsToShow.map((record, idx) => (
                         <Table.Row key={`${record.timeStamp}-${idx}`}>
                             <Table.DataCell>
-                                <BodyShort size="small">
-                                    {formatDate(record.timeStamp)}
-                                </BodyShort>
+                                <BodyShort size="small">{formatDate(record.timeStamp)}</BodyShort>
                             </Table.DataCell>
                             <Table.DataCell>
                                 <BodyShort size="small">{record.portalUser}</BodyShort>
@@ -124,5 +122,3 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
         </Box>
     );
 }
-
-
