@@ -185,8 +185,8 @@ class AssetApi {
             endpoint: `${baseEndpoint}/${primaryAssetName}/clients/${clientName}`,
             functionName: 'addClientToPrimaryAsset',
             body: JSON.stringify({ name: clientName }),
-            customErrorMessage: `Kunne ikke sette klient '${clientName}' som primærressurs '${primaryAssetName}'.`,
-            customSuccessMessage: `Fjernet klient '${clientName}' og satt til klient primærressurs '${primaryAssetName}'.`,
+            customErrorMessage: `Kunne ikke sette klient '${clientName}' '.`,
+            customSuccessMessage: `Fjernet klient '${clientName}' '.`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
@@ -206,7 +206,7 @@ class AssetApi {
     static async addClientToAsset(url: string, clientName: string): Promise<ApiResponse<void>> {
         return await assetManager.call<void>({
             method: 'PUT',
-            endpoint: url.replace(API_URL || '', ''), // convert to relative if old callers pass full URL
+            endpoint: url.replace(API_URL || '', ''),
             functionName: 'addClientToAsset',
             body: JSON.stringify({ name: clientName }),
             customErrorMessage: `Kunne ikke legge til klienten: ${clientName}`,
