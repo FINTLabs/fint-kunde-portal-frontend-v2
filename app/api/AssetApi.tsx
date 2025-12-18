@@ -185,7 +185,7 @@ class AssetApi {
             endpoint: `${baseEndpoint}/${primaryAssetName}/clients/${clientName}`,
             functionName: 'addClientToPrimaryAsset',
             body: JSON.stringify({ name: clientName }),
-            customErrorMessage: `Kunne ikke sette klient '${clientName}' '.`,
+            customErrorMessage: `Kunne ikke sette klient '${clientName}'.`,
             customSuccessMessage: `Fjernet klient '${clientName}' '.`,
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
