@@ -5,11 +5,12 @@ import { IAsset } from '~/types/Asset';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const orgName = await getSelectedOrganization(request);
-    const assetsResponse = await AssetApi.getAllAssets(orgName);
+    const selectedOrgName = await getSelectedOrganization(request);
+    const assetsResponse = await AssetApi.getAllAssets(selectedOrgName);
+    const primaryAssetResponse = await AssetApi.getPrimaryAsset(selectedOrgName);
 
     if (!assetsResponse.success) {
-        throw new Error(`Kunne ikke hente ressurser for organisasjonen: ${orgName}`);
+        throw new Error(`Kunne ikke hente ressurser for organisasjonen: ${selectedOrgName}`);
     }
 
     const assets = assetsResponse.data || [];
@@ -17,6 +18,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     return Response.json({
         assets,
-        orgName,
+        primaryAsset: primaryAssetResponse.data,
     });
 };

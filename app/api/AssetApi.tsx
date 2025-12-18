@@ -9,6 +9,19 @@ const assetManager = new NovariApiManager({
 });
 
 class AssetApi {
+    static async getPrimaryAsset(organisationName: string): Promise<ApiResponse<IAsset>> {
+        return await assetManager.call<IAsset>({
+            method: 'GET',
+            endpoint: `/api/assets/${organisationName}/primary`,
+            functionName: 'getPrimaryAsset',
+            customErrorMessage: `Kunne ikke hente primærressurs for organisasjonen: ${organisationName}`,
+            customSuccessMessage: 'Primærressurs hentet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
+        });
+    }
+
     static async getAllAssets(organisationName: string): Promise<ApiResponse<IAsset[]>> {
         return await assetManager.call<IAsset[]>({
             method: 'GET',
@@ -158,6 +171,9 @@ class AssetApi {
             body: JSON.stringify({ name: clientName }),
             customErrorMessage: `Kunne ikke fjerne klienten: ${clientName}`,
             customSuccessMessage: `Klienten ${clientName} ble fjernet.`,
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
         });
 
         if (!removeResponse.success) {

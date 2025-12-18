@@ -1,4 +1,4 @@
-import { FloppydiskIcon, PencilIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { FloppydiskIcon, PencilIcon, StarIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading, HStack, Label, VStack } from '@navikt/ds-react';
 import React, { useState } from 'react';
 
@@ -44,6 +44,13 @@ export function DetailsView({ asset, onUpdate, onDelete }: DetailsViewProps) {
                     Detaljer
                 </Heading>
             </HStack>
+            {asset.primaryAsset && (
+                <HStack gap={'2'}>
+                    <StarIcon title="a11y-title" fontSize="1.5rem" className={'text-yellow-600'} />
+                    <BodyShort> Primær ressurs</BodyShort>
+                </HStack>
+            )}
+
             <VStack>
                 <Label>Navn</Label>
                 <BodyShort data-cy="details-Name">{asset.name}</BodyShort>
@@ -59,42 +66,44 @@ export function DetailsView({ asset, onUpdate, onDelete }: DetailsViewProps) {
                 isEditing={isEditing}
                 setValue={setResourceShortDesc}
             />
-            <HStack justify={'space-between'}>
-                <HStack className="w-full" align={'end'} justify={'end'} gap="2">
-                    {/* Save Button */}
-                    <Button
-                        icon={
-                            isEditing ? (
-                                <FloppydiskIcon title="Lagre" data-cy="save-button" />
-                            ) : (
-                                <PencilIcon title="Rediger" data-cy="edit-button" />
-                            )
-                        }
-                        variant="tertiary"
-                        onClick={isEditing ? handleSave : () => setIsEditing(true)}
-                    />
-
-                    {!isEditing && (
-                        <ConfirmAction
-                            buttonText={'delete'}
-                            showButtonText={false}
-                            subTitleText={`Er du sikker på at du vil slette ${asset.name}?`}
-                            onConfirm={handleConfirmDelete}
-                            buttonVariant="tertiary"
-                            buttonSize={'medium'}
-                            icon={<TrashIcon aria-hidden />}
-                        />
-                    )}
-
-                    {isEditing && (
+            {!asset.primaryAsset && (
+                <HStack justify={'space-between'}>
+                    <HStack className="w-full" align={'end'} justify={'end'} gap="2">
+                        {/* Save Button */}
                         <Button
-                            icon={<XMarkIcon title="Avbryt" fontSize="1.5rem" />}
+                            icon={
+                                isEditing ? (
+                                    <FloppydiskIcon title="Lagre" data-cy="save-button" />
+                                ) : (
+                                    <PencilIcon title="Rediger" data-cy="edit-button" />
+                                )
+                            }
                             variant="tertiary"
-                            onClick={handleCancel}
+                            onClick={isEditing ? handleSave : () => setIsEditing(true)}
                         />
-                    )}
+
+                        {!isEditing && (
+                            <ConfirmAction
+                                buttonText={'delete'}
+                                showButtonText={false}
+                                subTitleText={`Er du sikker på at du vil slette ${asset.name}?`}
+                                onConfirm={handleConfirmDelete}
+                                buttonVariant="tertiary"
+                                buttonSize={'medium'}
+                                icon={<TrashIcon aria-hidden />}
+                            />
+                        )}
+
+                        {isEditing && (
+                            <Button
+                                icon={<XMarkIcon title="Avbryt" fontSize="1.5rem" />}
+                                variant="tertiary"
+                                onClick={handleCancel}
+                            />
+                        )}
+                    </HStack>
                 </HStack>
-            </HStack>
+            )}
         </VStack>
     );
 }

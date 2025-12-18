@@ -1,14 +1,26 @@
 [
   {
-    "dn": "ou=udehenrik_fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint",
-    "name": "udehenrik_fintlabs_no",
+    "dn": "ou=jennifer_fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint",
+    "name": "jennifer_fintlabs_no",
     "description": "yes",
     "organisation": "ou=fintlabs_no,ou=organisations,o=fint",
     "clients": [
       "cn=jennifer-test-test@client.fintlabs.no,ou=clients,ou=fintlabs_no,ou=organisations,o=fint"
     ],
     "adapters": [],
-    "assetId": "udehenrik.fintlabs.no",
+    "assetId": "jennifer.fintlabs.no",
+    "primaryAsset": false
+  },
+  {
+    "dn": "ou=maarberg_fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint",
+    "name": "maarberg_fintlabs_no",
+    "description": "yes",
+    "organisation": "ou=fintlabs_no,ou=organisations,o=fint",
+    "clients": [
+      "cn=jennifer-test-test@client.fintlabs.no,ou=clients,ou=fintlabs_no,ou=organisations,o=fint"
+    ],
+    "adapters": [],
+    "assetId": "maarberg.fintlabs.no",
     "primaryAsset": false
   },
   {
@@ -20,19 +32,7 @@
       "cn=jennifer-test-test@client.fintlabs.no,ou=clients,ou=fintlabs_no,ou=organisations,o=fint"
     ],
     "adapters": [],
-    "assetId": "udehenrik.fintlabs.no",
-    "primaryAsset": false
-  },
-  {
-    "dn": "ou=udehenrik_fintlabs_no,ou=assets,ou=fintlabs_no,ou=organisations,o=fint",
-    "name": "udehenrik_fintlabs_no",
-    "description": "yes",
-    "organisation": "ou=fintlabs_no,ou=organisations,o=fint",
-    "clients": [
-      "cn=jennifer-test-test@client.fintlabs.no,ou=clients,ou=fintlabs_no,ou=organisations,o=fint"
-    ],
-    "adapters": [],
-    "assetId": "udehenrik.fintlabs.no",
-    "primaryAsset": false
+    "assetId": "fintlabs.no",
+    "primaryAsset": true
   }
   ]

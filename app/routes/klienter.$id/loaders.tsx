@@ -4,7 +4,6 @@ import AccessApi from '~/api/AccessApi';
 import ClientApi from '~/api/ClientApi';
 // import FeaturesApi from '~/api/FeaturesApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import FeaturesApi from '~/api/FeaturesApi';
 import ComponentApi from '~/api/ComponentApi';
 
 export async function loader({ request, params }: ActionFunctionArgs) {
@@ -14,9 +13,9 @@ export async function loader({ request, params }: ActionFunctionArgs) {
     const clientResponse = await ClientApi.getClientById(orgName, id);
 
     //TODO: FIX this when access control is fully implemented
-    const featuresResponse = await FeaturesApi.fetchFeatures();
-    const hasAccessControl = id && featuresResponse.data?.['access-controll-new'];
-    // hasAccessControl = false;
+    // const featuresResponse = await FeaturesApi.fetchFeatures();
+    // const hasAccessControl = id && featuresResponse.data?.['access-controll-new'];
+    const hasAccessControl = false;
 
     const [accessResponse, componentListResponse, auditResponse, accessLogResponse] =
         hasAccessControl

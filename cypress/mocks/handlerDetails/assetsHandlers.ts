@@ -2,26 +2,28 @@ import { http, HttpResponse } from 'msw';
 
 import resource from '../../fixtures/resource.json';
 import resources from '../../fixtures/resources.json';
+import primaryResource from '../../fixtures/primaryResource.json';
 import { API_URL } from '../mockConfig';
 
 export const assetsHandlers = [
+    http.get(`${API_URL}/api/assets/calvin_organizations/primary`, () => {
+        return HttpResponse.json(primaryResource);
+    }),
     http.get(`${API_URL}/api/assets/calvin_organizations/`, () => {
         return HttpResponse.json(resources);
     }),
 
-    http.post(`${API_URL}/api/assets/calvin_organizations/`, async ({ request }) => {
-        console.log('POST CREATE RESOURCE');
-        const body = await request.json();
-        console.log('Resource creation request body:', body);
-        
+    http.post(`${API_URL}/api/assets/fintlabs.no/`, async () => {
+        // const body = await request.json();
+
         // Return a mock created resource response
         const newResource = {
             id: `test-resource-${Date.now()}`,
-            name: body.name || 'Test Resource',
-            description: body.description || 'Test Description',
-            orgName: 'calvin_organizations'
+            name: 'test',
+            description: 'Test Description',
+            orgName: 'calvin_organizations',
         };
-        
+
         return HttpResponse.json(newResource, { status: 201 });
     }),
 

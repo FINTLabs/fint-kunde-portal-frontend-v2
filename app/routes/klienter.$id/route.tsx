@@ -128,7 +128,9 @@ export default function ClientDetails() {
     };
 
     const handleToggle = (formData: FormData) => {
-        formData.append('actionType', 'ADD_COMPONENT_ACCESS_NEW');
+        // TODO: Fix this when access control is finished
+        // formData.append('actionType', 'ADD_COMPONENT_ACCESS_NEW');
+        formData.append('actionType', 'ADD_COMPONENT_ACCESS');
         formData.append('username', client?.name as string);
         formData.append('componentName', formData.get('componentName') as string);
         formData.append('enabled', formData.get('isChecked') as string);

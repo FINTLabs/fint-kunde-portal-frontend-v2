@@ -1,17 +1,18 @@
 // CreateForm.tsx
-import { Box, Button, FormSummary, HStack, TextField } from '@navikt/ds-react';
+import { Box, Button, FormSummary, HStack, Label, TextField } from '@navikt/ds-react';
 import { useState } from 'react';
+import { IAsset } from '~/types';
 
 type Errors = { name?: string; description?: string; note?: string };
 
 export default function CreateForm({
     onCancel,
     onCreate,
-    orgName,
+    primaryAsset,
 }: {
     onCancel: () => void;
     onCreate: (formData: FormData) => void;
-    orgName: string;
+    primaryAsset: IAsset;
 }) {
     // const actionData = useActionData<ActionData>();
 
@@ -34,6 +35,7 @@ export default function CreateForm({
             const formData = new FormData();
             formData.append('name', inputName);
             formData.append('description', inputDescription);
+            formData.append('orgName', primaryAsset.assetId);
             onCreate(formData);
         }
     };
@@ -59,7 +61,7 @@ export default function CreateForm({
                                 error={errors?.name}
                                 onChange={(e) => setInputName(e.target.value)}
                             />
-                            <span className="pb-3.5">_{orgName}</span>
+                            <Label>{primaryAsset.assetId}</Label>
                         </HStack>
                     </FormSummary.Answer>
 

@@ -22,7 +22,7 @@ import { loader } from './loaders';
 
 interface IPageLoaderData {
     assets: IAsset[];
-    orgName: string;
+    primaryAsset: IAsset;
 }
 
 export const meta: MetaFunction = () => {
@@ -35,7 +35,7 @@ export const action = async (args: ActionFunctionArgs) => handleAssetIndexAction
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Ressurser', link: '/ressurser' }];
-    const { assets, orgName } = useLoaderData<IPageLoaderData>();
+    const { assets, primaryAsset } = useLoaderData<IPageLoaderData>();
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate();
     // const [searchParams] = useSearchParams();
@@ -76,7 +76,11 @@ export default function Index() {
                     <BodyLong>Fant ingen ressurser</BodyLong>
                 </Box>
             ) : isCreating ? (
-                <CreateForm onCancel={handleCancel} orgName={orgName} onCreate={handleSave} />
+                <CreateForm
+                    onCancel={handleCancel}
+                    primaryAsset={primaryAsset}
+                    onCreate={handleSave}
+                />
             ) : (
                 <AssetsTable assets={assets} onRowClick={handleClick} />
             )}
