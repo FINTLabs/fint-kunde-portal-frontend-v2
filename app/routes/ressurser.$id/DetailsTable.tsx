@@ -24,7 +24,6 @@ const DetailsTable = ({ data, assetData, onSwitchChange, isClient }: ResourceTab
     const handleSwitchChange = (adapterName: string, isChecked: boolean) => {
         onSwitchChange(adapterName, isChecked);
     };
-
     return (
         <Table>
             <Table.Header>
@@ -43,9 +42,8 @@ const DetailsTable = ({ data, assetData, onSwitchChange, isClient }: ResourceTab
                                 size="small"
                                 hideLabel
                                 checked={isConnected(element)}
-                                onChange={(e) => handleSwitchChange(element.name, e.target.checked)}
-                                disabled={
-                                    isClient && assetData.primaryAsset && isConnected(element)
+                                onChange={(e) =>
+                                    handleSwitchChange(element.name, e.target.checked)
                                 }>
                                 {element.name}
                             </Switch>

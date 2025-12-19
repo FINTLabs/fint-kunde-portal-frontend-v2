@@ -1,4 +1,4 @@
-import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
+import { type ApiResponse, NovariApiManager } from 'novari-frontend-components';
 
 import { IAsset, IPartialAsset } from '~/types/Asset';
 import { HeaderProperties } from '~/utils/headerProperties';
@@ -145,8 +145,7 @@ class AssetApi {
         clientName: string,
         assetName: string,
         organisationName: string,
-        updateType: string,
-        primaryAssetName: string
+        updateType: string
     ): Promise<ApiResponse<void>> {
         const baseEndpoint = `/api/assets/${organisationName}`;
 
@@ -164,7 +163,8 @@ class AssetApi {
             });
         }
 
-        const removeResponse = await assetManager.call<void>({
+        // if (!removeResponse.success) {
+        return await assetManager.call<void>({
             method: 'DELETE',
             endpoint: `${baseEndpoint}/${assetName}/clients/${clientName}`,
             functionName: 'removeClientFromAsset',
@@ -175,32 +175,6 @@ class AssetApi {
                 'x-nin': HeaderProperties.getXnin(),
             },
         });
-
-        if (!removeResponse.success) {
-            return removeResponse;
-        }
-
-        const addPrimaryResponse = await assetManager.call<void>({
-            method: 'PUT',
-            endpoint: `${baseEndpoint}/${primaryAssetName}/clients/${clientName}`,
-            functionName: 'addClientToPrimaryAsset',
-            body: JSON.stringify({ name: clientName }),
-            customErrorMessage: `Kunne ikke sette klient '${clientName}'.`,
-            customSuccessMessage: `Fjernet klient '${clientName}' '.`,
-            additionalHeaders: {
-                'x-nin': HeaderProperties.getXnin(),
-            },
-        });
-
-        if (addPrimaryResponse.success) {
-            return addPrimaryResponse;
-        }
-
-        return {
-            success: false,
-            message: `Klient '${clientName}' ble fjernet, men kunne ikke settes som primærressurs '${primaryAssetName}'.`,
-            variant: 'error',
-        };
     }
 
     static async addClientToAsset(url: string, clientName: string): Promise<ApiResponse<void>> {
