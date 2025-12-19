@@ -51,8 +51,7 @@ export async function handleAssetAction({ request }: { request: Request }) {
                 formData.get('clientName') as string,
                 formData.get('assetName') as string,
                 orgName,
-                formData.get('updateType') as string,
-                formData.get('primaryAssetDN') as string
+                formData.get('updateType') as string
             );
 
         default:

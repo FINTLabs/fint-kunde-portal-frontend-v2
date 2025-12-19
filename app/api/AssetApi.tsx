@@ -163,7 +163,6 @@ class AssetApi {
             });
         }
 
-        // if (!removeResponse.success) {
         return await assetManager.call<void>({
             method: 'DELETE',
             endpoint: `${baseEndpoint}/${assetName}/clients/${clientName}`,
@@ -171,6 +170,7 @@ class AssetApi {
             body: JSON.stringify({ name: clientName }),
             customErrorMessage: `Kunne ikke fjerne klienten: ${clientName}`,
             customSuccessMessage: `Klienten ${clientName} ble fjernet.`,
+            customSuccessVariant: 'warning',
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },
