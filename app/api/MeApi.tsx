@@ -12,6 +12,14 @@ const apiManager = new NovariApiManager({
 
 class MeApi {
     static async fetchMe(): Promise<IMeData> {
+        //TODO: should we check xnin before going further?
+        // if (!HeaderProperties.getXnin()) {
+        //     throw new Response('Login informasjon mangler. Vennligst logg inn på nytt.', {
+        //         status: 500,
+        //         statusText: 'Login informasjon mangler. Vennligst logg inn på nytt.',
+        //     });
+        // }
+
         const res = await apiManager.call<IMeData>({
             method: 'GET',
             endpoint: '/api/me',

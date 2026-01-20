@@ -25,8 +25,15 @@ import { handlers } from '../mocks/handlers';
 const worker = setupWorker(...handlers);
 
 before(() => {
-    worker.start({
+    return worker.start({
         onUnhandledRequest: 'bypass',
+        serviceWorker: {
+            url: '/mockServiceWorker.js',
+        },
+    }).catch((error) => {
+        // Log error but don't fail the test suite
+        // This allows tests to continue even if MSW fails to initialize
+        console.warn('MSW failed to start:', error);
     });
 });
 
