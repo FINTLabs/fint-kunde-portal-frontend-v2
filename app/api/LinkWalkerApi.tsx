@@ -26,12 +26,8 @@ class LinkWalkerApi {
         return `${API_URL}/link-walker/tasks/${orgName}/${resultId}/download`;
     }
 
-    static async addTest(
-        testUrl: string,
-        clientName: string,
-        orgName: string
-    ): Promise<ApiResponse<void>> {
-        const data = { url: testUrl, client: clientName };
+    static async addTest(testUrl: string, orgName: string): Promise<ApiResponse<void>> {
+        const data = { url: testUrl };
 
         return await linkWalkerManager.call<void>({
             method: 'POST',

@@ -2,32 +2,22 @@ import React, { useState } from 'react';
 import { Box, Button, HGrid, Select } from '@navikt/ds-react';
 import { PlayIcon } from '@navikt/aksel-icons';
 import { IComponent } from '~/types/Component';
-import { IClient } from '~/types/Clients';
 import { IComponentConfig } from '~/types/ComponentConfig';
 
 interface TestAddFormProps {
     components: IComponent[];
-    clients: IClient[];
     configs: IComponentConfig[];
-    runTest: (testUrl: string, clientName: string) => void;
+    runTest: (testUrl: string) => void;
 }
 
-const RelationTestAddForm = ({ components, clients, configs, runTest }: TestAddFormProps) => {
+const RelationTestAddForm = ({ components, configs, runTest }: TestAddFormProps) => {
     const [selectedComponent, setSelectedComponent] = useState<string>('');
-    const [selectedClient, setSelectedClient] = useState<string>('');
     const [selectedConfig, setSelectedConfig] = useState<string>('');
     const [selectedBaseUrl, setSelectedBaseUrl] = useState(
         'https://play-with-fint.felleskomponent.no'
     );
     const [selectedComponentError, setSelectedComponentError] = useState<string | undefined>();
-    const [selectedClientError, setSelectedClientError] = useState<string | undefined>();
-
     const [matchingConfigs, setMatchingConfigs] = useState<IComponentConfig[]>([]);
-
-    const filteredClients = clients.filter((client: IClient) => !client.managed);
-    const sortedClients = filteredClients.sort((a: IClient, b: IClient) =>
-        a.shortDescription.localeCompare(b.shortDescription)
-    );
 
     function handleChangeComponent(value: string) {
         setSelectedComponent(value);
@@ -51,19 +41,11 @@ const RelationTestAddForm = ({ components, clients, configs, runTest }: TestAddF
             setSelectedComponentError(undefined);
         }
 
-        if (
-            selectedBaseUrl != 'https://play-with-fint.felleskomponent.no' &&
-            selectedClient === ''
-        ) {
-            setSelectedClientError('påkrevd');
-            isValid = false;
-        }
-
         if (isValid) {
             // const component = components.find((comp) => comp.dn === selectedComponent);
             const fullUrl = `${selectedBaseUrl}${selectedConfig}`;
             // console.debug('FULL URL:', fullUrl);
-            runTest(fullUrl, selectedClient);
+            runTest(fullUrl);
         }
     }
 
@@ -109,20 +91,6 @@ const RelationTestAddForm = ({ components, clients, configs, runTest }: TestAddF
                         </option>
                     ))
                 )}
-            </Select>
-
-            <Select
-                label="Klient"
-                size="small"
-                error={selectedClientError}
-                onChange={(e) => setSelectedClient(e.target.value)}
-                disabled={selectedBaseUrl == 'https://play-with-fint.felleskomponent.no'}>
-                <option value="">Velg</option>
-                {sortedClients.map((client, index) => (
-                    <option value={client.name} key={index}>
-                        {client.shortDescription}
-                    </option>
-                ))}
             </Select>
 
             <Box className="flex items-end">

@@ -2,7 +2,12 @@ import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, HStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import React, { useEffect } from 'react';
-import { type ActionFunctionArgs, type MetaFunction, useFetcher, useLoaderData } from 'react-router';
+import {
+    type ActionFunctionArgs,
+    type MetaFunction,
+    useFetcher,
+    useLoaderData,
+} from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -10,7 +15,6 @@ import { handleRelationTestAction } from '~/routes/relasjonstest/actions';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
 import type { IComponentConfig, ILinkWalkerTest } from '~/types';
-import { IClient } from '~/types/Clients';
 import { IComponent } from '~/types/Component';
 
 import { loader } from './loaders';
@@ -25,14 +29,13 @@ export const action = async (args: ActionFunctionArgs) => handleRelationTestActi
 
 interface IPageLoaderData {
     components: IComponent[];
-    clients: IClient[];
     relationTests: ILinkWalkerTest[];
     configs: IComponentConfig[];
 }
 
 export default function Index() {
     const breadcrumbs = [{ name: 'Relasjonstest', link: '/relasjonstest' }];
-    const { components, clients, relationTests, configs } = useLoaderData<IPageLoaderData>();
+    const { components, relationTests, configs } = useLoaderData<IPageLoaderData>();
 
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<ILinkWalkerTest>;
@@ -67,10 +70,9 @@ export default function Index() {
         return () => clearInterval(interval);
     }, [relationTests, fetcher]);
 
-    function runTest(testUrl: string, client: string) {
+    function runTest(testUrl: string) {
         const formData = new FormData();
         formData.append('testUrl', testUrl);
-        formData.append('clientName', client);
         formData.append('actionType', 'ADD_TEST');
         fetcher.submit(formData, { method: 'post' });
     }
@@ -101,12 +103,7 @@ export default function Index() {
                 </Alert>
             )}
             <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                <RelationTestAddForm
-                    components={components}
-                    clients={clients}
-                    configs={configs}
-                    runTest={runTest}
-                />
+                <RelationTestAddForm components={components} configs={configs} runTest={runTest} />
             </Box>
 
             {relationTests && relationTests.length > 0 && (
@@ -123,14 +120,16 @@ export default function Index() {
                         </HStack>
                     </Box>
                     <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                        <RelationTestResultsTable logResults={
-                            // Ensure logResults is of type ILogResults[]
-                            // Convert 'relationTests' to correct type if necessary (coerce 'errorMessage')
-                            relationTests.map((test) => ({
-                                ...test,
-                                errorMessage: test.errorMessage ?? ""
-                            }))
-                        } />
+                        <RelationTestResultsTable
+                            logResults={
+                                // Ensure logResults is of type ILogResults[]
+                                // Convert 'relationTests' to correct type if necessary (coerce 'errorMessage')
+                                relationTests.map((test) => ({
+                                    ...test,
+                                    errorMessage: test.errorMessage ?? '',
+                                }))
+                            }
+                        />
                     </Box>
                 </>
             )}

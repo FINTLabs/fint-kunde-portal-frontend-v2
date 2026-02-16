@@ -11,14 +11,15 @@ export async function handleRelationTestAction({ request }: { request: Request }
     const formData = await request.formData();
 
     const testUrl = formData.get('testUrl');
-    const clientName = formData.get('clientName');
+    // const clientName = formData.get('clientName');
     const actionType = formData.get('actionType') as string;
 
     logger.debug('ACTION TYPE relasjonstest', actionType);
 
     switch (actionType) {
         case 'ADD_TEST':
-            return await LinkWalkerApi.addTest(testUrl as string, clientName as string, orgName);
+            // return await LinkWalkerApi.addTest(testUrl as string, clientName as string, orgName);
+            return await LinkWalkerApi.addTest(testUrl as string, orgName);
 
         case 'CLEAR_TESTS':
             return await LinkWalkerApi.clearTests(orgName);
