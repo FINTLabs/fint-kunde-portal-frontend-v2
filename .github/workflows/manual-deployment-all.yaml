@@ -1,0 +1,21 @@
+# Lets user manually trigger a deployment to a selected cluster
+name: manual-deployment
+on:
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: 'Select an environment'
+        required: true
+        type: choice
+        options:
+          - aks-alpha-fint-2021-11-18
+          - aks-beta-fint-2021-11-23
+          - aks-api-fint-2022-02-08
+          - aks-pwf-fint-2021-10-20
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/CD.yaml
+    secrets: inherit
+    with:
+      cluster: ${{ github.event.inputs.cluster }}

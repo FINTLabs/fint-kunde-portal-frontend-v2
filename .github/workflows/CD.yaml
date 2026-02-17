@@ -1,8 +1,11 @@
 name: CD
 
 on:
-  repository_dispatch:
-    types: [trigger-cd]
+  workflow_call:
+    inputs:
+      cluster:
+        required: true
+        type: string
 
 env:
   REGISTRY: ghcr.io
@@ -19,7 +22,7 @@ jobs:
       tags: ${{ steps.meta.outputs.tags }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5.0.0
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -33,12 +36,10 @@ jobs:
         id: meta
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=sha,enable=true,priority=100,prefix=sha-,suffix=,format=short
-            latest
+          tags: type=sha,enable=true,priority=100,prefix=sha-,suffix=,format=short
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
@@ -48,7 +49,8 @@ jobs:
   deploy-to-aks:
     name: deploy for ${{ matrix.org }} to ${{ matrix.cluster }}
     runs-on: ubuntu-latest
-    needs: build-and-push
+    needs:
+      - build-and-push
     permissions:
       contents: read
       packages: write
@@ -57,24 +59,21 @@ jobs:
         org:
           - fintlabs-no
         cluster:
-  #          - aks-alpha-fint-2021-11-18
-          - aks-beta-fint-2021-11-23
-          - aks-api-fint-2022-02-08
-  #          - aks-pwf-fint-2021-10-20
+          - ${{ inputs.cluster }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5.0.0
 
       - name: Get environment
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         id: environment
         with:
-          script: return '${{ matrix.cluster }}'.split('-')[1]
+          script: return '${{ inputs.cluster }}'.split('-')[1]
           result-encoding: string
 
       - name: Get resource group name
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         id: resource-group
         with:
           script: return 'rg-aks-${{ steps.environment.outputs.result }}'
@@ -82,29 +81,35 @@ jobs:
 
       - name: Bake manifests with Kustomize
         id: bake
-        uses: azure/k8s-bake@v2
+        uses: azure/k8s-bake@v3
         with:
           renderEngine: 'kustomize'
-          kustomizationPath: 'kustomize/overlays/${{ steps.environment.outputs.result }}'
+          kustomizationPath: 'kustomize/overlays/${{ steps.environment.outputs.result }}/${{ matrix.org }}'
 
-      - uses: azure/login@v1
+      - uses: azure/login@v2
         with:
           creds: "${{ secrets[format('AKS_{0}_FINT_GITHUB', steps.environment.outputs.result)] }}"
 
-      - uses: azure/use-kubelogin@v1.1
+      - uses: azure/use-kubelogin@v1.2
         with:
           kubelogin-version: 'v0.0.26'
 
       - name: Set the target cluster
-        uses: azure/aks-set-context@v3
+        uses: azure/aks-set-context@v4
         with:
           cluster-name: '${{ matrix.cluster }}'
           resource-group: '${{ steps.resource-group.outputs.result }}'
           admin: 'true'
           use-kubelogin: 'true'
 
+      - name: Create Namespace if it doesn't exist
+        run: |
+          if ! kubectl get namespace ${{ matrix.org }}; then
+            kubectl create namespace ${{ matrix.org }}
+          fi
+
       - name: Deploy
-        uses: azure/k8s-deploy@v4.9
+        uses: azure/k8s-deploy@v5.0.3 # Because of bug in 5.0.4, we specify 5.0.3
         with:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
