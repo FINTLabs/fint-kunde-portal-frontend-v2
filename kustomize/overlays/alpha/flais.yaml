@@ -18,7 +18,7 @@ spec:
     - name: TEST_RUNNER_API_URL
       value: http://fint-test-runner-kotlin:8080
   url:
-    hostname: kunde-beta.felleskomponent.no
+    hostname: kunde.test.felleskomponent.no
     basePath: /
   ingress:
     enabled: true
