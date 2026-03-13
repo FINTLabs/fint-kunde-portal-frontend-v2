@@ -16,10 +16,10 @@
         "test": "cypress run"
     },
     "overrides": {
-        "minimatch": "10.2.1"
+        "minimatch": "10.2.3"
     },
     "resolutions": {
-        "minimatch": "10.2.1"
+        "minimatch": "10.2.3"
     },
     "dependencies": {
         "@navikt/ds-css": "^7.4.3",
