@@ -1,6 +1,6 @@
-import { ArrowLeftIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
+import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import React from 'react';
-import { Box, Button, HGrid } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
@@ -88,7 +88,8 @@ export default function Route() {
     }
 
     return (
-        <HGrid gap="2" align={'start'}>
+        <>
+            {/*<HGrid gap="2" align={'start'}>*/}
             <Breadcrumbs breadcrumbs={breadcrumbs} />
 
             <InternalPageHeader
@@ -96,26 +97,24 @@ export default function Route() {
                 icon={KeyVerticalIcon}
                 helpText="NEED_THIS"
             />
-            <Box>
-                <Button
-                    data-cy="back-button"
-                    className="relative h-12 w-12 top-2 right-14"
-                    icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
-                    variant="tertiary"
-                    onClick={() => navigate(`/${elementType}/${clientOrAdapter}`)}></Button>
-            </Box>
-
+            {/*<Box>*/}
+            {/*    <Button*/}
+            {/*        data-cy="back-button"*/}
+            {/*        className="relative h-12 w-12 top-2 right-14"*/}
+            {/*        icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}*/}
+            {/*        variant="tertiary"*/}
+            {/*        onClick={() => navigate(`/${elementType}/${clientOrAdapter}`)}></Button>*/}
+            {/*</Box>*/}
+            <NovariSnackbar
+                items={alertState}
+                position={'top-right'}
+                // onCloseItem={handleCloseItem}
+            />
             <Box
-                className="w-full relative bottom-12"
+                // className="w-full relative bottom-12"
                 padding="6"
                 borderRadius="large"
                 shadow="small">
-                <NovariSnackbar
-                    items={alertState}
-                    position={'top-right'}
-                    // onCloseItem={handleCloseItem}
-                />
-
                 <ResourcesList
                     accessComponent={resourceList as IAccessComponent[]}
                     title={resourceTitle || ''}
@@ -125,6 +124,7 @@ export default function Route() {
                     isSubmitting={fetcher.state === 'submitting' || fetcher.state === 'loading'}
                 />
             </Box>
-        </HGrid>
+            {/*</HGrid>*/}
+        </>
     );
 }

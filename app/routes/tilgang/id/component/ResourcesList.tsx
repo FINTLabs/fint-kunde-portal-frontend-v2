@@ -13,7 +13,14 @@ interface ConfigClassTableProps {
     isSubmitting?: boolean;
 }
 
-const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkToggle, isSubmitting }: ConfigClassTableProps) => {
+const ResourcesList = ({
+    accessComponent,
+    title,
+    onToggle,
+    onSelected,
+    onBulkToggle,
+    isSubmitting,
+}: ConfigClassTableProps) => {
     function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value;
         const isChecked = e.target.checked;
@@ -34,7 +41,7 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
                     resource: resource.name,
                     enabled: true,
                     writeable: resource.writeable,
-                    readingOption: resource.readingOption
+                    readingOption: resource.readingOption,
                 }));
 
             const formData = new FormData();
@@ -52,7 +59,7 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
                     resource: resource.name,
                     enabled: false,
                     writeable: resource.writeable,
-                    readingOption: resource.readingOption
+                    readingOption: resource.readingOption,
                 }));
 
             const formData = new FormData();
@@ -63,14 +70,12 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
     }
 
     return (
-        <>
-            <FormSummary>
-                <FormSummary.Header>
-                    <FormSummary.Heading level="2">{title}</FormSummary.Heading>
-                    
-                </FormSummary.Header>
-                <FormSummary.Answers>
-                    <FormSummary.Answer>
+        <FormSummary>
+            <FormSummary.Header>
+                <FormSummary.Heading level="2">{title}</FormSummary.Heading>
+            </FormSummary.Header>
+            <FormSummary.Answers>
+                <FormSummary.Answer>
                     <HStack gap="2" style={{ margin: '1rem' }}>
                         <Button
                             onClick={handleSelectAll}
@@ -91,34 +96,32 @@ const ResourcesList = ({ accessComponent, title, onToggle, onSelected, onBulkTog
                             Fjern alle
                         </Button>
                     </HStack>
-                        {accessComponent.map((x, i) => {
-                            return (
-                                <HStack key={x.name} justify={'space-between'} align={'center'}>
-                                    <Checkbox
-                                        onChange={(e) => handleCheckbox(e)}
-                                        value={x.name}
-                                        key={x.name + i}
-                                        checked={x.enabled}
-                                        data-cy={`resource-toggle-${x.name}`}>
-                                        {x.name}
-                                    </Checkbox>
+                    {accessComponent.map((x, i) => {
+                        return (
+                            <HStack key={x.name} justify={'space-between'} align={'center'}>
+                                <Checkbox
+                                    onChange={(e) => handleCheckbox(e)}
+                                    value={x.name}
+                                    key={x.name + i}
+                                    checked={x.enabled}
+                                    data-cy={`resource-toggle-${x.name}`}>
+                                    {x.name}
+                                </Checkbox>
 
-                                    <Button
-                                        icon={<ChevronRightCircleIcon title="Rediger" />}
-                                        onClick={() => onSelected(x.name)}
-                                        variant={'tertiary'}
-                                        size={'xsmall'}
-                                        disabled={!x.enabled}
-                                        data-cy={`resource-details-${x.name}`}
-                                    />
-
-                                </HStack>
-                            );
-                        })}
-                    </FormSummary.Answer>
-                </FormSummary.Answers>
-            </FormSummary>
-        </>
+                                <Button
+                                    icon={<ChevronRightCircleIcon title="Rediger" />}
+                                    onClick={() => onSelected(x.name)}
+                                    variant={'tertiary'}
+                                    size={'xsmall'}
+                                    disabled={!x.enabled}
+                                    data-cy={`resource-details-${x.name}`}
+                                />
+                            </HStack>
+                        );
+                    })}
+                </FormSummary.Answer>
+            </FormSummary.Answers>
+        </FormSummary>
     );
 };
 

@@ -1,12 +1,11 @@
-import { ArrowLeftIcon, KeyVerticalIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, FormSummary, HGrid, HStack } from '@navikt/ds-react';
+import { KeyVerticalIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, FormSummary, HStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
     type LoaderFunctionArgs,
     useFetcher,
     useLoaderData,
-    useNavigate,
     useSearchParams,
 } from 'react-router';
 
@@ -54,7 +53,7 @@ export default function Route() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<IField>;
     const { alertState } = useAlerts<IField>([], actionData, fetcher.state);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const addedNew = searchParams.get('addedNew') || 'false';
     if (addedNew === 'true') {
@@ -127,7 +126,7 @@ export default function Route() {
     }
 
     return (
-        <HGrid gap="2" align={'start'}>
+        <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
 
             <InternalPageHeader
@@ -136,19 +135,19 @@ export default function Route() {
                 helpText="NEED_THIS"
             />
 
-            <Box>
-                <Button
-                    data-cy="back-button"
-                    className="relative h-12 w-12 top-2 right-14"
-                    icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
-                    variant="tertiary"
-                    onClick={() =>
-                        navigate(`/tilgang/${clientOrAdapter}/${componentName}`)
-                    }></Button>
-            </Box>
+            {/*<Box>*/}
+            {/*    <Button*/}
+            {/*        data-cy="back-button"*/}
+            {/*        className="relative h-12 w-12 top-2 right-14"*/}
+            {/*        icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}*/}
+            {/*        variant="tertiary"*/}
+            {/*        onClick={() =>*/}
+            {/*            navigate(`/tilgang/${clientOrAdapter}/${componentName}`)*/}
+            {/*        }></Button>*/}
+            {/*</Box>*/}
 
             <Box
-                className="w-full relative bottom-12"
+                // className="w-full relative bottom-12"
                 padding="6"
                 borderRadius="large"
                 shadow="small">
@@ -188,6 +187,6 @@ export default function Route() {
                     </FormSummary.Answers>
                 </FormSummary>
             </Box>
-        </HGrid>
+        </>
     );
 }
