@@ -1,5 +1,5 @@
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { Alert, Box, HGrid, VStack } from '@navikt/ds-react';
+import { Alert, Box, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
@@ -8,8 +8,6 @@ import {
     useLoaderData,
     useParams,
 } from 'react-router';
-
-import { BackButton } from '~/components/shared/BackButton';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { handleAssetAction } from '~/routes/ressurser.$id/actions';
@@ -21,8 +19,6 @@ import { IAsset } from '~/types/Asset';
 import { IClient } from '~/types/Clients';
 
 import { loader } from './loaders';
-
-
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Ressurser' }, { name: 'description', content: 'Liste over ressurser' }];
@@ -112,30 +108,35 @@ export default function Index() {
             {!asset ? (
                 <Alert variant="warning">Det finnes ingen ressurser</Alert>
             ) : (
-                <HGrid gap="2" align={'start'}>
-                    <BackButton to={`/ressurser`} className="relative h-12 w-12 top-2 right-14" />
+                // <HGrid gap="2" align={'start'}>
+                //     <BackButton to={`/ressurser`} className="relative h-12 w-12 top-2 right-14" />
+                <VStack gap={'2'}>
                     <Box
-                        className="w-full relative bottom-12"
+                        // className="w-full relative bottom-12"
                         padding="6"
                         borderRadius="large"
                         shadow="small">
-                        <VStack gap="5">
-                            <DetailsView
-                                asset={asset}
-                                onUpdate={handleUpdate}
-                                onDelete={handleDelete}
-                            />
-
-                            <TabsComponent
-                                asset={asset}
-                                unmanagedAdapters={unmanagedAdapters}
-                                unmanagedClients={unmanagedClients}
-                                onAdapterSwitchChange={onAdapterSwitchChange}
-                                onClientSwitchChange={onClientSwitchChange}
-                            />
-                        </VStack>
+                        <DetailsView
+                            asset={asset}
+                            onUpdate={handleUpdate}
+                            onDelete={handleDelete}
+                        />
                     </Box>
-                </HGrid>
+                    <Box
+                        // className="w-full relative bottom-12"
+                        padding="6"
+                        borderRadius="large"
+                        shadow="small">
+                        <TabsComponent
+                            asset={asset}
+                            unmanagedAdapters={unmanagedAdapters}
+                            unmanagedClients={unmanagedClients}
+                            onAdapterSwitchChange={onAdapterSwitchChange}
+                            onClientSwitchChange={onClientSwitchChange}
+                        />
+                    </Box>
+                </VStack>
+                // </HGrid>
             )}
         </>
     );

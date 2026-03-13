@@ -1,6 +1,5 @@
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { Box, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack } from '@navikt/ds-react';
-import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -196,8 +195,6 @@ const ComponentsTable = ({
                 onConfirm={handleConfirm}
                 onCancel={handleCancel}
             />
-
-            <Divider />
         </Box>
     );
 };

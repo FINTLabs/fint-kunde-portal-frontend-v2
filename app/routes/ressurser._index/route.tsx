@@ -70,20 +70,25 @@ export default function Index() {
                 helpText="assets"
                 onAddClick={handleCreate}
             />
-
-            {!assets || assets.length === 0 ? (
-                <Box padding="8">
-                    <BodyLong>Fant ingen ressurser</BodyLong>
-                </Box>
-            ) : isCreating ? (
-                <CreateForm
-                    onCancel={handleCancel}
-                    primaryAsset={primaryAsset}
-                    onCreate={handleSave}
-                />
-            ) : (
-                <AssetsTable assets={assets} onRowClick={handleClick} />
-            )}
+            <Box
+                // className="w-full relative bottom-12"
+                padding="6"
+                borderRadius="large"
+                shadow="small">
+                {!assets || assets.length === 0 ? (
+                    <Box padding="8">
+                        <BodyLong>Fant ingen ressurser</BodyLong>
+                    </Box>
+                ) : isCreating ? (
+                    <CreateForm
+                        onCancel={handleCancel}
+                        primaryAsset={primaryAsset}
+                        onCreate={handleSave}
+                    />
+                ) : (
+                    <AssetsTable assets={assets} onRowClick={handleClick} />
+                )}
+            </Box>
         </>
     );
 }

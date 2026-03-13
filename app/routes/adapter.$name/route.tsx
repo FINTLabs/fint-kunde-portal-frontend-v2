@@ -1,5 +1,5 @@
 import { LayersIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Heading, HGrid } from '@navikt/ds-react';
+import { Alert, Box, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
@@ -10,7 +10,6 @@ import {
 } from 'react-router';
 
 import { AuthTable } from '~/components/shared/AuthTable';
-import { BackButton } from '~/components/shared/BackButton';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -106,12 +105,13 @@ export default function Index() {
     // }
     // // console.log('access', access);
 
-    const selectedComponents = adapter?.components
-        .map((adapterComponent) => {
-            const matchedComponent = components.find((c) => c.dn === adapterComponent);
-            return matchedComponent?.name;
-        })
-        .filter((name): name is string => name !== undefined) || [];
+    const selectedComponents =
+        adapter?.components
+            .map((adapterComponent) => {
+                const matchedComponent = components.find((c) => c.dn === adapterComponent);
+                return matchedComponent?.name;
+            })
+            .filter((name): name is string => name !== undefined) || [];
 
     return (
         <>
@@ -132,10 +132,10 @@ export default function Index() {
             {!adapter ? (
                 <Alert variant="warning">Adapter finnes ikke</Alert>
             ) : (
-                <HGrid gap="2" align={'start'}>
-                    <BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />
+                <VStack gap="2">
+                    {/*<BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />*/}
                     <Box
-                        className="w-full relative bottom-12"
+                        // className="w-full relative bottom-12"
                         padding="6"
                         borderRadius="large"
                         shadow="small">
@@ -144,72 +144,45 @@ export default function Index() {
                             onUpdate={handleUpdate}
                             onDelete={handleDelete}
                         />
-
-                        {!adapter.managed && (
-                            // <Box className={'border-b-1 border-gray-200 pb-5'}>
-                            <Box>
-                                <Heading size={'medium'}>Autentisering</Heading>
-                                <AuthTable
-                                    entity={adapter}
-                                    entityType="adapter"
-                                    onUpdatePassword={handleUpdatePassword}
-                                    onUpdateAuthInfo={handleUpdateAuthoInfo}
-                                    {...(actionData?.clientSecret
-                                        ? { clientSecret: actionData.clientSecret }
-                                        : {})}
-                                />
-                            </Box>
-                        )}
-
-                        <Box padding="6">
-                            <HGrid gap="2">
-                                <Heading size={'medium'}>Komponenter</Heading>
-
-
-                                        <ComponentsTable items={components} selectedItems={selectedComponents} toggle={handleToggle} isManaged={adapter.managed} fromAdapter={adapter.name} />
-
-                            </HGrid>
-                        </Box>
-
-                        {/*{hasAccessControl && access ? (*/}
-                        {/*    <>*/}
-                        {/*        <Heading size={'medium'}>Tilgangsstyring for Komponenter</Heading>*/}
-
-                        {/*        <Box padding={'6'}>*/}
-                        {/*            <CheckboxGroup*/}
-                        {/*                legend="Environment:"*/}
-                        {/*                onChange={(vals) => handleEnvChange(vals as Environment[])}*/}
-                        {/*                defaultValue={selectedEnvs}*/}
-                        {/*                data-cy={'env-checkbox-group'}>*/}
-                        {/*                <HGrid gap="6" columns={4}>*/}
-                        {/*                    <Checkbox value="api">API</Checkbox>*/}
-                        {/*                    <Checkbox value="beta">Beta</Checkbox>*/}
-                        {/*                    <Checkbox value="alpha">Alpha</Checkbox>*/}
-                        {/*                    <Checkbox value="pwf">PWF</Checkbox>*/}
-                        {/*                </HGrid>*/}
-                        {/*            </CheckboxGroup>*/}
-                        {/*        </Box>*/}
-
-                        {/*        <ComponentList*/}
-                        {/*            accessList={accessComponentList}*/}
-                        {/*            entity={adapter.name}*/}
-                        {/*            onToggle={handleToggle}*/}
-                        {/*        />*/}
-                        {/*    </>*/}
-                        {/*) : (*/}
-                        {/*    <Box padding="6">*/}
-                        {/*        <Alert variant="warning">*/}
-                        {/*            Tilgangsstyring for komponenter er ikke aktivert*/}
-                        {/*        </Alert>*/}
-                        {/*        <Box className={'pt-5'}>*/}
-                        {/*            <Button onClick={addAccess} size={'small'} loading={isLoading}>*/}
-                        {/*                Sett opp tilgangsstyring*/}
-                        {/*            </Button>*/}
-                        {/*        </Box>*/}
-                        {/*    </Box>*/}
-                        {/*)}*/}
                     </Box>
-                </HGrid>
+                    {!adapter.managed && (
+                        // <Box className={'border-b-1 border-gray-200 pb-5'}>
+                        <Box
+                            // className="w-full relative bottom-12"
+                            padding="6"
+                            borderRadius="large"
+                            shadow="small">
+                            <Heading size={'medium'}>Autentisering</Heading>
+                            <AuthTable
+                                entity={adapter}
+                                entityType="adapter"
+                                onUpdatePassword={handleUpdatePassword}
+                                onUpdateAuthInfo={handleUpdateAuthoInfo}
+                                {...(actionData?.clientSecret
+                                    ? { clientSecret: actionData.clientSecret }
+                                    : {})}
+                            />
+                        </Box>
+                    )}
+
+                    <Box
+                        // className="w-full relative bottom-12"
+                        padding="6"
+                        borderRadius="large"
+                        shadow="small">
+                        <HGrid gap="2">
+                            <Heading size={'medium'}>Komponenter</Heading>
+
+                            <ComponentsTable
+                                items={components}
+                                selectedItems={selectedComponents}
+                                toggle={handleToggle}
+                                isManaged={adapter.managed}
+                                fromAdapter={adapter.name}
+                            />
+                        </HGrid>
+                    </Box>
+                </VStack>
             )}
         </>
     );

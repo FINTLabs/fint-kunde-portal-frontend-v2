@@ -2,7 +2,7 @@ import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
-import { type ActionFunction,type MetaFunction, useFetcher, useLoaderData } from 'react-router';
+import { type ActionFunction, type MetaFunction, useFetcher, useLoaderData } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
@@ -83,35 +83,46 @@ export default function Index() {
                 // onCloseItem={handleCloseItem}
             />
 
-            <Box className="m-10">
-                <Heading size="xsmall">Juridisk kontakt</Heading>
-                {legalContact ? (
-                    <HStack gap="4" align="center" className="px-4">
-                        <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full " />
-                        <BodyShort size="medium">
-                            {legalContact.firstName} {legalContact.lastName}
-                        </BodyShort>
-                    </HStack>
-                ) : (
-                    <BodyShort size="medium">Ingen juridisk kontakt funnet</BodyShort>
-                )}
-            </Box>
-
-            {technicalContacts && typeof technicalContacts !== 'string' && (
-                <ContactTable
-                    contactsData={technicalContacts}
-                    rolesData={rolesData}
-                    onButtonClick={handleFormSubmit}
-                    selectedOrg={selectedOrg}
-                />
-            )}
-            <ContactModal
-                data-cy="contact-modal"
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                contacts={allContacts || []}
-                onAddContact={handleAddContact}
-            />
+            <VStack gap="4">
+                <Box
+                    // className="w-full relative bottom-12"
+                    padding="6"
+                    borderRadius="large"
+                    shadow="small">
+                    <Heading size="xsmall">Juridisk kontakt</Heading>
+                    {legalContact ? (
+                        <HStack gap="4" align="center" className="px-4">
+                            <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full " />
+                            <BodyShort size="medium">
+                                {legalContact.firstName} {legalContact.lastName}
+                            </BodyShort>
+                        </HStack>
+                    ) : (
+                        <BodyShort size="medium">Ingen juridisk kontakt funnet</BodyShort>
+                    )}
+                </Box>
+                <Box
+                    // className="w-full relative bottom-12"
+                    padding="6"
+                    borderRadius="large"
+                    shadow="small">
+                    {technicalContacts && typeof technicalContacts !== 'string' && (
+                        <ContactTable
+                            contactsData={technicalContacts}
+                            rolesData={rolesData}
+                            onButtonClick={handleFormSubmit}
+                            selectedOrg={selectedOrg}
+                        />
+                    )}
+                    <ContactModal
+                        data-cy="contact-modal"
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        contacts={allContacts || []}
+                        onAddContact={handleAddContact}
+                    />
+                </Box>
+            </VStack>
         </>
     );
 }

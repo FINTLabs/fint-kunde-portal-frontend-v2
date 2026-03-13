@@ -1,7 +1,6 @@
-import { ArrowLeftIcon, ComponentIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading, HGrid, HStack, Spacer } from '@navikt/ds-react';
-import Divider from 'node_modules/@navikt/ds-react/esm/dropdown/Menu/Divider';
-import { type LoaderFunctionArgs, useLoaderData, useNavigate, useSearchParams } from 'react-router';
+import { ComponentIcon } from '@navikt/aksel-icons';
+import { Box, Heading, HStack, Spacer, VStack } from '@navikt/ds-react';
+import { type LoaderFunctionArgs, useLoaderData } from 'react-router';
 
 import ComponentApi from '~/api/ComponentApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -21,38 +20,38 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
 export default function Index() {
     const component = useLoaderData<IComponent>();
-    const [searchParams] = useSearchParams();
-    const fromAdapter = searchParams.get('fromAdapter');
+    // const [searchParams] = useSearchParams();
+    // const fromAdapter = searchParams.get('fromAdapter');
     const breadcrumbs = [
         { name: 'Komponenter', link: '/komponenter' },
         { name: component.name, link: `/komponenter/${component.name}` },
     ];
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
-    const handleBack = () => {
-        if (fromAdapter) {
-            navigate(`/adapter/${fromAdapter}`);
-        } else {
-            navigate(`/komponenter`);
-        }
-    };
+    // const handleBack = () => {
+    //     if (fromAdapter) {
+    //         navigate(`/adapter/${fromAdapter}`);
+    //     } else {
+    //         navigate(`/komponenter`);
+    //     }
+    // };
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={component.description} icon={ComponentIcon} />
 
-            <HGrid gap="2" align={'start'}>
-                <Box>
-                    <Button
-                        className="relative h-12 w-12 top-2 right-14"
-                        icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
-                        variant="tertiary"
-                        onClick={handleBack}></Button>
-                </Box>
-
+            {/*<HGrid gap="2" align={'start'}>*/}
+            {/*<Box>*/}
+            {/*    <Button*/}
+            {/*        className="relative h-12 w-12 top-2 right-14"*/}
+            {/*        icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}*/}
+            {/*        variant="tertiary"*/}
+            {/*        onClick={handleBack}></Button>*/}
+            {/*</Box>*/}
+            <VStack gap={'2'}>
                 <Box
-                    className="w-full relative bottom-12"
+                    // className="w-full relative bottom-12"
                     padding="6"
                     borderRadius="large"
                     shadow="small">
@@ -62,20 +61,30 @@ export default function Index() {
                     </HStack>
 
                     <ComponentDetails component={component} />
-
-                    <Divider className="pt-3" />
-
+                </Box>
+                <Box
+                    // className="w-full relative bottom-12"
+                    padding="6"
+                    borderRadius="large"
+                    shadow="small">
                     <Heading size={'medium'}>Endepunkter</Heading>
                     <Box padding="4">
                         <EndpointTable component={component} />
                     </Box>
+                </Box>
+                <Box
+                    // className="w-full relative bottom-12"
+                    padding="6"
+                    borderRadius="large"
+                    shadow="small">
                     <Heading size={'medium'}>Swagger</Heading>
 
                     <Box padding="4">
                         <SwaggerTable component={component} />
                     </Box>
                 </Box>
-            </HGrid>
+            </VStack>
+            {/*</HGrid>*/}
         </>
     );
 }

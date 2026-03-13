@@ -1,9 +1,4 @@
-import {
-    ArrowLeftIcon,
-    TokenIcon,
-    TasklistSendIcon,
-    ShieldCheckmarkIcon,
-} from '@navikt/aksel-icons';
+import { ShieldCheckmarkIcon, TasklistSendIcon, TokenIcon } from '@navikt/aksel-icons';
 import {
     Alert,
     Box,
@@ -14,16 +9,11 @@ import {
     HGrid,
     HStack,
     Modal,
+    VStack,
 } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
-import {
-    type ActionFunctionArgs,
-    useFetcher,
-    useLoaderData,
-    useNavigate,
-    useParams,
-} from 'react-router';
+import { type ActionFunctionArgs, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { AuthTable } from '~/components/shared/AuthTable';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -86,7 +76,7 @@ export default function ClientDetails() {
     const [isAuditOpen, setIsAuditOpen] = useState(false);
     const [isLogOpen, setIsLogOpen] = useState(false);
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const { id } = useParams();
     const breadcrumbs = [
@@ -129,8 +119,8 @@ export default function ClientDetails() {
 
     const handleToggle = (formData: FormData) => {
         // TODO: Fix this when access control is finished
-        // formData.append('actionType', 'ADD_COMPONENT_ACCESS_NEW');
-        formData.append('actionType', 'ADD_COMPONENT_ACCESS');
+        formData.append('actionType', 'ADD_COMPONENT_ACCESS_NEW');
+        // formData.append('actionType', 'ADD_COMPONENT_ACCESS');
         formData.append('username', client?.name as string);
         formData.append('componentName', formData.get('componentName') as string);
         formData.append('enabled', formData.get('isChecked') as string);
@@ -170,18 +160,19 @@ export default function ClientDetails() {
             {!client ? (
                 <Alert variant="warning">Det finnes ingen klienter ved navn {id} i listen</Alert>
             ) : (
-                <HGrid gap="2" align={'start'}>
-                    <Box>
-                        <Button
-                            data-cy="back-button"
-                            className="relative h-12 w-12 top-2 right-14"
-                            icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
-                            variant="tertiary"
-                            onClick={() => navigate(`/klienter`)}></Button>
-                    </Box>
-
+                // <HGrid gap="6" align={'start'}>
+                //     <Box>
+                //         <Button
+                //             data-cy="back-button"
+                //             className="relative h-12 w-12 top-2 right-14"
+                //             icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
+                //             variant="tertiary"
+                //             onClick={() => navigate(`/klienter`)}></Button>
+                //     </Box>
+                <VStack gap={'6'}>
                     <Box
-                        className="w-full relative bottom-12"
+                        // className="w-full relative bottom-12"
+                        // margin="6"
                         padding="6"
                         borderRadius="large"
                         shadow="small">
@@ -190,6 +181,12 @@ export default function ClientDetails() {
                             onUpdate={handleUpdate}
                             onDelete={handleDelete}
                         />
+                    </Box>
+                    <Box
+                        // className="w-full relative bottom-12"
+                        padding="6"
+                        borderRadius="large"
+                        shadow="small">
                         {!client.managed && (
                             <>
                                 <Heading size={'medium'}>Autentisering</Heading>
@@ -204,8 +201,12 @@ export default function ClientDetails() {
                                 />
                             </>
                         )}
-                        <Box className={'border-b-1 border-gray-200 pb-5'} />
-
+                    </Box>
+                    <Box
+                        // className="w-full relative bottom-12"
+                        padding="6"
+                        borderRadius="large"
+                        shadow="small">
                         {hasAccessControl && access ? (
                             <>
                                 <HStack>
@@ -292,7 +293,8 @@ export default function ClientDetails() {
                             </Box>
                         )}
                     </Box>
-                </HGrid>
+                </VStack>
+                // </HGrid>
             )}
         </>
     );

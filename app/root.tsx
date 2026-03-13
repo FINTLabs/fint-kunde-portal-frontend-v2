@@ -38,6 +38,7 @@ import tailwindHref from './styles/tailwind.css?url';
 import { HeaderProperties } from './utils/headerProperties';
 import { pageVisits, dailyPageVisits, getCurrentDate } from '~/routes/metrics';
 import { normalizePathname } from '~/utils/metricsPath';
+import { cspReportOnly } from '~/utils/csp';
 
 export const links: LinksFunction = () => [
     { rel: 'stylesheet', href: akselHref, as: 'style' }, // Aksel first
@@ -82,10 +83,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // Normalize  for Prometheus labels
     const normalized = normalizePathname(pathname);
     const currentDate = getCurrentDate();
-    
+
     // Track total visits (cumulative)
     pageVisits.inc({ path: normalized });
-    
+
     // Track daily visits (resets each day via date label)
     dailyPageVisits.inc({ path: normalized, date: currentDate });
 
@@ -122,13 +123,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             {
                 headers: {
                     'Set-Cookie': newCookieHeader,
+                    'Content-Security-Policy-Report-Only': cspReportOnly,
                 },
             }
         );
     }
 
     return new Response(JSON.stringify({ userSession }), {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Security-Policy-Report-Only': cspReportOnly,
+        },
     });
 };
 
@@ -190,7 +195,7 @@ export default function App() {
             </Box>
 
             <Box padding="8" paddingBlock="2" as="main">
-                <Page.Block gutters width="lg">
+                <Page.Block gutters width="2xl">
                     <Outlet context={userSession} />
                 </Page.Block>
             </Box>
@@ -260,12 +265,16 @@ export async function action({ request }: ActionFunctionArgs) {
             {
                 headers: {
                     'Set-Cookie': newCookieHeader,
+                    'Content-Security-Policy-Report-Only': cspReportOnly,
                 },
             }
         );
     }
 
     return new Response(JSON.stringify({ ok: true }), {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Security-Policy-Report-Only': cspReportOnly,
+        },
     });
 }
