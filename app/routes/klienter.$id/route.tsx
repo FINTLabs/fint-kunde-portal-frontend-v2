@@ -97,6 +97,7 @@ export default function ClientDetails() {
 
     const handleUpdate = (formData: FormData) => {
         formData.append('actionType', 'UPDATE_CLIENT');
+        formData.append('clientId', client.name);
         fetcher.submit(formData, { method: 'post' });
     };
 
