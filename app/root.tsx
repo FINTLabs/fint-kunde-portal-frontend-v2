@@ -203,6 +203,7 @@ export default function App() {
     );
 }
 
+//todo: update  package, cypress specifically
 export function ErrorBoundary() {
     const error = useRouteError();
 
