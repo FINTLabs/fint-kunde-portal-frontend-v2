@@ -1,6 +1,6 @@
 import { redirect } from 'react-router';
 
-import AccessApi from '~/api/AccessApi';
+// import AccessApi from '~/api/AccessApi';
 import ClientApi from '~/api/ClientApi';
 import { IPartialClient } from '~/types/Clients';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
@@ -21,9 +21,9 @@ export async function handleClientIndexAction({ request }: { request: Request })
 
     const response = await ClientApi.createClient(newClient, orgName);
 
-    if (response.success) {
-        await AccessApi.addAccess(response.data?.name as string);
-    }
+    // if (response.success) {
+    //     await AccessApi.addAccess(response.data?.name as string);
+    // }
 
     if (!response.success) {
         throw new Response('Kunne ikke opprette ny klient.', { status: 500 });
