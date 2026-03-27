@@ -1,5 +1,5 @@
 import { GavelSoundBlockIcon, LinkBrokenIcon } from '@navikt/aksel-icons';
-import { HGrid } from '@navikt/ds-react';
+import { HStack } from '@navikt/ds-react';
 import React from 'react';
 
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
@@ -39,7 +39,7 @@ const ExpandableRowContent = ({
                 hasRole={hasRole}
                 updateRole={updateRole}
             />
-            <HGrid columns={3} gap={'5'} className={'pt-5'}>
+            <HStack justify="end" width="100%" gap="space-8">
                 <ConfirmAction
                     icon={<GavelSoundBlockIcon />}
                     buttonText={'Sett som juridisk kontakt'}
@@ -55,7 +55,7 @@ const ExpandableRowContent = ({
                     onConfirm={onRemoveContact}
                     subTitleText={`Er du sikker på at du vil fjerne ${contact.firstName} ${contact.lastName} ?`}
                 />
-            </HGrid>
+            </HStack>
         </>
     );
 };

@@ -29,8 +29,8 @@ const AddServiceForm = ({ onCancel, onSave }: AddTjenesteFormProps) => {
     };
 
     return (
-        <Box padding="6" borderRadius="large" shadow="small">
-            <VStack gap="4">
+        <Box padding="space-6" borderRadius="large" shadow="small">
+            <VStack gap="space-4">
                 <TextField
                     label="Tjeneste Navn"
                     size="small"
@@ -38,7 +38,7 @@ const AddServiceForm = ({ onCancel, onSave }: AddTjenesteFormProps) => {
                     onChange={(e) => setNewServiceName(e.target.value)}
                     error={serviceNameError}
                 />
-                <HStack justify="end" gap="4">
+                <HStack justify="end" gap="space-4">
                     <Button variant="secondary" onClick={onCancel}>
                         Avbryt
                     </Button>

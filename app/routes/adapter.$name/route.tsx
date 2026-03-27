@@ -12,7 +12,7 @@ import {
 import { AuthTable } from '~/components/shared/AuthTable';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { handleAdapterAction } from '~/routes/adapter.$name/actions';
 import { IAdapter } from '~/types/Adapter';
 
@@ -132,13 +132,13 @@ export default function Index() {
             {!adapter ? (
                 <Alert variant="warning">Adapter finnes ikke</Alert>
             ) : (
-                <VStack gap="2">
+                <VStack gap="space-24">
                     {/*<BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />*/}
                     <Box
-                        // className="w-full relative bottom-12"
-                        padding="6"
-                        borderRadius="large"
-                        shadow="small">
+                        padding="space-16"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
                         <GeneralDetailView
                             resource={adapter}
                             onUpdate={handleUpdate}
@@ -146,12 +146,11 @@ export default function Index() {
                         />
                     </Box>
                     {!adapter.managed && (
-                        // <Box className={'border-b-1 border-gray-200 pb-5'}>
                         <Box
-                            // className="w-full relative bottom-12"
-                            padding="6"
-                            borderRadius="large"
-                            shadow="small">
+                            padding="space-16"
+                            borderColor="neutral-subtle"
+                            borderWidth="2"
+                            borderRadius="12">
                             <Heading size={'medium'}>Autentisering</Heading>
                             <AuthTable
                                 entity={adapter}
@@ -166,11 +165,11 @@ export default function Index() {
                     )}
 
                     <Box
-                        // className="w-full relative bottom-12"
-                        padding="6"
-                        borderRadius="large"
-                        shadow="small">
-                        <HGrid gap="2">
+                        padding="space-16"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
+                        <HGrid gap="space-2">
                             <Heading size={'medium'}>Komponenter</Heading>
 
                             <ComponentsTable

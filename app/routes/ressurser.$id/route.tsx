@@ -9,7 +9,7 @@ import {
     useParams,
 } from 'react-router';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { handleAssetAction } from '~/routes/ressurser.$id/actions';
 import { DetailsView } from '~/routes/ressurser.$id/DetailsView';
 import TabsComponent from '~/routes/ressurser.$id/TabsComponent';
@@ -110,12 +110,12 @@ export default function Index() {
             ) : (
                 // <HGrid gap="2" align={'start'}>
                 //     <BackButton to={`/ressurser`} className="relative h-12 w-12 top-2 right-14" />
-                <VStack gap={'2'}>
+                <VStack gap={'space-24'}>
                     <Box
-                        // className="w-full relative bottom-12"
-                        padding="6"
-                        borderRadius="large"
-                        shadow="small">
+                        padding="space-16"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
                         <DetailsView
                             asset={asset}
                             onUpdate={handleUpdate}
@@ -123,10 +123,10 @@ export default function Index() {
                         />
                     </Box>
                     <Box
-                        // className="w-full relative bottom-12"
-                        padding="6"
-                        borderRadius="large"
-                        shadow="small">
+                        padding="space-16"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
                         <TabsComponent
                             asset={asset}
                             unmanagedAdapters={unmanagedAdapters}

@@ -1,5 +1,6 @@
 import { ChevronRightIcon, HouseIcon } from '@navikt/aksel-icons';
-import { Link, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
+import { BodyShort, HStack, Link } from '@navikt/ds-react';
 
 interface BreadcrumbItem {
     name: string;
@@ -12,31 +13,35 @@ interface BreadcrumbsProps {
 
 export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
     const homeLink = '/';
-    const linkStyle = { textDecoration: 'none', display: 'flex', alignItems: 'center' };
     const location = useLocation();
     const currentPath = location.pathname;
 
-    const crumbs = breadcrumbs.map(({ name, link }) => (
-        <div key={link} className="flex items-center" data-cy={`breadcrumb-item`}>
-            <ChevronRightIcon title="Spacer" className="mx-1" />
-
-            {link === '' || link === currentPath ? (
-                <>{name}</>
-            ) : (
-                <Link to={link} style={linkStyle}>
-                    {name}
-                </Link>
-            )}
-        </div>
-    ));
-
     return (
-        <div className="flex items-center align-center p-3" data-cy="breadcrumbs">
-            <Link to={homeLink} style={linkStyle} className="!flex !items-start">
-                <HouseIcon title="dashboard" className="mt-[1.5px] " />
-                <span className="">{'Dashboard'}</span>
+        <HStack gap="space-2" paddingBlock="space-8" align="center">
+            <Link href={homeLink} className="flex items-center gap-1 no-underline">
+                <HouseIcon fontSize="1.2rem" />
+                <BodyShort size="small" as="span">
+                    Dashboard
+                </BodyShort>
             </Link>
-            {crumbs}
-        </div>
+
+            {breadcrumbs.map(({ name, link }) => (
+                <HStack key={name} gap="space-2" align="center">
+                    <ChevronRightIcon fontSize="1rem" />
+
+                    {link === '' || link === currentPath ? (
+                        <BodyShort size="small" as="span">
+                            {name}
+                        </BodyShort>
+                    ) : (
+                        <Link href={link} className="no-underline">
+                            <BodyShort size="small" as="span">
+                                {name}
+                            </BodyShort>
+                        </Link>
+                    )}
+                </HStack>
+            ))}
+        </HStack>
     );
 }

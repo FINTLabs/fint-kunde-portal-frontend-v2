@@ -18,23 +18,23 @@ const ComponentDetails = ({ component }: ComponentDetailProps) => {
     if (component.common) selectedValues.push('common');
 
     return (
-        <HStack className="!flex !justify-between !items-center">
-            <VStack gap={'2'}>
-                <HStack gap={'2'}>
-                    <Label>Navn</Label>
+        <HStack gap={'space-2'} justify="space-between" padding={'space-24'}>
+            <VStack gap={'space-8'} paddingBlock={'space-16'}>
+                <div>
+                    <Label>Navn: </Label>
                     <BodyShort>{component.name}</BodyShort>
-                </HStack>
-                <HStack gap={'2'}>
-                    <Label>Beskrivelse</Label>
+                </div>
+                <div>
+                    <Label>Beskrivelse: </Label>
                     <BodyShort>{component.description}</BodyShort>
-                </HStack>
-                <HStack gap={'2'}>
-                    <Label>Sti</Label>
+                </div>
+                <div>
+                    <Label>Sti: </Label>
                     <BodyShort>{component.basePath}</BodyShort>
-                </HStack>
+                </div>
             </VStack>
             <VStack>
-                <HStack>
+                <HStack gap={'space-2'} justify="space-between" padding={'space-8'}>
                     <CheckboxGroup
                         legend="Tilgjengelighet"
                         // onChange={handleChange}
@@ -45,7 +45,7 @@ const ComponentDetails = ({ component }: ComponentDetailProps) => {
                         <Checkbox value="common">Felles</Checkbox>
                     </CheckboxGroup>
                 </HStack>
-                <HStack>
+                <HStack gap={'space-2'} justify="space-between" padding={'space-8'}>
                     <CheckboxGroup
                         legend="Miljø"
                         //Open Data onChange={handleChange}

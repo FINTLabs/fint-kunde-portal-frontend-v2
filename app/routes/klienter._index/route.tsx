@@ -1,5 +1,5 @@
 import { TokenIcon } from '@navikt/aksel-icons';
-import { Search } from '@navikt/ds-react';
+import { Box, Button, Search, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { useEffect, useState } from 'react';
 import {
@@ -12,13 +12,13 @@ import {
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { CustomTabs } from '~/components/shared/CustomTabs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { useDeletedSearchParamAlert } from '~/hooks/useDeletedSearchParamAlert';
 import { handleClientIndexAction } from '~/routes/klienter._index/actions';
 import ClientCreateForm from '~/routes/klienter._index/CreateForm';
 import { IClient } from '~/types/Clients';
 
 import { loader } from './loaders';
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Klienter' }, { name: 'description', content: 'klienter' }];
@@ -85,7 +85,7 @@ export default function Index() {
     };
 
     const showDetails = (id: string) => {
-        navigate(`/klienter/${id}`);
+        navigate(`/klienter/${encodeURIComponent(id)}`);
     };
 
     return (
@@ -108,30 +108,49 @@ export default function Index() {
                         title={'Klienter'}
                         icon={TokenIcon}
                         helpText={'klienter'}
-                        onAddClick={handleCreate}
-                    />
+                        // onAddClick={handleCreate}
+                    >
+                        <Button
+                            onClick={handleCreate}
+                            variant="primary"
+                            size="small"
+                            className="mr-2"
+                            data-cy="create-button">
+                            Opprett klient
+                        </Button>
+                    </InternalPageHeader>
 
-                    <Search
-                        label="Søk etter klienter"
-                        hideLabel
-                        variant="secondary"
-                        size="small"
-                        value={searchValue}
-                        onChange={(value: string) => handleSearch(value)}
-                        placeholder="Søk etter navn eller beskrivelse"
-                        className="pb-6"
-                        data-cy="search-input"
-                    />
+                    <VStack gap={'space-8'}>
+                        <Box padding="space-16">
+                            <Search
+                                label="Søk etter klienter"
+                                hideLabel
+                                variant="secondary"
+                                size="small"
+                                value={searchValue}
+                                onChange={(value: string) => handleSearch(value)}
+                                placeholder="Søk etter navn eller beskrivelse"
+                                className="pb-6"
+                                data-cy="search-input"
+                            />
+                        </Box>
 
-                    {filteredClients && (
-                        <CustomTabs
-                            items={filteredClients}
-                            showDetails={showDetails}
-                            getItemName={(item) => item.name}
-                            getItemDescription={(item) => item.shortDescription}
-                            isManaged={(item) => item.managed}
-                        />
-                    )}
+                        <Box
+                            padding="space-16"
+                            borderColor="neutral-subtle"
+                            borderWidth="2"
+                            borderRadius="12">
+                            {filteredClients && (
+                                <CustomTabs
+                                    items={filteredClients}
+                                    showDetails={showDetails}
+                                    getItemName={(item) => item.name}
+                                    getItemDescription={(item) => item.shortDescription}
+                                    isManaged={(item) => item.managed}
+                                />
+                            )}
+                        </Box>
+                    </VStack>
                 </>
             )}
         </>

@@ -1,7 +1,8 @@
 import { ChevronRightIcon, CogRotationIcon, NotePencilDashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Heading, Label, Switch, Table, Tabs } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Label, Switch, Table, Tabs } from '@navikt/ds-react';
 
 import { tabInfo } from '~/routes/adaptere._index/constants';
+import React from 'react';
 
 interface CustomTabsProps<T> {
     items: T[];
@@ -13,7 +14,6 @@ interface CustomTabsProps<T> {
     getItemDescription: (item: T) => string;
     isManaged: (item: T) => boolean;
 }
-
 export function CustomTabs<T>({
     items,
     selectable = false,
@@ -80,9 +80,21 @@ export function CustomTabs<T>({
                                             {getItemName(item)}
                                         </BodyShort>
                                     </Table.DataCell>
+                                    <Table.DataCell>
+                                        {/*<Tag variant={'alt1-filled'}>API v3</Tag>*/}
+                                    </Table.DataCell>
 
-                                    <Table.DataCell onClick={() => showDetails(getItemName(item))}>
-                                        <ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />
+                                    <Table.DataCell>
+                                        {/*<ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />*/}
+                                        <Button
+                                            variant="tertiary"
+                                            size={'small'}
+                                            icon={<ChevronRightIcon title="Rediger" />}
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                showDetails(getItemName(item));
+                                            }}
+                                        />
                                     </Table.DataCell>
                                 </Table.Row>
                             ))}

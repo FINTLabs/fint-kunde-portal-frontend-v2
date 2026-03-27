@@ -77,8 +77,8 @@ const AddPolicyForm = ({
     };
 
     return (
-        <Box padding="6" borderRadius="large" shadow="small">
-            <VStack gap="4">
+        <Box padding="space-16" borderColor="neutral-subtle" borderWidth="2" borderRadius="12">
+            <VStack gap="space-4">
                 <Select
                     label="Personopplysning"
                     value={selectedPersonalData}
@@ -120,7 +120,7 @@ const AddPolicyForm = ({
                     onChange={(e) => setNote(e.target.value)}
                     error={noteError}
                 />
-                <HStack justify="end" gap="4">
+                <HStack justify="end" gap="space-4">
                     <Button variant="secondary" onClick={onCancel}>
                         Avbryt
                     </Button>

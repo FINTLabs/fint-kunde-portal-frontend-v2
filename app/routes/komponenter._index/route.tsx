@@ -1,15 +1,19 @@
 import { ComponentIcon } from '@navikt/aksel-icons';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
-import { type ActionFunctionArgs, type MetaFunction, useFetcher, useLoaderData } from 'react-router';
+import {
+    type ActionFunctionArgs,
+    type MetaFunction,
+    useFetcher,
+    useLoaderData,
+} from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { handleComponentIndexAction } from '~/routes/komponenter._index/actions';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import { IComponent } from '~/types/Component';
 
 import { loader } from './loaders';
-
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Komponenter' }, { name: 'description', content: 'Liste over komponenter' }];
@@ -36,6 +40,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
+
             <InternalPageHeader title={'Komponenter'} icon={ComponentIcon} helpText="components" />
             <NovariSnackbar
                 items={alertState}

@@ -32,7 +32,7 @@ export default function Index() {
             <HGrid gap="2" align={'start'}>
                 <BackButton to={`/`} className="relative h-12 w-12 top-2 right-14" />
                 <Box
-                    padding="6"
+                    padding="space-6"
                     borderRadius="large"
                     shadow="small"
                     className="relative bottom-12"

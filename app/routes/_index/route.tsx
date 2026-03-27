@@ -1,4 +1,4 @@
-import { Box, Heading, HGrid, LinkCard, VStack } from '@navikt/ds-react';
+import { Heading, HGrid, LinkCard, VStack } from '@navikt/ds-react';
 import { type MetaFunction, useOutletContext } from 'react-router';
 
 import { novariMenu } from '~/components/Menu/MenuConfig';
@@ -30,86 +30,89 @@ export default function Index() {
     };
 
     return (
-        <Box className="font-sans p-4">
-            <VStack gap="6" justify={'center'} align="center">
-                <Heading className="pt-8" size="large">
-                    Velkommen til kundeportalen, {userSession.meData.firstName}.
-                </Heading>
+        // <Box className="font-sans p-4">
+        <VStack gap="space-6" justify={'center'} align="center">
+            <Heading className="pt-8" size="large">
+                Velkommen til kundeportalen, {userSession.meData.firstName}.
+            </Heading>
 
-                <HGrid className="pt-4" gap="3" columns={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }}>
-                    {/*{userSession.selectedOrganization?.name == 'calvin_organizations' && (*/}
-                    {/*    <>*/}
-                    {/*        <LinkCard key="fintlabs_no" size="small">*/}
-                    {/*            <LinkCard.Title as="h3">*/}
-                    {/*                <LinkCard.Anchor href="https://core-status.fintlabs.no/">*/}
-                    {/*                    Status Service*/}
-                    {/*                </LinkCard.Anchor>*/}
-                    {/*            </LinkCard.Title>*/}
-                    {/*        </LinkCard>*/}
-                    {/*        <LinkCard key="fintlabs_no" size="small">*/}
-                    {/*            <LinkCard.Title as="h3">*/}
-                    {/*                <LinkCard.Anchor href="https://admin.fintlabs.no/">*/}
-                    {/*                    Admin Portal*/}
-                    {/*                </LinkCard.Anchor>*/}
-                    {/*            </LinkCard.Title>*/}
-                    {/*        </LinkCard>*/}
-                    {/*    </>*/}
-                    {/*)}*/}
-                    {novariMenu.flatMap((menuItem) => {
-                        if (menuItem.action && !menuItem.submenu) {
-                            if (menuItem.displayBox === false) {
-                                return null;
-                            }
+            <HGrid
+                gap="space-24"
+                columns={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }}
+                paddingBlock={'space-24'}>
+                {/*{userSession.selectedOrganization?.name == 'calvin_organizations' && (*/}
+                {/*    <>*/}
+                {/*        <LinkCard key="fintlabs_no" size="small">*/}
+                {/*            <LinkCard.Title as="h3">*/}
+                {/*                <LinkCard.Anchor href="https://core-status.fintlabs.no/">*/}
+                {/*                    Status Service*/}
+                {/*                </LinkCard.Anchor>*/}
+                {/*            </LinkCard.Title>*/}
+                {/*        </LinkCard>*/}
+                {/*        <LinkCard key="fintlabs_no" size="small">*/}
+                {/*            <LinkCard.Title as="h3">*/}
+                {/*                <LinkCard.Anchor href="https://admin.fintlabs.no/">*/}
+                {/*                    Admin Portal*/}
+                {/*                </LinkCard.Anchor>*/}
+                {/*            </LinkCard.Title>*/}
+                {/*        </LinkCard>*/}
+                {/*    </>*/}
+                {/*)}*/}
+                {novariMenu.flatMap((menuItem) => {
+                    if (menuItem.action && !menuItem.submenu) {
+                        if (menuItem.displayBox === false) {
+                            return null;
+                        }
 
-                            return (
-                                <LinkCard key={menuItem.action} size="medium">
-                                    {/* No icon property on menuItem, so do not render icon */}
+                        return (
+                            <LinkCard key={menuItem.action} size="medium">
+                                {/* No icon property on menuItem, so do not render icon */}
+                                <LinkCard.Title as="h3">
+                                    <LinkCard.Anchor href={menuItem.action}>
+                                        {menuItem.label}
+                                    </LinkCard.Anchor>
+                                </LinkCard.Title>
+                                {menuItem.description && (
+                                    <LinkCard.Description className="panel-description">
+                                        {menuItem.description}
+                                    </LinkCard.Description>
+                                )}
+                            </LinkCard>
+                        );
+                    }
+
+                    // Handle submenu items
+                    if (menuItem.submenu) {
+                        return menuItem.submenu
+                            .filter(
+                                (item) => item.role && hasRole(item.role)
+                                // && (item.displayBox === null || item.displayBox !== false)
+                            )
+                            .map((item) => (
+                                <LinkCard key={item.action} size="medium">
+                                    {item.icon && (
+                                        <LinkCard.Icon className="panel-icon">
+                                            {item.icon}
+                                        </LinkCard.Icon>
+                                    )}
                                     <LinkCard.Title as="h3">
-                                        <LinkCard.Anchor href={menuItem.action}>
-                                            {menuItem.label}
+                                        <LinkCard.Anchor href={item.action}>
+                                            {item.label}
                                         </LinkCard.Anchor>
                                     </LinkCard.Title>
-                                    {menuItem.description && (
+                                    {item.description && (
                                         <LinkCard.Description className="panel-description">
-                                            {menuItem.description}
+                                            {item.description}
                                         </LinkCard.Description>
                                     )}
                                 </LinkCard>
-                            );
-                        }
+                            ));
+                    }
 
-                        // Handle submenu items
-                        if (menuItem.submenu) {
-                            return menuItem.submenu
-                                .filter(
-                                    (item) => item.role && hasRole(item.role)
-                                    // && (item.displayBox === null || item.displayBox !== false)
-                                )
-                                .map((item) => (
-                                    <LinkCard key={item.action} size="medium">
-                                        {item.icon && (
-                                            <LinkCard.Icon className="panel-icon">
-                                                {item.icon}
-                                            </LinkCard.Icon>
-                                        )}
-                                        <LinkCard.Title as="h3">
-                                            <LinkCard.Anchor href={item.action}>
-                                                {item.label}
-                                            </LinkCard.Anchor>
-                                        </LinkCard.Title>
-                                        {item.description && (
-                                            <LinkCard.Description className="panel-description">
-                                                {item.description}
-                                            </LinkCard.Description>
-                                        )}
-                                    </LinkCard>
-                                ));
-                        }
-
-                        return [];
-                    })}
-                </HGrid>
-            </VStack>
-        </Box>
+                    return [];
+                })}
+            </HGrid>
+        </VStack>
+        // </Box>
     );
 }

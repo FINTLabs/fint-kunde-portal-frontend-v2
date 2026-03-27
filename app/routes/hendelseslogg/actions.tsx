@@ -12,7 +12,7 @@ export async function handleLogAction({ request }: { request: Request }) {
 
     const response = await LogApi.getLogs(environment, orgName, componentName, resource, action);
 
-    if (!response.success || response.data.length === 0) {
+    if (!response.success || response.data?.length === 0) {
         return {
             success: false,
             message: `Kunne ikke hente logger for spesifisert ressurs.`,

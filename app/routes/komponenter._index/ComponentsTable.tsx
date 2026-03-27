@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from '@navikt/aksel-icons';
-import { Box, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack } from '@navikt/ds-react';
+import { Box, Button, Checkbox, CheckboxGroup, FormSummary, HGrid, HStack } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -115,7 +115,7 @@ const ComponentsTable = ({
 
     return (
         <Box>
-            <HGrid gap={'3'} columns={3}>
+            <HGrid gap={'space-8'} columns={3}>
                 {Object.keys(groupedByType).map((groupName, i) => {
                     const groupComponents = groupedByType[groupName];
                     const selectedItemsInGroupNames = groupComponents
@@ -150,7 +150,7 @@ const ComponentsTable = ({
                                                     key={groupName + i}
                                                     justify={'space-between'}
                                                     align={'center'}>
-                                                    <HStack align={'center'} gap={'0'}>
+                                                    <HStack align={'center'} gap={'space-0'}>
                                                         <Checkbox
                                                             data-cy={`component-toggle-${item.name}`}
                                                             value={item.name}
@@ -165,17 +165,27 @@ const ComponentsTable = ({
                                                         </Checkbox>
                                                     </HStack>
                                                     <HStack align={'center'}>
-                                                        <Box
-                                                            padding={'2'}
-                                                            className="hover:bg-[--a-surface-active] hover:cursor-pointer">
-                                                            {/*{!hideLink && (*/}
-                                                            <ChevronRightIcon
-                                                                title="ChevronRightIcon"
-                                                                fontSize="1.5rem"
-                                                                onClick={() => handleRowClick(item)}
-                                                            />
-                                                            {/*)}*/}
-                                                        </Box>
+                                                        <Button
+                                                            variant="tertiary"
+                                                            onClick={() => handleRowClick(item)}
+                                                            size={'small'}
+                                                            disabled={isManaged}
+                                                            icon={
+                                                                <ChevronRightIcon title="Rediger" />
+                                                            }
+                                                        />
+
+                                                        {/*<Box*/}
+                                                        {/*    as="button"*/}
+                                                        {/*    type="button"*/}
+                                                        {/*    padding={'space-2'}*/}
+                                                        {/*    className="cursor-pointer rounded-md hover:bg-gray-100"*/}
+                                                        {/*    onClick={() => handleRowClick(item)}>*/}
+                                                        {/*    <ChevronRightIcon*/}
+                                                        {/*        title="ChevronRightIcon"*/}
+                                                        {/*        fontSize="1.5rem"*/}
+                                                        {/*    />*/}
+                                                        {/*</Box>*/}
                                                     </HStack>
                                                 </HStack>
                                             );

@@ -1,5 +1,5 @@
-import { LayersIcon } from '@navikt/aksel-icons';
-import { Alert, Search } from '@navikt/ds-react';
+import { LayersIcon, PlusIcon } from '@navikt/aksel-icons';
+import { Alert, Box, Button, Search, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { useEffect, useState } from 'react';
 import {
@@ -12,12 +12,11 @@ import {
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { CustomTabs } from '~/components/shared/CustomTabs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { useDeletedSearchParamAlert } from '~/hooks/useDeletedSearchParamAlert';
 import { handleAdapterIndexAction } from '~/routes/adaptere._index/actions';
 import AdapterCreateForm from '~/routes/adaptere._index/CreateForm';
 import { IAdapter } from '~/types/Adapter';
-
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { loader } from './loaders';
 
 export const meta: MetaFunction = () => {
@@ -75,7 +74,7 @@ export default function Index() {
         setFilteredAdapter(filtered);
     };
 
-    const showDetails = (id: string) => navigate(`/adapter/${id}`);
+    const showDetails = (id: string) => navigate(`/adapter/${encodeURIComponent(id)}`);
 
     return (
         <>
@@ -92,39 +91,52 @@ export default function Index() {
                         title={'Adaptere'}
                         icon={LayersIcon}
                         helpText="adaptere"
-                        onAddClick={handleCreate}
-                    />
+                        // onAddClick={handleCreate}
+                    >
+                        <Button
+                            variant="primary"
+                            onClick={handleCreate}
+                            size="small"
+                            icon={<PlusIcon aria-hidden />}
+                            data-cy="create-adapter-button">
+                            Opprett adapter
+                        </Button>
+                    </InternalPageHeader>
 
-                    <NovariSnackbar
-                        items={alertState}
-                        position={'top-right'}
-                        // onCloseItem={handleCloseItem}
-                    />
+                    <NovariSnackbar items={alertState} position={'top-right'} />
+                    <VStack gap={'space-8'}>
+                        <Box padding="space-16">
+                            <Search
+                                label="Søk etter adaptere"
+                                hideLabel
+                                variant="secondary"
+                                size="small"
+                                onChange={(value: string) => handleSearch(value)}
+                                placeholder="Søk etter navn eller beskrivelse"
+                                className={'pb-6'}
+                                data-cy="search-input"
+                            />
+                        </Box>
+                        <Box
+                            padding="space-16"
+                            borderColor="neutral-subtle"
+                            borderWidth="2"
+                            borderRadius="12">
+                            {adapters && adapters.length === 0 && (
+                                <Alert variant="warning">Ingen adaptere</Alert>
+                            )}
 
-                    <Search
-                        label="Søk etter adaptere"
-                        hideLabel
-                        variant="secondary"
-                        size="small"
-                        onChange={(value: string) => handleSearch(value)}
-                        placeholder="Søk etter navn eller beskrivelse"
-                        className={'pb-6'}
-                        data-cy="search-input"
-                    />
-
-                    {adapters && adapters.length === 0 && (
-                        <Alert variant="warning">Ingen adaptere</Alert>
-                    )}
-
-                    {filteredAdapter && filteredAdapter.length > 0 && (
-                        <CustomTabs
-                            items={filteredAdapter}
-                            showDetails={showDetails}
-                            getItemName={(item) => item.name}
-                            getItemDescription={(item) => item.shortDescription}
-                            isManaged={(item) => item.managed}
-                        />
-                    )}
+                            {filteredAdapter && filteredAdapter.length > 0 && (
+                                <CustomTabs
+                                    items={filteredAdapter}
+                                    showDetails={showDetails}
+                                    getItemName={(item) => item.name}
+                                    getItemDescription={(item) => item.shortDescription}
+                                    isManaged={(item) => item.managed}
+                                />
+                            )}
+                        </Box>
+                    </VStack>
                 </>
             )}
         </>

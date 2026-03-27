@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { type ActionFunction, type MetaFunction, useFetcher, useLoaderData } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { handleContactsAction } from '~/routes/kontakter/actions';
 import ContactModal from '~/routes/kontakter/ContactModal';
 import ContactTable from '~/routes/kontakter/ContactTable';
@@ -13,6 +12,7 @@ import { IContact } from '~/types/Contact';
 import { IRole } from '~/types/Role';
 
 import { loader } from './loaders';
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 
 interface IPageLoaderData {
     technicalContacts?: IContact[] | string;
@@ -56,42 +56,23 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
+            <InternalPageHeader title={'Kontakter'} icon={PersonGroupIcon} helpText="contacts">
+                <Button
+                    data-cy="add-contact-button"
+                    size="small"
+                    onClick={() => setIsModalOpen(true)}
+                    icon={<PlusIcon aria-hidden />}>
+                    Legg til
+                </Button>
+            </InternalPageHeader>
 
-            <HStack align="center" justify="space-between">
-                <VStack>
-                    <InternalPageHeader
-                        title={'Kontakter'}
-                        icon={PersonGroupIcon}
-                        helpText="contacts"
-                    />
-                </VStack>
-                <VStack>
-                    <Button
-                        data-cy="add-contact-button"
-                        size="small"
-                        onClick={() => setIsModalOpen(true)}
-                        icon={<PlusIcon aria-hidden />}>
-                        Legg til
-                    </Button>
-                </VStack>
-            </HStack>
+            <NovariSnackbar items={alertState} position={'top-right'} />
 
-            {/*<AlertManager alerts={alerts} />*/}
-            <NovariSnackbar
-                items={alertState}
-                position={'top-right'}
-                // onCloseItem={handleCloseItem}
-            />
-
-            <VStack gap="4">
-                <Box
-                    // className="w-full relative bottom-12"
-                    padding="6"
-                    borderRadius="large"
-                    shadow="small">
+            <VStack gap="space-16">
+                <Box padding="space-24" borderColor="brand-blue" borderWidth="2" borderRadius="12">
                     <Heading size="xsmall">Juridisk kontakt</Heading>
                     {legalContact ? (
-                        <HStack gap="4" align="center" className="px-4">
+                        <HStack gap="space-4" align="center" className="px-4">
                             <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full " />
                             <BodyShort size="medium">
                                 {legalContact.firstName} {legalContact.lastName}
@@ -102,10 +83,10 @@ export default function Index() {
                     )}
                 </Box>
                 <Box
-                    // className="w-full relative bottom-12"
-                    padding="6"
-                    borderRadius="large"
-                    shadow="small">
+                    padding="space-16"
+                    borderColor="neutral-subtle"
+                    borderWidth="2"
+                    borderRadius="12">
                     {technicalContacts && typeof technicalContacts !== 'string' && (
                         <ContactTable
                             contactsData={technicalContacts}

@@ -8,6 +8,8 @@ import { componentsHandlers } from './componentsHandlers';
 import { contactsHandlers } from './contactsHandlers';
 import { linkWalkerHandlers } from './linkWalkerHandlers';
 import { userHandlers } from './userHandlers';
+import { eventsHandlers } from './hendelsesloggHandlers';
+import { basisHandlers } from './basistest';
 
 // General handlerDetails
 const generalHandlers = [
@@ -27,4 +29,6 @@ export const handlers = [
     ...clientsHandlers,
     ...assetsHandlers,
     ...linkWalkerHandlers,
+    ...eventsHandlers,
+    ...basisHandlers,
 ];

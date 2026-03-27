@@ -12,7 +12,7 @@ interface RoleTagsProps {
 
 const RoleTags = ({ contact, hasRole, getUserRolesForOrg }: RoleTagsProps) => {
     return (
-        <HStack gap="2">
+        <HStack gap="space-6">
             {hasRole(contact, 'ROLE_ADMIN') ? (
                 <Tag variant="warning" size={'xsmall'} icon={<ShieldLockIcon aria-hidden />}>
                     Admin

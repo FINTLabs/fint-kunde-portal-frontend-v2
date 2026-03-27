@@ -13,7 +13,7 @@ import {
 
 import AccessApi from '~/api/AccessApi';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { handleAccessElementAction } from '~/routes/tilgang/id/component/actions';
 import ResourcesList from '~/routes/tilgang/id/component/ResourcesList';
 import { IAccessComponent } from '~/types/Access';
@@ -110,11 +110,7 @@ export default function Route() {
                 position={'top-right'}
                 // onCloseItem={handleCloseItem}
             />
-            <Box
-                // className="w-full relative bottom-12"
-                padding="6"
-                borderRadius="large"
-                shadow="small">
+            <Box padding="space-16" borderColor="neutral-subtle" borderWidth="2" borderRadius="12">
                 <ResourcesList
                     accessComponent={resourceList as IAccessComponent[]}
                     title={resourceTitle || ''}

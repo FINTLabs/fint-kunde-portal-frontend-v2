@@ -1,6 +1,6 @@
 import React from 'react';
 import { Loader, Table, Tooltip } from '@navikt/ds-react';
-import { CheckmarkCircleIcon, DownloadIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleFillIcon, DownloadIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { ILogResults } from '~/types/RelationTest';
 import { parseDate } from '~/utils/dateUtils';
 
@@ -55,20 +55,21 @@ const RelationTestResultsTable = ({ logResults }: TestResultsTableProps) => {
                     .map((result, index) => (
                         <Table.Row key={index}>
                             <Table.DataCell>
-                                {result.status === 'FAILED' && (
+                                {result.status === 'FAILED' ? (
                                     <Tooltip content={result.errorMessage || 'An error occurred'}>
-                                        <XMarkOctagonIcon
+                                        <XMarkOctagonFillIcon
                                             title="FAILED"
                                             fontSize="1.5rem"
-                                            className={'navds-error-message'}
+                                            style={{ color: 'var(--ax-border-danger)' }}
                                         />
                                     </Tooltip>
-                                )}
-                                {result.status === 'COMPLETED' && (
-                                    <CheckmarkCircleIcon title="COMPLETED" fontSize="1.5rem" />
-                                )}
-                                {result.status === 'IN_QUEUE' || result.status === 'PROCESSING' || (
-                                    // <ArrowCirclepathIcon title={result.status} fontSize="1.5rem" />
+                                ) : result.status === 'COMPLETED' ? (
+                                    <CheckmarkCircleFillIcon
+                                        title="COMPLETED"
+                                        fontSize="1.5rem"
+                                        style={{ color: 'var(--ax-bg-success-strong-hover)' }}
+                                    />
+                                ) : (
                                     <Loader size="xsmall" title="Venter..." />
                                 )}
                             </Table.DataCell>

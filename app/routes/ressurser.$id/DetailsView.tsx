@@ -38,27 +38,29 @@ export function DetailsView({ asset, onUpdate, onDelete }: DetailsViewProps) {
     };
 
     return (
-        <VStack gap="6">
-            <HStack justify={'space-between'} align={'center'}>
-                <Heading align="start" size="medium">
-                    Detaljer
-                </Heading>
-            </HStack>
+        <VStack gap="space-6">
+            <Heading align="start" size="medium">
+                Detaljer
+            </Heading>
             {asset.primaryAsset && (
-                <HStack gap={'2'}>
-                    <StarIcon title="a11y-title" fontSize="1.5rem" className={'text-yellow-600'} />
+                <HStack gap={'space-6'}>
+                    <StarIcon
+                        title="a11y-title"
+                        fontSize="1.5rem"
+                        style={{ color: 'var(--ax-bg-warning-strong)' }}
+                    />
                     <BodyShort> Primær ressurs</BodyShort>
                 </HStack>
             )}
 
-            <VStack>
-                <Label>Navn</Label>
-                <BodyShort data-cy="details-Name">{asset.name}</BodyShort>
-            </VStack>
-            <VStack>
-                <Label>Ressursid</Label>
-                <BodyShort data-cy="details-resourceId">{asset.assetId}</BodyShort>
-            </VStack>
+            {/*<VStack gap={'space-6'}>*/}
+            <Label>Navn</Label>
+            <BodyShort data-cy="details-Name">{asset.name}</BodyShort>
+            {/*</VStack>*/}
+            {/*<VStack>*/}
+            <Label>Ressursid</Label>
+            <BodyShort data-cy="details-resourceId">{asset.assetId}</BodyShort>
+            {/*</VStack>*/}
 
             <EditableTextField
                 label={'Beskrivelse'}
@@ -68,7 +70,7 @@ export function DetailsView({ asset, onUpdate, onDelete }: DetailsViewProps) {
             />
             {!asset.primaryAsset && (
                 <HStack justify={'space-between'}>
-                    <HStack className="w-full" align={'end'} justify={'end'} gap="2">
+                    <HStack className="w-full" align={'end'} justify={'end'} gap="space-2">
                         {/* Save Button */}
                         <Button
                             icon={

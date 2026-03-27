@@ -1,8 +1,9 @@
 // AssetsTable.tsx
 import { ChevronRightIcon, StarIcon } from '@navikt/aksel-icons';
-import { BodyShort, Detail, Heading, Table } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, Heading, Table } from '@navikt/ds-react';
 
 import { IAsset } from '~/types/Asset';
+import React from 'react';
 
 interface AssetsTableProps {
     assets: IAsset[];
@@ -17,14 +18,13 @@ export default function AssetsTable({ assets, onRowClick }: AssetsTableProps) {
                     <Table.Row
                         data-cy="details-row"
                         key={i + item.dn}
-                        className="active:bg-[--a-surface-active] hover:cursor-pointer"
-                        onClick={() => onRowClick(item.name)}>
+                        className="active:bg-[--a-surface-active] hover:cursor-pointer">
                         <Table.DataCell width={'5em'}>
                             {item.primaryAsset && (
                                 <StarIcon
                                     title="a11y-title"
                                     fontSize="1.5rem"
-                                    className={'text-yellow-600'}
+                                    style={{ color: 'var(--ax-bg-warning-strong)' }}
                                 />
                             )}
                         </Table.DataCell>
@@ -34,7 +34,13 @@ export default function AssetsTable({ assets, onRowClick }: AssetsTableProps) {
                             <BodyShort textColor="subtle">{item.description}</BodyShort>
                         </Table.DataCell>
                         <Table.DataCell>
-                            <ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />
+                            {/*<ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />*/}
+                            <Button
+                                variant="tertiary"
+                                size={'small'}
+                                icon={<ChevronRightIcon title="Rediger" />}
+                                onClick={() => onRowClick(item.name)}
+                            />
                         </Table.DataCell>
                     </Table.Row>
                 ))}

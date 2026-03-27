@@ -39,7 +39,7 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
     };
 
     return (
-        <Box paddingBlock="10" paddingInline="20" data-cy="create-form">
+        <Box paddingBlock="space-24">
             <FormSummary>
                 <FormSummary.Header>
                     <FormSummary.Heading level="2">Opprett ny adapter</FormSummary.Heading>
@@ -47,18 +47,18 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
 
                 <FormSummary.Answers>
                     <FormSummary.Answer>
-                        <HStack className="flex !items-end" gap="2">
+                        <HStack gap="space-4" align="end">
                             <TextField
                                 data-cy="input-name"
                                 name="name"
                                 label="Navn"
                                 type="text"
-                                // htmlSize={50}
+                                size="small"
                                 value={inputName}
                                 onChange={(e) => setInputName(e.target.value)}
                                 error={errors.name}
                             />
-                            <span className="pb-3.5">@adapter.{orgName.replace(/_/g, '.')}</span>
+                            <span>@adapter.{orgName.replace(/_/g, '.')}</span>
                         </HStack>
                     </FormSummary.Answer>
 
@@ -68,7 +68,7 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
                             name="description"
                             label="Tittel"
                             type="text"
-                            // htmlSize={50}
+                            size={'small'}
                             value={inputDescription}
                             onChange={(e) => setInputDescription(e.target.value)}
                             error={errors.description}
@@ -85,7 +85,7 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
                             error={errors.detailedInfo}
                         />
                     </FormSummary.Answer>
-                    <HStack gap="4">
+                    <HStack gap="space-4">
                         <Button title="Opprett" onClick={handleSubmit} data-cy="save-button">
                             Opprett
                         </Button>

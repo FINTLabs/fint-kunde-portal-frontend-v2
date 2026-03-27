@@ -11,7 +11,7 @@ export function CustomErrorLayout({ children }: { children: React.ReactNode }) {
     return (
         <Page
             footer={
-                <Box padding="1" as="footer" className={'novari-footer'}>
+                <Box padding="space-2" as="footer" className={'novari-footer'}>
                     <Page.Block gutters width="lg">
                         <NovariFooter links={footerLinksNotLoggedIn} />
                     </Page.Block>
@@ -23,11 +23,11 @@ export function CustomErrorLayout({ children }: { children: React.ReactNode }) {
                     {/*<Heading size="large">Error</Heading>*/}
                 </Page.Block>
             </Box>
-            <Box padding="8" paddingBlock="2" as="main">
-                <Page.Block gutters width="lg">
-                    {children}
-                </Page.Block>
-            </Box>
+            {/*<Box padding="space-8" paddingBlock="space-2" as="main">*/}
+            <Page.Block as="main" width="xl" gutters>
+                {children}
+            </Page.Block>
+            {/*</Box>*/}
         </Page>
     );
 }

@@ -161,17 +161,16 @@ export const AuthTable = ({
                     </Table.Row>
                 </Table.Body>
             </Table>
-
-            <CopyButton
-                className="!mx-auto"
-                copyText={generateAuthInfo()}
-                text="Kopier autentiseringsinformasjon"
-                activeText="Autentiseringsinformasjon er kopiert"
-                icon={<BagdeIcon aria-hidden />}
-                activeIcon={<ThumbUpIcon aria-hidden />}
-                variant={'action'}
-                disabled={!isCopyPasswordEnabled || !clientSecret}
-            />
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <CopyButton
+                    copyText={generateAuthInfo()}
+                    text="Kopier autentiseringsinformasjon"
+                    activeText="Autentiseringsinformasjon er kopiert"
+                    icon={<BagdeIcon aria-hidden />}
+                    activeIcon={<ThumbUpIcon aria-hidden />}
+                    disabled={!isCopyPasswordEnabled || !clientSecret}
+                />
+            </div>
         </>
     );
 };

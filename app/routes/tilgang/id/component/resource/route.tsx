@@ -148,7 +148,7 @@ export default function Route() {
 
             <Box
                 // className="w-full relative bottom-12"
-                padding="6"
+                padding="space-6"
                 borderRadius="large"
                 shadow="small">
                 <NovariSnackbar

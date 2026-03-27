@@ -93,7 +93,7 @@ export default function BasicTestAddForm({
 
     return (
         <>
-            <HGrid gap="6" columns={4}>
+            <HGrid gap="space-6" columns={5} align="end">
                 <Select
                     label="Miljø"
                     size="small"
@@ -145,9 +145,9 @@ export default function BasicTestAddForm({
 
             <Modal ref={ref} closeOnBackdropClick aria-label="Advarsel, passord vil resettes">
                 <Alert variant="warning" className="justify-center">
-                    <VStack gap="6">
+                    <VStack gap="space-6">
                         <p>Passordet på klienten kommer til å bli nullstilt.</p>
-                        <HStack gap="8" justify="center">
+                        <HStack gap="space-8" justify="center">
                             <Button variant="secondary" onClick={handleShowAlert}>
                                 Avbryt
                             </Button>

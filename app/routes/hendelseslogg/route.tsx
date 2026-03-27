@@ -2,10 +2,15 @@ import { TasklistSendIcon } from '@navikt/aksel-icons';
 import { Box, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import React, { useState } from 'react';
-import { type ActionFunctionArgs, type MetaFunction, useFetcher, useLoaderData } from 'react-router';
+import {
+    type ActionFunctionArgs,
+    type MetaFunction,
+    useFetcher,
+    useLoaderData,
+} from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { handleLogAction } from '~/routes/hendelseslogg/actions';
 import LogSearchForm from '~/routes/hendelseslogg/LogSearchForm';
 import type { AuditEvent, IComponentConfig } from '~/types';
@@ -55,8 +60,14 @@ export default function Index() {
                 helpText="hendelseslogg"
             />
 
-            <VStack gap={'10'}>
-                <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+            <NovariSnackbar items={alertState} position={'top-right'} />
+
+            <VStack gap={'space-12'}>
+                <Box
+                    padding="space-16"
+                    borderColor="neutral-subtle"
+                    borderWidth="2"
+                    borderRadius="12">
                     <LogSearchForm
                         onSearchSubmit={handleFormSubmit}
                         components={components}
@@ -64,14 +75,13 @@ export default function Index() {
                         onFilter={(value: string) => setFilterValue(value)}
                     />
                 </Box>
-                <NovariSnackbar
-                    items={alertState}
-                    position={'top-right'}
-                    // onCloseItem={handleCloseItem}
-                />
 
                 {filteredLogs.length > 0 && (
-                    <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+                    <Box
+                        padding="space-16"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
                         <LogTable logs={filteredLogs} />
                     </Box>
                 )}

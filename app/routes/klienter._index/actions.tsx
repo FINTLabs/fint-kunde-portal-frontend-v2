@@ -1,6 +1,5 @@
 import { redirect } from 'react-router';
 
-// import AccessApi from '~/api/AccessApi';
 import ClientApi from '~/api/ClientApi';
 import { IPartialClient } from '~/types/Clients';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';

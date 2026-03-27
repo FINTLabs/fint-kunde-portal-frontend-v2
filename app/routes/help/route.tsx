@@ -3,7 +3,7 @@ import { Accordion, Box } from '@navikt/ds-react';
 import { type MetaFunction } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { helpData, HelpDataItem } from '~/routes/help/HelpData';
 
 export const meta: MetaFunction = () => {
@@ -20,10 +20,7 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Mer informasjon'} icon={InformationSquareIcon} />
-            <Box
-                // background="surface-alt-4-moderate"
-                padding="8"
-                paddingBlock="16">
+            <Box padding="space-16" borderColor="neutral-subtle" borderWidth="2" borderRadius="12">
                 <Accordion>
                     {helpData.map((item: HelpDataItem) => (
                         <Accordion.Item key={item.id}>

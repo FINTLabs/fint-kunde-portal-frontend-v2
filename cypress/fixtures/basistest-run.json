@@ -1,0 +1,19 @@
+{
+    "resourceResults": [
+        {
+            "resource": "rolle",
+            "lastUpdated": -403,
+            "size": -403,
+            "status": "PARTIALLY_FAILED",
+            "message": "Client does not have access to this component"
+        },
+        {
+            "resource": "fullmakt",
+            "lastUpdated": -403,
+            "size": -403,
+            "status": "PARTIALLY_FAILED",
+            "message": "Client does not have access to this component"
+        }
+    ],
+    "message": ""
+}

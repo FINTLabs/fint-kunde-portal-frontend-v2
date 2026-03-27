@@ -10,7 +10,7 @@ import {
 } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { handleBasicTestAction } from '~/routes/basistest/actions';
 import BasicTestAddForm from '~/routes/basistest/BasicTestAddForm';
 import CacheStatusTable from '~/routes/basistest/CacheStatusTable';
@@ -52,11 +52,16 @@ export default function Index() {
         fetcher.submit(formData, { method: 'post' });
     };
 
+    const isSubmitting = fetcher.state === 'submitting';
+    const variant = actionData?.variant;
+    const healthResults = actionData?.data?.healthData?.healthData;
+    const cacheResults = actionData?.data?.cacheData?.resourceResults;
+    const hasActionData = Boolean(actionData);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Basistest'} icon={TerminalIcon} helpText="basistest" />
-            <VStack gap={'6'}>
+            <VStack gap={'space-24'}>
                 {fetcher.state !== 'submitting' && !actionData && (
                     <Alert variant="warning">
                         Advarsel: Passordet til klienten du kjører testen på, vil bli nullstilt
@@ -64,7 +69,11 @@ export default function Index() {
                         testing.
                     </Alert>
                 )}
-                <Box className="w-full" padding="6" borderRadius="large" shadow="small">
+                <Box
+                    padding="space-16"
+                    borderColor="neutral-subtle"
+                    borderWidth="2"
+                    borderRadius="12">
                     <BasicTestAddForm
                         components={components}
                         clients={clients}
@@ -72,64 +81,59 @@ export default function Index() {
                     />
                 </Box>
 
-                <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                    {fetcher.state === 'submitting' && (
-                        <Loader size="large" title="Laster inn data..." />
-                    )}
-
-                    {fetcher.state !== 'submitting' && (
-                        <>
-                            {actionData && actionData.variant && (
-                                <>
-                                    {/*{actionData.variant === 'success' && (*/}
-                                    <Box className="pb-10">
-                                        <Alert variant={actionData.variant}>
+                {hasActionData && (
+                    <>
+                        {isSubmitting ? (
+                            <Loader size="large" title="Laster inn data..." />
+                        ) : (
+                            <>
+                                {variant && (
+                                    <>
+                                        <Alert variant={variant}>
                                             <Heading size="small">
-                                                {actionData.variant === 'error'
+                                                {variant === 'error'
                                                     ? 'Error running test:'
                                                     : 'Test completed:'}
                                             </Heading>
+
                                             <BodyShort>
                                                 {actionData.message}: {actionData.testUrl}
                                             </BodyShort>
+
                                             <BodyShort>
-                                                Klient:{' '}
-                                                {actionData.clientName
-                                                    ? actionData.clientName
-                                                    : ' ingen klient'}
+                                                Klient: {actionData.clientName || 'ingen klient'}
                                             </BodyShort>
                                         </Alert>
+                                    </>
+                                )}
+
+                                {healthResults && (
+                                    <Box
+                                        padding="space-16"
+                                        borderColor="neutral-subtle"
+                                        borderWidth="2"
+                                        borderRadius="12">
+                                        <Heading size="medium">Resultat av helsetest:</Heading>
+                                        <HealthTestResultsTable logResults={healthResults} />
                                     </Box>
-                                    {/*)}*/}
+                                )}
 
-                                    {actionData?.data?.healthData.healthData && (
-                                        <>
-                                            <Heading size={'medium'}>
-                                                Resultat av helsetest:{' '}
-                                            </Heading>
-                                            <HealthTestResultsTable
-                                                logResults={actionData.data.healthData.healthData}
-                                            />
-                                        </>
-                                    )}
-
-                                    {actionData?.data?.cacheData.resourceResults && (
-                                        <>
-                                            <Heading size={'medium'} className={'pt-5'}>
-                                                Cache status:
-                                            </Heading>
-                                            <CacheStatusTable
-                                                logResults={
-                                                    actionData.data.cacheData.resourceResults
-                                                }
-                                            />
-                                        </>
-                                    )}
-                                </>
-                            )}
-                        </>
-                    )}
-                </Box>
+                                {cacheResults && (
+                                    <Box
+                                        padding="space-16"
+                                        borderColor="neutral-subtle"
+                                        borderWidth="2"
+                                        borderRadius="12">
+                                        <Heading size="medium" className="pt-5">
+                                            Cache status:
+                                        </Heading>
+                                        <CacheStatusTable logResults={cacheResults} />
+                                    </Box>
+                                )}
+                            </>
+                        )}
+                    </>
+                )}
             </VStack>
         </>
     );

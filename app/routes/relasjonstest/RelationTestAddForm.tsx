@@ -50,7 +50,7 @@ const RelationTestAddForm = ({ components, configs, runTest }: TestAddFormProps)
     }
 
     return (
-        <HGrid gap="6" columns={5}>
+        <HGrid gap="space-6" columns={5} align="end">
             <Select
                 label="Miljø"
                 size="small"
@@ -93,7 +93,7 @@ const RelationTestAddForm = ({ components, configs, runTest }: TestAddFormProps)
                 )}
             </Select>
 
-            <Box className="flex items-end">
+            <Box>
                 <Button
                     size="small"
                     variant="primary"

@@ -5,7 +5,7 @@ const CustomErrorNoOrg = () => {
     return (
         <Box paddingBlock="20 8">
             <HGrid columns="minmax(auto,600px)">
-                <VStack gap="16">
+                <VStack gap="space-16">
                     <Heading level="1" size="large" spacing>
                         Du har ikke tilgang til dette området. For å få tilgang til dette området,
                         kontakt fint-administratoren din.

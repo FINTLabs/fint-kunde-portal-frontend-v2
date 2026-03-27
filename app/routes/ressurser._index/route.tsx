@@ -1,5 +1,5 @@
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { BodyLong, Box } from '@navikt/ds-react';
+import { BodyLong, Box, Button } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
 import {
@@ -11,7 +11,7 @@ import {
 } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { handleAssetIndexAction } from '~/routes/ressurser._index/actions';
 import CreateForm from '~/routes/ressurser._index/CreateForm';
 import AssetsTable from '~/routes/ressurser._index/ResourcesTable';
@@ -68,15 +68,16 @@ export default function Index() {
                 title={'Ressurser'}
                 icon={MigrationIcon}
                 helpText="assets"
-                onAddClick={handleCreate}
-            />
-            <Box
-                // className="w-full relative bottom-12"
-                padding="6"
-                borderRadius="large"
-                shadow="small">
+                // onAddClick={handleCreate}
+            >
+                <Button variant="primary" size="small" onClick={handleCreate}>
+                    Legg til ressurs
+                </Button>
+            </InternalPageHeader>
+
+            <Box>
                 {!assets || assets.length === 0 ? (
-                    <Box padding="8">
+                    <Box padding="space-8">
                         <BodyLong>Fant ingen ressurser</BodyLong>
                     </Box>
                 ) : isCreating ? (
@@ -86,7 +87,13 @@ export default function Index() {
                         onCreate={handleSave}
                     />
                 ) : (
-                    <AssetsTable assets={assets} onRowClick={handleClick} />
+                    <Box
+                        padding="space-16"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
+                        <AssetsTable assets={assets} onRowClick={handleClick} />
+                    </Box>
                 )}
             </Box>
         </>

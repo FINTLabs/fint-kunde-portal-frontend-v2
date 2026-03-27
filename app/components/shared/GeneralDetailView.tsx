@@ -52,12 +52,10 @@ export function GeneralDetailView({ resource, onUpdate, onDelete }: GeneralDetai
     };
 
     return (
-        <VStack gap="6">
-            <HStack justify={'space-between'} align={'center'}>
-                <Heading align="start" size="medium">
-                    Detaljer
-                </Heading>
-            </HStack>
+        <VStack gap="space-6">
+            <Heading align="start" size="medium">
+                Detaljer
+            </Heading>
             {loading && <Loader size="large" title="Venter..." />}
             <VStack>
                 <Label>Navn</Label>
@@ -81,7 +79,7 @@ export function GeneralDetailView({ resource, onUpdate, onDelete }: GeneralDetai
                     className="w-full"
                     align={'end'}
                     justify={'end'}
-                    gap="2"
+                    gap="space-2"
                     data-cy="edit-button">
                     {/* Save Button */}
                     <Button

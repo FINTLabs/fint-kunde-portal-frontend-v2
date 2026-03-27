@@ -41,7 +41,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
 
     return (
         // <Form method="post">
-        <Box paddingBlock="10" paddingInline="20" data-cy="create-form">
+        <Box paddingBlock="space-12">
             <FormSummary>
                 <FormSummary.Header>
                     <FormSummary.Heading level="2">Opprett ny klient</FormSummary.Heading>
@@ -50,7 +50,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
 
                 <FormSummary.Answers>
                     <FormSummary.Answer>
-                        <HStack className="flex !items-end" gap="2">
+                        <HStack gap="space-4" align="end">
                             <TextField
                                 data-cy="input-name"
                                 name="name"
@@ -58,6 +58,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
                                 type="text"
                                 htmlSize={20}
                                 error={errors?.name}
+                                size={'small'}
                                 onChange={(e) => setInputName(e.target.value)}
                             />
                             <span className="pb-3.5">@client.{orgName.replace(/_/g, '.')}</span>
@@ -72,6 +73,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
                             type="text"
                             htmlSize={50}
                             error={errors?.description}
+                            size={'small'}
                             onChange={(e) => setInputDescription(e.target.value)}
                         />
                     </FormSummary.Answer>
@@ -85,7 +87,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
                             onChange={(e) => setInputNote(e.target.value)}
                         />
                     </FormSummary.Answer>
-                    <HStack gap="4">
+                    <HStack gap="space-4">
                         <Button
                             title="Opprett"
                             onClick={handleSubmit}

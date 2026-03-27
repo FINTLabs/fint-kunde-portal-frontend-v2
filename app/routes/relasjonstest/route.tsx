@@ -1,5 +1,5 @@
 import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, HStack } from '@navikt/ds-react';
+import { Alert, Box, Button, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import React, { useEffect } from 'react';
 import {
@@ -10,7 +10,7 @@ import {
 } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { handleRelationTestAction } from '~/routes/relasjonstest/actions';
 import RelationTestAddForm from '~/routes/relasjonstest/RelationTestAddForm';
 import RelationTestResultsTable from '~/routes/relasjonstest/RelationTestResultsTable';
@@ -96,20 +96,26 @@ export default function Index() {
                 position={'top-right'}
                 // onCloseItem={handleCloseItem}
             />
-            {fetcher.state !== 'submitting' && !actionData && (
-                <Alert variant="warning">
-                    Advarsel: Passordet til klienten du kjører testen på, vil bli nullstilt under
-                    testkjøringen. Det anbefales derfor å bruke en dedikert klient for testing.
-                </Alert>
-            )}
-            <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                <RelationTestAddForm components={components} configs={configs} runTest={runTest} />
-            </Box>
-
-            {relationTests && relationTests.length > 0 && (
-                <>
-                    <Box className="w-full" padding="6">
-                        <HStack gap={'10'}>
+            <VStack gap={'space-12'}>
+                {fetcher.state !== 'submitting' && !actionData && (
+                    <Alert variant="warning">
+                        Advarsel: Passordet til klienten du kjører testen på, vil bli nullstilt
+                        under testkjøringen. Det anbefales derfor å bruke en dedikert klient for
+                        testing.
+                    </Alert>
+                )}
+                <Box
+                    padding="space-16"
+                    borderColor="neutral-subtle"
+                    borderWidth="2"
+                    borderRadius="12">
+                    <RelationTestAddForm
+                        components={components}
+                        configs={configs}
+                        runTest={runTest}
+                    />
+                    {relationTests && relationTests.length > 0 && (
+                        <Box padding="space-16">
                             <Button
                                 size={'xsmall'}
                                 variant={'secondary'}
@@ -117,22 +123,31 @@ export default function Index() {
                                 onClick={removeAllTests}>
                                 Fjern alle tester
                             </Button>
-                        </HStack>
-                    </Box>
-                    <Box className="w-full" padding="6" borderRadius="large" shadow="small">
-                        <RelationTestResultsTable
-                            logResults={
-                                // Ensure logResults is of type ILogResults[]
-                                // Convert 'relationTests' to correct type if necessary (coerce 'errorMessage')
-                                relationTests.map((test) => ({
-                                    ...test,
-                                    errorMessage: test.errorMessage ?? '',
-                                }))
-                            }
-                        />
-                    </Box>
-                </>
-            )}
+                        </Box>
+                    )}
+                </Box>
+
+                {relationTests && relationTests.length > 0 && (
+                    <>
+                        <Box
+                            padding="space-16"
+                            borderColor="neutral-subtle"
+                            borderWidth="2"
+                            borderRadius="12">
+                            <RelationTestResultsTable
+                                logResults={
+                                    // Ensure logResults is of type ILogResults[]
+                                    // Convert 'relationTests' to correct type if necessary (coerce 'errorMessage')
+                                    relationTests.map((test) => ({
+                                        ...test,
+                                        errorMessage: test.errorMessage ?? '',
+                                    }))
+                                }
+                            />
+                        </Box>
+                    </>
+                )}
+            </VStack>
         </>
     );
 }

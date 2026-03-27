@@ -61,8 +61,8 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
     }
 
     return (
-        <VStack gap="10" data-cy="log-search-form">
-            <HGrid gap="6" columns={5}>
+        <VStack gap="space-12" data-cy="log-search-form">
+            <HGrid gap="space-6" columns={5} align="end">
                 <Select
                     data-cy="log-search-environment"
                     label={'Miljø'}
@@ -133,7 +133,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                     <option value="UPDATE">UPDATE</option>
                 </Select>
 
-                <Box className="flex items-end">
+                <Box>
                     <Button size="small" icon={<PlayIcon title="søk" />} onClick={handleFormSubmit}>
                         Søk
                     </Button>

@@ -122,7 +122,7 @@ export default function Index() {
             </HStack>
 
             <VStack gap={'6'}>
-                <Box className="w-full" padding="6">
+                <Box className="w-full" padding="space-6">
                     {error && <Alert variant="warning">{error}</Alert>}
                     {showAddPolicyForm && (
                         <AddPolicyForm

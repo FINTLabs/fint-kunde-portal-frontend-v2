@@ -20,7 +20,7 @@ import Breadcrumbs from '~/components/shared/breadcrumbs';
 import ComponentList from '~/routes/klienter.$id/ComponentList';
 import ComponentAccessAudit from '~/routes/klienter.$id/ComponentAccessAudit';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
-import InternalPageHeader from '~/components/shared/InternalPageHeader';
+import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { handleClientAction } from '~/routes/klienter.$id/actions';
 import {
     Environment,
@@ -170,13 +170,12 @@ export default function ClientDetails() {
                 //             variant="tertiary"
                 //             onClick={() => navigate(`/klienter`)}></Button>
                 //     </Box>
-                <VStack gap={'6'}>
+                <VStack gap={'space-24'}>
                     <Box
-                        // className="w-full relative bottom-12"
-                        // margin="6"
-                        padding="6"
-                        borderRadius="large"
-                        shadow="small">
+                        padding="space-16"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
                         <GeneralDetailView
                             resource={client}
                             onUpdate={handleUpdate}
@@ -184,10 +183,10 @@ export default function ClientDetails() {
                         />
                     </Box>
                     <Box
-                        // className="w-full relative bottom-12"
-                        padding="6"
-                        borderRadius="large"
-                        shadow="small">
+                        padding="space-16"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
                         {!client.managed && (
                             <>
                                 <Heading size={'medium'}>Autentisering</Heading>
@@ -204,10 +203,10 @@ export default function ClientDetails() {
                         )}
                     </Box>
                     <Box
-                        // className="w-full relative bottom-12"
-                        padding="6"
-                        borderRadius="large"
-                        shadow="small">
+                        padding="space-16"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
                         {hasAccessControl && access ? (
                             <>
                                 <HStack>
@@ -234,13 +233,13 @@ export default function ClientDetails() {
                                     </Box>
                                 </HStack>
 
-                                <Box padding={'6'}>
+                                <Box padding={'space-6'}>
                                     <CheckboxGroup
                                         legend="Miljø:"
                                         onChange={(vals) => handleEnvChange(vals as Environment[])}
                                         defaultValue={selectedEnvs}
                                         data-cy={'env-checkbox-group'}>
-                                        <HGrid gap="6" columns={4}>
+                                        <HGrid gap="space-6" columns={4}>
                                             <Checkbox value="api">API</Checkbox>
                                             <Checkbox value="beta">Beta</Checkbox>
                                             <Checkbox value="alpha">Alpha</Checkbox>
@@ -273,7 +272,7 @@ export default function ClientDetails() {
                                 </Modal>
                             </>
                         ) : !hasAccessControl ? (
-                            <Box padding="6">
+                            <Box padding="space-6">
                                 <ComponentsTable
                                     items={components}
                                     selectedItems={selectedComponents}
@@ -283,7 +282,7 @@ export default function ClientDetails() {
                                 />
                             </Box>
                         ) : (
-                            <Box padding="6">
+                            <Box padding="space-6">
                                 <Alert variant="warning">
                                     Tilgangsstyring for komponenter er ikke aktivert
                                 </Alert>

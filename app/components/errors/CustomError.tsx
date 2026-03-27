@@ -23,10 +23,10 @@ const CustomErrorPage: React.FC<CustomErrorPageProps> = ({
 
     const formattedErrorData = formatErrorData(errorData);
     return (
-        <Box paddingBlock="20 8">
+        <Box paddingBlock="space-16">
             <HGrid columns="minmax(auto,600px)" data-aksel-template={`${statusCode}-v2`}>
-                <VStack gap="16">
-                    <VStack gap="12" align="start">
+                <VStack gap="space-16">
+                    <VStack gap="space-12" align="start">
                         <div>
                             <BodyShort textColor="subtle" size="small">
                                 Statuskode {statusCode}
@@ -70,7 +70,10 @@ const CustomErrorPage: React.FC<CustomErrorPageProps> = ({
                         </div>
 
                         {statusCode != 403 && (
-                            <BodyShort size="small" textColor="subtle" style={{ whiteSpace: 'pre-wrap' }}>
+                            <BodyShort
+                                size="small"
+                                textColor="subtle"
+                                style={{ whiteSpace: 'pre-wrap' }}>
                                 Feil-data: {statusCode} - {formattedErrorData}
                             </BodyShort>
                         )}

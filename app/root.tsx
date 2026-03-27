@@ -34,15 +34,14 @@ import { selectOrgCookie } from '~/utils/cookie';
 
 import FeaturesApi from './api/FeaturesApi';
 import themeHref from './styles/novari-theme.css?url';
-import tailwindHref from './styles/tailwind.css?url';
 import { HeaderProperties } from './utils/headerProperties';
-import { pageVisits, dailyPageVisits, getCurrentDate } from '~/routes/metrics';
+import { dailyPageVisits, getCurrentDate, pageVisits } from '~/routes/metrics';
 import { normalizePathname } from '~/utils/metricsPath';
 import { cspReportOnly } from '~/utils/csp';
 
 export const links: LinksFunction = () => [
     { rel: 'stylesheet', href: akselHref, as: 'style' }, // Aksel first
-    { rel: 'stylesheet', href: tailwindHref, as: 'style' }, // Tailwind next
+    // { rel: 'stylesheet', href: tailwindHref, as: 'style' }, // Tailwind next
     { rel: 'stylesheet', href: themeHref, as: 'style' }, // Your overrides last
     // // (optional — check your real font URL)
     // { rel: 'preconnect', href: 'https://fonts.cdnfonts.com' },
@@ -171,13 +170,14 @@ export default function App() {
     return (
         <Page
             footer={
-                <Box padding="1" as="footer" className={'novari-footer'}>
+                <Box padding="space-2" as="footer" className={'novari-footer'}>
                     <Page.Block gutters width="lg">
                         <NovariFooter links={footerLinks} />
                     </Page.Block>
                 </Box>
             }>
-            <Box background={'bg-default'} as="nav" data-cy="novari-header">
+            <Box className={'novari-header'} as="nav" data-cy="novari-header" shadow="dialog">
+                {' '}
                 <NovariHeader
                     isLoggedIn={true}
                     // appName={'FINT Kunde Portal'}
@@ -194,11 +194,11 @@ export default function App() {
                 </NovariHeader>
             </Box>
 
-            <Box padding="8" paddingBlock="2" as="main">
-                <Page.Block gutters width="2xl">
-                    <Outlet context={userSession} />
-                </Page.Block>
-            </Box>
+            {/*<Box padding="space-8" paddingBlock="space-2" as="main">*/}
+            <Page.Block as="main" width="xl" gutters>
+                <Outlet context={userSession} />
+            </Page.Block>
+            {/*</Box>*/}
         </Page>
     );
 }
