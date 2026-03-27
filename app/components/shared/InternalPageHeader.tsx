@@ -45,3 +45,5 @@ export function InternalPageHeader({
         </Box>
     );
 }
+
+export default InternalPageHeader;
