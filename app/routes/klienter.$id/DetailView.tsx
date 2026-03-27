@@ -46,7 +46,8 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
         console.log('handleSave');
         if (
             resourceNote.trim() !== resource.note ||
-            resourceShortDesc.trim() !== resource.shortDescription
+            resourceShortDesc.trim() !== resource.shortDescription ||
+            resourceModelVersion !== resource.modelVersion
         ) {
             const formData = new FormData();
             formData.append('note', resourceNote);
