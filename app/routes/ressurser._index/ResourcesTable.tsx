@@ -18,7 +18,8 @@ export default function AssetsTable({ assets, onRowClick }: AssetsTableProps) {
                     <Table.Row
                         data-cy="details-row"
                         key={i + item.dn}
-                        className="active:bg-[--a-surface-active] hover:cursor-pointer">
+                        className="active:bg-[--a-surface-active] hover:cursor-pointer"
+                        onClick={() => onRowClick(item.name)}>
                         <Table.DataCell width={'5em'}>
                             {item.primaryAsset && (
                                 <StarIcon
