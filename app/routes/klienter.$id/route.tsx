@@ -19,7 +19,6 @@ import { AuthTable } from '~/components/shared/AuthTable';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import ComponentList from '~/routes/klienter.$id/ComponentList';
 import ComponentAccessAudit from '~/routes/klienter.$id/ComponentAccessAudit';
-import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { handleClientAction } from '~/routes/klienter.$id/actions';
 import {
@@ -29,13 +28,13 @@ import {
     IComponentAccessLog,
     IDomainPackages,
 } from '~/types/Access';
-import { IAdapter } from '~/types/Adapter';
 import { IClient } from '~/types/Clients';
 
 import { loader } from './loaders';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 import { IComponent } from '~/types';
 import ComponentAccessLog from '~/routes/klienter.$id/ComponentAccessLog';
+import { DetailView } from '~/routes/klienter.$id/DetailView';
 
 export { loader };
 
@@ -84,11 +83,12 @@ export default function ClientDetails() {
         { name: `${id}`, link: `/klienter/${id}` },
     ];
 
-    const fetcher = useFetcher<ApiResponse<IAdapter>>();
+    const fetcher = useFetcher<IExtendedFetcherResponseData>();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
-    const { alertState } = useAlerts<IClient>([], actionData, fetcher.state);
+    const { alertState } = useAlerts<IClient>([], fetcher.data, fetcher.state);
     const [isLoading, setIsLoading] = useState(false);
 
+    console.log('action data', alertState);
     let selectedEnvs: Environment[] = [];
     if (access?.environments)
         selectedEnvs = (Object.keys(access.environments) as Environment[]).filter(
@@ -151,7 +151,14 @@ export default function ClientDetails() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={client?.shortDescription || ''} icon={TokenIcon} />
-
+            <NovariSnackbar
+                items={alertState.map((item) => ({
+                    ...item,
+                    open: true,
+                    show: true,
+                }))}
+                position="top-right"
+            />
             <NovariSnackbar
                 items={alertState}
                 position={'top-right'}
@@ -161,22 +168,13 @@ export default function ClientDetails() {
             {!client ? (
                 <Alert variant="warning">Det finnes ingen klienter ved navn {id} i listen</Alert>
             ) : (
-                // <HGrid gap="6" align={'start'}>
-                //     <Box>
-                //         <Button
-                //             data-cy="back-button"
-                //             className="relative h-12 w-12 top-2 right-14"
-                //             icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}
-                //             variant="tertiary"
-                //             onClick={() => navigate(`/klienter`)}></Button>
-                //     </Box>
                 <VStack gap={'space-24'}>
                     <Box
                         padding="space-16"
                         borderColor="neutral-subtle"
                         borderWidth="2"
                         borderRadius="12">
-                        <GeneralDetailView
+                        <DetailView
                             resource={client}
                             onUpdate={handleUpdate}
                             onDelete={handleDelete}

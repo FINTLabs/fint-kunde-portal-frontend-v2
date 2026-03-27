@@ -2,6 +2,7 @@ export interface IPartialClient {
     name: string;
     shortDescription: string;
     note: string;
+    modelVersion?: string;
 }
 
 export interface IClient extends IPartialClient {
@@ -12,4 +13,5 @@ export interface IClient extends IPartialClient {
     components: string[];
     accessPackages: string[];
     managed: boolean;
+    modelVersion?: string;
 }

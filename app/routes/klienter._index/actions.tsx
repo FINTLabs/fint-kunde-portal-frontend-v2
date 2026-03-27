@@ -10,12 +10,15 @@ export async function handleClientIndexAction({ request }: { request: Request })
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
     const note = formData.get('note') as string;
+    const modelVersion = formData.get('modelVersion') as string;
+
     const orgName = await getSelectedOrganization(request);
 
     const newClient: IPartialClient = {
         name,
         note,
         shortDescription: description,
+        modelVersion,
     };
 
     const response = await ClientApi.createClient(newClient, orgName);

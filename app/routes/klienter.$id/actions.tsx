@@ -27,6 +27,7 @@ export async function handleClientAction({ request }: { request: Request }) {
                 clientName,
                 formData.get('shortDescription') as string,
                 formData.get('note') as string,
+                formData.get('modelVersion') as string,
                 orgName
             );
 

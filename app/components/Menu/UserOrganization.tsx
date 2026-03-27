@@ -1,4 +1,4 @@
-import { Select } from '@navikt/ds-react';
+import { Box, Select } from '@navikt/ds-react';
 import { ChangeEvent, useState } from 'react';
 import { useSubmit } from 'react-router';
 
@@ -25,7 +25,7 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
     };
 
     return (
-        <div>
+        <Box padding={'space-24'}>
             {userSession.organizations.length === 1 && (
                 <div className="flex items-center">{userSession.organizations[0].displayName}</div>
             )}
@@ -44,6 +44,6 @@ export const UserOrganization = ({ userSession }: { userSession: IUserSession })
                     ))}
                 </Select>
             )}
-        </div>
+        </Box>
     );
 };

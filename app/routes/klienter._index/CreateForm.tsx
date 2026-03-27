@@ -1,4 +1,4 @@
-import { Box, Button, FormSummary, HStack, Textarea, TextField } from '@navikt/ds-react';
+import { Box, Button, FormSummary, HStack, Select, Textarea, TextField } from '@navikt/ds-react';
 import React, { useState } from 'react';
 
 interface AdapterCreateFormProps {
@@ -13,6 +13,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
     const [inputName, setInputName] = useState('');
     const [inputDescription, setInputDescription] = useState('');
     const [inputNote, setInputNote] = useState('');
+    const [inputModelVersion, setInputModelVersion] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = () => {
@@ -35,6 +36,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
             formData.append('name', inputName);
             formData.append('description', inputDescription);
             formData.append('note', inputNote);
+            formData.append('modelVersion', inputModelVersion);
             onSave(formData);
         }
     };
@@ -86,6 +88,17 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
                             error={errors?.note}
                             onChange={(e) => setInputNote(e.target.value)}
                         />
+                    </FormSummary.Answer>
+                    <FormSummary.Answer>
+                        <Select
+                            label="Velg modelversjon"
+                            size="small"
+                            description="Styrer hvilken informasjonsmodellversjon klienten kommuniserer med for utdanningsdomenet"
+                            style={{ width: '12rem' }}
+                            onChange={(e) => setInputModelVersion(e.target.value)}>
+                            <option value="V3">V3</option>
+                            <option value="V4">V4</option>
+                        </Select>
                     </FormSummary.Answer>
                     <HStack gap="space-4">
                         <Button

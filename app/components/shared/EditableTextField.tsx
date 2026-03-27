@@ -6,22 +6,32 @@ export function EditableTextField({
     value,
     isEditing,
     setValue,
+    fullWidth = false,
 }: {
     label: string;
     value: string;
     isEditing: boolean;
     setValue: React.Dispatch<React.SetStateAction<string>>;
+    fullWidth?: boolean;
 }) {
     const maxChars = 94;
     return (
         <HStack justify={'space-between'}>
-            <VStack>
+            <VStack className={fullWidth ? 'w-full' : undefined}>
                 {isEditing ? (
                     <TextField
                         data-cy={`details-edit-${label}`}
                         value={value}
                         type="text"
-                        htmlSize={value.length + 10 < maxChars ? value.length + 10 : maxChars}
+                        size={'small'}
+                        htmlSize={
+                            fullWidth
+                                ? undefined
+                                : value.length + 10 < maxChars
+                                  ? value.length + 10
+                                  : maxChars
+                        }
+                        style={fullWidth ? { width: '100%' } : undefined}
                         label={label}
                         onChange={(e) => setValue(e.target.value)}></TextField>
                 ) : (

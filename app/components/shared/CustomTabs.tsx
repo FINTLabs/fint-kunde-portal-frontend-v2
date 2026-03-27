@@ -1,5 +1,5 @@
 import { ChevronRightIcon, CogRotationIcon, NotePencilDashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, Label, Switch, Table, Tabs } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Label, Switch, Table, Tabs, Tag } from '@navikt/ds-react';
 
 import { tabInfo } from '~/routes/adaptere._index/constants';
 import React from 'react';
@@ -27,6 +27,17 @@ export function CustomTabs<T>({
     if (!items) {
         return <div>Fant ingen</div>;
     }
+
+    const getModelVersion = (item: T): string | undefined => {
+        if (typeof item === 'object' && item !== null && 'modelVersion' in item) {
+            const modelVersion = (item as { modelVersion?: unknown }).modelVersion;
+            if (modelVersion === null || modelVersion === undefined) {
+                return 'V3';
+            }
+            return typeof modelVersion === 'string' ? modelVersion : 'V3';
+        }
+        return undefined;
+    };
 
     return (
         <Tabs defaultValue={tabInfo[0].value} fill>
@@ -81,7 +92,24 @@ export function CustomTabs<T>({
                                         </BodyShort>
                                     </Table.DataCell>
                                     <Table.DataCell>
-                                        {/*<Tag variant={'alt1-filled'}>API v3</Tag>*/}
+                                        {(() => {
+                                            const modelVersion = getModelVersion(item);
+                                            if (!modelVersion) {
+                                                return null;
+                                            }
+
+                                            return (
+                                                <Tag
+                                                    variant="moderate"
+                                                    data-color={
+                                                        modelVersion.toUpperCase() === 'V3'
+                                                            ? 'accent'
+                                                            : 'meta-purple'
+                                                    }>
+                                                    Model version: {modelVersion}
+                                                </Tag>
+                                            );
+                                        })()}
                                     </Table.DataCell>
 
                                     <Table.DataCell>

@@ -177,7 +177,6 @@ export default function App() {
                 </Box>
             }>
             <Box className={'novari-header'} as="nav" data-cy="novari-header" shadow="dialog">
-                {' '}
                 <NovariHeader
                     isLoggedIn={true}
                     // appName={'FINT Kunde Portal'}

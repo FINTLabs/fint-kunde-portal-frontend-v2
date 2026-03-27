@@ -42,6 +42,7 @@ class ClientApi {
         client: IPartialClient,
         organisation: string
     ): Promise<ApiResponse<IClient>> {
+        console.log('Creating client', client);
         return await clientManager.call<IClient>({
             method: 'POST',
             endpoint: `/api/clients/${organisation}`,
@@ -59,13 +60,16 @@ class ClientApi {
         clientName: string,
         clientShortDescription: string,
         clientNote: string,
+        modelVersion: string,
         organisation: string
     ): Promise<ApiResponse<IClient>> {
         const partialClient: IPartialClient = {
             name: clientName,
             shortDescription: clientShortDescription,
             note: clientNote,
+            modelVersion: modelVersion,
         };
+        console.log('partialClient', partialClient);
 
         return await clientManager.call<IClient>({
             method: 'PUT',
@@ -80,7 +84,10 @@ class ClientApi {
         });
     }
 
-    static async deleteClient(clientName: string, organisation: string): Promise<ApiResponse<IClient>> {
+    static async deleteClient(
+        clientName: string,
+        organisation: string
+    ): Promise<ApiResponse<IClient>> {
         return await clientManager.call<IClient>({
             method: 'DELETE',
             endpoint: `/api/clients/${organisation}/${clientName}`,
