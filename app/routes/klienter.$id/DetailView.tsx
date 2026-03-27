@@ -109,7 +109,7 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
                     </Select>
                 ) : (
                     <>
-                        <Label>Model Version</Label>
+                        <Label>Model Version utdanningsdomenet</Label>
                         <BodyShort>{resource.modelVersion ?? 'V3'}</BodyShort>
                     </>
                 )}
