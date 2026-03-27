@@ -101,12 +101,13 @@ export function CustomTabs<T>({
                                             return (
                                                 <Tag
                                                     variant="moderate"
+                                                    size="small"
                                                     data-color={
                                                         modelVersion.toUpperCase() === 'V3'
                                                             ? 'accent'
                                                             : 'meta-purple'
                                                     }>
-                                                    Model version: {modelVersion}
+                                                    Model version utdanningsdomenet: {modelVersion}
                                                 </Tag>
                                             );
                                         })()}
