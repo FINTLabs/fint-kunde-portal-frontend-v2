@@ -31,7 +31,7 @@ export default function Index() {
 
     return (
         // <Box className="font-sans p-4">
-        <VStack gap="space-6" justify={'center'} align="center">
+        <VStack gap="space-6" justify={'center'} align="center" style={{ marginTop: '3rem' }}>
             <Heading className="pt-8" size="large">
                 Velkommen til kundeportalen, {userSession.meData.firstName}.
             </Heading>

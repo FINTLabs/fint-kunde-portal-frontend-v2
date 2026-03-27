@@ -176,12 +176,7 @@ export default function App() {
                     </Page.Block>
                 </Box>
             }>
-            <Box
-                className={'novari-header'}
-                as="nav"
-                data-cy="novari-header"
-                shadow="dialog"
-                style={{ marginBottom: '3rem' }}>
+            <Box className={'novari-header'} as="nav" data-cy="novari-header" shadow="dialog">
                 <NovariHeader
                     isLoggedIn={true}
                     // appName={'FINT Kunde Portal'}
