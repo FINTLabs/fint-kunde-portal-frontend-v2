@@ -1,7 +1,9 @@
 import { FloppydiskIcon, PencilIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import {
     BodyShort,
+    Box,
     Button,
+    GlobalAlert,
     Heading,
     HGrid,
     HStack,
@@ -114,7 +116,20 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
                         <BodyShort>{resource.modelVersion ?? 'V3'}</BodyShort>
                     </>
                 )}
+                {isEditing && (
+                    <Box padding={'space-24'}>
+                        <GlobalAlert status="announcement" size={'small'}>
+                            <GlobalAlert.Header>
+                                <GlobalAlert.Title>Endringen i klienten</GlobalAlert.Title>
+                            </GlobalAlert.Header>
+                            <GlobalAlert.Content>
+                                For at endringen skal tre i kraft, må nytt token hentes fra klienten
+                            </GlobalAlert.Content>
+                        </GlobalAlert>
+                    </Box>
+                )}
             </VStack>
+
             <HStack gap="space-6" align="end" justify="end">
                 <Button
                     disabled={resource.managed}
