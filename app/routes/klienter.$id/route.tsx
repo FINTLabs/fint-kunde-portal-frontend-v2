@@ -1,6 +1,5 @@
 import { ShieldCheckmarkIcon, TasklistSendIcon, TokenIcon } from '@navikt/aksel-icons';
 import {
-    Alert,
     Box,
     Button,
     Checkbox,
@@ -8,6 +7,7 @@ import {
     Heading,
     HGrid,
     HStack,
+    LocalAlert,
     Modal,
     VStack,
 } from '@navikt/ds-react';
@@ -166,9 +166,7 @@ export default function ClientDetails() {
                 // onCloseItem={handleCloseItem}
             />
 
-            {!client ? (
-                <Alert variant="warning">Det finnes ingen klienter ved navn {id} i listen</Alert>
-            ) : (
+            {client && (
                 <VStack gap={'space-24'}>
                     <Box
                         padding="space-16"
@@ -282,9 +280,14 @@ export default function ClientDetails() {
                             </Box>
                         ) : (
                             <Box padding="space-6">
-                                <Alert variant="warning">
-                                    Tilgangsstyring for komponenter er ikke aktivert
-                                </Alert>
+                                <LocalAlert status="announcement">
+                                    <LocalAlert.Header>
+                                        <LocalAlert.Title>Ikke aktivert</LocalAlert.Title>
+                                    </LocalAlert.Header>
+                                    <LocalAlert.Content>
+                                        Tilgangsstyring for komponenter er ikke aktivert
+                                    </LocalAlert.Content>
+                                </LocalAlert>
 
                                 <Button onClick={addAccess} size={'small'} loading={isLoading}>
                                     Sett opp tilgangsstyring
@@ -293,7 +296,6 @@ export default function ClientDetails() {
                         )}
                     </Box>
                 </VStack>
-                // </HGrid>
             )}
         </>
     );

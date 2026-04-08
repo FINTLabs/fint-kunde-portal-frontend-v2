@@ -18,4 +18,8 @@ export const clientsHandlers = [
     http.put(`${API_URL}/api/clients/jennifer-test-test@client.fintlabs.no`, () => {
         return HttpResponse.json('from handler in MSW', { status: 200 });
     }),
+
+    http.get(`${API_URL}/api/clients/jennifer-test-test@client.fintlabs.no`, () => {
+        return HttpResponse.json('from handler in MSW', { status: 403 });
+    }),
 ];

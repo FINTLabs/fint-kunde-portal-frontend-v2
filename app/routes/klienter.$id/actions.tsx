@@ -73,11 +73,18 @@ export async function handleClientAction({ request }: { request: Request }) {
                 formData.get('entityName') as string,
                 orgName
             );
-            return {
-                clientSecret: secretResponse.data,
-                message: 'Klienthemmeligheten ble hentet',
-                variant: 'success',
-            };
+            if (secretResponse.status === 200) {
+                return {
+                    clientSecret: secretResponse.data,
+                    message: 'Klienthemmeligheten ble hentet',
+                    variant: 'success',
+                };
+            } else {
+                return {
+                    message: 'Kunne ikke hente klienthemmeligheten',
+                    variant: 'error',
+                };
+            }
 
         default:
             return {

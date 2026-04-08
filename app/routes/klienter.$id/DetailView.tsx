@@ -3,7 +3,7 @@ import {
     BodyShort,
     Box,
     Button,
-    GlobalAlert,
+    LocalAlert,
     Heading,
     HGrid,
     HStack,
@@ -118,14 +118,14 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
                 )}
                 {isEditing && (
                     <Box padding={'space-24'}>
-                        <GlobalAlert status="announcement" size={'small'}>
-                            <GlobalAlert.Header>
-                                <GlobalAlert.Title>Endringen i klienten</GlobalAlert.Title>
-                            </GlobalAlert.Header>
-                            <GlobalAlert.Content>
+                        <LocalAlert status="announcement" size={'small'}>
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>Endringen i klienten</LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>
                                 For at endringen skal tre i kraft, må nytt token hentes fra klienten
-                            </GlobalAlert.Content>
-                        </GlobalAlert>
+                            </LocalAlert.Content>
+                        </LocalAlert>
                     </Box>
                 )}
             </VStack>

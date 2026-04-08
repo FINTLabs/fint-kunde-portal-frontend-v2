@@ -1,5 +1,5 @@
 import { LayersIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
@@ -88,23 +88,6 @@ export default function Index() {
         fetcher.submit(formData, { method: 'post' });
     };
 
-    // function handleEnvChange(values: Environment[]) {
-    //     const formData = new FormData();
-    //     formData.append('actionType', 'UPDATE_ENVIRONMENT');
-    //     // append only the checked ones
-    //     values.forEach((v) => formData.append('environments[]', v));
-    //     fetcher.submit(formData, { method: 'post' });
-    // }
-    //
-    // function addAccess() {
-    //     setIsLoading(true);
-    //     const formData = new FormData();
-    //     formData.append('actionType', 'ADD_ACCESS');
-    //     formData.append('username', adapter?.name as string);
-    //     fetcher.submit(formData, { method: 'post' });
-    // }
-    // // console.log('access', access);
-
     const selectedComponents =
         adapter?.components
             .map((adapterComponent) => {
@@ -129,9 +112,7 @@ export default function Index() {
                 // onCloseItem={handleCloseItem}
             />
 
-            {!adapter ? (
-                <Alert variant="warning">Adapter finnes ikke</Alert>
-            ) : (
+            {adapter && (
                 <VStack gap="space-24">
                     {/*<BackButton to={`/adaptere`} className="relative h-12 w-12 top-2 right-14" />*/}
                     <Box

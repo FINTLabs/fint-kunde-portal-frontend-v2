@@ -43,7 +43,7 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
 
     return (
         <Box>
-            <HGrid gap={'3'} columns={3}>
+            <HGrid gap={'space-4'} columns={3}>
                 {accessList.map((domain, i) => {
                     // const domainAccess = groupedByDomain[domain];
                     //indeterminate={
@@ -74,7 +74,7 @@ function ComponentList({ accessList, onToggle, entity }: ComponentListProps) {
                                                 //     onToggle(
                                                 //         item.domain,
                                                 //         item.packageName,
-                                                //         item.status === 'ENABLED'
+                                                //         item.sync === 'ENABLED'
                                                 //     )
                                                 // }
                                                 // indeterminate={isIntermediate(item.access, domain.packages)}

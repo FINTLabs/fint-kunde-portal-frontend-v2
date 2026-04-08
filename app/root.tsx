@@ -33,6 +33,7 @@ import { IUserSession } from '~/types/Session';
 import { selectOrgCookie } from '~/utils/cookie';
 
 import FeaturesApi from './api/FeaturesApi';
+import tailwindHref from './styles/tailwind.css?url';
 import themeHref from './styles/novari-theme.css?url';
 import { HeaderProperties } from './utils/headerProperties';
 import { dailyPageVisits, getCurrentDate, pageVisits } from '~/routes/metrics';
@@ -40,8 +41,8 @@ import { normalizePathname } from '~/utils/metricsPath';
 import { cspReportOnly } from '~/utils/csp';
 
 export const links: LinksFunction = () => [
-    { rel: 'stylesheet', href: akselHref, as: 'style' }, // Aksel first
-    // { rel: 'stylesheet', href: tailwindHref, as: 'style' }, // Tailwind next
+    { rel: 'stylesheet', href: tailwindHref, as: 'style' }, // Tailwind first
+    { rel: 'stylesheet', href: akselHref, as: 'style' }, // Aksel next
     { rel: 'stylesheet', href: themeHref, as: 'style' }, // Your overrides last
     // // (optional — check your real font URL)
     // { rel: 'preconnect', href: 'https://fonts.cdnfonts.com' },

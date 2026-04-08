@@ -1,5 +1,5 @@
 import { TerminalIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Heading, Loader, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Heading, Loader, LocalAlert, VStack } from '@navikt/ds-react';
 import { type ApiResponse } from 'novari-frontend-components';
 import React from 'react';
 import {
@@ -63,11 +63,16 @@ export default function Index() {
             <InternalPageHeader title={'Basistest'} icon={TerminalIcon} helpText="basistest" />
             <VStack gap={'space-24'}>
                 {fetcher.state !== 'submitting' && !actionData && (
-                    <Alert variant="warning">
-                        Advarsel: Passordet til klienten du kjører testen på, vil bli nullstilt
-                        under testkjøringen. Det anbefales derfor å bruke en dedikert klient for
-                        testing.
-                    </Alert>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>Passordet til klienten</LocalAlert.Title>
+                        </LocalAlert.Header>
+                        <LocalAlert.Content>
+                            Passordet til klienten du kjører testen på, vil bli nullstilt under
+                            testkjøringen. Det anbefales derfor å bruke en dedikert klient for
+                            testing.
+                        </LocalAlert.Content>
+                    </LocalAlert>
                 )}
                 <Box
                     padding="space-16"
