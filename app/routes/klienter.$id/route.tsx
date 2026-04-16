@@ -179,26 +179,26 @@ export default function ClientDetails() {
                             onDelete={handleDelete}
                         />
                     </Box>
-                    <Box
-                        padding="space-16"
-                        borderColor="neutral-subtle"
-                        borderWidth="2"
-                        borderRadius="12">
-                        {!client.managed && (
-                            <>
-                                <Heading size={'medium'}>Autentisering</Heading>
-                                <AuthTable
-                                    entity={client}
-                                    entityType="client"
-                                    onUpdatePassword={handleUpdatePassword}
-                                    onUpdateAuthInfo={handleUpdateAuthInfo}
-                                    {...(actionData?.clientSecret
-                                        ? { clientSecret: actionData.clientSecret }
-                                        : {})}
-                                />
-                            </>
-                        )}
-                    </Box>
+
+                    {!client.managed && (
+                        <Box
+                            padding="space-16"
+                            borderColor="neutral-subtle"
+                            borderWidth="2"
+                            borderRadius="12">
+                            <Heading size={'medium'}>Autentisering</Heading>
+                            <AuthTable
+                                entity={client}
+                                entityType="client"
+                                onUpdatePassword={handleUpdatePassword}
+                                onUpdateAuthInfo={handleUpdateAuthInfo}
+                                {...(actionData?.clientSecret
+                                    ? { clientSecret: actionData.clientSecret }
+                                    : {})}
+                            />
+                        </Box>
+                    )}
+
                     <Box
                         padding="space-16"
                         borderColor="neutral-subtle"

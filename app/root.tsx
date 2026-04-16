@@ -43,6 +43,7 @@ import { cspReportOnly } from '~/utils/csp';
 export const links: LinksFunction = () => [
     { rel: 'stylesheet', href: akselHref, as: 'style' }, // Aksel next
     { rel: 'stylesheet', href: themeHref, as: 'style' }, // Your overrides last
+    // { rel: 'stylesheet', href: tailwindHref, as: 'style' }, // Tailwind first
     // // (optional — check your real font URL)
     // { rel: 'preconnect', href: 'https://fonts.cdnfonts.com' },
     // { rel: 'stylesheet', href: 'https://fonts.cdnfonts.com/css/brockmann' },
