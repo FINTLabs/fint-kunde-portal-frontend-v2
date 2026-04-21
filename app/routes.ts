@@ -11,4 +11,5 @@ export default [
     route('tilgang/:id/:component', 'routes/tilgang/id/component/route.tsx'),
     route('tilgang/:id/:component/:resource', 'routes/tilgang/id/component/resource/route.tsx'),
     route('help', 'routes/help/route.tsx'),
+    route('_analytics/events', 'routes/api.events.tsx'),
 ] satisfies RouteConfig;

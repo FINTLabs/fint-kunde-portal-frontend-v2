@@ -133,7 +133,9 @@ class ClientApi {
         endpoint: string,
         componentName: string
     ): Promise<ApiResponse<IClient>> {
-        return await clientManager.call<IClient>({
+        console.log('Adding client', endpoint);
+        console.log('Adding client', componentName);
+        const ret = await clientManager.call<IClient>({
             method: 'PUT',
             endpoint,
             functionName: 'addComponentToClient',
@@ -144,6 +146,8 @@ class ClientApi {
                 'x-nin': HeaderProperties.getXnin(),
             },
         });
+        console.log(ret);
+        return ret;
     }
 
     private static async removeComponentFromClient(

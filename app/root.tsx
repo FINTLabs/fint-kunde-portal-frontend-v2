@@ -39,6 +39,7 @@ import { HeaderProperties } from './utils/headerProperties';
 import { dailyPageVisits, getCurrentDate, pageVisits } from '~/routes/metrics';
 import { normalizePathname } from '~/utils/metricsPath';
 import { cspReportOnly } from '~/utils/csp';
+import { useTrackAnalyticsPageViews } from '~/hooks/useTrackAnalyticsPageViews';
 
 export const links: LinksFunction = () => [
     { rel: 'stylesheet', href: akselHref, as: 'style' }, // Aksel next
@@ -161,6 +162,7 @@ export default function App() {
     const { userSession } = useLoaderData<{
         userSession: IUserSession;
     }>();
+    useTrackAnalyticsPageViews(userSession.selectedOrganization.name);
 
     const navigate = useNavigate();
 
