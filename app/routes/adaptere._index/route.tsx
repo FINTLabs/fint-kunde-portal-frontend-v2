@@ -1,6 +1,6 @@
 import { LayersIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Search, VStack } from '@navikt/ds-react';
-import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { Box, Button, LocalAlert, Search, VStack } from '@navikt/ds-react';
+import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useEffect, useState } from 'react';
 import {
     type ActionFunctionArgs,
@@ -103,7 +103,7 @@ export default function Index() {
                         </Button>
                     </InternalPageHeader>
 
-                    <NovariSnackbar items={alertState} position={'top-right'} />
+                    <NovariToaster items={alertState} position={'top-right'} />
                     <VStack gap={'space-8'}>
                         <Box padding="space-16">
                             <Search
@@ -123,7 +123,7 @@ export default function Index() {
                             borderWidth="2"
                             borderRadius="12">
                             {adapters && adapters.length === 0 && (
-                                <Alert variant="warning">Ingen adaptere</Alert>
+                                <LocalAlert status="announcement">Ingen adaptere</LocalAlert>
                             )}
 
                             {filteredAdapter && filteredAdapter.length > 0 && (

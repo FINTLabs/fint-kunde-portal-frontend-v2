@@ -1,5 +1,5 @@
 import { TerminalIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Heading, Loader, LocalAlert, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Heading, Loader, LocalAlert, VStack } from '@navikt/ds-react';
 import { type ApiResponse } from 'novari-frontend-components';
 import React from 'react';
 import {
@@ -57,6 +57,7 @@ export default function Index() {
     const healthResults = actionData?.data?.healthData?.healthData;
     const cacheResults = actionData?.data?.cacheData?.resourceResults;
     const hasActionData = Boolean(actionData);
+    //TODO: fix local alert when info is updated in novari components
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -94,7 +95,8 @@ export default function Index() {
                             <>
                                 {variant && (
                                     <>
-                                        <Alert variant={variant}>
+                                        <LocalAlert
+                                            status={variant === 'info' ? 'announcement' : variant}>
                                             <Heading size="small">
                                                 {variant === 'error'
                                                     ? 'Error running test:'
@@ -108,7 +110,7 @@ export default function Index() {
                                             <BodyShort>
                                                 Klient: {actionData.clientName || 'ingen klient'}
                                             </BodyShort>
-                                        </Alert>
+                                        </LocalAlert>
                                     </>
                                 )}
 

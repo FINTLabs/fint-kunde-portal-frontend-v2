@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Alert, Box, Button, HGrid, HStack, Modal, Select, VStack } from '@navikt/ds-react';
+import { Box, Button, HGrid, HStack, LocalAlert, Modal, Select, VStack } from '@navikt/ds-react';
 import { PlayIcon } from '@navikt/aksel-icons';
 import { IComponent } from '~/types/Component';
 import { IClient } from '~/types/Clients';
@@ -144,7 +144,7 @@ export default function BasicTestAddForm({
             </HGrid>
 
             <Modal ref={ref} closeOnBackdropClick aria-label="Advarsel, passord vil resettes">
-                <Alert variant="warning" className="justify-center">
+                <LocalAlert status="warning">
                     <VStack gap="space-6">
                         <p>Passordet på klienten kommer til å bli nullstilt.</p>
                         <HStack gap="space-8" justify="center">
@@ -154,7 +154,7 @@ export default function BasicTestAddForm({
                             <Button onClick={handleFormSubmit}>Kjør</Button>
                         </HStack>
                     </VStack>
-                </Alert>
+                </LocalAlert>
             </Modal>
         </>
     );

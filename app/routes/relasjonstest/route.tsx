@@ -1,6 +1,6 @@
 import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, VStack } from '@navikt/ds-react';
-import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { Box, Button, LocalAlert, VStack } from '@navikt/ds-react';
+import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import React, { useEffect } from 'react';
 import {
     type ActionFunctionArgs,
@@ -91,18 +91,18 @@ export default function Index() {
                 icon={ArrowsSquarepathIcon}
                 helpText="relasjonstest"
             />
-            <NovariSnackbar
+            <NovariToaster
                 items={alertState}
                 position={'top-right'}
                 // onCloseItem={handleCloseItem}
             />
             <VStack gap={'space-12'}>
                 {fetcher.state !== 'submitting' && !actionData && (
-                    <Alert variant="warning">
+                    <LocalAlert status="warning">
                         Advarsel: Passordet til klienten du kjører testen på, vil bli nullstilt
                         under testkjøringen. Det anbefales derfor å bruke en dedikert klient for
                         testing.
-                    </Alert>
+                    </LocalAlert>
                 )}
                 <Box
                     padding="space-16"

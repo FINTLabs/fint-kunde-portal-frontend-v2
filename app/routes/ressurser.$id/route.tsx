@@ -1,6 +1,6 @@
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { Alert, Box, VStack } from '@navikt/ds-react';
-import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { Box, LocalAlert, VStack } from '@navikt/ds-react';
+import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -99,14 +99,14 @@ export default function Index() {
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'Ressurser'} icon={MigrationIcon} helpText="ressurser" />
 
-            <NovariSnackbar
+            <NovariToaster
                 items={alertState}
                 position={'top-right'}
                 // onCloseItem={handleCloseItem}
             />
 
             {!asset ? (
-                <Alert variant="warning">Det finnes ingen ressurser</Alert>
+                <LocalAlert status="warning">Det finnes ingen ressurser</LocalAlert>
             ) : (
                 // <HGrid gap="2" align={'start'}>
                 //     <BackButton to={`/ressurser`} className="relative h-12 w-12 top-2 right-14" />
