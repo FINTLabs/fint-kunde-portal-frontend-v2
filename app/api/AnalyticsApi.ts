@@ -3,7 +3,7 @@ import { NovariApiManager } from 'novari-frontend-components';
 const apiManager = new NovariApiManager({
     baseUrl: '',
 });
-const APP_NAME = 'fint-kunde-portal-fronted-v2';
+const APP_NAME = 'kunde-portal';
 
 class AnalyticsApi {
     static async trackEvent(params: {
