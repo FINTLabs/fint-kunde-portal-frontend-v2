@@ -99,9 +99,14 @@ export default function Index() {
             <VStack gap={'space-12'}>
                 {fetcher.state !== 'submitting' && !actionData && (
                     <LocalAlert status="warning">
-                        Advarsel: Passordet til klienten du kjører testen på, vil bli nullstilt
-                        under testkjøringen. Det anbefales derfor å bruke en dedikert klient for
-                        testing.
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>Advarsel</LocalAlert.Title>
+                        </LocalAlert.Header>
+                        <LocalAlert.Content>
+                            Passordet til klienten du kjører testen på, vil bli nullstilt under
+                            testkjøringen. Det anbefales derfor å bruke en dedikert klient for
+                            testing.
+                        </LocalAlert.Content>
                     </LocalAlert>
                 )}
                 <Box
