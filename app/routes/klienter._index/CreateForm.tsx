@@ -13,7 +13,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
     const [inputName, setInputName] = useState('');
     const [inputDescription, setInputDescription] = useState('');
     const [inputNote, setInputNote] = useState('');
-    const [inputModelVersion, setInputModelVersion] = useState('');
+    const [inputModelVersion, setInputModelVersion] = useState('V3');
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = () => {
