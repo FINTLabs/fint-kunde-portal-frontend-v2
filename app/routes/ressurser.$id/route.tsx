@@ -106,7 +106,11 @@ export default function Index() {
             />
 
             {!asset ? (
-                <LocalAlert status="warning">Det finnes ingen ressurser</LocalAlert>
+                <LocalAlert status="announcement">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Det finnes ingen ressurser</LocalAlert.Title>
+                    </LocalAlert.Header>
+                </LocalAlert>
             ) : (
                 // <HGrid gap="2" align={'start'}>
                 //     <BackButton to={`/ressurser`} className="relative h-12 w-12 top-2 right-14" />

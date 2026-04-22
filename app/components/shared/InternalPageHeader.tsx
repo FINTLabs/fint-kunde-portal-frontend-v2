@@ -23,6 +23,7 @@ export function InternalPageHeader({
         <Box
             paddingBlock="space-24"
             paddingInline="space-0"
+            data-cy="page-title"
             style={{
                 borderBottom: '1px solid #e0e0e0',
                 marginBottom: '1.5rem',

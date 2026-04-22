@@ -1,6 +1,6 @@
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, FormSummary, HStack } from '@navikt/ds-react';
-import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
     type LoaderFunctionArgs,
@@ -149,9 +149,9 @@ export default function Route() {
             <Box
                 // className="w-full relative bottom-12"
                 padding="space-6"
-                borderRadius="large"
-                shadow="small">
-                <NovariSnackbar
+                borderRadius="12"
+                shadow="dialog">
+                <NovariToaster
                     items={alertState}
                     position={'top-right'}
                     // onCloseItem={handleCloseItem}
@@ -160,7 +160,7 @@ export default function Route() {
                 <FormSummary key={`x`}>
                     <FormSummary.Header>
                         <FormSummary.Heading level="2">
-                            <HStack gap={'3'}>{fieldListTitle}</HStack>
+                            <HStack gap={'space-4'}>{fieldListTitle}</HStack>
                             <BodyShort>
                                 Skriverettighet: {resource.writeable ? 'Ja' : 'Nei'}
                             </BodyShort>

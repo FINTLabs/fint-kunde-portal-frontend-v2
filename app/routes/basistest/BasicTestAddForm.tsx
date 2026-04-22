@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Box, Button, HGrid, HStack, LocalAlert, Modal, Select, VStack } from '@navikt/ds-react';
+import { Box, Button, HGrid, Select } from '@navikt/ds-react';
 import { PlayIcon } from '@navikt/aksel-icons';
 import { IComponent } from '~/types/Component';
 import { IClient } from '~/types/Clients';
@@ -143,19 +143,19 @@ export default function BasicTestAddForm({
                 </Box>
             </HGrid>
 
-            <Modal ref={ref} closeOnBackdropClick aria-label="Advarsel, passord vil resettes">
-                <LocalAlert status="warning">
-                    <VStack gap="space-6">
-                        <p>Passordet på klienten kommer til å bli nullstilt.</p>
-                        <HStack gap="space-8" justify="center">
-                            <Button variant="secondary" onClick={handleShowAlert}>
-                                Avbryt
-                            </Button>
-                            <Button onClick={handleFormSubmit}>Kjør</Button>
-                        </HStack>
-                    </VStack>
-                </LocalAlert>
-            </Modal>
+            {/*<Modal ref={ref} closeOnBackdropClick aria-label="Advarsel, passord vil resettes">*/}
+            {/*    <LocalAlert status="warning">*/}
+            {/*        <VStack gap="space-6">*/}
+            {/*            <p>Passordet på klienten kommer til å bli nullstilt.!!</p>*/}
+            {/*            <HStack gap="space-8" justify="center">*/}
+            {/*                <Button variant="secondary" onClick={handleShowAlert}>*/}
+            {/*                    Avbryt*/}
+            {/*                </Button>*/}
+            {/*                <Button onClick={handleFormSubmit}>Kjør</Button>*/}
+            {/*            </HStack>*/}
+            {/*        </VStack>*/}
+            {/*    </LocalAlert>*/}
+            {/*</Modal>*/}
         </>
     );
 }

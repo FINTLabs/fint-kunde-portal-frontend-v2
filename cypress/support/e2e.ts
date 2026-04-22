@@ -59,9 +59,10 @@ declare global {
 
 Cypress.Commands.add('waitForAppReady', () => {
     cy.reload();
-    // Wait for shell to mount
-    cy.get('[data-theme="novari"]').should('exist');
-    cy.get('.navds-page').should('be.visible');
+    // Wait for shell to mount using stable app selectors
+    cy.document().its('readyState').should('eq', 'complete');
+    cy.get('body[data-theme="novari"]').should('exist');
+    cy.get('[data-cy="novari-header"]').should('be.visible');
     cy.get('main').should('be.visible');
     // If you render a spinner during data load, wait for it to vanish
     //cy.get('[data-cy="spinner"]', { timeout: 15000 }).should('not.exist');

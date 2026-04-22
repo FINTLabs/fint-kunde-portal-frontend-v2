@@ -10,4 +10,7 @@ export const eventsHandlers = [
             return HttpResponse.json(events);
         }
     ),
+    http.get(`${API_URL}/api/events/:organisation/:environment/:component/:type`, () => {
+        return HttpResponse.json(events);
+    }),
 ];

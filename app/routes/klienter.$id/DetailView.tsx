@@ -15,7 +15,9 @@ import {
 } from '@navikt/ds-react';
 import { useState } from 'react';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
-import { IClient } from '~/types';
+import { IClient, IUserSession } from '~/types';
+import AnalyticsApi from '~/api/AnalyticsApi';
+import { useLoaderData } from 'react-router';
 
 type DetailViewProps = {
     resource: IClient;
@@ -46,6 +48,15 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
 
     const handleSave = () => {
         console.log('handleSave');
+        const { userSession } = useLoaderData<{
+            userSession: IUserSession;
+        }>();
+        void AnalyticsApi.trackButtonClick(
+            'client-save-changes-button',
+            location.pathname,
+            userSession.selectedOrganization.name
+        );
+
         if (
             resourceNote.trim() !== resource.note ||
             resourceShortDesc.trim() !== resource.shortDescription ||

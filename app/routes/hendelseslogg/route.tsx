@@ -1,6 +1,6 @@
 import { TasklistSendIcon } from '@navikt/aksel-icons';
 import { Box, VStack } from '@navikt/ds-react';
-import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import React, { useState } from 'react';
 import {
     type ActionFunctionArgs,
@@ -60,7 +60,7 @@ export default function Index() {
                 helpText="hendelseslogg"
             />
 
-            <NovariSnackbar items={alertState} position={'top-right'} />
+            <NovariToaster items={alertState} position={'top-right'} />
 
             <VStack gap={'space-12'}>
                 <Box

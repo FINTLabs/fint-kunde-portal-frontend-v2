@@ -11,7 +11,7 @@ import {
     Modal,
     VStack,
 } from '@navikt/ds-react';
-import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
 import { type ActionFunctionArgs, useFetcher, useLoaderData, useParams } from 'react-router';
 
@@ -152,7 +152,7 @@ export default function ClientDetails() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={client?.shortDescription || ''} icon={TokenIcon} />
-            <NovariSnackbar
+            <NovariToaster
                 items={alertState.map((item) => ({
                     ...item,
                     open: true,
@@ -160,11 +160,11 @@ export default function ClientDetails() {
                 }))}
                 position="top-right"
             />
-            <NovariSnackbar
-                items={alertState}
-                position={'top-right'}
-                // onCloseItem={handleCloseItem}
-            />
+            {/*<NovariToaster*/}
+            {/*    items={alertState}*/}
+            {/*    position={'top-right'}*/}
+            {/*    // onCloseItem={handleCloseItem}*/}
+            {/*/>*/}
 
             {client && (
                 <VStack gap={'space-24'}>

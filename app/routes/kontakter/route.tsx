@@ -1,6 +1,6 @@
 import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
 import { type ActionFunction, type MetaFunction, useFetcher, useLoaderData } from 'react-router';
 
@@ -66,7 +66,7 @@ export default function Index() {
                 </Button>
             </InternalPageHeader>
 
-            <NovariSnackbar items={alertState} position={'top-right'} />
+            <NovariToaster items={alertState} position={'top-right'} />
 
             <VStack gap="space-16">
                 <Box padding="space-24" borderColor="brand-blue" borderWidth="2" borderRadius="12">

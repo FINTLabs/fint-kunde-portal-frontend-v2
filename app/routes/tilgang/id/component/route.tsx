@@ -1,7 +1,7 @@
 import { KeyVerticalIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import { Box } from '@navikt/ds-react';
-import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
     type LoaderFunctionArgs,
@@ -105,7 +105,7 @@ export default function Route() {
             {/*        variant="tertiary"*/}
             {/*        onClick={() => navigate(`/${elementType}/${clientOrAdapter}`)}></Button>*/}
             {/*</Box>*/}
-            <NovariSnackbar
+            <NovariToaster
                 items={alertState}
                 position={'top-right'}
                 // onCloseItem={handleCloseItem}

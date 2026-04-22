@@ -94,24 +94,24 @@ export default function Index() {
                         ) : (
                             <>
                                 {variant && (
-                                    <>
-                                        <LocalAlert
-                                            status={variant === 'info' ? 'announcement' : variant}>
-                                            <Heading size="small">
+                                    <LocalAlert
+                                        status={variant === 'info' ? 'announcement' : variant}>
+                                        <LocalAlert.Header>
+                                            <LocalAlert.Title>
                                                 {variant === 'error'
                                                     ? 'Error running test:'
                                                     : 'Test completed:'}
-                                            </Heading>
-
+                                            </LocalAlert.Title>
+                                        </LocalAlert.Header>
+                                        <LocalAlert.Content>
                                             <BodyShort>
                                                 {actionData.message}: {actionData.testUrl}
                                             </BodyShort>
-
                                             <BodyShort>
                                                 Klient: {actionData.clientName || 'ingen klient'}
                                             </BodyShort>
-                                        </LocalAlert>
-                                    </>
+                                        </LocalAlert.Content>
+                                    </LocalAlert>
                                 )}
 
                                 {healthResults && (

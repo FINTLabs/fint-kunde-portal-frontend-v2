@@ -1,5 +1,5 @@
 import { ComponentIcon } from '@navikt/aksel-icons';
-import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -42,7 +42,7 @@ export default function Index() {
             <Breadcrumbs breadcrumbs={breadcrumbs} />
 
             <InternalPageHeader title={'Komponenter'} icon={ComponentIcon} helpText="components" />
-            <NovariSnackbar
+            <NovariToaster
                 items={alertState}
                 position={'top-right'}
                 // onCloseItem={handleCloseItem}

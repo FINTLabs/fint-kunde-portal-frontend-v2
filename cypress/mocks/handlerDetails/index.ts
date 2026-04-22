@@ -10,6 +10,7 @@ import { linkWalkerHandlers } from './linkWalkerHandlers';
 import { userHandlers } from './userHandlers';
 import { eventsHandlers } from './hendelsesloggHandlers';
 import { basisHandlers } from './basistest';
+import { analyticsHandlers } from './analyticsHandlers';
 
 // General handlerDetails
 const generalHandlers = [
@@ -31,4 +32,5 @@ export const handlers = [
     ...linkWalkerHandlers,
     ...eventsHandlers,
     ...basisHandlers,
+    ...analyticsHandlers,
 ];

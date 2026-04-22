@@ -1,6 +1,6 @@
 import { TokenIcon } from '@navikt/aksel-icons';
 import { Box, Button, Search, VStack } from '@navikt/ds-react';
-import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useEffect, useState } from 'react';
 import {
     type ActionFunctionArgs,
@@ -91,7 +91,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <NovariSnackbar
+            <NovariToaster
                 items={alertState}
                 position={'top-right'}
                 // onCloseItem={handleCloseItem}

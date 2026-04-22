@@ -40,7 +40,7 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
 
     return (
         <Box paddingBlock="space-24">
-            <FormSummary>
+            <FormSummary data-cy="create-form">
                 <FormSummary.Header>
                     <FormSummary.Heading level="2">Opprett ny adapter</FormSummary.Heading>
                 </FormSummary.Header>

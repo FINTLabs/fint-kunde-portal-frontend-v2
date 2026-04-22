@@ -1,13 +1,12 @@
-import { type NovariSnackbarItem } from 'novari-frontend-components';
+import { type NovariToasterItem } from 'novari-frontend-components';
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router';
-
 export function useDeletedSearchParamAlert({
     label,
     setAlertState,
 }: {
     label: string;
-    setAlertState: React.Dispatch<React.SetStateAction<NovariSnackbarItem[]>>;
+    setAlertState: React.Dispatch<React.SetStateAction<NovariToasterItem[]>>;
 }) {
     const hasShownAlert = useRef(false);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -17,10 +16,10 @@ export function useDeletedSearchParamAlert({
         if (deleteName && !hasShownAlert.current) {
             hasShownAlert.current = true;
 
-            const newItem: NovariSnackbarItem = {
+            const newItem: NovariToasterItem = {
                 id: `delete-${deleteName}`,
                 message: `${label} «${deleteName}» ble slettet.`,
-                variant: 'success',
+                status: 'success',
             };
 
             setAlertState((prev) => [...prev, newItem]);

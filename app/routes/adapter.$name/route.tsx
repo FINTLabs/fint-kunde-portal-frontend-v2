@@ -1,6 +1,6 @@
 import { LayersIcon } from '@navikt/aksel-icons';
 import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
-import { type ApiResponse, NovariSnackbar, useAlerts } from 'novari-frontend-components';
+import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -105,7 +105,7 @@ export default function Index() {
                 helpText="adapter detaljer"
             />
 
-            <NovariSnackbar
+            <NovariToaster
                 data-cy="snackbar"
                 items={alertState}
                 position={'top-right'}

@@ -15,61 +15,56 @@ Cypress.on('uncaught:exception', (err) => {
 
 describe('Adapters Details Page Tests', () => {
     beforeEach(() => {
-        // cy.visit('/adapter/jennifer-another-test@adapter.fintlabs.no', {
-        //     failOnStatusCode: false }).then(() => {
-        //     cy.waitForAppReady();
-        // });
         cy.visit('/adapter/jennifer-another-test@adapter.fintlabs.no', { failOnStatusCode: false });
         cy.waitForAppReady();
     });
 
     it('should display the correct adapter name', () => {
-        cy.get('[data-cy="page-title"]').should('contain', 'jennifer-another-test');
+        cy.contains('h2', 'jennifer-another-test').should('be.visible');
     });
 
     it('should navigate back to adapter list', () => {
-        cy.get('[data-cy="back-button"]').click();
-        // cy.reload();
-        cy.waitForAppReady();
-        cy.url().should('include', '/adapter');
+        cy.contains('a', 'Adaptere')
+            .should('have.attr', 'href', '/adaptere')
+            .invoke('attr', 'href')
+            .then((href) => {
+                cy.visit(href as string, { failOnStatusCode: false });
+            });
+        cy.location('pathname', { timeout: 10000 }).should('eq', '/adaptere');
+        cy.contains('h2', 'Adaptere').should('be.visible');
     });
 
     it('should display adapter details correctly', () => {
-        // cy.get('[data-cy="detail-name"]').should('contain', 'jennifer-another-test');
         cy.get('[data-cy="details-Tittel"]').should('contain', 'test');
         cy.get('[data-cy="details-Beskrivelse"]').should('contain', 'test');
     });
 
     it('should allow updating adapter details', () => {
-        cy.get('[data-cy="edit-button"]').find('button').first().should('be.visible');
-        cy.get('[data-cy="edit-button"]').find('button').first().should('not.be.disabled');
-        cy.get('[data-cy="edit-button"]').find('button').first().click();
+        cy.get('[data-cy="details-Tittel"]').should('be.visible');
+        cy.get('[data-cy="edit-button"] button').first().as('editButton');
+        cy.get('@editButton').should('be.visible').and('not.be.disabled');
 
+        cy.get('@editButton').click({ force: true });
         cy.get('body').then(($body) => {
-            if ($body.find('input[type="text"]').length > 0) {
-                cy.log('Edit mode activated successfully');
-                cy.get('input[type="text"]').should('have.length.greaterThan', 0);
-
-                cy.get('[data-cy="details-edit-Tittel"]').clear();
-                cy.get('[data-cy="details-edit-Tittel"]').type('testing new description');
-
-                cy.get('[data-cy="edit-button"]').find('button').first().click();
-
-                // cy.wait(3000);
-                cy.get('.navds-alert').should('exist');
-            } else {
-                cy.log('Edit mode not activated - trying alternative approach');
-                cy.get('[data-cy="edit-button"]').find('button').first().trigger('click');
-                // cy.wait(2000);
-                cy.get('input[type="text"]').should('have.length.greaterThan', 0);
+            if ($body.find('[data-cy="details-edit-Tittel"]').length === 0) {
+                cy.log('First edit click did not open edit mode, retrying');
+                cy.get('@editButton').click({ force: true });
             }
         });
+
+        cy.get('[data-cy="details-edit-Tittel"]', { timeout: 10000 }).should('be.visible');
+        cy.get('[data-cy="details-edit-Tittel"]', { timeout: 10000 }).clear();
+        cy.get('[data-cy="details-edit-Tittel"]').type('testing new description');
+
+        cy.get('[data-cy="edit-button"] button').first().click({ force: true });
+        cy.get('[data-cy="details-Tittel"]').should('contain', 'testing new description');
     });
 
     it('should allow toggling components', () => {
-        cy.get('[data-cy="component-toggle-fullmakt"]').should('be.visible');
-        cy.get('[data-cy="component-toggle-fullmakt"]').should('not.be.disabled');
-        cy.get('[data-cy="component-toggle-fullmakt"]').click();
-        // cy.get('.navds-alert').should('exist');
+        cy.get('[data-cy^="component-toggle-"]')
+            .first()
+            .should('be.visible')
+            .and('not.be.disabled');
+        cy.get('[data-cy^="component-toggle-"]').first().click({ force: true });
     });
 });

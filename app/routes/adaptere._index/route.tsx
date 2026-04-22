@@ -123,7 +123,13 @@ export default function Index() {
                             borderWidth="2"
                             borderRadius="12">
                             {adapters && adapters.length === 0 && (
-                                <LocalAlert status="announcement">Ingen adaptere</LocalAlert>
+                                <LocalAlert status="announcement">
+                                    <LocalAlert.Header>
+                                        <LocalAlert.Title>
+                                            Det finnes ingen adaptere
+                                        </LocalAlert.Title>
+                                    </LocalAlert.Header>
+                                </LocalAlert>
                             )}
 
                             {filteredAdapter && filteredAdapter.length > 0 && (

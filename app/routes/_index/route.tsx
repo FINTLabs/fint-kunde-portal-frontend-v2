@@ -40,24 +40,6 @@ export default function Index() {
                 gap="space-24"
                 columns={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }}
                 paddingBlock={'space-24'}>
-                {/*{userSession.selectedOrganization?.name == 'calvin_organizations' && (*/}
-                {/*    <>*/}
-                {/*        <LinkCard key="fintlabs_no" size="small">*/}
-                {/*            <LinkCard.Title as="h3">*/}
-                {/*                <LinkCard.Anchor href="https://core-status.fintlabs.no/">*/}
-                {/*                    Status Service*/}
-                {/*                </LinkCard.Anchor>*/}
-                {/*            </LinkCard.Title>*/}
-                {/*        </LinkCard>*/}
-                {/*        <LinkCard key="fintlabs_no" size="small">*/}
-                {/*            <LinkCard.Title as="h3">*/}
-                {/*                <LinkCard.Anchor href="https://admin.fintlabs.no/">*/}
-                {/*                    Admin Portal*/}
-                {/*                </LinkCard.Anchor>*/}
-                {/*            </LinkCard.Title>*/}
-                {/*        </LinkCard>*/}
-                {/*    </>*/}
-                {/*)}*/}
                 {novariMenu.flatMap((menuItem) => {
                     if (menuItem.action && !menuItem.submenu) {
                         if (menuItem.displayBox === false) {
@@ -68,7 +50,9 @@ export default function Index() {
                             <LinkCard key={menuItem.action} size="medium">
                                 {/* No icon property on menuItem, so do not render icon */}
                                 <LinkCard.Title as="h3">
-                                    <LinkCard.Anchor href={menuItem.action}>
+                                    <LinkCard.Anchor
+                                        href={menuItem.action}
+                                        data-cy={menuItem.label}>
                                         {menuItem.label}
                                     </LinkCard.Anchor>
                                 </LinkCard.Title>
