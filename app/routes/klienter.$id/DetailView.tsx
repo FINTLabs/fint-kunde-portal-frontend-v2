@@ -17,7 +17,7 @@ import { useState } from 'react';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
 import { IClient, IUserSession } from '~/types';
 import AnalyticsApi from '~/api/AnalyticsApi';
-import { useLoaderData } from 'react-router';
+import { useLocation, useOutletContext } from 'react-router';
 
 type DetailViewProps = {
     resource: IClient;
@@ -26,6 +26,8 @@ type DetailViewProps = {
 };
 
 export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
+    const userSession = useOutletContext<IUserSession>();
+    const location = useLocation();
     const [isEditing, setIsEditing] = useState(false);
     const [resourceShortDesc, setResourceShortDesc] = useState(resource.shortDescription);
     const [resourceNote, setResourceNote] = useState(resource.note);
@@ -47,14 +49,10 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
     };
 
     const handleSave = () => {
-        console.log('handleSave');
-        const { userSession } = useLoaderData<{
-            userSession: IUserSession;
-        }>();
         void AnalyticsApi.trackButtonClick(
             'client-save-changes-button',
             location.pathname,
-            userSession.selectedOrganization.name
+            userSession?.selectedOrganization?.name
         );
 
         if (
