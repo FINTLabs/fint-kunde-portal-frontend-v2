@@ -25,20 +25,24 @@ type DetailViewProps = {
     onDelete: (formData: FormData) => void;
 };
 
+const normalizeModelVersion = (modelVersion?: string | null): 'V3' | 'V4' =>
+    modelVersion === 'V4' ? 'V4' : 'V3';
+
 export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
     const userSession = useOutletContext<IUserSession>();
     const location = useLocation();
     const [isEditing, setIsEditing] = useState(false);
     const [resourceShortDesc, setResourceShortDesc] = useState(resource.shortDescription);
     const [resourceNote, setResourceNote] = useState(resource.note);
-    const [resourceModelVersion, setResourceModelVersion] = useState(
-        resource.modelVersion ? resource.modelVersion : 'V3'
+    const [resourceModelVersion, setResourceModelVersion] = useState<'V3' | 'V4'>(
+        normalizeModelVersion(resource.modelVersion)
     );
     const [loading, setLoading] = useState(false);
 
     const handleCancel = () => {
         setResourceShortDesc(resource.shortDescription);
         setResourceNote(resource.note);
+        setResourceModelVersion(normalizeModelVersion(resource.modelVersion));
         setIsEditing(false);
     };
 
@@ -58,7 +62,7 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
         if (
             resourceNote.trim() !== resource.note ||
             resourceShortDesc.trim() !== resource.shortDescription ||
-            resourceModelVersion !== resource.modelVersion
+            resourceModelVersion !== normalizeModelVersion(resource.modelVersion)
         ) {
             const formData = new FormData();
             formData.append('note', resourceNote);
@@ -110,7 +114,7 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
                 {isEditing ? (
                     <Select
                         label="Velg modelversjon"
-                        value={resourceModelVersion ?? 'V3'}
+                        value={resourceModelVersion}
                         size="small"
                         description="Styrer hvilken informasjonsmodellversjon klienten kommuniserer med for utdanningsdomenet"
                         onChange={(e) =>
@@ -122,7 +126,7 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
                 ) : (
                     <>
                         <Label>Model Version utdanningsdomenet</Label>
-                        <BodyShort>{resource.modelVersion ?? 'V3'}</BodyShort>
+                        <BodyShort>{normalizeModelVersion(resource.modelVersion)}</BodyShort>
                     </>
                 )}
                 {isEditing && (
