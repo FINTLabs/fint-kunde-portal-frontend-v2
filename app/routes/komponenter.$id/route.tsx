@@ -18,6 +18,13 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     return Response.json(component);
 };
 
+export const handle = {
+    analytics: {
+        pageType: 'komponenter',
+        pathPattern: '/komponenter/:id',
+    },
+};
+
 export default function Index() {
     const component = useLoaderData<IComponent>();
     // const [searchParams] = useSearchParams();

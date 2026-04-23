@@ -24,6 +24,13 @@ export const meta: MetaFunction = () => {
     return [{ title: 'Ressurser' }, { name: 'description', content: 'Liste over ressurser' }];
 };
 
+export const handle = {
+    analytics: {
+        pageType: 'ressurser',
+        pathPattern: '/ressurser/:id',
+    },
+};
+
 type LoaderData = {
     adapters: IAdapter[];
     asset: IAsset;

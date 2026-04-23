@@ -38,6 +38,13 @@ import { DetailView } from '~/routes/klienter.$id/DetailView';
 
 export { loader };
 
+export const handle = {
+    analytics: {
+        pageType: 'client',
+        pathPattern: '/klienter/:id',
+    },
+};
+
 export const action = async (args: ActionFunctionArgs) => handleClientAction(args);
 
 interface IExtendedFetcherResponseData extends ApiResponse<IClient> {

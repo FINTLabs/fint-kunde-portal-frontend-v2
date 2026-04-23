@@ -12,7 +12,7 @@ export const clientsHandlers = [
         const body = await request.json();
         //eslint-disable-next-line no-console
         console.log('Client creation request body:', body);
-        return HttpResponse.json('from handler in MSW', { status: 200 });
+        return HttpResponse.json('from handler in MSW', { status: 500 });
     }),
 
     http.put(`${API_URL}/api/clients/jennifer-test-test@client.fintlabs.no`, () => {

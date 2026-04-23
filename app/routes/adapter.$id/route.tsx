@@ -13,7 +13,7 @@ import { AuthTable } from '~/components/shared/AuthTable';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
-import { handleAdapterAction } from '~/routes/adapter.$name/actions';
+import { handleAdapterAction } from '~/routes/adapter.$id/actions';
 import { IAdapter } from '~/types/Adapter';
 
 import { loader } from './loaders';
@@ -22,6 +22,13 @@ import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Adapter Detaljer' }, { name: 'description', content: 'Adapter Detaljer' }];
+};
+
+export const handle = {
+    analytics: {
+        pageType: 'adapter',
+        pathPattern: '/adapter/:id',
+    },
 };
 
 export { loader };
@@ -40,14 +47,14 @@ export default function Index() {
     }>();
     const fetcher = useFetcher<ApiResponse<IAdapter>>();
     const actionData = fetcher.data as IExtendedFetcherResponseData;
-    const { name } = useParams();
+    const { id } = useParams();
     // const hasAccessControl = features['access-controll-new'];
     const breadcrumbs = [
         { name: 'Adaptere', link: '/adaptere' },
-        { name: `${name}`, link: `/adapter/${name}` },
+        { name: `${id}`, link: `/adapter/${id}` },
     ];
 
-    const filteredAdapters = adapters.filter((a) => a.name === name);
+    const filteredAdapters = adapters.filter((a) => a.name === id);
     const adapter = filteredAdapters.length > 0 ? filteredAdapters[0] : null;
     const displayName = adapter?.name.split('@')[0] || '';
     const { alertState } = useAlerts<IAdapter>([], actionData, fetcher.state);
@@ -73,7 +80,7 @@ export default function Index() {
     const handleToggle = (formData: FormData) => {
         formData.append('actionType', 'UPDATE_COMPONENT_IN_ADAPTER');
         formData.append('componentName', formData.get('componentName') as string);
-        formData.append('adapterName', name as string);
+        formData.append('adapterName', id as string);
         formData.append('isChecked', formData.get('isChecked') as string);
         fetcher.submit(formData, { method: 'post' });
     };

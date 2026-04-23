@@ -6,6 +6,13 @@ import { getSelectedOrganization } from '~/utils/selectedOrganization';
 //TODO: This needs to be testing in a live environment, made changes to error Response that i am not sure work correctly?
 //TODO: This can be done better i am sure
 
+export const handle = {
+    analytics: {
+        pageType: 'relasjonstest',
+        pathPattern: '/relasjonstest/:id',
+    },
+};
+
 export const loader: LoaderFunction = async ({ request, params }) => {
     const { id } = params;
 

@@ -55,28 +55,28 @@ export const links: LinksFunction = () => [
 
 // Initialize MSW based on environment
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-let server: any;
-
-async function initializeMSW() {
-    if (import.meta.env.DEV && import.meta.env.VITE_MOCK_CYPRESS === 'true') {
-        if (typeof window !== 'undefined') {
-            const { worker } = await import('../cypress/mocks/browser');
-            await worker.start({ onUnhandledRequest: 'bypass' });
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (window as any).__mswReady = true;
-        } else {
-            const { server: nodeServer } = await import('../cypress/mocks/node');
-            server = nodeServer;
-            server.listen({ onUnhandledRequest: 'bypass' });
-        }
-    } else {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (typeof window !== 'undefined') (window as any).__mswReady = true;
-    }
-}
-
-// Initialize MSW
-initializeMSW();
+// let server: any;
+//
+// async function initializeMSW() {
+//     if (import.meta.env.DEV && import.meta.env.VITE_MOCK_CYPRESS === 'true') {
+//         if (typeof window !== 'undefined') {
+//             const { worker } = await import('../cypress/mocks/browser');
+//             await worker.start({ onUnhandledRequest: 'bypass' });
+//             // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//             (window as any).__mswReady = true;
+//         } else {
+//             const { server: nodeServer } = await import('../cypress/mocks/node');
+//             server = nodeServer;
+//             server.listen({ onUnhandledRequest: 'bypass' });
+//         }
+//     } else {
+//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//         if (typeof window !== 'undefined') (window as any).__mswReady = true;
+//     }
+// }
+//
+// // Initialize MSW
+// initializeMSW();
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const { pathname } = new URL(request.url);
