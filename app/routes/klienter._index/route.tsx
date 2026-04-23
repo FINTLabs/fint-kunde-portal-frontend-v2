@@ -43,8 +43,7 @@ export default function Index() {
 
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<IClient>;
-    const { alertState, setAlertState } = useAlerts<IClient>([], actionData);
-
+    const { alertState, setAlertState } = useAlerts<IClient>([], actionData, fetcher.state);
     useDeletedSearchParamAlert({
         label: 'Klient',
         setAlertState,
@@ -81,7 +80,6 @@ export default function Index() {
     }
 
     const handleSave = (formData: FormData) => {
-        setIsCreating(false);
         fetcher.submit(formData, { method: 'post', action: '/klienter' });
     };
 
@@ -89,9 +87,11 @@ export default function Index() {
         navigate(`/klienter/${encodeURIComponent(id)}`);
     };
 
+    console.log('alerts', alertState);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
+
             <NovariToaster
                 items={alertState}
                 position={'top-right'}
@@ -102,6 +102,8 @@ export default function Index() {
                     onCancel={handleCancelCreate}
                     onSave={handleSave}
                     orgName={orgName}
+                    isSubmitting={fetcher.state !== 'idle'}
+                    clientData={clientData}
                 />
             ) : (
                 <>

@@ -1,23 +1,39 @@
-import { Box, Button, FormSummary, HStack, Select, Textarea, TextField } from '@navikt/ds-react';
+import {
+    Box,
+    Button,
+    FormSummary,
+    HStack,
+    // LocalAlert,
+    Select,
+    Textarea,
+    TextField,
+} from '@navikt/ds-react';
 import React, { useState } from 'react';
 import AnalyticsApi from '~/api/AnalyticsApi';
-import { IUserSession } from '~/types';
+import { IClient, IUserSession } from '~/types';
 import { useOutletContext } from 'react-router';
 
 interface AdapterCreateFormProps {
     onCancel: () => void;
     onSave: (formData: FormData) => void;
     orgName: string;
+    isSubmitting: boolean;
+    clientData: IClient[];
 }
 type Errors = { name?: string; description?: string; note?: string };
 
-export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterCreateFormProps) {
+export default function ClientCreateForm({
+    onCancel,
+    onSave,
+    orgName,
+    isSubmitting,
+    clientData,
+}: AdapterCreateFormProps) {
     const [errors, setErrors] = useState<Errors>({});
     const [inputName, setInputName] = useState('');
     const [inputDescription, setInputDescription] = useState('');
     const [inputNote, setInputNote] = useState('');
     const [inputModelVersion, setInputModelVersion] = useState('V3');
-    const [isLoading, setIsLoading] = useState(false);
     const userSession = useOutletContext<IUserSession>();
 
     const handleSubmit = () => {
@@ -32,6 +48,12 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
         if (!inputName) {
             newErrors.name = 'Navn er påkrevd';
         }
+        const exists = clientData.some((client) =>
+            client.name.toLowerCase().includes(inputName.toLowerCase())
+        );
+        if (inputName && exists) {
+            newErrors.name = 'Klienten eksisterer allerede';
+        }
         if (!inputDescription) {
             newErrors.description = 'Tittel er påkrevd';
         }
@@ -42,7 +64,6 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
-            setIsLoading(true);
             const formData = new FormData();
             formData.append('name', inputName);
             formData.append('description', inputDescription);
@@ -63,7 +84,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
 
                 <FormSummary.Answers>
                     <FormSummary.Answer>
-                        <HStack gap="space-4" align="end">
+                        <HStack gap="space-4" align="center">
                             <TextField
                                 data-cy="input-name"
                                 name="name"
@@ -116,7 +137,7 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
                             title="Opprett"
                             onClick={handleSubmit}
                             data-cy="save-button"
-                            loading={isLoading}>
+                            loading={isSubmitting}>
                             Opprett
                         </Button>
                         <Button variant="secondary" onClick={onCancel}>
@@ -125,6 +146,20 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
                     </HStack>
                 </FormSummary.Answers>
             </FormSummary>
+            {/*{alertState.length > 0 && (*/}
+            {/*    <LocalAlert status="announcement">*/}
+            {/*        <LocalAlert.Header>*/}
+            {/*            <LocalAlert.Title>*/}
+            {/*                Nyhet! Nå kan du ettersende vedlegg digitalt*/}
+            {/*            </LocalAlert.Title>*/}
+            {/*        </LocalAlert.Header>*/}
+            {/*        <LocalAlert.Content>*/}
+            {/*            Kunngjøringer brukes for å formidle noe om appen eller systemet, eller*/}
+            {/*            endringer som påvirker brukerne. Eksempelvis planlagt vedlikehold eller*/}
+            {/*            driftsmeldinger.*/}
+            {/*        </LocalAlert.Content>*/}
+            {/*    </LocalAlert>*/}
+            {/*)}*/}
         </Box>
         // </Form>
     );

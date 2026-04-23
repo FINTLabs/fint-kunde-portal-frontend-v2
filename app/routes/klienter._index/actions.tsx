@@ -27,12 +27,11 @@ export async function handleClientIndexAction({ request }: { request: Request })
     //     await AccessApi.addAccess(response.data?.name as string);
     // }
 
+    //TODO: Handle this better!
     if (!response.success) {
         if (response.status === 409) {
             return {
-                body: undefined,
-                data: undefined,
-                status: 409,
+                // ...response,
                 success: false,
                 message: 'Klienten eksisterer allerede',
                 variant: 'error',
