@@ -51,6 +51,8 @@ interface IExtendedFetcherResponseData extends ApiResponse<IClient> {
     clientSecret?: string;
 }
 
+//TODO: If i add an error boundry, can i track tenant??
+
 export default function ClientDetails() {
     const {
         client,

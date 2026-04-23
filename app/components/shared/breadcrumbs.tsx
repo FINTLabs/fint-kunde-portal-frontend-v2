@@ -15,7 +15,9 @@ export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
     const homeLink = '/';
     const location = useLocation();
     const currentPath = location.pathname;
+    const currentPathEncoded = decodeURIComponent(currentPath);
 
+    console.log(currentPathEncoded);
     return (
         <HStack gap="space-2" paddingBlock="space-8" align="center">
             <Link href={homeLink} className="flex items-center gap-1 no-underline">
@@ -29,7 +31,7 @@ export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
                 <HStack key={name} gap="space-2" align="center">
                     <ChevronRightIcon fontSize="1rem" />
 
-                    {link === '' || link === currentPath ? (
+                    {link === '' || link === currentPath || link == currentPathEncoded ? (
                         <BodyShort size="small" as="span">
                             {name}
                         </BodyShort>

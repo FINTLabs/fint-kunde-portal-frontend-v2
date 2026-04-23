@@ -85,6 +85,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const normalized = normalizePathname(pathname);
     const currentDate = getCurrentDate();
 
+    //TODO; remove these custom metrics
     // Track total visits (cumulative)
     pageVisits.inc({ path: normalized });
 
