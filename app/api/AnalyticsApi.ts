@@ -33,12 +33,13 @@ class AnalyticsApi {
         });
     }
 
-    static async trackButtonClick(element: string, path: string, tenant?: string) {
+    static async trackButtonClick(element: string, path: string, tenant?: string, meta?: any) {
         return this.trackEvent({
             type: 'button_click',
             path,
             element,
             tenant: tenant || '',
+            meta: meta ?? null,
         });
     }
 
