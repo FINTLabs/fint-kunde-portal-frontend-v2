@@ -28,6 +28,16 @@ export async function handleClientIndexAction({ request }: { request: Request })
     // }
 
     if (!response.success) {
+        if (response.status === 403) {
+            return {
+                body: undefined,
+                data: undefined,
+                status: 402,
+                success: false,
+                message: 'Klienten eksisterer allerede',
+                variant: 'error',
+            };
+        }
         throw new Response('Kunne ikke opprette ny klient.', { status: 500 });
     }
 

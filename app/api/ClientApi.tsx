@@ -43,7 +43,7 @@ class ClientApi {
         organisation: string
     ): Promise<ApiResponse<IClient>> {
         console.log('Creating client', client);
-        const ret = await clientManager.call<IClient>({
+        return await clientManager.call<IClient>({
             method: 'POST',
             endpoint: `/api/clients/${organisation}`,
             functionName: 'createClient',
@@ -54,9 +54,6 @@ class ClientApi {
                 'x-nin': HeaderProperties.getXnin(),
             },
         });
-        if (ret.success && ret.status === 409) {
-            throw new Error('Klienten eksisterer allerede');
-        } else return ret;
     }
 
     static async updateClient(
