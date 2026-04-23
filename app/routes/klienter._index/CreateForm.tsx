@@ -1,5 +1,8 @@
 import { Box, Button, FormSummary, HStack, Select, Textarea, TextField } from '@navikt/ds-react';
 import React, { useState } from 'react';
+import AnalyticsApi from '~/api/AnalyticsApi';
+import { IUserSession } from '~/types';
+import { useOutletContext } from 'react-router';
 
 interface AdapterCreateFormProps {
     onCancel: () => void;
@@ -15,8 +18,16 @@ export default function ClientCreateForm({ onCancel, onSave, orgName }: AdapterC
     const [inputNote, setInputNote] = useState('');
     const [inputModelVersion, setInputModelVersion] = useState('V3');
     const [isLoading, setIsLoading] = useState(false);
+    const userSession = useOutletContext<IUserSession>();
 
     const handleSubmit = () => {
+        void AnalyticsApi.trackButtonClick(
+            'client-create-button',
+            '/klienter',
+            userSession?.selectedOrganization?.name,
+            { inputName: inputName }
+        );
+
         const newErrors: Errors = {};
         if (!inputName) {
             newErrors.name = 'Navn er påkrevd';
