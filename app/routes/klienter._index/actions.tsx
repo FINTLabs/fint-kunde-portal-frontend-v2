@@ -28,11 +28,11 @@ export async function handleClientIndexAction({ request }: { request: Request })
     // }
 
     if (!response.success) {
-        if (response.status === 403) {
+        if (response.status === 409) {
             return {
                 body: undefined,
                 data: undefined,
-                status: 402,
+                status: 409,
                 success: false,
                 message: 'Klienten eksisterer allerede',
                 variant: 'error',

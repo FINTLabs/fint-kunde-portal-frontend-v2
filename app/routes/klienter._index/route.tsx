@@ -81,6 +81,7 @@ export default function Index() {
     }
 
     const handleSave = (formData: FormData) => {
+        setIsCreating(false);
         fetcher.submit(formData, { method: 'post', action: '/klienter' });
     };
 
