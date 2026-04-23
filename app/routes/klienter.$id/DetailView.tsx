@@ -55,7 +55,7 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
     const handleSave = () => {
         void AnalyticsApi.trackButtonClick(
             'client-save-changes-button',
-            '/klienter',
+            '/klienter/:id',
             userSession?.selectedOrganization?.name,
             { id: resource.name, rawPath: location.pathname }
         );
