@@ -4,6 +4,7 @@ import AnalyticsApi from '~/api/AnalyticsApi';
 import ClientApi from '~/api/ClientApi';
 import { IPartialClient } from '~/types/Clients';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import { trackActionFromServer } from '~/app/utils/analytics.server';
 
 export async function handleClientIndexAction({ request }: { request: Request }) {
     const formData = await request.formData();
@@ -36,8 +37,7 @@ export async function handleClientIndexAction({ request }: { request: Request })
     }
 
     //TODO: continue to track this? this is a debuging tracking
-    await AnalyticsApi.trackEvent({
-        type: 'action',
+    await trackActionFromServer({
         path: new URL(request.url).pathname,
         element: 'client-create-action',
         tenant: orgName,
