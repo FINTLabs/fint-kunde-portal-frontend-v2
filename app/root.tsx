@@ -164,6 +164,33 @@ export default function App() {
     );
 }
 
+export async function action({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const actionType = formData.get('actionType') as string;
+
+    if (actionType === 'UPDATE_SELECTED_ORGANIZATION') {
+        const selectedOrganization = formData.get('selectedOrganization') as string;
+
+        const newCookieHeader = await selectOrgCookie.serialize(selectedOrganization);
+        return data(
+            { revalidate: true },
+            {
+                headers: {
+                    'Set-Cookie': newCookieHeader,
+                    'Content-Security-Policy-Report-Only': cspReportOnly,
+                },
+            }
+        );
+    }
+
+    return new Response(JSON.stringify({ ok: true }), {
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Security-Policy-Report-Only': cspReportOnly,
+        },
+    });
+}
+
 export function ErrorBoundary() {
     const error = useRouteError();
 
@@ -211,31 +238,4 @@ export function ErrorBoundary() {
             </CustomErrorLayout>
         );
     }
-}
-
-export async function action({ request }: ActionFunctionArgs) {
-    const formData = await request.formData();
-    const actionType = formData.get('actionType') as string;
-
-    if (actionType === 'UPDATE_SELECTED_ORGANIZATION') {
-        const selectedOrganization = formData.get('selectedOrganization') as string;
-
-        const newCookieHeader = await selectOrgCookie.serialize(selectedOrganization);
-        return data(
-            { revalidate: true },
-            {
-                headers: {
-                    'Set-Cookie': newCookieHeader,
-                    'Content-Security-Policy-Report-Only': cspReportOnly,
-                },
-            }
-        );
-    }
-
-    return new Response(JSON.stringify({ ok: true }), {
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Security-Policy-Report-Only': cspReportOnly,
-        },
-    });
 }

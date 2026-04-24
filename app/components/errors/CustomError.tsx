@@ -1,6 +1,5 @@
 import { BodyShort, Box, Button, Heading, HGrid, Link, List, VStack } from '@navikt/ds-react';
-import React, { useEffect } from 'react';
-import AnalyticsApi from '~/api/AnalyticsApi';
+import React from 'react';
 
 interface CustomErrorPageProps {
     statusCode?: number;
@@ -24,13 +23,13 @@ const CustomErrorPage: React.FC<CustomErrorPageProps> = ({
 
     const formattedErrorData = formatErrorData(errorData);
 
-    useEffect(() => {
-        void AnalyticsApi.trackError({
-            path: location.pathname,
-            message: formattedErrorData,
-            statusCode: statusCode ? statusCode : 500,
-        });
-    }, []);
+    // useEffect(() => {
+    //     void AnalyticsApi.trackError({
+    //         path: location.pathname,
+    //         message: formattedErrorData,
+    //         statusCode: statusCode ? statusCode : 500,
+    //     });
+    // }, []);
 
     return (
         <Box paddingBlock="space-16">

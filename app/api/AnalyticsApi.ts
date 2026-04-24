@@ -52,13 +52,21 @@ class AnalyticsApi {
         });
     }
 
-    static async trackError(params: { path: string; message: string; statusCode?: number }) {
+    static async trackError(
+        path: string,
+        message: string,
+        statusCode: number,
+        tenant?: string,
+        action?: string
+    ) {
         return this.trackEvent({
             type: 'error',
-            path: params.path,
+            path,
+            ...(tenant && { tenant }),
             meta: {
-                message: params.message,
-                statusCode: params.statusCode ?? null,
+                message: message,
+                status: statusCode,
+                action: action,
             },
         });
     }

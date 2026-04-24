@@ -1,6 +1,7 @@
 import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
+import AnalyticsApi from '~/api/AnalyticsApi';
 
 export async function handleContactsAction(request: Request) {
     const formData = await request.formData();
@@ -34,6 +35,16 @@ export async function handleContactsAction(request: Request) {
                 message: `Ukjent handlingstype: '${actionType}'`,
                 variant: 'error',
             };
+    }
+
+    if (!response.success) {
+        void AnalyticsApi.trackError(
+            new URL(request.url).pathname,
+            response.message,
+            response.status ?? 500,
+            selectedOrg,
+            actionType
+        );
     }
 
     return response;

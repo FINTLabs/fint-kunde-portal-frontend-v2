@@ -1,5 +1,6 @@
 import { redirect } from 'react-router';
 
+import AnalyticsApi from '~/api/AnalyticsApi';
 import ClientApi from '~/api/ClientApi';
 import { IPartialClient } from '~/types/Clients';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
@@ -22,13 +23,15 @@ export async function handleClientIndexAction({ request }: { request: Request })
     };
 
     const response = await ClientApi.createClient(newClient, orgName);
-    console.log('DEBUGGING:', response);
 
     if (!response.success) {
-        if (response.status === 409) {
-            throw new Response('Klienten eksisterer allerede.', { status: 409 });
-        }
-        throw new Response('Kunne ikke opprette ny klient.', { status: 500 });
+        const statusCode = response.status === 409 ? 409 : 500;
+        const message =
+            statusCode === 409 ? 'Klienten eksisterer allerede.' : 'Kunne ikke opprette ny klient.';
+
+        await AnalyticsApi.trackError(new URL(request.url).pathname, message, statusCode, orgName);
+
+        throw new Response(message, { status: statusCode });
     }
 
     return redirect(`/klienter/${response.data?.name}`);

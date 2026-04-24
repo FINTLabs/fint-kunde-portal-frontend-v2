@@ -3,6 +3,7 @@ import { NovariApiManager } from 'novari-frontend-components';
 import type { IMeData } from '~/types/Me';
 import type { IOrganisation } from '~/types/Organisation';
 import { HeaderProperties } from '~/utils/headerProperties';
+import AnalyticsApi from '~/api/AnalyticsApi';
 
 const API_URL = process.env.API_URL || '';
 
@@ -37,13 +38,19 @@ class MeApi {
 
         if (res.status === 404) {
             // translate 404 -> 406 for the app
+            const message = 'Du har ikke opprettet bruker.';
+
+            await AnalyticsApi.trackError('/api/me', message, 406);
+
             throw new Response('Du har ikke opprettet bruker.', {
                 status: 406,
                 statusText: 'Du har ikke opprettet bruker.',
             });
         }
 
-        throw new Response('Ingen tilkobling til server', {
+        const message = 'Ingen tilkobling til server';
+        await AnalyticsApi.trackError('/api/me', message, 500);
+        throw new Response(message, {
             status: 500,
             statusText: 'Ingen brukerdata funnet',
         });
