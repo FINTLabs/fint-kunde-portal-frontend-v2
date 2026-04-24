@@ -23,6 +23,7 @@ export async function handleClientIndexAction({ request }: { request: Request })
     };
 
     const response = await ClientApi.createClient(newClient, orgName);
+    console.log('Client creation response:', response);
 
     if (!response.success) {
         const statusCode = response.status === 409 ? 409 : 500;

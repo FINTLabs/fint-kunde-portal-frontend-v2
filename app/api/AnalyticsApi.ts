@@ -1,7 +1,7 @@
 import { NovariApiManager } from 'novari-frontend-components';
 
 const apiManager = new NovariApiManager({
-    baseUrl: '',
+    baseUrl: process.env.APP_URL ?? 'http://localhost:3000',
 });
 const APP_NAME = 'kunde-portal';
 
