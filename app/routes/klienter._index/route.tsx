@@ -87,7 +87,6 @@ export default function Index() {
         navigate(`/klienter/${encodeURIComponent(id)}`);
     };
 
-    console.log('alerts', alertState);
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -133,7 +132,7 @@ export default function Index() {
                                 value={searchValue}
                                 onChange={(value: string) => handleSearch(value)}
                                 placeholder="Søk etter navn eller beskrivelse"
-                                className="pb-6"
+                                // className="pb-6"
                                 data-cy="search-input"
                             />
                         </Box>

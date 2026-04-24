@@ -21,7 +21,7 @@ export default function ComponentAccessLog({ accessLog }: ComponentAccessLogProp
 
     if (!accessLog || !accessLog.accessLogs || accessLog.accessLogs.length === 0) {
         return (
-            <Box padding="4">
+            <Box padding="space-4">
                 <BodyShort>Ingen tilgangslogger registrert</BodyShort>
             </Box>
         );
@@ -33,7 +33,7 @@ export default function ComponentAccessLog({ accessLog }: ComponentAccessLogProp
 
     return (
         <Box>
-            <Box paddingBlock="2 4">
+            <Box paddingBlock="space-4">
                 {hasMoreThanTenLogs && !showAllLogs ? (
                     <>
                         <BodyShort size="small" textColor="subtle">
@@ -87,7 +87,7 @@ export default function ComponentAccessLog({ accessLog }: ComponentAccessLogProp
                 </Table.Body>
             </Table>
             {hasMoreThanTenLogs && !showAllLogs && (
-                <Box paddingBlock="4 0">
+                <Box paddingBlock="space-4">
                     <Button variant="secondary" size="small" onClick={() => setShowAllLogs(true)}>
                         Vis full logg
                     </Button>

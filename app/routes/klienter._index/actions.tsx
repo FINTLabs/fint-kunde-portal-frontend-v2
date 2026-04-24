@@ -22,6 +22,7 @@ export async function handleClientIndexAction({ request }: { request: Request })
     };
 
     const response = await ClientApi.createClient(newClient, orgName);
+    console.log('DEBUGGIN:', response);
 
     if (!response.success) {
         if (response.status === 409) {

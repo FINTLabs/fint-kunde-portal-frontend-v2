@@ -105,18 +105,19 @@ export default function Index() {
 
                     <NovariToaster items={alertState} position={'top-right'} />
                     <VStack gap={'space-8'}>
-                        <Box padding="space-16">
-                            <Search
-                                label="Søk etter adaptere"
-                                hideLabel
-                                variant="secondary"
-                                size="small"
-                                onChange={(value: string) => handleSearch(value)}
-                                placeholder="Søk etter navn eller beskrivelse"
-                                className={'pb-6'}
-                                data-cy="search-input"
-                            />
-                        </Box>
+                        {/*<Box padding="space-16">*/}
+                        <Search
+                            label="Søk etter adaptere"
+                            hideLabel
+                            variant="secondary"
+                            size="small"
+                            onChange={(value: string) => handleSearch(value)}
+                            placeholder="Søk etter navn eller beskrivelse"
+                            // className={'pb-6'}
+                            data-cy="search-input"
+                        />
+                        {/*</Box>*/}
+
                         <Box
                             padding="space-16"
                             borderColor="neutral-subtle"

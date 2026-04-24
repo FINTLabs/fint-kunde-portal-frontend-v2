@@ -32,8 +32,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
     const fieldList = await AccessApi.getFieldAccess(clientOrAdapter, componentName, resourceName);
 
-    console.log('resource', resource);
-    console.log('fieldList', fieldList);
     return Response.json({
         clientOrAdapter,
         componentName,

@@ -3,7 +3,7 @@ import React from 'react';
 
 const CustomErrorNoUser = () => {
     return (
-        <Box paddingBlock="20 8">
+        <Box paddingBlock="space-16">
             <HGrid columns="minmax(auto,600px)">
                 <VStack gap="space-16">
                     <Heading level="1" size="large" spacing>

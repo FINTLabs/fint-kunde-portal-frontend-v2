@@ -16,17 +16,24 @@ const IconToggleButtons = ({
     onClickIsWriteable,
 }: IconToggleButtonsProps) => {
     return (
-        <HStack gap={'4'} className={'pb-5 justify-end'}>
-            <Tooltip content={resource.writeable ? 'Klikk for å fjerne skriverettighet' : 'Klikk for å gi skriverettighet'}>
+        <HStack gap={'space-4'} className={'pb-5 justify-end'}>
+            <Tooltip
+                content={
+                    resource.writeable
+                        ? 'Klikk for å fjerne skriverettighet'
+                        : 'Klikk for å gi skriverettighet'
+                }>
                 <div>
                     <ConfirmAction
-                        buttonText={resource.writeable ? 'Fjern skriverettighet' : 'Gi skriverettighet'}
+                        buttonText={
+                            resource.writeable ? 'Fjern skriverettighet' : 'Gi skriverettighet'
+                        }
                         buttonVariant={resource.writeable ? 'secondary' : 'primary'}
                         titleText={`${resource.name} - Endre skriverettighet`}
                         onConfirm={onClickIsWriteable}
                         subTitleText={
-                            resource.writeable 
-                                ? 'Er du sikker på at du vil fjerne skriverettighet for denne ressursen?' 
+                            resource.writeable
+                                ? 'Er du sikker på at du vil fjerne skriverettighet for denne ressursen?'
                                 : 'Er du sikker på at du vil gi skriverettighet for denne ressursen?'
                         }
                         icon={
@@ -40,11 +47,12 @@ const IconToggleButtons = ({
                 </div>
             </Tooltip>
 
-            <Tooltip content={
-                resource.readingOption === 'SINGULAR' 
-                    ? 'Klikk for å tillate flere oppslag' 
-                    : 'Klikk for å begrense til enkeltoppslag'
-            }>
+            <Tooltip
+                content={
+                    resource.readingOption === 'SINGULAR'
+                        ? 'Klikk for å tillate flere oppslag'
+                        : 'Klikk for å begrense til enkeltoppslag'
+                }>
                 <div>
                     <ConfirmAction
                         buttonText={

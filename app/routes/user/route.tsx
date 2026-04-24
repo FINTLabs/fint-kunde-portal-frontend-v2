@@ -3,7 +3,6 @@ import { BodyLong, Box, HGrid, Label, Tag } from '@navikt/ds-react';
 import { useLoaderData } from 'react-router';
 
 import MeApi from '~/api/MeApi';
-import { BackButton } from '~/components/shared/BackButton';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import InternalPageHeader from '~/components/shared/InternalPageHeader';
 import { IMeData } from '~/types/Me';
@@ -29,17 +28,13 @@ export default function Index() {
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader title={'User Information'} icon={PersonIcon} />
 
-            <HGrid gap="2" align={'start'}>
-                <BackButton to={`/`} className="relative h-12 w-12 top-2 right-14" />
+            <HGrid gap="space-2" align={'start'}>
                 <Box
-                    padding="space-6"
-                    borderRadius="large"
-                    shadow="small"
-                    className="relative bottom-12"
-                    background-color="var(--a-surface-default)">
+                    padding="space-16"
+                    borderColor="neutral-subtle"
+                    borderWidth="2"
+                    borderRadius="12">
                     <div>
-                        {/* <Breadcrumbs breadcrumbs={breadcrumbs} /> */}
-                        {/*<InternalPageHeader title={'User Information'} icon={PersonIcon} />*/}
                         <div style={{ marginBottom: '1rem' }}>
                             <Label>Full Name:</Label>
                             <BodyLong>{`${user.firstName} ${user.lastName}`}</BodyLong>

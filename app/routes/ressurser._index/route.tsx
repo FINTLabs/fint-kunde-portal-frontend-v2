@@ -1,5 +1,5 @@
 import { MigrationIcon } from '@navikt/aksel-icons';
-import { BodyLong, Box, Button } from '@navikt/ds-react';
+import { Box, Button, LocalAlert } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
 import {
@@ -64,22 +64,27 @@ export default function Index() {
                 // onCloseItem={handleCloseItem}
             />
 
-            <InternalPageHeader
-                title={'Ressurser'}
-                icon={MigrationIcon}
-                helpText="assets"
-                // onAddClick={handleCreate}
-            >
-                <Button variant="primary" size="small" onClick={handleCreate}>
-                    Legg til ressurs
-                </Button>
-            </InternalPageHeader>
+            {!isCreating && (
+                <InternalPageHeader
+                    title={'Ressurser'}
+                    icon={MigrationIcon}
+                    helpText="assets"
+                    // onAddClick={handleCreate}
+                >
+                    <Button variant="primary" size="small" onClick={handleCreate}>
+                        Legg til ressurs
+                    </Button>
+                </InternalPageHeader>
+            )}
 
             <Box>
                 {!assets || assets.length === 0 ? (
-                    <Box padding="space-8">
-                        <BodyLong>Fant ingen ressurser</BodyLong>
-                    </Box>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>Komponent ikke funnet</LocalAlert.Title>
+                        </LocalAlert.Header>
+                        <LocalAlert.Content>Kunne ikke laste komponentdetaljer.</LocalAlert.Content>
+                    </LocalAlert>
                 ) : isCreating ? (
                     <CreateForm
                         onCancel={handleCancel}

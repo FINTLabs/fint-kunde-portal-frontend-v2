@@ -76,7 +76,7 @@ const ResourcesList = ({
             </FormSummary.Header>
             <FormSummary.Answers>
                 <FormSummary.Answer>
-                    <HStack gap="2" style={{ margin: '1rem' }}>
+                    <HStack gap="space-2" style={{ margin: '1rem' }}>
                         <Button
                             onClick={handleSelectAll}
                             variant="secondary"

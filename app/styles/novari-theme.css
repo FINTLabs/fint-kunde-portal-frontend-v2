@@ -40,6 +40,9 @@
     --novari-footer-fg: #FFFFFF;
 }
 
+.novari-header-icon {
+    color: var(--novari-chrome-fg);
+}
 .novari-header {
     background: var(--novari-chrome-bg);
     color: var(--novari-chrome-fg);

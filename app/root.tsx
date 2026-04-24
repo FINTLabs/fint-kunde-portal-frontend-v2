@@ -1,4 +1,4 @@
-import { Box, Page } from '@navikt/ds-react';
+import { Box, Link, Page } from '@navikt/ds-react';
 import { NovariFooter, NovariHeader } from 'novari-frontend-components';
 import React from 'react';
 import {
@@ -36,6 +36,7 @@ import { cspReportOnly } from '~/utils/csp';
 import { useTrackAnalyticsPageViews } from '~/hooks/useTrackAnalyticsPageViews';
 import appStylesHref from './styles/app.css?url';
 import akselHref from '@navikt/ds-css?url';
+import { PersonCircleIcon } from '@navikt/aksel-icons';
 
 export const links: LinksFunction = () => [
     { rel: 'stylesheet', href: akselHref },
@@ -144,6 +145,13 @@ export default function App() {
                     appName={'FINT Kundeportal'}
                     onLogin={onLogin}>
                     <UserOrganization userSession={userSession} />
+                    <Link href={'/user'}>
+                        <PersonCircleIcon
+                            title="a11y-title"
+                            fontSize="1.5rem"
+                            className="novari-header-icon"
+                        />
+                    </Link>
                 </NovariHeader>
             </Box>
 

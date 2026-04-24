@@ -40,7 +40,7 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
 
     if (!audit || !audit.auditRecord || audit.auditRecord.length === 0) {
         return (
-            <Box padding="4">
+            <Box padding="space-4">
                 <BodyShort>Ingen endringer registrert</BodyShort>
             </Box>
         );
@@ -54,7 +54,7 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
 
     return (
         <Box>
-            <Box paddingBlock="2 4">
+            <Box paddingBlock="space-6">
                 {hasMoreThanTenRecords && !showAllRecords ? (
                     <>
                         <BodyShort size="small" textColor="subtle">
@@ -110,7 +110,7 @@ export default function ComponentAccessAudit({ audit }: ComponentAccessAuditProp
                 </Table.Body>
             </Table>
             {hasMoreThanTenRecords && !showAllRecords && (
-                <Box paddingBlock="4 0">
+                <Box paddingBlock="space-4">
                     <Button
                         variant="secondary"
                         size="small"
