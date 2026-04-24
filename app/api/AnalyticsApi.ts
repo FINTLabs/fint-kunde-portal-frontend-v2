@@ -22,10 +22,12 @@ class AnalyticsApi {
             meta: params.meta ?? null,
         };
 
+        const functionName = `trackEvent:${params.type.replace('_', '-')}`;
+
         return await apiManager.call({
             method: 'POST',
             endpoint: `/api/events`,
-            functionName: 'trackEvent',
+            functionName: functionName,
             body,
             additionalHeaders: {
                 'x-analytics-token': 'change-me',
