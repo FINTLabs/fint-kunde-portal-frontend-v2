@@ -39,7 +39,12 @@ export async function handleClientAction({ request }: { request: Request }) {
             response = await ClientApi.deleteClient(clientName, orgName);
 
             if (response?.success === false) {
-                break;
+                response = {
+                    success: false,
+                    status: 500,
+                    message: `Kunne ikke slette klient '${clientName}'`,
+                    variant: 'error',
+                };
             }
 
             return redirect(`/klienter?deleted=${clientName}`);
