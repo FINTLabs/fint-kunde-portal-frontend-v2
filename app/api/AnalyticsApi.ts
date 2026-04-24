@@ -7,7 +7,7 @@ const APP_NAME = 'kunde-portal';
 
 class AnalyticsApi {
     static async trackEvent(params: {
-        type: 'page_view' | 'button_click' | 'search' | 'error';
+        type: 'page_view' | 'button_click' | 'search' | 'error' | 'action';
         path?: string;
         element?: string;
         tenant?: string;

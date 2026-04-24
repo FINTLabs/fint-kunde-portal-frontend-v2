@@ -34,5 +34,13 @@ export async function handleClientIndexAction({ request }: { request: Request })
         throw new Response(message, { status: statusCode });
     }
 
+    //TODO: continue to track this? this is a debuging tracking
+    await AnalyticsApi.trackEvent({
+        type: 'action',
+        path: new URL(request.url).pathname,
+        element: 'client-create-action',
+        tenant: orgName,
+    });
+
     return redirect(`/klienter/${response.data?.name}`);
 }
