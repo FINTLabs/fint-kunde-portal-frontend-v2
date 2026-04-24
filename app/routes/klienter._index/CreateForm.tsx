@@ -1,13 +1,4 @@
-import {
-    Box,
-    Button,
-    FormSummary,
-    HStack,
-    // LocalAlert,
-    Select,
-    Textarea,
-    TextField,
-} from '@navikt/ds-react';
+import { BodyShort, Button, Fieldset, HStack, Select, Textarea, TextField } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import AnalyticsApi from '~/api/AnalyticsApi';
 import { IClient, IUserSession } from '~/types';
@@ -74,93 +65,62 @@ export default function ClientCreateForm({
     };
 
     return (
-        // <Form method="post">
-        <Box paddingBlock="space-12">
-            <FormSummary>
-                <FormSummary.Header>
-                    <FormSummary.Heading level="2">Opprett ny klient</FormSummary.Heading>
-                    {/* <FormSummary.EditLink href="#" /> */}
-                </FormSummary.Header>
+        <Fieldset legend="Opprett ny klient">
+            <HStack gap="space-4" align="center" justify="start">
+                <TextField
+                    data-cy="input-name"
+                    name="name"
+                    label="Navn"
+                    type="text"
+                    htmlSize={20}
+                    error={errors?.name}
+                    size={'small'}
+                    onChange={(e) => setInputName(e.target.value)}
+                />
+                <BodyShort className={!errors.name ? 'pt-6' : undefined}>
+                    @client.{orgName.replace(/_/g, '.')}
+                </BodyShort>
+            </HStack>
 
-                <FormSummary.Answers>
-                    <FormSummary.Answer>
-                        <HStack gap="space-4" align="center">
-                            <TextField
-                                data-cy="input-name"
-                                name="name"
-                                label="Navn"
-                                type="text"
-                                htmlSize={20}
-                                error={errors?.name}
-                                size={'small'}
-                                onChange={(e) => setInputName(e.target.value)}
-                            />
-                            <span className="pb-3.5">@client.{orgName.replace(/_/g, '.')}</span>
-                        </HStack>
-                    </FormSummary.Answer>
+            <TextField
+                data-cy="input-title"
+                name="description"
+                label="Tittel"
+                type="text"
+                htmlSize={50}
+                error={errors?.description}
+                size={'small'}
+                onChange={(e) => setInputDescription(e.target.value)}
+            />
 
-                    <FormSummary.Answer>
-                        <TextField
-                            data-cy="input-title"
-                            name="description"
-                            label="Tittel"
-                            type="text"
-                            htmlSize={50}
-                            error={errors?.description}
-                            size={'small'}
-                            onChange={(e) => setInputDescription(e.target.value)}
-                        />
-                    </FormSummary.Answer>
-
-                    <FormSummary.Answer>
-                        <Textarea
-                            data-cy="input-note"
-                            name="note"
-                            label="Beskrivelse"
-                            error={errors?.note}
-                            onChange={(e) => setInputNote(e.target.value)}
-                        />
-                    </FormSummary.Answer>
-                    <FormSummary.Answer>
-                        <Select
-                            label="Velg modelversjon"
-                            size="small"
-                            description="Styrer hvilken informasjonsmodellversjon klienten kommuniserer med for utdanningsdomenet"
-                            style={{ width: '12rem' }}
-                            onChange={(e) => setInputModelVersion(e.target.value)}>
-                            <option value="V3">V3</option>
-                            <option value="V4">V4</option>
-                        </Select>
-                    </FormSummary.Answer>
-                    <HStack gap="space-4">
-                        <Button
-                            title="Opprett"
-                            onClick={handleSubmit}
-                            data-cy="save-button"
-                            loading={isSubmitting}>
-                            Opprett
-                        </Button>
-                        <Button variant="secondary" onClick={onCancel}>
-                            Avbryt
-                        </Button>
-                    </HStack>
-                </FormSummary.Answers>
-            </FormSummary>
-            {/*{alertState.length > 0 && (*/}
-            {/*    <LocalAlert status="announcement">*/}
-            {/*        <LocalAlert.Header>*/}
-            {/*            <LocalAlert.Title>*/}
-            {/*                Nyhet! Nå kan du ettersende vedlegg digitalt*/}
-            {/*            </LocalAlert.Title>*/}
-            {/*        </LocalAlert.Header>*/}
-            {/*        <LocalAlert.Content>*/}
-            {/*            Kunngjøringer brukes for å formidle noe om appen eller systemet, eller*/}
-            {/*            endringer som påvirker brukerne. Eksempelvis planlagt vedlikehold eller*/}
-            {/*            driftsmeldinger.*/}
-            {/*        </LocalAlert.Content>*/}
-            {/*    </LocalAlert>*/}
-            {/*)}*/}
-        </Box>
-        // </Form>
+            <Textarea
+                data-cy="input-note"
+                name="note"
+                label="Beskrivelse"
+                error={errors?.note}
+                onChange={(e) => setInputNote(e.target.value)}
+            />
+            <Select
+                label="Velg modelversjon"
+                size="small"
+                description="Styrer hvilken informasjonsmodellversjon klienten kommuniserer med for utdanningsdomenet"
+                style={{ width: '12rem' }}
+                onChange={(e) => setInputModelVersion(e.target.value)}>
+                <option value="V3">V3</option>
+                <option value="V4">V4</option>
+            </Select>
+            <HStack gap="space-4">
+                <Button
+                    title="Opprett"
+                    onClick={handleSubmit}
+                    data-cy="save-button"
+                    loading={isSubmitting}>
+                    Opprett
+                </Button>
+                <Button variant="secondary" onClick={onCancel}>
+                    Avbryt
+                </Button>
+            </HStack>
+        </Fieldset>
     );
 }

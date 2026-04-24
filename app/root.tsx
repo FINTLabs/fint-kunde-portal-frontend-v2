@@ -1,4 +1,3 @@
-import akselHref from '@navikt/ds-css?url';
 import { Box, Page } from '@navikt/ds-react';
 import { NovariFooter, NovariHeader } from 'novari-frontend-components';
 import React from 'react';
@@ -31,67 +30,18 @@ import { IMeData } from '~/types/Me';
 import { IOrganisation } from '~/types/Organisation';
 import { IUserSession } from '~/types/Session';
 import { selectOrgCookie } from '~/utils/cookie';
-
 import FeaturesApi from './api/FeaturesApi';
-// import tailwindHref from './styles/tailwind.css?url';
-import themeHref from './styles/novari-theme.css?url';
 import { HeaderProperties } from './utils/headerProperties';
-import { dailyPageVisits, getCurrentDate, pageVisits } from '~/routes/metrics';
-import { normalizePathname } from '~/utils/metricsPath';
 import { cspReportOnly } from '~/utils/csp';
 import { useTrackAnalyticsPageViews } from '~/hooks/useTrackAnalyticsPageViews';
+import appStylesHref from './styles/app.css?url';
+import akselHref from '@navikt/ds-css?url';
 
 export const links: LinksFunction = () => [
-    { rel: 'stylesheet', href: akselHref, as: 'style' }, // Aksel next
-    { rel: 'stylesheet', href: themeHref, as: 'style' }, // Your overrides last
-    // { rel: 'stylesheet', href: tailwindHref, as: 'style' }, // Tailwind first
-    // // (optional — check your real font URL)
-    // { rel: 'preconnect', href: 'https://fonts.cdnfonts.com' },
-    // { rel: 'stylesheet', href: 'https://fonts.cdnfonts.com/css/brockmann' },
+    { rel: 'stylesheet', href: akselHref },
+    { rel: 'stylesheet', href: appStylesHref },
 ];
-// export const remix_cookie = createCookie('remix_cookie', {
-//     maxAge: 604_800, // one week
-// });
-
-// Initialize MSW based on environment
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// let server: any;
-//
-// async function initializeMSW() {
-//     if (import.meta.env.DEV && import.meta.env.VITE_MOCK_CYPRESS === 'true') {
-//         if (typeof window !== 'undefined') {
-//             const { worker } = await import('../cypress/mocks/browser');
-//             await worker.start({ onUnhandledRequest: 'bypass' });
-//             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//             (window as any).__mswReady = true;
-//         } else {
-//             const { server: nodeServer } = await import('../cypress/mocks/node');
-//             server = nodeServer;
-//             server.listen({ onUnhandledRequest: 'bypass' });
-//         }
-//     } else {
-//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//         if (typeof window !== 'undefined') (window as any).__mswReady = true;
-//     }
-// }
-//
-// // Initialize MSW
-// initializeMSW();
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    const { pathname } = new URL(request.url);
-
-    // Normalize  for Prometheus labels
-    const normalized = normalizePathname(pathname);
-    const currentDate = getCurrentDate();
-
-    //TODO; remove these custom metrics
-    // Track total visits (cumulative)
-    pageVisits.inc({ path: normalized });
-
-    // Track daily visits (resets each day via date label)
-    dailyPageVisits.inc({ path: normalized, date: currentDate });
-
     HeaderProperties.setProperties(request);
 
     const meData: IMeData = await MeApi.fetchMe();

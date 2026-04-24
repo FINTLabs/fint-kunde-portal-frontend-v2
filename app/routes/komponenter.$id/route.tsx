@@ -1,5 +1,5 @@
 import { ComponentIcon } from '@navikt/aksel-icons';
-import { Box, Heading, VStack } from '@navikt/ds-react';
+import { Box, Heading, LocalAlert, VStack } from '@navikt/ds-react';
 import { type LoaderFunctionArgs, useLoaderData } from 'react-router';
 
 import ComponentApi from '~/api/ComponentApi';
@@ -26,13 +26,15 @@ export const handle = {
 };
 
 export default function Index() {
-    const component = useLoaderData<IComponent>();
+    const component = useLoaderData<IComponent | null>();
     // const [searchParams] = useSearchParams();
     // const fromAdapter = searchParams.get('fromAdapter');
-    const breadcrumbs = [
-        { name: 'Komponenter', link: '/komponenter' },
-        { name: component.name, link: `/komponenter/${component.name}` },
-    ];
+    const breadcrumbs = component
+        ? [
+              { name: 'Komponenter', link: '/komponenter' },
+              { name: component.name, link: `/komponenter/${component.name}` },
+          ]
+        : [{ name: 'Komponenter', link: '/komponenter' }];
     // const navigate = useNavigate();
 
     // const handleBack = () => {
@@ -46,49 +48,53 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={component.description} icon={ComponentIcon} />
+            {component ? (
+                <InternalPageHeader title={component.description} icon={ComponentIcon} />
+            ) : (
+                <InternalPageHeader title="Komponent" icon={ComponentIcon} />
+            )}
 
-            {/*<HGrid gap="2" align={'start'}>*/}
-            {/*<Box>*/}
-            {/*    <Button*/}
-            {/*        className="relative h-12 w-12 top-2 right-14"*/}
-            {/*        icon={<ArrowLeftIcon title="ArrowLeftIcon" fontSize="1.5rem" />}*/}
-            {/*        variant="tertiary"*/}
-            {/*        onClick={handleBack}></Button>*/}
-            {/*</Box>*/}
-            <VStack gap={'space-16'}>
-                <Box
-                    padding="space-16"
-                    borderColor="neutral-subtle"
-                    borderWidth="2"
-                    borderRadius="12">
-                    <Heading size={'medium'}>Detaljer</Heading>
+            {component ? (
+                <VStack gap={'space-16'}>
+                    <Box
+                        padding="space-16"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
+                        <Heading size={'medium'}>Detaljer</Heading>
 
-                    <ComponentDetails component={component} />
-                </Box>
-                <Box
-                    padding="space-24"
-                    borderColor="neutral-subtle"
-                    borderWidth="2"
-                    borderRadius="12">
-                    <Heading size={'medium'}>Endepunkter</Heading>
-                    <Box padding="space-4">
-                        <EndpointTable component={component} />
+                        <ComponentDetails component={component} />
                     </Box>
-                </Box>
-                <Box
-                    padding="space-24"
-                    borderColor="neutral-subtle"
-                    borderWidth="2"
-                    borderRadius="12">
-                    <Heading size={'medium'}>Swagger</Heading>
-
-                    <Box padding="space-4">
-                        <SwaggerTable component={component} />
+                    <Box
+                        padding="space-24"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
+                        <Heading size={'medium'}>Endepunkter</Heading>
+                        <Box padding="space-4">
+                            <EndpointTable component={component} />
+                        </Box>
                     </Box>
-                </Box>
-            </VStack>
-            {/*</HGrid>*/}
+                    <Box
+                        padding="space-24"
+                        borderColor="neutral-subtle"
+                        borderWidth="2"
+                        borderRadius="12">
+                        <Heading size={'medium'}>Swagger</Heading>
+
+                        <Box padding="space-4">
+                            <SwaggerTable component={component} />
+                        </Box>
+                    </Box>
+                </VStack>
+            ) : (
+                <LocalAlert status="warning">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Komponent ikke funnet</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>Kunne ikke laste komponentdetaljer.</LocalAlert.Content>
+                </LocalAlert>
+            )}
         </>
     );
 }

@@ -26,23 +26,16 @@ class ClientApi {
         organisationName: string,
         clientId: string
     ): Promise<IClient | null> {
+        console.log('Fetching client by ID', clientId);
         const clientsResponse = await this.getClients(organisationName);
-
-        if (!clientsResponse.success) {
-            throw new Error(`Kunne ikke hente klienter for organisasjonen: ${organisationName}`);
-        }
-
-        const client = clientsResponse.data?.find((c) => c.name === clientId);
-        if (client) return client;
-
-        throw new Error(`Klient ikke funnet, klientId: ${clientId}`);
+        const client = clientsResponse?.data?.find((c) => c.name === clientId);
+        return client ?? null;
     }
 
     static async createClient(
         client: IPartialClient,
         organisation: string
     ): Promise<ApiResponse<IClient>> {
-        console.log('Creating client', client);
         return await clientManager.call<IClient>({
             method: 'POST',
             endpoint: `/api/clients/${organisation}`,
@@ -69,7 +62,6 @@ class ClientApi {
             note: clientNote,
             modelVersion: modelVersion,
         };
-        console.log('partialClient', partialClient);
 
         return await clientManager.call<IClient>({
             method: 'PUT',
@@ -133,9 +125,7 @@ class ClientApi {
         endpoint: string,
         componentName: string
     ): Promise<ApiResponse<IClient>> {
-        console.log('Adding client', endpoint);
-        console.log('Adding client', componentName);
-        const ret = await clientManager.call<IClient>({
+        return await clientManager.call<IClient>({
             method: 'PUT',
             endpoint,
             functionName: 'addComponentToClient',
@@ -146,8 +136,6 @@ class ClientApi {
                 'x-nin': HeaderProperties.getXnin(),
             },
         });
-        console.log(ret);
-        return ret;
     }
 
     private static async removeComponentFromClient(

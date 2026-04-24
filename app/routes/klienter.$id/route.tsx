@@ -97,7 +97,6 @@ export default function ClientDetails() {
     const { alertState } = useAlerts<IClient>([], fetcher.data, fetcher.state);
     const [isLoading, setIsLoading] = useState(false);
 
-    console.log('action data', alertState);
     let selectedEnvs: Environment[] = [];
     if (access?.environments)
         selectedEnvs = (Object.keys(access.environments) as Environment[]).filter(
@@ -107,7 +106,6 @@ export default function ClientDetails() {
     const handleUpdate = (formData: FormData) => {
         formData.append('actionType', 'UPDATE_CLIENT');
         formData.append('clientId', client.name);
-        console.log(formData);
         fetcher.submit(formData, { method: 'post' });
     };
 
@@ -160,7 +158,7 @@ export default function ClientDetails() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={client?.shortDescription || ''} icon={TokenIcon} />
+            <InternalPageHeader title={client?.shortDescription || 'Klient'} icon={TokenIcon} />
             <NovariToaster
                 items={alertState.map((item) => ({
                     ...item,
@@ -169,13 +167,8 @@ export default function ClientDetails() {
                 }))}
                 position="top-right"
             />
-            {/*<NovariToaster*/}
-            {/*    items={alertState}*/}
-            {/*    position={'top-right'}*/}
-            {/*    // onCloseItem={handleCloseItem}*/}
-            {/*/>*/}
 
-            {client && (
+            {client ? (
                 <VStack gap={'space-24'}>
                     <Box
                         padding="space-16"
@@ -305,6 +298,13 @@ export default function ClientDetails() {
                         )}
                     </Box>
                 </VStack>
+            ) : (
+                <LocalAlert status="announcement">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Klient ikke funnet</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>Kunne ikke laste klientdetaljer.</LocalAlert.Content>
+                </LocalAlert>
             )}
         </>
     );

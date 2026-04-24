@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Textarea, TextField, FormSummary } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Fieldset, HStack, Textarea, TextField } from '@navikt/ds-react';
 import React, { useState } from 'react';
 
 type Errors = { name?: string; description?: string; detailedInfo?: string };
@@ -40,61 +40,51 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
 
     return (
         <Box paddingBlock="space-24">
-            <FormSummary data-cy="create-form">
-                <FormSummary.Header>
-                    <FormSummary.Heading level="2">Opprett ny adapter</FormSummary.Heading>
-                </FormSummary.Header>
+            <Fieldset legend="Opprett ny adapter" data-cy="create-form">
+                <HStack gap="space-4" align="center">
+                    <TextField
+                        data-cy="input-name"
+                        name="name"
+                        label="Navn"
+                        type="text"
+                        size="small"
+                        value={inputName}
+                        onChange={(e) => setInputName(e.target.value)}
+                        error={errors.name}
+                    />
+                    <BodyShort className={!errors.name ? 'pt-6' : undefined}>
+                        @adapter.{orgName.replace(/_/g, '.')}
+                    </BodyShort>
+                </HStack>
 
-                <FormSummary.Answers>
-                    <FormSummary.Answer>
-                        <HStack gap="space-4" align="end">
-                            <TextField
-                                data-cy="input-name"
-                                name="name"
-                                label="Navn"
-                                type="text"
-                                size="small"
-                                value={inputName}
-                                onChange={(e) => setInputName(e.target.value)}
-                                error={errors.name}
-                            />
-                            <span>@adapter.{orgName.replace(/_/g, '.')}</span>
-                        </HStack>
-                    </FormSummary.Answer>
+                <TextField
+                    data-cy="input-description"
+                    name="description"
+                    label="Tittel"
+                    type="text"
+                    size={'small'}
+                    value={inputDescription}
+                    onChange={(e) => setInputDescription(e.target.value)}
+                    error={errors.description}
+                />
 
-                    <FormSummary.Answer>
-                        <TextField
-                            data-cy="input-description"
-                            name="description"
-                            label="Tittel"
-                            type="text"
-                            size={'small'}
-                            value={inputDescription}
-                            onChange={(e) => setInputDescription(e.target.value)}
-                            error={errors.description}
-                        />
-                    </FormSummary.Answer>
-
-                    <FormSummary.Answer>
-                        <Textarea
-                            data-cy="input-detailedInfo"
-                            name="detailedInfo"
-                            label="Beskrivelse"
-                            value={inputDetailedInfo}
-                            onChange={(e) => setInputDetailedInfo(e.target.value)}
-                            error={errors.detailedInfo}
-                        />
-                    </FormSummary.Answer>
-                    <HStack gap="space-4">
-                        <Button title="Opprett" onClick={handleSubmit} data-cy="save-button">
-                            Opprett
-                        </Button>
-                        <Button variant="secondary" onClick={onCancel}>
-                            Avbryt
-                        </Button>
-                    </HStack>
-                </FormSummary.Answers>
-            </FormSummary>
+                <Textarea
+                    data-cy="input-detailedInfo"
+                    name="detailedInfo"
+                    label="Beskrivelse"
+                    value={inputDetailedInfo}
+                    onChange={(e) => setInputDetailedInfo(e.target.value)}
+                    error={errors.detailedInfo}
+                />
+                <HStack gap="space-4">
+                    <Button title="Opprett" onClick={handleSubmit} data-cy="save-button">
+                        Opprett
+                    </Button>
+                    <Button variant="secondary" onClick={onCancel}>
+                        Avbryt
+                    </Button>
+                </HStack>
+            </Fieldset>
         </Box>
     );
 }

@@ -24,16 +24,8 @@ class ComponentApi {
 
     static async getComponentById(componentName: string): Promise<IComponent | null> {
         const componentsResponse = await this.getAllComponents();
-
-        if (!componentsResponse.success) {
-            throw new Response('Kunne ikke hente komponenter.');
-        }
-
-        const component = componentsResponse.data?.find((item) => item.name === componentName);
-        if (component) {
-            return component;
-        }
-        throw new Response(`Komponent med navn ${componentName} ikke funnet.`);
+        const component = componentsResponse?.data?.find((item) => item.name === componentName);
+        return component ?? null;
     }
 
     static async getOrganisationComponents(
