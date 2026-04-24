@@ -23,19 +23,9 @@ export async function handleClientIndexAction({ request }: { request: Request })
 
     const response = await ClientApi.createClient(newClient, orgName);
 
-    // if (response.success) {
-    //     await AccessApi.addAccess(response.data?.name as string);
-    // }
-
-    //TODO: Handle this better!
     if (!response.success) {
         if (response.status === 409) {
-            return {
-                // ...response,
-                success: false,
-                message: 'Klienten eksisterer allerede',
-                variant: 'error',
-            };
+            throw new Response('Klienten eksisterer allerede.', { status: 409 });
         }
         throw new Response('Kunne ikke opprette ny klient.', { status: 500 });
     }

@@ -156,7 +156,6 @@ export default function App() {
     );
 }
 
-//TODO: Add tenant to analytic tracking if logged in!!
 export function ErrorBoundary() {
     const error = useRouteError();
 

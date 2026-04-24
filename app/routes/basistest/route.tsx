@@ -57,7 +57,6 @@ export default function Index() {
     const healthResults = actionData?.data?.healthData?.healthData;
     const cacheResults = actionData?.data?.cacheData?.resourceResults;
     const hasActionData = Boolean(actionData);
-    //TODO: fix local alert when info is updated in novari components
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
