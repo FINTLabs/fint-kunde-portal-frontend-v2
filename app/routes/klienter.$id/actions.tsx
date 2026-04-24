@@ -2,7 +2,7 @@ import { redirect } from 'react-router';
 import AccessApi from '~/api/AccessApi';
 import ClientApi from '~/api/ClientApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import AnalyticsApi from '~/api/AnalyticsApi';
+import { trackActionFromServer } from '~/app/utils/analytics.server';
 
 export async function handleClientAction({ request }: { request: Request }) {
     const formData = await request.formData();
@@ -108,13 +108,12 @@ export async function handleClientAction({ request }: { request: Request }) {
     }
 
     if (response?.success === false) {
-        void AnalyticsApi.trackError(
-            new URL(request.url).pathname,
-            response.message,
-            response.status ?? 500,
-            orgName,
-            actionType
-        );
+        await trackActionFromServer({
+            path: new URL(request.url).pathname,
+            type: 'error',
+            element: `client-${actionType}-action`,
+            tenant: orgName,
+        });
     }
 
     return response;

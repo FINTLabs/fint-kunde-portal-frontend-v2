@@ -1,7 +1,7 @@
 import ContactApi from '~/api/ContactApi';
 import RoleApi from '~/api/RolesApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import AnalyticsApi from '~/api/AnalyticsApi';
+import { trackActionFromServer } from '~/app/utils/analytics.server';
 
 export async function handleContactsAction(request: Request) {
     const formData = await request.formData();
@@ -37,14 +37,13 @@ export async function handleContactsAction(request: Request) {
             };
     }
 
-    if (!response.success) {
-        void AnalyticsApi.trackError(
-            new URL(request.url).pathname,
-            response.message,
-            response.status ?? 500,
-            selectedOrg,
-            actionType
-        );
+    if (response?.success === false) {
+        await trackActionFromServer({
+            path: new URL(request.url).pathname,
+            type: 'error',
+            element: `kontakter-${actionType}-action`,
+            tenant: selectedOrg,
+        });
     }
 
     return response;

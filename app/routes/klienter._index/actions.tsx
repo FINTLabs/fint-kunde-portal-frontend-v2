@@ -39,6 +39,7 @@ export async function handleClientIndexAction({ request }: { request: Request })
     //TODO: continue to track this? this is a debuging tracking
     await trackActionFromServer({
         path: new URL(request.url).pathname,
+        type: 'action',
         element: 'client-create-action',
         tenant: orgName,
     });

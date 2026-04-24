@@ -3,6 +3,7 @@ const ANALYTICS_INTERNAL_URL = process.env.ANALYTICS_URL ?? 'http://fint-analyti
 export async function trackActionFromServer(params: {
     path: string;
     element: string;
+    type: string;
     tenant?: string;
     meta?: Record<string, unknown>;
 }) {
@@ -14,7 +15,7 @@ export async function trackActionFromServer(params: {
         },
         body: JSON.stringify({
             app: 'kunde-portal',
-            type: 'action',
+            type: params.type,
             path: params.path,
             element: params.element,
             tenant: params.tenant ?? null,
