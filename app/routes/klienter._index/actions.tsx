@@ -4,7 +4,6 @@ import AnalyticsApi from '~/api/AnalyticsApi';
 import ClientApi from '~/api/ClientApi';
 import { IPartialClient } from '~/types/Clients';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { trackActionFromServer } from '~/app/utils/analytics.server';
 
 export async function handleClientIndexAction({ request }: { request: Request }) {
     const formData = await request.formData();
@@ -31,13 +30,19 @@ export async function handleClientIndexAction({ request }: { request: Request })
         const message =
             statusCode === 409 ? 'Klienten eksisterer allerede.' : 'Kunne ikke opprette ny klient.';
 
-        await AnalyticsApi.trackError(new URL(request.url).pathname, message, statusCode, orgName);
+        await AnalyticsApi.trackActionError(
+            new URL(request.url).pathname,
+            message,
+            statusCode,
+            orgName
+        );
 
+        //TODO:remove this throw and display a action message
         throw new Response(message, { status: statusCode });
     }
 
-    //TODO: continue to track this? this is a debuging tracking
-    await trackActionFromServer({
+    //TODO:remove this after debugging?
+    await AnalyticsApi.trackActionEvent({
         path: new URL(request.url).pathname,
         type: 'action',
         element: 'client-create-action',

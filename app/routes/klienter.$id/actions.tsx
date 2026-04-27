@@ -2,7 +2,6 @@ import { redirect } from 'react-router';
 import AccessApi from '~/api/AccessApi';
 import ClientApi from '~/api/ClientApi';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
-import { trackActionFromServer } from '~/app/utils/analytics.server';
 
 export async function handleClientAction({ request }: { request: Request }) {
     const formData = await request.formData();
@@ -105,15 +104,6 @@ export async function handleClientAction({ request }: { request: Request }) {
                 message: `Ukjent handlingstype: '${actionType}'`,
                 variant: 'error',
             };
-    }
-
-    if (response?.success === false) {
-        await trackActionFromServer({
-            path: new URL(request.url).pathname,
-            type: 'error',
-            element: `client-${actionType}-action`,
-            tenant: orgName,
-        });
     }
 
     return response;
