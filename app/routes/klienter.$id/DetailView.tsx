@@ -76,108 +76,223 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
 
     return (
         <HGrid columns={2}>
-            <VStack gap="space-6">
-                <Heading align="start" size="medium">
-                    Detaljer
-                </Heading>
-                {loading && <Loader size="large" title="Venter..." />}
-                <Label>Navn</Label>
-                <BodyShort>{resource.name}</BodyShort>
+            {loading ? (
+                <Loader size="3xlarge" title="Venter..." />
+            ) : (
+                <>
+                    <VStack gap="space-6">
+                        <Heading align="start" size="medium">
+                            Detaljer
+                        </Heading>
 
-                {isEditing ? (
-                    <TextField
-                        label={'Tittel'}
-                        value={resourceShortDesc}
-                        size={'small'}
-                        onChange={(e) => setResourceShortDesc(e.target.value)}
-                    />
-                ) : (
-                    <>
-                        <Label>Title</Label>
-                        <BodyShort>{resource.shortDescription}</BodyShort>
-                    </>
-                )}
+                        <Label>Navn</Label>
+                        <BodyShort>{resource.name}</BodyShort>
 
-                {isEditing ? (
-                    <TextField
-                        label={'Beskrivelse'}
-                        value={resourceNote}
-                        size={'small'}
-                        onChange={(e) => setResourceNote(e.target.value)}
-                    />
-                ) : (
-                    <>
-                        <Label>Beskrivelse</Label>
-                        <BodyShort>{resource.note}</BodyShort>
-                    </>
-                )}
-
-                {isEditing ? (
-                    <Select
-                        label="Velg modelversjon"
-                        value={resourceModelVersion}
-                        size="small"
-                        description="Styrer hvilken informasjonsmodellversjon klienten kommuniserer med for utdanningsdomenet"
-                        onChange={(e) =>
-                            setResourceModelVersion(e.target.value === 'V3' ? 'V3' : 'V4')
-                        }>
-                        <option value="V3">V3</option>
-                        <option value="V4">V4</option>
-                    </Select>
-                ) : (
-                    <>
-                        <Label>Model Version utdanningsdomenet</Label>
-                        <BodyShort>{normalizeModelVersion(resource.modelVersion)}</BodyShort>
-                    </>
-                )}
-                {isEditing && (
-                    <Box padding={'space-24'}>
-                        <LocalAlert status="announcement" size={'small'}>
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>Endringen i klienten</LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>
-                                For at endringen skal tre i kraft, må nytt token hentes fra klienten
-                            </LocalAlert.Content>
-                        </LocalAlert>
-                    </Box>
-                )}
-            </VStack>
-
-            <HStack gap="space-6" align="end" justify="end">
-                <Button
-                    disabled={resource.managed}
-                    icon={
-                        isEditing ? (
-                            <FloppydiskIcon title="Lagre" />
+                        {isEditing ? (
+                            <TextField
+                                label="Tittel"
+                                value={resourceShortDesc}
+                                size="small"
+                                onChange={(e) => setResourceShortDesc(e.target.value)}
+                            />
                         ) : (
-                            <PencilIcon title="Rediger" />
-                        )
-                    }
-                    variant="tertiary"
-                    onClick={isEditing ? handleSave : () => setIsEditing(true)}
-                />
+                            <>
+                                <Label>Title</Label>
+                                <BodyShort>{resource.shortDescription}</BodyShort>
+                            </>
+                        )}
 
-                {!isEditing && !resource.managed && (
-                    <ConfirmAction
-                        buttonText={'delete'}
-                        showButtonText={false}
-                        subTitleText={`Er du sikker på at du vil slette ${resource.name}?`}
-                        onConfirm={handleConfirmDelete}
-                        buttonVariant="tertiary"
-                        buttonSize={'medium'}
-                        icon={<TrashIcon aria-hidden />}
-                    />
-                )}
+                        {isEditing ? (
+                            <TextField
+                                label="Beskrivelse"
+                                value={resourceNote}
+                                size="small"
+                                onChange={(e) => setResourceNote(e.target.value)}
+                            />
+                        ) : (
+                            <>
+                                <Label>Beskrivelse</Label>
+                                <BodyShort>{resource.note}</BodyShort>
+                            </>
+                        )}
 
-                {isEditing && (
-                    <Button
-                        icon={<XMarkIcon title="Avbryt" fontSize="1.5rem" />}
-                        variant="tertiary"
-                        onClick={handleCancel}
-                    />
-                )}
-            </HStack>
+                        {isEditing ? (
+                            <Select
+                                label="Velg modelversjon"
+                                value={resourceModelVersion}
+                                size="small"
+                                description="Styrer hvilken informasjonsmodellversjon klienten kommuniserer med for utdanningsdomenet"
+                                onChange={(e) =>
+                                    setResourceModelVersion(e.target.value === 'V3' ? 'V3' : 'V4')
+                                }>
+                                <option value="V3">V3</option>
+                                <option value="V4">V4</option>
+                            </Select>
+                        ) : (
+                            <>
+                                <Label>Model Version utdanningsdomenet</Label>
+                                <BodyShort>
+                                    {normalizeModelVersion(resource.modelVersion)}
+                                </BodyShort>
+                            </>
+                        )}
+
+                        {isEditing && (
+                            <Box padding="space-24">
+                                <LocalAlert status="announcement" size="small">
+                                    <LocalAlert.Header>
+                                        <LocalAlert.Title>Endringen i klienten</LocalAlert.Title>
+                                    </LocalAlert.Header>
+                                    <LocalAlert.Content>
+                                        For at endringen skal tre i kraft, må nytt token hentes fra
+                                        klienten
+                                    </LocalAlert.Content>
+                                </LocalAlert>
+                            </Box>
+                        )}
+                    </VStack>
+
+                    <HStack gap="space-6" align="end" justify="end">
+                        <Button
+                            disabled={resource.managed}
+                            icon={
+                                isEditing ? (
+                                    <FloppydiskIcon title="Lagre" />
+                                ) : (
+                                    <PencilIcon title="Rediger" />
+                                )
+                            }
+                            variant="tertiary"
+                            onClick={isEditing ? handleSave : () => setIsEditing(true)}
+                        />
+
+                        {!isEditing && !resource.managed && (
+                            <ConfirmAction
+                                buttonText={'delete'}
+                                showButtonText={false}
+                                subTitleText={`Er du sikker på at du vil slette ${resource.name}?`}
+                                onConfirm={handleConfirmDelete}
+                                buttonVariant="tertiary"
+                                buttonSize={'medium'}
+                                icon={<TrashIcon aria-hidden />}
+                            />
+                        )}
+
+                        {isEditing && (
+                            <Button
+                                icon={<XMarkIcon title="Avbryt" fontSize="1.5rem" />}
+                                variant="tertiary"
+                                onClick={handleCancel}
+                            />
+                        )}
+                    </HStack>
+                </>
+            )}
         </HGrid>
+
+        // <HGrid columns={2}>
+        //     <VStack gap="space-6">
+        //         <Heading align="start" size="medium">
+        //             Detaljer
+        //         </Heading>
+        //         {loading && <Loader size="large" title="Venter..." />}
+        //         <Label>Navn</Label>
+        //         <BodyShort>{resource.name}</BodyShort>
+        //
+        //         {isEditing ? (
+        //             <TextField
+        //                 label={'Tittel'}
+        //                 value={resourceShortDesc}
+        //                 size={'small'}
+        //                 onChange={(e) => setResourceShortDesc(e.target.value)}
+        //             />
+        //         ) : (
+        //             <>
+        //                 <Label>Title</Label>
+        //                 <BodyShort>{resource.shortDescription}</BodyShort>
+        //             </>
+        //         )}
+        //
+        //         {isEditing ? (
+        //             <TextField
+        //                 label={'Beskrivelse'}
+        //                 value={resourceNote}
+        //                 size={'small'}
+        //                 onChange={(e) => setResourceNote(e.target.value)}
+        //             />
+        //         ) : (
+        //             <>
+        //                 <Label>Beskrivelse</Label>
+        //                 <BodyShort>{resource.note}</BodyShort>
+        //             </>
+        //         )}
+        //
+        //         {isEditing ? (
+        //             <Select
+        //                 label="Velg modelversjon"
+        //                 value={resourceModelVersion}
+        //                 size="small"
+        //                 description="Styrer hvilken informasjonsmodellversjon klienten kommuniserer med for utdanningsdomenet"
+        //                 onChange={(e) =>
+        //                     setResourceModelVersion(e.target.value === 'V3' ? 'V3' : 'V4')
+        //                 }>
+        //                 <option value="V3">V3</option>
+        //                 <option value="V4">V4</option>
+        //             </Select>
+        //         ) : (
+        //             <>
+        //                 <Label>Model Version utdanningsdomenet</Label>
+        //                 <BodyShort>{normalizeModelVersion(resource.modelVersion)}</BodyShort>
+        //             </>
+        //         )}
+        //         {isEditing && (
+        //             <Box padding={'space-24'}>
+        //                 <LocalAlert status="announcement" size={'small'}>
+        //                     <LocalAlert.Header>
+        //                         <LocalAlert.Title>Endringen i klienten</LocalAlert.Title>
+        //                     </LocalAlert.Header>
+        //                     <LocalAlert.Content>
+        //                         For at endringen skal tre i kraft, må nytt token hentes fra klienten
+        //                     </LocalAlert.Content>
+        //                 </LocalAlert>
+        //             </Box>
+        //         )}
+        //     </VStack>
+        //
+        //     <HStack gap="space-6" align="end" justify="end">
+        //         <Button
+        //             disabled={resource.managed}
+        //             icon={
+        //                 isEditing ? (
+        //                     <FloppydiskIcon title="Lagre" />
+        //                 ) : (
+        //                     <PencilIcon title="Rediger" />
+        //                 )
+        //             }
+        //             variant="tertiary"
+        //             onClick={isEditing ? handleSave : () => setIsEditing(true)}
+        //         />
+        //
+        //         {!isEditing && !resource.managed && (
+        //             <ConfirmAction
+        //                 buttonText={'delete'}
+        //                 showButtonText={false}
+        //                 subTitleText={`Er du sikker på at du vil slette ${resource.name}?`}
+        //                 onConfirm={handleConfirmDelete}
+        //                 buttonVariant="tertiary"
+        //                 buttonSize={'medium'}
+        //                 icon={<TrashIcon aria-hidden />}
+        //             />
+        //         )}
+        //
+        //         {isEditing && (
+        //             <Button
+        //                 icon={<XMarkIcon title="Avbryt" fontSize="1.5rem" />}
+        //                 variant="tertiary"
+        //                 onClick={handleCancel}
+        //             />
+        //         )}
+        //     </HStack>
+        // </HGrid>
     );
 }

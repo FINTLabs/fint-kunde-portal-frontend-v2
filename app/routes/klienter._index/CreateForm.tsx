@@ -28,13 +28,6 @@ export default function ClientCreateForm({
     const userSession = useOutletContext<IUserSession>();
 
     const handleSubmit = () => {
-        void AnalyticsApi.trackButtonClick(
-            'client-create-button',
-            '/klienter',
-            userSession?.selectedOrganization?.name,
-            { inputName: inputName }
-        );
-
         const newErrors: Errors = {};
         if (!inputName) {
             newErrors.name = 'Navn er påkrevd';
@@ -55,6 +48,13 @@ export default function ClientCreateForm({
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
+            void AnalyticsApi.trackButtonClick(
+                'client-create-button',
+                '/klienter',
+                userSession?.selectedOrganization?.name,
+                { inputName: inputName }
+            );
+
             const formData = new FormData();
             formData.append('name', inputName);
             formData.append('description', inputDescription);
