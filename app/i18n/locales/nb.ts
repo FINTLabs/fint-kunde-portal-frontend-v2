@@ -6,7 +6,7 @@ const nb = {
             userIconTitle: 'Brukerprofil',
         },
         language: {
-            label: 'Sprak',
+            label: 'Språk',
             nb: 'Norsk',
             en: 'Engelsk',
         },
@@ -35,8 +35,8 @@ const nb = {
             pageTitle: 'Adaptere',
             metaDescription: 'Liste over adaptere',
             createButton: 'Opprett adapter',
-            searchLabel: 'Sok etter adaptere',
-            searchPlaceholder: 'Sok etter navn eller beskrivelse',
+            searchLabel: 'Søk etter adaptere',
+            searchPlaceholder: 'Søk etter navn eller beskrivelse',
             emptyState: 'Det finnes ingen adaptere',
         },
         home: {
@@ -51,37 +51,37 @@ const nb = {
             },
             components: {
                 title: 'Komponenter',
-                shortDescription: 'En komponent er en losning fra FINT.',
+                shortDescription: 'En komponent er en løsning fra FINT.',
                 description:
-                    'En komponent er en losning fra FINT. For at en organisasjon skal kunne benytte en komponent, ma den forst legges til i organisasjonens oppsett. Komponenter merket som Apne Data/Felles kan ikke legges til, da de administreres sentralt av FINT.',
+                    'En komponent er en løsning fra FINT. For at en organisasjon skal kunne benytte en komponent, må den først legges til i organisasjonens oppsett. Komponenter merket som Åpne Data/Felles kan ikke legges til, da de administreres sentralt av FINT.',
             },
             adapter: {
                 title: 'Adapter',
                 shortDescription:
-                    'Et adapter er paloggingsinformasjon som benyttes av fagsystem-adaptere.',
+                    'Et adapter er påloggingsinformasjon som benyttes av fagsystem-adaptere.',
                 description:
-                    'Et adapter er paloggingsinformasjon som benyttes av fagsystem-adaptere for a fa tilgang til en komponent, for eksempel Visma Enterprise eller Unit4 (Evry). For et fagsystem-adapter kan tas i bruk, ma adapteret registreres. Dette innebaerer a opprette paloggingsinformasjon og tildele tilgang til de relevante komponentene som skal handteres. Paloggingsinformasjon og detaljer om endepunkter ma deles med den som skal installere og konfigurere adapteret. For nye tjenester opprettes klienter automatisk, som eliminerer behovet for manuell handtering og utveksling av autentiseringsinformasjon. Disse klientene etableres for a dekke tilgangsbehov i FINTs undersystemer.',
+                    'Et adapter er påloggingsinformasjon som benyttes av fagsystem-adaptere for å få tilgang til en komponent, for eksempel Visma Enterprise eller Unit4 (Evry). For at et fagsystem-adapter skal kunne tas i bruk, må adapteret registreres. Dette innebærer å opprette påloggingsinformasjon og tildele tilgang til de relevante komponentene som skal håndteres. Påloggingsinformasjon og detaljer om endepunkter må deles med den som skal installere og konfigurere adapteret. For nye tjenester opprettes klienter automatisk, som eliminerer behovet for manuell håndtering og utveksling av autentiseringsinformasjon. Disse klientene etableres for å dekke tilgangsbehov i FINTs undersystemer.',
             },
             klienter: {
                 title: 'Klienter',
                 shortDescription:
-                    'En klient er paloggingsinformasjon som brukes av en integrasjon for a fa tilgang til en komponent.',
+                    'En klient er påloggingsinformasjon som brukes av en integrasjon for å få tilgang til en komponent.',
                 description:
-                    'En klient er paloggingsinformasjon som brukes av en integrasjon for a fa tilgang til en komponent, for eksempel et IDM-system eller en integrasjonsbuss som BizTalk. For integrasjonen kan tas i bruk, ma klienten registreres. Dette innebaerer a opprette paloggingsinformasjon og tildele tilgang til de relevante komponentene som skal handteres. Paloggingsinformasjon og detaljer om endepunkter ma deles med den som skal installere og konfigurere integrasjonen. For nye tjenester opprettes klienter automatisk, noe som eliminerer behovet for manuell handtering og utveksling av autentiseringsinformasjon. Disse klientene etableres for a dekke tilgangsbehov i FINTs undersystemer.',
+                    'En klient er påloggingsinformasjon som brukes av en integrasjon for å få tilgang til en komponent, for eksempel et IDM-system eller en integrasjonsbuss som BizTalk. For at integrasjonen skal kunne tas i bruk, må klienten registreres. Dette innebærer å opprette påloggingsinformasjon og tildele tilgang til de relevante komponentene som skal håndteres. Påloggingsinformasjon og detaljer om endepunkter må deles med den som skal installere og konfigurere integrasjonen. For nye tjenester opprettes klienter automatisk, noe som eliminerer behovet for manuell håndtering og utveksling av autentiseringsinformasjon. Disse klientene etableres for å dekke tilgangsbehov i FINTs undersystemer.',
             },
             assets: {
                 title: 'Ressurser',
                 shortDescription:
-                    'En ressurs er en identifikator som sikrer at en foresporsel til en komponent rutes til riktig organisasjon.',
+                    'En ressurs er en identifikator som sikrer at en forespørsel til en komponent rutes til riktig organisasjon.',
                 description:
-                    'En ressurs er en identifikator som sikrer at en foresporsel til en komponent rutes til riktig organisasjon. Alle adaptere og klienter ma vaere tilknyttet en ressurs. Nar et nytt adapter eller en ny klient opprettes, blir de automatisk koblet til primaerressursen.',
+                    'En ressurs er en identifikator som sikrer at en forespørsel til en komponent rutes til riktig organisasjon. Alle adaptere og klienter må være tilknyttet en ressurs. Når et nytt adapter eller en ny klient opprettes, blir de automatisk koblet til primærressursen.',
             },
             basistest: {
                 title: 'Basistest',
                 shortDescription:
                     'En basistest verifiserer at alle deler av FINT-komponenten fungerer som forventet.',
                 description:
-                    'En basistest verifiserer at alle deler av FINT-komponenten fungerer som forventet. I tillegg sjekker den at cachen inneholder data, og at disse nylig er oppdatert. Basistesten er nyttig ved feilsoking, og det er pakrevd a sende med testresultatet nar man kontakter support.',
+                    'En basistest verifiserer at alle deler av FINT-komponenten fungerer som forventet. I tillegg sjekker den at cachen inneholder data, og at disse nylig er oppdatert. Basistesten er nyttig ved feilsøking, og det er påkrevd å sende med testresultatet når man kontakter support.',
             },
             relasjonstest: {
                 title: 'Relasjonstest',
@@ -96,27 +96,27 @@ const nb = {
             },
             samtykke: {
                 title: 'Samtykke',
-                shortDescription: 'Samtykke-admin er et verktoy for a administrere samtykkebehandlinger.',
+                shortDescription: 'Samtykke-admin er et verktøy for å administrere samtykkebehandlinger.',
                 description:
-                    'Nedenfor finner du en oversikt over tilgjengelige tjenester. Klikk pa overskriften for a se hele listen over behandlinger eller legge til en ny behandling. For a legge til en ny tjeneste eller behandlingsgrunnlag, klikker du pa plussikonet.',
+                    'Nedenfor finner du en oversikt over tilgjengelige tjenester. Klikk på overskriften for å se hele listen over behandlinger eller legge til en ny behandling. For å legge til en ny tjeneste eller behandlingsgrunnlag, klikker du på plussikonet.',
             },
             status: {
                 title: 'Status Dashboard',
                 shortDescription: 'Oversikt over status for alle FINT-komponenter og tjenester.',
                 description:
-                    'Status Dashboard gir deg en oversikt over status for alle FINT-komponenter og tjenester. Her kan du se hvilke komponenter som fungerer normalt, og hvilke som kan ha problemer. Dashboardet viser ogsa informasjon om siste aktivitet og tilgjengelighet for hver komponent.',
+                    'Status Dashboard gir deg en oversikt over status for alle FINT-komponenter og tjenester. Her kan du se hvilke komponenter som fungerer normalt, og hvilke som kan ha problemer. Dashboardet viser også informasjon om siste aktivitet og tilgjengelighet for hver komponent.',
             },
             statusKontrakter: {
                 title: 'Status Kontrakter',
                 shortDescription: 'Detaljert oversikt over adaptere og deres status.',
                 description:
-                    'Status Kontrakter viser en detaljert oversikt over alle adaptere og deres navaerende status. Her kan du se heartbeat-status, synkronisering og siste overforing for hver kontrakt.',
+                    'Status Kontrakter viser en detaljert oversikt over alle adaptere og deres nåværende status. Her kan du se heartbeat-status, synkronisering og siste overføring for hver kontrakt.',
             },
             statusHendelser: {
                 title: 'Status Hendelser',
                 shortDescription: 'Oversikt over hendelser og deres status i FINT-systemet.',
                 description:
-                    'Status Hendelser gir deg en oversikt over alle hendelser som har skjedd i FINT-systemet. Her kan du se operasjoner, ressurser, status og nar hendelsene ble overfort.',
+                    'Status Hendelser gir deg en oversikt over alle hendelser som har skjedd i FINT-systemet. Her kan du se operasjoner, ressurser, status og når hendelsene ble overført.',
             },
         },
     },
