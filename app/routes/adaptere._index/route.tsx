@@ -92,7 +92,7 @@ export default function Index() {
                     <InternalPageHeader
                         title={t('adapterIndex.pageTitle')}
                         icon={LayersIcon}
-                        helpText="adaptere"
+                        helpText="adapter"
                         // onAddClick={handleCreate}
                     >
                         <Button

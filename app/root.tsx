@@ -1,4 +1,4 @@
-import { Box, HStack, Link, Page, Select } from '@navikt/ds-react';
+import { ActionMenu, Box, Button, Link, Page } from '@navikt/ds-react';
 import { NovariFooter, NovariHeader } from 'novari-frontend-components';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,7 +27,7 @@ import CustomErrorNoUser from '~/components/errors/CustomErrorNoUser';
 import { getFooterLinks, getNovariMenu } from '~/components/Menu/MenuConfig';
 import { UserOrganization } from '~/components/Menu/UserOrganization';
 import { setLanguage } from '~/i18n/config';
-import { supportedLanguages, type SupportedLanguage } from '~/i18n/resources';
+import { type SupportedLanguage, supportedLanguages } from '~/i18n/resources';
 import { defaultFeatures } from '~/types/FeatureFlag';
 import { IMeData } from '~/types/Me';
 import { IOrganisation } from '~/types/Organisation';
@@ -39,7 +39,7 @@ import { cspReportOnly } from '~/utils/csp';
 import { useTrackAnalyticsPageViews } from '~/hooks/useTrackAnalyticsPageViews';
 import appStylesHref from './styles/app.css?url';
 import akselHref from '@navikt/ds-css?url';
-import { PersonCircleIcon } from '@navikt/aksel-icons';
+import { LanguageIcon, PersonCircleIcon } from '@navikt/aksel-icons';
 
 export const links: LinksFunction = () => [
     { rel: 'stylesheet', href: akselHref },
@@ -153,24 +153,6 @@ export default function App() {
                 <Box padding="space-2" as="footer" className={'novari-footer'}>
                     <Page.Block gutters width="lg">
                         <NovariFooter links={footerLinks} />
-                        <HStack justify="end" className="mb-4">
-                            <Box className="w-48">
-                                <Select
-                                    size="small"
-                                    label={t('language.label')}
-                                    id="language-select"
-                                    value={selectedLanguage}
-                                    onChange={(event) =>
-                                        setLanguage(event.target.value as SupportedLanguage)
-                                    }>
-                                    {supportedLanguages.map((language) => (
-                                        <option key={language} value={language}>
-                                            {t(`language.${language}`)}
-                                        </option>
-                                    ))}
-                                </Select>
-                            </Box>
-                        </HStack>
                     </Page.Block>
                 </Box>
             }>
@@ -187,6 +169,28 @@ export default function App() {
                     onMenuClick={(action) => navigate(action)}
                     appName={t('root.appName')}
                     onLogin={onLogin}>
+                    <ActionMenu>
+                        <ActionMenu.Trigger>
+                            <Button
+                                size="small"
+                                variant="tertiary"
+                                icon={<LanguageIcon aria-hidden />}
+                                aria-label={t('language.label')}
+                                className="novari-header-icon">
+                                {t(`language.${selectedLanguage}`)}
+                            </Button>
+                        </ActionMenu.Trigger>
+                        <ActionMenu.Content>
+                            {supportedLanguages.map((language) => (
+                                <ActionMenu.Item
+                                    key={language}
+                                    onSelect={() => setLanguage(language as SupportedLanguage)}>
+                                    {t(`language.${language}`)}
+                                </ActionMenu.Item>
+                            ))}
+                        </ActionMenu.Content>
+                    </ActionMenu>
+
                     <UserOrganization userSession={userSession} />
                     <Link href={'/user'}>
                         <PersonCircleIcon
