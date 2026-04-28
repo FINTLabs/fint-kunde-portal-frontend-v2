@@ -202,11 +202,9 @@ export default function App() {
                 </NovariHeader>
             </Box>
 
-            {/*<Box padding="space-8" paddingBlock="space-2" as="main">*/}
             <Page.Block as="main" width="xl" gutters>
                 <Outlet context={userSession} />
             </Page.Block>
-            {/*</Box>*/}
         </Page>
     );
 }
