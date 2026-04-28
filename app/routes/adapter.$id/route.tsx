@@ -1,6 +1,7 @@
 import { LayersIcon } from '@navikt/aksel-icons';
 import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
+import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -40,6 +41,7 @@ interface IExtendedFetcherResponseData extends ApiResponse<IAdapter> {
 }
 
 export default function Index() {
+    const { t } = useTranslation();
     const { adapters, components } = useLoaderData<{
         adapters: IAdapter[];
         components: IComponent[];
@@ -50,7 +52,7 @@ export default function Index() {
     const { id } = useParams();
     // const hasAccessControl = features['access-controll-new'];
     const breadcrumbs = [
-        { name: 'Adaptere', link: '/adaptere' },
+        { name: t('menu.adapters'), link: '/adaptere' },
         { name: `${id}`, link: `/adapter/${id}` },
     ];
 
@@ -107,7 +109,7 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader
-                title={displayName ? displayName : 'Error'}
+                title={displayName ? displayName : t('mainRoutes.adapterDetails.errorTitle')}
                 icon={LayersIcon}
                 helpText="adapter detaljer"
             />
@@ -139,7 +141,7 @@ export default function Index() {
                             borderColor="neutral-subtle"
                             borderWidth="2"
                             borderRadius="12">
-                            <Heading size={'medium'}>Autentisering</Heading>
+                            <Heading size={'medium'}>{t('mainRoutes.adapterDetails.authHeading')}</Heading>
                             <AuthTable
                                 entity={adapter}
                                 entityType="adapter"
@@ -158,7 +160,7 @@ export default function Index() {
                         borderWidth="2"
                         borderRadius="12">
                         <HGrid gap="space-2">
-                            <Heading size={'medium'}>Komponenter</Heading>
+                            <Heading size={'medium'}>{t('menu.components')}</Heading>
 
                             <ComponentsTable
                                 items={components}

@@ -1,6 +1,7 @@
 import { MigrationIcon } from '@navikt/aksel-icons';
 import { Box, LocalAlert, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
+import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -43,6 +44,7 @@ export { loader };
 export const action = async (args: ActionFunctionArgs) => handleAssetAction(args);
 
 export default function Index() {
+    const { t } = useTranslation();
     const { id } = useParams();
     const { adapters, asset, clients, assets } = useLoaderData<LoaderData>();
     const fetcher = useFetcher();
@@ -50,7 +52,7 @@ export default function Index() {
     const { alertState } = useAlerts<IResource>([], actionData, fetcher.state);
 
     const breadcrumbs = [
-        { name: 'Ressurser', link: '/ressurser' },
+        { name: t('menu.resources'), link: '/ressurser' },
         { name: `${id}`, link: `/ressurser/${id}` },
     ];
 
@@ -104,7 +106,7 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'Ressurser'} icon={MigrationIcon} helpText="ressurser" />
+            <InternalPageHeader title={t('menu.resources')} icon={MigrationIcon} helpText="ressurser" />
 
             <NovariToaster
                 items={alertState}
@@ -115,9 +117,11 @@ export default function Index() {
             {!asset ? (
                 <LocalAlert status="announcement">
                     <LocalAlert.Header>
-                        <LocalAlert.Title>Ressursen ikke funnet</LocalAlert.Title>
+                        <LocalAlert.Title>{t('mainRoutes.resourcesDetails.notFoundTitle')}</LocalAlert.Title>
                     </LocalAlert.Header>
-                    <LocalAlert.Content>Kunne ikke laste ressursen.</LocalAlert.Content>
+                    <LocalAlert.Content>
+                        {t('mainRoutes.resourcesDetails.notFoundDescription')}
+                    </LocalAlert.Content>
                 </LocalAlert>
             ) : (
                 <VStack gap={'space-24'}>

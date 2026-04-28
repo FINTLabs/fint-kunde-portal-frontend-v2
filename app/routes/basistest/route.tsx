@@ -2,6 +2,7 @@ import { TerminalIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Heading, Loader, LocalAlert, VStack } from '@navikt/ds-react';
 import { type ApiResponse } from 'novari-frontend-components';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -35,7 +36,8 @@ type ExtendedFetcherResponseData = ApiResponse<IBasicTestResponse> & {
 };
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'Basistest', link: '/basistest' }];
+    const { t } = useTranslation();
+    const breadcrumbs = [{ name: t('menu.basicTest'), link: '/basistest' }];
     const fetcher = useFetcher();
     const actionData = fetcher.data as ExtendedFetcherResponseData;
 
@@ -60,17 +62,15 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'Basistest'} icon={TerminalIcon} helpText="basistest" />
+            <InternalPageHeader title={t('menu.basicTest')} icon={TerminalIcon} helpText="basistest" />
             <VStack gap={'space-24'}>
                 {fetcher.state !== 'submitting' && !actionData && (
                     <LocalAlert status="warning">
                         <LocalAlert.Header>
-                            <LocalAlert.Title>Passordet til klienten</LocalAlert.Title>
+                            <LocalAlert.Title>{t('mainRoutes.basicTest.warningTitle')}</LocalAlert.Title>
                         </LocalAlert.Header>
                         <LocalAlert.Content>
-                            Passordet til klienten du kjører testen på, vil bli nullstilt under
-                            testkjøringen. Det anbefales derfor å bruke en dedikert klient for
-                            testing.
+                            {t('mainRoutes.basicTest.warningDescription')}
                         </LocalAlert.Content>
                     </LocalAlert>
                 )}
@@ -89,7 +89,7 @@ export default function Index() {
                 {hasActionData && (
                     <>
                         {isSubmitting ? (
-                            <Loader size="large" title="Laster inn data..." />
+                            <Loader size="large" title={t('mainRoutes.basicTest.loadingTitle')} />
                         ) : (
                             <>
                                 {variant && (
@@ -98,8 +98,8 @@ export default function Index() {
                                         <LocalAlert.Header>
                                             <LocalAlert.Title>
                                                 {variant === 'error'
-                                                    ? 'Error running test:'
-                                                    : 'Test completed:'}
+                                                    ? t('mainRoutes.basicTest.errorRunningTest')
+                                                    : t('mainRoutes.basicTest.testCompleted')}
                                             </LocalAlert.Title>
                                         </LocalAlert.Header>
                                         <LocalAlert.Content>
@@ -107,7 +107,8 @@ export default function Index() {
                                                 {actionData.message}: {actionData.testUrl}
                                             </BodyShort>
                                             <BodyShort>
-                                                Klient: {actionData.clientName || 'ingen klient'}
+                                                {t('mainRoutes.basicTest.clientLabel')}:{' '}
+                                                {actionData.clientName || t('mainRoutes.basicTest.noClient')}
                                             </BodyShort>
                                         </LocalAlert.Content>
                                     </LocalAlert>
@@ -119,7 +120,9 @@ export default function Index() {
                                         borderColor="neutral-subtle"
                                         borderWidth="2"
                                         borderRadius="12">
-                                        <Heading size="medium">Resultat av helsetest:</Heading>
+                                        <Heading size="medium">
+                                            {t('mainRoutes.basicTest.healthResultsHeading')}
+                                        </Heading>
                                         <HealthTestResultsTable logResults={healthResults} />
                                     </Box>
                                 )}
@@ -131,7 +134,7 @@ export default function Index() {
                                         borderWidth="2"
                                         borderRadius="12">
                                         <Heading size="medium" className="pt-5">
-                                            Cache status:
+                                            {t('mainRoutes.basicTest.cacheStatusHeading')}
                                         </Heading>
                                         <CacheStatusTable logResults={cacheResults} />
                                     </Box>

@@ -1,5 +1,6 @@
 import { ComponentIcon } from '@navikt/aksel-icons';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
+import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -24,7 +25,8 @@ export { loader };
 export const action = async (args: ActionFunctionArgs) => handleComponentIndexAction(args);
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'Komponenter', link: '/komponenter' }];
+    const { t } = useTranslation();
+    const breadcrumbs = [{ name: t('menu.components'), link: '/komponenter' }];
     const { components, orgName } = useLoaderData<{ components: IComponent[]; orgName: string }>();
     const fetcher = useFetcher<ApiResponse<IComponent>>();
     const actionData = fetcher.data as ApiResponse<IComponent>;
@@ -41,7 +43,7 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
 
-            <InternalPageHeader title={'Komponenter'} icon={ComponentIcon} helpText="components" />
+            <InternalPageHeader title={t('menu.components')} icon={ComponentIcon} helpText="components" />
             <NovariToaster
                 items={alertState}
                 position={'top-right'}

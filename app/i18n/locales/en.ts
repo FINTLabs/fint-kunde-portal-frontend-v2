@@ -10,6 +10,87 @@ const en = {
             nb: 'Norwegian',
             en: 'English',
         },
+        mainRoutes: {
+            adaptersIndex: {
+                deletedLabel: 'Adapter',
+            },
+            resourcesIndex: {
+                addButton: 'Add resource',
+                notFoundTitle: 'Component not found',
+                notFoundDescription: 'Could not load component details.',
+            },
+            resourcesDetails: {
+                notFoundTitle: 'Resource not found',
+                notFoundDescription: 'Could not load resource.',
+            },
+            componentDetails: {
+                defaultTitle: 'Component',
+                detailsHeading: 'Details',
+                endpointsHeading: 'Endpoints',
+                swaggerHeading: 'Swagger',
+                notFoundTitle: 'Component not found',
+                notFoundDescription: 'Could not load component details.',
+            },
+            adapterDetails: {
+                errorTitle: 'Error',
+                authHeading: 'Authentication',
+            },
+            basicTest: {
+                warningTitle: 'Client password',
+                warningDescription:
+                    'The password for the client you run the test with will be reset during the test run. We therefore recommend using a dedicated test client.',
+                loadingTitle: 'Loading data...',
+                errorRunningTest: 'Error running test:',
+                testCompleted: 'Test completed:',
+                clientLabel: 'Client',
+                noClient: 'no client',
+                healthResultsHeading: 'Health test results:',
+                cacheStatusHeading: 'Cache status:',
+            },
+            contacts: {
+                addButton: 'Add',
+                legalContactHeading: 'Legal contact',
+                noLegalContact: 'No legal contact found',
+            },
+            clientsIndex: {
+                deletedLabel: 'Client',
+                createButton: 'Create client',
+                searchLabel: 'Search clients',
+                searchPlaceholder: 'Search by name or description',
+            },
+            clientDetails: {
+                defaultTitle: 'Client',
+                authHeading: 'Authentication',
+                accessControlHeading: 'Access control for components',
+                changeLogButton: 'Change log',
+                accessLogButton: 'Access log',
+                accessLogModalTitle: 'Access log',
+                environmentLegend: 'Environment:',
+                notEnabledTitle: 'Not enabled',
+                notEnabledDescription: 'Access control for components is not enabled',
+                setupAccessButton: 'Set up access control',
+                notFoundTitle: 'Client not found',
+                notFoundDescription: 'Could not load client details.',
+            },
+            relationTest: {
+                warningTitle: 'Warning',
+                warningDescription:
+                    'The password for the client you run the test with will be reset during the test run. We therefore recommend using a dedicated test client.',
+                removeAllButton: 'Remove all tests',
+            },
+            user: {
+                breadcrumb: 'Profile',
+                title: 'User information',
+                fullNameLabel: 'Full name:',
+                emailLabel: 'Email:',
+                mobileLabel: 'Mobile:',
+                rolesLabel: 'Roles:',
+            },
+            help: {
+                breadcrumb: 'Help',
+                title: 'More information',
+            },
+        },
         footer: {
             incidents: 'Service status',
             support: 'Support Request',

@@ -17,12 +17,12 @@ export const meta: MetaFunction = () => {
 export default function Index() {
     const { t } = useTranslation();
     const helpData = getHelpData(t);
-    const breadcrumbs = [{ name: 'Support', link: '/support' }];
+    const breadcrumbs = [{ name: t('mainRoutes.help.breadcrumb'), link: '/help' }];
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'Mer informasjon'} icon={InformationSquareIcon} />
+            <InternalPageHeader title={t('mainRoutes.help.title')} icon={InformationSquareIcon} />
             <Box padding="space-16" borderColor="neutral-subtle" borderWidth="2" borderRadius="12">
                 <Accordion>
                     {helpData.map((item: HelpDataItem) => (

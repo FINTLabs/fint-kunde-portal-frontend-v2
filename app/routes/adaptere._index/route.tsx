@@ -46,7 +46,7 @@ export default function Index() {
     const { alertState, setAlertState } = useAlerts<IAdapter>([], actionData);
 
     useDeletedSearchParamAlert({
-        label: 'Adapter',
+        label: t('mainRoutes.adaptersIndex.deletedLabel'),
         setAlertState,
     });
 

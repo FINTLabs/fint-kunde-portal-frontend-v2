@@ -1,5 +1,6 @@
 import { ComponentIcon } from '@navikt/aksel-icons';
 import { Box, Heading, LocalAlert, VStack } from '@navikt/ds-react';
+import { useTranslation } from 'react-i18next';
 import { type LoaderFunctionArgs, useLoaderData } from 'react-router';
 
 import ComponentApi from '~/api/ComponentApi';
@@ -26,15 +27,16 @@ export const handle = {
 };
 
 export default function Index() {
+    const { t } = useTranslation();
     const component = useLoaderData<IComponent | null>();
     // const [searchParams] = useSearchParams();
     // const fromAdapter = searchParams.get('fromAdapter');
     const breadcrumbs = component
         ? [
-              { name: 'Komponenter', link: '/komponenter' },
+              { name: t('menu.components'), link: '/komponenter' },
               { name: component.name, link: `/komponenter/${component.name}` },
           ]
-        : [{ name: 'Komponenter', link: '/komponenter' }];
+        : [{ name: t('menu.components'), link: '/komponenter' }];
     // const navigate = useNavigate();
 
     // const handleBack = () => {
@@ -51,7 +53,7 @@ export default function Index() {
             {component ? (
                 <InternalPageHeader title={component.description} icon={ComponentIcon} />
             ) : (
-                <InternalPageHeader title="Komponent" icon={ComponentIcon} />
+                <InternalPageHeader title={t('mainRoutes.componentDetails.defaultTitle')} icon={ComponentIcon} />
             )}
 
             {component ? (
@@ -61,7 +63,7 @@ export default function Index() {
                         borderColor="neutral-subtle"
                         borderWidth="2"
                         borderRadius="12">
-                        <Heading size={'medium'}>Detaljer</Heading>
+                        <Heading size={'medium'}>{t('mainRoutes.componentDetails.detailsHeading')}</Heading>
 
                         <ComponentDetails component={component} />
                     </Box>
@@ -70,7 +72,7 @@ export default function Index() {
                         borderColor="neutral-subtle"
                         borderWidth="2"
                         borderRadius="12">
-                        <Heading size={'medium'}>Endepunkter</Heading>
+                        <Heading size={'medium'}>{t('mainRoutes.componentDetails.endpointsHeading')}</Heading>
                         <Box padding="space-4">
                             <EndpointTable component={component} />
                         </Box>
@@ -80,7 +82,7 @@ export default function Index() {
                         borderColor="neutral-subtle"
                         borderWidth="2"
                         borderRadius="12">
-                        <Heading size={'medium'}>Swagger</Heading>
+                        <Heading size={'medium'}>{t('mainRoutes.componentDetails.swaggerHeading')}</Heading>
 
                         <Box padding="space-4">
                             <SwaggerTable component={component} />
@@ -90,9 +92,11 @@ export default function Index() {
             ) : (
                 <LocalAlert status="warning">
                     <LocalAlert.Header>
-                        <LocalAlert.Title>Komponent ikke funnet</LocalAlert.Title>
+                        <LocalAlert.Title>{t('mainRoutes.componentDetails.notFoundTitle')}</LocalAlert.Title>
                     </LocalAlert.Header>
-                    <LocalAlert.Content>Kunne ikke laste komponentdetaljer.</LocalAlert.Content>
+                    <LocalAlert.Content>
+                        {t('mainRoutes.componentDetails.notFoundDescription')}
+                    </LocalAlert.Content>
                 </LocalAlert>
             )}
         </>

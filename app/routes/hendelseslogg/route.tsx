@@ -2,6 +2,7 @@ import { TasklistSendIcon } from '@navikt/aksel-icons';
 import { Box, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -34,7 +35,8 @@ interface IPageLoaderData {
 }
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'Hendelseslogg', link: '/hendelseslogg' }];
+    const { t } = useTranslation();
+    const breadcrumbs = [{ name: t('menu.eventLog'), link: '/hendelseslogg' }];
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<AuditEvent[]>;
     const { components, configs } = useLoaderData<IPageLoaderData>();
@@ -55,7 +57,7 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader
-                title={'Hendelseslogg'}
+                title={t('menu.eventLog')}
                 icon={TasklistSendIcon}
                 helpText="hendelseslogg"
             />

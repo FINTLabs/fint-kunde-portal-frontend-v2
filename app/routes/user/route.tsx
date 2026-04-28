@@ -1,5 +1,6 @@
 import { PersonIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box, HGrid, Label, Tag } from '@navikt/ds-react';
+import { useTranslation } from 'react-i18next';
 import { useLoaderData } from 'react-router';
 
 import MeApi from '~/api/MeApi';
@@ -20,13 +21,14 @@ export const loader = async () => {
 };
 
 export default function Index() {
+    const { t } = useTranslation();
     const { user } = useLoaderData<LoaderData>();
-    const breadcrumbs = [{ name: 'Profile', link: '/user' }];
+    const breadcrumbs = [{ name: t('mainRoutes.user.breadcrumb'), link: '/user' }];
 
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'User Information'} icon={PersonIcon} />
+            <InternalPageHeader title={t('mainRoutes.user.title')} icon={PersonIcon} />
 
             <HGrid gap="space-2" align={'start'}>
                 <Box
@@ -36,20 +38,20 @@ export default function Index() {
                     borderRadius="12">
                     <div>
                         <div style={{ marginBottom: '1rem' }}>
-                            <Label>Full Name:</Label>
+                            <Label>{t('mainRoutes.user.fullNameLabel')}</Label>
                             <BodyLong>{`${user.firstName} ${user.lastName}`}</BodyLong>
                         </div>
                         <div style={{ marginBottom: '1rem' }}>
-                            <Label>Email:</Label>
+                            <Label>{t('mainRoutes.user.emailLabel')}</Label>
                             <BodyLong>{user.mail}</BodyLong>
                         </div>
                         <div style={{ marginBottom: '1rem' }}>
-                            <Label>Mobile:</Label>
+                            <Label>{t('mainRoutes.user.mobileLabel')}</Label>
                             <BodyLong>{user.mobile}</BodyLong>
                         </div>
 
                         <div style={{ marginBottom: '1rem' }}>
-                            <Label>Roles:</Label>
+                            <Label>{t('mainRoutes.user.rolesLabel')}</Label>
                             <BodyLong>
                                 {user.roles.map((role, index) => (
                                     <Tag

@@ -2,6 +2,7 @@ import { TokenIcon } from '@navikt/aksel-icons';
 import { Box, Button, Search, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -34,8 +35,9 @@ interface IPageLoaderData {
 }
 
 export default function Index() {
+    const { t } = useTranslation();
     const { clientData, orgName } = useLoaderData<IPageLoaderData>();
-    const breadcrumbs = [{ name: 'Klienter', link: '/klienter' }];
+    const breadcrumbs = [{ name: t('menu.clients'), link: '/klienter' }];
     const [filteredClients, setFilteredClients] = useState(clientData);
     const [isCreating, setIsCreating] = useState(false);
     const [searchValue, setSearchValue] = useState('');
@@ -45,7 +47,7 @@ export default function Index() {
     const actionData = fetcher.data as ApiResponse<IClient>;
     const { alertState, setAlertState } = useAlerts<IClient>([], actionData, fetcher.state);
     useDeletedSearchParamAlert({
-        label: 'Klient',
+        label: t('mainRoutes.clientsIndex.deletedLabel'),
         setAlertState,
     });
 
@@ -107,7 +109,7 @@ export default function Index() {
             ) : (
                 <>
                     <InternalPageHeader
-                        title={'Klienter'}
+                        title={t('menu.clients')}
                         icon={TokenIcon}
                         helpText={'klienter'}
                         // onAddClick={handleCreate}
@@ -118,20 +120,20 @@ export default function Index() {
                             size="small"
                             className="mr-2"
                             data-cy="create-button">
-                            Opprett klient
+                            {t('mainRoutes.clientsIndex.createButton')}
                         </Button>
                     </InternalPageHeader>
 
                     <VStack gap={'space-8'}>
                         <Box padding="space-16">
                             <Search
-                                label="Søk etter klienter"
+                                label={t('mainRoutes.clientsIndex.searchLabel')}
                                 hideLabel
                                 variant="secondary"
                                 size="small"
                                 value={searchValue}
                                 onChange={(value: string) => handleSearch(value)}
-                                placeholder="Søk etter navn eller beskrivelse"
+                                placeholder={t('mainRoutes.clientsIndex.searchPlaceholder')}
                                 // className="pb-6"
                                 data-cy="search-input"
                             />

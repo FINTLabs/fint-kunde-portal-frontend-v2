@@ -2,6 +2,7 @@ import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { type ActionFunction, type MetaFunction, useFetcher, useLoaderData } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
@@ -34,7 +35,8 @@ export const action: ActionFunction = async ({ request }) => {
 export { loader };
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'Kontakter', link: '/kontakter' }];
+    const { t } = useTranslation();
+    const breadcrumbs = [{ name: t('menu.contacts'), link: '/kontakter' }];
     const { legalContact, technicalContacts, allContacts, rolesData, selectedOrg } =
         useLoaderData<IPageLoaderData>();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -56,13 +58,13 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={'Kontakter'} icon={PersonGroupIcon} helpText="contacts">
+            <InternalPageHeader title={t('menu.contacts')} icon={PersonGroupIcon} helpText="contacts">
                 <Button
                     data-cy="add-contact-button"
                     size="small"
                     onClick={() => setIsModalOpen(true)}
                     icon={<PlusIcon aria-hidden />}>
-                    Legg til
+                    {t('mainRoutes.contacts.addButton')}
                 </Button>
             </InternalPageHeader>
 
@@ -70,7 +72,7 @@ export default function Index() {
 
             <VStack gap="space-16">
                 <Box padding="space-24" borderColor="brand-blue" borderWidth="2" borderRadius="12">
-                    <Heading size="xsmall">Juridisk kontakt</Heading>
+                    <Heading size="xsmall">{t('mainRoutes.contacts.legalContactHeading')}</Heading>
                     {legalContact ? (
                         <HStack gap="space-4" align="center" className="px-4">
                             <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full " />
@@ -79,7 +81,7 @@ export default function Index() {
                             </BodyShort>
                         </HStack>
                     ) : (
-                        <BodyShort size="medium">Ingen juridisk kontakt funnet</BodyShort>
+                        <BodyShort size="medium">{t('mainRoutes.contacts.noLegalContact')}</BodyShort>
                     )}
                 </Box>
                 <Box

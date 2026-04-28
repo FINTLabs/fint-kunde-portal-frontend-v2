@@ -2,6 +2,7 @@ import { MigrationIcon } from '@navikt/aksel-icons';
 import { Box, Button, LocalAlert } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -34,7 +35,8 @@ export { loader };
 export const action = async (args: ActionFunctionArgs) => handleAssetIndexAction(args);
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'Ressurser', link: '/ressurser' }];
+    const { t } = useTranslation();
+    const breadcrumbs = [{ name: t('menu.resources'), link: '/ressurser' }];
     const { assets, primaryAsset } = useLoaderData<IPageLoaderData>();
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate();
@@ -66,13 +68,13 @@ export default function Index() {
 
             {!isCreating && (
                 <InternalPageHeader
-                    title={'Ressurser'}
+                    title={t('menu.resources')}
                     icon={MigrationIcon}
                     helpText="assets"
                     // onAddClick={handleCreate}
                 >
                     <Button variant="primary" size="small" onClick={handleCreate}>
-                        Legg til ressurs
+                        {t('mainRoutes.resourcesIndex.addButton')}
                     </Button>
                 </InternalPageHeader>
             )}
@@ -81,9 +83,13 @@ export default function Index() {
                 {!assets || assets.length === 0 ? (
                     <LocalAlert status="warning">
                         <LocalAlert.Header>
-                            <LocalAlert.Title>Komponent ikke funnet</LocalAlert.Title>
+                            <LocalAlert.Title>
+                                {t('mainRoutes.resourcesIndex.notFoundTitle')}
+                            </LocalAlert.Title>
                         </LocalAlert.Header>
-                        <LocalAlert.Content>Kunne ikke laste komponentdetaljer.</LocalAlert.Content>
+                        <LocalAlert.Content>
+                            {t('mainRoutes.resourcesIndex.notFoundDescription')}
+                        </LocalAlert.Content>
                     </LocalAlert>
                 ) : isCreating ? (
                     <CreateForm

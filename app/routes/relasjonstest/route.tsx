@@ -2,6 +2,7 @@ import { ArrowsSquarepathIcon, EraserIcon } from '@navikt/aksel-icons';
 import { Box, Button, LocalAlert, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -34,7 +35,8 @@ interface IPageLoaderData {
 }
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'Relasjonstest', link: '/relasjonstest' }];
+    const { t } = useTranslation();
+    const breadcrumbs = [{ name: t('menu.relationTest'), link: '/relasjonstest' }];
     const { components, relationTests, configs } = useLoaderData<IPageLoaderData>();
 
     const fetcher = useFetcher();
@@ -87,7 +89,7 @@ export default function Index() {
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             <InternalPageHeader
-                title={'Relasjonstest'}
+                title={t('menu.relationTest')}
                 icon={ArrowsSquarepathIcon}
                 helpText="relasjonstest"
             />
@@ -100,12 +102,10 @@ export default function Index() {
                 {fetcher.state !== 'submitting' && !actionData && (
                     <LocalAlert status="warning">
                         <LocalAlert.Header>
-                            <LocalAlert.Title>Advarsel</LocalAlert.Title>
+                            <LocalAlert.Title>{t('mainRoutes.relationTest.warningTitle')}</LocalAlert.Title>
                         </LocalAlert.Header>
                         <LocalAlert.Content>
-                            Passordet til klienten du kjører testen på, vil bli nullstilt under
-                            testkjøringen. Det anbefales derfor å bruke en dedikert klient for
-                            testing.
+                            {t('mainRoutes.relationTest.warningDescription')}
                         </LocalAlert.Content>
                     </LocalAlert>
                 )}
@@ -126,7 +126,7 @@ export default function Index() {
                                 variant={'secondary'}
                                 icon={<EraserIcon aria-hidden />}
                                 onClick={removeAllTests}>
-                                Fjern alle tester
+                                {t('mainRoutes.relationTest.removeAllButton')}
                             </Button>
                         </Box>
                     )}

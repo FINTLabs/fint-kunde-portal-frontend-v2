@@ -10,6 +10,87 @@ const nb = {
             nb: 'Norsk',
             en: 'Engelsk',
         },
+        mainRoutes: {
+            adaptersIndex: {
+                deletedLabel: 'Adapter',
+            },
+            resourcesIndex: {
+                addButton: 'Legg til ressurs',
+                notFoundTitle: 'Komponent ikke funnet',
+                notFoundDescription: 'Kunne ikke laste komponentdetaljer.',
+            },
+            resourcesDetails: {
+                notFoundTitle: 'Ressursen ikke funnet',
+                notFoundDescription: 'Kunne ikke laste ressursen.',
+            },
+            componentDetails: {
+                defaultTitle: 'Komponent',
+                detailsHeading: 'Detaljer',
+                endpointsHeading: 'Endepunkter',
+                swaggerHeading: 'Swagger',
+                notFoundTitle: 'Komponent ikke funnet',
+                notFoundDescription: 'Kunne ikke laste komponentdetaljer.',
+            },
+            adapterDetails: {
+                errorTitle: 'Feil',
+                authHeading: 'Autentisering',
+            },
+            basicTest: {
+                warningTitle: 'Passordet til klienten',
+                warningDescription:
+                    'Passordet til klienten du kjører testen på, vil bli nullstilt under testkjøringen. Det anbefales derfor å bruke en dedikert klient for testing.',
+                loadingTitle: 'Laster inn data...',
+                errorRunningTest: 'Feil ved kjøring av test:',
+                testCompleted: 'Test fullført:',
+                clientLabel: 'Klient',
+                noClient: 'ingen klient',
+                healthResultsHeading: 'Resultat av helsetest:',
+                cacheStatusHeading: 'Cache status:',
+            },
+            contacts: {
+                addButton: 'Legg til',
+                legalContactHeading: 'Juridisk kontakt',
+                noLegalContact: 'Ingen juridisk kontakt funnet',
+            },
+            clientsIndex: {
+                deletedLabel: 'Klient',
+                createButton: 'Opprett klient',
+                searchLabel: 'Søk etter klienter',
+                searchPlaceholder: 'Søk etter navn eller beskrivelse',
+            },
+            clientDetails: {
+                defaultTitle: 'Klient',
+                authHeading: 'Autentisering',
+                accessControlHeading: 'Tilgangsstyring for komponenter',
+                changeLogButton: 'Endringslogg',
+                accessLogButton: 'Tilgangslogg',
+                accessLogModalTitle: 'Tilgangslogg',
+                environmentLegend: 'Miljø:',
+                notEnabledTitle: 'Ikke aktivert',
+                notEnabledDescription: 'Tilgangsstyring for komponenter er ikke aktivert',
+                setupAccessButton: 'Sett opp tilgangsstyring',
+                notFoundTitle: 'Klient ikke funnet',
+                notFoundDescription: 'Kunne ikke laste klientdetaljer.',
+            },
+            relationTest: {
+                warningTitle: 'Advarsel',
+                warningDescription:
+                    'Passordet til klienten du kjører testen på, vil bli nullstilt under testkjøringen. Det anbefales derfor å bruke en dedikert klient for testing.',
+                removeAllButton: 'Fjern alle tester',
+            },
+            user: {
+                breadcrumb: 'Profil',
+                title: 'Brukerinformasjon',
+                fullNameLabel: 'Fullt navn:',
+                emailLabel: 'E-post:',
+                mobileLabel: 'Mobil:',
+                rolesLabel: 'Roller:',
+            },
+            help: {
+                breadcrumb: 'Hjelp',
+                title: 'Mer informasjon',
+            },
+        },
         footer: {
             incidents: 'Driftsmeldinger',
             support: 'Opprett supportsak',

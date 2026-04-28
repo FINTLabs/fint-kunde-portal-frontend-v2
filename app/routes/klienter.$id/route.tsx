@@ -13,6 +13,7 @@ import {
 } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { type ActionFunctionArgs, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { AuthTable } from '~/components/shared/AuthTable';
@@ -52,6 +53,7 @@ interface IExtendedFetcherResponseData extends ApiResponse<IClient> {
 }
 
 export default function ClientDetails() {
+    const { t } = useTranslation();
     const {
         client,
         access,
@@ -86,7 +88,7 @@ export default function ClientDetails() {
 
     const { id } = useParams();
     const breadcrumbs = [
-        { name: 'Klienter', link: '/klienter' },
+        { name: t('menu.clients'), link: '/klienter' },
         { name: `${id}`, link: `/klienter/${id}` },
     ];
 
@@ -156,7 +158,10 @@ export default function ClientDetails() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={client?.shortDescription || 'Klient'} icon={TokenIcon} />
+            <InternalPageHeader
+                title={client?.shortDescription || t('mainRoutes.clientDetails.defaultTitle')}
+                icon={TokenIcon}
+            />
             <NovariToaster
                 items={alertState.map((item) => ({
                     ...item,
@@ -186,7 +191,7 @@ export default function ClientDetails() {
                             borderColor="neutral-subtle"
                             borderWidth="2"
                             borderRadius="12">
-                            <Heading size={'medium'}>Autentisering</Heading>
+                            <Heading size={'medium'}>{t('mainRoutes.clientDetails.authHeading')}</Heading>
                             <AuthTable
                                 entity={client}
                                 entityType="client"
@@ -208,7 +213,7 @@ export default function ClientDetails() {
                             <>
                                 <HStack>
                                     <Heading size={'medium'}>
-                                        Tilgangsstyring for Komponenter
+                                        {t('mainRoutes.clientDetails.accessControlHeading')}
                                     </Heading>
                                     <Box
                                         className="w-full flex-1"
@@ -218,21 +223,21 @@ export default function ClientDetails() {
                                             variant="tertiary"
                                             icon={<TasklistSendIcon />}
                                             onClick={() => setIsAuditOpen(true)}>
-                                            Endringslogg
+                                            {t('mainRoutes.clientDetails.changeLogButton')}
                                         </Button>
                                         <Button
                                             size="xsmall"
                                             variant="tertiary"
                                             icon={<ShieldCheckmarkIcon />}
                                             onClick={() => setIsLogOpen(true)}>
-                                            Tilgangslogg
+                                            {t('mainRoutes.clientDetails.accessLogButton')}
                                         </Button>
                                     </Box>
                                 </HStack>
 
                                 <Box padding={'space-6'}>
                                     <CheckboxGroup
-                                        legend="Miljø:"
+                                        legend={t('mainRoutes.clientDetails.environmentLegend')}
                                         onChange={(vals) => handleEnvChange(vals as Environment[])}
                                         defaultValue={selectedEnvs}
                                         data-cy={'env-checkbox-group'}>
@@ -253,7 +258,7 @@ export default function ClientDetails() {
                                 <Modal
                                     open={isAuditOpen}
                                     onClose={() => setIsAuditOpen(false)}
-                                    header={{ heading: 'Endringslogg' }}>
+                                    header={{ heading: t('mainRoutes.clientDetails.changeLogButton') }}>
                                     <Modal.Body>
                                         <ComponentAccessAudit audit={accessAuditLogs} />
                                     </Modal.Body>
@@ -262,7 +267,7 @@ export default function ClientDetails() {
                                 <Modal
                                     open={isLogOpen}
                                     onClose={() => setIsLogOpen(false)}
-                                    header={{ heading: 'Access Log' }}>
+                                    header={{ heading: t('mainRoutes.clientDetails.accessLogModalTitle') }}>
                                     <Modal.Body>
                                         <ComponentAccessLog accessLog={accessLog} />
                                     </Modal.Body>
@@ -282,15 +287,17 @@ export default function ClientDetails() {
                             <Box padding="space-6">
                                 <LocalAlert status="announcement">
                                     <LocalAlert.Header>
-                                        <LocalAlert.Title>Ikke aktivert</LocalAlert.Title>
+                                        <LocalAlert.Title>
+                                            {t('mainRoutes.clientDetails.notEnabledTitle')}
+                                        </LocalAlert.Title>
                                     </LocalAlert.Header>
                                     <LocalAlert.Content>
-                                        Tilgangsstyring for komponenter er ikke aktivert
+                                        {t('mainRoutes.clientDetails.notEnabledDescription')}
                                     </LocalAlert.Content>
                                 </LocalAlert>
 
                                 <Button onClick={addAccess} size={'small'} loading={isLoading}>
-                                    Sett opp tilgangsstyring
+                                    {t('mainRoutes.clientDetails.setupAccessButton')}
                                 </Button>
                             </Box>
                         )}
@@ -299,9 +306,11 @@ export default function ClientDetails() {
             ) : (
                 <LocalAlert status="announcement">
                     <LocalAlert.Header>
-                        <LocalAlert.Title>Klient ikke funnet</LocalAlert.Title>
+                        <LocalAlert.Title>{t('mainRoutes.clientDetails.notFoundTitle')}</LocalAlert.Title>
                     </LocalAlert.Header>
-                    <LocalAlert.Content>Kunne ikke laste klientdetaljer.</LocalAlert.Content>
+                    <LocalAlert.Content>
+                        {t('mainRoutes.clientDetails.notFoundDescription')}
+                    </LocalAlert.Content>
                 </LocalAlert>
             )}
         </>
