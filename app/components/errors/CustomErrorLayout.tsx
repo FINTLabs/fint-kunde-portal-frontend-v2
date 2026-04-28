@@ -1,17 +1,20 @@
 import { Box, Page } from '@navikt/ds-react';
 import { NovariFooter, NovariHeader } from 'novari-frontend-components';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import '@navikt/ds-css';
-import { footerLinksNotLoggedIn } from '~/components/Menu/MenuConfig';
+import { getFooterLinksNotLoggedIn } from '~/components/Menu/MenuConfig';
 
 export function CustomErrorLayout({ children }: { children: React.ReactNode }) {
+    const { t } = useTranslation();
+
     return (
         <Page
             footer={
                 <Box padding="space-2" as="footer" className={'novari-footer'}>
                     <Page.Block gutters width="lg">
-                        <NovariFooter links={footerLinksNotLoggedIn} />
+                        <NovariFooter links={getFooterLinksNotLoggedIn(t)} />
                     </Page.Block>
                 </Box>
             }>
@@ -28,7 +31,7 @@ export function CustomErrorLayout({ children }: { children: React.ReactNode }) {
                                 'https://idp.felleskomponent.no/nidp/app/logout')
                         }
                         onMenuClick={() => {}}
-                        appName={'FINT Kundeportal'}
+                        appName={t('root.appName')}
                         onLogin={() => {}}
                     />
                 </Page.Block>

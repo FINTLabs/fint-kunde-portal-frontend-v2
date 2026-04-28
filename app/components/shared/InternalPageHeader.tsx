@@ -1,6 +1,8 @@
 import { Box, Heading, HelpText, Hide, HStack } from '@navikt/ds-react';
 import React, { ReactNode } from 'react';
-import { helpData, HelpDataItem } from '~/routes/help/HelpData';
+import { useTranslation } from 'react-i18next';
+
+import { getHelpData, type HelpDataItem } from '~/routes/help/HelpData';
 
 interface PageHeaderProps {
     title: string;
@@ -15,6 +17,8 @@ export function InternalPageHeader({
     helpText,
     children,
 }: PageHeaderProps) {
+    const { t } = useTranslation();
+    const helpData = getHelpData(t);
     const helpDescription = helpData.find(
         (item: HelpDataItem) => item.id === helpText
     )?.description;

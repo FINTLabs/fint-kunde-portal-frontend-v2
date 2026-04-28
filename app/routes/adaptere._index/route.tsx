@@ -2,6 +2,7 @@ import { LayersIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, LocalAlert, Search, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
     type MetaFunction,
@@ -32,7 +33,8 @@ export { loader };
 export const action = async (args: ActionFunctionArgs) => handleAdapterIndexAction(args);
 
 export default function Index() {
-    const breadcrumbs = [{ name: 'Adaptere', link: '/adaptere' }];
+    const { t } = useTranslation();
+    const breadcrumbs = [{ name: t('adapterIndex.pageTitle'), link: '/adaptere' }];
     const { adapters, orgName } = useLoaderData<IPageLoaderData>();
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<IAdapter>;
@@ -88,7 +90,7 @@ export default function Index() {
             ) : (
                 <>
                     <InternalPageHeader
-                        title={'Adaptere'}
+                        title={t('adapterIndex.pageTitle')}
                         icon={LayersIcon}
                         helpText="adaptere"
                         // onAddClick={handleCreate}
@@ -99,7 +101,7 @@ export default function Index() {
                             size="small"
                             icon={<PlusIcon aria-hidden />}
                             data-cy="create-adapter-button">
-                            Opprett adapter
+                            {t('adapterIndex.createButton')}
                         </Button>
                     </InternalPageHeader>
 
@@ -107,12 +109,12 @@ export default function Index() {
                     <VStack gap={'space-8'}>
                         {/*<Box padding="space-16">*/}
                         <Search
-                            label="Søk etter adaptere"
+                            label={t('adapterIndex.searchLabel')}
                             hideLabel
                             variant="secondary"
                             size="small"
                             onChange={(value: string) => handleSearch(value)}
-                            placeholder="Søk etter navn eller beskrivelse"
+                            placeholder={t('adapterIndex.searchPlaceholder')}
                             // className={'pb-6'}
                             data-cy="search-input"
                         />
@@ -127,7 +129,7 @@ export default function Index() {
                                 <LocalAlert status="announcement">
                                     <LocalAlert.Header>
                                         <LocalAlert.Title>
-                                            Det finnes ingen adaptere
+                                            {t('adapterIndex.emptyState')}
                                         </LocalAlert.Title>
                                     </LocalAlert.Header>
                                 </LocalAlert>

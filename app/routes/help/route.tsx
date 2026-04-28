@@ -1,10 +1,11 @@
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Accordion, Box } from '@navikt/ds-react';
+import { useTranslation } from 'react-i18next';
 import { type MetaFunction } from 'react-router';
 
 import Breadcrumbs from '~/components/shared/breadcrumbs';
 import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
-import { helpData, HelpDataItem } from '~/routes/help/HelpData';
+import { getHelpData, type HelpDataItem } from '~/routes/help/HelpData';
 
 export const meta: MetaFunction = () => {
     return [
@@ -14,6 +15,8 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+    const { t } = useTranslation();
+    const helpData = getHelpData(t);
     const breadcrumbs = [{ name: 'Support', link: '/support' }];
 
     return (

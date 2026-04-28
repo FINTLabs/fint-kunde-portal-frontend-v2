@@ -1,7 +1,8 @@
 import { Heading, HGrid, LinkCard, VStack } from '@navikt/ds-react';
+import { useTranslation } from 'react-i18next';
 import { type MetaFunction, useOutletContext } from 'react-router';
 
-import { novariMenu } from '~/components/Menu/MenuConfig';
+import { getNovariMenu } from '~/components/Menu/MenuConfig';
 import { IUserSession } from '~/types/Session';
 
 export const meta: MetaFunction = () => {
@@ -16,7 +17,9 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+    const { t } = useTranslation();
     const userSession = useOutletContext<IUserSession>();
+    const novariMenu = getNovariMenu(t);
 
     const hasRole = (roleId: string): boolean => {
         const orgName = userSession.selectedOrganization?.name;
@@ -32,7 +35,7 @@ export default function Index() {
     return (
         <VStack gap="space-6" justify={'center'} align="center" style={{ marginTop: '3rem' }}>
             <Heading size="large">
-                Velkommen til kundeportalen, {userSession.meData.firstName}.
+                {t('home.welcome', { name: userSession.meData.firstName })}
             </Heading>
 
             <HGrid

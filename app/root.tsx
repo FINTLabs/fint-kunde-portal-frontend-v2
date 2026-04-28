@@ -1,6 +1,7 @@
-import { Box, Link, Page } from '@navikt/ds-react';
+import { Box, HStack, Link, Page, Select } from '@navikt/ds-react';
 import { NovariFooter, NovariHeader } from 'novari-frontend-components';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
     data,
@@ -23,8 +24,10 @@ import { CustomErrorLayout } from '~/components/errors/CustomErrorLayout';
 import CustomErrorNoAccess from '~/components/errors/CustomErrorNoAccess';
 import CustomErrorNoOrg from '~/components/errors/CustomErrorNoOrg';
 import CustomErrorNoUser from '~/components/errors/CustomErrorNoUser';
-import { footerLinks, novariMenu } from '~/components/Menu/MenuConfig';
+import { getFooterLinks, getNovariMenu } from '~/components/Menu/MenuConfig';
 import { UserOrganization } from '~/components/Menu/UserOrganization';
+import { setLanguage } from '~/i18n/config';
+import { supportedLanguages, type SupportedLanguage } from '~/i18n/resources';
 import { defaultFeatures } from '~/types/FeatureFlag';
 import { IMeData } from '~/types/Me';
 import { IOrganisation } from '~/types/Organisation';
@@ -91,15 +94,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
+    const { t, i18n } = useTranslation();
+
     return (
-        <html lang="en">
+        <html lang={i18n.resolvedLanguage || i18n.language || 'nb'}>
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" type="image/x-icon" />
                 <Meta />
                 <Links />
-                <title>FINT Kundeportal</title>
+                <title>{t('root.title')}</title>
             </head>
             <body data-theme="novari">
                 {children}
@@ -111,6 +116,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+    const { t, i18n } = useTranslation();
     const { userSession } = useLoaderData<{
         userSession: IUserSession;
     }>();
@@ -122,12 +128,49 @@ export default function App() {
         throw new Error('Function not implemented.');
     }
 
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        const language = window.localStorage.getItem('fint-kundeportal-language');
+        const storedLanguage = supportedLanguages.includes(language as SupportedLanguage)
+            ? (language as SupportedLanguage)
+            : undefined;
+        if (storedLanguage && storedLanguage !== i18n.resolvedLanguage) {
+            setLanguage(storedLanguage);
+        }
+    }, [i18n.resolvedLanguage]);
+
+    const menu = getNovariMenu(t);
+    const footerLinks = getFooterLinks(t);
+    const selectedLanguage = (i18n.resolvedLanguage || i18n.language || 'nb') as SupportedLanguage;
+
+    //TODO: Add language selector to novari-components
     return (
         <Page
             footer={
                 <Box padding="space-2" as="footer" className={'novari-footer'}>
                     <Page.Block gutters width="lg">
                         <NovariFooter links={footerLinks} />
+                        <HStack justify="end" className="mb-4">
+                            <Box className="w-48">
+                                <Select
+                                    size="small"
+                                    label={t('language.label')}
+                                    id="language-select"
+                                    value={selectedLanguage}
+                                    onChange={(event) =>
+                                        setLanguage(event.target.value as SupportedLanguage)
+                                    }>
+                                    {supportedLanguages.map((language) => (
+                                        <option key={language} value={language}>
+                                            {t(`language.${language}`)}
+                                        </option>
+                                    ))}
+                                </Select>
+                            </Box>
+                        </HStack>
                     </Page.Block>
                 </Box>
             }>
@@ -135,19 +178,19 @@ export default function App() {
                 <NovariHeader
                     isLoggedIn={true}
                     // appName={'FINT Kunde Portal'}
-                    menu={novariMenu}
+                    menu={menu}
                     showLogoWithTitle={true}
                     displayName={userSession.meData.firstName || 'Logged In'}
                     onLogout={() =>
                         (window.location.href = 'https://idp.felleskomponent.no/nidp/app/logout')
                     }
                     onMenuClick={(action) => navigate(action)}
-                    appName={'FINT Kundeportal'}
+                    appName={t('root.appName')}
                     onLogin={onLogin}>
                     <UserOrganization userSession={userSession} />
                     <Link href={'/user'}>
                         <PersonCircleIcon
-                            title="a11y-title"
+                            title={t('root.userIconTitle')}
                             fontSize="1.5rem"
                             className="novari-header-icon"
                         />

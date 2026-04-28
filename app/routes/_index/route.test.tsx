@@ -14,7 +14,7 @@ vi.mock('react-router', async () => {
 });
 
 vi.mock('~/components/Menu/MenuConfig', () => ({
-    novariMenu: [
+    getNovariMenu: () => [
         {
             label: 'Open page',
             action: '/open-page',
@@ -37,6 +37,18 @@ vi.mock('~/components/Menu/MenuConfig', () => ({
             ],
         },
     ],
+}));
+
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key: string, options?: { name?: string }) => {
+            if (key === 'home.welcome') {
+                return `Velkommen til kundeportalen, ${options?.name}.`;
+            }
+
+            return key;
+        },
+    }),
 }));
 
 describe('Index route', () => {
