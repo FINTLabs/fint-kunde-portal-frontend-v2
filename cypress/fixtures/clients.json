@@ -9,7 +9,8 @@
         "clientId": "a5fe8278-8a6e-41bf-85ac-247e2afaf136",
         "components": [],
         "accessPackages": [],
-        "managed": false
+        "managed": false,
+        "modelVersion": "V3"
     },
     {
         "dn": "cn=jennifer-another-test@client.fintlabs.no,ou=clients,ou=fintlabs_no,ou=organisations,o=fint",
@@ -21,7 +22,8 @@
         "clientId": "a5fe8278-8a6e-41bf-85ac-247e2afaf138",
         "components": [],
         "accessPackages": [],
-        "managed": false
+        "managed": false,
+        "modelVersion": "V4"
     },
     {
         "dn": "cn=jennifer-test@client.fintlabs.no,ou=clients,ou=fintlabs_no,ou=organisations,o=fint",
@@ -33,6 +35,7 @@
         "clientId": "a5fe8278-8a6e-41bf-85ac-247e2afaf138",
         "components": [],
         "accessPackages": [],
-        "managed": true
+        "managed": true,
+        "modelVersion": "V4"
     }
 ]

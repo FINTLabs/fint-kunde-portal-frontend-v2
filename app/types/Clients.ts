@@ -15,3 +15,8 @@ export interface IClient extends IPartialClient {
     managed: boolean;
     modelVersion?: string;
 }
+
+export interface IClientModelVersion {
+    V3: number;
+    V4: number;
+}

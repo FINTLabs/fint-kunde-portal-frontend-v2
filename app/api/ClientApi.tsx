@@ -1,6 +1,6 @@
 import { NovariApiManager, type ApiResponse } from 'novari-frontend-components';
 
-import type { IClient, IPartialClient } from '~/types/Clients';
+import { IClient, IClientModelVersion, IPartialClient } from '~/types/Clients';
 import { HeaderProperties } from '~/utils/headerProperties';
 
 const API_URL = process.env.API_URL || '';
@@ -16,6 +16,21 @@ class ClientApi {
             functionName: 'getClients',
             customErrorMessage: `Kunne ikke hente klienter for organisasjonen: ${organisationName}`,
             customSuccessMessage: 'Klienter hentet',
+            additionalHeaders: {
+                'x-nin': HeaderProperties.getXnin(),
+            },
+        });
+    }
+
+    static async getClientModelVersions(
+        organisationName: string
+    ): Promise<ApiResponse<IClientModelVersion>> {
+        return await clientManager.call<IClientModelVersion>({
+            method: 'GET',
+            endpoint: `/api/client-metrics/${organisationName}/model-versions`,
+            functionName: 'getClientModelVersions',
+            customErrorMessage: `Kunne ikke hente modellversjoner for organisasjonen: ${organisationName}`,
+            customSuccessMessage: 'Modellversjoner hentet',
             additionalHeaders: {
                 'x-nin': HeaderProperties.getXnin(),
             },

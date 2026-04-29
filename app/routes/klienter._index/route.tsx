@@ -1,5 +1,5 @@
 import { TokenIcon } from '@navikt/aksel-icons';
-import { Box, Button, Search, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, LocalAlert, ProgressBar, Search, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ import { CustomTabs } from '~/components/shared/CustomTabs';
 import { useDeletedSearchParamAlert } from '~/hooks/useDeletedSearchParamAlert';
 import { handleClientIndexAction } from '~/routes/klienter._index/actions';
 import ClientCreateForm from '~/routes/klienter._index/CreateForm';
-import { IClient } from '~/types/Clients';
+import { IClient, IClientModelVersion } from '~/types/Clients';
 
 import { loader } from './loaders';
 import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
@@ -31,12 +31,13 @@ export const action = async (args: ActionFunctionArgs) => handleClientIndexActio
 
 interface IPageLoaderData {
     clientData: IClient[];
+    modelVersion: IClientModelVersion;
     orgName: string;
 }
 
 export default function Index() {
     const { t } = useTranslation();
-    const { clientData, orgName } = useLoaderData<IPageLoaderData>();
+    const { clientData, modelVersion, orgName } = useLoaderData<IPageLoaderData>();
     const breadcrumbs = [{ name: t('menu.clients'), link: '/klienter' }];
     const [filteredClients, setFilteredClients] = useState(clientData);
     const [isCreating, setIsCreating] = useState(false);
@@ -98,6 +99,7 @@ export default function Index() {
                 position={'top-right'}
                 // onCloseItem={handleCloseItem}
             />
+
             {isCreating ? (
                 <ClientCreateForm
                     onCancel={handleCancelCreate}
@@ -123,6 +125,27 @@ export default function Index() {
                             {t('mainRoutes.clientsIndex.createButton')}
                         </Button>
                     </InternalPageHeader>
+                    <div className="flex justify-center">
+                        <LocalAlert status="announcement" className="mb-4 w-1/2 " size="small">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                    Konvertering av informasjonsmodellversjon
+                                </LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>
+                                <BodyShort>
+                                    {modelVersion?.V4} av {modelVersion?.V3 + modelVersion?.V4}{' '}
+                                    informasjonsmodellversjoner konvertert fra V3 til V4
+                                </BodyShort>
+                                <ProgressBar
+                                    value={modelVersion?.V4 || 0}
+                                    valueMax={(modelVersion?.V3 ?? 0) + (modelVersion?.V4 ?? 0)}
+                                    size="small"
+                                    aria-labelledby="progress-bar-label-small"
+                                />
+                            </LocalAlert.Content>
+                        </LocalAlert>
+                    </div>
 
                     <VStack gap={'space-8'}>
                         <Box padding="space-16">
