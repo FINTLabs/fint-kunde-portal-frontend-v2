@@ -1,11 +1,16 @@
 import { http, HttpResponse } from 'msw';
 
 import clients from '../../fixtures/clients.json';
+import clientModels from '../../fixtures/clientModelVersion.json';
 import { API_URL } from '../mockConfig';
 
 export const clientsHandlers = [
     http.get(`${API_URL}/api/clients/calvin_organizations`, () => {
         return HttpResponse.json(clients);
+    }),
+
+    http.get(`${API_URL}/api/client-metrics/calvin_organizations/model-versions`, () => {
+        return HttpResponse.json(clientModels);
     }),
 
     http.post(`${API_URL}/api/clients/calvin_organizations`, async ({ request }) => {

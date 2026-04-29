@@ -121,21 +121,29 @@ export default function Index() {
                                                     padding="space-16"
                                                     background="info-soft"
                                                     borderRadius="12">
-                                                    <InlineMessage status="info">
-                                                        {modelVersion?.V4} av{' '}
-                                                        {(modelVersion?.V3 ?? 0) +
-                                                            (modelVersion?.V4 ?? 0)}{' '}
-                                                        utdanningsdomenet konvertert fra V3 til V4
-                                                        <ProgressBar
-                                                            value={modelVersion?.V4 || 0}
-                                                            valueMax={
-                                                                (modelVersion?.V3 ?? 0) +
-                                                                (modelVersion?.V4 ?? 0)
-                                                            }
-                                                            size="small"
-                                                            aria-labelledby="progress-bar-label-small"
-                                                        />
-                                                    </InlineMessage>
+                                                    {(modelVersion?.V3 ?? 0) === 0 &&
+                                                    (modelVersion?.V4 ?? 0) > 0 ? (
+                                                        <InlineMessage status="success">
+                                                            Konvertering til V4 fullført
+                                                        </InlineMessage>
+                                                    ) : (
+                                                        <InlineMessage status="info">
+                                                            {modelVersion?.V4 ?? 0} av{' '}
+                                                            {(modelVersion?.V3 ?? 0) +
+                                                                (modelVersion?.V4 ?? 0)}{' '}
+                                                            utdanningsdomenet konvertert fra V3 til
+                                                            V4
+                                                            <ProgressBar
+                                                                value={modelVersion?.V4 ?? 0}
+                                                                valueMax={
+                                                                    (modelVersion?.V3 ?? 0) +
+                                                                    (modelVersion?.V4 ?? 0)
+                                                                }
+                                                                size="small"
+                                                                aria-labelledby="progress-bar-label-small"
+                                                            />
+                                                        </InlineMessage>
+                                                    )}
                                                 </Box>
                                             )}
                                         </LinkCard.Description>

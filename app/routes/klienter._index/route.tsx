@@ -126,25 +126,36 @@ export default function Index() {
                         </Button>
                     </InternalPageHeader>
                     <div className="flex justify-center">
-                        <LocalAlert status="announcement" className="mb-4 w-1/2 " size="small">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>
-                                    Konvertering av informasjonsmodellversjon
-                                </LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>
-                                <BodyShort>
-                                    {modelVersion?.V4} av {modelVersion?.V3 + modelVersion?.V4}{' '}
-                                    utdanningsdomenet konvertert fra V3 til V4
-                                </BodyShort>
-                                <ProgressBar
-                                    value={modelVersion?.V4 || 0}
-                                    valueMax={(modelVersion?.V3 ?? 0) + (modelVersion?.V4 ?? 0)}
-                                    size="small"
-                                    aria-labelledby="progress-bar-label-small"
-                                />
-                            </LocalAlert.Content>
-                        </LocalAlert>
+                        {(modelVersion?.V3 ?? 0) === 0 && (modelVersion?.V4 ?? 0) > 0 ? (
+                            <LocalAlert status="success" className="mb-4 w-1/2" size="small">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>
+                                        Konvertering til V4 fullført
+                                    </LocalAlert.Title>
+                                </LocalAlert.Header>
+                            </LocalAlert>
+                        ) : (
+                            <LocalAlert status="announcement" className="mb-4 w-1/2" size="small">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>
+                                        Konvertering av informasjonsmodellversjon
+                                    </LocalAlert.Title>
+                                </LocalAlert.Header>
+                                <LocalAlert.Content>
+                                    <BodyShort>
+                                        {modelVersion?.V4 ?? 0} av{' '}
+                                        {(modelVersion?.V3 ?? 0) + (modelVersion?.V4 ?? 0)}{' '}
+                                        utdanningsdomenet konvertert fra V3 til V4
+                                    </BodyShort>
+                                    <ProgressBar
+                                        value={modelVersion?.V4 ?? 0}
+                                        valueMax={(modelVersion?.V3 ?? 0) + (modelVersion?.V4 ?? 0)}
+                                        size="small"
+                                        aria-labelledby="progress-bar-label-small"
+                                    />
+                                </LocalAlert.Content>
+                            </LocalAlert>
+                        )}
                     </div>
 
                     <VStack gap={'space-8'}>
