@@ -129,8 +129,7 @@ export default function Index() {
                         <LocalAlert status="announcement" className="mb-4 w-1/2 " size="small">
                             <LocalAlert.Header>
                                 <LocalAlert.Title>
-                                    Konvertering av informasjonsmodellversjon klienten kommuniserer
-                                    med utdanningsdomenet
+                                    Konvertering av informasjonsmodellversjon
                                 </LocalAlert.Title>
                             </LocalAlert.Header>
                             <LocalAlert.Content>
