@@ -129,13 +129,14 @@ export default function Index() {
                         <LocalAlert status="announcement" className="mb-4 w-1/2 " size="small">
                             <LocalAlert.Header>
                                 <LocalAlert.Title>
-                                    Konvertering av informasjonsmodellversjon
+                                    Konvertering av informasjonsmodellversjon klienten kommuniserer
+                                    med utdanningsdomenet
                                 </LocalAlert.Title>
                             </LocalAlert.Header>
                             <LocalAlert.Content>
                                 <BodyShort>
                                     {modelVersion?.V4} av {modelVersion?.V3 + modelVersion?.V4}{' '}
-                                    informasjonsmodellversjoner konvertert fra V3 til V4
+                                    utdanningsdomenet konvertert fra V3 til V4
                                 </BodyShort>
                                 <ProgressBar
                                     value={modelVersion?.V4 || 0}
