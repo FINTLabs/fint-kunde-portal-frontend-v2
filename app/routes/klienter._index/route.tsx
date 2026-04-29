@@ -144,8 +144,8 @@ export default function Index() {
                                 <LocalAlert.Content>
                                     <BodyShort>
                                         {modelVersion?.V4 ?? 0} av{' '}
-                                        {(modelVersion?.V3 ?? 0) + (modelVersion?.V4 ?? 0)}{' '}
-                                        utdanningsdomenet konvertert fra V3 til V4
+                                        {(modelVersion?.V3 ?? 0) + (modelVersion?.V4 ?? 0)} klienter
+                                        konvertert til V4 i utdanningsdomenet
                                     </BodyShort>
                                     <ProgressBar
                                         value={modelVersion?.V4 ?? 0}

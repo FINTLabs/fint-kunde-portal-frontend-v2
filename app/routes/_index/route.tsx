@@ -131,8 +131,8 @@ export default function Index() {
                                                             {modelVersion?.V4 ?? 0} av{' '}
                                                             {(modelVersion?.V3 ?? 0) +
                                                                 (modelVersion?.V4 ?? 0)}{' '}
-                                                            utdanningsdomenet konvertert fra V3 til
-                                                            V4
+                                                            klienter konvertert til V4 i
+                                                            utdanningsdomenet
                                                             <ProgressBar
                                                                 value={modelVersion?.V4 ?? 0}
                                                                 valueMax={
