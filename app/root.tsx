@@ -144,7 +144,7 @@ export default function App() {
                 'change-language-button',
                 '/',
                 userSession?.selectedOrganization?.name,
-                { setLanguage: storedLanguage }
+                { setLanguage: i18n.resolvedLanguage }
             );
         }
     }, [i18n.resolvedLanguage]);
