@@ -167,7 +167,8 @@ const en = {
                 title: 'Relation Test',
                 shortDescription:
                     'A relation test checks that all relations in a component are working.',
-                description: 'A relation test checks that all relations in a component are working.',
+                description:
+                    'A relation test checks that all relations in a component are working.',
             },
             hendelseslogg: {
                 title: 'Event Log',

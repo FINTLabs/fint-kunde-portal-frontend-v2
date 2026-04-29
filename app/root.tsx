@@ -40,6 +40,7 @@ import { useTrackAnalyticsPageViews } from '~/hooks/useTrackAnalyticsPageViews';
 import appStylesHref from './styles/app.css?url';
 import akselHref from '@navikt/ds-css?url';
 import { LanguageIcon, PersonCircleIcon } from '@navikt/aksel-icons';
+import AnalyticsApi from '~/api/AnalyticsApi';
 
 export const links: LinksFunction = () => [
     { rel: 'stylesheet', href: akselHref },
@@ -139,6 +140,12 @@ export default function App() {
             : undefined;
         if (storedLanguage && storedLanguage !== i18n.resolvedLanguage) {
             setLanguage(storedLanguage);
+            void AnalyticsApi.trackButtonClick(
+                'change-language-button',
+                '/',
+                userSession?.selectedOrganization?.name,
+                { setLanguage: storedLanguage }
+            );
         }
     }, [i18n.resolvedLanguage]);
 
