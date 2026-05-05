@@ -2,6 +2,7 @@ export const cspReportOnly = [
     "default-src 'none'",
     "script-src 'self'",
     "style-src 'self' 'sha256-GpfW+bAfgFdUnWgH132TmXe74zxmBoQ23bG1FpTFo/Q='",
+    "style-src-attr 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self' https://cdn.nav.no",
     "connect-src 'self'",
