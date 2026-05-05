@@ -1,6 +1,6 @@
 export const cspReportOnly = [
     "default-src 'none'",
-    "script-src 'self'",
+    "script-src 'self' 'sha256-dNy0y48tFd3Ueh+izbVssQPVSHSkZce1VpirT2wc1j4='",
     "style-src 'self' 'sha256-GpfW+bAfgFdUnWgH132TmXe74zxmBoQ23bG1FpTFo/Q='",
     "style-src-attr 'unsafe-inline'",
     "img-src 'self' data: blob:",
