@@ -2,8 +2,7 @@ export const cspReportOnly = [
     "default-src 'none'",
     "script-src 'self'",
     "style-src 'self'",
-    // "img-src 'self'",
-    "img-src 'none'",
+    "img-src 'self' data: blob:",
     "font-src 'self'",
     "connect-src 'self'",
     "base-uri 'self'",
@@ -11,6 +10,7 @@ export const cspReportOnly = [
     "frame-ancestors 'none'",
     "object-src 'none'",
     'upgrade-insecure-requests',
+    'report-uri /api/csp-report',
 ].join('; ');
 
 // very strict

@@ -46,6 +46,14 @@ export const links: LinksFunction = () => [
     { rel: 'stylesheet', href: akselHref },
     { rel: 'stylesheet', href: appStylesHref },
 ];
+
+export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
+    return {
+        'Content-Security-Policy-Report-Only':
+            loaderHeaders.get('Content-Security-Policy-Report-Only') ?? cspReportOnly,
+    };
+}
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     HeaderProperties.setProperties(request);
 
