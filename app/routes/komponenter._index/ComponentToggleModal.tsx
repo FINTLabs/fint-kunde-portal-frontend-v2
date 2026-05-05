@@ -49,7 +49,7 @@ const ComponentToggleModal = ({
                 </p>
                 {isDeactivating && (
                     <>
-                        <p style={{ marginTop: '1rem' }}>
+                        <p className="component-toggle-modal-confirm-text">
                             Skriv inn komponentnavnet for å bekrefte:
                         </p>
                         <TextField

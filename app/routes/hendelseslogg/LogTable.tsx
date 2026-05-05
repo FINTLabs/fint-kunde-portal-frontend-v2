@@ -50,14 +50,12 @@ const LogTable = ({ logs }: HealthStatusProps) => {
                                 <Table.DataCell>{log.action}</Table.DataCell>
                                 <Table.DataCell>
                                     {hasError ? (
-                                        <ExclamationmarkTriangleIcon
-                                            style={{ color: 'red', marginRight: '0.5rem' }}
-                                        />
+                                        <ExclamationmarkTriangleIcon className="status-icon-error" />
                                     ) : (
                                         <CheckmarkCircleIcon
                                             title="CheckmarkCircleIcon"
                                             fontSize="1.5rem"
-                                            style={{ color: 'green', marginRight: '0.5rem' }}
+                                            className="status-icon-success"
                                         />
                                     )}
                                 </Table.DataCell>

@@ -69,7 +69,7 @@ const ContactModal = ({ isOpen, onClose, contacts, onAddContact }: ContactModalP
                 />
 
                 {/* Set a fixed height for the table wrapper */}
-                <div style={{ minHeight: '200px' }}>
+                <div className="contact-modal-table-wrapper">
                     <Table>
                         <Table.Body>
                             {sortData.length === 0 && filter !== '' ? (

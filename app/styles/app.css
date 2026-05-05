@@ -4,3 +4,87 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 
 @import "./novari-theme.css";
+
+.home-page-stack {
+    margin-top: 3rem;
+}
+
+.internal-page-header {
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 1.5rem;
+}
+
+.component-toggle-modal-confirm-text {
+    margin-top: 1rem;
+}
+
+.custom-error-pre-wrap {
+    white-space: pre-wrap;
+}
+
+.status-icon-error {
+    color: red;
+    margin-right: 0.5rem;
+}
+
+.status-icon-success {
+    color: green;
+    margin-right: 0.5rem;
+}
+
+.primary-asset-icon {
+    color: var(--ax-bg-warning-strong);
+}
+
+.auth-secret-cell {
+    word-break: break-all;
+    white-space: normal;
+}
+
+.auth-copy-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.user-info-section {
+    margin-bottom: 1rem;
+}
+
+.user-role-tag {
+    margin-right: 0.5rem;
+}
+
+.client-details-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.create-client-model-select {
+    width: 12rem;
+}
+
+.relation-status-failed {
+    color: var(--ax-border-danger);
+}
+
+.relation-status-completed {
+    color: var(--ax-bg-success-strong-hover);
+}
+
+.relation-download-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.resources-list-bulk-actions {
+    margin: 1rem;
+}
+
+.contact-modal-table-wrapper {
+    min-height: 200px;
+}
+
+.editable-text-field-full-width {
+    width: 100%;
+}

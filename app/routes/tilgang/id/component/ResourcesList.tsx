@@ -76,7 +76,7 @@ const ResourcesList = ({
             </FormSummary.Header>
             <FormSummary.Answers>
                 <FormSummary.Answer>
-                    <HStack gap="space-2" style={{ margin: '1rem' }}>
+                    <HStack gap="space-2" className="resources-list-bulk-actions">
                         <Button
                             onClick={handleSelectAll}
                             variant="secondary"

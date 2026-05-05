@@ -126,7 +126,7 @@ export const AuthTable = ({
 
                     <Table.Row>
                         <Table.HeaderCell scope="row">Klient hemmelighet</Table.HeaderCell>
-                        <Table.DataCell style={{ wordBreak: 'break-all', whiteSpace: 'normal' }}>
+                        <Table.DataCell className="auth-secret-cell">
                             {clientSecret ? clientSecret : '******************************'}
                         </Table.DataCell>
                         <Table.DataCell>
@@ -161,7 +161,7 @@ export const AuthTable = ({
                     </Table.Row>
                 </Table.Body>
             </Table>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="auth-copy-wrapper">
                 <CopyButton
                     copyText={generateAuthInfo()}
                     text="Kopier autentiseringsinformasjon"

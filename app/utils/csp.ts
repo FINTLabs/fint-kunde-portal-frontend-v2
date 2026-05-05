@@ -3,7 +3,7 @@ export const cspReportOnly = [
     "script-src 'self'",
     "style-src 'self'",
     "img-src 'self' data: blob:",
-    "font-src 'self'",
+    "font-src 'self' https://cdn.nav.no",
     "connect-src 'self'",
     "base-uri 'self'",
     "form-action 'self'",

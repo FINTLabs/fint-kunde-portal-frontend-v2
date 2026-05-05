@@ -74,7 +74,7 @@ const CustomErrorPage: React.FC<CustomErrorPageProps> = ({
                             <BodyShort
                                 size="small"
                                 textColor="subtle"
-                                style={{ whiteSpace: 'pre-wrap' }}>
+                                className="custom-error-pre-wrap">
                                 Feil-data: {statusCode} - {formattedErrorData}
                             </BodyShort>
                         )}

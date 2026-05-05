@@ -31,7 +31,7 @@ export function EditableTextField({
                                   ? value.length + 10
                                   : maxChars
                         }
-                        style={fullWidth ? { width: '100%' } : undefined}
+                        className={fullWidth ? 'editable-text-field-full-width' : undefined}
                         label={label}
                         onChange={(e) => setValue(e.target.value)}></TextField>
                 ) : (

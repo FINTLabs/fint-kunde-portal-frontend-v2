@@ -47,7 +47,7 @@ export function DetailsView({ asset, onUpdate, onDelete }: DetailsViewProps) {
                     <StarIcon
                         title="a11y-title"
                         fontSize="1.5rem"
-                        style={{ color: 'var(--ax-bg-warning-strong)' }}
+                        className="primary-asset-icon"
                     />
                     <BodyShort> Primær ressurs</BodyShort>
                 </HStack>

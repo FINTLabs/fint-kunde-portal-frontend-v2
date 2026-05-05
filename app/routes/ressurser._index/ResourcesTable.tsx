@@ -25,7 +25,7 @@ export default function AssetsTable({ assets, onRowClick }: AssetsTableProps) {
                                 <StarIcon
                                     title="a11y-title"
                                     fontSize="1.5rem"
-                                    style={{ color: 'var(--ax-bg-warning-strong)' }}
+                                    className="primary-asset-icon"
                                 />
                             )}
                         </Table.DataCell>

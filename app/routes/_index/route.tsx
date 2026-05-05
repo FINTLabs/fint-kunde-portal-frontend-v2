@@ -60,7 +60,7 @@ export default function Index() {
     };
 
     return (
-        <VStack gap="space-6" justify={'center'} align="center" style={{ marginTop: '3rem' }}>
+        <VStack gap="space-6" justify={'center'} align="center" className="home-page-stack">
             <Heading size="large">
                 {t('home.welcome', { name: userSession.meData.firstName })}
             </Heading>

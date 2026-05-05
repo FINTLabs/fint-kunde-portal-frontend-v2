@@ -28,10 +28,7 @@ export function InternalPageHeader({
             paddingBlock="space-24"
             paddingInline="space-0"
             data-cy="page-title"
-            style={{
-                borderBottom: '1px solid #e0e0e0',
-                marginBottom: '1.5rem',
-            }}>
+            className="internal-page-header">
             <HStack gap={'space-8'} justify="space-between">
                 <HStack gap="space-8">
                     <Hide below="md">

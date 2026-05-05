@@ -104,7 +104,7 @@ export default function ClientCreateForm({
                 label="Velg modelversjon"
                 size="small"
                 description="Styrer hvilken informasjonsmodellversjon klienten kommuniserer med for utdanningsdomenet"
-                style={{ width: '12rem' }}
+                className="create-client-model-select"
                 onChange={(e) => setInputModelVersion(e.target.value)}>
                 <option value="V3">V3</option>
                 <option value="V4">V4</option>

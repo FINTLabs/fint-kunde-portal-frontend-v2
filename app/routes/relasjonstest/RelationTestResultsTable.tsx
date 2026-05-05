@@ -60,14 +60,14 @@ const RelationTestResultsTable = ({ logResults }: TestResultsTableProps) => {
                                         <XMarkOctagonFillIcon
                                             title="FAILED"
                                             fontSize="1.5rem"
-                                            style={{ color: 'var(--ax-border-danger)' }}
+                                            className="relation-status-failed"
                                         />
                                     </Tooltip>
                                 ) : result.status === 'COMPLETED' ? (
                                     <CheckmarkCircleFillIcon
                                         title="COMPLETED"
                                         fontSize="1.5rem"
-                                        style={{ color: 'var(--ax-bg-success-strong-hover)' }}
+                                        className="relation-status-completed"
                                     />
                                 ) : (
                                     <Loader size="xsmall" title="Venter..." />
@@ -91,11 +91,7 @@ const RelationTestResultsTable = ({ logResults }: TestResultsTableProps) => {
                             <Table.DataCell>
                                 <button
                                     onClick={() => handleDownload(result.id)}
-                                    style={{
-                                        background: 'none',
-                                        border: 'none',
-                                        cursor: 'pointer',
-                                    }}>
+                                    className="relation-download-button">
                                     <DownloadIcon title="Download Excel" fontSize="1.5rem" />
                                 </button>
                             </Table.DataCell>

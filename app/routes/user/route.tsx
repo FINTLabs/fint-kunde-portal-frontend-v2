@@ -37,26 +37,26 @@ export default function Index() {
                     borderWidth="2"
                     borderRadius="12">
                     <div>
-                        <div style={{ marginBottom: '1rem' }}>
+                        <div className="user-info-section">
                             <Label>{t('mainRoutes.user.fullNameLabel')}</Label>
                             <BodyLong>{`${user.firstName} ${user.lastName}`}</BodyLong>
                         </div>
-                        <div style={{ marginBottom: '1rem' }}>
+                        <div className="user-info-section">
                             <Label>{t('mainRoutes.user.emailLabel')}</Label>
                             <BodyLong>{user.mail}</BodyLong>
                         </div>
-                        <div style={{ marginBottom: '1rem' }}>
+                        <div className="user-info-section">
                             <Label>{t('mainRoutes.user.mobileLabel')}</Label>
                             <BodyLong>{user.mobile}</BodyLong>
                         </div>
 
-                        <div style={{ marginBottom: '1rem' }}>
+                        <div className="user-info-section">
                             <Label>{t('mainRoutes.user.rolesLabel')}</Label>
                             <BodyLong>
                                 {user.roles.map((role, index) => (
                                     <Tag
                                         key={index}
-                                        style={{ marginRight: '0.5rem' }}
+                                        className="user-role-tag"
                                         variant={'info'}>
                                         {role}
                                     </Tag>

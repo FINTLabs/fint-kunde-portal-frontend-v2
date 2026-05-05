@@ -216,8 +216,7 @@ export default function ClientDetails() {
                                         {t('mainRoutes.clientDetails.accessControlHeading')}
                                     </Heading>
                                     <Box
-                                        className="w-full flex-1"
-                                        style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                        className="w-full flex-1 client-details-actions">
                                         <Button
                                             size="xsmall"
                                             variant="tertiary"
