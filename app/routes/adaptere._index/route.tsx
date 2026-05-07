@@ -131,11 +131,7 @@ export default function Index() {
                         />
                         {/*</Box>*/}
 
-                        <Box
-                            padding="space-16"
-                            borderColor="neutral-subtle"
-                            borderWidth="2"
-                            borderRadius="12">
+                        <Box>
                             {adapters && adapters.length === 0 && (
                                 <LocalAlert status="announcement">
                                     <LocalAlert.Header>

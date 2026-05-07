@@ -1,21 +1,18 @@
-import {
-    ChevronRightIcon,
-    CogRotationIcon,
-    NotePencilDashIcon,
-} from '@navikt/aksel-icons';
+import { ChevronRightIcon, CogRotationIcon, NotePencilDashIcon } from '@navikt/aksel-icons';
 import {
     BodyShort,
+    Box,
     Button,
     Heading,
     Label,
     Switch,
     Table,
-    Tabs,
     Tag,
+    ToggleGroup,
 } from '@navikt/ds-react';
 
 import { tabInfo } from '~/routes/adaptere._index/constants';
-import React from 'react';
+import React, { useState } from 'react';
 import { LoginStatusIcon } from '~/components/shared/LoginStatusIcon';
 
 interface CustomTabsProps<T extends { name: string; shortDescription: string }> {
@@ -36,6 +33,8 @@ export function CustomTabs<T extends { name: string; shortDescription: string }>
     isManaged,
     lastLoginTime,
 }: CustomTabsProps<T>) {
+    const [selectedTab, setSelectedTab] = useState(tabInfo[0].value);
+
     if (!items) {
         return <div>Fant ingen</div>;
     }
@@ -51,104 +50,98 @@ export function CustomTabs<T extends { name: string; shortDescription: string }>
         return undefined;
     };
 
+    const filteredItems =
+        selectedTab === tabInfo[1].value
+            ? items.filter((i) => isManaged(i))
+            : items.filter((i) => !isManaged(i));
 
     return (
-        <Tabs defaultValue={tabInfo[0].value} fill>
-            <Tabs.List>
-                <Tabs.Tab
-                    data-cy={`tab-item-0`}
-                    value={tabInfo[0].value}
-                    label={tabInfo[0].label}
-                    icon={<NotePencilDashIcon title={tabInfo[0].label} aria-hidden />}
-                />
-                <Tabs.Tab
-                    data-cy={`tab-item-1`}
-                    value={tabInfo[1].value}
-                    label={tabInfo[1].label}
-                    icon={<CogRotationIcon title={tabInfo[1].label} aria-hidden />}
-                />
-            </Tabs.List>
-            {tabInfo.map((tab, index) => (
-                <Tabs.Panel key={index} value={tab.value} className="w-full">
-                    <Table size={'small'}>
-                        <Table.Body>
-                            {(index === 1
-                                ? items.filter((i) => isManaged(i))
-                                : items.filter((i) => !isManaged(i))
-                            ).map((item, i) => {
-                                const modelVersion = getModelVersion(item);
+        <Box>
+            <ToggleGroup
+                className="pb-2"
+                defaultValue={tabInfo[0].value}
+                onChange={setSelectedTab}
+                size="small"
+                fill>
+                <ToggleGroup.Item value={tabInfo[0].value} data-cy="tab-item-0">
+                    <NotePencilDashIcon aria-hidden />
+                    {tabInfo[0].label}
+                </ToggleGroup.Item>
+                <ToggleGroup.Item value={tabInfo[1].value} data-cy="tab-item-1">
+                    <CogRotationIcon aria-hidden />
+                    {tabInfo[1].label}
+                </ToggleGroup.Item>
+            </ToggleGroup>
+            <Box padding="space-16" borderColor="neutral-subtle" borderWidth="2" borderRadius="12">
+                <Table size="small">
+                    <Table.Body>
+                        {filteredItems.map((item, i) => {
+                            const modelVersion = getModelVersion(item);
 
-                                return (
-                                    <Table.Row
-                                        data-cy="details-row"
-                                        key={i + item.name}
-                                        className="active:bg-[--a-surface-active] hover:cursor-pointer"
-                                        onClick={() => showDetails(item.name)}>
-                                        {selectable && (
-                                            <Table.DataCell scope="row">
-                                                <Switch
-                                                    checked={
-                                                        selectedItems &&
-                                                        selectedItems.some(
-                                                            (selected) => selected === item.name
-                                                        )
-                                                    }
-                                                    onChange={(e) => {
-                                                        const isChecked = e.target.checked;
-                                                        toggleSwitch?.(item.name, isChecked);
-                                                    }}>
-                                                    <Label>{''}</Label>
-                                                </Switch>
-                                            </Table.DataCell>
-                                        )}
-                                        {lastLoginTime && (
-                                            <Table.DataCell>
-                                                <LoginStatusIcon lastLoginTime={lastLoginTime(item)} />
-                                            </Table.DataCell>
-                                        )}
-                                        <Table.DataCell>
-                                            <Heading size="small">{item.shortDescription}</Heading>
-                                            <BodyShort textColor="subtle">{item.name}</BodyShort>
+                            return (
+                                <Table.Row
+                                    data-cy="details-row"
+                                    key={i + item.name}
+                                    className="active:bg-[--a-surface-active] hover:cursor-pointer"
+                                    onClick={() => showDetails(item.name)}>
+                                    {selectable && (
+                                        <Table.DataCell scope="row">
+                                            <Switch
+                                                checked={
+                                                    selectedItems &&
+                                                    selectedItems.some(
+                                                        (selected) => selected === item.name
+                                                    )
+                                                }
+                                                onChange={(e) => {
+                                                    const isChecked = e.target.checked;
+                                                    toggleSwitch?.(item.name, isChecked);
+                                                }}>
+                                                <Label>{''}</Label>
+                                            </Switch>
                                         </Table.DataCell>
+                                    )}
+                                    {lastLoginTime && (
                                         <Table.DataCell>
-                                            {/*{lastLoginTime && (*/}
-                                            {/*    <BodyShort>*/}
-                                            {/*        {formatLastLoginDate(lastLoginTime(item))}*/}
-                                            {/*    </BodyShort>*/}
-                                            {/*)}*/}
-                                            {modelVersion && (
-                                                <Tag
-                                                    variant="moderate"
-                                                    size="small"
-                                                    data-color={
-                                                        modelVersion.toUpperCase() === 'V3'
-                                                            ? 'accent'
-                                                            : 'meta-purple'
-                                                    }>
-                                                    Model version utdanningsdomenet: {modelVersion}
-                                                </Tag>
-                                            )}
+                                            <LoginStatusIcon lastLoginTime={lastLoginTime(item)} />
                                         </Table.DataCell>
+                                    )}
+                                    <Table.DataCell>
+                                        <Heading size="small">{item.shortDescription}</Heading>
+                                        <BodyShort textColor="subtle">{item.name}</BodyShort>
+                                    </Table.DataCell>
+                                    <Table.DataCell>
+                                        {modelVersion && (
+                                            <Tag
+                                                variant="moderate"
+                                                size="small"
+                                                data-color={
+                                                    modelVersion.toUpperCase() === 'V3'
+                                                        ? 'accent'
+                                                        : 'meta-purple'
+                                                }>
+                                                Model version utdanningsdomenet: {modelVersion}
+                                            </Tag>
+                                        )}
+                                    </Table.DataCell>
 
-                                        <Table.DataCell>
-                                            {/*<ChevronRightIcon title="vis detaljer" fontSize="1.5rem" />*/}
-                                            <Button
-                                                variant="tertiary"
-                                                size={'small'}
-                                                icon={<ChevronRightIcon title="Rediger" />}
-                                                onClick={(event) => {
-                                                    event.stopPropagation();
-                                                    showDetails(item.name);
-                                                }}
-                                            />
-                                        </Table.DataCell>
-                                    </Table.Row>
-                                );
-                            })}
-                        </Table.Body>
-                    </Table>
-                </Tabs.Panel>
-            ))}
-        </Tabs>
+                                    <Table.DataCell>
+                                        <Button
+                                            variant="tertiary"
+                                            size="small"
+                                            icon={<ChevronRightIcon title="Rediger" />}
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                showDetails(item.name);
+                                            }}
+                                        />
+                                    </Table.DataCell>
+                                </Table.Row>
+                            );
+                        })}
+                    </Table.Body>
+                </Table>
+            </Box>
+        </Box>
     );
 }

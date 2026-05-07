@@ -253,20 +253,16 @@ export default function Index() {
                             </HStack>
                         </Box>
 
-                        <Box
-                            padding="space-16"
-                            borderColor="neutral-subtle"
-                            borderWidth="2"
-                            borderRadius="12">
-                            {filteredClients && (
-                                <CustomTabs
-                                    items={filteredClients}
-                                    showDetails={showDetails}
-                                    isManaged={(item) => item.managed}
-                                    lastLoginTime={(item) => item.lastLoginTime}
-                                />
-                            )}
-                        </Box>
+                        {/*<Box>*/}
+                        {filteredClients && (
+                            <CustomTabs
+                                items={filteredClients}
+                                showDetails={showDetails}
+                                isManaged={(item) => item.managed}
+                                lastLoginTime={(item) => item.lastLoginTime}
+                            />
+                        )}
+                        {/*</Box>*/}
                     </VStack>
                 </>
             )}
