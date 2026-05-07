@@ -27,13 +27,11 @@ export const accessHandlers = [
     */
 
     http.get(`${API_URL}/access/jennifer-test-test@client.fintlabs.no`, () => {
-        // eslint-disable-next-line no-console
         console.log('GET ACCESS FOR CLIENT/ADAPTER');
         return HttpResponse.json(access);
     }),
 
     http.get(`${API_URL}/access/jennifer-another-test@adapter.fintlabs.no`, () => {
-        // eslint-disable-next-line no-console
         console.log('GET ACCESS FOR CLIENT/ADAPTER');
         return HttpResponse.json(access);
     }),
@@ -54,13 +52,11 @@ export const accessHandlers = [
         ]
      */
     http.get(`${API_URL}/access/jennifer-another-test@adapter.fintlabs.no/component`, () => {
-        // eslint-disable-next-line no-console
         console.log('GET ACCESS FOR CLIENT/ADAPTER');
         return HttpResponse.json(accessComponent);
     }),
 
     http.get(`${API_URL}/access/jennifer-test-test@client.fintlabs.no/component`, () => {
-        // eslint-disable-next-line no-console
         console.log('GET ACCESS FOR CLIENT/ADAPTER');
         return HttpResponse.json(accessComponent);
     }),
@@ -79,7 +75,6 @@ export const accessHandlers = [
     http.get(
         `${API_URL}/access/jennifer-test-test@client.fintlabs.no/component/administrasjon-fullmakt/resource/string`,
         () => {
-            // eslint-disable-next-line no-console
             console.log('GET RESOURCE ACCESS DETAILS');
             return HttpResponse.json(resourceAccess);
         }
@@ -87,7 +82,6 @@ export const accessHandlers = [
     http.get(
         `${API_URL}/access/jennifer-another-test@adapter.fintlabs.no/component/administrasjon-fullmakt/resource/string`,
         () => {
-            // eslint-disable-next-line no-console
             console.log('GET RESOURCE ACCESS DETAILS');
             return HttpResponse.json(resourceAccess);
         }
@@ -108,7 +102,6 @@ export const accessHandlers = [
     http.get(
         `${API_URL}/access/jennifer-test-test@client.fintlabs.no/component/administrasjon-fullmakt/resource`,
         () => {
-            // eslint-disable-next-line no-console
             console.log('GET RESOURCE ACCESS DETAILS');
             return HttpResponse.json(accessResourceDetails);
         }
@@ -116,7 +109,6 @@ export const accessHandlers = [
     http.get(
         `${API_URL}/access/jennifer-another-test@adapter.fintlabs.no/component/administrasjon-fullmakt/resource`,
         () => {
-            // eslint-disable-next-line no-console
             console.log('GET RESOURCE ACCESS DETAILS');
             return HttpResponse.json(accessResourceDetails);
         }
@@ -139,7 +131,6 @@ export const accessHandlers = [
     http.get(
         `${API_URL}/access/jennifer-test-test@client.fintlabs.no/component/administrasjon-fullmakt/Aktivitet`,
         () => {
-            // eslint-disable-next-line no-console
             console.log('GET RESOURCE ACCESS DETAILS');
             return HttpResponse.json(fieldAccess);
         }
@@ -147,7 +138,6 @@ export const accessHandlers = [
     http.get(
         `${API_URL}/access/jennifer-test-test@client.fintlabs.no/component/administrasjon-fullmakt/resource/Aktivitet/field`,
         () => {
-            // eslint-disable-next-line no-console
             console.log('GET FIELD  DETAILS handler');
             return HttpResponse.json(fieldAccess);
         }
@@ -155,7 +145,6 @@ export const accessHandlers = [
     http.get(
         `${API_URL}/access/jennifer-test-test@client.fintlabs.no/component/administrasjon-fullmakt/resource/Aktivitet`,
         () => {
-            // eslint-disable-next-line no-console
             console.log('GET resource  DETAILS handler');
             return HttpResponse.json(resourceAccess);
         }
@@ -180,7 +169,6 @@ export const accessHandlers = [
      */
 
     http.get(`${API_URL}/access/jennifer-test-test@client.fintlabs.no/audit`, () => {
-        // eslint-disable-next-line no-console
         console.log('GET AUDIT LOG');
         return HttpResponse.json(accessAudit);
     }),

@@ -3,6 +3,7 @@ import { describe, expect, it, vi, beforeEach } from 'vitest';
 import Index from './route';
 
 const mockUseOutletContext = vi.fn();
+const mockUseLoaderData = vi.fn();
 
 vi.mock('react-router', async () => {
     const actual = await vi.importActual<typeof import('react-router')>('react-router');
@@ -10,6 +11,7 @@ vi.mock('react-router', async () => {
     return {
         ...actual,
         useOutletContext: () => mockUseOutletContext(),
+        useLoaderData: () => mockUseLoaderData(),
     };
 });
 
@@ -54,6 +56,8 @@ vi.mock('react-i18next', () => ({
 describe('Index route', () => {
     beforeEach(() => {
         mockUseOutletContext.mockReset();
+        mockUseLoaderData.mockReset();
+        mockUseLoaderData.mockReturnValue({ modelVersion: { V3: 0, V4: 0 } });
     });
 
     it('shows welcome message with first name', () => {

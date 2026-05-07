@@ -1,7 +1,16 @@
 import { TokenIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, LocalAlert, ProgressBar, Search, VStack } from '@navikt/ds-react';
+import {
+    Box,
+    Button,
+    Chips,
+    HStack,
+    InlineMessage,
+    ProgressBar,
+    Search,
+    VStack,
+} from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
@@ -21,6 +30,35 @@ import { IClient, IClientModelVersion } from '~/types/Clients';
 import { loader } from './loaders';
 import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 
+const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+const CURRENT_TIME_MS = Date.now();
+
+type LoginStatusFilter = 'missing' | 'stale' | 'warning' | 'ok';
+const DEFAULT_STATUS_FILTERS: LoginStatusFilter[] = ['missing', 'stale', 'ok'];
+
+const getLastLoginStatus = (lastLoginTime?: string | null): LoginStatusFilter => {
+    if (lastLoginTime === null || lastLoginTime === undefined) {
+        return 'missing';
+    }
+
+    const parsedDate = new Date(lastLoginTime);
+    if (Number.isNaN(parsedDate.getTime())) {
+        return 'missing';
+    }
+
+    const diffInDays = (CURRENT_TIME_MS - parsedDate.getTime()) / MILLISECONDS_PER_DAY;
+
+    if (diffInDays > 30) {
+        return 'stale';
+    }
+
+    if (diffInDays > 7) {
+        return 'warning';
+    }
+
+    return 'ok';
+};
+
 export const meta: MetaFunction = () => {
     return [{ title: 'Klienter' }, { name: 'description', content: 'klienter' }];
 };
@@ -39,10 +77,32 @@ export default function Index() {
     const { t } = useTranslation();
     const { clientData, modelVersion, orgName } = useLoaderData<IPageLoaderData>();
     const breadcrumbs = [{ name: t('menu.clients'), link: '/klienter' }];
-    const [filteredClients, setFilteredClients] = useState(clientData);
+    // const [filteredClients, setFilteredClients] = useState(clientData);
     const [isCreating, setIsCreating] = useState(false);
-    const [searchValue, setSearchValue] = useState('');
+    // const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
+    const [searchState, setSearchState] = useState({
+        orgName,
+        value: '',
+    });
+    const [statusFilters, setStatusFilters] = useState<LoginStatusFilter[]>(DEFAULT_STATUS_FILTERS);
+
+    const searchValue = searchState.orgName === orgName ? searchState.value : '';
+
+    const filteredClients = clientData.filter((client) => {
+        const query = searchValue.toLowerCase();
+        const clientStatus = getLastLoginStatus(client.lastLoginTime);
+
+        return (
+            (client.name.toLowerCase().includes(query) ||
+                client.shortDescription.toLowerCase().includes(query)) &&
+            statusFilters.includes(clientStatus)
+        );
+    });
+
+    const handleSearch = (value: string) => {
+        setSearchState({ orgName, value });
+    };
 
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<IClient>;
@@ -52,31 +112,21 @@ export default function Index() {
         setAlertState,
     });
 
-    useEffect(() => {
-        setFilteredClients(clientData);
-    }, [clientData]);
-
-    // Clear search when organization changes
-    useEffect(() => {
-        setSearchValue('');
-        setFilteredClients(clientData);
-    }, [orgName, clientData]);
-
     const handleCreate = () => {
         setIsCreating(true);
     };
 
-    const handleSearch = (value: string) => {
-        setSearchValue(value);
-        const query = value.toLowerCase();
-        setFilteredClients(
-            clientData.filter(
-                (client) =>
-                    client.name.toLowerCase().includes(query) ||
-                    client.shortDescription.toLowerCase().includes(query)
-            )
-        );
-    };
+    // const handleSearch = (value: string) => {
+    //     setSearchValue(value);
+    //     const query = value.toLowerCase();
+    //     setFilteredClients(
+    //         clientData.filter(
+    //             (client) =>
+    //                 client.name.toLowerCase().includes(query) ||
+    //                 client.shortDescription.toLowerCase().includes(query)
+    //         )
+    //     );
+    // };
 
     function handleCancelCreate() {
         setIsCreating(false);
@@ -125,52 +175,82 @@ export default function Index() {
                             {t('mainRoutes.clientsIndex.createButton')}
                         </Button>
                     </InternalPageHeader>
-                    <div className="flex justify-center">
+                    <Box padding="space-16" background="info-soft" borderRadius="12">
                         {(modelVersion?.V3 ?? 0) === 0 && (modelVersion?.V4 ?? 0) > 0 ? (
-                            <LocalAlert status="success" className="mb-4 w-1/2" size="small">
-                                <LocalAlert.Header>
-                                    <LocalAlert.Title>
-                                        Konvertering til V4 fullført
-                                    </LocalAlert.Title>
-                                </LocalAlert.Header>
-                            </LocalAlert>
+                            <InlineMessage status="success">
+                                Konvertering til V4 fullført
+                            </InlineMessage>
                         ) : (
-                            <LocalAlert status="announcement" className="mb-4 w-1/2" size="small">
-                                <LocalAlert.Header>
-                                    <LocalAlert.Title>
-                                        Konvertering av informasjonsmodellversjon
-                                    </LocalAlert.Title>
-                                </LocalAlert.Header>
-                                <LocalAlert.Content>
-                                    <BodyShort>
-                                        {modelVersion?.V4 ?? 0} av{' '}
-                                        {(modelVersion?.V3 ?? 0) + (modelVersion?.V4 ?? 0)} klienter
-                                        konvertert til V4 i utdanningsdomenet
-                                    </BodyShort>
-                                    <ProgressBar
-                                        value={modelVersion?.V4 ?? 0}
-                                        valueMax={(modelVersion?.V3 ?? 0) + (modelVersion?.V4 ?? 0)}
-                                        size="small"
-                                        aria-labelledby="progress-bar-label-small"
-                                    />
-                                </LocalAlert.Content>
-                            </LocalAlert>
+                            <InlineMessage status="info">
+                                {modelVersion?.V4 ?? 0} av{' '}
+                                {(modelVersion?.V3 ?? 0) + (modelVersion?.V4 ?? 0)} klienter
+                                konvertert til V4 i utdanningsdomenet
+                                <ProgressBar
+                                    value={modelVersion?.V4 ?? 0}
+                                    valueMax={(modelVersion?.V3 ?? 0) + (modelVersion?.V4 ?? 0)}
+                                    size="small"
+                                    aria-labelledby="progress-bar-label-small"
+                                />
+                            </InlineMessage>
                         )}
-                    </div>
+                    </Box>
 
                     <VStack gap={'space-8'}>
                         <Box padding="space-16">
-                            <Search
-                                label={t('mainRoutes.clientsIndex.searchLabel')}
-                                hideLabel
-                                variant="secondary"
-                                size="small"
-                                value={searchValue}
-                                onChange={(value: string) => handleSearch(value)}
-                                placeholder={t('mainRoutes.clientsIndex.searchPlaceholder')}
-                                // className="pb-6"
-                                data-cy="search-input"
-                            />
+                            <HStack gap="space-8" align="center">
+                                {/*<div className="min-w-0 flex-1">*/}
+                                <Search
+                                    label={t('mainRoutes.clientsIndex.searchLabel')}
+                                    hideLabel
+                                    variant="secondary"
+                                    size="small"
+                                    value={searchValue}
+                                    onChange={handleSearch}
+                                    placeholder={t('mainRoutes.clientsIndex.searchPlaceholder')}
+                                    data-cy="search-input"
+                                    className="min-w-0 flex-1"
+                                />
+                                {/*</div>*/}
+                                <Chips size="small">
+                                    <Chips.Toggle
+                                        selected={statusFilters.includes('missing')}
+                                        onClick={() =>
+                                            setStatusFilters((prev) =>
+                                                prev.includes('missing')
+                                                    ? prev.filter((status) => status !== 'missing')
+                                                    : [...prev, 'missing']
+                                            )
+                                        }
+                                        data-color="info">
+                                        Ingen innlogging
+                                    </Chips.Toggle>
+                                    <Chips.Toggle
+                                        selected={statusFilters.includes('stale')}
+                                        onClick={() =>
+                                            setStatusFilters((prev) =>
+                                                prev.includes('stale')
+                                                    ? prev.filter((status) => status !== 'stale')
+                                                    : [...prev, 'stale']
+                                            )
+                                        }
+                                        data-color="danger">
+                                        Over 30 dager
+                                    </Chips.Toggle>
+
+                                    <Chips.Toggle
+                                        selected={statusFilters.includes('ok')}
+                                        onClick={() =>
+                                            setStatusFilters((prev) =>
+                                                prev.includes('ok')
+                                                    ? prev.filter((status) => status !== 'ok')
+                                                    : [...prev, 'ok']
+                                            )
+                                        }
+                                        data-color="success">
+                                        Nylig innlogging
+                                    </Chips.Toggle>
+                                </Chips>
+                            </HStack>
                         </Box>
 
                         <Box
@@ -182,9 +262,8 @@ export default function Index() {
                                 <CustomTabs
                                     items={filteredClients}
                                     showDetails={showDetails}
-                                    getItemName={(item) => item.name}
-                                    getItemDescription={(item) => item.shortDescription}
                                     isManaged={(item) => item.managed}
+                                    lastLoginTime={(item) => item.lastLoginTime}
                                 />
                             )}
                         </Box>

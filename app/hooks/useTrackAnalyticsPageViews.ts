@@ -19,8 +19,8 @@ export function useTrackAnalyticsPageViews(tenant?: string) {
 
     const analytics = leafMatch?.handle?.analytics;
     const trackedPath = analytics?.pathPattern ?? location.pathname;
-    const params = leafMatch?.params ?? {};
-    const hasParams = Object.keys(params).length > 0;
+    const params = React.useMemo(() => leafMatch?.params ?? {}, [leafMatch?.params]);
+    const hasParams = React.useMemo(() => Object.keys(params).length > 0, [params]);
 
     const lastSent = React.useRef<string | null>(null);
 
@@ -47,5 +47,13 @@ export function useTrackAnalyticsPageViews(tenant?: string) {
 
             void AnalyticsApi.trackSearch(trackedPath, meta, tenant);
         }
-    }, [location.pathname, location.search, trackedPath, tenant, leafMatch?.params]);
+    }, [
+        location.pathname,
+        location.search,
+        trackedPath,
+        tenant,
+        leafMatch?.params,
+        hasParams,
+        params,
+    ]);
 }

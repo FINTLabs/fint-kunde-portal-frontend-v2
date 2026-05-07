@@ -1,82 +1,73 @@
-# FINT KUNDE PORTAL FRONTEND V2
+# FINT Kundeportal Frontend v2
 
-## Setup environment
+## Local setup
 
-## Create a `.env` file in root directory.
+### 1) Install dependencies
 
+```sh
+npm install
 ```
+
+### 2) Create `.env` in project root
+
+Use these values for local development:
+
+```env
 API_URL=http://localhost:<BACKEND_API_PORT>
-ZENDESK_API_URL=<BACKEND_ZENDESK_PORT>
-LINKWALKER_API_URL=http://localhost:<BACKEND_LINK-WALKER_PORT>
-CONSENT_API_URL=http://localhost:<BACKEND_SAMTYKE_PORT>
-TEST_RUNNER_API_URL=http://localhost:<BACKEND_TEST-RUNNER_PORT>
+LINKWALKER_API_URL=http://localhost:<BACKEND_LINKWALKER_PORT>
+CONSENT_API_URL=http://localhost:<BACKEND_CONSENT_PORT>
+TEST_RUNNER_API_URL=http://localhost:<BACKEND_TEST_RUNNER_PORT>
+ACCESS_URL=http://localhost:<BACKEND_ACCESS_PORT>
 
-CYPRESS_TESTS=false
-LOG_LEVEL=debug
-NODE_ENV=development
+# Optional
+ANALYTICS_URL=http://localhost:<ANALYTICS_PORT>
+VITE_MOCK_CYPRESS=false
 ```
 
-Remember to start up backends for each area you are connecting to locally. 
-A bearer token is necessary for local connection to Samtykke backend.
-### Environment Variables Explained
+### 3) Start port forwarding (optional but common locally)
 
-#### LOG_LEVEL
-
-The `LOG_LEVEL` environment variable controls the verbosity of logging in the application. You can set it to one of the following levels:
-
-| Level   | Description       |
-|---------|-------------------|
-| `error` | Only log errors   |
-| `warn`  | Log warnings and errors |
-| `info`  | Standard log messages, warnings, and errors |
-| `http`  | HTTP logs along with info, warnings, and errors |
-| `verbose` | More detailed logs |
-| `debug` | Debug-level logs for troubleshooting |
-| `silly` | Most detailed log level for in-depth analysis |
-
-### Start locally:
-1. **Start Port Forwarding**  
-   Run the provided script:
-   ```sh
-   ./startUpForwards.sh
-   ```
-2. **Header**  
-   add x-nin to the header
-```
-x-nin : YOUR_XNIN
+```sh
+./setUpLocalForwards.sh start
 ```
 
-3**Start React**  
-   Run the provided script:
+Stop forwarding:
+
+```sh
+./setUpLocalForwards.sh stop
+```
+
+### 4) Start app
+
 ```sh
 npm run dev
 ```
 
-## Deployment
+### 5) Required request header for backend calls
 
-First, build your app for production:
+The app forwards `x-nin` to backend APIs. For local testing, ensure requests include:
 
-```sh
-npm run build
+```txt
+x-nin: YOUR_XNIN
 ```
 
-Then run the app in production mode:
+## Scripts
 
-```sh
-npm start
-```
+- `npm run dev` - start dev server
+- `npm run build` - build production artifacts
+- `npm start` - run built server (`build/server/index.js`)
+- `npm run lint` - run ESLint
+- `npm run typecheck` - generate route types and run TypeScript
+- `npm run test:unit` - run Vitest
+- `npm run test:e2e` - run Cypress
+- `npm run coverage` - run unit tests with coverage
 
-Now you'll need to pick a host to deploy it to.
+## Production build output
 
-### DIY
+Deploy output from:
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
--   `build/server`
--   `build/client`
+- `build/server`
+- `build/client`
 
 ## Styling
 
-Tailwind, Aksel, and Novari-theme
+This project uses Tailwind CSS, Aksel, and Novari theme styles.

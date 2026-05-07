@@ -18,7 +18,7 @@ type GeneralDetailViewProps = {
     onDelete: (formData: FormData) => void;
 };
 
-export function GeneralDetailView({ resource, onUpdate, onDelete }: GeneralDetailViewProps) {
+export function DetailView({ resource, onUpdate, onDelete }: GeneralDetailViewProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [resourceShortDesc, setResourceShortDesc] = useState(resource.shortDescription);
     const [resourceNote, setResourceNote] = useState(resource.note);

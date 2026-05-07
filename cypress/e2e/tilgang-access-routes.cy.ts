@@ -52,7 +52,7 @@ describe('Tilgang (Access) Routes Tests', () => {
             // );
             cy.visit(`/tilgang/${testClient}/${testComponent}`, { failOnStatusCode: false });
             cy.reload();
-            cy.wait(3000)
+            // cy.wait(3000)
             // console.log('testClient', `/tilgang/${testClient}/${testComponent}`);
             // //cy.visit(`/tilgang/jennifer-another-test@client.fintlabs.no/administrasjon-fullmakt`, { failOnStatusCode: false });
             // cy.reload();

@@ -12,7 +12,6 @@ import {
 
 import { AuthTable } from '~/components/shared/AuthTable';
 import Breadcrumbs from '~/components/shared/breadcrumbs';
-import { GeneralDetailView } from '~/components/shared/GeneralDetailView';
 import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 import { handleAdapterAction } from '~/routes/adapter.$id/actions';
 import { IAdapter } from '~/types/Adapter';
@@ -20,6 +19,7 @@ import { IAdapter } from '~/types/Adapter';
 import { loader } from './loaders';
 import { IComponent } from '~/types';
 import ComponentsTable from '~/routes/komponenter._index/ComponentsTable';
+import { DetailView } from '~/routes/adapter.$id/DetailView';
 
 export const meta: MetaFunction = () => {
     return [{ title: 'Adapter Detaljer' }, { name: 'description', content: 'Adapter Detaljer' }];
@@ -129,7 +129,7 @@ export default function Index() {
                         borderColor="neutral-subtle"
                         borderWidth="2"
                         borderRadius="12">
-                        <GeneralDetailView
+                        <DetailView
                             resource={adapter}
                             onUpdate={handleUpdate}
                             onDelete={handleDelete}
@@ -141,7 +141,9 @@ export default function Index() {
                             borderColor="neutral-subtle"
                             borderWidth="2"
                             borderRadius="12">
-                            <Heading size={'medium'}>{t('mainRoutes.adapterDetails.authHeading')}</Heading>
+                            <Heading size={'medium'}>
+                                {t('mainRoutes.adapterDetails.authHeading')}
+                            </Heading>
                             <AuthTable
                                 entity={adapter}
                                 entityType="adapter"

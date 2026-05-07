@@ -1,7 +1,7 @@
 import React from 'react';
 import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { formatDate, formatTimeOnly } from '~/utils/dateUtils';
+import { formatDate } from '~/utils/dateUtils';
 import { IResourceResult } from '~/types/BasicTest';
 
 interface TestResultsTableProps {

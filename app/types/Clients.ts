@@ -14,6 +14,7 @@ export interface IClient extends IPartialClient {
     accessPackages: string[];
     managed: boolean;
     modelVersion?: string;
+    lastLoginTime?: string;
 }
 
 export interface IClientModelVersion {

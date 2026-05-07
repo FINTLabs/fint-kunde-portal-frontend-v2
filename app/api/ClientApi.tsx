@@ -41,7 +41,6 @@ class ClientApi {
         organisationName: string,
         clientId: string
     ): Promise<IClient | null> {
-        console.log('Fetching client by ID', clientId);
         const clientsResponse = await this.getClients(organisationName);
         const client = clientsResponse?.data?.find((c) => c.name === clientId);
         return client ?? null;

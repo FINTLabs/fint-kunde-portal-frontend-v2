@@ -1,7 +1,7 @@
 import { LayersIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, LocalAlert, Search, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
@@ -39,10 +39,25 @@ export default function Index() {
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<IAdapter>;
     const [isCreating, setIsCreating] = useState(false);
-    const [filteredAdapter, setFilteredAdapter] = useState(adapters);
+    // const [filteredAdapter, setFilteredAdapter] = useState(adapters);
     //
     // const [searchParams, setSearchParams] = useSearchParams();
     // const deleteName = searchParams.get('deleted');
+    const [searchValue, setSearchValue] = useState('');
+
+    const filteredAdapters = (adapters ?? [])
+        .filter((adapter) => {
+            const query = searchValue.toLowerCase();
+
+            return (
+                adapter.name.toLowerCase().includes(query) ||
+                adapter.shortDescription.toLowerCase().includes(query)
+            );
+        })
+        .sort((a, b) => a.shortDescription.localeCompare(b.shortDescription));
+    const handleSearch = (value: string) => {
+        setSearchValue(value);
+    };
     const { alertState, setAlertState } = useAlerts<IAdapter>([], actionData);
 
     useDeletedSearchParamAlert({
@@ -52,10 +67,6 @@ export default function Index() {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        setFilteredAdapter(adapters);
-    }, [adapters]);
-
     const handleCreate = () => setIsCreating(true);
 
     const handleCancelCreate = () => setIsCreating(false);
@@ -64,17 +75,17 @@ export default function Index() {
         fetcher.submit(formData, { method: 'post', action: '/adaptere' });
     };
 
-    const handleSearch = (value: string) => {
-        const query = value.toLowerCase();
-        const filtered = adapters?.filter(
-            (adapter) =>
-                adapter.name.toLowerCase().includes(query) ||
-                adapter.shortDescription.toLowerCase().includes(query)
-        );
-
-        filtered?.sort((a, b) => a.shortDescription.localeCompare(b.shortDescription));
-        setFilteredAdapter(filtered);
-    };
+    // const handleSearch = (value: string) => {
+    //     const query = value.toLowerCase();
+    //     const filtered = adapters?.filter(
+    //         (adapter) =>
+    //             adapter.name.toLowerCase().includes(query) ||
+    //             adapter.shortDescription.toLowerCase().includes(query)
+    //     );
+    //
+    //     filtered?.sort((a, b) => a.shortDescription.localeCompare(b.shortDescription));
+    //     setFilteredAdapter(filtered);
+    // };
 
     const showDetails = (id: string) => navigate(`/adapter/${encodeURIComponent(id)}`);
 
@@ -113,9 +124,9 @@ export default function Index() {
                             hideLabel
                             variant="secondary"
                             size="small"
-                            onChange={(value: string) => handleSearch(value)}
+                            value={searchValue}
+                            onChange={handleSearch}
                             placeholder={t('adapterIndex.searchPlaceholder')}
-                            // className={'pb-6'}
                             data-cy="search-input"
                         />
                         {/*</Box>*/}
@@ -135,12 +146,10 @@ export default function Index() {
                                 </LocalAlert>
                             )}
 
-                            {filteredAdapter && filteredAdapter.length > 0 && (
+                            {filteredAdapters.length > 0 && (
                                 <CustomTabs
-                                    items={filteredAdapter}
+                                    items={filteredAdapters}
                                     showDetails={showDetails}
-                                    getItemName={(item) => item.name}
-                                    getItemDescription={(item) => item.shortDescription}
                                     isManaged={(item) => item.managed}
                                 />
                             )}

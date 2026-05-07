@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
-import { formatDate, formatTimeOnly } from '~/utils/dateUtils';
+import { formatDate } from '~/utils/dateUtils';
 import { IHealthData } from '~/types/BasicTest';
 
 interface TestResultsTableProps {

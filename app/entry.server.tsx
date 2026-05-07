@@ -2,7 +2,6 @@ import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
 import { ServerRouter } from 'react-router';
 import type { EntryContext } from 'react-router';
-import type { AppLoadContext } from 'react-router';
 
 let mswStarted = false;
 
@@ -19,6 +18,7 @@ async function startMockServer() {
     });
 
     mswStarted = true;
+    // eslint-disable-next-line no-console
     console.log('MSW node server started');
 }
 
@@ -28,8 +28,7 @@ export default async function handleRequest(
     request: Request,
     responseStatusCode: number,
     responseHeaders: Headers,
-    routerContext: EntryContext,
-    _loadContext: AppLoadContext
+    routerContext: EntryContext
 ) {
     return await new Promise<Response>((resolve, reject) => {
         let shellRendered = false;
@@ -58,6 +57,7 @@ export default async function handleRequest(
                 onError(error) {
                     responseStatusCode = 500;
                     if (shellRendered) {
+                        // eslint-disable-next-line no-console
                         console.error(error);
                     }
                 },

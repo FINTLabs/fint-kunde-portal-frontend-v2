@@ -1,6 +1,6 @@
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Modal, TextField } from '@navikt/ds-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 interface ComponentToggleModalProps {
     isOpen: boolean;
@@ -10,48 +10,35 @@ interface ComponentToggleModalProps {
     onCancel: () => void;
 }
 
-const ComponentToggleModal = ({
-    isOpen,
+const ComponentToggleModalContent = ({
     componentName,
     isChecked,
     onConfirm,
     onCancel,
-}: ComponentToggleModalProps) => {
+}: Omit<ComponentToggleModalProps, 'isOpen'>) => {
     const [typedName, setTypedName] = useState('');
     const isDeactivating = !isChecked;
     const canConfirm = isChecked || typedName === componentName;
 
-    // Reset the typed name when modal opens/closes
-    useEffect(() => {
-        if (!isOpen) {
-            setTypedName('');
-        }
-    }, [isOpen]);
-
     return (
-        <Modal
-            open={isOpen}
-            header={{
-                heading: 'Bekreftelse',
-                size: 'small',
-                icon: <ExclamationmarkTriangleIcon />,
-            }}
-            width="small"
-            onClose={onCancel}>
+        <>
             <Modal.Body>
                 <Heading size="small">
                     {isChecked
                         ? 'Er du sikker på at du vil aktivere denne komponenten?'
                         : 'Er du sikker på at du vil deaktivere denne komponenten?'}
                 </Heading>
+
                 <p>
                     Komponenten: <strong>{componentName}</strong>
                 </p>
+
                 {isDeactivating && (
                     <>
                         <p className="component-toggle-modal-confirm-text">
                             Skriv inn komponentnavnet for å bekrefte:
                         </p>
+
                         <TextField
                             label="Komponentnavn"
                             hideLabel
@@ -65,6 +52,7 @@ const ComponentToggleModal = ({
                     </>
                 )}
             </Modal.Body>
+
             <Modal.Footer>
                 <Button
                     data-cy="confirm-toggle-button"
@@ -72,20 +60,46 @@ const ComponentToggleModal = ({
                     variant="primary"
                     onClick={onConfirm}
                     disabled={!canConfirm}
-                    size={'small'}>
+                    size="small">
                     Ja, jeg er sikker
                 </Button>
-                <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={onCancel}
-                    size={'small'}>
+
+                <Button type="button" variant="secondary" onClick={onCancel} size="small">
                     Avbryt
                 </Button>
             </Modal.Footer>
+        </>
+    );
+};
+
+const ComponentToggleModal = ({
+    isOpen,
+    componentName,
+    isChecked,
+    onConfirm,
+    onCancel,
+}: ComponentToggleModalProps) => {
+    return (
+        <Modal
+            open={isOpen}
+            header={{
+                heading: 'Bekreftelse',
+                size: 'small',
+                icon: <ExclamationmarkTriangleIcon />,
+            }}
+            width="small"
+            onClose={onCancel}>
+            {isOpen && (
+                <ComponentToggleModalContent
+                    key={`${componentName}-${isChecked}`}
+                    componentName={componentName}
+                    isChecked={isChecked}
+                    onConfirm={onConfirm}
+                    onCancel={onCancel}
+                />
+            )}
         </Modal>
     );
 };
 
 export default ComponentToggleModal;
-

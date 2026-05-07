@@ -23,6 +23,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const nestedReport = payloadRecord?.['csp-report'];
     const reportRecord = asRecord(nestedReport) ?? payloadRecord;
 
+    // eslint-disable-next-line no-console
     console.log(
         '[CSP-REPORT]',
         JSON.stringify({

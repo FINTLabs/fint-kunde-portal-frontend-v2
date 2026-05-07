@@ -24,6 +24,7 @@ export function getStoredLanguage(): SupportedLanguage | undefined {
 }
 
 if (!i18n.isInitialized) {
+    // eslint-disable-next-line import/no-named-as-default-member
     void i18n.use(initReactI18next).init({
         resources,
         lng: defaultLanguage,
@@ -38,6 +39,7 @@ if (!i18n.isInitialized) {
 }
 
 export function setLanguage(language: SupportedLanguage) {
+    /* eslint-disable import/no-named-as-default-member */
     void i18n.changeLanguage(language);
 
     if (typeof window !== 'undefined') {

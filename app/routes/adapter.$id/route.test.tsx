@@ -186,7 +186,9 @@ describe('adapter detail route', () => {
     it('renders adapter details with selected components and auth section', () => {
         render(<Index />);
 
-        expect(screen.getByTestId('breadcrumbs')).toHaveTextContent('Adaptere > adapter@fint.no');
+        expect(screen.getByTestId('breadcrumbs')).toHaveTextContent(
+            /^(Adaptere|menu\.adapters) > adapter@fint\.no$/
+        );
         expect(screen.getByRole('heading', { name: 'adapter' })).toBeInTheDocument();
         expect(screen.getByTestId('toaster')).toHaveTextContent('alerts:1');
         expect(screen.getByTestId('selected-components')).toHaveTextContent('Comp A');
@@ -251,7 +253,9 @@ describe('adapter detail route', () => {
 
         render(<Index />);
 
-        expect(screen.getByRole('heading', { name: 'Error' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { name: /^(Error|Feil|mainRoutes\.adapterDetails\.errorTitle)$/ })
+        ).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'update-adapter' })).not.toBeInTheDocument();
     });
 

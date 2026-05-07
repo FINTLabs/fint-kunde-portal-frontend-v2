@@ -155,7 +155,7 @@ export default function App() {
                 { setLanguage: i18n.resolvedLanguage }
             );
         }
-    }, [i18n.resolvedLanguage]);
+    }, [i18n.resolvedLanguage, userSession?.selectedOrganization?.name]);
 
     const menu = getNovariMenu(t);
     const footerLinks = getFooterLinks(t);

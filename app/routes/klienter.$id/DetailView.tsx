@@ -15,6 +15,7 @@ import {
 } from '@navikt/ds-react';
 import { useState } from 'react';
 import ConfirmAction from '~/components/shared/ConfirmActionModal';
+import { LoginStatusIcon } from '~/components/shared/LoginStatusIcon';
 import { IClient, IUserSession } from '~/types';
 import AnalyticsApi from '~/api/AnalyticsApi';
 import { useLocation, useOutletContext } from 'react-router';
@@ -98,7 +99,9 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
                         ) : (
                             <>
                                 <Label>Title</Label>
-                                <BodyShort>{resource.shortDescription}</BodyShort>
+                                <BodyShort data-cy={`details-Tittel`}>
+                                    {resource.shortDescription}
+                                </BodyShort>
                             </>
                         )}
 
@@ -112,7 +115,9 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
                         ) : (
                             <>
                                 <Label>Beskrivelse</Label>
-                                <BodyShort>{resource.note}</BodyShort>
+                                <BodyShort data-cy={`details-Beskrivelse`}>
+                                    {resource.note}
+                                </BodyShort>
                             </>
                         )}
 
@@ -137,6 +142,16 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
                             </>
                         )}
 
+                        <Label>Sist logget inn</Label>
+                        <HStack gap="space-4" align="center">
+                            <LoginStatusIcon lastLoginTime={resource.lastLoginTime} />
+                            <BodyShort>
+                                {resource.lastLoginTime
+                                    ? resource.lastLoginTime
+                                    : 'Ugyldig innloggingstid'}
+                            </BodyShort>
+                        </HStack>
+
                         {isEditing && (
                             <Box padding="space-24">
                                 <LocalAlert status="announcement" size="small">
@@ -155,6 +170,7 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
                     <HStack gap="space-6" align="end" justify="end">
                         <Button
                             disabled={resource.managed}
+                            data-cy={`edit-button`}
                             icon={
                                 isEditing ? (
                                     <FloppydiskIcon title="Lagre" />

@@ -26,8 +26,7 @@ const RelationTestResultsTable = ({ logResults }: TestResultsTableProps) => {
                 a.remove();
                 window.URL.revokeObjectURL(url);
             }
-        } catch (error) {
-            console.error('Error downloading file:', error);
+        } catch {
             throw new Response('Failed to download the file', {
                 status: 500,
                 statusText: 'Failed to download the file',

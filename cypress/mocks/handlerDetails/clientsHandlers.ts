@@ -15,7 +15,6 @@ export const clientsHandlers = [
 
     http.post(`${API_URL}/api/clients/calvin_organizations`, async ({ request }) => {
         const body = await request.json();
-        //eslint-disable-next-line no-console
         console.log('Client creation request body:', body);
         return HttpResponse.json('from handler in MSW', { status: 409 });
     }),

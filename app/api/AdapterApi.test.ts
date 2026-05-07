@@ -10,7 +10,6 @@ const { mockCall } = vi.hoisted(() => {
 vi.mock('novari-frontend-components', () => {
     class MockNovariApiManager {
         call = mockCall;
-        constructor(_: unknown) {}
     }
 
     return {

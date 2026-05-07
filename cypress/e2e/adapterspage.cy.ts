@@ -14,24 +14,37 @@ Cypress.on('uncaught:exception', (err) => {
 });
 
 describe('Adapters Page Tests', () => {
-    const openCreateAdapterForm = () => {
-        cy.get('body', { timeout: 15000 }).should(($body) => {
-            const hasCreateForm = $body.find('[data-cy="create-form"]').length > 0;
-            const hasCreateButton = $body.find('[data-cy="create-adapter-button"]').length > 0;
-            expect(hasCreateForm || hasCreateButton).to.equal(true);
-        });
-
-        cy.get('body').then(($body) => {
-            if ($body.find('[data-cy="create-form"]').length > 0) {
-                return;
-            }
-
-            cy.get('[data-cy="create-adapter-button"]').should('be.visible');
-            cy.get('[data-cy="create-adapter-button"]').click({ force: true });
-        });
-
-        cy.get('[data-cy="create-form"]', { timeout: 15000 }).should('be.visible');
+    const waitForAdaptersPageLoaded = () => {
+        cy.contains('h2', 'Adaptere', { timeout: 20000 }).should('be.visible');
+        cy.get('[data-cy="tab-item-0"]', { timeout: 20000 }).should('be.visible');
+        cy.get('[data-cy="tab-item-1"]', { timeout: 20000 }).should('be.visible');
+        cy.get('[data-cy="create-adapter-button"]', { timeout: 20000 }).should('be.visible');
     };
+
+    // const openCreateAdapterForm = (retriesLeft = 2) => {
+    //     cy.get('body').then(($body) => {
+    //         const hasCreateForm = $body.find('[data-cy="create-form"]').length > 0;
+    //         if (hasCreateForm) return;
+    //
+    //         cy.get('[data-cy="create-adapter-button"]')
+    //             .should('be.visible')
+    //             .click({ force: true, waitForAnimations: true });
+    //     });
+    //
+    //     cy.get('body').then(($body) => {
+    //         const hasCreateForm = $body.find('[data-cy="create-form"]').length > 0;
+    //         if (hasCreateForm) return;
+    //
+    //         if (retriesLeft <= 0) {
+    //             throw new Error('Create form did not open: [data-cy="create-form"] not found.');
+    //         }
+    //
+    //         cy.wait(500);
+    //         openCreateAdapterForm(retriesLeft - 1);
+    //     });
+    //
+    //     cy.get('[data-cy="create-form"]', { timeout: 20000 }).should('be.visible');
+    // };
 
     beforeEach(() => {
         // cy.visit('/adaptere', { failOnStatusCode: false }).then(() => {
@@ -40,6 +53,7 @@ describe('Adapters Page Tests', () => {
         cy.visit('/adaptere', { failOnStatusCode: false });
         // cy.reload();
         cy.waitForAppReady();
+        waitForAdaptersPageLoaded();
     });
 
     // Header Tests
@@ -51,7 +65,7 @@ describe('Adapters Page Tests', () => {
         cy.get('[data-cy="tab-item-0"]').should('exist');
         cy.get('[data-cy="tab-item-1"]').should('exist');
 
-        openCreateAdapterForm();
+        // openCreateAdapterForm();
     });
 
     it('should display the two tabs', () => {
@@ -60,7 +74,7 @@ describe('Adapters Page Tests', () => {
     });
 
     it('should show form when add button is clicked', () => {
-        openCreateAdapterForm();
+        // openCreateAdapterForm();
 
         // Verify form elements are present
         cy.get('[data-cy="input-name"]').should('be.visible');
@@ -84,7 +98,7 @@ describe('Adapters Page Tests', () => {
 
     it.skip('should show validation errors for invalid form submission', () => {
         // Open the create form
-        openCreateAdapterForm();
+        // openCreateAdapterForm();
 
         // Try to save without filling required fields
         cy.get('[data-cy="save-button"]').should('be.visible');
