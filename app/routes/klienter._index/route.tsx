@@ -3,6 +3,7 @@ import {
     Box,
     Button,
     Chips,
+    Detail,
     HStack,
     InlineMessage,
     ProgressBar,
@@ -33,10 +34,11 @@ import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 const CURRENT_TIME_MS = Date.now();
 
-type LoginStatusFilter = 'missing' | 'stale' | 'warning' | 'ok';
-const DEFAULT_STATUS_FILTERS: LoginStatusFilter[] = ['missing', 'stale', 'ok'];
+type LoginStatusFilter = 'missing' | 'stale' | 'all';
+type LastLoginStatus = 'missing' | 'stale' | 'active';
+const DEFAULT_STATUS_FILTERS: LoginStatusFilter[] = ['all'];
 
-const getLastLoginStatus = (lastLoginTime?: string | null): LoginStatusFilter => {
+const getLastLoginStatus = (lastLoginTime?: string | null): LastLoginStatus => {
     if (lastLoginTime === null || lastLoginTime === undefined) {
         return 'missing';
     }
@@ -52,11 +54,7 @@ const getLastLoginStatus = (lastLoginTime?: string | null): LoginStatusFilter =>
         return 'stale';
     }
 
-    if (diffInDays > 7) {
-        return 'warning';
-    }
-
-    return 'ok';
+    return 'active';
 };
 
 export const meta: MetaFunction = () => {
@@ -92,11 +90,14 @@ export default function Index() {
     const filteredClients = clientData.filter((client) => {
         const query = searchValue.toLowerCase();
         const clientStatus = getLastLoginStatus(client.lastLoginTime);
+        const matchesStatus =
+            statusFilters.includes('all') ||
+            (clientStatus !== 'active' && statusFilters.includes(clientStatus));
 
         return (
             (client.name.toLowerCase().includes(query) ||
                 client.shortDescription.toLowerCase().includes(query)) &&
-            statusFilters.includes(clientStatus)
+            matchesStatus
         );
     });
 
@@ -115,7 +116,6 @@ export default function Index() {
     const handleCreate = () => {
         setIsCreating(true);
     };
-
     // const handleSearch = (value: string) => {
     //     setSearchValue(value);
     //     const query = value.toLowerCase();
@@ -218,11 +218,21 @@ export default function Index() {
                                             setStatusFilters((prev) =>
                                                 prev.includes('missing')
                                                     ? prev.filter((status) => status !== 'missing')
-                                                    : [...prev, 'missing']
+                                                    : [...prev.filter((status) => status !== 'all'), 'missing']
                                             )
                                         }
                                         data-color="info">
-                                        Ingen innlogging
+                                        Null
+                                    </Chips.Toggle>
+                                    <Chips.Toggle
+                                        selected={statusFilters.includes('all')}
+                                        onClick={() =>
+                                            setStatusFilters((prev) =>
+                                                prev.includes('all') ? [] : ['all']
+                                            )
+                                        }
+                                        data-color="neutral">
+                                        Alle
                                     </Chips.Toggle>
                                     <Chips.Toggle
                                         selected={statusFilters.includes('stale')}
@@ -230,30 +240,16 @@ export default function Index() {
                                             setStatusFilters((prev) =>
                                                 prev.includes('stale')
                                                     ? prev.filter((status) => status !== 'stale')
-                                                    : [...prev, 'stale']
+                                                    : [...prev.filter((status) => status !== 'all'), 'stale']
                                             )
                                         }
                                         data-color="danger">
                                         Over 30 dager
                                     </Chips.Toggle>
-
-                                    <Chips.Toggle
-                                        selected={statusFilters.includes('ok')}
-                                        onClick={() =>
-                                            setStatusFilters((prev) =>
-                                                prev.includes('ok')
-                                                    ? prev.filter((status) => status !== 'ok')
-                                                    : [...prev, 'ok']
-                                            )
-                                        }
-                                        data-color="success">
-                                        Nylig innlogging
-                                    </Chips.Toggle>
                                 </Chips>
                             </HStack>
                         </Box>
 
-                        {/*<Box>*/}
                         {filteredClients && (
                             <CustomTabs
                                 items={filteredClients}
@@ -262,7 +258,7 @@ export default function Index() {
                                 lastLoginTime={(item) => item.lastLoginTime}
                             />
                         )}
-                        {/*</Box>*/}
+                        <Detail>{filteredClients.length}</Detail>
                     </VStack>
                 </>
             )}
