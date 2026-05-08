@@ -3,7 +3,6 @@ import {
     Box,
     Button,
     Chips,
-    Detail,
     HStack,
     InlineMessage,
     ProgressBar,
@@ -218,7 +217,12 @@ export default function Index() {
                                             setStatusFilters((prev) =>
                                                 prev.includes('missing')
                                                     ? prev.filter((status) => status !== 'missing')
-                                                    : [...prev.filter((status) => status !== 'all'), 'missing']
+                                                    : [
+                                                          ...prev.filter(
+                                                              (status) => status !== 'all'
+                                                          ),
+                                                          'missing',
+                                                      ]
                                             )
                                         }
                                         data-color="info">
@@ -240,7 +244,12 @@ export default function Index() {
                                             setStatusFilters((prev) =>
                                                 prev.includes('stale')
                                                     ? prev.filter((status) => status !== 'stale')
-                                                    : [...prev.filter((status) => status !== 'all'), 'stale']
+                                                    : [
+                                                          ...prev.filter(
+                                                              (status) => status !== 'all'
+                                                          ),
+                                                          'stale',
+                                                      ]
                                             )
                                         }
                                         data-color="danger">
@@ -258,7 +267,6 @@ export default function Index() {
                                 lastLoginTime={(item) => item.lastLoginTime}
                             />
                         )}
-                        <Detail>{filteredClients.length}</Detail>
                     </VStack>
                 </>
             )}
