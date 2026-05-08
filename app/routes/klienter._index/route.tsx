@@ -33,9 +33,9 @@ import { InternalPageHeader } from '~/components/shared/InternalPageHeader';
 const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 const CURRENT_TIME_MS = Date.now();
 
-type LoginStatusFilter = 'missing' | 'stale' | 'all';
+type LoginStatusFilter = 'missing' | 'stale' | 'active';
 type LastLoginStatus = 'missing' | 'stale' | 'active';
-const DEFAULT_STATUS_FILTERS: LoginStatusFilter[] = ['all'];
+const DEFAULT_STATUS_FILTERS: LoginStatusFilter[] = ['missing', 'active', 'stale'];
 
 const getLastLoginStatus = (lastLoginTime?: string | null): LastLoginStatus => {
     if (lastLoginTime === null || lastLoginTime === undefined) {
@@ -89,9 +89,7 @@ export default function Index() {
     const filteredClients = clientData.filter((client) => {
         const query = searchValue.toLowerCase();
         const clientStatus = getLastLoginStatus(client.lastLoginTime);
-        const matchesStatus =
-            statusFilters.includes('all') ||
-            (clientStatus !== 'active' && statusFilters.includes(clientStatus));
+        const matchesStatus = statusFilters.includes(clientStatus);
 
         return (
             (client.name.toLowerCase().includes(query) ||
@@ -217,26 +215,23 @@ export default function Index() {
                                             setStatusFilters((prev) =>
                                                 prev.includes('missing')
                                                     ? prev.filter((status) => status !== 'missing')
-                                                    : [
-                                                          ...prev.filter(
-                                                              (status) => status !== 'all'
-                                                          ),
-                                                          'missing',
-                                                      ]
+                                                    : [...prev, 'missing']
                                             )
                                         }
                                         data-color="info">
-                                        Null
+                                        Ingen pålogging
                                     </Chips.Toggle>
                                     <Chips.Toggle
-                                        selected={statusFilters.includes('all')}
+                                        selected={statusFilters.includes('active')}
                                         onClick={() =>
                                             setStatusFilters((prev) =>
-                                                prev.includes('all') ? [] : ['all']
+                                                prev.includes('active')
+                                                    ? prev.filter((status) => status !== 'active')
+                                                    : [...prev, 'active']
                                             )
                                         }
-                                        data-color="neutral">
-                                        Alle
+                                        data-color="success">
+                                        Nylig innlogging
                                     </Chips.Toggle>
                                     <Chips.Toggle
                                         selected={statusFilters.includes('stale')}
@@ -244,12 +239,7 @@ export default function Index() {
                                             setStatusFilters((prev) =>
                                                 prev.includes('stale')
                                                     ? prev.filter((status) => status !== 'stale')
-                                                    : [
-                                                          ...prev.filter(
-                                                              (status) => status !== 'all'
-                                                          ),
-                                                          'stale',
-                                                      ]
+                                                    : [...prev, 'stale']
                                             )
                                         }
                                         data-color="danger">
