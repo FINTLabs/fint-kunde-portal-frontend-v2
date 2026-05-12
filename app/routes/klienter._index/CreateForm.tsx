@@ -1,4 +1,13 @@
-import { BodyShort, Button, Fieldset, HStack, Select, Textarea, TextField } from '@navikt/ds-react';
+import {
+    BodyShort,
+    Button,
+    Fieldset,
+    HStack,
+    LocalAlert,
+    Select,
+    Textarea,
+    TextField,
+} from '@navikt/ds-react';
 import React, { useState } from 'react';
 import AnalyticsApi from '~/api/AnalyticsApi';
 import { IClient, IUserSession } from '~/types';
@@ -100,10 +109,13 @@ export default function ClientCreateForm({
                 error={errors?.note}
                 onChange={(e) => setInputNote(e.target.value)}
             />
+            <BodyShort>
+                Velg hvilken informasjonsmodellversjon klienten skal kommunisere med for
+                utdanningsdomenet.
+            </BodyShort>
             <Select
                 label="Velg modelversjon"
                 size="small"
-                description="Styrer hvilken informasjonsmodellversjon klienten kommuniserer med for utdanningsdomenet"
                 className="create-client-model-select"
                 onChange={(e) => setInputModelVersion(e.target.value)}>
                 <option value="V3">V3</option>
@@ -121,6 +133,15 @@ export default function ClientCreateForm({
                     Avbryt
                 </Button>
             </HStack>
+            <LocalAlert status={'warning'} className={'mt-16'}>
+                <LocalAlert.Header>
+                    <LocalAlert.Title>Vi opplever ustabilitet i infrastrukturen.</LocalAlert.Title>
+                </LocalAlert.Header>
+                <LocalAlert.Content>
+                    Nye klienter og oppdaterte klienter kan bruke fra noen timer til 2 dager før de
+                    er stabile.
+                </LocalAlert.Content>
+            </LocalAlert>
         </Fieldset>
     );
 }
