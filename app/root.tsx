@@ -285,7 +285,7 @@ export function ErrorBoundary() {
             </CustomErrorLayout>
         );
     } else {
-        // Handle unexpected errors (like API fetch failures)
+        // Handle unexpected linkwalker.$type._errors (like API fetch failures)
         const errorMessage = error instanceof Error ? error.message : 'Ukjent feil';
 
         return (

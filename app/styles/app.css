@@ -1,9 +1,9 @@
 @layer theme, base, components, utilities;
 
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
 
-@import "./novari-theme.css";
+@import './novari-theme.css';
 
 .home-page-stack {
     margin-top: 3rem;
@@ -87,4 +87,76 @@
 
 .editable-text-field-full-width {
     width: 100%;
+}
+
+.linkwalker-details-card {
+    height: 100%;
+    border-width: 2px;
+    border-radius: var(--ax-radius-12);
+}
+
+.linkwalker-details-card:hover {
+    border-color: var(--ax-border-strong);
+    box-shadow: 0 0 0 1px var(--ax-border-strong);
+}
+
+.linkwalker-details-card .aksel-link-card__icon {
+    color: var(--ax-text-default);
+}
+
+.linkwalker-details-card__metrics {
+    color: var(--ax-text-neutral);
+}
+
+.linkwalker-details-card__content {
+    height: 100%;
+}
+
+.linkwalker-details-card__footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+    padding-top: var(--ax-space-8);
+}
+
+.linkwalker-details-card__view-link {
+    font-size: var(--ax-font-size-small);
+}
+
+.linkwalker-text-success {
+    color: var(--ax-text-success);
+}
+
+.linkwalker-text-warning {
+    color: var(--ax-text-warning);
+}
+.linkwalker-text-danger {
+    color: var(--ax-text-danger);
+}
+.linkwalker-text-info {
+    color: var(--ax-bg-info-strong);
+}
+
+.linkwalker-icon-warning {
+    color: var(--ax-bg-warning-moderate-pressed);
+}
+
+.linkwalker-icon-success {
+    color: var(--ax-bg-success-strong);
+}
+.linkwalker-icon-danger {
+    color: var(--ax-bg-danger-strong);
+}
+.linkwalker-icon-info {
+    color: var(--ax-bg-info-strong);
+}
+.aksel-table__expanded-row-content {
+    background-color: var(--ax-bg-neutral-moderate);
+}
+.aksel-progress-bar[data-color='warning'] .aksel-progress-bar__foreground {
+    background-color: var(--ax-text-warning);
+}
+
+.aksel-progress-bar[data-color='warning'] .aksel-progress-bar__foreground {
+    background-color: var(--ax-bg-warning-moderate-pressed);
 }

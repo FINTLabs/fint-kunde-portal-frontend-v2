@@ -14,7 +14,7 @@ interface BreadcrumbsProps {
 export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
     const homeLink = '/';
     const location = useLocation();
-    const currentPath = location.pathname;
+    const currentPath = `${location.pathname}${location.search}`;
     const currentPathEncoded = decodeURIComponent(currentPath);
 
     return (

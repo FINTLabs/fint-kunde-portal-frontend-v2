@@ -102,27 +102,14 @@ export const getNovariMenu = (t: TFunction) => {
                     role: 'ROLE_LOG',
                     description: helpData.find((i) => i.id === 'relasjonstest')?.shortDescription,
                 },
+                {
+                    action: '/linkwalker',
+                    icon: <ArrowsSquarepathIcon title="Relasjonstest" fontSize="1.5rem" />,
+                    label: 'Link-walker',
+                    role: 'ROLE_FINTLABS_TEST',
+                    description: helpData.find((i) => i.id === 'relasjonstest')?.shortDescription,
+                },
             ],
         },
-        // {
-        //     action: '',
-        //     label: 'Status Service',
-        //     submenu: [
-        //         {
-        //             action: '/status/adaptere',
-        //             icon: <VitalsIcon title="Status Adaptere" fontSize="1.5rem" />,
-        //             label: 'Status Adaptere',
-        //             role: 'ROLE_LOG',
-        //             description: helpData.find((i) => i.id === 'statusKontrakter')?.shortDescription,
-        //         },
-        //         {
-        //             action: '/status/hendelser',
-        //             icon: <TasklistSendIcon title="Status Hendelser" fontSize="1.5rem" />,
-        //             label: 'Status Hendelser',
-        //             role: 'ROLE_LOG',
-        //             description: helpData.find((i) => i.id === 'statusHendelser')?.shortDescription,
-        //         },
-        //     ],
-        // },
     ];
 };

@@ -54,7 +54,7 @@ export function CustomTabs<T extends { name: string; shortDescription: string }>
         selectedTab === tabInfo[1].value
             ? items.filter((i) => isManaged(i))
             : items.filter((i) => !isManaged(i));
-
+    console.log('filteredItems', filteredItems);
     return (
         <Box>
             <ToggleGroup

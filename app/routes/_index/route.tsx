@@ -5,6 +5,7 @@ import {
     InlineMessage,
     LinkCard,
     ProgressBar,
+    Tag,
     VStack,
 } from '@navikt/ds-react';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +21,7 @@ import { IUserSession } from '~/types/Session';
 import { getSelectedOrganization } from '~/utils/selectedOrganization';
 import ClientApi from '~/api/ClientApi';
 import { IClientModelVersion } from '~/types/Clients';
+import { SparkLargeIcon } from '@navikt/aksel-icons';
 
 export const meta: MetaFunction = () => {
     return [
@@ -145,6 +147,16 @@ export default function Index() {
                                                         </InlineMessage>
                                                     )}
                                                 </Box>
+                                            )}
+                                            {item.action === '/linkwalker' && (
+                                                <LinkCard.Footer>
+                                                    <Tag
+                                                        variant="outline"
+                                                        data-color="brand-magenta"
+                                                        icon={<SparkLargeIcon />}>
+                                                        New!
+                                                    </Tag>
+                                                </LinkCard.Footer>
                                             )}
                                         </LinkCard.Description>
                                     )}

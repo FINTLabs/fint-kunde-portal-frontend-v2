@@ -10,6 +10,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const modelVersion = modelVersionResponse.data;
 
     const clientData = clientsResponse.data || [];
+    console.log('clientData', clientData);
     clientData.sort((a: { shortDescription: string }, b: { shortDescription: string }) =>
         a.shortDescription.localeCompare(b.shortDescription)
     );
