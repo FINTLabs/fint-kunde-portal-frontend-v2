@@ -53,7 +53,7 @@ function CacheStatusTable({ logResults }: TestResultsTableProps) {
                         <Table.DataCell>{result.size <= 0 ? '' : result.size}</Table.DataCell>
                         <Table.DataCell>
                             {result.lastUpdated <= 0 ? '' : formatDate(result.lastUpdated)}
-                        </Table.DataCell>{' '}
+                        </Table.DataCell>
                     </Table.Row>
                 ))}
             </Table.Body>

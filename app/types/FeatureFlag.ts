@@ -6,7 +6,7 @@ export interface IFeatureFlag {
     'roles-init-new': boolean;
     'access-packages': boolean;
     'samtykke-admin': boolean;
-    roles: boolean;
+    // roles: boolean;
     'audit-log': boolean;
     'roles-init': boolean;
     'access-controll-new': boolean;
@@ -19,7 +19,7 @@ export const defaultFeatures: IFeatureFlag = {
     'roles-init-new': false,
     'access-packages': false,
     'samtykke-admin': false,
-    roles: false,
+    // roles: false,
     'audit-log': false,
     'roles-init': false,
     'access-controll-new': false,

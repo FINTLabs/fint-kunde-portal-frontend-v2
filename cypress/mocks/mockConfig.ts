@@ -4,4 +4,4 @@ export const ACCESS_URL = 'http://localhost:8085';
 export const LINKWALKER_API_URL = 'http://localhost:8086';
 export const TEST_RUNNER_API_URL = 'http://localhost:8085';
 export const CONSENT_API_URL = 'http://localhost:8084';
-
+export const LINKWALKER_READER_API_URL = 'http://localhost:8089';

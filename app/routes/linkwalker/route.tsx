@@ -9,6 +9,7 @@ import type { LatestReportSummary } from '~/types';
 
 import { DetailsTable } from './DetailsTable';
 import { OverallSummaryCard } from './OverallSummaryCard';
+import { getSelectedOrganization } from '~/utils/selectedOrganization';
 
 type LoaderData = {
     summary: LatestReportSummary;
@@ -17,8 +18,8 @@ type LoaderData = {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     // TODO: TESTING ONLY
-    // const orgName = await getSelectedOrganization(request);
-    const orgName = 'afk_no';
+    const orgName = await getSelectedOrganization(request);
+    // const orgName = 'afk_no';
 
     const summaryResponse = await LinkWalkerIntegrationApi.getSummary(orgName);
     const summary = summaryResponse.data;

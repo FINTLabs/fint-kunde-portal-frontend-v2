@@ -25,6 +25,10 @@ vi.mock('react-router', async () => {
     };
 });
 
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 vi.mock('novari-frontend-components', () => ({
     NovariToaster: ({ items }: { items: unknown[] }) => (
         <div data-testid="toaster">alerts:{items.length}</div>
@@ -50,8 +54,8 @@ vi.mock('~/components/shared/InternalPageHeader', () => ({
     InternalPageHeader: ({ title }: { title: string }) => <h1>{title}</h1>,
 }));
 
-vi.mock('~/components/shared/GeneralDetailView', () => ({
-    GeneralDetailView: ({
+vi.mock('~/routes/adapter.$id/DetailView', () => ({
+    DetailView: ({
         onUpdate,
         onDelete,
     }: {

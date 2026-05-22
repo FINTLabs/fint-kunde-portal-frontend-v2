@@ -27,6 +27,10 @@ export default defineConfig({
                 'cypress/**',
                 'build/**',
                 'coverage/**',
+                'app/i18n/*',
+                // 'app/routes/xx',
+                'app/types/*',
+                'app/components/Menu/Logo.tsx',
             ],
             excludeAfterRemap: true,
             thresholds: {
