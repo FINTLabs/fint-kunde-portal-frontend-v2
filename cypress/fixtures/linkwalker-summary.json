@@ -1,0 +1,766 @@
+{
+    "scanCompletedAt": "2026-05-06T07:28:23.298189053Z",
+    "orgId": "afk_no",
+    "components": [
+        "administrasjon_fullmakt",
+        "administrasjon_kodeverk",
+        "administrasjon_organisasjon",
+        "administrasjon_personal",
+        "felles_kodeverk",
+        "personvern_samtykke",
+        "ressurs_datautstyr",
+        "ressurs_eiendel",
+        "ressurs_tilgang",
+        "utdanning_elev",
+        "utdanning_kodeverk",
+        "utdanning_larling",
+        "utdanning_ot",
+        "utdanning_timeplan",
+        "utdanning_utdanningsprogram",
+        "utdanning_vurdering"
+    ],
+    "summary": {
+        "totalRecords": 4333844,
+        "totalRefs": 19343906,
+        "brokenLinkCount": 2076969,
+        "integrityPercent": 89.26,
+        "byProblemType": {
+            "missing-resource": 120,
+            "unknown-link": 300,
+            "missing-back-link-adapter": 500000,
+            "missing-back-link-autorelation": 10000
+        },
+        "components": [
+            {
+                "component": "utdanning_vurdering",
+                "totalRecords": 3388762,
+                "totalRefs": 15742363,
+                "brokenLinkCount": 1835680,
+                "integrityPercent": 88.33,
+                "byProblemType": {
+                    "missing-resource": 12,
+                    "unknown-link": 3,
+                    "missing-back-link-adapter": 5,
+                    "missing-back-link-autorelation": 0
+                },
+                "resources": [
+                    {
+                        "resource": "fravarsregistrering",
+                        "totalRecords": 2529860,
+                        "totalRefs": 9343915,
+                        "brokenLinkCount": 1766122,
+                        "integrityPercent": 81.09,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 28549,
+                            "missing-resource": 1737573
+                        }
+                    },
+                    {
+                        "resource": "underveisfagvurdering",
+                        "totalRecords": 508144,
+                        "totalRefs": 2032576,
+                        "brokenLinkCount": 65530,
+                        "integrityPercent": 96.77,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 1044,
+                            "missing-resource": 64486
+                        }
+                    },
+                    {
+                        "resource": "eksamensgruppe",
+                        "totalRecords": 8479,
+                        "totalRefs": 97107,
+                        "brokenLinkCount": 3787,
+                        "integrityPercent": 96.1,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 13,
+                            "missing-resource": 3774
+                        }
+                    },
+                    {
+                        "resource": "eksamensgruppemedlemskap",
+                        "totalRecords": 55301,
+                        "totalRefs": 110602,
+                        "brokenLinkCount": 226,
+                        "integrityPercent": 99.79,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 66,
+                            "missing-resource": 160
+                        }
+                    },
+                    {
+                        "resource": "halvarsfagvurdering",
+                        "totalRecords": 209661,
+                        "totalRefs": 838644,
+                        "brokenLinkCount": 10,
+                        "integrityPercent": 99.99,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 9,
+                            "missing-resource": 1
+                        }
+                    },
+                    {
+                        "resource": "elevvurdering",
+                        "totalRecords": 35531,
+                        "totalRefs": 758328,
+                        "brokenLinkCount": 4,
+                        "integrityPercent": 99.99,
+                        "byProblemType": {
+                            "missing-resource": 4
+                        }
+                    },
+                    {
+                        "resource": "sluttfagvurdering",
+                        "totalRecords": 6048,
+                        "totalRefs": 24192,
+                        "brokenLinkCount": 1,
+                        "integrityPercent": 99.99,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 1
+                        }
+                    },
+                    {
+                        "resource": "karakterverdi",
+                        "totalRecords": 213,
+                        "totalRefs": 213,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": 100.0,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "elevfravar",
+                        "totalRecords": 35525,
+                        "totalRefs": 2536786,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": 100.0,
+                        "byProblemType": {}
+                    }
+                ]
+            },
+            {
+                "component": "utdanning_elev",
+                "totalRecords": 211919,
+                "totalRefs": 1125684,
+                "brokenLinkCount": 110794,
+                "integrityPercent": 90.15,
+                "byProblemType": {
+                    "missing-back-link-autorelation": 2914,
+                    "missing-resource": 87813,
+                    "missing-back-link-adapter": 20067
+                },
+                "resources": [
+                    {
+                        "resource": "elev",
+                        "totalRecords": 39489,
+                        "totalRefs": 83718,
+                        "brokenLinkCount": 29311,
+                        "integrityPercent": 64.98,
+                        "byProblemType": {
+                            "missing-resource": 29281,
+                            "missing-back-link-adapter": 30
+                        }
+                    },
+                    {
+                        "resource": "kontaktperson",
+                        "totalRecords": 24796,
+                        "totalRefs": 25152,
+                        "brokenLinkCount": 21406,
+                        "integrityPercent": 14.89,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 115,
+                            "missing-resource": 21291
+                        }
+                    },
+                    {
+                        "resource": "elevforhold",
+                        "totalRecords": 44240,
+                        "totalRefs": 672248,
+                        "brokenLinkCount": 17450,
+                        "integrityPercent": 97.4,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 22,
+                            "missing-resource": 17428
+                        }
+                    },
+                    {
+                        "resource": "person",
+                        "totalRecords": 13862,
+                        "totalRefs": 30098,
+                        "brokenLinkCount": 16154,
+                        "integrityPercent": 46.32,
+                        "byProblemType": {
+                            "missing-resource": 12860,
+                            "missing-back-link-adapter": 1285,
+                            "missing-back-link-autorelation": 2009
+                        }
+                    },
+                    {
+                        "resource": "skoleressurs",
+                        "totalRecords": 8074,
+                        "totalRefs": 32904,
+                        "brokenLinkCount": 15022,
+                        "integrityPercent": 54.34,
+                        "byProblemType": {
+                            "missing-back-link-adapter": 8074,
+                            "missing-resource": 6835,
+                            "missing-back-link-autorelation": 113
+                        }
+                    },
+                    {
+                        "resource": "undervisningsforhold",
+                        "totalRecords": 8419,
+                        "totalRefs": 47384,
+                        "brokenLinkCount": 8686,
+                        "integrityPercent": 81.66,
+                        "byProblemType": {
+                            "missing-back-link-adapter": 8404,
+                            "missing-back-link-autorelation": 219,
+                            "missing-resource": 63
+                        }
+                    },
+                    {
+                        "resource": "klasse",
+                        "totalRecords": 1958,
+                        "totalRefs": 49666,
+                        "brokenLinkCount": 2294,
+                        "integrityPercent": 95.38,
+                        "byProblemType": {
+                            "missing-back-link-adapter": 2274,
+                            "missing-resource": 20
+                        }
+                    },
+                    {
+                        "resource": "kontaktlarergruppemedlemskap",
+                        "totalRecords": 33490,
+                        "totalRefs": 66980,
+                        "brokenLinkCount": 413,
+                        "integrityPercent": 99.38,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 412,
+                            "missing-resource": 1
+                        }
+                    },
+                    {
+                        "resource": "kontaktlarergruppe",
+                        "totalRecords": 2267,
+                        "totalRefs": 46886,
+                        "brokenLinkCount": 58,
+                        "integrityPercent": 99.87,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 24,
+                            "missing-resource": 34
+                        }
+                    },
+                    {
+                        "resource": "klassemedlemskap",
+                        "totalRecords": 35324,
+                        "totalRefs": 70648,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": 100.0,
+                        "byProblemType": {}
+                    }
+                ]
+            },
+            {
+                "component": "administrasjon_personal",
+                "totalRecords": 127132,
+                "totalRefs": 497279,
+                "brokenLinkCount": 97153,
+                "integrityPercent": 80.46,
+                "byProblemType": {
+                    "missing-back-link-adapter": 61616,
+                    "missing-resource": 35537
+                },
+                "resources": [
+                    {
+                        "resource": "fravar",
+                        "totalRecords": 50317,
+                        "totalRefs": 168434,
+                        "brokenLinkCount": 51041,
+                        "integrityPercent": 69.69,
+                        "byProblemType": {
+                            "missing-back-link-adapter": 50598,
+                            "missing-resource": 443
+                        }
+                    },
+                    {
+                        "resource": "fasttillegg",
+                        "totalRecords": 24581,
+                        "totalRefs": 49162,
+                        "brokenLinkCount": 24581,
+                        "integrityPercent": 50.0,
+                        "byProblemType": {
+                            "missing-resource": 13964,
+                            "missing-back-link-adapter": 10617
+                        }
+                    },
+                    {
+                        "resource": "person",
+                        "totalRecords": 12422,
+                        "totalRefs": 33215,
+                        "brokenLinkCount": 20793,
+                        "integrityPercent": 37.39,
+                        "byProblemType": {
+                            "missing-resource": 20793
+                        }
+                    },
+                    {
+                        "resource": "fastlonn",
+                        "totalRecords": 617,
+                        "totalRefs": 1234,
+                        "brokenLinkCount": 617,
+                        "integrityPercent": 50.0,
+                        "byProblemType": {
+                            "missing-resource": 245,
+                            "missing-back-link-adapter": 372
+                        }
+                    },
+                    {
+                        "resource": "personalressurs",
+                        "totalRecords": 12427,
+                        "totalRefs": 56000,
+                        "brokenLinkCount": 92,
+                        "integrityPercent": 99.83,
+                        "byProblemType": {
+                            "missing-resource": 92
+                        }
+                    },
+                    {
+                        "resource": "variabellonn",
+                        "totalRecords": 29,
+                        "totalRefs": 145,
+                        "brokenLinkCount": 29,
+                        "integrityPercent": 80.0,
+                        "byProblemType": {
+                            "missing-back-link-adapter": 29
+                        }
+                    },
+                    {
+                        "resource": "arbeidsforhold",
+                        "totalRecords": 26739,
+                        "totalRefs": 189089,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": 100.0,
+                        "byProblemType": {}
+                    }
+                ]
+            },
+            {
+                "component": "utdanning_timeplan",
+                "totalRecords": 539481,
+                "totalRefs": 1659471,
+                "brokenLinkCount": 21607,
+                "integrityPercent": 98.69,
+                "byProblemType": {
+                    "missing-back-link-autorelation": 8886,
+                    "missing-resource": 12721
+                },
+                "resources": [
+                    {
+                        "resource": "faggruppemedlemskap",
+                        "totalRecords": 263466,
+                        "totalRefs": 526932,
+                        "brokenLinkCount": 12505,
+                        "integrityPercent": 97.62,
+                        "byProblemType": {
+                            "missing-resource": 12505
+                        }
+                    },
+                    {
+                        "resource": "fag",
+                        "totalRecords": 10612,
+                        "totalRefs": 44262,
+                        "brokenLinkCount": 8833,
+                        "integrityPercent": 80.04,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 8833
+                        }
+                    },
+                    {
+                        "resource": "undervisningsgruppe",
+                        "totalRecords": 12551,
+                        "totalRefs": 318973,
+                        "brokenLinkCount": 259,
+                        "integrityPercent": 99.91,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 51,
+                            "missing-resource": 208
+                        }
+                    },
+                    {
+                        "resource": "undervisningsgruppemedlemskap",
+                        "totalRecords": 240221,
+                        "totalRefs": 480442,
+                        "brokenLinkCount": 10,
+                        "integrityPercent": 99.99,
+                        "byProblemType": {
+                            "missing-back-link-autorelation": 2,
+                            "missing-resource": 8
+                        }
+                    },
+                    {
+                        "resource": "faggruppe",
+                        "totalRecords": 12631,
+                        "totalRefs": 288862,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": 100.0,
+                        "byProblemType": {}
+                    }
+                ]
+            },
+            {
+                "component": "utdanning_utdanningsprogram",
+                "totalRecords": 47633,
+                "totalRefs": 251832,
+                "brokenLinkCount": 10892,
+                "integrityPercent": 95.67,
+                "byProblemType": {
+                    "missing-resource": 89,
+                    "missing-back-link-adapter": 10803
+                },
+                "resources": [
+                    {
+                        "resource": "skole",
+                        "totalRecords": 41,
+                        "totalRefs": 111337,
+                        "brokenLinkCount": 10804,
+                        "integrityPercent": 90.29,
+                        "byProblemType": {
+                            "missing-resource": 1,
+                            "missing-back-link-adapter": 10803
+                        }
+                    },
+                    {
+                        "resource": "programomrademedlemskap",
+                        "totalRecords": 42881,
+                        "totalRefs": 85762,
+                        "brokenLinkCount": 56,
+                        "integrityPercent": 99.93,
+                        "byProblemType": {
+                            "missing-resource": 56
+                        }
+                    },
+                    {
+                        "resource": "utdanningsprogram",
+                        "totalRecords": 22,
+                        "totalRefs": 5001,
+                        "brokenLinkCount": 22,
+                        "integrityPercent": 99.56,
+                        "byProblemType": {
+                            "missing-resource": 22
+                        }
+                    },
+                    {
+                        "resource": "programomrade",
+                        "totalRecords": 4684,
+                        "totalRefs": 47774,
+                        "brokenLinkCount": 10,
+                        "integrityPercent": 99.97,
+                        "byProblemType": {
+                            "missing-resource": 10
+                        }
+                    },
+                    {
+                        "resource": "arstrinn",
+                        "totalRecords": 5,
+                        "totalRefs": 1958,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": 100.0,
+                        "byProblemType": {}
+                    }
+                ]
+            },
+            {
+                "component": "administrasjon_organisasjon",
+                "totalRecords": 571,
+                "totalRefs": 28409,
+                "brokenLinkCount": 529,
+                "integrityPercent": 98.13,
+                "byProblemType": {
+                    "missing-back-link-adapter": 529
+                },
+                "resources": [
+                    {
+                        "resource": "organisasjonselement",
+                        "totalRecords": 571,
+                        "totalRefs": 28409,
+                        "brokenLinkCount": 529,
+                        "integrityPercent": 98.13,
+                        "byProblemType": {
+                            "missing-back-link-adapter": 529
+                        }
+                    }
+                ]
+            },
+            {
+                "component": "administrasjon_fullmakt",
+                "totalRecords": 4386,
+                "totalRefs": 21451,
+                "brokenLinkCount": 271,
+                "integrityPercent": 98.73,
+                "byProblemType": {
+                    "missing-back-link-adapter": 176,
+                    "missing-resource": 95
+                },
+                "resources": [
+                    {
+                        "resource": "fullmakt",
+                        "totalRecords": 4383,
+                        "totalRefs": 17062,
+                        "brokenLinkCount": 176,
+                        "integrityPercent": 98.96,
+                        "byProblemType": {
+                            "missing-back-link-adapter": 176
+                        }
+                    },
+                    {
+                        "resource": "rolle",
+                        "totalRecords": 3,
+                        "totalRefs": 4389,
+                        "brokenLinkCount": 95,
+                        "integrityPercent": 97.83,
+                        "byProblemType": {
+                            "missing-resource": 95
+                        }
+                    }
+                ]
+            },
+            {
+                "component": "administrasjon_kodeverk",
+                "totalRecords": 6519,
+                "totalRefs": 486,
+                "brokenLinkCount": 43,
+                "integrityPercent": 91.15,
+                "byProblemType": {
+                    "missing-resource": 43
+                },
+                "resources": [
+                    {
+                        "resource": "fravarstype",
+                        "totalRecords": 43,
+                        "totalRefs": 43,
+                        "brokenLinkCount": 43,
+                        "integrityPercent": 0.0,
+                        "byProblemType": {
+                            "missing-resource": 43
+                        }
+                    },
+                    {
+                        "resource": "art",
+                        "totalRecords": 657,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "arbeidsforholdstype",
+                        "totalRecords": 31,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "diverse",
+                        "totalRecords": 503,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "funksjon",
+                        "totalRecords": 196,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "anlegg",
+                        "totalRecords": 890,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "ansvar",
+                        "totalRecords": 566,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "prosjekt",
+                        "totalRecords": 2693,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "lonnsart",
+                        "totalRecords": 577,
+                        "totalRefs": 443,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": 100.0,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "personalressurskategori",
+                        "totalRecords": 7,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "uketimetall",
+                        "totalRecords": 7,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "fravarsgrunn",
+                        "totalRecords": 3,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "stillingskode",
+                        "totalRecords": 346,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    }
+                ]
+            },
+            {
+                "component": "felles_kodeverk",
+                "totalRecords": 374,
+                "totalRefs": 0,
+                "brokenLinkCount": 0,
+                "integrityPercent": null,
+                "byProblemType": {},
+                "resources": [
+                    {
+                        "resource": "fylke",
+                        "totalRecords": 16,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "kommune",
+                        "totalRecords": 358,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    }
+                ]
+            },
+            {
+                "component": "utdanning_kodeverk",
+                "totalRecords": 156,
+                "totalRefs": 426,
+                "brokenLinkCount": 0,
+                "integrityPercent": 100.0,
+                "byProblemType": {},
+                "resources": [
+                    {
+                        "resource": "fravarstype",
+                        "totalRecords": 6,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "elevkategori",
+                        "totalRecords": 3,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "eksamensform",
+                        "totalRecords": 7,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "skolear",
+                        "totalRecords": 41,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "termin",
+                        "totalRecords": 82,
+                        "totalRefs": 0,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": null,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "karakterskala",
+                        "totalRecords": 17,
+                        "totalRefs": 426,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": 100.0,
+                        "byProblemType": {}
+                    }
+                ]
+            },
+            {
+                "component": "utdanning_larling",
+                "totalRecords": 6911,
+                "totalRefs": 16505,
+                "brokenLinkCount": 0,
+                "integrityPercent": 100.0,
+                "byProblemType": {},
+                "resources": [
+                    {
+                        "resource": "larling",
+                        "totalRecords": 3301,
+                        "totalRefs": 9903,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": 100.0,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "person",
+                        "totalRecords": 3301,
+                        "totalRefs": 3301,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": 100.0,
+                        "byProblemType": {}
+                    },
+                    {
+                        "resource": "virksomhet",
+                        "totalRecords": 309,
+                        "totalRefs": 3301,
+                        "brokenLinkCount": 0,
+                        "integrityPercent": 100.0,
+                        "byProblemType": {}
+                    }
+                ]
+            }
+        ]
+    }
+}

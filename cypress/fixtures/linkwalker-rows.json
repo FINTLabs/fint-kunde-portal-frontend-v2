@@ -1,0 +1,808 @@
+{
+    "rows": [
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elev",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/skole/organisasjonsnummer/***MASKED***",
+            "relationName": "skole",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "unknown-link",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/invalid/resource/id/***MASKED***",
+            "relationName": null,
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "time",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/time/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "relationName": "undervisningsgruppe",
+            "expectedInverseName": "time"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/basisgruppe/systemid/***MASKED***",
+            "relationName": "basisgruppe",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "personalressurs",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/organisasjon/organisasjonselement/organisasjonsid/***MASKED***",
+            "relationName": "organisasjonselement",
+            "expectedInverseName": "personalressurs"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "undervisningsgruppe",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elevforhold",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/utdanningsprogram/utdanningsprogram/systemid/***MASKED***",
+            "relationName": "utdanningsprogram",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "arbeidsforhold",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/arbeidsforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "relationName": "personalressurs",
+            "expectedInverseName": "arbeidsforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/felles/person/person/fodselsnummer/***MASKED***",
+            "relationName": "person",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elev",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/skole/organisasjonsnummer/***MASKED***",
+            "relationName": "skole",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "unknown-link",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/invalid/resource/id/***MASKED***",
+            "relationName": null,
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "time",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/time/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "relationName": "undervisningsgruppe",
+            "expectedInverseName": "time"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/basisgruppe/systemid/***MASKED***",
+            "relationName": "basisgruppe",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "personalressurs",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/organisasjon/organisasjonselement/organisasjonsid/***MASKED***",
+            "relationName": "organisasjonselement",
+            "expectedInverseName": "personalressurs"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "undervisningsgruppe",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elevforhold",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/utdanningsprogram/utdanningsprogram/systemid/***MASKED***",
+            "relationName": "utdanningsprogram",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "arbeidsforhold",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/arbeidsforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "relationName": "personalressurs",
+            "expectedInverseName": "arbeidsforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/felles/person/person/fodselsnummer/***MASKED***",
+            "relationName": "person",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elev",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/skole/organisasjonsnummer/***MASKED***",
+            "relationName": "skole",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "unknown-link",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/invalid/resource/id/***MASKED***",
+            "relationName": null,
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "time",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/time/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "relationName": "undervisningsgruppe",
+            "expectedInverseName": "time"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/basisgruppe/systemid/***MASKED***",
+            "relationName": "basisgruppe",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "personalressurs",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/organisasjon/organisasjonselement/organisasjonsid/***MASKED***",
+            "relationName": "organisasjonselement",
+            "expectedInverseName": "personalressurs"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "undervisningsgruppe",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elevforhold",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/utdanningsprogram/utdanningsprogram/systemid/***MASKED***",
+            "relationName": "utdanningsprogram",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "arbeidsforhold",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/arbeidsforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "relationName": "personalressurs",
+            "expectedInverseName": "arbeidsforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/felles/person/person/fodselsnummer/***MASKED***",
+            "relationName": "person",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elev",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/skole/organisasjonsnummer/***MASKED***",
+            "relationName": "skole",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "unknown-link",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/invalid/resource/id/***MASKED***",
+            "relationName": null,
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "time",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/time/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "relationName": "undervisningsgruppe",
+            "expectedInverseName": "time"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/basisgruppe/systemid/***MASKED***",
+            "relationName": "basisgruppe",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "personalressurs",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/organisasjon/organisasjonselement/organisasjonsid/***MASKED***",
+            "relationName": "organisasjonselement",
+            "expectedInverseName": "personalressurs"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "undervisningsgruppe",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elevforhold",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/utdanningsprogram/utdanningsprogram/systemid/***MASKED***",
+            "relationName": "utdanningsprogram",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "arbeidsforhold",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/arbeidsforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "relationName": "personalressurs",
+            "expectedInverseName": "arbeidsforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/felles/person/person/fodselsnummer/***MASKED***",
+            "relationName": "person",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elev",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/skole/organisasjonsnummer/***MASKED***",
+            "relationName": "skole",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "unknown-link",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/invalid/resource/id/***MASKED***",
+            "relationName": null,
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "time",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/time/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "relationName": "undervisningsgruppe",
+            "expectedInverseName": "time"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/basisgruppe/systemid/***MASKED***",
+            "relationName": "basisgruppe",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "personalressurs",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/organisasjon/organisasjonselement/organisasjonsid/***MASKED***",
+            "relationName": "organisasjonselement",
+            "expectedInverseName": "personalressurs"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "undervisningsgruppe",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elevforhold",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/utdanningsprogram/utdanningsprogram/systemid/***MASKED***",
+            "relationName": "utdanningsprogram",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "arbeidsforhold",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/arbeidsforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "relationName": "personalressurs",
+            "expectedInverseName": "arbeidsforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/felles/person/person/fodselsnummer/***MASKED***",
+            "relationName": "person",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elev",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/skole/organisasjonsnummer/***MASKED***",
+            "relationName": "skole",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "unknown-link",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/invalid/resource/id/***MASKED***",
+            "relationName": null,
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "time",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/time/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "relationName": "undervisningsgruppe",
+            "expectedInverseName": "time"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/basisgruppe/systemid/***MASKED***",
+            "relationName": "basisgruppe",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "personalressurs",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/organisasjon/organisasjonselement/organisasjonsid/***MASKED***",
+            "relationName": "organisasjonselement",
+            "expectedInverseName": "personalressurs"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "undervisningsgruppe",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elevforhold",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/utdanningsprogram/utdanningsprogram/systemid/***MASKED***",
+            "relationName": "utdanningsprogram",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "arbeidsforhold",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/arbeidsforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "relationName": "personalressurs",
+            "expectedInverseName": "arbeidsforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/felles/person/person/fodselsnummer/***MASKED***",
+            "relationName": "person",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elev",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/skole/organisasjonsnummer/***MASKED***",
+            "relationName": "skole",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "unknown-link",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/invalid/resource/id/***MASKED***",
+            "relationName": null,
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "time",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/time/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "relationName": "undervisningsgruppe",
+            "expectedInverseName": "time"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/basisgruppe/systemid/***MASKED***",
+            "relationName": "basisgruppe",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "personalressurs",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/organisasjon/organisasjonselement/organisasjonsid/***MASKED***",
+            "relationName": "organisasjonselement",
+            "expectedInverseName": "personalressurs"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "undervisningsgruppe",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elevforhold",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/utdanningsprogram/utdanningsprogram/systemid/***MASKED***",
+            "relationName": "utdanningsprogram",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "arbeidsforhold",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/arbeidsforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "relationName": "personalressurs",
+            "expectedInverseName": "arbeidsforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/felles/person/person/fodselsnummer/***MASKED***",
+            "relationName": "person",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elev",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/skole/organisasjonsnummer/***MASKED***",
+            "relationName": "skole",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "unknown-link",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/invalid/resource/id/***MASKED***",
+            "relationName": null,
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "time",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/time/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "relationName": "undervisningsgruppe",
+            "expectedInverseName": "time"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/basisgruppe/systemid/***MASKED***",
+            "relationName": "basisgruppe",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "personalressurs",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/organisasjon/organisasjonselement/organisasjonsid/***MASKED***",
+            "relationName": "organisasjonselement",
+            "expectedInverseName": "personalressurs"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_timeplan",
+            "resource": "undervisningsgruppe",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/timeplan/undervisningsgruppe/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "relationName": "elevforhold",
+            "expectedInverseName": null
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elevforhold",
+            "problemType": "missing-back-link-adapter",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elevforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/utdanning/utdanningsprogram/utdanningsprogram/systemid/***MASKED***",
+            "relationName": "utdanningsprogram",
+            "expectedInverseName": "elevforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "administrasjon_personal",
+            "resource": "arbeidsforhold",
+            "problemType": "missing-back-link-autorelation",
+            "sourceSelf": "https://beta.felleskomponent.no/administrasjon/personal/arbeidsforhold/systemid/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/administrasjon/personal/personalressurs/ansattnummer/***MASKED***",
+            "relationName": "personalressurs",
+            "expectedInverseName": "arbeidsforhold"
+        },
+        {
+            "orgId": "fintlabs_no",
+            "component": "utdanning_elev",
+            "resource": "elev",
+            "problemType": "missing-resource",
+            "sourceSelf": "https://beta.felleskomponent.no/utdanning/elev/elev/feidenavn/***MASKED***",
+            "targetHref": "https://beta.felleskomponent.no/felles/person/person/fodselsnummer/***MASKED***",
+            "relationName": "person",
+            "expectedInverseName": null
+        }
+    ],
+    "page": 0,
+    "size": 10,
+    "totalRows": 36,
+    "totalPages": 4
+}
