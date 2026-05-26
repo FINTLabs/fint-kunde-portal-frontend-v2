@@ -50,8 +50,8 @@ vi.mock('~/components/shared/InternalPageHeader', () => ({
     InternalPageHeader: ({ title }: { title: string }) => <h1>{title}</h1>,
 }));
 
-vi.mock('~/components/shared/GeneralDetailView', () => ({
-    GeneralDetailView: ({
+vi.mock('./DetailView', () => ({
+    DetailView: ({
         onUpdate,
         onDelete,
     }: {
