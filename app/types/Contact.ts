@@ -11,15 +11,15 @@ export interface IContact {
     roles?: string[] | null;
 }
 
-export const defaultContact: IContact = {
-    dn: '',
-    nin: '',
-    firstName: '',
-    lastName: '',
-    mail: '',
-    mobile: '',
-    technical: null,
-    legal: null,
-    supportId: null,
-    roles: null,
-};
+// export const defaultContact: IContact = {
+//     dn: '',
+//     nin: '',
+//     firstName: '',
+//     lastName: '',
+//     mail: '',
+//     mobile: '',
+//     technical: null,
+//     legal: null,
+//     supportId: null,
+//     roles: null,
+// };

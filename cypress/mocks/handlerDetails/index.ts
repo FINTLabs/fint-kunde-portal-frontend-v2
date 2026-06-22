@@ -7,6 +7,7 @@ import { clientsHandlers } from './clientsHandlers';
 import { componentsHandlers } from './componentsHandlers';
 import { contactsHandlers } from './contactsHandlers';
 import { linkWalkerHandlers } from './linkWalkerHandlers';
+import { linkWalkerIntegrationHandlers } from './linkWalkerIntegrationHandlers';
 import { userHandlers } from './userHandlers';
 import { eventsHandlers } from './hendelsesloggHandlers';
 import { basisHandlers } from './basistest';
@@ -30,6 +31,7 @@ export const handlers = [
     ...clientsHandlers,
     ...assetsHandlers,
     ...linkWalkerHandlers,
+    ...linkWalkerIntegrationHandlers,
     ...eventsHandlers,
     ...basisHandlers,
     ...analyticsHandlers,

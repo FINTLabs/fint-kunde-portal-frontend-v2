@@ -44,10 +44,10 @@ export async function handleClientAction({ request }: { request: Request }) {
                     message: `Kunne ikke slette klient '${clientName}'`,
                     variant: 'error',
                 };
+                break;
+            } else {
+                return redirect(`/klienter?deleted=${clientName}`);
             }
-
-            return redirect(`/klienter?deleted=${clientName}`);
-
         case 'ADD_COMPONENT_ACCESS':
             response = await ClientApi.updateComponentInClient(
                 formData.get('componentName') as string,

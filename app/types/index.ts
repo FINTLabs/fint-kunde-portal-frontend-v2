@@ -10,6 +10,18 @@ export type { IContact } from './Contact';
 export type { IFeatureFlag } from './FeatureFlag';
 export type { IMeData } from './Me';
 export type { ILinkWalkerTest, LinkWalkerStatus, LinkWalkerEnvironment } from './LinkWalker';
+export type {
+    ComponentSummary,
+    GetRowsParams,
+    LinkWalkerBrokenNavigationState,
+    LatestReportSummary,
+    LinkWalkerProblemTypeSummaryState,
+    PagedRows,
+    ProblemType,
+    ReportRow,
+    ResourceSummary,
+    ScanSummary,
+} from './LinkWalkerIntegration';
 export type { ReduntantLog, ReduntantLogEvent, AuditEvent, LogEvent, Log } from './LogEvent';
 export type { IOrganisation } from './Organisation';
 export type { IRole } from './Role';

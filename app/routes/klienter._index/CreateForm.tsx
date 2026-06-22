@@ -13,7 +13,7 @@ import AnalyticsApi from '~/api/AnalyticsApi';
 import { IClient, IUserSession } from '~/types';
 import { useOutletContext } from 'react-router';
 
-interface AdapterCreateFormProps {
+interface ClientCreateFormProps {
     onCancel: () => void;
     onSave: (formData: FormData) => void;
     orgName: string;
@@ -28,7 +28,7 @@ export default function ClientCreateForm({
     orgName,
     isSubmitting,
     clientData,
-}: AdapterCreateFormProps) {
+}: ClientCreateFormProps) {
     const [errors, setErrors] = useState<Errors>({});
     const [inputName, setInputName] = useState('');
     const [inputDescription, setInputDescription] = useState('');

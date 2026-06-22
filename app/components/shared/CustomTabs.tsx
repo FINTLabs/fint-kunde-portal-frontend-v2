@@ -11,7 +11,6 @@ import {
     ToggleGroup,
 } from '@navikt/ds-react';
 
-import { tabInfo } from '~/routes/adaptere._index/constants';
 import React, { useState } from 'react';
 import { LoginStatusIcon } from '~/components/shared/LoginStatusIcon';
 
@@ -33,6 +32,17 @@ export function CustomTabs<T extends { name: string; shortDescription: string }>
     isManaged,
     lastLoginTime,
 }: CustomTabsProps<T>) {
+    const tabInfo = [
+        {
+            value: 'manuelt-opprettet',
+            label: 'Manuelt opprettet',
+        },
+        {
+            value: 'automatisk-opprettet',
+            label: 'Automatisk opprettet',
+        },
+    ];
+
     const [selectedTab, setSelectedTab] = useState(tabInfo[0].value);
 
     if (!items) {
