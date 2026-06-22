@@ -39,12 +39,12 @@ import { DetailView } from '~/routes/klienter.$id/DetailView';
 
 export { loader };
 
-export const handle = {
-    analytics: {
-        pageType: 'client',
-        pathPattern: '/klienter/:id',
-    },
-};
+// export const handle = {
+//     analytics: {
+//         pageType: 'client',
+//         pathPattern: '/klienter/:id',
+//     },
+// };
 
 export const action = async (args: ActionFunctionArgs) => handleClientAction(args);
 
@@ -191,7 +191,9 @@ export default function ClientDetails() {
                             borderColor="neutral-subtle"
                             borderWidth="2"
                             borderRadius="12">
-                            <Heading size={'medium'}>{t('mainRoutes.clientDetails.authHeading')}</Heading>
+                            <Heading size={'medium'}>
+                                {t('mainRoutes.clientDetails.authHeading')}
+                            </Heading>
                             <AuthTable
                                 entity={client}
                                 entityType="client"
@@ -215,8 +217,7 @@ export default function ClientDetails() {
                                     <Heading size={'medium'}>
                                         {t('mainRoutes.clientDetails.accessControlHeading')}
                                     </Heading>
-                                    <Box
-                                        className="w-full flex-1 client-details-actions">
+                                    <Box className="w-full flex-1 client-details-actions">
                                         <Button
                                             size="xsmall"
                                             variant="tertiary"
@@ -257,7 +258,9 @@ export default function ClientDetails() {
                                 <Modal
                                     open={isAuditOpen}
                                     onClose={() => setIsAuditOpen(false)}
-                                    header={{ heading: t('mainRoutes.clientDetails.changeLogButton') }}>
+                                    header={{
+                                        heading: t('mainRoutes.clientDetails.changeLogButton'),
+                                    }}>
                                     <Modal.Body>
                                         <ComponentAccessAudit audit={accessAuditLogs} />
                                     </Modal.Body>
@@ -266,7 +269,9 @@ export default function ClientDetails() {
                                 <Modal
                                     open={isLogOpen}
                                     onClose={() => setIsLogOpen(false)}
-                                    header={{ heading: t('mainRoutes.clientDetails.accessLogModalTitle') }}>
+                                    header={{
+                                        heading: t('mainRoutes.clientDetails.accessLogModalTitle'),
+                                    }}>
                                     <Modal.Body>
                                         <ComponentAccessLog accessLog={accessLog} />
                                     </Modal.Body>
@@ -305,7 +310,9 @@ export default function ClientDetails() {
             ) : (
                 <LocalAlert status="announcement">
                     <LocalAlert.Header>
-                        <LocalAlert.Title>{t('mainRoutes.clientDetails.notFoundTitle')}</LocalAlert.Title>
+                        <LocalAlert.Title>
+                            {t('mainRoutes.clientDetails.notFoundTitle')}
+                        </LocalAlert.Title>
                     </LocalAlert.Header>
                     <LocalAlert.Content>
                         {t('mainRoutes.clientDetails.notFoundDescription')}
