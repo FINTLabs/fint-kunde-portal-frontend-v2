@@ -54,6 +54,7 @@ vi.mock('~/components/shared/InternalPageHeader', () => ({
     InternalPageHeader: ({ title }: { title: string }) => <h1>{title}</h1>,
 }));
 
+
 vi.mock('~/routes/adapter.$id/DetailView', () => ({
     DetailView: ({
         onUpdate,
