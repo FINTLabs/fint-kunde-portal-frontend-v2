@@ -96,14 +96,20 @@ export function DetailView({ resource, onUpdate, onDelete }: GeneralDetailViewPr
                     />
 
                     {!isEditing && !resource.managed && (
-                        <ConfirmAction
-                            buttonText={'delete'}
-                            showButtonText={false}
-                            subTitleText={`Er du sikker på at du vil slette ${resource.name}?`}
-                            onConfirm={handleConfirmDelete}
-                            buttonVariant="tertiary"
-                            buttonSize={'medium'}
+                        // <ConfirmAction
+                        //     buttonText={'delete'}
+                        //     showButtonText={false}
+                        //     subTitleText={`Er du sikker på at du vil slette ${resource.name}?`}
+                        //     onConfirm={handleConfirmDelete}
+                        //     buttonVariant="tertiary"
+                        //     buttonSize={'medium'}
+                        //     icon={<TrashIcon aria-hidden />}
+                        // />
+                        <Button
+                            disabled={true}
                             icon={<TrashIcon aria-hidden />}
+                            variant="tertiary"
+                            onClick={handleConfirmDelete}
                         />
                     )}
 

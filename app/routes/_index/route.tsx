@@ -1,5 +1,6 @@
 import {
     Box,
+    GlobalAlert,
     Heading,
     HGrid,
     InlineMessage,
@@ -66,6 +67,18 @@ export default function Index() {
             <Heading size="large">
                 {t('home.welcome', { name: userSession.meData.firstName })}
             </Heading>
+            <GlobalAlert status="error">
+                <GlobalAlert.Header>
+                    <GlobalAlert.Title>
+                        Vi opplever problemer med autentiseringsløsningen.
+                    </GlobalAlert.Title>
+                </GlobalAlert.Header>
+                <GlobalAlert.Content className="pl-10 pr-0">
+                    Vi opplever problemer med autentiseringsløsningen. Vi må derfor midlertidig
+                    stenge for oppretting og sletting av Klienter og Adaptere. Redigering vil
+                    fortsatt fungere.
+                </GlobalAlert.Content>
+            </GlobalAlert>
 
             <HGrid
                 gap="space-24"
