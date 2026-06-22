@@ -82,9 +82,9 @@ describe('MenuConfig', () => {
                     description: 'event log help',
                 }),
                 expect.objectContaining({
-                    action: '/linkwalker',
-                    label: 'Link-walker',
-                    role: 'ROLE_FINTLABS_TEST',
+                    action: '/relasjonstest',
+                    label: 'menu.relationTest',
+                    role: 'ROLE_LOG',
                     description: 'relation test help',
                 }),
             ])
