@@ -1,0 +1,39 @@
+.novari-header {
+    background: var(--novari-header-bg);
+    color: var(--novari-header-fg);
+    margin-bottom: 1rem;
+}
+
+.novari-header .novari-header-title,
+.novari-header-icon {
+    color: var(--novari-header-fg);
+}
+
+.novari-footer {
+    background: var(--novari-footer-bg);
+    color: var(--novari-footer-fg);
+}
+
+.panel-icon {
+    margin-right: 20px;
+    font-size: 34px;
+    color: #d2452c;
+    transition: transform 0.3s ease;
+    border: #d2452c 1px solid;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.panel-icon-disabled {
+    color: #b0b0b0;
+    border: #b0b0b0 1px solid;
+}
+
+.aksel-link-card:hover .panel-icon {
+    transform: scale(1.3);
+}

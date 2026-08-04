@@ -1,80 +1,87 @@
-/*.light {*/
-/*    !* NOVARI Footer and header *!*/
-/*    .novari-header {*/
-/*        background: #FCF5ED; color: #6B133D;*/
-/*    }*/
-
-/*    .novari-footer {*/
-/*        background: #6B133D;*/
-/*    }*/
-/*    !* theme.css *!*/
-/*    .rounded-box {*/
-/*        border: 2px solid var(--ax-border-brand-magenta-subtle);*/
-/*        border-radius: 12px;*/
-/*        padding: var(--ax-space-16);*/
-/*        height: 20rem;*/
-/*        overflow: auto;*/
-/*    }*/
-/*    .border-box {*/
-/*        border-top: 2px solid var(--ax-border-brand-magenta-subtle);*/
-/*        !*border-radius: 12px;*!*/
-/*        padding: var(--ax-space-16);*/
-/*        height: 20rem;*/
-/*        overflow: auto;*/
-/*    }*/
-
-/*}*/
-/* Default (light) */
-:root {
-    --novari-chrome-bg: #FCF5ED;   /* header */
-    --novari-chrome-fg: #6B133D;
-    --novari-footer-bg: #6B133D;
-    --novari-footer-fg: #FFFFFF;
+.aksel-theme.novari-theme {
+    --novari-header-bg: var(--ax-bg-default);
+    --novari-header-fg: var(--ax-text-default);
+    --novari-footer-bg: #6b133d;
+    --novari-footer-fg: #fcf5ed;
 }
 
-/* When Aksel Theme is dark */
-[data-theme="dark"] {
-    --novari-chrome-bg: #1E1E1E;   /* or a darker warm-ish surface */
-    --novari-chrome-fg: #F3E7EC;   /* light text with slight warmth */
-    --novari-footer-bg: #4E0F2B;   /* deep burgundy */
-    --novari-footer-fg: #FFFFFF;
+.aksel-theme.novari-theme.light {
+    --novari-header-bg: #fcf5ed;
+    --novari-header-fg: #6b133d;
+
+    --ax-surface-default: #fefcfa;
+    --ax-surface-subtle: #fcf5ed;
+    --ax-bg-strong: #5a51e1;
+    --ax-bg-strong-hover: #5149ca;
+    --ax-bg-moderate-hoverA: #e5e4fa;
+
+    --ax-surface-action: #5a51e1;
+    --ax-surface-action-hover: #5149ca;
+    --ax-surface-action-active: #5a51e1;
+    --ax-surface-action-selected: #5a51e1;
+    --ax-bg-strong-pressed: #5149ca;
+
+    --ax-surface-action-subtle-hover: #fcf5ed;
+    --ax-surface-action-selected-hover: #5149ca;
+    --ax-surface-hover: #e5e4fa;
+
+    --ax-text-on-action: #ffffff;
+    --ax-border-focus: #5a51e1;
+
+    --ax-border-selected: #5a51e1;
+    --ax-border-selected-hover: #4c46c7;
+
+    --ax-surface-selected: #e5e4fa;
+    --ax-text-on-selected: #5a51e1;
+    --ax-text-default: #202733;
+
+    --ax-text-action: #5a51e1;
+    --ax-text-action-hover: #5a51e1;
+    --ax-text-action-selected: #5a51e1;
+    --ax-text-subtle: #5a51e1;
+    --ax-text-action-on-action-subtle: #5a51e1;
+
+    --ax-border-default: #5a51e1;
+    --ax-border-strong: #5a51e1;
+    --ax-border-subtle: #e5e4fa;
+    --ax-border-action: #5a51e1;
+    --ax-border-action-hover: #5a51e1;
+    --ax-border-action-selected: #5a51e1;
+
+    --ax-surface-selected-hover: #e5e4fa;
+    --ax-surface-subtle-hover: #e5e4fa;
+    --ax-surface-alt-strong: #5a51e1;
+    --ax-surface-alt-subtle: #e5e4fa;
+    --ax-surface-alt-moderate: #6b133d;
+
+    --ax-bg-accent-soft: #fcf5ed;
+    --ax-bg-accent-softA: #fcf5ed;
+    --ax-bg-accent-moderate: #e5e4fa;
+    --ax-bg-accent-moderateA: #e5e4fa;
+    --ax-bg-accent-moderate-hover: #e5e4fa;
+    --ax-bg-accent-moderate-hoverA: #e5e4fa;
+    --ax-bg-accent-moderate-pressed: #d4d2f5;
+    --ax-bg-accent-moderate-pressedA: #d4d2f5;
+    --ax-bg-accent-strong: #5a51e1;
+    --ax-bg-accent-strong-hover: #5149ca;
+    --ax-bg-accent-strong-pressed: #4c46c7;
+
+    --ax-text-accent: #5a51e1;
+    --ax-text-accent-subtle: #202733;
+    --ax-text-accent-contrast: #ffffff;
+    --ax-text-accent-decoration: #5a51e1;
+
+    --ax-border-accent: #5a51e1;
+    --ax-border-accent-strong: #5a51e1;
+    --ax-border-accent-subtle: #e5e4fa;
+    --ax-border-accent-subtleA: #e5e4fa;
 }
 
-.novari-header-icon {
-    color: var(--novari-chrome-fg);
-}
-.novari-header {
-    background: var(--novari-chrome-bg);
-    color: var(--novari-chrome-fg);
-}
-
-.novari-footer {
-    background: var(--novari-footer-bg);
-    color: var(--novari-footer-fg);
-}
-
-/* Icon styles */
-.panel-icon {
-    margin-right: 20px;
-    font-size: 34px;
-    color: #d2452c; /* NAV blue */
-    transition: transform 0.3s ease; /* Smooth scaling transition */
-    border: #d2452c 1px solid;
-    border-radius: 50%; /* Make the border circular */
-    width: 40px; /* Set width and height to the same value */
-    height: 40px; /* Adjust as needed to fit the icon */
-    display: flex; /* Center the icon within the circle */
-    align-items: center; /* Center vertically */
-    justify-content: center; /* Center horizontally */
-    padding: 10px;
-}
-
-/* Styles for the disabled icon */
-.panel-icon-disabled {
-    color: #b0b0b0; /* Lighter color for the icon */
-    border: #b0b0b0 1px solid; /* Lighter border for the disabled icon */
-}
-
-.aksel-link-card:hover .panel-icon {
-    transform: scale(1.3); /* Enlarge the icon on hover */
+.aksel-theme.novari-theme.dark {
+    --ax-bg-accent-strong: #9a95ee;
+    --ax-bg-accent-strong-hover: #ada8f2;
+    --ax-bg-accent-strong-pressed: #c0bcf5;
+    --ax-text-accent: #c0bcf5;
+    --ax-border-accent: #9a95ee;
+    --ax-border-focus: #ada8f2;
 }

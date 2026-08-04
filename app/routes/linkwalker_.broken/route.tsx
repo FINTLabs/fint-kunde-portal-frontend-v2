@@ -36,8 +36,8 @@ function getProblemTypeColor(problemType: string) {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    // TODO: TESTING ONLY
     // const orgName = await getSelectedOrganization(request);
+    // TODO: TESTING ONLY
     const orgName = 'afk_no';
 
     const url = new URL(request.url);
@@ -180,12 +180,14 @@ export default function LinkWalkerErrorsRoute() {
                                     key={problemType}
                                     data-color={getProblemTypeColor(problemType)}
                                     size="small"
-                                    className={'w-72'}>
+                                    className={'w-72'}
+                                >
                                     <InfoCard.Header>
                                         <InfoCard.Title
                                             as="h3"
                                             className="min-w-0 truncate"
-                                            title={problemType}>
+                                            title={problemType}
+                                        >
                                             {problemType}
                                         </InfoCard.Title>
                                     </InfoCard.Header>
@@ -227,7 +229,8 @@ export default function LinkWalkerErrorsRoute() {
                                 nextParams.set('page', '0');
 
                                 setSearchParams(nextParams);
-                            }}>
+                            }}
+                        >
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>

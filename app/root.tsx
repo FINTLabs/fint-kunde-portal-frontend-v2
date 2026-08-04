@@ -1,5 +1,5 @@
-import { ActionMenu, Box, Button, Link, Page } from '@navikt/ds-react';
-import { NovariFooter, NovariHeader } from 'novari-frontend-components';
+import { ActionMenu, Box, Button, Link, Page, Theme as AkselTheme } from '@navikt/ds-react';
+import { NovariFooter, NovariHeader, ThemeProvider, useTheme } from 'novari-frontend-components';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -102,6 +102,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     });
 };
 
+function AppTheme({ children }: { children: React.ReactNode }) {
+    const { theme } = useTheme();
+
+    return (
+        <AkselTheme theme={theme} className="novari-theme" hasBackground>
+            {children}
+        </AkselTheme>
+    );
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
     const { t, i18n } = useTranslation();
 
@@ -115,8 +125,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Links />
                 <title>{t('root.title')}</title>
             </head>
-            <body data-theme="novari">
-                {children}
+            <body>
+                <ThemeProvider defaultTheme="light" storageKey="novari-theme">
+                    <AppTheme>{children}</AppTheme>
+                </ThemeProvider>
                 <ScrollRestoration />
                 <Scripts />
             </body>
@@ -167,10 +179,11 @@ export default function App() {
             footer={
                 <Box padding="space-2" as="footer" className={'novari-footer'}>
                     <Page.Block gutters width="lg">
-                        <NovariFooter links={footerLinks} />
+                        <NovariFooter links={footerLinks} showThemeSwitcher={true} />
                     </Page.Block>
                 </Box>
-            }>
+            }
+        >
             <Box className={'novari-header'} as="nav" data-cy="novari-header" shadow="dialog">
                 <NovariHeader
                     isLoggedIn={true}
@@ -183,7 +196,10 @@ export default function App() {
                     }
                     onMenuClick={(action) => navigate(action)}
                     appName={t('root.appName')}
-                    onLogin={onLogin}>
+                    onLogin={onLogin}
+                >
+                    <UserOrganization userSession={userSession} />
+
                     <ActionMenu>
                         <ActionMenu.Trigger>
                             <Button
@@ -191,7 +207,8 @@ export default function App() {
                                 variant="tertiary"
                                 icon={<LanguageIcon aria-hidden />}
                                 aria-label={t('language.label')}
-                                className="novari-header-icon">
+                                className="novari-header-icon"
+                            >
                                 {t(`language.${selectedLanguage}`)}
                             </Button>
                         </ActionMenu.Trigger>
@@ -199,14 +216,14 @@ export default function App() {
                             {supportedLanguages.map((language) => (
                                 <ActionMenu.Item
                                     key={language}
-                                    onSelect={() => setLanguage(language as SupportedLanguage)}>
+                                    onSelect={() => setLanguage(language as SupportedLanguage)}
+                                >
                                     {t(`language.${language}`)}
                                 </ActionMenu.Item>
                             ))}
                         </ActionMenu.Content>
                     </ActionMenu>
 
-                    <UserOrganization userSession={userSession} />
                     <Link href={'/user'}>
                         <PersonCircleIcon
                             title={t('root.userIconTitle')}

@@ -102,7 +102,7 @@ export const getNovariMenu = (t: TFunction) => {
                     role: 'ROLE_LOG',
                     description: helpData.find((i) => i.id === 'relasjonstest')?.shortDescription,
                 },
-                //TODO: When the new linkwalker is ready, turn the menu item on
+                // TODO: When the new linkwalker is ready, turn the menu item on
                 // {
                 //     action: '/linkwalker',
                 //     icon: <ArrowsSquarepathIcon title="Relasjonstest" fontSize="1.5rem" />,

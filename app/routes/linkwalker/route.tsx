@@ -17,8 +17,8 @@ type LoaderData = {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    // TODO: TESTING ONLY
     const orgName = await getSelectedOrganization(request);
+    // TODO: TESTING ONLY
     // const orgName = 'afk_no';
 
     const summaryResponse = await LinkWalkerIntegrationApi.getSummary(orgName);

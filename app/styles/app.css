@@ -4,6 +4,7 @@
 @import 'tailwindcss/utilities.css' layer(utilities);
 
 @import './novari-theme.css';
+@import './kunde-portal.css';
 
 .home-page-stack {
     margin-top: 3rem;

@@ -58,7 +58,10 @@ export default function Index() {
     return (
         <>
             <Breadcrumbs breadcrumbs={breadcrumbs} />
-            <InternalPageHeader title={t('menu.contacts')} icon={PersonGroupIcon} helpText="contacts">
+            <InternalPageHeader
+                title={t('menu.contacts')}
+                icon={PersonGroupIcon}
+                helpText="contacts">
                 <Button
                     data-cy="add-contact-button"
                     size="small"
@@ -71,7 +74,11 @@ export default function Index() {
             <NovariToaster items={alertState} position={'top-right'} />
 
             <VStack gap="space-16">
-                <Box padding="space-24" borderColor="brand-blue" borderWidth="2" borderRadius="12">
+                <Box
+                    padding="space-24"
+                    borderWidth="2"
+                    borderRadius="12"
+                    borderColor="neutral-subtle">
                     <Heading size="xsmall">{t('mainRoutes.contacts.legalContactHeading')}</Heading>
                     {legalContact ? (
                         <HStack gap="space-4" align="center" className="px-4">
@@ -81,7 +88,9 @@ export default function Index() {
                             </BodyShort>
                         </HStack>
                     ) : (
-                        <BodyShort size="medium">{t('mainRoutes.contacts.noLegalContact')}</BodyShort>
+                        <BodyShort size="medium">
+                            {t('mainRoutes.contacts.noLegalContact')}
+                        </BodyShort>
                     )}
                 </Box>
                 <Box
