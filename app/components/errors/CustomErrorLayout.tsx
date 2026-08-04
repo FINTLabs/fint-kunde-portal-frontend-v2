@@ -4,11 +4,16 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import '@navikt/ds-css';
-import { getFooterLinksNotLoggedIn } from '~/components/Menu/MenuConfig';
+import { getFooterLinksNotLoggedIn, getNovariMenu } from '~/components/Menu/MenuConfig';
 
-export function CustomErrorLayout({ children }: { children: React.ReactNode }) {
+type CustomErrorLayoutProps = {
+    children: React.ReactNode;
+    showMenu?: boolean;
+};
+
+export function CustomErrorLayout({ children, showMenu = true }: CustomErrorLayoutProps) {
     const { t } = useTranslation();
-
+    const menu = getNovariMenu(t);
     return (
         <Page
             footer={
@@ -17,13 +22,13 @@ export function CustomErrorLayout({ children }: { children: React.ReactNode }) {
                         <NovariFooter links={getFooterLinksNotLoggedIn(t)} />
                     </Page.Block>
                 </Box>
-            }>
+            }
+        >
             <Box as="header" className={'novari-header'}>
                 <Page.Block gutters width="lg" className={'pt-5 pb-5'}>
                     <NovariHeader
-                        isLoggedIn={true}
-                        // appName={'FINT Kunde Portal'}
-                        menu={[]}
+                        isLoggedIn={showMenu}
+                        menu={showMenu ? menu : []}
                         showLogoWithTitle={true}
                         displayName={'Error'}
                         onLogout={() =>

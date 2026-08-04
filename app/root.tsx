@@ -57,14 +57,30 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     HeaderProperties.setProperties(request);
 
-    const meData: IMeData = await MeApi.fetchMe();
+    const cookieHeader = request.headers.get('Cookie');
+    let cookieValue = await selectOrgCookie.parse(cookieHeader);
+    const hasLoginCookie = Boolean(cookieValue);
+    let meData: IMeData;
+
+    try {
+        meData = await MeApi.fetchMe();
+    } catch (error) {
+        if (error instanceof Response) {
+            const message = await error.text();
+            throw data(
+                { message, hasLoginCookie, source: 'me' },
+                {
+                    status: error.status,
+                    statusText: error.statusText,
+                }
+            );
+        }
+        throw error;
+    }
 
     HeaderProperties.setUsername(`${meData.firstName} ${meData.lastName}`.trim());
     const organisationsData: IOrganisation[] = await MeApi.fetchOrganisations();
     const featuresResponse = await FeaturesApi.fetchFeatures();
-
-    const cookieHeader = request.headers.get('Cookie');
-    let cookieValue = await selectOrgCookie.parse(cookieHeader);
 
     let selectedOrganization = organisationsData.find((org) => org.name === cookieValue);
     if (!selectedOrganization) {
@@ -270,6 +286,19 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export function ErrorBoundary() {
     const error = useRouteError();
+    const hasLoginCookie =
+        isRouteErrorResponse(error) &&
+        typeof error.data === 'object' &&
+        error.data !== null &&
+        'hasLoginCookie' in error.data
+            ? Boolean(error.data.hasLoginCookie)
+            : false;
+    const isMeError =
+        isRouteErrorResponse(error) &&
+        typeof error.data === 'object' &&
+        error.data !== null &&
+        'source' in error.data &&
+        error.data.source === 'me';
 
     if (isRouteErrorResponse(error)) {
         // Handle a 404 from me - special case
@@ -281,7 +310,7 @@ export function ErrorBoundary() {
             );
         } else if (error.status === 401) {
             return (
-                <CustomErrorLayout>
+                <CustomErrorLayout showMenu={isMeError ? false : hasLoginCookie}>
                     <CustomErrorNoOrg />
                 </CustomErrorLayout>
             );
@@ -296,7 +325,13 @@ export function ErrorBoundary() {
             <CustomErrorLayout>
                 <CustomError
                     statusCode={error.status}
-                    errorData={error.data}
+                    errorData={
+                        typeof error.data === 'object' &&
+                        error.data !== null &&
+                        'message' in error.data
+                            ? error.data.message
+                            : error.data
+                    }
                     statusTitle={error.statusText}
                 />
             </CustomErrorLayout>

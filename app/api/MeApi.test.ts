@@ -59,6 +59,15 @@ describe('MeApi', () => {
         });
     });
 
+    it('fetchMe throws 401 response when user is not logged in', async () => {
+        mockCall.mockResolvedValue({ success: false, status: 401 });
+
+        await expect(MeApi.fetchMe()).rejects.toMatchObject({
+            status: 401,
+            statusText: 'Du er ikke innlogget.',
+        });
+    });
+
     it('fetchMe throws 500 response when no user data is found', async () => {
         mockCall.mockResolvedValue({ success: false, status: 500 });
 

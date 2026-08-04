@@ -12,6 +12,8 @@ export const userHandlers = [
 
     http.get(`${API_URL}/api/me`, () => {
         return HttpResponse.json(me);
+        // to test no login
+        // return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }),
 
     http.get(`${API_URL}/api/role`, () => {

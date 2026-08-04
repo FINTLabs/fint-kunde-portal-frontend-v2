@@ -48,6 +48,13 @@ class MeApi {
             });
         }
 
+        if (res.status === 401) {
+            throw new Response('Du er ikke innlogget.', {
+                status: 401,
+                statusText: 'Du er ikke innlogget.',
+            });
+        }
+
         const message = 'Ingen tilkobling til server';
         // await AnalyticsApi.trackError('/api/me', message, 500);
         throw new Response(message, {
