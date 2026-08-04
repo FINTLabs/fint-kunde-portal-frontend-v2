@@ -35,7 +35,7 @@ export function CustomErrorLayout({ children, showMenu = true }: CustomErrorLayo
                             (window.location.href =
                                 'https://idp.felleskomponent.no/nidp/app/logout')
                         }
-                        onMenuClick={() => {}}
+                        onMenuClick={(action) => (window.location.href = action)}
                         appName={t('root.appName')}
                         onLogin={() => {}}
                     />
