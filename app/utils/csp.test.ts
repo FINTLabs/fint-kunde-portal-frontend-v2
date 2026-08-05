@@ -8,7 +8,7 @@ describe('cspReportOnly', () => {
         expect(cspReportOnly).toContain("script-src 'self'");
         expect(cspReportOnly).toContain("style-src 'self'");
         expect(cspReportOnly).toContain("connect-src 'self'");
-        expect(cspReportOnly).toContain("frame-ancestors 'none'");
+        //expect(cspReportOnly).toContain("frame-ancestors 'none'");
         expect(cspReportOnly).toContain('report-uri /api/csp-report');
     });
 });

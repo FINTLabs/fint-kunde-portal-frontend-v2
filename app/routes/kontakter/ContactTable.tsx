@@ -64,7 +64,7 @@ const ContactTable = ({
         <Table zebraStripes>
             <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell />
+                    <Table.DataCell />
                     <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Roller</Table.HeaderCell>
                 </Table.Row>
@@ -82,7 +82,8 @@ const ContactTable = ({
                                 handleUpdateLegalContact={handleUpdateLegalContact}
                                 handleRemoveContact={handleRemoveContact}
                             />
-                        }>
+                        }
+                    >
                         <Table.DataCell scope="row">
                             {contact.firstName} {contact.lastName}
                         </Table.DataCell>

@@ -61,12 +61,14 @@ export default function Index() {
             <InternalPageHeader
                 title={t('menu.contacts')}
                 icon={PersonGroupIcon}
-                helpText="contacts">
+                helpText="contacts"
+            >
                 <Button
                     data-cy="add-contact-button"
                     size="small"
                     onClick={() => setIsModalOpen(true)}
-                    icon={<PlusIcon aria-hidden />}>
+                    icon={<PlusIcon aria-hidden />}
+                >
                     {t('mainRoutes.contacts.addButton')}
                 </Button>
             </InternalPageHeader>
@@ -78,7 +80,8 @@ export default function Index() {
                     padding="space-24"
                     borderWidth="2"
                     borderRadius="12"
-                    borderColor="neutral-subtle">
+                    borderColor="neutral-subtle"
+                >
                     <Heading size="xsmall">{t('mainRoutes.contacts.legalContactHeading')}</Heading>
                     {legalContact ? (
                         <HStack gap="space-4" align="center" className="px-4">
@@ -97,7 +100,8 @@ export default function Index() {
                     padding="space-16"
                     borderColor="neutral-subtle"
                     borderWidth="2"
-                    borderRadius="12">
+                    borderRadius="12"
+                >
                     {technicalContacts && typeof technicalContacts !== 'string' && (
                         <ContactTable
                             contactsData={technicalContacts}

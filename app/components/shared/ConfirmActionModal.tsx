@@ -53,7 +53,8 @@ function ConfirmAction({
                 icon={icon}
                 size={buttonSize ? (buttonSize as 'xsmall' | 'small' | 'medium') : 'xsmall'}
                 onClick={() => setOpen(true)}
-                data-cy="confirm-button">
+                data-cy="confirm-button"
+            >
                 {showButtonText ? buttonText : ''}
             </Button>
 
@@ -62,12 +63,13 @@ function ConfirmAction({
                 header={{
                     heading: `Bekreftelse`,
                     size: 'small',
-                    icon: <ExclamationmarkTriangleIcon />,
+                    icon: <ExclamationmarkTriangleIcon aria-hidden="true" />,
                 }}
                 width="small"
-                onClose={() => handleClose(false)}>
+                onClose={() => handleClose(false)}
+            >
                 <Modal.Body>
-                    <Heading size="small">{titleText}</Heading>
+                    {titleText?.trim() && <Heading size="small">{titleText}</Heading>}
                     {/*<Heading size="medium" spacing>*/}
                     {subTitleText}
                     {/*</Heading>*/}
@@ -78,7 +80,8 @@ function ConfirmAction({
                         type="submit"
                         variant="danger"
                         onClick={() => handleClose(true)}
-                        size={'small'}>
+                        size={'small'}
+                    >
                         Ja, jeg er sikker
                     </Button>
 
@@ -86,7 +89,8 @@ function ConfirmAction({
                         type="button"
                         variant="secondary"
                         onClick={() => handleClose(false)}
-                        size={'small'}>
+                        size={'small'}
+                    >
                         Avbryt
                     </Button>
                 </Modal.Footer>
