@@ -68,7 +68,7 @@
         "globals": "^16.4.0",
         "jsdom": "^29.0.2",
         "npm-force-resolutions": "^0.0.10",
-        "postcss": "^8.4.47",
+        "postcss": "^8.5.26",
         "prettier": "^3.3.3",
         "tailwindcss": "^4.1.11",
         "typescript": "^5.6.3",
