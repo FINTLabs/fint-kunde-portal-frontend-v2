@@ -1,4 +1,4 @@
-import { PersonGroupIcon, PersonSuitIcon, PlusIcon } from '@navikt/aksel-icons';
+import { PersonGroupIcon, PersonGavelIcon, PlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { type ApiResponse, NovariToaster, useAlerts } from 'novari-frontend-components';
 import { useState } from 'react';
@@ -85,7 +85,7 @@ export default function Index() {
                     <Heading size="xsmall">{t('mainRoutes.contacts.legalContactHeading')}</Heading>
                     {legalContact ? (
                         <HStack gap="space-4" align="center" className="px-4">
-                            <PersonSuitIcon className="h-10 w-10 bg-slate-200 rounded-full " />
+                            <PersonGavelIcon className="h-10 w-10 rounded-full " />
                             <BodyShort size="medium">
                                 {legalContact.firstName} {legalContact.lastName}
                             </BodyShort>

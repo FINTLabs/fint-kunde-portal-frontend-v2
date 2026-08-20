@@ -1,6 +1,6 @@
 import { ActionMenu, Box, Button, Link, Page, Theme as AkselTheme } from '@navikt/ds-react';
 import { NovariFooter, NovariHeader, ThemeProvider, useTheme } from 'novari-frontend-components';
-import React, { useEffect } from 'react';
+import React, { useEffect, useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     type ActionFunctionArgs,
@@ -16,6 +16,7 @@ import {
     useLoaderData,
     useNavigate,
     useRouteError,
+    useRouteLoaderData,
 } from 'react-router';
 
 import MeApi from '~/api/MeApi';
@@ -32,7 +33,13 @@ import { defaultFeatures } from '~/types/FeatureFlag';
 import { IMeData } from '~/types/Me';
 import { IOrganisation } from '~/types/Organisation';
 import { IUserSession } from '~/types/Session';
-import { selectOrgCookie } from '~/utils/cookie';
+import {
+    parseTheme,
+    selectOrgCookie,
+    THEME_STORAGE_KEY,
+    themeCookie,
+    type ThemeName,
+} from '~/utils/cookie';
 import FeaturesApi from './api/FeaturesApi';
 import { HeaderProperties } from './utils/headerProperties';
 import { cspReportOnly } from '~/utils/csp';
@@ -59,6 +66,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     const cookieHeader = request.headers.get('Cookie');
     let cookieValue = await selectOrgCookie.parse(cookieHeader);
+    const theme = parseTheme(await themeCookie.parse(cookieHeader));
     const hasLoginCookie = Boolean(cookieValue);
     let meData: IMeData;
 
@@ -100,7 +108,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (!cookieValue) {
         const newCookieHeader = await selectOrgCookie.serialize(selectedOrganization.name);
         return data(
-            { userSession },
+            { userSession, theme },
             {
                 headers: {
                     'Set-Cookie': newCookieHeader,
@@ -110,7 +118,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         );
     }
 
-    return new Response(JSON.stringify({ userSession }), {
+    return new Response(JSON.stringify({ userSession, theme }), {
         headers: {
             'Content-Type': 'application/json',
             'Content-Security-Policy-Report-Only': cspReportOnly,
@@ -118,21 +126,49 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     });
 };
 
-function AppTheme({ children }: { children: React.ReactNode }) {
+const hydrateSubscribe = () => () => {};
+const getHydrateSnapshot = () => true;
+const getHydrateServerSnapshot = () => false;
+
+function useHydrated() {
+    return useSyncExternalStore(hydrateSubscribe, getHydrateSnapshot, getHydrateServerSnapshot);
+}
+
+function ThemeCookieSync() {
     const { theme } = useTheme();
 
+    useEffect(() => {
+        void themeCookie.serialize(theme).then((serialized) => {
+            document.cookie = serialized;
+        });
+    }, [theme]);
+
+    return null;
+}
+
+function AppTheme({ children, ssrTheme }: { children: React.ReactNode; ssrTheme: ThemeName }) {
+    const { theme } = useTheme();
+    const hydrated = useHydrated();
+
     return (
-        <AkselTheme theme={theme} className="novari-theme" hasBackground>
+        <AkselTheme theme={hydrated ? theme : ssrTheme} className="novari-theme" hasBackground>
             {children}
         </AkselTheme>
     );
 }
 
+type RootLoaderData = {
+    userSession?: IUserSession;
+    theme?: ThemeName;
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
     const { t, i18n } = useTranslation();
+    const rootData = useRouteLoaderData('root') as RootLoaderData | undefined;
+    const ssrTheme = rootData?.theme ?? 'light';
 
     return (
-        <html lang={i18n.resolvedLanguage || i18n.language || 'nb'}>
+        <html lang={i18n.resolvedLanguage || i18n.language || 'nb'} suppressHydrationWarning>
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -140,10 +176,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Meta />
                 <Links />
                 <title>{t('root.title')}</title>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `(function(){try{var t=localStorage.getItem('${THEME_STORAGE_KEY}');if(t==='dark'||t==='light'){document.documentElement.classList.add(t);}}catch(e){}})();`,
+                    }}
+                />
             </head>
             <body>
-                <ThemeProvider defaultTheme="light" storageKey="novari-theme">
-                    <AppTheme>{children}</AppTheme>
+                <ThemeProvider defaultTheme={ssrTheme} storageKey={THEME_STORAGE_KEY}>
+                    <ThemeCookieSync />
+                    <AppTheme ssrTheme={ssrTheme}>{children}</AppTheme>
                 </ThemeProvider>
                 <ScrollRestoration />
                 <Scripts />
@@ -154,8 +196,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
     const { t, i18n } = useTranslation();
+    const themeHydrated = useHydrated();
     const { userSession } = useLoaderData<{
         userSession: IUserSession;
+        theme: ThemeName;
     }>();
     useTrackAnalyticsPageViews(userSession.selectedOrganization.name);
 
@@ -195,7 +239,7 @@ export default function App() {
             footer={
                 <Box padding="space-2" as="footer" className={'novari-footer'}>
                     <Page.Block gutters width="lg">
-                        <NovariFooter links={footerLinks} showThemeSwitcher={true} />
+                        <NovariFooter links={footerLinks} showThemeSwitcher={themeHydrated} />
                     </Page.Block>
                 </Box>
             }

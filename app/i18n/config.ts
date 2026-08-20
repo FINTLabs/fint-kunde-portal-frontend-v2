@@ -42,9 +42,9 @@ export function setLanguage(language: SupportedLanguage) {
     /* eslint-disable import/no-named-as-default-member */
     void i18n.changeLanguage(language);
 
-    if (typeof window !== 'undefined') {
-        window.localStorage.setItem(STORAGE_KEY, language);
-    }
+    // if (typeof window !== 'undefined') {
+    //     window.localStorage.setItem(STORAGE_KEY, language);
+    // }
 }
 
 export default i18n;
