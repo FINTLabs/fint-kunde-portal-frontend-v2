@@ -58,7 +58,7 @@
         "cypress": "^15.20.1",
         "eslint": "^9.39.4",
         "eslint-import-resolver-typescript": "^4.4.4",
-        "eslint-plugin-cypress": "^6.4.0",
+        "eslint-plugin-cypress": "^7.0.0",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-jest-dom": "^5.5.0",
         "eslint-plugin-jsx-a11y": "^6.10.2",
