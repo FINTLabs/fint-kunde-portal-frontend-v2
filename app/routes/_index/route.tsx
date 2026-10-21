@@ -67,23 +67,24 @@ export default function Index() {
             <Heading size="large">
                 {t('home.welcome', { name: userSession.meData.firstName })}
             </Heading>
-            <GlobalAlert status="error">
-                <GlobalAlert.Header>
-                    <GlobalAlert.Title>
-                        Vi opplever problemer med autentiseringsløsningen.
-                    </GlobalAlert.Title>
-                </GlobalAlert.Header>
-                <GlobalAlert.Content className="pl-10 pr-0">
-                    Vi opplever problemer med autentiseringsløsningen. Vi må derfor midlertidig
-                    stenge for oppretting og sletting av Klienter og Adaptere. Redigering vil
-                    fortsatt fungere.
-                </GlobalAlert.Content>
-            </GlobalAlert>
+            {/*<GlobalAlert status="error">*/}
+            {/*    <GlobalAlert.Header>*/}
+            {/*        <GlobalAlert.Title>*/}
+            {/*            Vi opplever problemer med autentiseringsløsningen.*/}
+            {/*        </GlobalAlert.Title>*/}
+            {/*    </GlobalAlert.Header>*/}
+            {/*    <GlobalAlert.Content className="pl-10 pr-0">*/}
+            {/*        Vi opplever problemer med autentiseringsløsningen. Vi må derfor midlertidig*/}
+            {/*        stenge for oppretting og sletting av Klienter og Adaptere. Redigering vil*/}
+            {/*        fortsatt fungere.*/}
+            {/*    </GlobalAlert.Content>*/}
+            {/*</GlobalAlert>*/}
 
             <HGrid
                 gap="space-24"
                 columns={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }}
-                paddingBlock={'space-24'}>
+                paddingBlock={'space-24'}
+            >
                 {novariMenu.flatMap((menuItem) => {
                     // if (menuItem.action && !menuItem.submenu) {
                     //     if (menuItem.displayBox === false) {
@@ -135,7 +136,8 @@ export default function Index() {
                                                 <Box
                                                     padding="space-16"
                                                     background="info-soft"
-                                                    borderRadius="12">
+                                                    borderRadius="12"
+                                                >
                                                     {(modelVersion?.V3 ?? 0) === 0 &&
                                                     (modelVersion?.V4 ?? 0) > 0 ? (
                                                         <InlineMessage status="success">
@@ -166,7 +168,8 @@ export default function Index() {
                                                     <Tag
                                                         variant="outline"
                                                         data-color="brand-magenta"
-                                                        icon={<SparkLargeIcon />}>
+                                                        icon={<SparkLargeIcon />}
+                                                    >
                                                         New!
                                                     </Tag>
                                                 </LinkCard.Footer>

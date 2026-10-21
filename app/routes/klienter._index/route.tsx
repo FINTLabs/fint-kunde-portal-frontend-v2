@@ -165,11 +165,12 @@ export default function Index() {
                     >
                         <Button
                             onClick={handleCreate}
-                            disabled={true}
+                            // disabled={true}
                             variant="primary"
                             size="small"
                             className="mr-2"
-                            data-cy="create-button">
+                            data-cy="create-button"
+                        >
                             {t('mainRoutes.clientsIndex.createButton')}
                         </Button>
                     </InternalPageHeader>
@@ -219,7 +220,8 @@ export default function Index() {
                                                     : [...prev, 'missing']
                                             )
                                         }
-                                        data-color="info">
+                                        data-color="info"
+                                    >
                                         Ingen pålogging
                                     </Chips.Toggle>
                                     <Chips.Toggle
@@ -231,7 +233,8 @@ export default function Index() {
                                                     : [...prev, 'active']
                                             )
                                         }
-                                        data-color="success">
+                                        data-color="success"
+                                    >
                                         Nylig innlogging
                                     </Chips.Toggle>
                                     <Chips.Toggle
@@ -243,7 +246,8 @@ export default function Index() {
                                                     : [...prev, 'stale']
                                             )
                                         }
-                                        data-color="danger">
+                                        data-color="danger"
+                                    >
                                         Over 30 dager
                                     </Chips.Toggle>
                                 </Chips>

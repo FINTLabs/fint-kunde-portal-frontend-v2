@@ -111,8 +111,9 @@ export default function Index() {
                             onClick={handleCreate}
                             size="small"
                             icon={<PlusIcon aria-hidden />}
+                            // disabled={true}
                             data-cy="create-adapter-button"
-                            disabled={true}>
+                        >
                             {t('adapterIndex.createButton')}
                         </Button>
                     </InternalPageHeader>
