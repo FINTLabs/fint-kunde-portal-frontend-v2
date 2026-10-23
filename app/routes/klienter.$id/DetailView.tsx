@@ -129,7 +129,8 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
                                 description="Styrer hvilken informasjonsmodellversjon klienten kommuniserer med for utdanningsdomenet"
                                 onChange={(e) =>
                                     setResourceModelVersion(e.target.value === 'V3' ? 'V3' : 'V4')
-                                }>
+                                }
+                            >
                                 <option value="V3">V3</option>
                                 <option value="V4">V4</option>
                             </Select>
@@ -183,18 +184,13 @@ export function DetailView({ resource, onUpdate, onDelete }: DetailViewProps) {
                         />
 
                         {!isEditing && !resource.managed && (
-                            // <ConfirmAction
-                            //     buttonText={'delete'}
-                            //     showButtonText={false}
-                            //     subTitleText={`Er du sikker på at du vil slette ${resource.name}?`}
-                            //     onConfirm={handleConfirmDelete}
-                            //     buttonVariant="tertiary"
-                            //     buttonSize={'medium'}
-                            //     icon={<TrashIcon aria-hidden />}
-                            // />
-                            <Button
-                                disabled={true}
-                                variant="tertiary"
+                            <ConfirmAction
+                                buttonText={'delete'}
+                                showButtonText={false}
+                                subTitleText={`Er du sikker på at du vil slette ${resource.name}?`}
+                                onConfirm={handleConfirmDelete}
+                                buttonVariant="tertiary"
+                                buttonSize={'medium'}
                                 icon={<TrashIcon aria-hidden />}
                             />
                         )}
