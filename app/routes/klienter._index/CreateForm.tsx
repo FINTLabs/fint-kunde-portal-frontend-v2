@@ -36,10 +36,18 @@ export default function ClientCreateForm({
     const [inputModelVersion, setInputModelVersion] = useState('V3');
     const userSession = useOutletContext<IUserSession>();
 
+    const domain = orgName.replace(/_/g, '.');
+    const suffix = `@adapter.${domain}`;
+
+    // LDAP common name cannot exceed 64 characters, including the suffix.
+    const maxNameLength = Math.max(0, 64 - suffix.length);
+
     const handleSubmit = () => {
         const newErrors: Errors = {};
-        if (!inputName) {
+        if (!inputName.trim()) {
             newErrors.name = 'Navn er påkrevd';
+        } else if (inputName.length > maxNameLength) {
+            newErrors.name = `Grunnet begrensninger i autentiseringsløsningen kan navn og domene samlet ikke overstige 64 tegn. Maksimalt ${maxNameLength} tegn er tillatt i navnet.`;
         }
         const exists = clientData.some((client) =>
             client.name.toLowerCase().includes(inputName.toLowerCase())
@@ -75,16 +83,17 @@ export default function ClientCreateForm({
 
     return (
         <Fieldset legend="Opprett ny klient">
-            <HStack gap="space-4" align="center" justify="start">
+            <HStack gap="space-4" align="center">
                 <TextField
                     data-cy="input-name"
                     name="name"
                     label="Navn"
                     type="text"
-                    htmlSize={20}
                     error={errors?.name}
                     size={'small'}
+                    maxLength={maxNameLength}
                     onChange={(e) => setInputName(e.target.value)}
+                    description={`Maks ${maxNameLength} tegn. Navn og domene kan samlet ikke overstige 64 tegn grunnet begrensninger i autentiseringsløsningen.`}
                 />
                 <BodyShort className={!errors.name ? 'pt-6' : undefined}>
                     @client.{orgName.replace(/_/g, '.')}
@@ -96,7 +105,6 @@ export default function ClientCreateForm({
                 name="description"
                 label="Tittel"
                 type="text"
-                htmlSize={50}
                 error={errors?.description}
                 size={'small'}
                 onChange={(e) => setInputDescription(e.target.value)}
@@ -117,7 +125,8 @@ export default function ClientCreateForm({
                 label="Velg modelversjon"
                 size="small"
                 className="create-client-model-select"
-                onChange={(e) => setInputModelVersion(e.target.value)}>
+                onChange={(e) => setInputModelVersion(e.target.value)}
+            >
                 <option value="V3">V3</option>
                 <option value="V4">V4</option>
             </Select>
@@ -126,7 +135,8 @@ export default function ClientCreateForm({
                     title="Opprett"
                     onClick={handleSubmit}
                     data-cy="save-button"
-                    loading={isSubmitting}>
+                    loading={isSubmitting}
+                >
                     Opprett
                 </Button>
                 <Button variant="secondary" onClick={onCancel}>

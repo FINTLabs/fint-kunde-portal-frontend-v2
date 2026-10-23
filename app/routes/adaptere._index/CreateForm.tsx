@@ -15,11 +15,21 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
     const [inputDescription, setInputDescription] = useState('');
     const [inputDetailedInfo, setInputDetailedInfo] = useState('');
 
+    const domain = orgName.replace(/_/g, '.');
+    const suffix = `@adapter.${domain}`;
+
+    // LDAP common name cannot exceed 64 characters, including the suffix.
+    const maxNameLength = Math.max(0, 64 - suffix.length);
+
     const handleSubmit = () => {
         const newErrors: Errors = {};
-        if (!inputName) {
+
+        if (!inputName.trim()) {
             newErrors.name = 'Navn er påkrevd';
+        } else if (inputName.length > maxNameLength) {
+            newErrors.name = `Grunnet begrensninger i autentiseringsløsningen kan navn og domene samlet ikke overstige 64 tegn. Maksimalt ${maxNameLength} tegn er tillatt i navnet.`;
         }
+
         if (!inputDescription) {
             newErrors.description = 'Tittel er påkrevd';
         }
@@ -49,9 +59,12 @@ export default function AdapterCreateForm({ onCancel, onSave, orgName }: Adapter
                         type="text"
                         size="small"
                         value={inputName}
+                        maxLength={maxNameLength}
                         onChange={(e) => setInputName(e.target.value)}
                         error={errors.name}
+                        description={`Maks ${maxNameLength} tegn. Navn og domene kan samlet ikke overstige 64 tegn grunnet begrensninger i autentiseringsløsningen.`}
                     />
+
                     <BodyShort className={!errors.name ? 'pt-6' : undefined}>
                         @adapter.{orgName.replace(/_/g, '.')}
                     </BodyShort>
