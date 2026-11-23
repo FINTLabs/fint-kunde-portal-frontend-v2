@@ -2,6 +2,7 @@ version: 2
 
 updates:
   - package-ecosystem: "npm"
+    target-branch: "develop"
     directory: "/"
     schedule:
       interval: "weekly"
@@ -18,6 +19,7 @@ updates:
         update-types: ["patch", "minor"]
 
   - package-ecosystem: "github-actions"
+    target-branch: "develop"
     directory: "/"
     schedule:
       interval: "weekly"
@@ -26,6 +28,7 @@ updates:
         patterns: ["*"]
 
   - package-ecosystem: "docker"
+    target-branch: "develop"
     directory: "/"
     schedule:
       interval: "weekly"
