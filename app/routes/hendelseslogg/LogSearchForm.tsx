@@ -17,7 +17,15 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
     const [selectedConfig, setSelectedConfig] = useState<string>('');
     const [selectedAction, setSelectedAction] = useState<string>('');
     const [selectedEnv, setSelectedEnv] = useState<string>('');
-    const [matchingConfigs, setMatchingConfigs] = useState<IComponentConfig[]>([]);
+
+    const resources = selectedComponent
+        ? configs
+              .filter((config) => config.dn.includes(selectedComponent))
+              .flatMap((config) => config.classes)
+        : [];
+
+    const resourceNames = [...new Set(resources.map(({ name }) => name))];
+    const resource = resourceNames.includes(selectedConfig) ? selectedConfig : '';
 
     const [errors, setErrors] = useState({
         environment: false,
@@ -26,22 +34,12 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
         action: false,
     });
 
-    function handleChangeComponent(value: string) {
-        setSelectedComponent(value);
-        const matchedConfigs = configs.filter((config) => config.dn.includes(value));
-        setMatchingConfigs(matchedConfigs);
-    }
-
-    if (!components) {
-        return <div>No components</div>;
-    }
-
     function handleFormSubmit() {
         // Validate the form resource
         const hasErrors = {
             environment: !selectedEnv,
             component: !selectedComponent,
-            configClass: !selectedConfig,
+            configClass: resourceNames.length > 0 && !resource,
             action: !selectedAction,
         };
 
@@ -55,7 +53,7 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
         const formData = new FormData();
         formData.append('environment', selectedEnv);
         formData.append('component', selectedComponent);
-        formData.append('resource', selectedConfig);
+        formData.append('resource', resource);
         formData.append('action', selectedAction);
         onSearchSubmit(formData);
     }
@@ -72,7 +70,8 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                     onChange={(e) => {
                         setSelectedEnv(e.target.value);
                         setErrors((prev) => ({ ...prev, environment: false }));
-                    }}>
+                    }}
+                >
                     <option value="">Velg</option>
                     <option value="api">API</option>
                     <option value="beta">BETA</option>
@@ -84,10 +83,12 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                     label={'Komponent'}
                     size="small"
                     onChange={(e) => {
-                        handleChangeComponent(e.target.value);
-                        setErrors((prev) => ({ ...prev, component: false }));
+                        setSelectedComponent(e.target.value);
+                        setSelectedConfig('');
+                        setErrors((prev) => ({ ...prev, component: false, configClass: false }));
                     }}
-                    error={errors.component ? 'Påkrevd' : undefined}>
+                    error={errors.component ? 'Påkrevd' : undefined}
+                >
                     <option value="">Velg</option>
                     {components
                         .sort((a, b) => a.description.localeCompare(b.description))
@@ -99,23 +100,27 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                 </Select>
 
                 <Select
-                    label={'Ressurs'}
+                    label="Ressurs"
                     size="small"
+                    name="configClass"
+                    value={resource}
+                    disabled={resourceNames.length === 0}
+                    error={errors.configClass && resourceNames.length > 0 ? 'Påkrevd' : undefined}
                     onChange={(e) => {
                         setSelectedConfig(e.target.value);
                         setErrors((prev) => ({ ...prev, configClass: false }));
                     }}
-                    value={selectedConfig}
-                    name="configClass"
-                    error={errors.configClass ? 'Påkrevd' : undefined}>
-                    <option value="">Velg</option>
-                    {matchingConfigs.flatMap((config) =>
-                        config.classes.map((item, index) => (
-                            <option value={item.name} key={index}>
-                                {item.name}
-                            </option>
-                        ))
-                    )}
+                >
+                    <option value="">
+                        {selectedComponent && resourceNames.length === 0
+                            ? 'Ingen ressurser'
+                            : 'Velg'}
+                    </option>
+                    {resourceNames.map((name) => (
+                        <option value={name} key={name}>
+                            {name}
+                        </option>
+                    ))}
                 </Select>
 
                 <Select
@@ -126,7 +131,8 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
                         setErrors((prev) => ({ ...prev, action: false }));
                     }}
                     name="action"
-                    error={errors.action ? 'Påkrevd' : undefined}>
+                    error={errors.action ? 'Påkrevd' : undefined}
+                >
                     <option value="">Velg</option>
                     <option value="GET_ALL">GET_ALL</option>
                     <option value="GET">GET</option>

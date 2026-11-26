@@ -31,13 +31,15 @@ export const action = async (args: ActionFunctionArgs) => handleRelationTestActi
 interface IPageLoaderData {
     components: IComponent[];
     relationTests: ILinkWalkerTest[];
+    relationTestsLoadFailed: boolean;
     configs: IComponentConfig[];
 }
 
 export default function Index() {
     const { t } = useTranslation();
     const breadcrumbs = [{ name: t('menu.relationTest'), link: '/relasjonstest' }];
-    const { components, relationTests, configs } = useLoaderData<IPageLoaderData>();
+    const { components, relationTests, relationTestsLoadFailed, configs } =
+        useLoaderData<IPageLoaderData>();
 
     const fetcher = useFetcher();
     const actionData = fetcher.data as ApiResponse<ILinkWalkerTest>;
@@ -99,6 +101,15 @@ export default function Index() {
                 // onCloseItem={handleCloseItem}
             />
             <VStack gap={'space-12'}>
+                {relationTestsLoadFailed && (
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>
+                                {t('mainRoutes.relationTest.loadError')}
+                            </LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                )}
                 {fetcher.state !== 'submitting' && !actionData && (
                     <LocalAlert status="warning">
                         <LocalAlert.Header>

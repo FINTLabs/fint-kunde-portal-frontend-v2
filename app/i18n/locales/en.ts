@@ -73,6 +73,7 @@ const en = {
                 notFoundDescription: 'Could not load client details.',
             },
             relationTest: {
+                loadError: 'Could not load relation test results.',
                 warningTitle: 'Warning',
                 warningDescription:
                     'The password for the client you run the test with will be reset during the test run. We therefore recommend using a dedicated test client.',
