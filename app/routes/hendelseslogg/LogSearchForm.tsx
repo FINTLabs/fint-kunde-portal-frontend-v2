@@ -17,7 +17,6 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
     const [selectedConfig, setSelectedConfig] = useState<string>('');
     const [selectedAction, setSelectedAction] = useState<string>('');
     const [selectedEnv, setSelectedEnv] = useState<string>('');
-    // const [matchingConfigs, setMatchingConfigs] = useState<IComponentConfig[]>([]);
 
     const resources = selectedComponent
         ? configs
@@ -34,16 +33,6 @@ const LogSearchForm = ({ onSearchSubmit, components, configs, onFilter }: LogSea
         configClass: false,
         action: false,
     });
-
-    // function handleChangeComponent(value: string) {
-    //     setSelectedComponent(value);
-    //     const matchedConfigs = configs.filter((config) => config.dn.includes(value));
-    //     setMatchingConfigs(matchedConfigs);
-    // }
-    //
-    // if (!components) {
-    //     return <div>No components</div>;
-    // }
 
     function handleFormSubmit() {
         // Validate the form resource
