@@ -18,12 +18,14 @@ describe('handleLogAction', () => {
         return new Request('http://localhost/hendelseslogg', { method: 'POST', body });
     }
 
-    it('returns error object when API returns no data', async () => {
+    it('returns an announcement when the API returns no events', async () => {
         vi.mocked(getSelectedOrganization).mockResolvedValue('fint-org');
         vi.mocked(LogApi.getLogs).mockResolvedValue({
             success: true,
+            message: 'Logger for spesifisert ressurs ble hentet.',
+            variant: 'success',
             data: [],
-        } as any);
+        });
 
         const request = makeRequest({
             environment: 'api',
@@ -36,18 +38,22 @@ describe('handleLogAction', () => {
 
         expect(LogApi.getLogs).toHaveBeenCalledWith('api', 'fint-org', 'comp-1', 'Student', 'GET');
         expect(result).toEqual({
-            success: false,
-            message: 'Kunne ikke hente logger for spesifisert ressurs.',
-            variant: 'error',
+            success: true,
+            data: [],
+            message: 'Fant ingen hendelser for dette søket.',
+            variant: 'announcement',
         });
     });
 
-    it('returns error object when API call is unsuccessful', async () => {
+    it('preserves the API error and status when the request fails', async () => {
         vi.mocked(getSelectedOrganization).mockResolvedValue('fint-org');
-        vi.mocked(LogApi.getLogs).mockResolvedValue({
+        const apiError = {
             success: false,
-            data: [{ anything: true }],
-        } as any);
+            message: 'Kunne ikke hente logger for spesifisert ressurs.',
+            variant: 'error' as const,
+            status: 404,
+        };
+        vi.mocked(LogApi.getLogs).mockResolvedValue(apiError);
 
         const request = makeRequest({
             environment: 'api',
@@ -58,11 +64,7 @@ describe('handleLogAction', () => {
 
         const result = await handleLogAction({ request });
 
-        expect(result).toEqual({
-            success: false,
-            message: 'Kunne ikke hente logger for spesifisert ressurs.',
-            variant: 'error',
-        });
+        expect(result).toEqual(apiError);
     });
 
     it('returns API response when it is successful and has data', async () => {
