@@ -26,6 +26,7 @@ describe('relasjonstest loader', () => {
             data: [{ dn: 'dn-comp-1', path: '/utdanning' }],
         } as any);
         vi.mocked(LinkWalkerApi.getTests).mockResolvedValue({
+            success: true,
             data: [{ id: 'test-1', status: 'COMPLETED' }],
         } as any);
 
@@ -40,12 +41,44 @@ describe('relasjonstest loader', () => {
         expect(data).toEqual({
             components: [{ name: 'comp-1', description: 'Comp 1' }],
             relationTests: [{ id: 'test-1', status: 'COMPLETED' }],
+            relationTestsLoadFailed: false,
             configs: [{ dn: 'dn-comp-1', path: '/utdanning' }],
             success: false,
             message: 'Oppdatering av testresultater',
             variant: 'success',
         });
     });
+
+    it.each([
+        { success: true, status: 204, loadFailed: false },
+        { success: true, status: 200, loadFailed: true },
+        { success: false, status: 503, loadFailed: true },
+    ])(
+        'returns an empty test list when a $status response has no data',
+        async ({ success, status, loadFailed }) => {
+            vi.mocked(getSelectedOrganization).mockResolvedValue('fint-org');
+            vi.mocked(ComponentApi.getOrganisationComponents).mockResolvedValue({
+                data: [],
+            } as any);
+            vi.mocked(ComponentConfigApi.getComponentConfigs).mockResolvedValue({
+                data: [],
+            } as any);
+            vi.mocked(LinkWalkerApi.getTests).mockResolvedValue({
+                success,
+                status,
+                message: '',
+                variant: success ? 'success' : 'error',
+            });
+
+            const request = new Request('http://localhost/relasjonstest');
+            const response = (await loader({ request } as any)) as Response;
+
+            expect(await response.json()).toMatchObject({
+                relationTests: [],
+                relationTestsLoadFailed: loadFailed,
+            });
+        }
+    );
 
     it('rethrows when LinkWalkerApi.getTests fails', async () => {
         vi.mocked(getSelectedOrganization).mockResolvedValue('fint-org');

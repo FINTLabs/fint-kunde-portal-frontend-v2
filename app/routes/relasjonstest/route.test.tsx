@@ -94,6 +94,7 @@ describe('relasjonstest route', () => {
             components: [{ dn: 'dn-comp-1', description: 'Comp 1' }],
             configs: [{ dn: 'dn-comp-1', path: '/utdanning' }],
             relationTests: [],
+            relationTestsLoadFailed: false,
         });
     });
 
@@ -114,6 +115,21 @@ describe('relasjonstest route', () => {
         expect(screen.queryByTestId('results-table')).not.toBeInTheDocument();
     });
 
+    it('shows a load error and keeps the test form available when results are unavailable', () => {
+        mockUseLoaderData.mockReturnValue({
+            components: [],
+            configs: [],
+            relationTests: [],
+            relationTestsLoadFailed: true,
+        });
+
+        render(<Index />);
+
+        expect(screen.getByText('mainRoutes.relationTest.loadError')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'run-test' })).toBeInTheDocument();
+        expect(screen.queryByTestId('results-table')).not.toBeInTheDocument();
+    });
+
     it('submits ADD_TEST when runTest is triggered', () => {
         render(<Index />);
 
@@ -130,6 +146,7 @@ describe('relasjonstest route', () => {
         mockUseLoaderData.mockReturnValue({
             components: [],
             configs: [],
+            relationTestsLoadFailed: false,
             relationTests: [
                 { id: 'test-1', status: 'COMPLETED', errorMessage: null },
                 { id: 'test-2', status: 'FAILED', errorMessage: 'error' },

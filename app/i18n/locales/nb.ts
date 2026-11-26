@@ -73,6 +73,7 @@ const nb = {
                 notFoundDescription: 'Kunne ikke laste klientdetaljer.',
             },
             relationTest: {
+                loadError: 'Kunne ikke hente resultater fra relasjonstester.',
                 warningTitle: 'Advarsel',
                 warningDescription:
                     'Passordet til klienten du kjører testen på, vil bli nullstilt under testkjøringen. Det anbefales derfor å bruke en dedikert klient for testing.',
